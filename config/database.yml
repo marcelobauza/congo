@@ -19,10 +19,15 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
+  host: localhost
+  user: postgres
+  pass: postgres
+
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
+  port: 5435
   database: congo_development
 
   # The specified database role being used to connect to postgres.
