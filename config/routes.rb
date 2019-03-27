@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :transactions
   resources :layer_types
   get 'dashboards/index'
   devise_for :users
