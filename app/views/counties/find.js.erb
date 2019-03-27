@@ -1,0 +1,6 @@
+name = '<%= @county[0].name %>'
+Congo.dashboards.config.name_layer = name;
+$('#filter').replaceWith('<div class="filter"> Comuna: '+ name + '   </div>');
+Congo.map_utils.counties();
+$("#modal-counties").modal('hide');
+

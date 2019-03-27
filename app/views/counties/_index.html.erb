@@ -1,0 +1,19 @@
+<div id="modal-counties" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class=modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Counties</h4>
+      </div>
+      <%= simple_form_for( :search, url: counties_find_path(), method: "Get", html: { remote: true}) do |f| %>
+        <div class="modal-body">
+
+          <div id="alert-success"></div>
+          <%= f.input :name, collection: counties_for_select(), :include_blank => true  %>
+        <%= f.submit %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

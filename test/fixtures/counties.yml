@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  code: MyString
+  transaction_data: false
+  demography_data: false
+  legislation_data: false
+  sales_project_data: false
+  future_project_data: false
+  commercial_project_data: MyString
+  code_sii: 1
+  name_last_project_future: 1
+
+two:
+  name: MyString
+  code: MyString
+  transaction_data: false
+  demography_data: false
+  legislation_data: false
+  sales_project_data: false
+  future_project_data: false
+  commercial_project_data: MyString
+  code_sii: 1
+  name_last_project_future: 1

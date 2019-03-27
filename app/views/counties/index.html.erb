@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Counties</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Code</th>
+      <th>Transaction data</th>
+      <th>Demography data</th>
+      <th>Legislation data</th>
+      <th>Sales project data</th>
+      <th>Future project data</th>
+      <th>Commercial project data</th>
+      <th>Code sii</th>
+      <th>Name last project future</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @counties.each do |county| %>
+      <tr>
+        <td><%= county.name %></td>
+        <td><%= county.code %></td>
+        <td><%= county.transaction_data %></td>
+        <td><%= county.demography_data %></td>
+        <td><%= county.legislation_data %></td>
+        <td><%= county.sales_project_data %></td>
+        <td><%= county.future_project_data %></td>
+        <td><%= county.commercial_project_data %></td>
+        <td><%= county.code_sii %></td>
+        <td><%= county.name_last_project_future %></td>
+        <td><%= link_to 'Show', county %></td>
+        <td><%= link_to 'Edit', edit_county_path(county) %></td>
+        <td><%= link_to 'Destroy', county, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New County', new_county_path %>

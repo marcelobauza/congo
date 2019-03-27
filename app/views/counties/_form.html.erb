@@ -1,0 +1,67 @@
+<%= form_with(model: county, local: true) do |form| %>
+  <% if county.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(county.errors.count, "error") %> prohibited this county from being saved:</h2>
+
+      <ul>
+      <% county.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :code %>
+    <%= form.text_field :code %>
+  </div>
+
+  <div class="field">
+    <%= form.label :transaction_data %>
+    <%= form.check_box :transaction_data %>
+  </div>
+
+  <div class="field">
+    <%= form.label :demography_data %>
+    <%= form.check_box :demography_data %>
+  </div>
+
+  <div class="field">
+    <%= form.label :legislation_data %>
+    <%= form.check_box :legislation_data %>
+  </div>
+
+  <div class="field">
+    <%= form.label :sales_project_data %>
+    <%= form.check_box :sales_project_data %>
+  </div>
+
+  <div class="field">
+    <%= form.label :future_project_data %>
+    <%= form.check_box :future_project_data %>
+  </div>
+
+  <div class="field">
+    <%= form.label :commercial_project_data %>
+    <%= form.text_field :commercial_project_data %>
+  </div>
+
+  <div class="field">
+    <%= form.label :code_sii %>
+    <%= form.number_field :code_sii %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name_last_project_future %>
+    <%= form.number_field :name_last_project_future %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

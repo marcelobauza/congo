@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @county.name %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @county.code %>
+</p>
+
+<p>
+  <strong>Transaction data:</strong>
+  <%= @county.transaction_data %>
+</p>
+
+<p>
+  <strong>Demography data:</strong>
+  <%= @county.demography_data %>
+</p>
+
+<p>
+  <strong>Legislation data:</strong>
+  <%= @county.legislation_data %>
+</p>
+
+<p>
+  <strong>Sales project data:</strong>
+  <%= @county.sales_project_data %>
+</p>
+
+<p>
+  <strong>Future project data:</strong>
+  <%= @county.future_project_data %>
+</p>
+
+<p>
+  <strong>Commercial project data:</strong>
+  <%= @county.commercial_project_data %>
+</p>
+
+<p>
+  <strong>Code sii:</strong>
+  <%= @county.code_sii %>
+</p>
+
+<p>
+  <strong>Name last project future:</strong>
+  <%= @county.name_last_project_future %>
+</p>
+
+<%= link_to 'Edit', edit_county_path(@county) %> |
+<%= link_to 'Back', counties_path %>
