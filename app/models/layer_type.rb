@@ -1,0 +1,2 @@
+class LayerType < ApplicationRecord
+end
