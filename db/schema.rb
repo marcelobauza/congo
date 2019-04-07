@@ -18,28 +18,20 @@ ActiveRecord::Schema.define(version: 2019_03_27_001941) do
   enable_extension "postgis"
   enable_extension "postgis_topology"
 
-  create_table "counties", id: :integer, default: nil, force: :cascade do |t|
-    t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
+  create_table "counties", force: :cascade do |t|
     t.string "name"
-    t.integer "code"
-    t.string "state"
-    t.string "transaction_data"
-    t.string "demography_data"
-    t.string "legislation_data"
-    t.string "sales_project_data"
-    t.string "created_at"
-    t.string "updated_at"
-    t.string "simple_geom"
-    t.string "future_project_data"
+    t.string "code"
+    t.boolean "transaction_data"
+    t.boolean "demography_data"
+    t.boolean "legislation_data"
+    t.boolean "sales_project_data"
+    t.boolean "future_project_data"
     t.string "commercial_project_data"
-    t.float "rate"
-    t.string "zip_file_file_name"
-    t.string "zip_file_content_type"
-    t.integer "zip_file_file_size"
-    t.string "zip_file_updated_at"
     t.integer "code_sii"
-    t.integer "number_last_project_future"
-    t.index ["the_geom"], name: "sidx_counties_the_geom", using: :gist
+    t.integer "name_last_project_future"
+    t.geometry "the_geom", limit: {:srid=>0, :type=>"st_polygon"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "layer_types", force: :cascade do |t|
