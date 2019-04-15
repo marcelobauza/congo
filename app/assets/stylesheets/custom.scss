@@ -82,3 +82,22 @@ a:hover {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.4) !important;
 }
+
+//Quita caret de dropdown
+.dropdown-toggle::after {
+    display:none !important;
+}
+
+//Dropdown
+.dropdown-menu.show {
+  min-width: unset;
+  text-align: center !important;
+  width: 61px;
+}
+i.fas {
+  width: 16px;
+  height: 16px;
+}
+#navbarDropdown {
+  margin-left: 5px;
+}
