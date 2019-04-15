@@ -89,17 +89,17 @@ a:hover {
 }
 
 //Dropdown
-.dropdown-menu.show {
+div.dropdown-menu.show {
   min-width: unset;
-  text-align: center !important;
-  width: 61px;
+  width: 60px
 }
-i.fas {
-  width: 16px;
-  height: 16px;
+.dropdown-item {
+  text-align: center !important;
+  padding: 0.5rem !important;
 }
 #navbarDropdown {
   margin-left: 5px;
+  width: 50px
 }
 
 //Navbar
