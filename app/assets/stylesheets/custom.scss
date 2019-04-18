@@ -23,11 +23,11 @@ body {
 
 .overlay {
   height: 93vh;
-  width: 100px;
+  width: 400px;
   position: absolute;
   right: 0px;
   z-index: 9999;
-  background-color: rgba(255, 50, 50, 0.5);
+  background-color: rgba(23, 32, 42, 0.1);
   pointer-events: auto;
 }
 
