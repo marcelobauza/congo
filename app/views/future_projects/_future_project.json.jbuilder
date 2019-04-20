@@ -1,0 +1,2 @@
+json.extract! future_project, :id, :code, :address, :name, :role_number, :file_number, :file_data, :owner, :legal_agent, :architect, :floors, :undergrounds, :total_units, :total_parking, :total_commercials, :m2_approved, :m2_built, :m2_field, :cadastral_date, :comments, :bimester, :year, :cadastre, :active, :project_type_id, :future_project_type_id, :county_id, :the_geom, :t_ofi, :created_at, :updated_at
+json.url future_project_url(future_project, format: :json)

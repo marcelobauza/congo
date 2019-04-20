@@ -1,0 +1,2 @@
+module FutureProjectsHelper
+end

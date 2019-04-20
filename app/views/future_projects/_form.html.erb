@@ -1,0 +1,39 @@
+<%= simple_form_for(@future_project) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :code %>
+    <%= f.input :address %>
+    <%= f.input :name %>
+    <%= f.input :role_number %>
+    <%= f.input :file_number %>
+    <%= f.input :file_date %>
+    <%= f.input :owner %>
+    <%= f.input :legal_agent %>
+    <%= f.input :architect %>
+    <%= f.input :floors %>
+    <%= f.input :undergrounds %>
+    <%= f.input :total_units %>
+    <%= f.input :total_parking %>
+    <%= f.input :total_commercials %>
+    <%= f.input :m2_approved %>
+    <%= f.input :m2_built %>
+    <%= f.input :m2_field %>
+    <%= f.input :cadastral_date %>
+    <%= f.input :comments %>
+    <%= f.input :bimester %>
+    <%= f.input :year %>
+    <%= f.input :cadastre %>
+    <%= f.input :active %>
+    <%= f.association :project_type %>
+    <%= f.association :future_project_type %>
+    <%= f.association :county %>
+    <%= f.input :the_geom %>
+    <%= f.input :t_ofi %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,0 +1,61 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  code: MyString
+  address: MyString
+  name: MyString
+  role_number: MyString
+  file_number: MyString
+  file_data: 2019-04-20
+  owner: MyString
+  legal_agent: MyString
+  architect: MyString
+  floors: 1
+  undergrounds: 1
+  total_units: 1
+  total_parking: 1
+  total_commercials: 1
+  m2_approved: 
+  m2_built: 
+  m2_field: 
+  cadastral_date: 2019-04-20
+  comments: MyString
+  bimester: 1
+  year: 1
+  cadastre: MyString
+  active: false
+  project_type: one
+  future_project_type: one
+  county: one
+  the_geom: 
+  t_ofi: 1
+
+two:
+  code: MyString
+  address: MyString
+  name: MyString
+  role_number: MyString
+  file_number: MyString
+  file_data: 2019-04-20
+  owner: MyString
+  legal_agent: MyString
+  architect: MyString
+  floors: 1
+  undergrounds: 1
+  total_units: 1
+  total_parking: 1
+  total_commercials: 1
+  m2_approved: 
+  m2_built: 
+  m2_field: 
+  cadastral_date: 2019-04-20
+  comments: MyString
+  bimester: 1
+  year: 1
+  cadastre: MyString
+  active: false
+  project_type: two
+  future_project_type: two
+  county: two
+  the_geom: 
+  t_ofi: 1
