@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @property_type.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @property_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_property_type_path(@property_type) %> |
+<%= link_to 'Back', property_types_path %>
