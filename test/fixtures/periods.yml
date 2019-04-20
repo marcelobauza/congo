@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  bimester: 1
+  year: 1
+  active: false
+
+two:
+  bimester: 1
+  year: 1
+  active: false
