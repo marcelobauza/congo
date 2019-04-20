@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Future Project Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Abbrev</th>
+      <th>Color</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @future_project_types.each do |future_project_type| %>
+      <tr>
+        <td><%= future_project_type.name %></td>
+        <td><%= future_project_type.abbrev %></td>
+        <td><%= future_project_type.color %></td>
+        <td><%= link_to 'Show', future_project_type %></td>
+        <td><%= link_to 'Edit', edit_future_project_type_path(future_project_type) %></td>
+        <td><%= link_to 'Destroy', future_project_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Future Project Type', new_future_project_type_path %>

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @future_project_type.name %>
+</p>
+
+<p>
+  <strong>Abbrev:</strong>
+  <%= @future_project_type.abbrev %>
+</p>
+
+<p>
+  <strong>Color:</strong>
+  <%= @future_project_type.color %>
+</p>
+
+<%= link_to 'Edit', edit_future_project_type_path(@future_project_type) %> |
+<%= link_to 'Back', future_project_types_path %>

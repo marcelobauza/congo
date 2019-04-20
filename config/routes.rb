@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :transactions
   resources :layer_types
   resources :future_projects
+  resources :future_project_types
   resources :project_types
   devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

@@ -1,0 +1,2 @@
+class FutureProjectType < ApplicationRecord
+end
