@@ -1,7 +1,7 @@
 Congo.namespace('map_utils');
 
 Congo.map_utils = function(){
-  var url, map;
+  var url, map, groupLayer;
   var init = function(){
     url = window.location.hostname;
     var streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -13,9 +13,11 @@ Congo.map_utils = function(){
       map = L.map('map',{
       zoom: 9,
       center: [-33.113399134183744, -69.69339599609376],
-      zoomControl: false,
+      zoomControl: true,
       layers: [streets]
     }) ;
+    groupLayer = L.layerGroup();
+    groupLayer.addTo(map); 
   }
  
   function BoundingBox(){
@@ -25,7 +27,8 @@ Congo.map_utils = function(){
 
   counties = function(){
     
-        name_layer = Congo.dashboards.config.name_layer;
+        county_id = Congo.dashboards.config.county_id;
+        layer_type = Congo.dashboards.config.layer_type;
     var options = {
 
       layers: "inciti_v2:counties_info",//nombre de la capa (ver get capabilities)
@@ -37,16 +40,27 @@ Congo.map_utils = function(){
              styles: 'polygon',
              INFO_FORMAT: 'application/json',
              format_options: 'callback:getJson',
-             CQL_FILTER: "name='"+ name_layer + "'"
+             CQL_FILTER: "id='"+ county_id + "'"
            };
             source = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options);
-            source.addTo(map);
+            
+            groupLayer.addLayer(source);
+    var options_layers = {
 
-        
-//var sw = map.options.crs.source(map.getBounds().getSouthWest());
-      console.log(map.options.crs);
-    // map.fitBounds(source.getBounds());
-  
+      
+      layers: "inciti_v2:"+ layer_type,//nombre de la capa (ver get capabilities)
+             format: 'image/png',
+             transparent: 'true',
+             opacity: 1,
+             version: '1.0.0',//wms version (ver get capabilities)
+             tiled: true,
+             styles: 'poi_new',
+             INFO_FORMAT: 'application/json',
+             format_options: 'callback:getJson',
+             CQL_FILTER: "county_id='"+ county_id + "'"
+           };
+            source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
+            groupLayer.addLayer(source_layers);
   }
   return{
     init:init,
