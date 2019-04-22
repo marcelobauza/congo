@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_19_125420) do
+ActiveRecord::Schema.define(version: 2019_04_20_134001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -34,6 +34,50 @@ ActiveRecord::Schema.define(version: 2019_04_19_125420) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "future_project_types", force: :cascade do |t|
+    t.string "name"
+    t.string "abbrev"
+    t.string "color"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "future_projects", force: :cascade do |t|
+    t.string "code"
+    t.string "address"
+    t.string "name"
+    t.string "role_number"
+    t.string "file_number"
+    t.date "file_date"
+    t.string "owner"
+    t.string "legal_agent"
+    t.string "architect"
+    t.integer "floors"
+    t.integer "undergrounds"
+    t.integer "total_units"
+    t.integer "total_parking"
+    t.integer "total_commercials"
+    t.decimal "m2_approved"
+    t.decimal "m2_built"
+    t.decimal "m2_field"
+    t.date "cadastral_date"
+    t.string "comments"
+    t.integer "bimester"
+    t.integer "year"
+    t.string "cadastre"
+    t.boolean "active"
+    t.bigint "project_type_id"
+    t.bigint "future_project_type_id"
+    t.bigint "county_id"
+    t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
+    t.integer "t_ofi"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["county_id"], name: "index_future_projects_on_county_id"
+    t.index ["future_project_type_id"], name: "index_future_projects_on_future_project_type_id"
+    t.index ["project_type_id"], name: "index_future_projects_on_project_type_id"
+  end
+
   create_table "layer_types", force: :cascade do |t|
     t.string "name"
     t.string "title"
@@ -45,6 +89,14 @@ ActiveRecord::Schema.define(version: 2019_04_19_125420) do
     t.integer "bimester"
     t.integer "year"
     t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "project_types", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.boolean "is_active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -62,59 +114,7 @@ ActiveRecord::Schema.define(version: 2019_04_19_125420) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "transactions", id: :integer, default: nil, force: :cascade do |t|
-    t.geometry "the_geom", limit: {:srid=>4326, :type=>"st_point"}
-    t.integer "property_type_id"
-    t.string "address"
-    t.integer "sheet"
-    t.integer "number"
-    t.string "inscription_date"
-    t.string "buyer_name"
-    t.integer "seller_type_id"
-    t.string "department"
-    t.string "blueprint"
-    t.float "real_value"
-    t.float "calculated_value"
-    t.integer "quarter"
-    t.integer "year"
-    t.float "sample_factor"
-    t.integer "county_id"
-    t.string "created_at"
-    t.string "updated_at"
-    t.integer "cellar"
-    t.integer "parking"
-    t.string "role"
-    t.string "seller_name"
-    t.string "buyer_rut"
-    t.float "uf_m2"
-    t.integer "tome"
-    t.string "lot"
-    t.string "block"
-    t.string "village"
-    t.float "surface"
-    t.string "requiring_entity"
-    t.string "comments"
-    t.integer "user_id"
-    t.integer "surveyor_id"
-    t.string "active"
-    t.integer "bimester"
-    t.integer "code_sii"
-    t.float "total_surface_building"
-    t.float "total_surface_terrain"
-    t.float "uf_m2_u"
-    t.float "uf_m2_t"
-    t.string "building_regulation"
-    t.string "role_1"
-    t.string "role_2"
-    t.string "code_destination"
-    t.string "code_material"
-    t.string "year_sii"
-    t.string "role_associated"
-    t.float "lat"
-    t.float "lng"
-  end
-
-  create_table "transactions_new", id: :bigint, default: -> { "nextval('transactions_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "transactions", force: :cascade do |t|
     t.bigint "property_type_id"
     t.string "address"
     t.integer "sheet"
@@ -202,4 +202,7 @@ ActiveRecord::Schema.define(version: 2019_04_19_125420) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  add_foreign_key "future_projects", "counties"
+  add_foreign_key "future_projects", "future_project_types"
+  add_foreign_key "future_projects", "project_types"
 end
