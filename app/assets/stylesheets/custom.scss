@@ -26,7 +26,7 @@ body {
   width: 400px;
   position: absolute;
   right: 0px;
-  z-index: 9999;
+  z-index: 401;
   background-color: rgba(23, 32, 42, 0.1);
   pointer-events: auto;
 }
@@ -101,7 +101,8 @@ a:hover {
 //Dropdown
 div.dropdown-menu.show {
   min-width: unset;
-  width: 60px
+  width: 60px;
+  z-index: 402;
 }
 .dropdown-item {
   text-align: center !important;
