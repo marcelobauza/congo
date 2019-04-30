@@ -2,13 +2,15 @@ class FutureProjectsController < ApplicationController
   before_action :set_future_project, only: [:show, :edit, :update, :destroy]
 
   def dashboards
-
-end
+    respond_to do |f|
+      f.js    
+    end 
+  end
 
   def future_projects_summary
     result = {:sheet => "Resumen", :data => []}
 
-    begin
+    #begin
       general_data = general
       types = future_project_type
       desttypes = destination_project_type
@@ -17,57 +19,77 @@ end
       m2bimester = m2_built_bimester
       rates = future_project_rates
       #GENERAL
-      result = {:sheet => "Resumen", :data => []}
-      result[:data] << ["Información General"]
+      #result = {:sheet => "Resumen", :data => []}
+      #result[:data] << ["Información General"]
 
+      data =[]
+      result=[]
       general_data.each do |item|
-        result[:data] << [item[:label], item[:value].to_i]
+      #  result[:data] << [item[:label], item[:value].to_i]
+        data.push("label": item[:label], "data":item[:value].to_i)
       end
+      result.push("chart0": {"title":"info general",  "data": data})
       #TIPO DE EXPEDIENTE
-      result[:data] << [""]
-      result[:data] << ["Tipos de expediente"]
-      result[:data] << ["Tipo", "Total de expedientes"]
+      #result[:data] << [""]
+      #result[:data] << ["Tipos de expediente"]
+      #result[:data] << ["Tipo", "Total de expedientes"]
 
+      data =[]
       types.each_pair do |key, value|
-        result[:data] << [FutureProjectType.find(key).name.capitalize, value.to_i]
+        data.push("label": FutureProjectType.find(key).name.capitalize, "data":value.to_i)
+        #result[:data] << [FutureProjectType.find(key).name.capitalize, value.to_i]
       end
+      result.push("chart1": {"title":"Tipo de Expendiente",  "data": data})
 
       #TIPO DE DESTINO
-      result[:data] << [""]
-      result[:data] << ["Tipos de destino"]
-      result[:data] << ["Tipo", "Total de expedientes"]
+      #result[:data] << [""]
+      #result[:data] << ["Tipos de destino"]
+      #result[:data] << ["Tipo", "Total de expedientes"]
 
+      data =[]
       desttypes.each do |item|
-        result[:data] << [item["project_type_name"], item["value"].to_i]
+        data.push("label": item["project_type_name"], "data": item["value"].to_i)
+        #result[:data] << [item["project_type_name"], item["value"].to_i]
       end
 
+      result.push("chart2": {"title":"Tipo de Expendiente",  "data": data})
+    
+
+      @result = result
+      return @result
+
+
       ##TIPO DE DESTINO OTRO
-      result[:data] << [""]
-      result[:data] << ["Tipo de destino"]
+      #result[:data] << [""]
+      #result[:data] << ["Tipo de destino"]
 
       categories = []
-
+      data =[]
       dtypes.each do |item|
+        @item = item
+
         item[:values].each do |itm|
+        @itm = itm
           categories << itm["project_type"]
         end
       end
+#pry
+#      result[:data] << [""] + categories.uniq!
+#      dtypes.each do |item|
+#        temp = [item[:type]]
+#        categories.each do |cat|
+#          val = 0
+#          item[:values].each do |ty|
+#            val = ty["value"].to_i if ty["project_type"] == cat
+#          end
+#
+#          temp << val
+#        end
+#        result[:data] << temp
+#      end
 
-      result[:data] << [""] + categories.uniq!
-      dtypes.each do |item|
-        temp = [item[:type]]
-        categories.each do |cat|
-          val = 0
 
-          item[:values].each do |ty|
-            val = ty["value"].to_i if ty["project_type"] == cat
-          end
-
-          temp << val
-        end
-        result[:data] << temp
-      end
-
+    
       #UNIDADES NUEVAS POR BIMESTRE
       result[:data] << [""]
       result[:data] << ["Cantidad de unidades nuevas / bimestre"]
@@ -103,15 +125,15 @@ end
         result[:data] << [(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), item[:perm_rate].to_f, item[:recept_rate].to_f]
       end
 
-    rescue
-      result[:data] = ["Sin datos"]
-    end
+    #rescue
+    #  result[:data] = ["Sin datos"]
+    #end
 
     #file_path = Xls.generate [result], "/xls", {:file_name => "#{Time.now.strftime("%Y-%m-%d_%H.%M")}_expedientes", :clean_directory_path => true}
     #send_file file_path, :type => "application/excel"
-   @result = result
+    @result = result
   end
-def general
+  def general
     rates, global_information = FutureProject.find_globals(params)
     @general = []
     return if global_information.nil?
@@ -256,13 +278,13 @@ def general
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_future_project
-      @future_project = FutureProject.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_future_project
+    @future_project = FutureProject.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def future_project_params
-      params.require(:future_project).permit(:code, :address, :name, :role_number, :file_number, :file_date, :owner, :legal_agent, :architect, :floors, :undergrounds, :total_units, :total_parking, :total_commercials, :m2_approved, :m2_built, :m2_field, :cadastral_date, :comments, :bimester, :year, :cadastre, :active, :project_type_id, :future_project_type_id, :county_id, :the_geom, :t_ofi)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def future_project_params
+    params.require(:future_project).permit(:code, :address, :name, :role_number, :file_number, :file_date, :owner, :legal_agent, :architect, :floors, :undergrounds, :total_units, :total_parking, :total_commercials, :m2_approved, :m2_built, :m2_field, :cadastral_date, :comments, :bimester, :year, :cadastre, :active, :project_type_id, :future_project_type_id, :county_id, :the_geom, :t_ofi)
+  end
 end
