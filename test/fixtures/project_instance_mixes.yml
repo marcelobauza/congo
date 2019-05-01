@@ -1,0 +1,61 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  project_instance: one
+  mix_id: 1
+  percentage: 
+  DEFAULT: MyString
+  0: MyString
+  stock_units: 1
+  mix_m2_field: 
+  mix_m2_built: 
+  mix_usable_square_meters: 
+  mix_terrace_square_meters: 
+  mix_uf_m2: 
+  mix_selling_speed: 
+  mix_uf_value: 
+  living_room: 1
+  service_room: MyString
+  h_office: 1
+  discount: 9.99
+  uf_min: 
+  uf_max: 
+  uf_parking: 
+  uf_cellar: 
+  common_expenses: 
+  withdrawal_percent: 
+  total_units: 1
+  t_min: 9.99
+  t_max: 9.99
+  home_type: MyString
+  model: MyString
+
+two:
+  project_instance: two
+  mix_id: 1
+  percentage: 
+  DEFAULT: MyString
+  0: MyString
+  stock_units: 1
+  mix_m2_field: 
+  mix_m2_built: 
+  mix_usable_square_meters: 
+  mix_terrace_square_meters: 
+  mix_uf_m2: 
+  mix_selling_speed: 
+  mix_uf_value: 
+  living_room: 1
+  service_room: MyString
+  h_office: 1
+  discount: 9.99
+  uf_min: 
+  uf_max: 
+  uf_parking: 
+  uf_cellar: 
+  common_expenses: 
+  withdrawal_percent: 
+  total_units: 1
+  t_min: 9.99
+  t_max: 9.99
+  home_type: MyString
+  model: MyString

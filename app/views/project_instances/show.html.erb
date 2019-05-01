@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Project:</strong>
+  <%= @project_instance.project %>
+</p>
+
+<p>
+  <strong>Project status:</strong>
+  <%= @project_instance.project_status %>
+</p>
+
+<p>
+  <strong>Bimester:</strong>
+  <%= @project_instance.bimester %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @project_instance.year %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= @project_instance.active %>
+</p>
+
+<p>
+  <strong>Default:</strong>
+  <%= @project_instance.DEFAULT %>
+</p>
+
+<p>
+  <strong>True:</strong>
+  <%= @project_instance.true %>
+</p>
+
+<p>
+  <strong>Comments:</strong>
+  <%= @project_instance.comments %>
+</p>
+
+<p>
+  <strong>Cadastre:</strong>
+  <%= @project_instance.cadastre %>
+</p>
+
+<p>
+  <strong>Validated:</strong>
+  <%= @project_instance.validated %>
+</p>
+
+<p>
+  <strong>Default:</strong>
+  <%= @project_instance.DEFAULT %>
+</p>
+
+<p>
+  <strong>False:</strong>
+  <%= @project_instance.false %>
+</p>
+
+<%= link_to 'Edit', edit_project_instance_path(@project_instance) %> |
+<%= link_to 'Back', project_instances_path %>

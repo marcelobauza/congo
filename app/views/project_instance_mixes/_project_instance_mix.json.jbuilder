@@ -1,0 +1,2 @@
+json.extract! project_instance_mix, :id, :project_instance_id, :mix_id, :percentage, :DEFAULT, :0, :stock_units, :mix_m2_field, :mix_m2_built, :mix_usable_square_meters, :mix_terrace_square_meters, :mix_uf_m2, :mix_selling_speed, :mix_uf_value, :living_room, :service_room, :h_office, :discount, :uf_min, :uf_max, :uf_parking, :uf_cellar, :common_expenses, :withdrawal_percent, :total_units, :t_min, :t_max, :home_type, :model, :created_at, :updated_at
+json.url project_instance_mix_url(project_instance_mix, format: :json)

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Bedroom:</strong>
+  <%= @project_mix.bedroom %>
+</p>
+
+<p>
+  <strong>Bathroom:</strong>
+  <%= @project_mix.bathroom %>
+</p>
+
+<p>
+  <strong>Mix type:</strong>
+  <%= @project_mix.mix_type %>
+</p>
+
+<%= link_to 'Edit', edit_project_mix_path(@project_mix) %> |
+<%= link_to 'Back', project_mixes_path %>

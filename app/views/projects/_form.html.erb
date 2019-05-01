@@ -1,0 +1,30 @@
+
+<%= simple_form_for(@project) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :code %>
+    <%= f.input :name %>
+    <%= f.input :address %>
+    <%= f.input :floors %>
+    <%= f.input :DEFAULT %>
+    <%= f.input :0 %>
+    <%= f.input :county_id %>
+    <%= f.input :agency_id %>
+    <%= f.input :integer %>
+    <%= f.input :project_type_id %>
+    <%= f.input :the_geom %>
+    <%= f.input :build_date %>
+    <%= f.input :sale_date %>
+    <%= f.input :transfer_date %>
+    <%= f.input :pilot_opening_date %>
+    <%= f.input :quantity_department_for_floor %>
+    <%= f.input :elevators %>
+    <%= f.input :general_observation %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,0 +1,2 @@
+class ProjectMix < ApplicationRecord
+end

@@ -1,0 +1,41 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  code: MyString
+  name: MyString
+  address: MyString
+  floors: 1
+  DEFAULT: MyString
+  0: MyString
+  county_id: 1
+  agency_id: MyString
+  integer: MyString
+  project_type_id: 1
+  the_geom: 
+  build_date: MyString
+  sale_date: MyString
+  transfer_date: MyString
+  pilot_opening_date: MyString
+  quantity_department_for_floor: 1
+  elevators: 1
+  general_observation: MyText
+
+two:
+  code: MyString
+  name: MyString
+  address: MyString
+  floors: 1
+  DEFAULT: MyString
+  0: MyString
+  county_id: 1
+  agency_id: MyString
+  integer: MyString
+  project_type_id: 1
+  the_geom: 
+  build_date: MyString
+  sale_date: MyString
+  transfer_date: MyString
+  pilot_opening_date: MyString
+  quantity_department_for_floor: 1
+  elevators: 1
+  general_observation: MyText

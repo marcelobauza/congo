@@ -1,0 +1,61 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Projects</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Floors</th>
+      <th>Default</th>
+      <th>0</th>
+      <th>County</th>
+      <th>Agency</th>
+      <th>Integer</th>
+      <th>Project type</th>
+      <th>The geom</th>
+      <th>Build date</th>
+      <th>Sale date</th>
+      <th>Transfer date</th>
+      <th>Pilot opening date</th>
+      <th>Quantity department for floor</th>
+      <th>Elevators</th>
+      <th>General observation</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+        <td><%= project.code %></td>
+        <td><%= project.name %></td>
+        <td><%= project.address %></td>
+        <td><%= project.floors %></td>
+        <td><%= project.DEFAULT %></td>
+        <td><%= project.0 %></td>
+        <td><%= project.county_id %></td>
+        <td><%= project.agency_id %></td>
+        <td><%= project.integer %></td>
+        <td><%= project.project_type_id %></td>
+        <td><%= project.the_geom %></td>
+        <td><%= project.build_date %></td>
+        <td><%= project.sale_date %></td>
+        <td><%= project.transfer_date %></td>
+        <td><%= project.pilot_opening_date %></td>
+        <td><%= project.quantity_department_for_floor %></td>
+        <td><%= project.elevators %></td>
+        <td><%= project.general_observation %></td>
+        <td><%= link_to 'Show', project %></td>
+        <td><%= link_to 'Edit', edit_project_path(project) %></td>
+        <td><%= link_to 'Destroy', project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Project', new_project_path %>

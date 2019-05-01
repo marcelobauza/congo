@@ -1,0 +1,24 @@
+
+<%= simple_form_for(@project_instance) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.association :project %>
+    <%= f.association :project_status %>
+    <%= f.input :bimester %>
+    <%= f.input :year %>
+    <%= f.input :active %>
+    <%= f.input :DEFAULT %>
+    <%= f.input :true %>
+    <%= f.input :comments %>
+    <%= f.input :cadastre %>
+    <%= f.input :validated %>
+    <%= f.input :DEFAULT %>
+    <%= f.input :false %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,0 +1,40 @@
+
+<%= simple_form_for(@project_instance_mix) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.association :project_instance %>
+    <%= f.input :mix_id %>
+    <%= f.input :percentage %>
+    <%= f.input :DEFAULT %>
+    <%= f.input :0 %>
+    <%= f.input :stock_units %>
+    <%= f.input :mix_m2_field %>
+    <%= f.input :mix_m2_built %>
+    <%= f.input :mix_usable_square_meters %>
+    <%= f.input :mix_terrace_square_meters %>
+    <%= f.input :mix_uf_m2 %>
+    <%= f.input :mix_selling_speed %>
+    <%= f.input :mix_uf_value %>
+    <%= f.input :living_room %>
+    <%= f.input :service_room %>
+    <%= f.input :h_office %>
+    <%= f.input :discount %>
+    <%= f.input :uf_min %>
+    <%= f.input :uf_max %>
+    <%= f.input :uf_parking %>
+    <%= f.input :uf_cellar %>
+    <%= f.input :common_expenses %>
+    <%= f.input :withdrawal_percent %>
+    <%= f.input :total_units %>
+    <%= f.input :t_min %>
+    <%= f.input :t_max %>
+    <%= f.input :home_type %>
+    <%= f.input :model %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

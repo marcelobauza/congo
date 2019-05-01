@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Project Mixes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Bedroom</th>
+      <th>Bathroom</th>
+      <th>Mix type</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @project_mixes.each do |project_mix| %>
+      <tr>
+        <td><%= project_mix.bedroom %></td>
+        <td><%= project_mix.bathroom %></td>
+        <td><%= project_mix.mix_type %></td>
+        <td><%= link_to 'Show', project_mix %></td>
+        <td><%= link_to 'Edit', edit_project_mix_path(project_mix) %></td>
+        <td><%= link_to 'Destroy', project_mix, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Project Mix', new_project_mix_path %>
