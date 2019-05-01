@@ -31,7 +31,8 @@ gem 'rgeo-shapefile'
 gem 'rgeo-geojson'
 gem 'activerecord-postgis-adapter'
 gem 'rgeoserver'
-
+gem 'scenic'
+gem 'fx'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
