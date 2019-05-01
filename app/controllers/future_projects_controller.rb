@@ -11,119 +11,131 @@ class FutureProjectsController < ApplicationController
     result = {:sheet => "Resumen", :data => []}
 
     #begin
-      general_data = general
-      types = future_project_type
-      desttypes = destination_project_type
-      dtypes = destination_type
-      ubimester = unit_bimester
-      m2bimester = m2_built_bimester
-      rates = future_project_rates
-      #GENERAL
-      #result = {:sheet => "Resumen", :data => []}
-      #result[:data] << ["Información General"]
+    general_data = general
+    types = future_project_type
+    desttypes = destination_project_type
+    dtypes = destination_type
+    ubimester = unit_bimester
+    m2bimester = m2_built_bimester
+    rates = future_project_rates
+    #GENERAL
 
+    data =[]
+    result=[]
+    general_data.each do |item|
+      data.push("name": item[:label], "count":item[:value].to_i)
+    end
+    result.push(["chart0": {"title":"Informacion General", "serie0": {"data": data}}])
+
+    #TIPO DE EXPEDIENTE
+    data =[]
+    types.each_pair do |key, value|
+      data.push("name": FutureProjectType.find(key).name.capitalize, "count":value.to_i)
+    end
+    result.push(["chart1": {"title":"Tipo de Expendiente", "serie0":{"data": data}}])
+
+    #TIPO DE DESTINO
+    data =[]
+    desttypes.each do |item|
+      data.push("name": item["project_type_name"], "count": item["value"].to_i)
+    end
+    result.push(["chart2": {"title":"Tipo de Expendiente",  "data": data}])
+    ##TIPO DE DESTINO OTRO
+    categories = []
+    series = []
+    count = 0
+    chart = ["chart3":{"title": "Tipo de Destino"}]
+    dtypes.each do |item|
+      label = item[:type]
       data =[]
-      result=[]
-      general_data.each do |item|
-      #  result[:data] << [item[:label], item[:value].to_i]
-        data.push("label": item[:label], "data":item[:value].to_i)
+      item[:values].each do |itm|
+        data.push("name": itm["project_type"], "count": itm["value"].to_i)
       end
-      result.push("chart0": {"title":"info general",  "data": data})
-      #TIPO DE EXPEDIENTE
-      #result[:data] << [""]
-      #result[:data] << ["Tipos de expediente"]
-      #result[:data] << ["Tipo", "Total de expedientes"]
+      chart[0][:chart3].merge!("serie#{count}":{"label": label, "data": data}  )
+      count = count + 1 
+    end
+    result.push(chart)
 
-      data =[]
-      types.each_pair do |key, value|
-        data.push("label": FutureProjectType.find(key).name.capitalize, "data":value.to_i)
-        #result[:data] << [FutureProjectType.find(key).name.capitalize, value.to_i]
-      end
-      result.push("chart1": {"title":"Tipo de Expendiente",  "data": data})
+    #UNIDADES NUEVAS POR BIMESTRE
+    chart4 = ["chart4":{"title": "Cantidad de unidades nuevas / bimestre"}]
+    a = []
+    p = []
+    r = []
+    ubimester.last.each do |item|
+      @item = item
+      item[:values].each do |itm|
 
-      #TIPO DE DESTINO
-      #result[:data] << [""]
-      #result[:data] << ["Tipos de destino"]
-      #result[:data] << ["Tipo", "Total de expedientes"]
-
-      data =[]
-      desttypes.each do |item|
-        data.push("label": item["project_type_name"], "data": item["value"].to_i)
-        #result[:data] << [item["project_type_name"], item["value"].to_i]
-      end
-
-      result.push("chart2": {"title":"Tipo de Expendiente",  "data": data})
-    
-
-      @result = result
-      return @result
-
-
-      ##TIPO DE DESTINO OTRO
-      #result[:data] << [""]
-      #result[:data] << ["Tipo de destino"]
-
-      categories = []
-      data =[]
-      dtypes.each do |item|
-        @item = item
-
-        item[:values].each do |itm|
-        @itm = itm
-          categories << itm["project_type"]
+        if itm["y_label"] == 'ANTEPROYECTO'
+          a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+          chart4[0][:chart4].merge!("serie0":{"label": "ANTEPROYECTO", "data": a})
         end
+        if itm["y_label"] == 'PERMISO DE EDIFICACION'
+          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+          chart4[0][:chart4].merge!("serie1":{"label": "PERMISO DE EDIFICACION", "data": p})
+        end
+
+        if itm["y_label"] == 'RECEPCION MUNICIPAL'
+          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+          chart4[0][:chart4].merge!("serie2":{"label": "RECEPCION MUNICIPAL", "data": r})
+        end
+
       end
-#pry
-#      result[:data] << [""] + categories.uniq!
-#      dtypes.each do |item|
-#        temp = [item[:type]]
-#        categories.each do |cat|
-#          val = 0
-#          item[:values].each do |ty|
-#            val = ty["value"].to_i if ty["project_type"] == cat
-#          end
-#
-#          temp << val
-#        end
-#        result[:data] << temp
-#      end
+    end
+    result.push(chart4)
 
+    #SUPERFICIE EDIFICADA POR EXPEDIENTE
 
-    
-      #UNIDADES NUEVAS POR BIMESTRE
-      result[:data] << [""]
-      result[:data] << ["Cantidad de unidades nuevas / bimestre"]
-      result[:data] << ["Bimestre", "Anteproyecto", "Permiso edificación", "Recepción Municipal"]
+    chart5 = ["chart5":{"title": "Superficie edificada por expediente"}]
+    a = []
+    p = []
+    r = []
+    m2bimester.last.each do |item|
+      item[:values].each do |itm|
 
-      ubimester.last.each do |item|
-        value_1 = item[:values].first["y_value"].to_i rescue 0
-        value_2 = item[:values][1]["y_value"].to_i rescue 0
-        value_3 = item[:values].last["y_value"].to_i rescue 0
+        if itm["y_label"] == 'ANTEPROYECTO'
+          a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+          chart5[0][:chart5].merge!("serie0":{"label": "ANTEPROYECTO", "data": a})
+        end
+        if itm["y_label"] == 'PERMISO DE EDIFICACION'
+          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+          chart5[0][:chart5].merge!("serie1":{"label": "PERMISO DE EDIFICACION", "data": p})
+        end
 
-        result[:data] << [(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), value_1, value_2, value_3]
+        if itm["y_label"] == 'RECEPCION MUNICIPAL'
+          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+          chart5[0][:chart5].merge!("serie2":{"label": "RECEPCION MUNICIPAL", "data": r})
+        end
+
       end
+    end
+    result.push(chart5)
 
-      #SUPERFICIE EDIFICADA POR EXPEDIENTE
-      result[:data] << [""]
-      result[:data] << ["Superficie edificada por expediente"]
-      result[:data] << ["Bimestre", "Anteproyecto", "Permiso edificación", "Recepción Municipal"]
 
-      m2bimester.last.each do |item|
-        value_1 = item[:values].first["y_value"].to_i rescue 0
-        value_2 = item[:values][1]["y_value"].to_i rescue 0
-        value_3 = item[:values].last["y_value"].to_i rescue 0
 
-        result[:data] << [(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), value_1, value_2, value_3]
-      end
+    #TASAS
 
-      #TASAS
-      result[:data] << [""]
-      result[:data] << ["Tasas"]
-      result[:data] << ["Bimestre", "Tasa permiso / Anteproyecto", "Tasa recepciones / Permisos"]
+    chart6 = ["chart6":{"title": "Tasas"}]
+    p = []
+    r = []
+    rates.each do |item|
+      p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:perm_rate] )           
+      chart6[0][:chart6].merge!("serie0":{"label": "Tasa Permiso / Anteproyecto", "data": p})
 
-      rates.each do |item|
-        result[:data] << [(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), item[:perm_rate].to_f, item[:recept_rate].to_f]
-      end
+      r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:recept_rate] )           
+      chart6[0][:chart6].merge!("serie1":{"label": "Tasa Recepciones / Permisos", "data": r})
+    end
+    result.push(chart6)
+
+    @result = result
+    return @result
+
+    # result[:data] << [""]
+    # result[:data] << ["Tasas"]
+    # result[:data] << ["Bimestre", "Tasa permiso / Anteproyecto", "Tasa recepciones / Permisos"]
+
+    # rates.each do |item|
+    #   result[:data] << [(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), item[:perm_rate].to_f, item[:recept_rate].to_f]
+    # end
 
     #rescue
     #  result[:data] = ["Sin datos"]
