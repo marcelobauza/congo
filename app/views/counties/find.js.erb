@@ -1,6 +1,11 @@
 name = '<%= @county[0].name %>'
-Congo.dashboards.config.name_layer = name;
-$('#filter').replaceWith('<div class="filter"> Comuna: '+ name + '   </div>');
+id = '<%= @county[0].id %>'
+Congo.dashboards.config.county_name = name;
+Congo.dashboards.config.county_id = id;
+$('#filter').replaceWith('<div class="filter" id="filter"> Comuna: '+ name + '   </div>');
 Congo.map_utils.counties();
-$("#modal-counties").modal('hide');
+$('#modal-counties').on('hidden.bs.modal', function () {
+  console.log("hide modal");
+      $(this).remove();
+});
 
