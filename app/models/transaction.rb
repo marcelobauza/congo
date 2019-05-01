@@ -16,7 +16,7 @@ class Transaction < ApplicationRecord
   before_save :pm2
 
   
-  include Builders
+  include WhereBuilder
   include Util
   include Ranges
 
