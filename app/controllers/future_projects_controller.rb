@@ -10,7 +10,7 @@ class FutureProjectsController < ApplicationController
   def future_projects_summary
     result = {:sheet => "Resumen", :data => []}
 
-    #begin
+    begin
     general_data = general
     types = future_project_type
     desttypes = destination_project_type
@@ -25,39 +25,38 @@ class FutureProjectsController < ApplicationController
     general_data.each do |item|
       data.push("name": item[:label], "count":item[:value].to_i)
     end
-    result.push(["chart0": {"title":"Informacion General", "serie0": {"data": data}}])
+    result.push({"title":"Informacion General", "serie0": {"data": data}})
 
     #TIPO DE EXPEDIENTE
     data =[]
     types.each_pair do |key, value|
       data.push("name": FutureProjectType.find(key).name.capitalize, "count":value.to_i)
     end
-    result.push(["chart1": {"title":"Tipo de Expendiente", "serie0":{"data": data}}])
+    result.push({"title":"Tipo de Expendiente", "serie":[{"data": data}]})
 
     #TIPO DE DESTINO
     data =[]
     desttypes.each do |item|
       data.push("name": item["project_type_name"], "count": item["value"].to_i)
     end
-    result.push(["chart2": {"title":"Tipo de Expendiente",  "data": data}])
+    result.push({"title":"Tipo de Expendiente",  "serie": [{"data": data}]})
     ##TIPO DE DESTINO OTRO
     categories = []
     series = []
     count = 0
-    chart = ["chart3":{"title": "Tipo de Destino"}]
     dtypes.each do |item|
       label = item[:type]
       data =[]
       item[:values].each do |itm|
         data.push("name": itm["project_type"], "count": itm["value"].to_i)
       end
-      chart[0][:chart3].merge!("serie#{count}":{"label": label, "data": data}  )
+      categories.push({"label": label, "data": data} )
       count = count + 1 
     end
-    result.push(chart)
+    result.push({"title": "Tipo de Destino", "series":categories})
 
     #UNIDADES NUEVAS POR BIMESTRE
-    chart4 = ["chart4":{"title": "Cantidad de unidades nuevas / bimestre"}]
+    categories = []
     a = []
     p = []
     r = []
@@ -67,83 +66,73 @@ class FutureProjectsController < ApplicationController
 
         if itm["y_label"] == 'ANTEPROYECTO'
           a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
-          chart4[0][:chart4].merge!("serie0":{"label": "ANTEPROYECTO", "data": a})
+
         end
         if itm["y_label"] == 'PERMISO DE EDIFICACION'
           p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
-          chart4[0][:chart4].merge!("serie1":{"label": "PERMISO DE EDIFICACION", "data": p})
+
         end
 
         if itm["y_label"] == 'RECEPCION MUNICIPAL'
           r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
-          chart4[0][:chart4].merge!("serie2":{"label": "RECEPCION MUNICIPAL", "data": r})
-        end
 
+        end
       end
     end
-    result.push(chart4)
+          categories.push({"label": "ANTEPROYECTO", "data": a})
+          categories.push({"label": "PERMISO DE EDIFICACION", "data": p})
+          categories.push({"label": "RECEPCION MUNICIPAL", "data": r})
+    result.push({"title": "Cantidad de unidades nuevas / bimestre", "series": categories})
 
     #SUPERFICIE EDIFICADA POR EXPEDIENTE
 
-    chart5 = ["chart5":{"title": "Superficie edificada por expediente"}]
+    categories = []
     a = []
     p = []
     r = []
     m2bimester.last.each do |item|
+
       item[:values].each do |itm|
 
         if itm["y_label"] == 'ANTEPROYECTO'
           a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
-          chart5[0][:chart5].merge!("serie0":{"label": "ANTEPROYECTO", "data": a})
         end
         if itm["y_label"] == 'PERMISO DE EDIFICACION'
           p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
-          chart5[0][:chart5].merge!("serie1":{"label": "PERMISO DE EDIFICACION", "data": p})
         end
 
         if itm["y_label"] == 'RECEPCION MUNICIPAL'
           r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
-          chart5[0][:chart5].merge!("serie2":{"label": "RECEPCION MUNICIPAL", "data": r})
         end
-
       end
     end
-    result.push(chart5)
+          categories.push({"label": "ANTEPROYECTO", "data": a})
+          categories.push({"label": "PERMISO DE EDIFICACION", "data": p})
+          categories.push({"label": "RECEPCION MUNICIPAL", "data": r})
+    result.push({"title": "Superficie edificada por expediente", "series": categories })
 
 
 
     #TASAS
-
-    chart6 = ["chart6":{"title": "Tasas"}]
+    categories=[]
     p = []
     r = []
     rates.each do |item|
       p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:perm_rate] )           
-      chart6[0][:chart6].merge!("serie0":{"label": "Tasa Permiso / Anteproyecto", "data": p})
-
       r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:recept_rate] )           
-      chart6[0][:chart6].merge!("serie1":{"label": "Tasa Recepciones / Permisos", "data": r})
     end
-    result.push(chart6)
+      categories.push({"label": "Tasa Permiso / Anteproyecto", "data": p})
+      categories.push({"label": "Tasa Recepciones / Permisos", "data": r})
+    result.push({"title": "Tasas", "series":categories})
 
-    @result = result
-    return @result
-
-    # result[:data] << [""]
-    # result[:data] << ["Tasas"]
-    # result[:data] << ["Bimestre", "Tasa permiso / Anteproyecto", "Tasa recepciones / Permisos"]
-
-    # rates.each do |item|
-    #   result[:data] << [(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), item[:perm_rate].to_f, item[:recept_rate].to_f]
-    # end
-
-    #rescue
-    #  result[:data] = ["Sin datos"]
-    #end
+    rescue
+      result[:data] = ["Sin datos"]
+    end
 
     #file_path = Xls.generate [result], "/xls", {:file_name => "#{Time.now.strftime("%Y-%m-%d_%H.%M")}_expedientes", :clean_directory_path => true}
     #send_file file_path, :type => "application/excel"
     @result = result
+    return @result
   end
   def general
     rates, global_information = FutureProject.find_globals(params)
