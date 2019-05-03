@@ -33,6 +33,7 @@ gem 'activerecord-postgis-adapter'
 gem 'rgeoserver'
 gem 'scenic'
 gem 'fx'
+gem 'unicorn'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -60,6 +61,12 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry'
+  gem "capistrano", "~> 3.10", require: false
+  gem "capistrano-rails", "~> 1.4", require: false
+  gem 'capistrano-rvm'
+  gem 'capistrano-bundler'
+  gem 'capistrano3-unicorn'
+
 end
 
 group :test do
