@@ -25,21 +25,21 @@ class FutureProjectsController < ApplicationController
     general_data.each do |item|
       data.push("name": item[:label], "count":item[:value].to_i)
     end
-    result.push({"title":"Informacion General", "serie0": {"data": data}})
+    result.push({"title":"Informacion General", "series": {"data": data}})
 
     #TIPO DE EXPEDIENTE
     data =[]
     types.each_pair do |key, value|
       data.push("name": FutureProjectType.find(key).name.capitalize, "count":value.to_i)
     end
-    result.push({"title":"Tipo de Expendiente", "serie":[{"data": data}]})
+    result.push({"title":"Tipo de Expendiente", "series":[{"data": data}]})
 
     #TIPO DE DESTINO
     data =[]
     desttypes.each do |item|
       data.push("name": item["project_type_name"], "count": item["value"].to_i)
     end
-    result.push({"title":"Tipo de Expendiente",  "serie": [{"data": data}]})
+    result.push({"title":"Tipo de Expendiente",  "series": [{"data": data}]})
     ##TIPO DE DESTINO OTRO
     categories = []
     series = []
