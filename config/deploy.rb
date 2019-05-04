@@ -11,7 +11,7 @@ set :repo_url, "git@bitbucket.org:asergiop21/congo.git"
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/opt/inciti"
-set :rvm_ruby_version, '2.4.5'
+set :rvm_ruby_version, '2.4.1'
 set :migration_role, :db
 
 # Default value for :format is :airbrussh.
