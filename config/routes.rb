@@ -15,6 +15,11 @@ Rails.application.routes.draw do
     get 'dashboards/index'
   root 'dashboards#index'
   end
+  resources :project_mixes
+  resources :project_statuses
+  resources :project_instance_mixes
+  resources :project_instances
+  resources :projects
   resources :counties
   resources :property_types
   resources :transactions
