@@ -1,0 +1,43 @@
+<div class="span">
+  <table class="bordered-table zebra-striped">
+    <thead>
+      <tr>
+        <th><%= User.human_attribute_name :name %></th>
+        <th><%= User.human_attribute_name :complete_name %></th>
+        <th><%= User.human_attribute_name :email %></th>
+        <th><%= User.human_attribute_name :company %></th>
+        <th><%= User.human_attribute_name :disabled %></th>
+        <th><%= User.human_attribute_name :is_temporal %></th>
+        <th><%= User.human_attribute_name :role %></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%=h(user.name) %></td>
+          <td><%=h user.complete_name %></td>
+          <td><%=h user.email %></td>
+          <td><%=h user.company %></td>
+          <td><%=h user.disabled  ? t(:YES) : t(:NO) %></td>
+          <td><%=h user.is_temporal ? t(:YES) : t(:NO) %></td>
+          <td><%=h user.role_id unless user.role_id.nil? %></td>
+          <td>
+            <div class="ui-state-default ui-corner-all" title="<%= t 'actions.edit' %>">
+              <%= link_to "", edit_user_path(user), :class => "ui-icon ui-icon-pencil" %>
+            </div>
+          </td>
+          <td>
+            <div class="ui-state-default ui-corner-all" title="<%= t 'actions.delete' %>">
+              <%= link_to "", user_path(user), :confirm => t('questions.are_you_sure'), :method => :delete, :class => "ui-icon ui-icon-trash" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="pull-left">
+    <%= will_paginate @users %>
+  </div>
+</div>

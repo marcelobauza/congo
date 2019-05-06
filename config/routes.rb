@@ -1,12 +1,5 @@
 Rails.application.routes.draw do
 
-
-
-  resources :project_mixes
-  resources :project_statuses
-  resources :project_instance_mixes
-  resources :project_instances
-  resources :projects
   get 'dashboards/index'
   get 'counties/find' => 'counties#find'
   get 'transactions/transactions_summary' => 'transactions#transactions_summary'
@@ -29,6 +22,7 @@ Rails.application.routes.draw do
   resources :project_types
   resources :seller_types
   devise_for :users
+  resources :users 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'dashboards#index'
 end
