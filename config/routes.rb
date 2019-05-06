@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   get 'projects/dashboards' => 'projects#dashboards'
   
   namespace :admin do
-      resources :periods
+    resources :periods
+    get 'dashboards/index'
+  root 'dashboards#index'
   end
   resources :counties
   resources :property_types
