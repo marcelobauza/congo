@@ -3,12 +3,15 @@ class TransactionsController < ApplicationController
   include NumberFormatter
 
   def dashboards
-
+    respond_to do |f|
+      f.js    
+    end 
   end
 
 
   def transactions_summary
-    result = {:sheet => "Resumen", :data => []}
+    result =[]
+
     begin
       global_transactions = Transaction.find_globals(params)
       general_data = [
@@ -19,106 +22,101 @@ class TransactionsController < ApplicationController
         {:label => t(:AVG_TRANSACTIONS_BIMESTER), :value => global_transactions[:avg_trans_count]},
         {:label => t(:AVG_UF_VOLUME_BIMESTER), :value => global_transactions[:avg_uf_volume]}]
 
-        ptypes = property_type
-        stypes = seller_type
-        transactions_by_periods = Transaction.group_transaction_county_and_bimester(params)
-        uf_periods = uf_period
-        average_uf_periods = average_uf_period
-        transactions_ufs = transactions_uf
-
-        #GENERAL
-        result = {:sheet => "Resumen", :data => []}
-        result[:data] << ["Información General"]
-
-        general_data.each do |item|
-          result[:data] << [item[:label], item[:value].to_i]
-        end
-        
-        #TIPO DE PROPIEDAD
-
-        result[:data] << [""]
-        result[:data] << ["Tipo de propiedad"]
-        result[:data] << ["Tipo", "Total de transacciones"]
-
-        ptypes.each do |prop|
-          result[:data] << [prop.name.capitalize, prop.value.to_i]
-        end
 
 
-        #TIPO DE VENDEDOR
+      ptypes = property_type
+      stypes = seller_type
+      transactions_by_periods = Transaction.group_transaction_county_and_bimester(params)
+      uf_periods = uf_period
+      average_uf_periods = average_uf_period
+      transactions_ufs = transactions_uf
 
-        result[:data] << [""]
-        result[:data] << ["Tipo de vendedor"]
-        result[:data] << ["Tipo", "Total de transacciones"]
+      #GENERAL
+      #result = {:sheet => "Resumen", :data => []}
+      #result[:data] << ["Información General"]
 
-        stypes.each do |seller|
-          result[:data] << [seller.name.capitalize, seller.value.to_i]
-        end
-
-
-        #TRANSACCIONES POR BIMESTRE
-
-        result[:data] << [""]
-        result[:data] << ["Transacciones por bimestre"]
-
-        counties_count = (transactions_by_periods.first.size - 3) / 2
-
-        label = ["Bimestre"]
-
-        1.upto(counties_count).each do |idx|
-          label << transactions_by_periods.first["y#{idx}_label".to_sym]
-        end
-
-        result[:data] << label
-
-        transactions_by_periods.each do |tb|
-          val = [tb[:label]]
-
-          1.upto(counties_count).each do |idx|
-            if tb["y#{idx}_value".to_sym].nil?
-              val << 0
-            else
-              val << tb["y#{idx}_value".to_sym].to_i
-            end
-          end
-
-          result[:data] << val
-        end
+      data =[]
+      result=[]
+      general_data.each do |item|
+        data.push("name": item[:label], "data":item[:value].to_i)
+      end
+      result.push({"title":"informacion General", "series":{"data": data}})
 
 
-        #UF PERIOD
+      #TIPO DE PROPIEDAD
+      data =[]
 
-        result[:data] << [""]
-        result[:data] << ["UF por Bimestre"]
-        result[:data] << ["Bimestre", "UF"]
-
-        uf_periods.each do |ufp|
-          result[:data] << [(ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), ufp[:value].to_i]
-        end
+      ptypes.each do |prop|
+        data.push("name": prop.name.capitalize, "count": prop.value.to_i)
+      end
+      result.push({"title":"tipo propiedad", "series":{"data": data}})
 
 
-        #AVERAGE UF PERIOD
+      
+    #TIPO DE VENDEDOR
 
-        result[:data] << [""]
-        result[:data] << ["Precio Promedio en UF por Bimestre"]
-        result[:data] << ["Bimestre", "Promedio UF"]
+      data =[]
+      stypes.each do |seller|
+        data.push({"name": seller.name.capitalize, "count":seller.value.to_i})
+      end
 
-        average_uf_periods.each do |aup|
-          result[:data] << [(aup[:period].to_s + "/" + aup[:year].to_s[2,3]), aup[:value].to_i]
-        end
+      result.push({"title":"Tipo de Vendedor", "series":{"data": data}})
+
+      #TRANSACCIONES POR BIMESTRE
+
+      # data =[]
+      # counties_count = (transactions_by_periods.first.size - 3) / 2
+
+      # label = ["Bimestre"]
+
+      # 1.upto(counties_count).each do |idx|
+      #   label << transactions_by_periods.first["y#{idx}_label".to_sym]
+      # end
+
+      # result[:data] << label
+
+      # transactions_by_periods.each do |tb|
+      #   val = [tb[:label]]
+
+      #   1.upto(counties_count).each do |idx|
+      #     if tb["y#{idx}_value".to_sym].nil?
+      #       val << 0
+      #     else
+      #       val << tb["y#{idx}_value".to_sym].to_i
+      #     end
+      #   end
+
+      #   result[:data] << val
+      # end
+
+      #UF PERIOD
+
+      data =[]
+      uf_periods.each do |ufp|
+        data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
+      end
+      result.push({"title":"UF por Bimestre", "series":{"data": data}})
 
 
-        #TRANSACTION UF
+      #AVERAGE UF PERIOD
 
-        result[:data] << [""]
-        result[:data] << ["Transacciones por UF"]
-        result[:data] << ["Rangos UF", "Total de transacciones"]
+      data =[]
+      average_uf_periods.each do |aup|
+        data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
+      end
 
-        transactions_ufs.each do |aup|
-        
-          result[:data] << [NumberFormatter.format(aup[:from], false).to_s + " - " + NumberFormatter.format(aup[:to], false).to_s,
-            aup[:value].to_i]
-        end
+      result.push({"title":"Precio Promedio en UF por Bimestre", "series":{"data": data}})
+
+      #TRANSACTION UF
+
+      data =[]
+
+      transactions_ufs.each do |aup|
+        data.push({"name": NumberFormatter.format(aup[:from], false).to_s + " - " + NumberFormatter.format(aup[:to], false).to_s, "count": aup[:value].to_i})
+      end
+   
+      result.push({"title":"Transacciones por UF", "series":{"data": data}})
+
     rescue
       result[:data] = ["Sin datos"]
     end
@@ -126,8 +124,8 @@ class TransactionsController < ApplicationController
 
     #file_path = Xls.generate [result], "/xls", {:file_name => "#{Time.now.strftime("%Y-%m-%d_%H.%M")}_transacciones", :clean_directory_path => true}
     #send_file file_path, :type => "application/excel"
-    @result = result
-    return @result 
+   @result = result
+   return @result 
   end
 
   def period
