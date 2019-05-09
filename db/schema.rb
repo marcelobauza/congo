@@ -354,4 +354,110 @@ ActiveRecord::Schema.define(version: 2019_04_21_215830) do
   add_foreign_key "project_instance_mixes", "project_instances"
   add_foreign_key "project_instances", "project_statuses"
   add_foreign_key "project_instances", "projects"
+
+  create_function :masud, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.masud(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      DECLARE m int;
+      BEGIN
+        m = months2(cadastre, sale_date);
+        RETURN ( SELECT CASE (total_units - stock_units) WHEN 0 THEN 0 
+        ELSE CASE m WHEN 0 THEN null
+        ELSE (stock_units / ((total_units - stock_units)::double precision /m)) END
+                                                      END) as masud;
+
+                                                  END;
+                                                  $function$
+  SQL
+  create_function :pp_utiles, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_utiles(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      declare disp int;
+      BEGIN
+        disp = (select sum(pim.stock_units)
+          from project_instance_mixes pim
+          where pim.project_instance_id = proj_instance_id);
+
+        if (disp = 0) then
+          return 0;
+        else
+          RETURN (select sum(pim.mix_usable_square_meters * pim.stock_units)/disp::int 
+            as pp_utiles
+            from project_instance_mixes pim
+            where pim.project_instance_id = proj_instance_id);
+        end if;
+                                          END;
+                                          $function$
+  SQL
+  create_function :vhmu, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.vhmu(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      DECLARE m int;
+      BEGIN
+
+        m = months2(cadastre, sale_date);
+        RETURN (  SELECT CASE m WHEN 0 THEN 1
+        ELSE (total_units - stock_units) / m::numeric END) as vhmu;
+        END;
+      $function$
+  SQL
+
+  create_trigger :layer_integrity_checks, sql_definition: <<-SQL
+      CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE PROCEDURE topology.layertrigger()
+  SQL
+
+  create_view "counties_info", sql_definition: <<-SQL
+      SELECT counties.id,
+      counties.name,
+      counties.the_geom
+     FROM counties;
+  SQL
+  create_view "project_instance_mix_views", sql_definition: <<-SQL
+      SELECT pim.project_instance_id,
+      (pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_min_percent,
+      (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_max_percent,
+      (((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) AS uf_avg_percent,
+      (pim.mix_usable_square_meters * (pim.total_units)::numeric) AS total_m2,
+      (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5)) AS u_half_terrace,
+      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5))) AS uf_m2,
+      (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric))::double precision / ((pim.mix_usable_square_meters)::double precision + ((((pim.t_min + pim.t_max))::double precision / (2)::double precision) * (0.25)::double precision))) AS uf_m2_home,
+      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters) AS uf_m2_u,
+      (vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date))::numeric AS vhmu,
+      ((pim.stock_units)::numeric * pim.mix_usable_square_meters) AS dis_m2,
+      masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date) AS masud,
+          CASE masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
+              WHEN 0 THEN (0)::real
+              ELSE vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
+          END AS vhmud,
+      (pim.total_units - pim.stock_units) AS sold_units,
+      pim.id,
+      (((pim.t_min + pim.t_max))::double precision / (2)::double precision) AS ps_terreno,
+      pim.stock_units,
+      pim.total_units,
+      pim.mix_terrace_square_meters,
+      pim.mix_usable_square_meters,
+      pim.t_min,
+      pim.t_max,
+      p.county_id,
+      p.id AS project_id,
+      p.the_geom,
+      pi.year,
+      pi.bimester,
+      pi.project_status_id,
+      p.project_type_id,
+      pim.mix_id,
+      p.name,
+      pp_utiles(pi.id) AS pp_utiles,
+      p.floors,
+      p.agency_id
+     FROM ((project_instance_mixes pim
+       JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
+       JOIN projects p ON ((pi.project_id = p.id)));
+  SQL
 end
