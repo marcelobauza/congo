@@ -4,7 +4,7 @@ Congo.map_utils.config={
   radius: 0,
   centerpt: '',
   cql_filter: '',
-  type_geometry: '',
+  typeGeometry: '',
   size_box: ''
 }
 
@@ -31,7 +31,7 @@ Congo.map_utils = function(){
 
     $('#select_circle').on('click', function(event) {
       checked = $('#select_circle').hasClass('active');
-      let type_geometry='circle';
+      let typeGeometry='circle';
       if (checked){
         // editableLayers.eachLayer(function (layer) {
         //             mymap.removeLayer(layer);
@@ -46,14 +46,14 @@ Congo.map_utils = function(){
         }
         editableLayers = new L.FeatureGroup();
         map.addLayer(editableLayers);
-        poly(type_geometry);
+        poly(typeGeometry);
         map.on('draw:created', function(e) {
           layer = e.layer
           var centerPt = layer.getLatLng();
           var radius = layer.getRadius();
           Congo.map_utils.radius = (radius/1000);
           center = centerPt.lng +" " + centerPt.lat; 
-          Congo.map_utils.type_geometry = type_geometry; 
+          Congo.map_utils.typeGeometry = typeGeometry; 
           Congo.map_utils.centerpt = center;
           editableLayers.addLayer(layer);
           $('#select_circle').removeClass('active');
@@ -61,7 +61,7 @@ Congo.map_utils = function(){
         });
       }});
     $('#select_polygon').on('click', function(event) {
-      let type_geometry='polygon';
+      let typeGeometry='polygon';
       size_box = [];
 
       if(typeof(editableLayers)!=='undefined'){
@@ -72,8 +72,8 @@ Congo.map_utils = function(){
       map.doubleClickZoom.disable();
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
-      Congo.map_utils.type_geometry = type_geometry; 
-      poly(type_geometry);
+      Congo.map_utils.typeGeometry = typeGeometry; 
+      poly(typeGeometry);
       map.on('draw:created', function(e) {
         var arr1 = []
         var type = e.layerType,
@@ -139,10 +139,10 @@ Congo.map_utils = function(){
       map.removeLayer(groupLayer);
     }
 
-    type_geometry = Congo.map_utils.type_geometry;
+    typeGeometry = Congo.map_utils.typeGeometry;
 
     county_id = Congo.dashboards.config.county_id;
-    switch(type_geometry) {
+    switch(typeGeometry) {
       case 'circle':
         centerpt = Congo.map_utils.centerpt;
         radius = Congo.map_utils.radius;
