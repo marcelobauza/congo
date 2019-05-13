@@ -65,16 +65,10 @@ Congo.future_projects.action_dashboards = function(){
               if (label == 'ANTEPROYECTO') {
                 serie_colour = '#60c843'
               }
-              if (label == 'PERMISO DE EDIFICACION') {
+              if (label == 'PERMISO DE EDIFICACION' || label == 'Tasa Permiso / Anteproyecto') {
                 serie_colour = '#0f115b'
               }
-              if (label == 'RECEPCION MUNICIPAL') {
-                serie_colour = '#eb2817'
-              }
-              if (label == 'Tasa Permiso / Anteproyecto') {
-                serie_colour = '#0f115b'
-              }
-              if (label == 'Tasa Recepciones / Permisos') {
+              if (label == 'RECEPCION MUNICIPAL' || label == 'Tasa Recepciones / Permisos') {
                 serie_colour = '#eb2817'
               }
 
