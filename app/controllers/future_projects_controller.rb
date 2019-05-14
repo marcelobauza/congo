@@ -25,7 +25,7 @@ class FutureProjectsController < ApplicationController
     general_data.each do |item|
       data.push("name": item[:label], "count":item[:value].to_i)
     end
-    result.push({"title":"Información General", "series": {"data": data}})
+    result.push({"title":"Información General", "data": data})
 
     #TIPO DE EXPEDIENTE
     data =[]
