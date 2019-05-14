@@ -118,7 +118,7 @@ Congo.future_projects.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  backgroundColor: serie_colour,
+                  //backgroundColor: serie_colour,
                 })
               }
 
