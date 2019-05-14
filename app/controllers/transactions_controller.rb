@@ -38,9 +38,9 @@ class TransactionsController < ApplicationController
       data =[]
       result=[]
       general_data.each do |item|
-        data.push("name": item[:label], "data":item[:value].to_i)
+        data.push("name": item[:label], "count":item[:value].to_i)
       end
-      result.push({"title":"Información General", "series":{"data": data}})
+      result.push({"title":"Información General", "data": data})
 
 
       #TIPO DE PROPIEDAD
@@ -49,7 +49,7 @@ class TransactionsController < ApplicationController
       ptypes.each do |prop|
         data.push("name": prop.name.capitalize, "count": prop.value.to_i)
       end
-      result.push({"title":"Tipo de Propiedad", "series":{"data": data}})
+      result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
 
 
 
@@ -60,7 +60,7 @@ class TransactionsController < ApplicationController
         data.push({"name": seller.name.capitalize, "count":seller.value.to_i})
       end
 
-      result.push({"title":"Tipo de Vendedor", "series":{"data": data}})
+      result.push({"title":"Tipo de Vendedor", "series":[{"data": data}]})
 
       #TRANSACCIONES POR BIMESTRE
 
@@ -95,7 +95,7 @@ class TransactionsController < ApplicationController
       uf_periods.each do |ufp|
         data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
       end
-      result.push({"title":"UF / Bimestre", "series":{"data": data}})
+      result.push({"title":"UF / Bimestre", "series":[{"data": data}]})
 
 
       #AVERAGE UF PERIOD
@@ -105,7 +105,7 @@ class TransactionsController < ApplicationController
         data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
       end
 
-      result.push({"title":"Precio Promedio en UF / Bimestre", "series":{"data": data}})
+      result.push({"title":"Precio Promedio en UF / Bimestre", "series":[{"data": data}]})
 
       #TRANSACTION UF
 
@@ -115,7 +115,7 @@ class TransactionsController < ApplicationController
         data.push({"name": NumberFormatter.format(aup[:from], false).to_s + " - " + NumberFormatter.format(aup[:to], false).to_s, "count": aup[:value].to_i})
       end
 
-      result.push({"title":"Transacciones / UF", "series":{"data": data}})
+      result.push({"title":"Transacciones / UF", "series":[{"data": data}]})
 
     rescue
       result[:data] = ["Sin datos"]
