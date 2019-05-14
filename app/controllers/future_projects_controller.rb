@@ -3,8 +3,8 @@ class FutureProjectsController < ApplicationController
 
   def dashboards
     respond_to do |f|
-      f.js    
-    end 
+      f.js
+    end
   end
 
   def future_projects_summary
@@ -51,7 +51,7 @@ class FutureProjectsController < ApplicationController
         data.push("name": itm["project_type"], "count": itm["value"].to_i)
       end
       categories.push({"label": label, "data": data} )
-      count = count + 1 
+      count = count + 1
     end
     result.push({"title": "Tipo de Destino Bar", "series":categories})
 
@@ -64,17 +64,17 @@ class FutureProjectsController < ApplicationController
       @item = item
       item[:values].each do |itm|
 
-          a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
         if itm["y_label"] == 'Anteproyecto'
+          a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
 
         end
-          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
         if itm["y_label"] == 'Permiso de Edif.'
+          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
 
         end
 
-          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
         if itm["y_label"] == 'Recep. Municipal'
+          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
 
         end
       end
@@ -94,15 +94,15 @@ class FutureProjectsController < ApplicationController
 
       item[:values].each do |itm|
 
-          a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
         if itm["y_label"] == 'Anteproyecto'
+          a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
         end
-          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
         if itm["y_label"] == 'Permiso de Edif.'
+          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
         end
 
-          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
         if itm["y_label"] == 'Recep. Municipal'
+          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
         end
       end
     end
@@ -118,8 +118,8 @@ class FutureProjectsController < ApplicationController
     p = []
     r = []
     rates.each do |item|
-      p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:perm_rate] )           
-      r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:recept_rate] )           
+      p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:perm_rate] )
+      r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:recept_rate] )
     end
       categories.push({"label": "Tasa Permiso / Anteproyecto", "data": p})
       categories.push({"label": "Tasa Recepciones / Permisos", "data": r})

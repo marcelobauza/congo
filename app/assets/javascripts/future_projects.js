@@ -10,7 +10,7 @@ Congo.future_projects.action_dashboards = function(){
 
   init=function(){
 
-    Congo.map_utils.init();  
+    Congo.map_utils.init();
 
   }
 
