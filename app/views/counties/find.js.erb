@@ -5,7 +5,6 @@ Congo.dashboards.config.county_id = id;
 $('#filter').replaceWith('<div class="filter" id="filter"> Comuna: '+ name + '   </div>');
 Congo.map_utils.counties();
 $('#modal-counties').on('hidden.bs.modal', function () {
-  console.log("hide modal");
-      $(this).remove();
+  $(this).remove();
 });
-
+$("#modal-counties").modal('hide');
