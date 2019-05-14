@@ -192,6 +192,11 @@ Congo.future_projects.action_dashboards = function(){
                 scales: {
                   xAxes: [{
                     stacked: true,
+                    ticks: {
+                      beginAtZero:true,
+                      autoSkip: false,
+                      maxRotation: 0,
+                    },
                   }],
                   yAxes: [{
                     stacked: true,
