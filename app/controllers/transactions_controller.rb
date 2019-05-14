@@ -40,7 +40,7 @@ class TransactionsController < ApplicationController
       general_data.each do |item|
         data.push("name": item[:label], "data":item[:value].to_i)
       end
-      result.push({"title":"informacion General", "series":{"data": data}})
+      result.push({"title":"Información General", "series":{"data": data}})
 
 
       #TIPO DE PROPIEDAD
@@ -49,7 +49,7 @@ class TransactionsController < ApplicationController
       ptypes.each do |prop|
         data.push("name": prop.name.capitalize, "count": prop.value.to_i)
       end
-      result.push({"title":"tipo propiedad", "series":{"data": data}})
+      result.push({"title":"Tipo de Propiedad", "series":{"data": data}})
 
 
       
@@ -95,7 +95,7 @@ class TransactionsController < ApplicationController
       uf_periods.each do |ufp|
         data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
       end
-      result.push({"title":"UF por Bimestre", "series":{"data": data}})
+      result.push({"title":"UF / Bimestre", "series":{"data": data}})
 
 
       #AVERAGE UF PERIOD
@@ -105,7 +105,7 @@ class TransactionsController < ApplicationController
         data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
       end
 
-      result.push({"title":"Precio Promedio en UF por Bimestre", "series":{"data": data}})
+      result.push({"title":"Precio Promedio en UF / Bimestre", "series":{"data": data}})
 
       #TRANSACTION UF
 
@@ -115,7 +115,7 @@ class TransactionsController < ApplicationController
         data.push({"name": NumberFormatter.format(aup[:from], false).to_s + " - " + NumberFormatter.format(aup[:to], false).to_s, "count": aup[:value].to_i})
       end
    
-      result.push({"title":"Transacciones por UF", "series":{"data": data}})
+      result.push({"title":"Transacciones / UF", "series":{"data": data}})
 
     rescue
       result[:data] = ["Sin datos"]
