@@ -25,7 +25,7 @@ class FutureProjectsController < ApplicationController
     general_data.each do |item|
       data.push("name": item[:label], "count":item[:value].to_i)
     end
-    result.push({"title":"Informacion General", "series": {"data": data}})
+    result.push({"title":"Información General", "series": {"data": data}})
 
     #TIPO DE EXPEDIENTE
     data =[]
@@ -34,13 +34,13 @@ class FutureProjectsController < ApplicationController
     end
     result.push({"title":"Tipo de Expendiente", "series":[{"data": data}]})
 
-    #TIPO DE DESTINO
+    #TIPO DE DESTINO PIE
     data =[]
     desttypes.each do |item|
       data.push("name": item["project_type_name"], "count": item["value"].to_i)
     end
-    result.push({"title":"Tipo de Expendiente",  "series": [{"data": data}]})
-    ##TIPO DE DESTINO OTRO
+    result.push({"title":"Tipo de Destino Pie",  "series": [{"data": data}]})
+    ##TIPO DE DESTINO BAR
     categories = []
     series = []
     count = 0
@@ -53,7 +53,7 @@ class FutureProjectsController < ApplicationController
       categories.push({"label": label, "data": data} )
       count = count + 1 
     end
-    result.push({"title": "Tipo de Destino", "series":categories})
+    result.push({"title": "Tipo de Destino Bar", "series":categories})
 
     #UNIDADES NUEVAS POR BIMESTRE
     categories = []
@@ -64,25 +64,25 @@ class FutureProjectsController < ApplicationController
       @item = item
       item[:values].each do |itm|
 
-        if itm["y_label"] == 'ANTEPROYECTO'
           a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+        if itm["y_label"] == 'Anteproyecto'
 
         end
-        if itm["y_label"] == 'PERMISO DE EDIFICACION'
           p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+        if itm["y_label"] == 'Permiso de Edif.'
 
         end
 
-        if itm["y_label"] == 'RECEPCION MUNICIPAL'
           r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+        if itm["y_label"] == 'Recep. Municipal'
 
         end
       end
     end
-          categories.push({"label": "ANTEPROYECTO", "data": a})
-          categories.push({"label": "PERMISO DE EDIFICACION", "data": p})
-          categories.push({"label": "RECEPCION MUNICIPAL", "data": r})
-    result.push({"title": "Cantidad de unidades nuevas / bimestre", "series": categories})
+          categories.push({"label": "Anteproyecto", "data": a})
+          categories.push({"label": "Permiso de Edif.", "data": p})
+          categories.push({"label": "Recep. Municipal", "data": r})
+    result.push({"title": "Cantidad de Nuevas Unidades / Bimestre", "series": categories})
 
     #SUPERFICIE EDIFICADA POR EXPEDIENTE
 
@@ -94,22 +94,22 @@ class FutureProjectsController < ApplicationController
 
       item[:values].each do |itm|
 
-        if itm["y_label"] == 'ANTEPROYECTO'
           a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+        if itm["y_label"] == 'Anteproyecto'
         end
-        if itm["y_label"] == 'PERMISO DE EDIFICACION'
           p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+        if itm["y_label"] == 'Permiso de Edif.'
         end
 
-        if itm["y_label"] == 'RECEPCION MUNICIPAL'
           r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )           
+        if itm["y_label"] == 'Recep. Municipal'
         end
       end
     end
-          categories.push({"label": "ANTEPROYECTO", "data": a})
-          categories.push({"label": "PERMISO DE EDIFICACION", "data": p})
-          categories.push({"label": "RECEPCION MUNICIPAL", "data": r})
-    result.push({"title": "Superficie edificada por expediente", "series": categories })
+          categories.push({"label": "Anteproyecto", "data": a})
+          categories.push({"label": "Permiso de Edif.", "data": p})
+          categories.push({"label": "Recep. Municipal", "data": r})
+    result.push({"title": "Superficie Edificada Por Expediente", "series": categories })
 
 
 

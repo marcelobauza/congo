@@ -33,8 +33,8 @@ Congo.future_projects.action_dashboards = function(){
           var title = reg['title'];
           var series = reg['series'];
 
-          //Extraemos los datos de "Informacion General" para tratarlos por separado
-          if (title == "Informacion General") {
+          //Extraemos los datos de "Información General" para tratarlos por separado
+          if (title == "Información General") {
 
             var info = reg['data'];
 
@@ -62,13 +62,13 @@ Congo.future_projects.action_dashboards = function(){
               var label = b['label']
               var data = b['data']
 
-              if (label == 'ANTEPROYECTO') {
+              if (label == 'Anteproyecto') {
                 serie_colour = '#60c843'
               }
-              if (label == 'PERMISO DE EDIFICACION' || label == 'Tasa Permiso / Anteproyecto') {
+              if (label == 'Permiso de Edif.' || label == 'Tasa Permiso / Anteproyecto') {
                 serie_colour = '#0f115b'
               }
-              if (label == 'RECEPCION MUNICIPAL' || label == 'Tasa Recepciones / Permisos') {
+              if (label == 'Recep. Municipal' || label == 'Tasa Recepciones / Permisos') {
                 serie_colour = '#eb2817'
               }
 
@@ -98,7 +98,7 @@ Congo.future_projects.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Tipos de destino') {
+              if (title == 'Tipo de Destino Pie') {
                 chart_type = 'pie';
                 cantidad = count.length;
                 rancolor = randomColor({
@@ -113,7 +113,7 @@ Congo.future_projects.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Tipo de Destino') {
+              if (title == 'Tipo de Destino Bar') {
                 chart_type = 'bar';
                 datasets.push({
                   label: label,
@@ -122,7 +122,7 @@ Congo.future_projects.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Cantidad de unidades nuevas / bimestre') {
+              if (title == 'Cantidad de Nuevas Unidades / Bimestre') {
                 chart_type = 'line';
                 datasets.push({
                   label: label,
@@ -135,7 +135,7 @@ Congo.future_projects.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Superficie edificada por expediente') {
+              if (title == 'Superficie Edificada Por Expediente') {
                 chart_type = 'line';
                 datasets.push({
                   label: label,
@@ -169,7 +169,7 @@ Congo.future_projects.action_dashboards = function(){
             })
 
             // Guardamos "options"
-            if (title == 'Tipo de Destino') {
+            if (title == 'Tipo de Destino Bar') {
               var chart_options = {
                 responsive: true,
                 title: {
