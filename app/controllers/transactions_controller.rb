@@ -4,8 +4,8 @@ class TransactionsController < ApplicationController
 
   def dashboards
     respond_to do |f|
-      f.js    
-    end 
+      f.js
+    end
   end
 
 
@@ -52,7 +52,7 @@ class TransactionsController < ApplicationController
       result.push({"title":"Tipo de Propiedad", "series":{"data": data}})
 
 
-      
+
     #TIPO DE VENDEDOR
 
       data =[]
@@ -114,7 +114,7 @@ class TransactionsController < ApplicationController
       transactions_ufs.each do |aup|
         data.push({"name": NumberFormatter.format(aup[:from], false).to_s + " - " + NumberFormatter.format(aup[:to], false).to_s, "count": aup[:value].to_i})
       end
-   
+
       result.push({"title":"Transacciones / UF", "series":{"data": data}})
 
     rescue
@@ -125,7 +125,7 @@ class TransactionsController < ApplicationController
     #file_path = Xls.generate [result], "/xls", {:file_name => "#{Time.now.strftime("%Y-%m-%d_%H.%M")}_transacciones", :clean_directory_path => true}
     #send_file file_path, :type => "application/excel"
    @result = result
-   return @result 
+   return @result
   end
 
   def period
