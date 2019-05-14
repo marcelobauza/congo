@@ -115,10 +115,14 @@ Congo.future_projects.action_dashboards = function(){
 
               if (title == 'Tipo de Destino Bar') {
                 chart_type = 'bar';
+                cantidad = count.length;
+                rancolor = randomColor({
+                  luminosity: 'light',
+                })
                 datasets.push({
                   label: label,
                   data: count,
-                  //backgroundColor: serie_colour,
+                  backgroundColor: rancolor,
                 })
               }
 
