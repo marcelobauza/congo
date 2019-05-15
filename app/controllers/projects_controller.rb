@@ -43,15 +43,15 @@ class ProjectsController < ApplicationController
         data.push("name": item[:label], "count":item[:value].to_i)
       end
 
-    result.push({"title":"Informacion General", "series": {"data": data}})
       
+    result.push({"title":"Información General", "data": data})
       ##ESTADO PROYECTO
       
       data =[]
       pstatus.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i)
       end
-      result.push({"title":"Total de proyectos", "series":[{"data": data}]})
+      result.push({"title":"Estado del Proyecto", "series":[{"data": data}]})
 
       ##TIPO PROYECTO
       data =[]
@@ -73,7 +73,7 @@ class ProjectsController < ApplicationController
       end
       categories.push({"label":"Venta Total", "data": sold_units});
       categories.push({"label":"Disponibilidad", "data": stock_units});
-      result.push({"title":"Tipo distribucion por mix", "series":categories})
+      result.push({"title":"Total Distribución por Mix", "series":categories})
 
       ##OFERTA, VENTA
       total_units=[]
@@ -102,8 +102,8 @@ class ProjectsController < ApplicationController
         avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
       end
       
-      categories.push({"label":"Minimo", "data": min});
-      categories.push({"label":"Maximo", "data": max});
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
 
       result.push({"title":"Valor UF por Bimestre", "series":categories})
@@ -118,11 +118,11 @@ class ProjectsController < ApplicationController
         max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
         avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
       end
-      categories.push({"label":"Minimo", "data": min});
-      categories.push({"label":"Maximo", "data": max});
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
 
-      result.push({"title":"Valor UF/m2 por Bimestre", "series":categories})
+      result.push({"title":"UF/m2 por Bimestre", "series":categories})
 
       ##SUP UTIL BIMESTRE
       min =[]
@@ -134,11 +134,11 @@ class ProjectsController < ApplicationController
         max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
         avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
       end
-      categories.push({"label":"Minimo", "data": min});
-      categories.push({"label":"Maximo", "data": max});
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
 
-      result.push({"title":"Superficie Util(m2) por Bimestre", "series":categories})
+      result.push({"title":"Superficie Util (m2) por Bimestre", "series":categories})
 
       ##SUP TERR BIMESTRE
       min =[]
@@ -154,11 +154,11 @@ class ProjectsController < ApplicationController
         max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
         avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
       end
-      categories.push({"label":"Minimo", "data": min});
-      categories.push({"label":"Maximo", "data": max});
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
 
-      result.push({"title":"Superficie Terreno/Terraza(m2) por Bimestre", "series":categories})
+      result.push({"title":"Superficie Terreno/Terraza (m2) por Bimestre", "series":categories})
 
       ##CANT PROYECTOS BIMESTER
       data =[]
@@ -174,7 +174,7 @@ class ProjectsController < ApplicationController
       cfloor.each do |item|
         data.push("name": (item.min_value.to_i.to_s + " - " + item.max_value.to_i.to_s), "count": item.value.to_i)
       end
-      result.push({"title":"Cantidad de  Pisos", "series":[{"data": data}]})
+      result.push({"title":"Cantidad de Pisos", "series":[{"data": data}]})
 
       ##UNIDADES POR RANGO UF
       data =[]
@@ -182,7 +182,7 @@ class ProjectsController < ApplicationController
       uf_ranges.each do |item|
         data.push("name": (item.min_value.to_i.to_s + " - " + item.max_value.to_i.to_s), "count": item.value.to_i)
       end
-      result.push({"title":"Unidades de proyecto por Rango UF", "series":[{"data": data}]})
+      result.push({"title":"Unidades Proyecto por Rango UF", "series":[{"data": data}]})
 
     rescue
       #result[:data] = ["Sin datos"]
