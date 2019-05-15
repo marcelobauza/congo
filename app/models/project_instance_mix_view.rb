@@ -1,0 +1,3 @@
+class ProjectInstanceMixView < ApplicationRecord
+
+end
