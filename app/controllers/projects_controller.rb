@@ -43,10 +43,10 @@ class ProjectsController < ApplicationController
         data.push("name": item[:label], "count":item[:value].to_i)
       end
 
-      
     result.push({"title":"Información General", "data": data})
+
       ##ESTADO PROYECTO
-      
+
       data =[]
       pstatus.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i)
@@ -63,7 +63,7 @@ class ProjectsController < ApplicationController
 
       ##MIX
       data =[]
-      
+
       stock_units =[]
       sold_units =[]
       categories=[]
@@ -101,7 +101,7 @@ class ProjectsController < ApplicationController
         max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
         avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
       end
-      
+
       categories.push({"label":"Mínimo", "data": min});
       categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
@@ -190,7 +190,7 @@ class ProjectsController < ApplicationController
     #file_path = Xls.generate [result], "/xls", {:file_name => "#{Time.now.strftime("%Y-%m-%d_%H.%M")}_residenciales", :clean_directory_path => true}
     #send_file file_path, :type => "application/excel"
     @result = result
-    return @result 
+    return @result
   end
 
 
