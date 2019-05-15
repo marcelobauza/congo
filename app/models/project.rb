@@ -19,6 +19,10 @@ class Project < ApplicationRecord
   delegate :name, :to => :get_seller, :prefix => true, :allow_nil => true
   delegate :id, :to => :get_seller, :prefix => true, :allow_nil => true
 
+  include WhereBuilder
+  include Util
+  include Ranges
+
   validates_presence_of :address,
     :county_id,
     :project_type_id,
@@ -301,9 +305,9 @@ class Project < ApplicationRecord
     select += "CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) "
     select += "ELSE SUM(project_instance_mix_views.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END AS masd "
 
+
     ProjectInstanceMixView.select(select).
                                 where(build_conditions_new(filters, nil, false)).first
-
   end
 
   def self.get_query_for_results(filters, result_id, map_columns)
@@ -344,12 +348,6 @@ class Project < ApplicationRecord
   #FIND PROJECTS BY WIDGETS. COUNT
   def self.projects_group_by_count(widget, filters, has_color)
     @joins = Array.new
-    #@joins << "INNER JOIN project_instance_views ON project_instance_views.project_id = projects.id "
-    #@joins << "INNER JOIN project_statuses ON project_statuses.id = project_instance_views.project_status_id "
-
-    #BUILD JOINS
-    #joins_by_widget(widget)
-    #joins_by_filter(filters)
 
     case widget
     when 'agencies'
@@ -363,12 +361,11 @@ class Project < ApplicationRecord
     select = "#{widget}.id, #{widget}.name"
     select += ", #{widget}.color" if has_color
 
-    ProjectInstanceMixView.find(:all,
-                                :select => "#{select}, COUNT(#{widget}.name) as value",
-                                :joins => @joins.uniq.join(" "),
-                                  :conditions => build_conditions_new(filters, widget),
-                                  :group => select,
-                                  :order => "#{widget}.name")
+    ProjectInstanceMixView.select( "#{select}, COUNT(#{widget}.name) as value").
+                            joins(@joins.uniq.join(" ")).
+                            where(build_conditions_new(filters, widget)).
+                            group(select).
+                            order("#{widget}.name")
   end
 
   def self.projects_sum_by_stock(filters)
@@ -396,62 +393,44 @@ class Project < ApplicationRecord
 
     values_by_period3("uf", select, filters, load_min_avg_max_values)
 
-    #ProjectInstanceMixView.find(:first,
-    #                            :select => select,
-    #                            :conditions => build_conditions(filters, nil),
-    #                            :group => 'year, bimester',
-    #                            :order => 'year, bimester')
   end
 
   def self.projects_by_usable_area(filters)
-    select = "(CASE WHEN MIN(mix_usable_square_meters) is null THEN MIN(usable_square_meters) "
-    select += "WHEN MIN(usable_square_meters) is null THEN MIN(mix_usable_square_meters) "
-    select += "WHEN MIN(usable_square_meters) < MIN(mix_usable_square_meters) THEN MIN(usable_square_meters) "
-    select += "ELSE MIN(mix_usable_square_meters) end) as min,"
-
-    select += "(CASE WHEN MAX(mix_usable_square_meters) is null THEN MAX(usable_square_meters) "
-    select += "WHEN MAX(usable_square_meters) is null THEN MAX(mix_usable_square_meters) "
-    select += "WHEN MAX(usable_square_meters) > MAX(mix_usable_square_meters) THEN MAX(usable_square_meters) "
-    select += "ELSE MAX(mix_usable_square_meters) end) as max, "
-
-    select += "((SUM(total_units * COALESCE(usable_square_meters, 0)) / SUM(total_units)) + "
-    select += "(SUM(total_units * COALESCE(mix_usable_square_meters,0)) / SUM(total_units))) as avg,"
-
+    select = "MIN(mix_usable_square_meters) as min, "
+    select += " MAX(mix_usable_square_meters) as max, "
+    select += "(SUM(total_units * COALESCE(mix_usable_square_meters,0)) / SUM(total_units)) as avg,"
     select += "year, bimester "
-
+    
     values_by_period3("usable_area", select, filters, load_min_avg_max_values)
+
   end
-
-
 
   def self.projects_by_ranges(widget, filters)
     @joins = Array.new
 
-    #query_condition = build_conditions_new(filters, widget)
-
-    query_condition = " year = #{filters[:years]}  " 
-    query_condition += " and bimester = #{filters[:periods]} "
+    query_condition = " year = #{filters[:to_year]}  " 
+    query_condition += " and bimester = #{filters[:to_period]} "
     query_condition += " and  county_id = #{filters[:county_id]} "  if filters.has_key? :county_id 
     query_condition += " and project_type_id  = #{filters[:project_type_ids]} " if filters.has_key? :project_type_ids
     query_condition += " and ST_Within(the_geom, ST_GeomFromText('#{filters[:wkt]}',4326)) " if filters.has_key? :wkt
 
 
     values = get_valid_min_max_limits(widget, filters)
-    ranges = get_valid_ranges(values, filters[:action]) 
+    ranges = get_valid_ranges(values, widget) 
 
     total_ranges = ranges.count - 1
     result = Array.new
 
     0.upto(total_ranges) do |i|
-      if (filters[:action] == 'floor')
+      if (filters[:widget] == 'floors')
         select = "count(distinct(project_id)) as value, #{ranges[i]["min"].to_i} as min_value, #{ranges[i]["max"].to_i} as max_value"
       else
         select = "sum(total_units) as value, #{ranges[i]["min"].to_i} as min_value, #{ranges[i]["max"].to_i} as max_value"
       end
       cond = "#{query_condition} AND " + WhereBuilder.build_between_condition("ROUND(#{widget})", ranges[i]["min"].to_i, ranges[i]["max"].to_i)
-      proj = ProjectInstanceMixView.find(:first,
-                                         :select => select,
-                                         :conditions => cond)
+      proj = ProjectInstanceMixView.select(select).
+                                where(cond).first
+
       result << proj
     end
     result
@@ -459,7 +438,7 @@ class Project < ApplicationRecord
 
   def self.get_valid_ranges(values, action)
 
-    if (action == 'floor')
+    if (action == 'floors')
 
       ranges = get_range_floors
     else
@@ -527,21 +506,11 @@ class Project < ApplicationRecord
   end
 
   def self.projects_by_uf_m2(filters)
-    #select = "MIN(project_instances.uf_m2) as min, "
-    #select += "MAX(project_instances.uf_m2) as max, "
-    #select += "(SUM(project_instances.total_units * project_instances.uf_m2) / SUM(project_instances.total_units)) as avg,"
-    #select += "project_instances.year, project_instances.bimester"
-
 
     select = " case when min(uf_m2) IS NULL then min(uf_m2_home) else min(uf_m2) end as min, "
     select += " case when max(uf_m2) IS NULL then max(uf_m2_home) else max(uf_m2) end as max, "
     select += " case when avg(uf_m2) IS NULL then avg(uf_m2_home) else avg(uf_m2) end as avg, "
     select += " year, bimester "
-   # select = " MIN(uf_m2) as min, "
-   # select += "MAX(uf_m2) as max, "
-   # select += "(SUM(total_units * uf_m2) / SUM(total_units)) as avg,"
-
-
 
     values_by_period3("uf_m2", select, filters, load_min_avg_max_values)
   end
@@ -558,45 +527,26 @@ class Project < ApplicationRecord
     bimesters.each do |bimester|
       cond_query = get_periods_query_new(bimester[:period], bimester[:year]) + condition
 
-      project = ProjectInstanceMixView.find(:first,
-                                            :select => select,
-                                            :joins => @joins.uniq.join(" "),
-                                            :conditions => cond_query,
-                                            :group => 'year, bimester',
-                                            :order => 'year, bimester')
+      project = ProjectInstanceMixView.select(select).
+                                       where(cond_query).
+                                       group('year, bimester').
+                                       order('year, bimester').first
 
       proc.call result, project, bimester
     end
 
+
     result.reverse
-
-
   end
 
 
   def self.projects_by_ground_area(widget, filters)
-    #select = "(CASE WHEN MIN(pp_utiles) is null THEN MIN(mix_terrace_square_meters) "
-    #select += "WHEN MIN(mix_terrace_square_meters) is null THEN MIN(pp_utiles) "
-    #select += "WHEN MIN(mix_terrace_square_meters) < MIN(pp_utiles) THEN MIN(mix_terrace_square_meters) "
-    #select += "ELSE MIN(pp_utiles) end) as min,"
-
-    #select += "(CASE WHEN MAX(pp_utiles) is null THEN MAX(mix_terrace_square_meters) "
-    #select += "WHEN MAX(mix_terrace_square_meters) is null THEN MAX(pp_utiles) "
-    #select += "WHEN MAX(mix_terrace_square_meters) > MAX(pp_utiles) THEN MAX(mix_terrace_square_meters) "
-    #select += "ELSE MAX(pp_utiles) end) as max, "
-
-    #select += "((SUM(total_units * COALESCE(mix_terrace_square_meters,0)) / SUM(total_units)) + "
-    #select += "(SUM(total_units * COALESCE(pp_utiles,0)) / SUM(total_units))) as avg, "
-    #select += "year, bimester "
-
     if (filters['project_type_ids'] == 1)
 
       select = "min(ps_terreno) as min, "
       select += "max(ps_terreno) as max, "
       select += "avg(ps_terreno) as avg, "
-
     else
-
       select = "min(mix_terrace_square_meters) as min, "
       select += "max(mix_terrace_square_meters) as max, "
       select += "avg(mix_terrace_square_meters) as avg, "
@@ -609,10 +559,8 @@ class Project < ApplicationRecord
   #FIND PROJECTS BY MIX TYPE
   def self.projects_group_by_mix(widget, filters)
     @joins = Array.new
-    #@joins << "INNER JOIN project_instance_views ON project_instance_views.id = project_instance_id "
     #BUILD JOINS
     joins_by_widget(widget)
-    #joins_by_filter(filters)
 
     select = "sum(project_instance_mix_views.stock_units) as stock_units,
               sum(project_instance_mix_views.total_units - project_instance_mix_views.stock_units) as sold_units, "
@@ -627,12 +575,11 @@ class Project < ApplicationRecord
     end 
 
 
-    ProjectInstanceMixView.find(:all,
-                                :select => select,
-                                :joins => @joins.uniq.join(" "),
-                                :conditions => query,
-                                :group => "project_mixes.mix_type, project_mixes.id",
-                                :order => "project_mixes.mix_type")
+    ProjectInstanceMixView.select(select).
+                           joins(@joins.uniq.join(" ")).
+                           where( query).
+                           group("project_mixes.mix_type, project_mixes.id").
+                           order("project_mixes.mix_type")
   end
 
   def save_project_data(data, project_type, geom)
@@ -685,7 +632,7 @@ result = self.save
   end
 
   def self.projects_count_by_period(widget, filters)
-    select = "COUNT(DISTINCT(prqoject_instance_mix_views.project_id)) as value, project_instance_mix_views.year, project_instance_mix_views.bimester"
+    select = "COUNT(DISTINCT(project_instance_mix_views.project_id)) as value, project_instance_mix_views.year, project_instance_mix_views.bimester"
     values_by_period3(widget, select, filters, load_value)
   end
 
@@ -859,6 +806,7 @@ result = self.save
   end
 
   def self.build_conditions(filters, self_not_filter=nil, useView = false)
+    
     @conditions = ''
     unless filters[:county_id].nil? and filters[:wkt].nil?
       if filters[:county_id].nil?
@@ -880,6 +828,7 @@ result = self.save
 
 
   def self.build_conditions_new(filters, self_not_filter=nil, useView = false)
+
     @conditions = ''
     unless filters[:county_id].nil? and filters[:wkt].nil?
       if filters[:county_id].nil?
@@ -888,13 +837,11 @@ result = self.save
         @conditions = "county_id = #{filters[:county_id]}" + Util.and
         end
     end
-    #@conditions += "(projects.bank_project = false OR projects.bank_project IS NULL) #{Util.and}"
-    #@conditions += "project_instances.active = true #{Util.and}"
     @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView) if filters.has_key? :to_period
     @conditions += bimesters_condition(filters, self_not_filter, useView)
     @conditions += ids_conditions_new(filters, self_not_filter, useView)
     @conditions += between_condition_new(filters, self_not_filter)
-    @conditions += "county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
+    #@conditions += "county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
     @conditions.chomp!(Util.and)
     @conditions
   end
