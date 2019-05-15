@@ -138,7 +138,7 @@ class ProjectsController < ApplicationController
       categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
 
-      result.push({"title":"Superficie Util (m2) por Bimestre", "series":categories})
+      result.push({"title":"Superficie Útil (m2) por Bimestre", "series":categories})
 
       ##SUP TERR BIMESTRE
       min =[]
