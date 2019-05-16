@@ -133,11 +133,14 @@ Congo.future_projects.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  borderColor: serie_colour,
-                  lineTension: 0,
-                  pointRadius: 0,
-                  borderWidth: 3,
                   fill: false,
+                  borderColor: serie_colour,
+                  borderWidth: 4,
+                  pointRadius: 1,
+                  lineTension: 0,
+                  pointHoverBackgroundColor: '#F2F4F4',
+                  pointHoverBorderWidth: 3,
+                  pointHitRadius: 5,
                 })
               }
 
@@ -146,11 +149,14 @@ Congo.future_projects.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  borderColor: serie_colour,
-                  lineTension: 0,
-                  pointRadius: 0,
-                  borderWidth: 3,
                   fill: false,
+                  borderColor: serie_colour,
+                  borderWidth: 4,
+                  pointRadius: 1,
+                  lineTension: 0,
+                  pointHoverBackgroundColor: '#F2F4F4',
+                  pointHoverBorderWidth: 3,
+                  pointHitRadius: 5,
                 })
               }
 
@@ -159,11 +165,14 @@ Congo.future_projects.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  borderColor: serie_colour,
-                  lineTension: 0,
-                  pointRadius: 0,
-                  borderWidth: 3,
                   fill: false,
+                  borderColor: serie_colour,
+                  borderWidth: 4,
+                  pointRadius: 1,
+                  lineTension: 0,
+                  pointHoverBackgroundColor: '#F2F4F4',
+                  pointHoverBorderWidth: 3,
+                  pointHitRadius: 5,
                 })
               }
 
