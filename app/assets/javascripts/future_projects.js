@@ -175,13 +175,14 @@ Congo.future_projects.action_dashboards = function(){
             })
 
             // Guardamos "options"
-            if (title == 'Tipo de Destino Bar') {
+            if (chart_type == 'bar') {
+
               var chart_options = {
                 responsive: true,
                 title: {
                   display: true,
                   text: title,
-                  fontSize:15
+                  fontSize: 15
                 },
                 legend: {
                   display: false,
@@ -195,23 +196,48 @@ Congo.future_projects.action_dashboards = function(){
                   xAxes: [{
                     stacked: true,
                     ticks: {
-                      beginAtZero:true,
                       autoSkip: false,
                       maxRotation: 0,
                     },
                   }],
                   yAxes: [{
                     stacked: true,
+                    ticks: {
+                      beginAtZero: true,
+                    },
                   }],
                 }
               }
-            } else {
+
+            } else if (chart_type == 'pie') {
+
               var chart_options = {
                 responsive: true,
                 title: {
                   display: true,
                   text: title,
-                  fontSize:15
+                  fontSize: 15
+                },
+                legend: {
+                  display: false,
+                },
+                plugins: {
+                  datalabels: {
+                    formatter: function(value, context) {
+                      return context.chart.data.labels[context.dataIndex];
+                    }
+                  }
+                },
+              }
+
+            } else {
+
+              var chart_options = {
+                responsive: true,
+                title: {
+                  display: true,
+                  text: title,
+                  fontSize: 15
                 },
                 legend: {
                   display: false,
@@ -221,7 +247,15 @@ Congo.future_projects.action_dashboards = function(){
                     display: false,
                   },
                 },
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true,
+                    },
+                  }],
+                }
               }
+
             }
 
             var chart_settings = {
