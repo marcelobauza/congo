@@ -85,31 +85,33 @@ Congo.future_projects.action_dashboards = function(){
               // Guardamos "datasets" y "chart_type"
               if (title == 'Tipo de Expendiente') {
                 chart_type = 'pie';
-                cantidad = count.length;
-                rancolor = randomColor({
-                  count: cantidad,
-                  format: 'rgb',
-                  seed: 1,
-                })
                 datasets.push({
                   label: label,
                   data: count,
-                  backgroundColor: rancolor,
+                  backgroundColor: [
+                      '#424949',
+                      '#7F8C8D',
+                      '#E5E8E8'
+                  ],
                 })
               }
 
               if (title == 'Tipo de Destino Pie') {
                 chart_type = 'pie';
-                cantidad = count.length;
-                rancolor = randomColor({
-                  count: cantidad,
-                  format: 'rgb',
-                  seed: 1,
-                })
                 datasets.push({
                   label: label,
                   data: count,
-                  backgroundColor: rancolor,
+                  backgroundColor: [
+                      '#4D5656',
+                      '#5F6A6A',
+                      '#717D7E',
+                      '#839192',
+                      '#95A5A6',
+                      '#AAB7B8',
+                      '#BFC9CA',
+                      '#D5DBDB',
+                      '#F4F6F6'
+                  ],
                 })
               }
 
