@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>County:</strong>
+  <%= @admin_county_uf.county %>
+</p>
+
+<p>
+  <strong>Property type:</strong>
+  <%= @admin_county_uf.property_type %>
+</p>
+
+<p>
+  <strong>Uf min:</strong>
+  <%= @admin_county_uf.uf_min %>
+</p>
+
+<p>
+  <strong>Uf max:</strong>
+  <%= @admin_county_uf.uf_max %>
+</p>
+
+<%= link_to 'Edit', edit_admin_county_uf_path(@admin_county_uf) %> |
+<%= link_to 'Back', admin_county_ufs_path %>

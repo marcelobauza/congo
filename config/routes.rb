@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   
   namespace :admin do
     resources :periods
+    resources :county_ufs
     get 'dashboards/index'
   root 'dashboards#index'
   end

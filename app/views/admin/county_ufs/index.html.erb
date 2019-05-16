@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+
+<h1>Admin County Ufs</h1>
+<% form_tag admin_county_ufs_path, :method => 'get', :html => {:class => 'form-stacked'} do |f| %>
+    <div class="alert-message block-message success">
+          <%= select_tag :county_id, options_for_select(@counties), :class => "text" %>
+              <%= select_tag :property_type_id, options_for_select(@property_types), :class => "text" %>
+                  <%= submit_tag t('menu.county_uf.search'), :class => "btn success" %>
+                    </div>
+              <% end %>
+<table>
+  <thead>
+    <tr>
+      <th>County</th>
+      <th>Property type</th>
+      <th>Uf min</th>
+      <th>Uf max</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @admin_county_ufs.each do |admin_county_uf| %>
+      <tr>
+        <td><%= admin_county_uf.county.name %></td>
+        <td><%= admin_county_uf.property_type.name %></td>
+        <td><%= admin_county_uf.uf_min %></td>
+        <td><%= admin_county_uf.uf_max %></td>
+        <td><%= link_to 'Show', admin_county_uf_path(admin_county_uf) %></td>
+        <td><%= link_to 'Edit', edit_admin_county_uf_path(admin_county_uf) %></td>
+        <td><%= link_to 'Destroy', admin_county_uf_path(admin_county_uf), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Admin County Uf', new_admin_county_uf_path %>
