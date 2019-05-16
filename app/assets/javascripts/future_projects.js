@@ -225,7 +225,22 @@ Congo.future_projects.action_dashboards = function(){
                   datalabels: {
                     formatter: function(value, context) {
                       return context.chart.data.labels[context.dataIndex];
-                    }
+                    },
+                    display: function(context) {
+                      var dataset = context.dataset;
+                      var count = dataset.data.length;
+                      var value = dataset.data[context.dataIndex];
+                      return value > count * 1.5;
+                    },
+                    font: {
+                      size: 11,
+                    },
+                    color: 'white',
+                    textStrokeColor: '#616A6B',
+                    textStrokeWidth: 1,
+                    textShadowColor: '#000000',
+                    textShadowBlur: 2,
+                    align: 'end',
                   }
                 },
               }
