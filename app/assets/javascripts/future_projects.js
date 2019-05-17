@@ -25,6 +25,12 @@ Congo.future_projects.action_dashboards = function(){
 
 
 
+
+        // Creamos y adjuntamos el overlay
+        var overlay = document.createElement('div');
+        overlay.className = 'overlay';
+        $('#map').append(overlay);
+
         // Separamos la información
         for (var i = 0; i < data.length; i++) {
 

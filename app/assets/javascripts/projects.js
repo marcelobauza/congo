@@ -22,6 +22,12 @@ Congo.projects.action_dashboards = function(){
       datatype: 'json',
       data: {to_year:"2018", locale:"es", periods_quantity: "5", to_period: "6", county_id:"52" },
       success: function(data){
+
+        // Creamos y adjuntamos el overlay
+        var overlay = document.createElement('div');
+        overlay.className = 'overlay';
+        $('#map').append(overlay);
+        
         // Extraemos los charts
         for (var i = 0; i < data.length; i++) {
 
