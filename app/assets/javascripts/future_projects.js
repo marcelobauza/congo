@@ -24,45 +24,45 @@ Congo.future_projects.action_dashboards = function(){
       success: function(data){
 
 
-        // Extraemos los charts
+
+        // Separamos la información
         for (var i = 0; i < data.length; i++) {
 
           var reg = data[i];
-
           var title = reg['title'];
           var series = reg['series'];
 
-          //Extraemos los datos de "Información General" para tratarlos por separado
+          // Creamos el div contenedor
+          var chart_container = document.createElement('div');
+          chart_container.className = 'chart-container'+i+' card';
+
+          // Creamos el card-header
+          var card_header = document.createElement('div');
+          card_header.className = 'card-header';
+          card_header.id = 'header'+i;
+
+          // Creamos el card-body
+          var card_body = document.createElement('div');
+          card_body.className = 'card-body';
+          card_body.id = 'body'+i;
+
+          // TODO: Crear título y boton cerrar dinámicos
+
+          // Creamos título y boton cerrar
+          var card_header_button = '<button type="button btn-sm" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+          var card_header_title = '<b>'+title+'</b>'
+
+          // Adjuntamos los elementos
+          $('.overlay').append(chart_container);
+          $('.chart-container'+i).append(card_header, card_body);
+          $('#header'+i).append(card_header_button, card_header_title);
+
+          // Información General
           if (title == "Información General") {
 
             var info = reg['data'];
 
-            // TODO: Evitar que se repita la creación de los divs
-
-            // Creamos el div contenedor
-            var chart_container = document.createElement('div');
-            chart_container.className = 'chart-container'+i+' card';
-
-            // Creamos el card-header
-            var card_header = document.createElement('div');
-            card_header.className = 'card-header';
-            card_header.id = 'header'+i;
-
-            // Creamos el card-body
-            var card_body = document.createElement('div');
-            card_body.className = 'card-body';
-            card_body.id = 'body'+i;
-
-            // Creamos título y boton cerrar
-            var card_header_button = '<button type="button btn-sm" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
-            var card_header_title = '<b>'+title+'</b>'
-
-            // Adjuntamos los elementos
-            $('.overlay').append(chart_container);
-            $('.chart-container'+i).append(card_header, card_body);
-            $('#header'+i).append(card_header_button, card_header_title);
-
-            // Extraemos los datos y los adjuntamos al div contenedor
+            // Extraemos y adjuntamos los datos al card-body
             $.each(info, function(y, z){
               name = z['name'];
               label = z['count']
@@ -70,7 +70,7 @@ Congo.future_projects.action_dashboards = function(){
               $('#body'+i).append(item);
             })
 
-          // Extraemos y publicamos los gráficos
+          // Gráficos
           } else {
 
             var datasets = [];
@@ -99,7 +99,6 @@ Congo.future_projects.action_dashboards = function(){
                 name.push(d['name'])
                 count.push(d['count'])
               })
-
 
               // Guardamos "datasets" y "chart_type"
               if (title == 'Tipo de Expendiente') {
@@ -203,7 +202,7 @@ Congo.future_projects.action_dashboards = function(){
             })
 
             // Guardamos "options"
-            if (chart_type == 'bar') {
+            if (chart_type == 'bar') { // Bar
 
               var chart_options = {
                 responsive: true,
@@ -233,9 +232,9 @@ Congo.future_projects.action_dashboards = function(){
                     },
                   }],
                 }
-              }
+              };
 
-            } else if (chart_type == 'pie') {
+            } else if (chart_type == 'pie') { // Pie
 
               var chart_options = {
                 responsive: true,
@@ -267,9 +266,9 @@ Congo.future_projects.action_dashboards = function(){
                     align: 'end',
                   }
                 },
-              }
+              };
 
-            } else {
+            } else { // Line
 
               var chart_options = {
                 responsive: true,
@@ -291,9 +290,9 @@ Congo.future_projects.action_dashboards = function(){
                     },
                   }],
                 }
-              }
+              };
 
-            }
+            } // Cierra else ("options")
 
             var chart_settings = {
               type: chart_type,
@@ -301,34 +300,9 @@ Congo.future_projects.action_dashboards = function(){
               options: chart_options
             }
 
-            // Creamos el div contenedor
-            var chart_container = document.createElement('div');
-            chart_container.className = 'chart-container'+i+' card';
-
-            // Creamos el card-header
-            var card_header = document.createElement('div');
-            card_header.className = 'card-header';
-            card_header.id = 'header'+i;
-
-            // Creamos el card-body
-            var card_body = document.createElement('div');
-            card_body.className = 'card-body';
-            card_body.id = 'body'+i;
-
-            // Creamos el canvas
+            // Creamos y adjuntamos el canvas
             var canvas = document.createElement('canvas');
             canvas.id = 'canvas'+i;
-
-            // TODO: Crear título y boton cerrar dinámicos
-
-            // Creamos título y boton cerrar
-            var card_header_button = '<button type="button btn-sm" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
-            var card_header_title = '<b>'+title+'</b>'
-
-            // Adjuntamos los elementos
-            $('.overlay').append(chart_container);
-            $('.chart-container'+i).append(card_header, card_body);
-            $('#header'+i).append(card_header_button, card_header_title);
             $('#body'+i).append(canvas);
 
             var chart_canvas = document.getElementById('canvas'+i).getContext('2d');
