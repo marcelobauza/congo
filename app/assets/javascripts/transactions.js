@@ -28,33 +28,52 @@ Congo.transactions.action_dashboards = function(){
         overlay.className = 'overlay';
         $('#map').append(overlay);
 
-        // Extraemos los charts
+        // Separamos la información
         for (var i = 0; i < data.length; i++) {
 
           var reg = data[i];
-
           var title = reg['title'];
           var series = reg['series'];
 
-          //Extraemos los datos de "Información General" para tratarlos por separado
+          // Creamos el div contenedor
+          var chart_container = document.createElement('div');
+          chart_container.className = 'chart-container'+i+' card';
+
+          // Creamos el card-header
+          var card_header = document.createElement('div');
+          card_header.className = 'card-header';
+          card_header.id = 'header'+i;
+
+          // Creamos el card-body
+          var card_body = document.createElement('div');
+          card_body.className = 'card-body';
+          card_body.id = 'body'+i;
+
+          // TODO: Crear título y boton cerrar dinámicos
+
+          // Creamos título y boton cerrar
+          var card_header_button = '<button type="button btn-sm" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+          var card_header_title = '<b>'+title+'</b>'
+
+          // Adjuntamos los elementos
+          $('.overlay').append(chart_container);
+          $('.chart-container'+i).append(card_header, card_body);
+          $('#header'+i).append(card_header_button, card_header_title);
+
+          // Información General
           if (title == "Información General") {
 
             var info = reg['data'];
 
-            // Creamos y adjuntamos el div contenedor
-            var chart_container = document.createElement('div');
-            chart_container.className = 'chart-container'+i+' card';
-            $('.overlay').append(chart_container);
-
-            // Extraemos los datos y los adjuntamos al div contenedor
+            // Extraemos y adjuntamos los datos al card-body
             $.each(info, function(y, z){
               name = z['name'];
               label = z['count']
               item = name+': '+label+'<br>';
-              $('.chart-container'+i).append(item);
+              $('#body'+i).append(item);
             })
 
-          // Extraemos y publicamos los gráficos
+          // Gráficos
           } else {
 
             var datasets = [];
@@ -107,7 +126,7 @@ Congo.transactions.action_dashboards = function(){
                 })
               }
 
-              // NOTE: Falta agregar el chart de Transacciones / Bimestre (line)
+              // TODO: Falta agregar el chart de Transacciones / Bimestre (line)
 
               if (title == 'UF / Bimestre') {
                 chart_type = 'line';
@@ -156,9 +175,7 @@ Congo.transactions.action_dashboards = function(){
               var chart_options = {
                 responsive: true,
                 title: {
-                  display: true,
-                  text: title,
-                  fontSize:15
+                  display: false,
                 },
                 legend: {
                   display: false,
@@ -185,9 +202,7 @@ Congo.transactions.action_dashboards = function(){
               var chart_options = {
                 responsive: true,
                 title: {
-                  display: true,
-                  text: title,
-                  fontSize:15
+                  display: false,
                 },
                 legend: {
                   display: false,
@@ -206,20 +221,10 @@ Congo.transactions.action_dashboards = function(){
               options: chart_options
             }
 
-            // TODO: Adjuntar las clases card-header y card-body
-
-            // Creamos el div contenedor
-            var chart_container = document.createElement('div');
-            chart_container.className = 'chart-container'+i+' card';
-
-            // Creamos el canvas
+            // Creamos y adjuntamos el canvas
             var canvas = document.createElement('canvas');
-            var canvas_id = 'canvas'+i;
-            canvas.id = canvas_id;
-
-            // Adjuntamos los elementos
-            $('.overlay').append(chart_container);
-            $('.chart-container'+i).append(canvas);
+            canvas.id = 'canvas'+i;
+            $('#body'+i).append(canvas);
 
             var chart_canvas = document.getElementById('canvas'+i).getContext('2d');
             var final_chart = new Chart(chart_canvas, chart_settings);
