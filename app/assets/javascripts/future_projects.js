@@ -90,10 +90,10 @@ Congo.future_projects.action_dashboards = function(){
               if (label == 'Anteproyecto') {
                 serie_colour = '#60c843'
               }
-              if (label == 'Permiso de Edif.' || label == 'Tasa Permiso / Anteproyecto') {
+              if (label == 'Permiso Edif.' || label == 'Tasa Permiso / Anteproyecto') {
                 serie_colour = '#0f115b'
               }
-              if (label == 'Recep. Municipal' || label == 'Tasa Recepciones / Permisos') {
+              if (label == 'Recep. Munic.' || label == 'Tasa Recepciones / Permisos') {
                 serie_colour = '#eb2817'
               }
 

@@ -80,8 +80,8 @@ class FutureProjectsController < ApplicationController
       end
     end
           categories.push({"label": "Anteproyecto", "data": a})
-          categories.push({"label": "Permiso de Edif.", "data": p})
-          categories.push({"label": "Recep. Municipal", "data": r})
+          categories.push({"label": "Permiso Edif.", "data": p})
+          categories.push({"label": "Recep. Munic.", "data": r})
     result.push({"title": "Cantidad de Nuevas Unidades / Bimestre", "series": categories})
 
     #SUPERFICIE EDIFICADA POR EXPEDIENTE
@@ -107,8 +107,8 @@ class FutureProjectsController < ApplicationController
       end
     end
           categories.push({"label": "Anteproyecto", "data": a})
-          categories.push({"label": "Permiso de Edif.", "data": p})
-          categories.push({"label": "Recep. Municipal", "data": r})
+          categories.push({"label": "Permiso Edif.", "data": p})
+          categories.push({"label": "Recep. Munic.", "data": r})
     result.push({"title": "Superficie Edificada Por Expediente", "series": categories })
 
 
