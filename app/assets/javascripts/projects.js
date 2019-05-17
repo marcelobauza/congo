@@ -241,11 +241,21 @@ Congo.projects.action_dashboards = function(){
 
             })
 
-            // TODO: Habría que organizar las opciones por tipo de gráfico.
-            // TODO: Agregar beginAtZero y autoSkip
-
             // Guardamos "options"
-            if (title == 'Total Distribución por Mix') {
+            if (chart_type == 'bar') { // Bar
+
+              // Seteamos los ticks
+              if (title == 'Total Distribución por Mix') {
+                var ticks = {
+                  display: false,
+                }
+              } else {
+                var ticks = {
+                  autoSkip: false,
+                  maxRotation: 12,
+                }
+              };
+
               var chart_options = {
                 responsive: true,
                 title: {
@@ -262,16 +272,53 @@ Congo.projects.action_dashboards = function(){
                 scales: {
                   xAxes: [{
                     stacked: true,
-                    ticks: {
-                      display: false
-                    },
+                    ticks: ticks
                   }],
                   yAxes: [{
                     stacked: true,
+                    ticks: {
+                      beginAtZero: true,
+                    },
                   }],
                 }
-              }
-            } else {
+              };
+
+            } else if (chart_type == 'pie') { // Pie
+
+              var chart_options = {
+                responsive: true,
+                title: {
+                  display: false,
+                },
+                legend: {
+                  display: false,
+                },
+                plugins: {
+                  datalabels: {
+                    formatter: function(value, context) {
+                      return context.chart.data.labels[context.dataIndex];
+                    },
+                    display: function(context) {
+                      var dataset = context.dataset;
+                      var count = dataset.data.length;
+                      var value = dataset.data[context.dataIndex];
+                      return value > count * 1.5;
+                    },
+                    font: {
+                      size: 11,
+                    },
+                    color: 'white',
+                    textStrokeColor: '#616A6B',
+                    textStrokeWidth: 1,
+                    textShadowColor: '#000000',
+                    textShadowBlur: 2,
+                    align: 'end',
+                  }
+                },
+              };
+
+            } else { // Line
+
               var chart_options = {
                 responsive: true,
                 title: {
@@ -285,7 +332,15 @@ Congo.projects.action_dashboards = function(){
                     display: false,
                   },
                 },
-              }
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true,
+                    },
+                  }],
+                }
+              };
+
             } // Cierra else ("options")
 
             var chart_settings = {
