@@ -241,6 +241,9 @@ Congo.projects.action_dashboards = function(){
                   label: label,
                   data: count,
                   backgroundColor: '#dddb58',
+                  borderColor: '#4D5656',
+                  borderWidth: 2,
+                  hoverBorderWidth: 3,
                 })
               }
 
@@ -250,6 +253,9 @@ Congo.projects.action_dashboards = function(){
                   label: label,
                   data: count,
                   backgroundColor: '#dddb58',
+                  borderColor: '#4D5656',
+                  borderWidth: 2,
+                  hoverBorderWidth: 3,
                 })
               }
 
