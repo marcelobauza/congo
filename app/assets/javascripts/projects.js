@@ -106,33 +106,26 @@ Congo.projects.action_dashboards = function(){
               // Guardamos "datasets" y "chart_type"
               if (title == 'Estado del Proyecto') {
                 chart_type = 'pie';
-                cantidad = count.length;
-                rancolor = randomColor({
-                  count: cantidad,
-                  hue: 'monochrome',
-                  format: 'rgb',
-                  seed: 1,
-                })
                 datasets.push({
                   label: label,
                   data: count,
-                  backgroundColor: rancolor,
+                  backgroundColor: [
+                      '#424949',
+                      '#616A6B',
+                      '#99A3A4',
+                      '#F2F4F4'
+                  ],
                 })
               }
 
               if (title == 'Tipo de Propiedad') {
                 chart_type = 'pie';
-                cantidad = count.length;
-                rancolor = randomColor({
-                  count: cantidad,
-                  hue: 'monochrome',
-                  format: 'rgb',
-                  seed: 1,
-                })
                 datasets.push({
                   label: label,
                   data: count,
-                  backgroundColor: rancolor,
+                  backgroundColor: [
+                      '#424949'
+                  ],
                 })
               }
 
