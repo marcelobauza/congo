@@ -178,7 +178,10 @@ Congo.transactions.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  backgroundColor: '#dddb58'
+                  backgroundColor: '#dddb58',
+                  borderColor: '#4D5656',
+                  borderWidth: 2,
+                  hoverBorderWidth: 3,
                 })
               }
 
