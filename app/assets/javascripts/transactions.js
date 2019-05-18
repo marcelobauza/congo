@@ -193,7 +193,8 @@ Congo.transactions.action_dashboards = function(){
             })
 
             // Guardamos "options"
-            if (title == 'Transacciones / UF' || title == 'Precio Promedio en UF / Bimestre') {
+            if (chart_type == 'bar') { // Bar
+
               var chart_options = {
                 responsive: true,
                 title: {
@@ -209,18 +210,59 @@ Congo.transactions.action_dashboards = function(){
                 },
                 scales: {
                   xAxes: [{
+                    stacked: true,
                     ticks: {
                       autoSkip: false,
-                    },
+                      maxRotation: 30,
+                    }
                   }],
                   yAxes: [{
+                    stacked: true,
                     ticks: {
                       beginAtZero: true,
                     },
-                  }]
+                  }],
                 }
-              }
-            } else {
+              };
+
+            } else if (chart_type == 'pie') { // Pie
+
+              // TODO: Configurar los datalabels utilizando el valor total
+
+              var chart_options = {
+                responsive: true,
+                title: {
+                  display: false,
+                },
+                legend: {
+                  display: false,
+                },
+                plugins: {
+                  datalabels: {
+                    formatter: function(value, context) {
+                      return context.chart.data.labels[context.dataIndex];
+                    },
+                    display: function(context) {
+                      var dataset = context.dataset;
+                      var count = dataset.data.length;
+                      var value = dataset.data[context.dataIndex];
+                      return value > 1000;
+                    },
+                    font: {
+                      size: 11,
+                    },
+                    color: 'white',
+                    textStrokeColor: '#616A6B',
+                    textStrokeWidth: 1,
+                    textShadowColor: '#000000',
+                    textShadowBlur: 2,
+                    align: 'end',
+                  }
+                },
+              };
+
+            } else { // Line
+
               var chart_options = {
                 responsive: true,
                 title: {
@@ -232,10 +274,18 @@ Congo.transactions.action_dashboards = function(){
                 plugins: {
                   datalabels: {
                     display: false,
-                  }
+                  },
+                },
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true,
+                    },
+                  }],
                 }
-              }
-            }
+              };
+
+            } // Cierra else ("options")
 
             var chart_settings = {
               type: chart_type,
