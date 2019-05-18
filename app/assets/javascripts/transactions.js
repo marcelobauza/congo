@@ -144,11 +144,15 @@ Congo.transactions.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  borderColor: '#f08939',
-                  lineTension: 0,
-                  pointRadius: 0,
-                  borderWidth: 3,
                   fill: false,
+                  borderColor: '#f08939',
+                  borderWidth: 4,
+                  pointBackgroundColor: '#F2F4F4',
+                  pointRadius: 3,
+                  lineTension: 0,
+                  pointHoverBackgroundColor: '#F2F4F4',
+                  pointHoverBorderWidth: 3,
+                  pointHitRadius: 5,
                 })
               }
 
@@ -157,11 +161,15 @@ Congo.transactions.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  borderColor: '#f08939',
-                  lineTension: 0,
-                  pointRadius: 0,
-                  borderWidth: 3,
                   fill: false,
+                  borderColor: '#f08939',
+                  borderWidth: 4,
+                  pointBackgroundColor: '#F2F4F4',
+                  pointRadius: 3,
+                  lineTension: 0,
+                  pointHoverBackgroundColor: '#F2F4F4',
+                  pointHoverBorderWidth: 3,
+                  pointHitRadius: 5,
                 })
               }
 
