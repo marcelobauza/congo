@@ -97,7 +97,7 @@ Congo.transactions.action_dashboards = function(){
               })
 
               // Guardamos "datasets" y "chart_type"
-              if (title == 'Tipo de Propiedad') {
+              if (title == 'Tipo de Propiedad') { // Pie
                 chart_type = 'pie';
                 datasets.push({
                   label: label,
@@ -117,7 +117,7 @@ Congo.transactions.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Tipo de Vendedor') {
+              if (title == 'Tipo de Vendedor') { // Pie
                 chart_type = 'pie';
                 datasets.push({
                   label: label,
@@ -138,8 +138,9 @@ Congo.transactions.action_dashboards = function(){
               }
 
               // TODO: Falta agregar el chart de Transacciones / Bimestre (line)
+              // TODO: Organizar los colores en variables
 
-              if (title == 'UF / Bimestre') {
+              if (title == 'UF / Bimestre') { // Line
                 chart_type = 'line';
                 datasets.push({
                   label: label,
@@ -156,7 +157,7 @@ Congo.transactions.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Precio Promedio en UF / Bimestre') {
+              if (title == 'Precio Promedio en UF / Bimestre') { // Line
                 chart_type = 'line';
                 datasets.push({
                   label: label,
@@ -173,7 +174,7 @@ Congo.transactions.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Transacciones / UF') {
+              if (title == 'Transacciones / UF') { // Bar
                 chart_type = 'bar';
                 datasets.push({
                   label: label,
