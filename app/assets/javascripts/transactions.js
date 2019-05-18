@@ -99,33 +99,41 @@ Congo.transactions.action_dashboards = function(){
               // Guardamos "datasets" y "chart_type"
               if (title == 'Tipo de Propiedad') {
                 chart_type = 'pie';
-                cantidad = count.length;
-                rancolor = randomColor({
-                  count: cantidad,
-                  hue: 'monochrome',
-                  format: 'rgb',
-                  seed: 1,
-                })
                 datasets.push({
                   label: label,
                   data: count,
-                  backgroundColor: rancolor,
+                  backgroundColor: [
+                      '#4D5656',
+                      '#5F6A6A',
+                      '#717D7E',
+                      '#839192',
+                      '#95A5A6',
+                      '#AAB7B8',
+                      '#BFC9CA',
+                      '#D5DBDB',
+                      '#EAEDED',
+                      '#F4F6F6'
+                  ],
                 })
               }
 
               if (title == 'Tipo de Vendedor') {
                 chart_type = 'pie';
-                cantidad = count.length;
-                rancolor = randomColor({
-                  count: cantidad,
-                  hue: 'monochrome',
-                  format: 'rgb',
-                  seed: 1,
-                })
                 datasets.push({
                   label: label,
                   data: count,
-                  backgroundColor: rancolor,
+                  backgroundColor: [
+                    '#4D5656',
+                    '#5F6A6A',
+                    '#717D7E',
+                    '#839192',
+                    '#95A5A6',
+                    '#AAB7B8',
+                    '#BFC9CA',
+                    '#D5DBDB',
+                    '#EAEDED',
+                    '#F4F6F6'
+                  ],
                 })
               }
 
