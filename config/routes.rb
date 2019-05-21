@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   root 'dashboards#index'
   end
   resources :land_use_types
+  resources :density_types
   resources :project_mixes
   resources :project_statuses
   resources :project_instance_mixes

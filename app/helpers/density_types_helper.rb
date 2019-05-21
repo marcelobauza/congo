@@ -1,0 +1,2 @@
+module DensityTypesHelper
+end

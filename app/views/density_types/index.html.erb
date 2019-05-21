@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Density Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Color</th>
+      <th>Position</th>
+      <th>Identifier</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @density_types.each do |density_type| %>
+      <tr>
+        <td><%= density_type.name %></td>
+        <td><%= density_type.color %></td>
+        <td><%= density_type.position %></td>
+        <td><%= density_type.identifier %></td>
+        <td><%= link_to 'Show', density_type %></td>
+        <td><%= link_to 'Edit', edit_density_type_path(density_type) %></td>
+        <td><%= link_to 'Destroy', density_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Density Type', new_density_type_path %>

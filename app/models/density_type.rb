@@ -1,0 +1,2 @@
+class DensityType < ApplicationRecord
+end
