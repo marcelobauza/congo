@@ -22,24 +22,11 @@ Congo.map_utils = function(){
     map = L.map('map',{
       fadeAnimation: false,
       markerZoomAnimation: false,
-      zoom: 9,
-      center: [-33.113399134183744, -69.69339599609376],
       zoomControl: true,
       zoomAnimation: false,
-      layers: [streets]
+             loadingControl: true,
     }) ;
 
-   map.addControl( new L.Control.Search({
-    url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
-    jsonpParam: 'json_callback',
-    propertyName: 'display_name',
-    markerLocation: true,
-    propertyLoc: ['lat','lon'],
-    marker: L.circleMarker([0,0],{radius:30}),
-    autoCollapse: true,
-    autoType: false,
-    minLength: 2
-  }) );
 
     $('#select_circle').on('click', function(event) {
       checked = $('#select_circle').hasClass('active');

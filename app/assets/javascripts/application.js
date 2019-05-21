@@ -11,10 +11,13 @@
 // about supported directives.
 //
 //= require leaflet/leaflet-search
+//= require leaflet/spin
+//= require leaflet/leaflet-spin
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
+//= require congo
 //= require_tree .
