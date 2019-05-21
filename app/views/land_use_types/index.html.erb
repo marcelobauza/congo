@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Land Use Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Abbreviation</th>
+      <th>Identifier</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @land_use_types.each do |land_use_type| %>
+      <tr>
+        <td><%= land_use_type.name %></td>
+        <td><%= land_use_type.abbreviation %></td>
+        <td><%= land_use_type.identifier %></td>
+        <td><%= link_to 'Show', land_use_type %></td>
+        <td><%= link_to 'Edit', edit_land_use_type_path(land_use_type) %></td>
+        <td><%= link_to 'Destroy', land_use_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Land Use Type', new_land_use_type_path %>

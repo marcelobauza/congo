@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @land_use_type.name %>
+</p>
+
+<p>
+  <strong>Abbreviation:</strong>
+  <%= @land_use_type.abbreviation %>
+</p>
+
+<p>
+  <strong>Identifier:</strong>
+  <%= @land_use_type.identifier %>
+</p>
+
+<%= link_to 'Edit', edit_land_use_type_path(@land_use_type) %> |
+<%= link_to 'Back', land_use_types_path %>

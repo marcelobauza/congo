@@ -1,0 +1,2 @@
+class LandUseType < ApplicationRecord
+end
