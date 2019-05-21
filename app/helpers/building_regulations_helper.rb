@@ -1,0 +1,2 @@
+module BuildingRegulationsHelper
+end

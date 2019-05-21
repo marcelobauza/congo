@@ -42,7 +42,7 @@
       </button>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="#"><i class="fas fa-male" title="Demografía y Gasto" style="font-size: 26px"></i></a>
-        <a class="dropdown-item" href="#"><i class="fas fa-file-alt" title="Normativa" style="font-size: 26px"></i></a>
+        <%= link_to building_regulations_dashboards_path(), class: "dropdown-item", remote: true  do  %><i class="fas fa-file-alt" title="Normativa" style="font-size: 26px"></i><% end %>
         <%= link_to transactions_dashboards_path(), class: "dropdown-item", remote: true  do  %><i class="fas fa-handshake" title="Compraventas CBR" style="font-size: 26px"></i><% end %>
         <%= link_to projects_dashboards_path(), class: "dropdown-item", remote: true  do  %> <i class="fas fa-home" title="Proyectos Residenciales" style="font-size: 26px"></i><% end %>
         <%= link_to future_projects_dashboards_path(), class: "dropdown-item", remote: true  do  %> <i class="fas fa-landmark" title="Expedientes Municipales" style="font-size: 26px"></i><% end %>

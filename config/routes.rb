@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'transactions/dashboards' => 'transactions#dashboards'
   get 'future_projects/dashboards' => 'future_projects#dashboards'
   get 'projects/dashboards' => 'projects#dashboards'
+  get 'building_regulations/dashboards' => 'building_regulations#dashboards'
   
   namespace :admin do
     resources :periods
@@ -18,6 +19,7 @@ Rails.application.routes.draw do
   end
   resources :land_use_types
   resources :density_types
+  resources :building_regulations
   resources :project_mixes
   resources :project_statuses
   resources :project_instance_mixes

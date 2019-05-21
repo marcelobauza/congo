@@ -1,0 +1,37 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  building_zone: MyString
+  construct: 
+  land_ocupation: 
+  site: MyString
+  the_geom: 
+  identifier: MyString
+  density_type: one
+  county: one
+  comments: MyString
+  hectarea_inhabitants: MyString
+  grouping: MyString
+  parkings: MyString
+  am_cc: 1
+  aminciti: MyString
+  icinciti: MyString
+  osinciti: MyString
+
+two:
+  building_zone: MyString
+  construct: 
+  land_ocupation: 
+  site: MyString
+  the_geom: 
+  identifier: MyString
+  density_type: two
+  county: two
+  comments: MyString
+  hectarea_inhabitants: MyString
+  grouping: MyString
+  parkings: MyString
+  am_cc: 1
+  aminciti: MyString
+  icinciti: MyString
+  osinciti: MyString
