@@ -55,7 +55,7 @@ Congo.future_projects.action_dashboards = function(){
           // TODO: Crear título y boton cerrar dinámicos
 
           // Creamos título y boton cerrar
-          var card_header_button = '<button type="button btn-sm" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+          var card_header_button = '<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
           var card_header_title = '<b>'+title+'</b>'
 
           // Adjuntamos los elementos
