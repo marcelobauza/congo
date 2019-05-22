@@ -4,10 +4,10 @@ class FutureProject < ApplicationRecord
   belongs_to :county
 
   before_validation :build_geom
-  
+
   include WhereBuilder
   include Util
-  
+
   validates_presence_of :address,
     :county_id,
     :project_type_id,
@@ -16,7 +16,7 @@ class FutureProject < ApplicationRecord
     :latitude,
     :code,
     :file_date
-  
+
   #validate :point_is_located_within_the_specified_county, :unless => "county.nil?"
 
   #validates_numericality_of :floors, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "floors.blank?"
@@ -27,9 +27,9 @@ class FutureProject < ApplicationRecord
   #validates_numericality_of :m2_approved, :greater_than_or_equal_to => 0, :unless => "m2_approved.blank?"
   #validates_numericality_of :m2_built, :greater_than_or_equal_to => 0, :unless => 'm2_built.blank?'
   #validates_numericality_of :m2_field, :greater_than_or_equal_to => 0, :unless => 'm2_field.blank?'
-  
+
   #named_scope :by_project, lambda { |t| {:conditions => {:project_type_id => t}} unless t.blank? }
- # named_scope :by_future_project_type, lambda { |t| {:conditions => {:future_project_type_id => t}} unless t.blank? }
+  # named_scope :by_future_project_type, lambda { |t| {:conditions => {:future_project_type_id => t}} unless t.blank? }
 
   BIMESTER_QUANTITY = 6
 
@@ -71,14 +71,14 @@ class FutureProject < ApplicationRecord
     self.address = ic.iconv(data["DIRECCION"].gsub("'","''")).to_s
     self.name = ic.iconv(data["NOMBRE"]).to_s
     self.role_number = ic.iconv(data["N_ROL"]).to_s
-    
+
     self.file_number = data["N_PE"].to_i.to_s
     self.file_date = data["F_PE"]
 
     self.owner = ic.iconv(data["PROP"]).to_s
     self.legal_agent = ic.iconv(data["REP_LEGAL"]).to_s
     self.architect = ic.iconv(data["ARQUITECTO"]).to_s
-   self.floors = data["N_PISOS"].to_i unless data["N_PISOS"] == -1
+    self.floors = data["N_PISOS"].to_i unless data["N_PISOS"] == -1
     self.undergrounds = data["SUBT"].to_i unless data["SUBT"] == -1
     self.total_units = data["T_UNID"].to_i unless data["T_UNID"] == -1
     self.total_parking = data["T_EST"].to_i unless data["T_EST"] == -1
@@ -87,7 +87,7 @@ class FutureProject < ApplicationRecord
     self.m2_built = data["M2_EDIF"]
     self.m2_field = data["M2_TERR"] unless data["M2_TERR"] == -1
     self.t_ofi = data["T_OFI"] unless data["T_OFI"] == -1
-    
+
     self.cadastral_date = data["F_CATASTRO"].to_date
     self.comments = ic.iconv(data["OBSERVACIO"]).to_s
     self.year = year
@@ -100,14 +100,14 @@ class FutureProject < ApplicationRecord
 
     self.county_id = county.id unless county.nil?
     self.the_geom = geom
-    
+
     if self.save
       County.update(county.id, :future_project_data => true,  :number_last_project_future => number_next_project ) unless county.nil?      
       return true
     end
     false
   end
-  
+
   def latitude
     @latitude ||= self.the_geom.y if self.the_geom
     return @latitude ? @latitude : ""
@@ -117,7 +117,7 @@ class FutureProject < ApplicationRecord
     @longitude ||= self.the_geom.x if self.the_geom
     return @longitude ? @longitude : ""
   end
-  
+
 
   def self.get_points_count_by_filters(filters, column)
     FutureProject.count(:joins => build_joins.join(" "), :conditions => "#{conditions(filters)} AND #{column} >= 1")
@@ -126,7 +126,7 @@ class FutureProject < ApplicationRecord
   def self.get_heat_map_points_count_by_filters(filters)
     FutureProject.count(:joins => build_joins.join(" "), :conditions => conditions(filters))
   end
-  
+
   def self.get_query_for_results(filters, result_id)
     sub_query = "SELECT #{result_id} as result_id, future_projects.id as future_project_id, future_projects.the_geom, "
     sub_query += "future_projects.m2_built, #{MapUtil::HEATMAP_VALUE} as heatmap_value, "
@@ -141,28 +141,28 @@ class FutureProject < ApplicationRecord
 
     periods = Period.get_periods(filters[:to_period].to_i, filters[:to_year].to_i, BIMESTER_QUANTITY, 1)
     cond_query = build_period_condition(periods) + Util.and
-    cond_query = conditions(filters, nil)
+      cond_query = conditions(filters, nil)
 
     joins = build_joins.join(" ")
 
     totals = FutureProject.select(select). 
-                          joins(joins).
-                          where(cond_query).
-                          group("future_project_types.name").
-                          order("future_project_types.name")
-    
+      joins(joins).
+      where(cond_query).
+      group("future_project_types.name").
+      order("future_project_types.name")
+
     draft = FutureProject.joins(joins).
-                          where(cond_query + Util.and + "future_project_types.name = 'ANTEPROYECTO'").count
+      where(cond_query + Util.and + "future_project_types.name = 'ANTEPROYECTO'").count
 
     perm = FutureProject.joins(joins).
-                        where(cond_query + Util.and + "future_project_types.name = 'PERMISO DE EDIFICACION'").count
+      where(cond_query + Util.and + "future_project_types.name = 'PERMISO DE EDIFICACION'").count
 
     recept = FutureProject.joins(joins).
       where(cond_query + Util.and + "future_project_types.name = 'RECEPCION MUNICIPAL'").count
 
     draft.to_f == 0 ? perm_rate = 0 : perm_rate = (perm.to_f / draft.to_f).round(2)
     perm.to_f == 0 ? recept_rate = 0: recept_rate = (recept.to_f / perm.to_f).round(2)
-    
+
     rates = {:permission_draft_rate => perm_rate, :reception_permission_rate => recept_rate}
     return rates, totals
   end
@@ -192,9 +192,9 @@ class FutureProject < ApplicationRecord
     cond = conditions(filters, widget)
 
     fut_types = FutureProject.select("DISTINCT future_project_types.name").
-        joins(build_joins.join(" ")). 
-        where(cond).
-        order('future_project_types.name').map { |typ| typ.name }
+      joins(build_joins.join(" ")). 
+      where(cond).
+      order('future_project_types.name').map { |typ| typ.name }
 
     bimesters.each do |bimester|
       cond_query = get_periods_query(bimester[:period], bimester[:year]) + Util.and + cond
@@ -217,10 +217,10 @@ class FutureProject < ApplicationRecord
 
     FutureProjectType.all.each do |typ|
       future = FutureProject.select(select). 
-                joins(build_joins.join(" ")). 
-                where(cond + Util.and + "future_project_type_id = #{typ.id}").
-                group("project_types.name").
-                order("project_types.name")
+        joins(build_joins.join(" ")). 
+        where(cond + Util.and + "future_project_type_id = #{typ.id}").
+        group("project_types.name").
+        order("project_types.name")
 
       result << {:type => typ.name, :values => future }
     end
@@ -269,18 +269,18 @@ class FutureProject < ApplicationRecord
 
   def self.get_bench_values(ids)
     projects= FutureProject.all(:joins => :future_project_type, 
-      :include => :future_project_type,
-      :conditions => "future_projects.id IN (#{ids.join(',')})")
+                                :include => :future_project_type,
+                                :conditions => "future_projects.id IN (#{ids.join(',')})")
 
     return projects
   end
 
   private
-  
+
   def build_geom
     self.the_geom = Point.from_x_y(self.longitude.to_f, self.latitude.to_f, 4326) if self.latitude and self.longitude
   end
- 
+
   def self.build_joins
     joins = []
     joins << "INNER JOIN future_project_types ON future_project_types.id = future_projects.future_project_type_id"
@@ -305,14 +305,14 @@ class FutureProject < ApplicationRecord
 
     bimesters.each do |bimester|
       cond_query = get_periods_query(bimester[:period], bimester[:year]) + Util.and
-      cond_query += cond
+        cond_query += cond
 
       project = FutureProject.find(:first,
-        :select => select,
-        :joins => build_joins.join(" "),
-        :conditions => cond_query,
-        :group => 'future_projects.year, future_projects.bimester',
-        :order => 'future_projects.year, future_projects.bimester')
+                                   :select => select,
+                                   :joins => build_joins.join(" "),
+                                   :conditions => cond_query,
+                                   :group => 'future_projects.year, future_projects.bimester',
+                                   :order => 'future_projects.year, future_projects.bimester')
 
       if project.nil?
         result << {:value => "null", :bimester => bimester[:period], :year => bimester[:year]}
@@ -329,10 +329,10 @@ class FutureProject < ApplicationRecord
       conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
       conditions = "county_id = #{filters[:county_id]}" + Util.and
-    end
-    
+      end
+
     conditions += "active = true #{Util.and}"
-    
+
     unless filters.has_key? :boost
       conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
       conditions += bimester_condition(filters, self_not_filter)
@@ -364,12 +364,12 @@ class FutureProject < ApplicationRecord
     conditions.chomp!(Util.or)
     conditions + ")"
   end
-  
+
   def self.get_periods_query(period, year)
     conditions = "("
     conditions += WhereBuilder.build_equal_condition('future_projects.bimester', period) 
     conditions += Util.and
-    conditions += WhereBuilder.build_equal_condition('future_projects.year', year)
+      conditions += WhereBuilder.build_equal_condition('future_projects.year', year)
     conditions += ")"
     conditions
   end
@@ -392,11 +392,11 @@ class FutureProject < ApplicationRecord
 
   def self.get_last_period
     period = FutureProject.find(:first,
-      :select => "future_projects.year, future_projects.bimester",
-      :joins => build_joins.join(" "),
-      :conditions => "active = true",
-      :group => "bimester, year",
-      :order => "year desc, bimester desc")
+                                :select => "future_projects.year, future_projects.bimester",
+                                :joins => build_joins.join(" "),
+                                :conditions => "active = true",
+                                :group => "bimester, year",
+                                :order => "year desc, bimester desc")
 
     return nil if period.nil?
     Period.get_periods(period.bimester, period.year, BIMESTER_QUANTITY, 1)
@@ -404,11 +404,11 @@ class FutureProject < ApplicationRecord
 
   def self.get_first_bimester_with_future_projects
     period = FutureProject.find(:first,
-      :select => "future_projects.year, future_projects.bimester",
-      :joins => build_joins.join(" "),
-      :conditions => "active = true",
-      :group => "year, bimester",
-      :order => "year, bimester")
+                                :select => "future_projects.year, future_projects.bimester",
+                                :joins => build_joins.join(" "),
+                                :conditions => "active = true",
+                                :group => "year, bimester",
+                                :order => "year, bimester")
 
     return nil if period.nil?
     return {:period => period.bimester, :year => period.year}
@@ -423,7 +423,7 @@ class FutureProject < ApplicationRecord
     if Period.get_distance_between_periods(f_period, f_year, t_period, t_year, 1) < distance
       return false
     end
-    
+
     return true
   end
 
@@ -432,12 +432,12 @@ class FutureProject < ApplicationRecord
 
     if filters[:to_period].nil?
       first = FutureProject.find(:first, :select => "bimester, year",
-        :conditions => "active = true", 
-        :group => "year, bimester", :order => "year, bimester")
-      
+                                 :conditions => "active = true", 
+                                 :group => "year, bimester", :order => "year, bimester")
+
       last = FutureProject.find(:first, :select => "bimester, year",
-        :conditions => "active = true", 
-        :group => "year, bimester", :order => "year desc, bimester desc")
+                                :conditions => "active = true", 
+                                :group => "year, bimester", :order => "year desc, bimester desc")
 
       bimesters = Period.get_between_periods(first.bimester.to_i, first.year.to_i, last.bimester.to_i, last.year.to_i, 1)
     else

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :periods
     resources :county_ufs
+    resources :future_projects
     get 'dashboards/index'
   root 'dashboards#index'
   end
@@ -33,7 +34,6 @@ Rails.application.routes.draw do
   resources :property_types
   resources :transactions
   resources :layer_types
-  resources :future_projects
   resources :future_project_types
   resources :project_types
   resources :seller_types

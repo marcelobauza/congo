@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Future Projects</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Future project type</th>
+      <th>Code</th>
+      <th>Address</th>
+      <th>County</th>
+      <th>Name</th>
+      <th>Project type</th>
+      <th>Bimester</th>
+      <th>Year</th>
+
+
+
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @future_projects.each do |future_project| %>
+      <tr>
+        <td><%= future_project.future_project_type.name %></td>
+        <td><%= future_project.code %></td>
+        <td><%= future_project.address %></td>
+        <td><%= future_project.county.name %></td>
+        <td><%= future_project.name %></td>
+        <td><%= future_project.project_type.name %></td>
+        <td><%= future_project.bimester %></td>
+        <td><%= future_project.year %></td>
+
+
+
+        <td><%= link_to 'Edit', edit_admin_future_project_path(future_project) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Future Project', new_admin_future_project_path %>
