@@ -10,13 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_09_051257) do
+ActiveRecord::Schema.define(version: 2019_05_18_121541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "postgis"
   enable_extension "postgis_topology"
+
+  create_table "building_regulation_land_use_types", force: :cascade do |t|
+    t.bigint "building_regulation_id"
+    t.bigint "land_use_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["building_regulation_id"], name: "index_building_regulation_id"
+    t.index ["land_use_type_id"], name: "index_building_regulation_land_use_types_on_land_use_type_id"
+  end
+
+  create_table "building_regulations", force: :cascade do |t|
+    t.string "building_zone"
+    t.decimal "construct"
+    t.decimal "land_ocupation"
+    t.string "site"
+    t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
+    t.string "identifier"
+    t.bigint "density_type_id"
+    t.bigint "county_id"
+    t.string "comments"
+    t.string "hectarea_inhabitants"
+    t.string "grouping"
+    t.string "parkings"
+    t.integer "am_cc"
+    t.string "aminciti"
+    t.string "icinciti"
+    t.string "osinciti"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["county_id"], name: "index_building_regulations_on_county_id"
+    t.index ["density_type_id"], name: "index_building_regulations_on_density_type_id"
+  end
 
   create_table "counties", id: :integer, default: nil, force: :cascade do |t|
     t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
@@ -51,6 +83,15 @@ ActiveRecord::Schema.define(version: 2019_05_09_051257) do
     t.datetime "updated_at", null: false
     t.index ["county_id"], name: "index_county_ufs_on_county_id"
     t.index ["property_type_id"], name: "index_county_ufs_on_property_type_id"
+  end
+
+  create_table "density_types", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.integer "position"
+    t.integer "identifier"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "future_project_types", force: :cascade do |t|
@@ -95,6 +136,14 @@ ActiveRecord::Schema.define(version: 2019_05_09_051257) do
     t.index ["county_id"], name: "index_future_projects_on_county_id"
     t.index ["future_project_type_id"], name: "index_future_projects_on_future_project_type_id"
     t.index ["project_type_id"], name: "index_future_projects_on_project_type_id"
+  end
+
+  create_table "land_use_types", force: :cascade do |t|
+    t.string "name"
+    t.string "abbreviation"
+    t.integer "identifier"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "layer_types", force: :cascade do |t|
@@ -358,6 +407,10 @@ ActiveRecord::Schema.define(version: 2019_05_09_051257) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  add_foreign_key "building_regulation_land_use_types", "building_regulations"
+  add_foreign_key "building_regulation_land_use_types", "land_use_types"
+  add_foreign_key "building_regulations", "counties"
+  add_foreign_key "building_regulations", "density_types"
   add_foreign_key "county_ufs", "counties"
   add_foreign_key "county_ufs", "property_types"
   add_foreign_key "future_projects", "counties"
@@ -685,5 +738,28 @@ ActiveRecord::Schema.define(version: 2019_05_09_051257) do
       transactions.year_sii,
       transactions.role_associated
      FROM transactions;
+  SQL
+  create_view "building_regulations_info", sql_definition: <<-SQL
+      SELECT building_regulations.id,
+      building_regulations.building_zone,
+      ( SELECT array_to_string(array_agg(land_use_types.abbreviation), ','::text) AS array_to_string
+             FROM (building_regulation_land_use_types
+               JOIN land_use_types ON ((building_regulation_land_use_types.land_use_type_id = land_use_types.id)))
+            WHERE (building_regulation_land_use_types.building_regulation_id = building_regulations.id)) AS land_use,
+      building_regulations.the_geom,
+      round(building_regulations.construct, 1) AS construct,
+      round(building_regulations.land_ocupation, 1) AS land_ocupation,
+      building_regulations.hectarea_inhabitants AS max_density,
+      building_regulations."grouping",
+      building_regulations.site,
+      building_regulations.comments,
+      building_regulations.aminciti AS am_cc,
+      building_regulations.parkings,
+      building_regulations.updated_at,
+      building_regulations.county_id,
+      density_types.color
+     FROM (building_regulations
+       JOIN density_types ON ((building_regulations.density_type_id = density_types.id)))
+    ORDER BY building_regulations.updated_at DESC;
   SQL
 end
