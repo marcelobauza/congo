@@ -94,8 +94,8 @@ a:hover {
   box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.4) !important;
 }
 
-//Quita caret de dropdown
-.dropdown-toggle::after {
+// Quita caret de dropdown del nav principal
+.nocaret::after {
   display:none !important;
 }
 
