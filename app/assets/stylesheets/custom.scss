@@ -99,22 +99,22 @@ a:hover {
   display:none !important;
 }
 
-//Dropdown
-div.dropdown-menu.show {
+//Dropdown Navbar 1
+div.dropdown-menu-navbar1.show {
   min-width: unset;
   width: 60px;
   z-index: 402;
 }
-.dropdown-item {
+.dropdown-item-navbar1 { // alineacion iconos dentro de dropdown
   text-align: center !important;
   padding: 0.5rem !important;
 }
-#navbarDropdown {
+#dropdown-navbar-1 { // espacio entre iconos navbar
   margin-left: 5px;
   width: 50px
 }
 
-//Navbar
+// Navbar height
 .navbar {
   padding: 0.25rem !important;
 }
