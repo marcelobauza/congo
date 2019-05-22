@@ -1,7 +1,5 @@
 class Transaction < ApplicationRecord
 
-  
-
   has_many :transaction_results
   belongs_to :surveyor
   belongs_to :user
@@ -15,7 +13,7 @@ class Transaction < ApplicationRecord
   before_save :update_calculated_value, :titleize_attributes 
   before_save :pm2
 
-  
+
   include WhereBuilder
   include Util
   include Ranges
@@ -32,13 +30,13 @@ class Transaction < ApplicationRecord
     :sample_factor,
     :tome,
     :code_sii
- # validates_numericality_of :uf_m2, :greater_than_or_equal_to => 0, :unless => 'uf_m2.blank?'
+  # validates_numericality_of :uf_m2, :greater_than_or_equal_to => 0, :unless => 'uf_m2.blank?'
   #validates_numericality_of :sample_factor, :greater_than => 0, :unless => 'sample_factor.blank?'
- # validates_numericality_of :sample_factor, :less_than_or_equal_to => 1, :unless => 'sample_factor.blank?'
+  # validates_numericality_of :sample_factor, :less_than_or_equal_to => 1, :unless => 'sample_factor.blank?'
 
- # validates_format_of :role, :with => /^(|\d{1,5}-(\d{1,5}))$/, :message => I18n.translate("activerecord.errors.models.transaction.invalid_role_format")
- # validate :is_buyer_rut_verification_digit_valid, :unless => 'self.buyer_rut.blank?'
- # validate :valid_date?
+  # validates_format_of :role, :with => /^(|\d{1,5}-(\d{1,5}))$/, :message => I18n.translate("activerecord.errors.models.transaction.invalid_role_format")
+  # validate :is_buyer_rut_verification_digit_valid, :unless => 'self.buyer_rut.blank?'
+  # validate :valid_date?
 
 
   #named_scope :by_number, lambda { |t| {:conditions => {:number => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
@@ -54,7 +52,7 @@ class Transaction < ApplicationRecord
   COUNT_CRITERIA = 1
   AVG_CRITERIA = 2
 
-def  self.pois params
+  def  self.pois params
 
     @joins = " INNER JOIN property_types ON property_types.id = transactions.property_type_id "
     @joins += " INNER JOIN seller_types ON seller_types.id = transactions.seller_type_id "
@@ -177,7 +175,7 @@ def  self.pois params
     self.surveyor_id = Surveyor.find_by_name(data["ENCUESTADOR"].to_s.downcase.titleize).id unless data["ENCUESTADOR"].nil?
     self.user_id = user_id
 
-     self.code_sii = data["code_sii"] 
+    self.code_sii = data["code_sii"] 
 
     self.total_surface_building = 0 
 
@@ -257,19 +255,19 @@ def  self.pois params
   end
 
   def self.find_globals(filters)
-  
+
     result = {:uf_min_value => 0.0, 
               :uf_max_value => 0.0,
               :average => 0.0, :deviation => 0.0,
               :avg_trans_count => 0, :avg_uf_volume => 0.0}
-      global_transactions = Transaction.select(
-                 'min(transactions.calculated_value) as uf_min_value,
+    global_transactions = Transaction.select(
+      'min(transactions.calculated_value) as uf_min_value,
                  max(transactions.calculated_value) as uf_max_value,
                  avg(transactions.calculated_value) as average,
                  stddev(transactions.calculated_value) as deviation,
                  ROUND((ROUND(SUM(1 / sample_factor)) / COUNT(DISTINCT(year, bimester)))) as avg_trans_count,
                  (SUM(calculated_value) / COUNT(DISTINCT(year, bimester))) as avg_uf_volume').
-                where(county_id: filters[:county_id]).order("uf_min_value").first
+    where(county_id: filters[:county_id]).order("uf_min_value").first
 
     return result if global_transactions.nil?
 
@@ -317,14 +315,14 @@ def  self.pois params
 
 
       trans = Transaction.joins(:county).
-                          where(conditions).
-                          group('county, year, bimester').
-                          order('year, bimester').
-                          pluck(select)
+        where(conditions).
+        group('county, year, bimester').
+        order('year, bimester').
+        pluck(select)
       unless trans.nil?
-    
+
         trans_group[:counties] = trans
-  
+
         trans.each {|t| 
           counties << t[0]}
       end
@@ -345,7 +343,7 @@ def  self.pois params
 
         q[:counties].each { |c| 
           item["y#{index}_value".to_sym] = c[1] if c[0] == county 
-  }
+        }
         values_sum += item["y#{index}_value".to_sym].to_i
       end
 
@@ -362,7 +360,7 @@ def  self.pois params
   end
 
   def self.group_transactions_by_uf(filters)
-  
+
     values = get_calculated_value_ranges(filters)
 
 
@@ -379,9 +377,9 @@ def  self.pois params
       filters[:to_calculated_value] = [qua["max"]]
 
       t = Transaction.select("ROUND(SUM(1/ sample_factor)) as value").
-                      joins(build_joins.join(" ")).
-                      where(build_conditions(filters)).
-                      order("value").first
+        joins(build_joins.join(" ")).
+        where(build_conditions(filters)).
+        order("value").first
 
       trans_group[:value] = t.value unless t.nil?
       result << trans_group
@@ -396,9 +394,9 @@ def  self.pois params
     select += "count(*) as count"
 
     t = Transaction.select(select).
-                    joins(build_joins.join(" ")).
-                    where(build_conditions(filters, 'calculated_value')).
-                    order("max").first
+      joins(build_joins.join(" ")).
+      where(build_conditions(filters, 'calculated_value')).
+      order("max").first
 
     original_min = 0.0
     original_max = 1.0
@@ -482,14 +480,14 @@ def  self.pois params
       conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
       conditions += build_ids_conditions(filters)
       conditions += build_calculated_value_condition(filters)
-#      conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
+      #      conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
       conditions = conditions.chomp!(Util.and)
-      
+
       t = Transaction.select(select).
-                      joins(build_joins.join(" ")).
-                      where(conditions). 
-                      group('bimester, year').
-                      order('year, bimester')
+        joins(build_joins.join(" ")).
+        where(conditions). 
+        group('bimester, year').
+        order('year, bimester')
 
       trans_group[:value] = t[0].value.to_f.round(2) unless t.nil?
       result << trans_group
@@ -539,9 +537,9 @@ def  self.pois params
 
     # conditions += build_ids_conditions(filters, widget)
     # conditions += build_calculated_value_condition(filters, widget)
-#FILTER DATA BY COUNTIES ASSOCIATED TO THE USER
-#ver que hace esto
- #   conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
+    #FILTER DATA BY COUNTIES ASSOCIATED TO THE USER
+    #ver que hace esto
+    #   conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
 
     conditions.chomp!(Util.and)
     conditions
@@ -585,7 +583,7 @@ def  self.pois params
     return CsvParser.get_transactions_csv_data(transactions)
   end
 
-    def self.get_csv_data_sii()
+  def self.get_csv_data_sii()
 
     transactions = Transaction.find(:all,
                                     :include => [:seller_type, :surveyor, :user, :county, :property_type],    
@@ -667,7 +665,7 @@ def  self.pois params
     joins = []
     joins << "INNER JOIN property_types ON property_types.id = transactions.property_type_id"
     joins << "INNER JOIN seller_types ON seller_types.id = transactions.seller_type_id"
-#    joins << "INNER JOIN user_expirations ON user_expirations.county_id = transactions.county_id" if User.current.is_count_down?
+    #    joins << "INNER JOIN user_expirations ON user_expirations.county_id = transactions.county_id" if User.current.is_count_down?
     joins
   end
 
@@ -780,14 +778,14 @@ def  self.pois params
 
     if filters[:to_period].nil?
       first = Transaction.select("bimester, year").
-                          where("active = true").
-                          group("year, bimester").
-                          order("year, bimester").first
+        where("active = true").
+        group("year, bimester").
+        order("year, bimester").first
 
       last = Transaction.select("bimester, year"). 
-                         where("active = true").
-                         group("year, bimester").
-                         order("year desc, bimester desc").first
+        where("active = true").
+        group("year, bimester").
+        order("year desc, bimester desc").first
 
       bimesters = Period.get_between_periods(first.bimester, first.year, last.bimester, last.year, 1)
     else
@@ -800,4 +798,44 @@ def  self.pois params
     condition = "(counties_users.user_id = #{user_id} AND counties_users.county_id IN(#{counties.join(",")}))#{Util.and}"
   end
 
+  def self.interval_graduated_points(params)
+    period_current = Period.get_period_current
+    bimester = period_current.bimester
+    year = period_current.year
+    county_id = params['county_id']
+    values = Transaction.select("COUNT(*) as counter, ROUND(calculated_value / 10) as value").
+      where(bimester: bimester, year: year, county_id: county_id).where("calculated_value > ?", 1).
+                           group("ROUND(calculated_value / 10)").
+                           order("counter desc").first
+    result = Array.new
+    ranges = get_valid_ranges(values)
+
+    0.upto(ranges.count - 1) do |i|
+      result << ranges[i]["min"].to_i
+    end
+
+    result << ranges[ranges.count - 1]["max"].to_i
+@rr = result
+    return result
+  end
+
+  def self.get_valid_ranges(values)
+
+    ranges = Project::get_ranges
+    min_value = values["value"].to_i * 10
+
+    index_min = ranges.count - 1
+    index_max = ranges.count - 1
+    @imn = index_min
+    @imx = index_max
+    @vv = values
+    ranges.each_with_index do |r, index|
+
+      index_min = index if min_value >= r["min"].to_i && min_value <= r["max"].to_i
+
+    end
+
+    ranges[index_min..index_max]
+
+  end
 end

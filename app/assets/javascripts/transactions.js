@@ -1,3 +1,4 @@
+Congo.namespace('transactions.action_graduated_points');
 Congo.namespace('transactions.action_dashboards');
 
 Congo.transactions.config= {
@@ -5,6 +6,33 @@ Congo.transactions.config= {
   county_id: '',
   layer_type: 'transactions_info'
 }
+
+Congo.transactions.action_graduated_points = function(){
+
+  init=function(){
+    var env1='';
+    $.ajax({
+      type: 'GET',
+      url: '/transactions/graduated_points.json',
+      datatype: 'json',
+      data: {county_id:"52" },
+      success: function(data){
+        $.each(data['data'], function(index, value){
+          str = 'interval'+index+':'+value+';';
+          env1 = env1.concat(str);
+        })
+        env1 = env1.concat(';color0:ffff00;color1:62d642;color2:3db868;color3:216e9e;color4:090c5e;color5:121CD1;color6:656CED;color7:9196F2;color8:9546F4');
+        Congo.dashboards.config.style_layer= 'transaction_calculated_value_graduated_points';
+        Congo.dashboards.config.env= env1;
+
+        Congo.map_utils.counties();
+      }
+    })
+  }
+  return {
+    init: init,
+  }
+}();
 
 Congo.transactions.action_dashboards = function(){
 

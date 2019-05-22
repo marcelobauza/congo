@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'future_projects/future_projects_summary' => 'future_projects#future_projects_summary'
   
   get 'transactions/dashboards' => 'transactions#dashboards'
+  get 'transactions/graduated_points' => 'transactions#graduated_points'
   get 'future_projects/dashboards' => 'future_projects#dashboards'
   get 'future_projects/graduated_points' => 'future_projects#graduated_points'
   get 'projects/dashboards' => 'projects#dashboards'
