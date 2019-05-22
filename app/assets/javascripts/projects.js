@@ -47,20 +47,26 @@ Congo.projects.action_dashboards = function(){
           card_header.className = 'card-header';
           card_header.id = 'header'+i;
 
+          // Creamos el collapse
+          var collapse = document.createElement('div');
+          collapse.className = 'collapse show';
+          collapse.id = 'collapse'+i;
+
           // Creamos el card-body
           var card_body = document.createElement('div');
           card_body.className = 'card-body';
           card_body.id = 'body'+i;
 
-          // TODO: Crear título y boton cerrar dinámicos
+          // TODO: Crear título y boton minimizar dinámicos
 
-          // Creamos título y boton cerrar
-          var card_header_button = '<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+          // Creamos título y boton minimizar
+          var card_header_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
           var card_header_title = '<b>'+title+'</b>'
 
           // Adjuntamos los elementos
           $('.overlay').append(chart_container);
-          $('.chart-container'+i).append(card_header, card_body);
+          $('.chart-container'+i).append(card_header, collapse);
+          $('#collapse'+i).append(card_body);
           $('#header'+i).append(card_header_button, card_header_title);
 
           // Información General
