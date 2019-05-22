@@ -22,11 +22,25 @@ Congo.map_utils = function(){
     map = L.map('map',{
       fadeAnimation: false,
       markerZoomAnimation: false,
+      zoom: 11,
+      center: [-33.4372, -70.6506],
       zoomControl: true,
       zoomAnimation: false,
+      layers: [streets],
              loadingControl: true,
     }) ;
 
+    map.addControl( new L.Control.Search({
+      url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
+      jsonpParam: 'json_callback',
+      propertyName: 'display_name',
+      markerLocation: true,
+      propertyLoc: ['lat','lon'],
+      marker: L.circleMarker([0,0],{radius:30}),
+      autoCollapse: true,
+      autoType: false,
+      minLength: 2
+    }) );
 
     $('#select_circle').on('click', function(event) {
       checked = $('#select_circle').hasClass('active');
@@ -129,7 +143,7 @@ Congo.map_utils = function(){
   }  
 
   function BoundingBox(){
-    var bounds = mymap.getBounds().getSouthWest().lng + "," + mymap.getBounds().getSouthWest().lat + "," + mymap.getBounds().getNorthEast().lng + "," + mymap.getBounds().getNorthEast().lat;
+    var bounds = map.getBounds().getSouthWest().lng + "," + map.getBounds().getSouthWest().lat + "," + map.getBounds().getNorthEast().lng + "," + map.getBounds().getNorthEast().lat;
     return bounds;
   }
 
@@ -159,6 +173,9 @@ Congo.map_utils = function(){
     }
     groupLayer = L.layerGroup();
     layer_type = Congo.dashboards.config.layer_type;
+    style_layer = Congo.dashboards.config.style_layer;
+    env = Congo.dashboards.config.env;
+
     if(county_id != ''){
       var options = {
 
@@ -185,14 +202,39 @@ Congo.map_utils = function(){
       opacity: 1,
       version: '1.0.0',//wms version (ver get capabilities)
       tiled: true,
-      styles: 'poi_new',
+      styles: style_layer,
       INFO_FORMAT: 'application/json',
       format_options: 'callback:getJson',
+      env: env,
       CQL_FILTER: cql_filter  };
     source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
     groupLayer.addLayer(source_layers);
     groupLayer.addTo(map);
 
+    var htmlLegend1and2 = L.control.htmllegend({
+      position: 'bottomleft',
+      legends: [{
+        name: "ver name",
+        layer: source_layers ,
+        elements: [{
+          label: '',
+          html: '',
+          style: {
+            'background-color': 'red',
+            'width': '10px',
+            'height': '10px'
+          }
+        }]
+      }],
+      collapseSimple: true,
+      detectStretched: true,
+      collapsedOnInit: true,
+      defaultOpacity: 1,
+      visibleIcon: 'icon icon-eye',
+      hiddenIcon: 'icon icon-eye-slash'
+    })
+    map.addControl(htmlLegend1and2)
+    groupLayer.addTo(map);
   }
 
   return{

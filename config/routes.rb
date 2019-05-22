@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
+
   get 'dashboards/index'
+  get 'dashboards/graduated_points'
   get 'counties/find' => 'counties#find'
   get 'transactions/transactions_summary' => 'transactions#transactions_summary'
   get 'projects/projects_summary' => 'projects#projects_summary'
@@ -8,6 +10,7 @@ Rails.application.routes.draw do
   
   get 'transactions/dashboards' => 'transactions#dashboards'
   get 'future_projects/dashboards' => 'future_projects#dashboards'
+  get 'future_projects/graduated_points' => 'future_projects#graduated_points'
   get 'projects/dashboards' => 'projects#dashboards'
   get 'building_regulations/dashboards' => 'building_regulations#dashboards'
   

@@ -1,6 +1,12 @@
 class FutureProjectsController < ApplicationController
   before_action :set_future_project, only: [:show, :edit, :update, :destroy]
 
+  def graduated_points
+      @interval = FutureProject.interval_graduated_points(params)
+      render json: {data: @interval}
+  end
+
+
   def dashboards
     respond_to do |f|
       f.js

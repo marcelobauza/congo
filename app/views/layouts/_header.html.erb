@@ -51,11 +51,12 @@
 
     <!-- Mapas Dropdown -->
     <div class="nav-item dropdown">
+
       <button class="btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-spinner" title="Puntos"></i>
       </button>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#"><i class="fas fa-braille" title="Puntos Proporcionales" style="font-size: 26px"></i></a>
+        <%= link_to dashboards_graduated_points_path(), class: "dropdown-item", remote: true  do  %><i class="fas fa-braille" title="Puntos Proporcionales" style="font-size: 26px"></i><% end %>
         <a class="dropdown-item" href="#"><i class="fas fa-fire" title="Heatmap" style="font-size: 26px"></i></a>
         <a class="dropdown-item" href="#"><i class="fas fa-dot-circle" title="Isolíneas" style="font-size: 26px"></i></a>
       </div>

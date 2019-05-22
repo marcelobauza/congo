@@ -447,6 +447,26 @@ class FutureProject < ApplicationRecord
     bimesters
   end
 
+  ########New Functions##################
+  def self.interval_graduated_points(params)
 
 
+    period_current = Period.get_period_current
+    bimester = period_current.bimester
+    year = period_current.year
+    county_id = params['county_id']
+    values = FutureProject.select("COUNT(*) as counter, ROUND(m2_built / 100) as value").
+      where(bimester: bimester, year: year, county_id: county_id).where("m2_built > ?", 1).
+                           group("ROUND(m2_built / 100)").
+                           order("counter desc").first
+       result = Array.new
+      unless values.nil?
+        seed = (values["value"].to_i * 100)
+        1.upto(Util::INTERVALS_QUANTITY) do
+          result << seed
+          seed += (values["value"].to_i * 100)
+        end
+      end
+      return result
+  end
 end

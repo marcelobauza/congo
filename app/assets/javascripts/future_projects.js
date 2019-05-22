@@ -1,3 +1,4 @@
+Congo.namespace('future_projects.action_graduated_points');
 Congo.namespace('future_projects.action_dashboards');
 
 Congo.future_projects.config= {
@@ -5,6 +6,31 @@ Congo.future_projects.config= {
   county_id: '',
   layer_type: 'future_projects_info'
 }
+Congo.future_projects.action_graduated_points = function(){
+
+  init=function(){
+    var env1='';
+    $.ajax({
+      type: 'GET',
+      url: '/future_projects/graduated_points.json',
+      datatype: 'json',
+      data: {county_id:"52" },
+      success: function(data){
+        $.each(data['data'], function(index, value){
+          str = 'interval'+index+':'+value+';';
+          env1 = env1.concat(str);
+        })
+        Congo.dashboards.config.style_layer= 'graduated_points_calculated_value';
+        Congo.dashboards.config.env= env1;
+
+        Congo.map_utils.counties();
+      }
+    })
+  }
+  return {
+    init: init,
+  }
+}();
 
 Congo.future_projects.action_dashboards = function(){
 
@@ -76,7 +102,7 @@ Congo.future_projects.action_dashboards = function(){
               $('#body'+i).append(item);
             })
 
-          // Gráficos
+            // Gráficos
           } else {
 
             var datasets = [];
@@ -113,9 +139,9 @@ Congo.future_projects.action_dashboards = function(){
                   label: label,
                   data: count,
                   backgroundColor: [
-                      '#424949',
-                      '#7F8C8D',
-                      '#E5E8E8'
+                    '#424949',
+                    '#7F8C8D',
+                    '#E5E8E8'
                   ],
                 })
               }
@@ -126,15 +152,15 @@ Congo.future_projects.action_dashboards = function(){
                   label: label,
                   data: count,
                   backgroundColor: [
-                      '#4D5656',
-                      '#5F6A6A',
-                      '#717D7E',
-                      '#839192',
-                      '#95A5A6',
-                      '#AAB7B8',
-                      '#BFC9CA',
-                      '#D5DBDB',
-                      '#F4F6F6'
+                    '#4D5656',
+                    '#5F6A6A',
+                    '#717D7E',
+                    '#839192',
+                    '#95A5A6',
+                    '#AAB7B8',
+                    '#BFC9CA',
+                    '#D5DBDB',
+                    '#F4F6F6'
                   ],
                 })
               }
