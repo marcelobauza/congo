@@ -19,20 +19,22 @@ Rails.application.routes.draw do
     resources :periods
     resources :county_ufs
     resources :future_projects
+    resources :transactions
+    resources :project_instance_mixes
+    resources :project_instances
+    resources :projects
+    resources :project_mixes
     get 'dashboards/index'
   root 'dashboards#index'
   end
   resources :land_use_types
   resources :density_types
   resources :building_regulations
-  resources :project_mixes
+
   resources :project_statuses
-  resources :project_instance_mixes
-  resources :project_instances
-  resources :projects
+
   resources :counties
   resources :property_types
-  resources :transactions
   resources :layer_types
   resources :future_project_types
   resources :project_types
