@@ -1,23 +1,35 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
 
+  <!-- Logo -->
+  <a class="navbar-brand" href="#">
+    <%=image_tag "logo.png", width:"", height:"32", alt:"" %>
+  </a>
+
+  <!-- Barra (Todo menos Logo)-->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <!-- Barra (Elementos Izquierda)-->
     <ul class="navbar-nav mr-auto">
+
+      <!-- Inicio -->
+      <li class="nav-item">
+        <a class="nav-link" href="#">Inicio</a>
+      </li>
+
+      <!-- Usuarios -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Usuarios
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <%= link_to "usuarios", users_path() %>
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" href="#">Logs</a>
+          <a class="dropdown-item" href="#">Roles</a>
+          <a class="dropdown-item" href="#">IncitiFlex</a>
         </div>
       </li>
+
+      <!-- Valores UF -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Valores UF
@@ -26,22 +38,52 @@
           <%= link_to "Uf por Comuna", admin_county_ufs_path() %>
           <a class="dropdown-item" href="#">Subir CSV</a>
       </li>
+
+      <!-- Capas -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Ddown
+          Capas
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" href="#">Proyectos Futuros</a>
+          <a class="dropdown-item" href="#">Transacciones</a>
+          <a class="dropdown-item" href="#">Proyectos</a>
+          <a class="dropdown-item" href="#">KPI</a>
+          <a class="dropdown-item" href="#">EMI</a>
         </div>
       </li>
+
+      <!-- UF_M2 -->
+      <li class="nav-item">
+        <a class="nav-link" href="#">UF_M2</a>
+      </li>
+
+      <!-- Usuarios -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Bapo
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Exportar CSV</a>
+          <a class="dropdown-item" href="#">Exportar CBR + SII</a>
+          <a class="dropdown-item" href="#">Exportar EM</a>
+          <a class="dropdown-item" href="#">Exportar PRV</a>
+        </div>
+      </li>
+
+      <!-- Importaciones -->
+      <li class="nav-item">
+        <a class="nav-link" href="#">Importaciones</a>
+      </li>
+
+      <!-- Comunas -->
+      <li class="nav-item">
+        <a class="nav-link" href="#">Comunas</a>
+      </li>
+
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+
   </div>
+
 </nav>
 <%= yield %>
