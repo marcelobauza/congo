@@ -362,14 +362,11 @@ class Transaction < ApplicationRecord
   def self.group_transactions_by_uf(filters)
 
     values = get_calculated_value_ranges(filters)
-
-
     result = []
 
     return result if values.nil?
 
     ranges = get_valid_ranges(values)
-
     ranges.each do |qua|
       trans_group = {:from => qua["min"], :to => qua["max"], :value => "0"}
 
@@ -808,7 +805,7 @@ class Transaction < ApplicationRecord
                            group("ROUND(calculated_value / 10)").
                            order("counter desc").first
     result = Array.new
-    ranges = get_valid_ranges(values)
+    ranges = get_valid_ranges_interval(values)
 
     0.upto(ranges.count - 1) do |i|
       result << ranges[i]["min"].to_i
@@ -819,7 +816,7 @@ class Transaction < ApplicationRecord
     return result
   end
 
-  def self.get_valid_ranges(values)
+  def self.get_valid_ranges_interval(values)
 
     ranges = Project::get_ranges
     min_value = values["value"].to_i * 10
