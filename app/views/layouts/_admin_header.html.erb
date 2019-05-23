@@ -22,7 +22,7 @@
           Usuarios
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <%= link_to "usuarios", users_path() %>
+          <%= link_to "usuarios", users_path(), class:"dropdown-item" %>
           <a class="dropdown-item" href="#">Logs</a>
           <a class="dropdown-item" href="#">Roles</a>
           <a class="dropdown-item" href="#">IncitiFlex</a>
@@ -35,7 +35,7 @@
           Valores UF
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <%= link_to "Uf por Comuna", admin_county_ufs_path() %>
+          <%= link_to "Uf por Comuna", admin_county_ufs_path(), class:"dropdown-item" %>
           <a class="dropdown-item" href="#">Subir CSV</a>
       </li>
 
@@ -45,9 +45,10 @@
           Capas
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Proyectos Futuros</a>
-          <a class="dropdown-item" href="#">Transacciones</a>
-          <a class="dropdown-item" href="#">Proyectos</a>
+          <%= link_to "Projectos Futuros", admin_future_projects_path(), class:"dropdown-item" %>
+          <%= link_to "Transacciones", admin_transactions_path(), class:"dropdown-item" %>
+          <%= link_to "Proyectos", admin_projects_path(), class:"dropdown-item" %>
+          <%= link_to "Periodos", admin_periods_path(), class:"dropdown-item" %>
           <a class="dropdown-item" href="#">KPI</a>
           <a class="dropdown-item" href="#">EMI</a>
         </div>
