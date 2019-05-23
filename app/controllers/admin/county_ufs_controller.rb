@@ -1,5 +1,6 @@
 class Admin::CountyUfsController < ApplicationController
   before_action :set_admin_county_uf, only: [:show, :edit, :update, :destroy]
+  layout 'admin'
 
   # GET /admin/county_ufs
   # GET /admin/county_ufs.json
