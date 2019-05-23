@@ -1,5 +1,4 @@
 class TransactionsController < ApplicationController
-  before_action :set_transaction, only: [:show, :edit, :update, :destroy]
   include NumberFormatter
 
   def graduated_points
@@ -12,7 +11,6 @@ class TransactionsController < ApplicationController
       f.js
     end
   end
-
 
   def transactions_summary
     result =[]
@@ -27,12 +25,12 @@ class TransactionsController < ApplicationController
         {:label => t(:AVG_TRANSACTIONS_BIMESTER), :value => global_transactions[:avg_trans_count]},
         {:label => t(:AVG_UF_VOLUME_BIMESTER), :value => global_transactions[:avg_uf_volume]}]
 
-
-
       ptypes = property_type
       stypes = seller_type
       transactions_by_periods = Transaction.group_transaction_county_and_bimester(params)
       uf_periods = uf_period
+      
+
       average_uf_periods = average_uf_period
       transactions_ufs = transactions_uf
 
@@ -162,78 +160,5 @@ class TransactionsController < ApplicationController
 
   def transactions_uf
     @transactions = Transaction.group_transactions_by_uf(params)
-  end
-
-
-
-  # GET /transactions
-  # GET /transactions.json
-  def index
-    @transactions = Transaction.all
-  end
-
-  # GET /transactions/1
-  # GET /transactions/1.json
-  def show
-  end
-
-  # GET /transactions/new
-  def new
-    @transaction = Transaction.new
-  end
-
-  # GET /transactions/1/edit
-  def edit
-  end
-
-  # POST /transactions
-  # POST /transactions.json
-  def create
-    @transaction = Transaction.new(transaction_params)
-
-    respond_to do |format|
-      if @transaction.save
-        format.html { redirect_to @transaction, notice: 'Transaction was successfully created.' }
-        format.json { render :show, status: :created, location: @transaction }
-      else
-        format.html { render :new }
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /transactions/1
-  # PATCH/PUT /transactions/1.json
-  def update
-    respond_to do |format|
-      if @transaction.update(transaction_params)
-        format.html { redirect_to @transaction, notice: 'Transaction was successfully updated.' }
-        format.json { render :show, status: :ok, location: @transaction }
-      else
-        format.html { render :edit }
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /transactions/1
-  # DELETE /transactions/1.json
-  def destroy
-    @transaction.destroy
-    respond_to do |format|
-      format.html { redirect_to transactions_url, notice: 'Transaction was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-
-  private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_transaction
-    @transaction = Transaction.find(params[:id])
-  end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def transaction_params
-    params.fetch(:transaction, {})
   end
 end
