@@ -1,4 +1,4 @@
-class ProjectMixesController < ApplicationController
+class Admin::ProjectMixesController < ApplicationController
   before_action :set_project_mix, only: [:show, :edit, :update, :destroy]
 
   # GET /project_mixes

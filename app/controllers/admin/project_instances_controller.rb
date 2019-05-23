@@ -1,4 +1,4 @@
-class ProjectInstancesController < ApplicationController
+class Admin::ProjectInstancesController < ApplicationController
   before_action :set_project_instance, only: [:show, :edit, :update, :destroy]
 
   # GET /project_instances

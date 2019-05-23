@@ -1,4 +1,4 @@
-class ProjectInstanceMixesController < ApplicationController
+class Admin::ProjectInstanceMixesController < ApplicationController
   before_action :set_project_instance_mix, only: [:show, :edit, :update, :destroy]
 
   # GET /project_instance_mixes
