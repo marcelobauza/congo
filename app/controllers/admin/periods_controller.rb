@@ -1,5 +1,6 @@
 class Admin::PeriodsController < ApplicationController
   before_action :set_admin_period, only: [:show, :edit, :update, :destroy]
+  layout 'admin'
 
   # GET /admin/periods
   # GET /admin/periods.json
