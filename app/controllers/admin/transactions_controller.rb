@@ -1,6 +1,7 @@
 class Admin::TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
   include NumberFormatter
+  layout 'admin'
 
   # GET /transactions
   # GET /transactions.json
