@@ -94,4 +94,7 @@ class Period < ApplicationRecord
       period_string = period + " " + I18n.translate(period_type) + " 20" + year
       return period_string
     end
+    def self.get_period_current()
+      period_current = Period.where(active: true).order(year: :desc,bimester: :desc).first
+    end
   end
