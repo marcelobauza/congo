@@ -338,6 +338,12 @@ Congo.transactions.action_dashboards = function(){
 
           } // Cierra if
         } // Cierra for
+
+        // Drag and Drop
+        var boxArray = document.getElementsByClassName("overlay");
+        var boxes = Array.prototype.slice.call(boxArray);
+        dragula({ containers: boxes });
+        
       } // Cierra success
     }) // Cierra ajax
   } // Cierra indicator_transactions
