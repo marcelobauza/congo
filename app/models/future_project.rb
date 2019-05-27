@@ -51,23 +51,19 @@ class FutureProject < ApplicationRecord
   end
 
   def file_date=(val)
+
     self[:file_date] = val
-    self.bimester = val.to_date.bimester
-    self.year = val.to_date.year
+    #self.bimester = val.to_date.bimester
+    #self.year = val.to_date.year
   end
 
   def save_future_project_data(geom, data, year, bimester, future_type)
     ic = Iconv.new('UTF-8', 'ISO-8859-1')
-    p "tipo"
-    p data["TIPO"]
     p_type = ProjectType.get_project_type_by_first_letter(data["TIPO"])
-    p "insp"
-    p p_type.inspect
+    
     county = County.find_by_code(data["COD_COM"].to_i.to_s)
-
-    number_next_project = county.number_last_project_future + 1 
-    #self.code = data["COD_PROY"].to_s
-    self.code = county.code + "-EM-"+ number_next_project.to_s
+    number_next_project = county.number_last_project_future + 1
+    self.code = county.code.to_s + "-EM-"+ number_next_project.to_s
     self.address = ic.iconv(data["DIRECCION"].gsub("'","''")).to_s
     self.name = ic.iconv(data["NOMBRE"]).to_s
     self.role_number = ic.iconv(data["N_ROL"]).to_s
@@ -78,6 +74,7 @@ class FutureProject < ApplicationRecord
     self.owner = ic.iconv(data["PROP"]).to_s
     self.legal_agent = ic.iconv(data["REP_LEGAL"]).to_s
     self.architect = ic.iconv(data["ARQUITECTO"]).to_s
+
     self.floors = data["N_PISOS"].to_i unless data["N_PISOS"] == -1
     self.undergrounds = data["SUBT"].to_i unless data["SUBT"] == -1
     self.total_units = data["T_UNID"].to_i unless data["T_UNID"] == -1
@@ -88,10 +85,11 @@ class FutureProject < ApplicationRecord
     self.m2_field = data["M2_TERR"] unless data["M2_TERR"] == -1
     self.t_ofi = data["T_OFI"] unless data["T_OFI"] == -1
 
-    self.cadastral_date = data["F_CATASTRO"].to_date
+    self.cadastral_date = data["F_CATASTRO"].to_date unless data["F_CATASTRO"].nil?
     self.comments = ic.iconv(data["OBSERVACIO"]).to_s
     self.year = year
     self.bimester = bimester
+
     self.active = true
 
     self.cadastre = data["CATASTRO"]
@@ -102,7 +100,7 @@ class FutureProject < ApplicationRecord
     self.the_geom = geom
 
     if self.save
-      County.update(county.id, :future_project_data => true,  :number_last_project_future => number_next_project ) unless county.nil?      
+      County.update(county.id, :future_project_data => true, :number_last_project_future => number_next_project) unless county.nil?
       return true
     end
     false
@@ -278,7 +276,7 @@ class FutureProject < ApplicationRecord
   private
 
   def build_geom
-    self.the_geom = Point.from_x_y(self.longitude.to_f, self.latitude.to_f, 4326) if self.latitude and self.longitude
+    self.the_geom = "POINT(#{self.longitude.to_f} #{self.latitude.to_f})" if self.latitude and self.longitude
   end
 
   def self.build_joins
@@ -457,16 +455,16 @@ class FutureProject < ApplicationRecord
     county_id = params['county_id']
     values = FutureProject.select("COUNT(*) as counter, ROUND(m2_built / 100) as value").
       where(bimester: bimester, year: year, county_id: county_id).where("m2_built > ?", 1).
-                           group("ROUND(m2_built / 100)").
-                           order("counter desc").first
-       result = Array.new
-      unless values.nil?
-        seed = (values["value"].to_i * 100)
-        1.upto(Util::INTERVALS_QUANTITY) do
-          result << seed
-          seed += (values["value"].to_i * 100)
-        end
+      group("ROUND(m2_built / 100)").
+      order("counter desc").first
+    result = Array.new
+    unless values.nil?
+      seed = (values["value"].to_i * 100)
+      1.upto(Util::INTERVALS_QUANTITY) do
+        result << seed
+        seed += (values["value"].to_i * 100)
       end
-      return result
+    end
+    return result
   end
 end

@@ -48,6 +48,8 @@ module Util
   end
 
   def self.extract(src, dst)
+    require 'rubygems'
+    require 'zip'
     Zip::ZipFile.open(src) do |zip|
       zip.each do |f|
         file_path = File.join(dst, f.to_s)
