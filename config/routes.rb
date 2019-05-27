@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get 'building_regulations/dashboards' => 'building_regulations#dashboards'
   
   namespace :admin do
+    resources :agencies
     resources :periods
     resources :import_processes
     resources :county_ufs
