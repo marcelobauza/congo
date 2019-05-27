@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   
   namespace :admin do
     resources :periods
+    resources :import_processes
     resources :county_ufs
     resources :future_projects
     resources :transactions

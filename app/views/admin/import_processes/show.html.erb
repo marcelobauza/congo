@@ -1,0 +1,52 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @import_process.status %>
+</p>
+
+<p>
+  <strong>Processed:</strong>
+  <%= @import_process.processed %>
+</p>
+
+<p>
+  <strong>Inserted:</strong>
+  <%= @import_process.inserted %>
+</p>
+
+<p>
+  <strong>Updated:</strong>
+  <%= @import_process.updated %>
+</p>
+
+<p>
+  <strong>Failed:</strong>
+  <%= @import_process.failed %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @import_process.user.complete_name %>
+</p>
+
+<p>
+  <strong>Data source:</strong>
+  <%= @import_process.data_source %>
+</p>
+
+<p>
+  <strong>Original filename:</strong>
+  <%= @import_process.original_filename %>
+</p>
+
+<ul class="unstyled">
+  <% @import_process.import_errors.each do |error| %>
+    <li>
+      <% if error.row_index.present? %>
+        <p class="label">Indice <%= error.row_index %></p>
+      <% end %>
+      <pre><%= error.message %></pre>
+    </li>
+  <% end %>
+</ul>

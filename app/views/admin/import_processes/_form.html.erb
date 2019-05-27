@@ -1,0 +1,24 @@
+<%= simple_form_for([:admin, @import_process]) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+  <div class="alert-message block-message info">
+    <p><strong>Importar un shape</strong> Se necesita un archivo zip con los archivos que componen un shape (.shp .shx .dbf)</p>
+  </div>
+
+  <div class="clearfix">
+    <label for="xlInput">Fuente de datos</label>
+    <div class="input">
+      <%=  f.select 'data_source', options_for_select([['Transacciones', 'Transactions'], ['Normativa', 'Building Regulation'], ['Proyecto', 'Project_Fulcrum'], ['Casas', 'Homes'], ['Departamentos', 'Departments'],['Proyecto Futuro', 'Future Projects'], ['Oficinas', 'Offices'], ['Bodegas', 'Cellars'], ['Centros comerciales', 'Strip Centers'], ['Parcelas', 'Lot'], ['Puntos de interes', 'POI'], ['Comunas', 'Counties'], ['Servicio Impuesto Internos', 'SII'] ]) %>
+    </div>
+  </div>
+
+  <div class="clearfix">
+    <label for="xlInput">Seleccione el archivo</label>
+    <div class="form-group col-md-3">
+            <%= f.file_field(:file)  %>
+                </div>
+  </div>
+
+  <%= f.submit  "Cargar", :class => 'btn primary' %>
+
+<% end %>

@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Import Processes</h1>
+
+<table>
+  <tbody>
+    <% @import_processes.each do |process| %>
+      <tr class="status">
+        <td>
+          <%= link_to admin_import_process_path(process) do %>
+            <%= short_description process %><br/>
+            Fuente de datos: <%= process.data_source %><br/>
+            Archivo: <%= process.original_filename %><br/>
+            Usuario: <%= process.user_complete_name %>
+          <% end %>
+        </td>
+      </tr>
+
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Import Process', new_admin_import_process_path %>
