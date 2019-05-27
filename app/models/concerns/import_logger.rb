@@ -21,7 +21,7 @@ module Ibiza
 
     def save
       self.details.each do |detail|
-        error = ImportError.new(row_index:(detail[:row_index] rescue ""), message:detail[:message]
+        error = ImportError.new(row_index:(detail[:row_index] rescue ""), message:detail[:message])
         self.import_process.import_errors << error
       end
       self.import_process.processed = self.processed
