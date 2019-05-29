@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
 
-
   get 'dashboards/index'
   get 'dashboards/graduated_points'
+  get 'dashboards/filter_county_for_lon_lat'
+  get 'dashboards/filter_period'
   get 'counties/find' => 'counties#find'
   get 'transactions/transactions_summary' => 'transactions#transactions_summary'
   get 'projects/projects_summary' => 'projects#projects_summary'

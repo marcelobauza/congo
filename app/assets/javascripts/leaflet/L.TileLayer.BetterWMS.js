@@ -105,10 +105,10 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
           inn = document.body.appendChild(z);
 
           if (!checked){
-              L.popup()
-              .setLatLng(latlng)
-              .setContent(inn)
-              .openOn(this._map);
+            //    L.popup()
+            //  .setLatLng(latlng)
+            //  .setContent(inn)
+            //  .openOn(this._map);
     // Otherwise show the content in a popup, or something.
 /*    L.popup({ maxWidth: 800})
       .setLatLng(latlng)

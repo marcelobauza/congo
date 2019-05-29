@@ -6,6 +6,8 @@ Congo.dashboards.config= {
   county_id: '',
   layer_type: 'transactions_info',
   style_layer: 'poi_new',
+  bimester: '',
+  year: '',
   env: ''
 }
 
