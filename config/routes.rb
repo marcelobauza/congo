@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get 'projects/dashboards' => 'projects#dashboards'
   get 'building_regulations/dashboards' => 'building_regulations#dashboards'
   
+  scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
     resources :agencies
     resources :periods
@@ -46,4 +47,7 @@ Rails.application.routes.draw do
   resources :users 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'dashboards#index'
+end
+ match '*path', to: redirect("/#{I18n.default_locale}/%{path}"), via: :all
+   match '', to: redirect("/#{I18n.default_locale}"), via: :all
 end

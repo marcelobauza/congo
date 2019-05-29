@@ -1,33 +1,244 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  "EXCAVACION": "Excavation"
+  "EXCAVACIONES": "Excavations"
+  "FUNDACIONES": "Fundations"
+  "OBRA GRUESA": "Structural work"
+  "SIN EJECUCION": "Without execution"
+  "TERMINACIONES": "Terminations"
+  "TERMINADO": "Finished"
+  "BANCO": "Bank"
+  "COOPERATIVA": "Cooperative"
+  "EMPRESA": "Company"
+  "F": "F"
+  "i": "i"
+  "INMOBILIARIA": "Real estate"
+  "M": "m"
+  "PROPIETARIO": "Proprietary"
+  "SI": "SI"
+  "S / I": "S / I"
+  "BODEGA": "Warehouse"
+  "CASA": "House"
+  "DEPARTAMENTO": "Department"
+  "ESTACIONAMIENTO": "Parking"
+  "L": "L"
+  "LOCAL COMERCIAL": "Commercial premises"
+  "OFICINA": "Office"
+  "OTRO": "Other"
+  "PARCELA": "Plot"
+  "SITIO": "Site"
+  "MUNICIPALIDAD": "Municipality"
+  "SIN INFORMACION": "Whitout information"
+  "PROPERTY_TYPE": "Property type"
+  "ADDRESS": "Address"
+  "SELLER_TYPE": "Seller type"
+  "SHEET": "Sheet"
+  "NUMBER": "Number"
+  "INSCRIPTION_DATE": "Inscription date"
+  "DEPARTMENT": "Department"
+  "BLUEPRINT": "Blueprint" 
+  "UF_VALUE": "UF Value"
+  "BUYER": "Buyer"
+  "SELLER": "Seller"
+  "BUYER_RUT": "Rut"
+  "TRANSACTION_LEGEND_TITLE": "UF Value"
+  "TRANSACTION_LEGEND_ITEM_1": "E"
+  "TRANSACTION_LEGEND_ITEM_2": "D"
+  "TRANSACTION_LEGEND_ITEM_3": "C3"
+  "TRANSACTION_LEGEND_ITEM_4": "C2b"
+  "TRANSACTION_LEGEND_ITEM_5": "C2a"
+  "TRANSACTION_LEGEND_ITEM_6": "C1b"
+  "TRANSACTION_LEGEND_ITEM_7": "C1c"
+  "TRANSACTION_LEGEND_ITEM_8": "AB"
+  "SALES_PROJECT_LEGEND_MONTHLY_TITLE": "Monthly Sales Projects"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_1": "Lower than 1"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_2": "Between 2 and 3"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_3": "Between 4 and 5"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_4": "Between 6 and 7"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_5": "Between 8 and 11"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_6": "Greater than 12"
+  "SALES_PROJECT_LEGEND_STOCK_TITLE": "Available Stock"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_1": "Lower than 10"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_2": "Between 11 and 30"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_3": "Between 31 and 60"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_4": "Between 61 and 100"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_5": "Between 101 and 150"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_6": "Greater than 151"
+  "NAME": "Name"
+  "MIN_SURFACE_AREA": "Min Surface Area"
+  "MAX_SURFACE_AREA": "Max Surface Area"
+  "MIN_USABLE_AREA": "Min Available Area"
+  "MAX_USABLE_AREA": "Max Available Area"
+  "MIN_BEDROOMS": "Min Bedrooms"
+  "MAX_BEDROOMS": "Max Bedrooms"
+  "MIN_BATHROOMS": "Min Bathrooms"
+  "MAX_BATHROOMS": "Max Bathrooms"
+  "MAX_BATHROOMS": "Max Bathrooms"
+  "UF_MIN_VALUE": "Min UF value"
+  "UF_MAX_VALUE": "Max UF value"
+  "UF_AVERAGE": "UF Average"
+  "UF_DEVIATION": "Standard deviation"
+  "UF_M2": "UF m2"
+  "UF_AVERAGE_M2": "UF Average m2"
+  "UF_MIN_M2_VALUE": "Min UF m2 value"
+  "UF_MAX_M2_VALUE": "Max UF m2 value"
+  "AVAILABLE_STOCK": "Available Stock"
+  "TOTAL_STOCK": "Total Stock"
+  "SELLS": "Sells"
+  "SELLS_VELOCITY": "Sells Velocity"
+  "MONTHS_TO_SPEND": "Months of available stock"
+  "PROPERTY_TYPE": "Property Type"
+  "PROJECT_STATUS": "Project Status"
+  "NAME": "Name"
+  "UNKNOWN": "Unknown"
+  "CODE": "Code"
+  "ZONE": "Zone"
+  "BUILDING_ZONE": "BUILDING ZONE"
+  "ALLOWED_USE": "Allowed Use"
+  "CONSTRUCT": "Constructivity"
+  "LAND_USE": "Land Use"
+  "MAX_DENSITY": "Maximun Density"
+  "DENSITY": "Density"
+  "MAX_HEIGHT": "Maximum Height"
+  "NOT_ALLOWED": "Not Allowed"
+  "AREA_LIMIT": The specified area is too big
+  "HOMES_TOTAL": Homes total
+  "PEOPLE_TOTAL": People total
+  "HOMES_AVG": Homes/block average
+  "PEOPLE_AVG": People/home average
+  "MORE_THAN": "more than"
+  "LESS_THAN": "less than"
+  "SUBDIV_M2": "M2 minimum farm subdivision"
+  "LAST_ACTUALIZATION": "Last actualization"
+  "SITE": "County web site"
+  "CONTACT_SUBJECT": "Inciti Contact"
+  "CONTACT_MAIL": "Mail"
+  "CONTACT_NAME": "Name"
+  "CHECK_TRANSACTION_SUBJECT": "Transaction verification"
+  "CHECK_USER_TITLE": "User"
+  "CHECK_USER_NAME": "Username"
+  "CHECK_USER_COMPLETE_NAME": "Name"
+  "CHECK_USER_EMAIL": "Email"
+  "CHECK_USER_MESSAGE": "Message"
+  "CHECK_TRANSACTION_TITLE": "Transaction to check"
+  "CHECK_TRANSACTION_ID": "Id"
+  "CHECK_BUILDING_REGULATION_SUBJECT": "Building regulation verification"
+  "CHECK_BUILDING_REGULATION_TITLE": "Building regulation to check"
+  "CHECK_BUILDING_REGULATION_IDENTIFIER": "ID"
+  "MIN": "Lower than "
+  "MAX": "Greater than "
+  "BETWEEN": "Between "
+  "AND": " and "
+  "AGENCY": Agency
+  "STATUS": Status
+  "STOCK": Total
+  "AVAILABILITY": Stock
+  "SALES": Sales
+  "UF_M2": UF/m2
+  "UF_VALUE": UF Value
+  "FLOORS": Floors
+  "CELLAR_PERCENTAJE": Cellar percentaje
+  "SELLING_SPEED": Selling Speed
+  "PERCENTAGE_SOLD": Sold Percentage
+  "USABLE_SQUARE_METERS": "Usable Area"
+  "TERRACE_SQUARE_METERS": "Terrace"
+  "CHECK_PROJECT_SUBJECT": "Sale Project verification"
+  "CHECK_PROJECT_TITLE": "Sale Project to check"
+  "CHECK_PROJECT_CODE": "COD_PROY"
+  "MIN_GROUND_AREA": "Min ground area"
+  "MAX_GROUND_AREA": "Max ground area"
+  "AVG_GROUND_AREA": "Average groud area"
+  "AVG_USABLE_AREA": "Average usable area"
+  "ERROR_GEOMETRY_POINT": "The geometry must be Point. Please check the data"
+  "ERROR_GEOMETRY_MULTIPOLYGON": "The geometry must be MultiPolygon. Please check the data"
+  "ERROR_STRUCTURE_FILE": "The column set do not match with the expected. Missing column data"
+  "ERROR_SHP_COLUMN_TYPE": "The Column dos not match the expected type. Read the documentation."
+  "ERROR_ON_SHAPE_FILE": "Error on shape file"
+  "INSERTS": "Inserts: "
+  "UPDATES": "Updates: "
+  "STOCK_TIME": Time to exhausts stock
+  "MIX_PROGRAM": "Mix Program"
+  "M2_FIELD": "Field m2"
+  "M2_BUILT": "Built m2"
+  "MIN_M2_FIELD": "Min Field (m2)"
+  "MAX_M2_FIELD": "Max Field (m2)"
+  "AVG_M2_FIELD": "Average Field (m2)"
+  "MIN_M2_BUILT": "Min Built (m2)"
+  "MAX_M2_BUILT": "Max Built (m2)"
+  "AVG_M2_BUILT": "Average Built (m2)"
+  "HOME_TYPE": "Home Type"
+  "CELLARS": "Cellars"
+  "PARKINGS": "Parkings"
+  "ROLE": "Role"
+  "ROLE_ADMIN": Admin
+  "ROLE_HIGH_PRO": High Pro
+  "ROLE_HIGH": High
+  "ROLE_MEDIUM": Medium
+  "ROLE_MEDIUM_PRO": Medium Pro
+  "ROLE_BASE": Base
+  "ROLE_BASE_PRO": Base Pro
+  "BUILDING_REGULATIONS_LEGEND_TITLE": Density
+  "FUTURE_PROJECTS_LEGEND_TITLE": "M2"
+  "ROLE_NUMBER": "Role number"
+  "PROJECT_TYPE": "Proyect Type"
+  "BUILDING_PERMITS_NUMBER": "Building Permits number"
+  "BUILDING_PERMITS_DATE": "Building Permits date"
+  "FUTURE_PROJECT_DATE": "Future Project date"
+  "DATE_DIFF": "Months Diff"
+  "OWNER": "Owner"
+  "LEGAL_AGENT": "Legal Agent"
+  "ARCHITECT": "Architect"
+  "UNDERGROUNDS": "Undergrounds"
+  "TOTA_UNITS": "Total Units"
+  "TOTAL_PARKING": "Parkings"
+  "TOTAL_COMMERCIALS": "Commercials"
+  "M2_PERMIT": "Permit (m2)"
+  "OBSERVATION": "Observations"
+  "TOTAL_UNITS": "Total Units"
+  "TOTAL_PARKING": "Total Parking"
+  "UNDERGROUNDS": "Undergrounds"
+  "TOTAL_COMMERCIALS": "Total Commercials"
+  "MIN_M2_PERMIT": "Min Permit (m2)"
+  "MAX_M2_PERMIT": "Max Permit (m2)"
+  "AVG_M2_PERMIT": "Average Permit (m2)"
+  "M2_BUILD_LEGEND_TITLE": "Built Area (m2)"
+  "CHECK_FUTURE_PROJECT_SUBJECT": "Future project verification"
+  "CHECK_FUTURE_PROJECT_TITLE": "Future project to check"
+  "CHECK_FUTURE_PROJECT_NUMBER": "COD_PROY"
+  "YEARS": "Years"
+  "MONTHS": "Months"
+  "DAYS": "Days"
+  "TOTAL_PERMISSIONS": "Total Projects"
+  "TOTAL_M2_FIELD": "Total Area"
+  "OFFICE_LEGEND_TITLE": "Total Surface"
+  "CELLAR_LEGEND_TITLE": "Total Surface"
+  "STRIP_CENTER_LEGEND_TITLE": "Total Surface"
+  "OCCUPATION_PERCENT": "Occupation Percent"
+  "VACANCY_PERCENT": "Vacancy Percent"
+  "TOTAL_SURFACE": "Total Surface"
+  "VACANCY_SURFACE": "Vacancy Surface"
+  "OFFICE_SURFACE": "Office Surface"
+  "CELLAR_SURFACE": "Cellar Surface"
+  "OFFICES_PROJECT_SUB_TYPE": "Offices"
+  "CELLARS_PROJECT_SUB_TYPE": "Cellars"
+  "STRIP_CENTERS_PROJECT_SUB_TYPE": "Strip Centers"
+  "HOUSES_PROJECT_SUB_TYPE": "Houses"
+  "DEPARTMENTS_PROJECT_SUB_TYPE": "Departments"
+  "RENT_SURFACE": "Rental Surface"
+  "TOTAL_PROJECTS_COUNT": "Total Project Count"
+  "MIN_UFM2": "UF/M2 Minimun"
+  "MAX_UFM2": "UF/M2 Maximun"
+  "AVG_UFM2": "UF/M2 Average"
+  "OCCUPATION_PERCENT_MIN": "Occupation Percent Min"
+  "OCCUPATION_PERCENT_MAX": "Occupation Percent Max"
+  "OCCUPATION_PERCENT_AVG": "Occupation Percent Avg"
+  "VACANCY_PERCENT_MIN": "Vacancy Percent Min"
+  "VACANCY_PERCENT_MAX": "Vacancy Percent Max"
+  "VACANCY_PERCENT_AVG": "Vacancy Percent Promedio"
+  "MIN_RENT_UFM2": "UF/M2 Rent Min"
+  "MAX_RENT_UFM2": "UF/M2 Rent Max"
+  "AVG_RENT_UFM2": "UF/M2 Rent Promedio"
+  "CHECK_COMMERCIAL_PROJECT_SUBJECT": "Commercial Projects Verification"
+  "CHECK_COMMERCIAL_PROJECT_TITLE" : "Commercial Project to Verify"
+  "MIN_TERRACE_AREA": "Terrace Minimun Area"
+  "MAX_TERRACE_AREA": "Terrace Maximun Area"
+  "AVG_TERRACE_AREA": "Terrace Average Area"

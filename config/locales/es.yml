@@ -1,0 +1,1399 @@
+#encoding: utf-8
+# Spanish translations for Rails as spoken in Chile
+# Based in the original Spanish translation by Francisco Fernando Garcia Nieto
+# and Tsutomu Kuroda
+# Corrected by Eloy Serra Laban: http://goo.gl/i9Kts, /nQ928, /XfKaX
+
+es:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d de %b"
+      long: "%A %d de %B de %Y"
+
+    day_names:
+      - Domingo
+      - Lunes
+      - Martes
+      - Miercoles
+      - Jueves
+      - Viernes
+      - Sabado
+    abbr_day_names:
+      - Dom
+      - Lun
+      - Mar
+      - Mie
+      - Jue
+      - Vie
+      - Sab
+
+    month_names:
+      - ~
+      - Enero
+      - Febrero
+      - Marzo
+      - Abril
+      - Mayo
+      - Junio
+      - Julio
+      - Agosto
+      - Septiembre
+      - Octubre
+      - Noviembre
+      - Diciembre
+    abbr_month_names:
+      - ~
+      - ene
+      - feb
+      - mar
+      - abr
+      - may
+      - jun
+      - jul
+      - ago
+      - sep
+      - oct
+      - nov
+      - dic
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      default: "%A, %d de %B de %Y %H:%M:%S %z"
+      short: "%d de %b %H:%M"
+      long: "%A %d de %B de %Y %H:%M"
+    am: "am"
+    pm: "pm"
+
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " y "
+      last_word_connector: ", y "
+
+    select:
+      prompt: "Por favor seleccione"
+
+  number:
+    format:
+      separator: ","
+      delimiter: "."
+      precision: 2
+      significant: false
+      strip_insignificant_zeros: false
+
+    currency:
+      format:
+        format: "%u %n"
+        unit: "$"
+        separator: ","
+        delimiter: "."
+        precision: 0
+        significant: false
+        strip_insignificant_zeros: false
+
+    percentage:
+      format:
+        delimiter: ""
+
+    precision:
+      format:
+        delimiter: ""
+
+    human:
+      format:
+        delimiter: ""
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one:   "Byte"
+            other: "Bytes"
+          kb: "KB"
+          mb: "MB"
+          gb: "GB"
+          tb: "TB"
+      decimal_units:
+        format: "%n %u"
+        units:
+          unit: ""
+          thousand: "mil"
+          million: "millon"
+          billion: "mil millones"
+          trillion: "billon"
+          quadrillion: "mil billones"
+
+  datetime:
+    distance_in_words:
+      half_a_minute: "medio minuto"
+      less_than_x_seconds:
+        one:  "menos de 1 segundo"
+        other: "menos de %{count} segundos"
+      x_seconds:
+        one:  "1 segundo"
+        other: "%{count} segundos"
+      less_than_x_minutes:
+        one:  "menos de 1 minuto"
+        other: "menos de %{count} minutos"
+      x_minutes:
+        one:  "1 minuto"
+        other: "%{count} minutos"
+      about_x_hours:
+        one:  "alrededor de 1 hora"
+        other: "alrededor de %{count} horas"
+      x_days:
+        one:  "1 dia"
+        other: "%{count} dias"
+      about_x_months:
+        one:  "alrededor de 1 mes"
+        other: "alrededor de %{count} meses"
+      x_months:
+        one:  "1 mes"
+        other: "%{count} meses"
+      about_x_years:
+        one:  "alrededor de 1 año"
+        other: "alrededor de %{count} años"
+      over_x_years:
+        one:  "mas de 1 año"
+        other: "mas de %{count} años"
+      almost_x_years:
+        one: "casi 1 año"
+        other: "casi %{count} años"
+    prompts:
+      year:   "Año"
+      month:  "Mes"
+      day:    "Dia"
+      hour:   "Hora"
+      minute: "Minutos"
+      second: "Segundos"
+
+  helpers:
+    select:
+      prompt: "Por favor seleccione"
+
+    submit:
+      create: 'Crear %{model}'
+      update: 'Actualizar %{model}'
+      submit: 'Guardar %{model}'
+
+  errors:
+    format: "%{attribute} %{message}"
+
+    messages: &errors_messages
+      inclusion: "no esta incluido en la lista"
+      exclusion: "esta reservado"
+      invalid: "no es valido"
+      confirmation: "no coincide con la confirmacion"
+      accepted: "debe ser aceptado"
+      empty: "no puede estar vacio"
+      blank: "no puede estar en blanco"
+      too_long: "es demasiado largo (%{count} caracteres maximo)"
+      too_short: "es demasiado corto (%{count} caracteres minimo)"
+      wrong_length: "no tiene la longitud correcta (%{count} caracteres exactos)"
+      not_a_number: "no es un numero"
+      not_an_integer: "debe ser un entero"
+      greater_than: "debe ser mayor que %{count}"
+      greater_than_or_equal_to: "debe ser mayor o igual a %{count}"
+      equal_to: "debe ser igual a %{count}"
+      less_than: "debe ser menor que %{count}"
+      less_than_or_equal_to: "debe ser menor o igual a %{count}"
+      odd: "debe ser impar"
+      even: "debe ser par"
+      taken: "ya esta en uso"
+      record_invalid: "La validacion fallo: %{errors}"
+    template: &errors_template
+      header:
+        one:   "No se pudo guardar este/a %{model} porque se encontro 1 error"
+        other:  "No se pudo guardar este/a %{model} porque se encontraron %{count} errores"
+      body: "Se encontraron problemas con los siguientes campos:"
+
+  activerecord:
+    errors:
+      messages:
+        <<: *errors_messages
+      template:
+        <<: *errors_template
+      full_messages:
+        format: "%{attribute} %{message}"
+
+      models:
+        transaction:
+          location_confirmation_required: confirmar la ubicacion
+          not_within_county: donde posiciono el punto (%{point_county}) no coincide con la comuna seleccionada (%{selected_county})
+          not_within_lot: no esta dentro de una parcela
+          not_valid_uf_value: no es valido para el tipo de propiedad y la comuna seleccionados
+          uf_county_not_exists: No ha sido cargado el Rango de valores para la Comuna y el Tipo de Propiedad seleccionados
+          invalid_role_format: "debe tener el siguiente formato: XXXXX-XXXXX donde X es un numero entre 0 y 9"
+          invalid_buyer_rut_format: "debe tener el siguiente formato: XXXXXXXX-X donde X es un numero entre 0 y 9 o K"
+          invalid_buyer_rut_verification_digit: "tiene el digito verificador incorrecto"
+          greater_than_toID: El ID desde debe ser menor que el ID hasta
+          inscription_date_less_than_today: no puede ser mayor a la fecha de Digitacion
+        future_project:
+          location_confirmation_required: confirmar la ubicacion
+          not_within_county: donde posiciono el punto (%{point_county}) no coincide con la comuna seleccionada (%{selected_county})
+        project:
+          location_confirmation_required: confirmar la ubicacion
+          not_within_county: donde posiciono el punto (%{point_county}) no coincide con la comuna seleccionada (%{selected_county})
+        county_uf:
+          uf_min_less_than_max: debe ser menor al Uf Maximo
+        user:
+          user_already_exists: existente. Verifique los datos ingresados.
+          attributes:
+            invalid_rut_format: " - Verifique el formato del RUT ingresado y vuelva a intentar"
+            rut:
+              required_rut: "Usuario sin RUT"
+              invalid_rut_format: " - Verifique el formato del RUT ingresado y vuelva a intentar"
+        order:
+          invalid_rut_format: "Verifique el formato del RUT ingresado en facturacion y vuelva a intentar"
+    models:
+      project:
+        one: Proyecto
+        other: Proyectos
+      project_instance:
+        one: Relevamiento
+        other: Relevamientos
+      project_instance_mix:
+        one: Mix
+        other: Mixes
+      future_project:
+        one: Proyecto Futuro
+        other: Proyectos Futuros
+      user:
+        one: Usuario
+        other: Usuarios
+      transaction:
+        one: Transaccion
+        other: Transacciones
+      role:
+        one: Rol
+        other: Roles
+      county:
+        one: Comuna
+        other: Comunas
+      selected_county:
+        one: Comuna seleccionada
+        other: Comunas seleccionadas
+
+    attributes:
+      project_instance:
+        usable_square_meters: Superficie util
+        terrace_square_meters: Superficie terraza
+        total_units: Oferta
+        stock_units: Unidades disponibles
+        sold_units: Unidades vendidas
+        sale_month: Meses venta
+        uf_m2: Valor UF m²
+        uf_value: PP UF
+        uf_value_m2: PP UF/m2
+        selling_speed: Velocidad de venta
+        percentage_sold: "% Vendido"
+        active: Activo
+        m2_built: Superficie construida
+        m2_field: Superficie terreno
+        bimester: Bimestre
+        year: Año
+        register_date: "Fecha registros"
+        comments: "Comentarios"
+        project_status: "Estado"
+        get_pp_utiles: "PP Utiles"
+        get_pp_utiles_terrace: "PP Utiles Terraza"
+        get_sale_months: Meses en venta
+        get_pp_uf_m2: PP Uf m2
+        get_pp_uf: PP Uf
+        get_vhmo: VHMO
+        get_percent_venta: "% Venta"
+        get_pp_uf_dis: PP Uf Disponibilidad
+        get_total_available: Disponibilidad
+        get_vhmd: VHMD
+        get_masd: MASD
+        get_pxq: PxQ
+        get_pxq_d: PxQ Dis
+      project_instance_mix:
+        mix_usable_square_meters: Sup. Util m2
+        mix_terrace_square_meters: Sup. Terraza
+        mix_selling_speed: Vel. Venta
+        total_units: Oferta
+        living_room: Estar
+        service_room: Servicio
+        h_office: Hoffice
+        percentage: "%D"
+        stock_units: Disponibilidad
+        get_sold_units: Unidades vendidas
+        mix_m2_built: M2 Construidos
+        mix_m2_field: M2
+        mix_uf_m2: Valor UF/m2
+        uf_min: Uf Min S/E C/Bod
+        uf_max: Uf Max S/E C/Bod
+        uf_parking: Uf Est
+        uf_cellar: Uf Bod
+        common_expenses: GC
+        withdrawal_percent: "% Desis"
+        mix_m2_built: Sup Util Casa
+        t_min: "T Min"
+        t_max: "T Max"
+        mix_uf_value: Valor UF
+        model: Modelo
+      project:
+        county: Comuna
+        county_id: Comuna
+        address: Direccion
+        code: Codigo
+        name: Nombre Proyecto
+        contact: Contacto
+        contact_phone: Telefono contacto
+        ref: Referencia
+        floors: Pisos
+        quantity_department_for_floor: Cantidad dpto por piso
+        elevators: Ascensores
+        agency: Inmobiliaria
+        agency_id: Inmobiliaria
+        get_agency_name: Inmobiliaria
+        get_constructor_name: Construye
+        get_seller_name: Vende
+        project_type: Tipo de proyecto
+        project_type_id: Tipo de proyecto
+        bank_project: Es proyecto del banco?
+        status: Estado
+        build_date: "Fecha inicio construccion"
+        transfer_date: "Fecha de entrega"
+        sale_date: Fecha de Venta
+        pilot_opening_date: Fecha Piloto
+        project_status_id: Estado
+        longitude: Longitud (x)
+        latitude: Latitud (y)
+      transaction:
+        property_type: Tipo de propiedad
+        property_type_id: Tipo de propiedad
+        address: Direccion
+        sheet: Foja
+        number: Nº Transaccion
+        inscription_date: Fecha de inscripcion
+        buyer_rut: RUT comprador
+        buyer_name: Nombre del comprador
+        seller_type: Tipo de vendedor
+        seller_type_id: Tipo de vendedor
+        seller_name: Nombre del vendedor
+        department: Nº de Depto/Casa/Bodega/Oficina
+        blueprint: Plano
+        uf_value: Valor UF
+        real_value: Valor CLP
+        calculated_value: Valor calculado
+        quarter: Trimestre
+        year: Año
+        sample_factor: Factor de la muestra
+        county: Comuna
+        county_id: Comuna
+        cellar: Bodega
+        parking: Estacionamiento
+        role: Rol
+        the_geom: Localizacion
+        latitude: Latitud (y)
+        longitude: Longitud (x)
+        lot: Parcela
+        point: Punto
+        uf_m2: Valor UF m²
+        user: Digitador
+        user_id: Digitador
+        surveyor: Encuestador
+        surveyor_id: Encuestador
+        requiring_entity: Requiriente
+        surface: Superficie
+        village: Condominio/Villa
+        block: Manzana
+        lot: Lote
+        tome: Tomo
+        active: Punto Activo
+      kpi:
+        polygon: Seleccione Poligono
+        county: Comuna
+        property_type: Tipo de Propiedad
+        bimester: Bimestre
+        year_from: Año Desde
+        year_to: Año Hasta
+      emi:
+        variable_map: Variable en mapa
+      future_project:
+        code: Codigo
+        address: Direccion
+        name: Nombre
+        role_number: Nº de rol
+        file_number: Nº Expediente
+        file_date: Fecha Expediente
+        owner: Propietario
+        legal_agent: Representante legal
+        architect: Arquitecto
+        floors: Pisos
+        undergrounds: Total de subterraneos
+        total_units: Total de unidades
+        total_parking: Total de estacionamientos
+        total_commercials: Total de locales comerciales
+        t_ofi: Total de oficinas
+        total_m2_built: Total Superficie
+        m2_approved: Superficie Aprobada m²
+        m2_built: Superficie Edificada m²
+        m2_field: Superficie Terreno m²
+        comments: Comentarios
+        project_type: Tipo de proyecto
+        project_type_id: Tipo de proyecto
+        future_project_type: Tipo de Fuente
+        future_project_type_id: Tipo de Fuente
+        county: Comuna
+        county_id: Comuna
+        created_at: Creado
+        updated_at: Actualizado
+        the_geom: Localizacion
+        bimester: Bimestre
+        year: Año
+        cadastre: Periodo de Catastro
+        cadastral_date: Fecha catastro
+        active: Punto Activo
+        longitude: Longitud (x)
+        latitude: Latitud (y)
+      user:
+        name: Usuario
+        complete_name: Nombre y Apellido
+        birth_day: Fecha de Nacimiento
+        email: Correo electronico
+        company: Empresa
+        city: Ciudad
+        county: Comuna
+        is_temporal: Temporal?
+        disabled: Deshabilitado?
+        password: Contraseña
+        permissions: Permisos
+        address: Direccion
+        phone: Telefono
+        rut: RUT
+        day: 1 Dia
+        week: 1 Semana
+        role: Rol
+        role_id: Rol
+        county_contract: Comuna Contratada
+        expiration_date: Fecha Vencimiento
+        expire: Vencido?
+        created_at: Fecha de Alta
+        last_buy_date: Fecha Ultima Compra
+      role:
+        name: Nombre
+      order:
+        user_data: Datos del Usuario
+        data_bases: Bases de Datos
+        counties: Comunas
+        rates: Valores
+        payment_confirmation: Confirmacion del Pago
+        total_amount: Monto Total
+        subtotal_amount: Sub Total
+        send_order: Enviar Orden
+        back: Atras
+        next: Siguiente
+        step1: "Paso 1: Bases de Datos"
+        step2: "Paso 2: Facturacion"
+        step3: "Paso 3: Confirmar Carro"
+        step4: "Paso 4: Finalizar"
+        validation_required: Debe completar todos los datos personales del usuario.
+        validation_modules: Debe seleccionar la base de datos que desea comprar y el tiempo.
+        county: Comuna
+        user_password: Ingrese su Email y Contraseña
+        login: Ingresar
+        register: Registrarse
+        step_login: Ingreso
+        step_register: Registro
+        user_register: Usuario Registrado
+        waiting_for: Espere mientras se lo redirecciona al sitio de pago.
+        payment_ok: El pago se realizo correctamente.
+        payment_error: Ha ocurrido un error en el proceso de pago.
+        start_application: Ingrese a la aplicacion con su Email y Contraseña.
+        thanks: Muchas Gracias!
+        IVA: IVA
+        amount: Monto Total
+        tickets_count: Capas Compradas
+        transaction_servipag: ID Trans. SERVIPAG
+        pending: Pagado ?
+        payment_date: Fecha de Compra
+        id: ID Trans. INCITI
+        payment_type: Medio Pago
+        contact: Mail Contacto
+        company: Empresa
+        rut: Rut
+        address: Direccion
+        phone: Telefono
+        category: Giro
+        receipt_information: Informacion de Facturacion
+      county:
+        code: Codigo Comuna
+        name: Nombre Comuna
+        zip_file_file_name: Nombre del Archivo Zip
+        code_sii: "Codigo Servicio Imp. Interno"
+      order_detail:
+        county_contract: Comuna Contratada
+        amount: Monto
+        hours: Tiempo Contratado
+        count_down_time: Tiempo Restaurante
+      county_uf:
+        county: Comuna
+        property_type_id: Tipo de Propiedad
+        uf_min: UF Minimo
+        uf_max: UF Maximo
+      uf_conversion:
+        uf_date: Fecha
+        uf_value: Valor UF
+      import_process:
+        status: Estado
+      closed_quarter:
+        quarter: Trimestre
+        year: Año
+      surveyor:
+        name: Nombre
+
+  controllers:
+    successfully_updated: Actualizado correctamente
+    successfully_created: Creado correctamente
+    successfully_destroyed: Eliminado correctamente
+  will_paginate:
+    previous_label: "&#8592; Anterior"
+    next_label: "Siguiente &#8594;"
+    page_gap: "&hellip;"
+
+  actions:
+    delete: Eliminar
+    edit: Editar
+    back: Volver
+    save: Guardar
+    save_and_continue: Guardar y seguir
+    logout: Salir
+    calculate: Calcular
+    editing: "Editando %{model}"
+    creating: "Creando %{model}"
+    new: Nuevo
+
+  questions:
+    are_you_sure: ¿Estas seguro?
+
+  form:
+    search: Buscar
+    hint:
+      user:
+        county: Ctrl+clic para seleccionar varias comunas.<br/>Si no selecciona ninguna, el usuario<br/>podra ver todas.
+      transaction:
+        address: Tipea una direccion y luego presiona Enter para proponer una ubicacion.
+        uf_m2: Es posible calcular el Valor UF m² si la Transaccion esta dentro de una Parcela y ademas se completo el campo Valor calculado
+        creation_information: "Digitado por %{user_name} el %{created_at}"
+        buyer_rut: "Formato: XXXXXXXX-X"
+        role: "Formato: XXXXX-XXXXX"
+      future_project:
+        address: Tipea una direccion y luego presiona Enter para proponer una ubicacion.
+      project:
+        address: Tipea una direccion y luego presiona Enter para proponer una ubicacion.
+      order:
+        counties: Seleccione las comunas a las que desea acceder.
+        price: "El valor por comuna es: "
+        limited: Acceso Ilimitado por 15 Dias
+        add_counties: Permite añadir comunas a la compra
+        buyer_rut: "Formato: XXXXXXXX-X"
+        required_data: Datos Requeridos
+
+  label:
+    import_process:
+      status:
+        success: "Iniciado el %{start_time}, termino correctamente %{time_later} despues"
+        failed: "Iniciado el %{start_time}, fue cancelado por fallas %{time_later} despues"
+        working: "Trabajando hace %{time_ago}"
+        idle: "Inactivo por %{time_ago}"
+  menu:
+    home:
+      index: Inicio
+      control_panel: Panel de control
+    import_process:
+      index: Importaciones
+      new: Importar
+      show: Importacion
+    role:
+      index: Roles
+      new: Nuevo rol
+      edit: Editar rol
+    user:
+      index: Usuarios
+      new: Nuevo usuario
+      edit: Editar usuario
+      login: Ingreso
+      incitiFlex_users: IncitiFlex
+    transaction:
+      index: Transacciones
+      new: Nueva transaccion
+      edit: Editar transaccion
+      search: Buscar
+      export: Exportar CSV
+    future_project:
+      index: Proyectos futuros
+      new: Nuevo proyecto futuro
+      edit: Editar proyecto futuro
+      search: Buscar
+    project:
+      index: Proyectos
+      new: Nuevo proyecto
+      edit: Editar proyecto
+      new_instance: Nuevo relevamiento
+      project: Proyecto
+      instances: Relevamientos
+    period:
+      index: Periodos
+      new: Nuevo periodo
+      edit: Editar periodo
+      destroy: Eliminar periodo
+    project_instance:
+      index: Relevamientos de proyecto
+      new: Nuevo relevamiento
+      edit: Editar relevamiento
+      new_instance: Nuevo relevamiento
+      project_instance: Relevamiento
+      mixes: Mix
+    project_instance_mix:
+      index: Mix
+      new: Nuevo mix
+      edit: Editar mix
+    user_log:
+      index: Actividad de usuario
+      log: Log
+    county_uf:
+      index: UF Por Comuna
+      new: Nuevo
+      edit: Editar
+      search: Buscar
+    uf_conversion:
+      upload: Subir CSV
+    closed_quarter:
+      index: Trimestres Cerrados
+      new: Agregar Trimestre Cerrado
+      edit: Editar Trimestre Cerrado
+    surveyor:
+      index: Encuestadores
+      new: Agregar Encuestador
+      edit: Editar Encuestador
+    counties:
+      index: Comunas
+      pdf: Agregar PDF
+      edit: Editar Comuna
+
+  welcome: Bienvenido
+  login: Ingreso
+  logged_in_as: "Autenticado como %{user_name} (%{logout})"
+  layers: Capas
+  new_future_project: Nuevo Proyecto Futuro
+  edit_future_project: Editar Proyecto Futuro
+  future_projects: Proyectos Futuros
+  back: Volver
+  select_item_from_list: Por favor seleccione un item
+  none: Ninguno
+  unknown: Desconocido
+  amount: Monto
+  users: Usuarios
+  ufs: Valores UF
+
+  "EXCAVACION": "Excavacion"
+  "EXCAVACIONES": "Excavaciones"
+  "FUNDACIONES": "Fundaciones"
+  "OBRA GRUESA": "Obra gruesa"
+  "SIN EJECUCION": "Sin ejecucion"
+  "TERMINACIONES": "Terminaciones"
+  "TERMINADO": "Terminado"
+  "BANCO": "Banco"
+  "COOPERATIVA": "Cooperativa"
+  "EMPRESA": "Empresa"
+  "F": "F"
+  "i": "i"
+  "INMOBILIARIA": "Inmobiliaria"
+  "M": "m"
+  "PROPIETARIO": "Propietario"
+  "SI": "Si"
+  "S / I": "S / I"
+  "BODEGA": "Bodega"
+  "CASA": "Casa"
+  "DEPARTAMENTO": "Departamento"
+  "ESTACIONAMIENTO": "Estacionamiento"
+  "L": "L"
+  "LOCAL COMERCIAL": "Local comercial"
+  "OFICINA": "Oficina"
+  "OTRO": "Otro"
+  "PARCELA": "Parcela"
+  "SITIO": "Sitio"
+  "MUNICIPALIDAD": "Municipalidad"
+  "SIN INFORMACION": "Sin informacion"
+  "PROPERTY_TYPE": "Tipo de Propiedad"
+  "ADDRESS": "Direccion"
+  "SELLER_TYPE": "Tipo de Vendedor"
+  "SHEET": "Foja"
+  "NUMBER": "Numero"
+  "INSCRIPTION_DATE": "Fecha de inscripcion"
+  "DEPARTMENT": "Departamento"
+  "BLUEPRINT": "Plano"
+  "UF_VALUE": "Valor UF"
+  "BUYER": "Comprador"
+  "BUYER_NAME": "Comprador"
+  "SELLER": "Vendedor"
+  "SELLER_NAME": "Vendedor"
+  "BUYER_RUT": "RUT"
+  "TRANSACTION_LEGEND_TITLE": "Valor UF"
+  "AGENCIES_NAME": "Inmobiliaria"
+  "PROJECTS_NAME": "Nombre"
+  "HEATMAP_TITLE": "Densidad"
+  "TRANSACTION_LEGEND_ITEM_1": "E"
+  "TRANSACTION_LEGEND_ITEM_2": "D"
+  "TRANSACTION_LEGEND_ITEM_3": "C3"
+  "TRANSACTION_LEGEND_ITEM_4": "C2b"
+  "TRANSACTION_LEGEND_ITEM_5": "C2a"
+  "TRANSACTION_LEGEND_ITEM_6": "C1b"
+  "TRANSACTION_LEGEND_ITEM_7": "C1c"
+  "TRANSACTION_LEGEND_ITEM_8": "AB"
+  "SALES_PROJECT_LEGEND_MONTHLY_TITLE": "Ventas mensuales"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_1": "Menor a 1"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_2": "Entre 2 y 3"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_3": "Entre 4 y 5"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_4": "Entre 6 y 7"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_5": "Entre 8 y 11"
+  "SALES_PROJECT_LEGEND_MONTHLY_ITEM_6": "Mayor a 12"
+  "SALES_PROJECT_LEGEND_STOCK_TITLE": "Stock Disponible"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_1": "Menor a 10"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_2": "Entre 11 y 30"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_3": "Entre 31 y 60"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_4": "Entre 61 y 100"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_5": "Entre 101 y 150"
+  "SALES_PROJECT_LEGEND_STOCK_ITEM_6": "Mayor a 151"
+  "MIN_SURFACE_AREA": "Superficie minima"
+  "MAX_SURFACE_AREA": "Superficie maxima"
+  "MIN_USABLE_AREA": "Superficie Útil Minima (m2)"
+  "MAX_USABLE_AREA": "Superficie Útil Maxima (m2)"
+  "MIN_BEDROOMS": "Cantidad minima de dormitorios"
+  "MAX_BEDROOMS": "Cantidad maxima de dormitorios"
+  "MIN_BATHROOMS": "Cantidad minima de baños"
+  "MAX_BATHROOMS": "Cantidad maxima de baños"
+  "UF_MIN_VALUE": "Valor UF Minimo"
+  "UF_MAX_VALUE": "Valor UF Maximo"
+  "UF_AVERAGE": "Valor UF Promedio"
+  "SOLD_UF_MIN_M2_VALUE": "Valor UF Min Venta"
+  "SOLD_UF_MAX_M2_VALUE": "Valor UF Max Venta"
+  "SOLD_UF_AVERAGE_M2": "Valor UF Prom Venta"
+  "HIRE_UF_MIN_VALUE": "Valor UF Minimo"
+  "HIRE_UF_MAX_VALUE": "Valor UF Maximo"
+  "HIRE_UF_AVERAGE": "Valor UF Promedio"
+  "UF_DEVIATION": "Desviacion estandar"
+  "UF_M2": "Valor UF m2"
+  "UF_AVERAGE_M2": "Valor UF/m2 Promedio"
+  "UF_MIN_M2_VALUE": "Valor UF/m2 Minimo"
+  "UF_MAX_M2_VALUE": "Valor UF/m2 Maximo"
+  "HIRE_UF_AVERAGE_M2": "Valor UF/m2 Prom Arriendo"
+  "HIRE_UF_MIN_M2_VALUE": "Valor UF/m2 Min Arriendo"
+  "HIRE_UF_MAX_M2_VALUE": "Valor UF/m2 Max Arriendo"
+  "AVAILABLE_STOCK": "Disponibilidad"
+  "TOTAL_STOCK": "Oferta"
+  "PP_UTILES": "Superfice Útil"
+  "PS_TERRENO": "Superficie Terreno"
+  "PP_UF": "Precio Lista Régimen"
+  "PP_UF_DIS": "Precio Lista Disponible"
+  "PP_UF_M2": "UF/m2 Régimen Dpto"
+  "PP_UF_M2_C": "UF/m2 Régimen Casas"
+  "VHMO": "VM Régimen"
+  "VHMD": "VM Disponible"
+  "MASD": "Meses Agotar Stock"
+  "SELLS": "Venta"
+  "SELLS_VELOCITY": "Velocidad de venta"
+  "MONTHS_TO_SPEND": "Meses para agotar stock"
+  "PROPERTY_TYPE": "Tipo de propiedad"
+  "PROJECT_STATUS": "Estado del proyecto"
+  "PROJECT_INFO_DETAIL": "Detalle de Proyecto"
+  "CREDIT_INFO_DETAIL": "Detalle de Clientes"
+  "PLAN_TABLE": "Tabla de creacion de planificaciones"
+  "PLAN_TABLE_DETAILS": "Detalles de Tabla de creacion de planificaciones"
+  "PLANNING_INFO_DETAIL": "Detalle de Clientes"
+  "USABLE_SQUARE_METERS": "Superficie Útil"
+  "TERRACE_SQUARE_METERS": "Terraza"
+  "NAME": "Nombre"
+  "UNKNOWN": "Desconocido"
+  "CODE": "Codigo"
+  "ZONE": "Zona"
+  "BUILDING_ZONE": "Normativa de Edificacion"
+  "ALLOWED_USE": "Uso Permitido"
+  "CONSTRUCT": "Constructibilidad"
+  "LAND_USE": "Ocupacion de suelo"
+  "MAX_DENSITY": "Densidad Maxima"
+  "DENSITY": "Densidad"
+  "MAX_HEIGHT": "Altura Maxima"
+  "NOT_ALLOWED": "No Aplica"
+  "AREA_LIMIT": "El area especificada es demasiado grande"
+  "HOMES_TOTAL": "Total hogares"
+  "PEOPLE_TOTAL": "Total habitantes"
+  "HOMES_AVG": "Promedio hogares/manzana"
+  "PEOPLE_AVG": "Promedio habitantes/hogar"
+  "MORE_THAN": "o mas"
+  "LESS_THAN": "o menos"
+  "SUBDIV_M2": "Subdivision predial minima m2"
+  "LAST_ACTUALIZATION": "Última actualizacion"
+  "SITE": "Sitio web comuna"
+  "CONTACT_SUBJECT": "Consulta Inciti"
+  "CONTACT_MAIL": "Mail"
+  "CONTACT_NAME": "Nombre"
+  "CHECK_TRANSACTION_SUBJECT": "Verificacion de transaccion"
+  "CHECK_USER_TITLE": "Usuario"
+  "CHECK_USER_NAME": "Nombre de usuario"
+  "CHECK_USER_COMPLETE_NAME": "Nombre"
+  "CHECK_USER_EMAIL": "Email"
+  "CHECK_USER_MESSAGE": "Mensaje"
+  "CHECK_TRANSACTION_TITLE": "Transaccion a verificar"
+  "CHECK_TRANSACTION_NUMBER": "NUMBER"
+  "CHECK_TRANSACTION_COUNTY_ID": "CODECOM"
+  "CHECK_TRANSACTION_QUARTER": "QUARTER"
+  "CHECK_TRANSACTION_YEAR": "YEAR"
+  "CHECK_TRANSACTION_ADDRESS": "Direccion"
+  "CHECK_BUILDING_REGULATION_SUBJECT": "Verificacion de normativa"
+  "CHECK_BUILDING_REGULATION_TITLE": "Normativa a verficar"
+  "CHECK_BUILDING_REGULATION_IDENTIFIER": "ID"
+  "CHECK_CLIENT_MESSAGE": "Su solicitud de verificacion fue recibida y se encuentra en etapa de revision."
+  "CHECK_CLIENT_MESSAGE_SIGN": "Atentamente, Inciti.com"
+  "MIN": "Menor a "
+  "MAX": "Mayor a "
+  "BETWEEN": "Entre "
+  "AND": " y "
+  "AGENCY": "Inmobiliaria"
+  "STATUS": "Estado"
+  "STOCK": "Oferta"
+  "AVAILABILITY": "Stock"
+  "SALES": "Ventas"
+  "UF_M2": "UF/m2 por bimestre"
+  "FLOORS": "Pisos"
+  "SELLING_SPEED": "Velocidad de Venta"
+  "PERCENTAGE_SOLD": "Porcentaje Vendido"
+  "CHECK_PROJECT_SUBJECT": "Verificacion de Proyecto en Venta"
+  "CHECK_PROJECT_TITLE": "Proyecto en venta a verificar"
+  "CHECK_PROJECT_CODE": "COD_PROY"
+  "MIN_GROUND_AREA": "Superficie Minima (m2)"
+  "MAX_GROUND_AREA": "Superficie Maxima (m2)"
+  "AVG_GROUND_AREA": "Superficie Promedio (m2)"
+  "AVG_USABLE_AREA": "Superficie Útil Promedio (m2)"
+  "ERROR_GEOMETRY_POINT": "La geometria debe ser un Point. Verifique los datos ingresados"
+  "ERROR_GEOMETRY_MULTIPOLYGON": "La geometria debe ser un MultiPolygon. Verifique los datos ingresados"
+  "ERROR_STRUCTURE_FILE": "El conjunto de columnas no coinciden con las columnas de datos esperadas. Falta la siguiente columna de datos"
+  "ERROR_SHP_COLUMN_TYPE": "La columna del shape es del tipo incorrecto. revise documentacion."
+  "ERROR_ON_SHAPE_FILE": "Error en el archivo Shape"
+  "INSERTS": "Cantidad de registros nuevos: "
+  "UPDATES": "Cantidad de registros actualizados: "
+  "STOCK_TIME": "Tiempo Hasta Agotar Stock"
+  "MIN_SELLING_SPEED": "Venta Mensual Historica Minima"
+  "MAX_SELLING_SPEED": "Venta Mensual Historica Maxima"
+  "AVG_SELLING_SPEED": "Venta Mensual Historica Promedio"
+  "TOTAL_SOLD": "Venta Total"
+  "MIX_PROGRAM": "Mix Programa"
+  "M2_FIELD": "Superficie Terreno m²"
+  "M2_BUILT": "Superficie Edificada m²"
+  "MIN_M2_FIELD": "Superficie Minima Terreno (m2)"
+  "MAX_M2_FIELD": "Superficie Maxima Terreno (m2)"
+  "AVG_M2_FIELD": "Superficie Promedio Terreno (m2)"
+  "MIN_M2_BUILT": "Superficie Minima Construida (m2)"
+  "MAX_M2_BUILT": "Superficie Maxima Construida (m2)"
+  "AVG_M2_BUILT": "Superficie Promedio Construida (m2)"
+  "HOME_TYPE": "Tipo de Casa"
+  "CELLARS": "Bodegas"
+  "PARKINGS": "Estacionamientos"
+  "ROLE": "Nº Rol"
+  "ROLE_ADMIN": "Administrador"
+  "ROLE_HIGH_PRO": "Alto Pro"
+  "ROLE_HIGH": "Alto"
+  "ROLE_MEDIUM": "Medio"
+  "ROLE_MEDIUM_PRO": "Medio Pro"
+  "ROLE_BASE": "Base"
+  "ROLE_BASE_PRO": "Base Pro"
+  "BUILDING_REGULATIONS_LEGEND_TITLE": "Alturas de Edificacion / Zonas Inciti"
+  "FUTURE_PROJECTS_LEGEND_TITLE": "M2"
+  "ROLE_NUMBER": "Nº de Rol"
+  "PROJECT_TYPE": "Tipo de Proyecto"
+  "BUILDING_PERMITS_NUMBER": "Nº Permiso Edificacion"
+  "BUILDING_PERMITS_DATE": " Fecha Otorgamiento Permiso"
+  "FUTURE_PROJECT_DATE": "Fecha de Medicion"
+  "DATE_DIFF": "Tiempo desde Otorgamiento"
+  "OWNER": "Propietario"
+  "LEGAL_AGENT": "Representante Legal"
+  "ARCHITECT": "Arquitecto"
+  "UNDERGROUNDS": "Subterraneos"
+  "TOTA_UNITS": "Oferta Total"
+  "TOTAL_PARKING": "Total de Estacionamientos"
+  "TOTAL_COMMERCIALS": "Total de Locales Comerciales"
+  "M2_PERMIT": "Superficie Aprobada (m2)"
+  "OBSERVATION": "Observaciones"
+  "TOTAL_UNITS": "Stock Total"
+  "UNDERGROUNDS": "Total de Subterraneos"
+  "TOTAL_COMMERCIALS": "Total de Locales Comerciales"
+  "MIN_M2_PERMIT": "Superficie Minima Permitida (m2)"
+  "MAX_M2_PERMIT": "Superficie Maxima Permitida (m2)"
+  "AVG_M2_PERMIT": "Superficie Promedio Permitida (m2)"
+  "M2_BUILD_LEGEND_TITLE": "Superficie Total Edificada (m2)"
+  "CHECK_FUTURE_PROJECT_SUBJECT": "Verificacion de proyecto futuro"
+  "CHECK_FUTURE_PROJECT_TITLE": "Proyecto futuro a verificar"
+  "CHECK_FUTURE_PROJECT_NUMBER": "COD_PROY"
+  "YEARS": "Años"
+  "MONTHS": "Meses"
+  "DAYS": "Dias"
+  "TOTAL_PERMISSIONS": "Total de "
+  "AVG_PERMISSIONS": "Prom Por Bimestre de "
+  "M2_BUILT_PERMISSIONS": "Total Sup Edificada "
+  "AVG_M2_BUILT_PERMISSIONS": "Prom Sup Edificada "
+  "PERMISSION_DRAFT_RATE": "Tasa Permiso / Anteproyecto"
+  "RECEPTION_PERMISSION_RATE": "Tasa Recepciones / Permisos"
+  "TOTAL_M2_FIELD": "Total Superficie (m2)"
+  "OFFICE_LEGEND_TITLE_SURF_OFFICE_M2": "Superficie Total Oficinas"
+  "OFFICE_LEGEND_TITLE_SURF_SOLD_UNITS": "Absorcion en m2"
+  "OFFICE_LEGEND_TITLE_UNIT_OFFICES": "Oficinas Unidades"
+  "OFFICE_LEGEND_TITLE_AVG_UF_M2": "Venta UF/m2"
+  "OFFICE_LEGEND_TITLE_HIRE_AVG_UF_M2": "Arriendo UF/m2"
+  "CELLAR_LEGEND_TITLE": "Superficie Total"
+  "CELLAR_LEGEND_HIRE_CELLAR_TOTAL_AVAIL_SURFACE": "Vacancia m2"
+  "CELLAR_LEGEND_HIRE_UF_M2": "Arriendo UF/m2"
+  "CELLAR_LEGEND_HIRE_CELLAR_TOTAL_BUILT_SURFACE": "Superficie Bodegas"
+  "CELLAR_LEGEND_HIRE_CELLAR_TOTAL_UNITS": "Cantidad de Bodegas"
+  "STRIP_LEGEND_SURF_M2": "Superficie Total"
+  "STRIP_LEGEND_SURF_AVAIL_M2": "Vacancia M2"
+  "STRIP_LEGEND_SHOP_UNITS": "Unidades Totales"
+  "STRIP_LEGEND_HIRE_UF_M2": "Arriendo UF/M2"
+  "STRIP_LEGEND_HIRE_UF_VALUE": "Uf Arriendo"
+  "OCCUPATION_PERCENT": "Porcentaje de Ocupacion"
+  "VACANCY_PERCENT": "Porcentaje de Vacancia"
+  "TOTAL_SURFACE": "Superficie Total"
+  "BUILT_SURFACE": "Superficie Ocupada"
+  "AVG_TOTAL_SURFACE": "Promedio Superficie Total m2"
+  "VACANCY_SURFACE": "Superficie de Vacancia"
+  "OFFICE_SURFACE": "Superficie de Oficinas"
+  "CELLAR_SURFACE": "Superficie de Bodegas"
+  "CELLAR_BUILT_SURFACE": "Superficie Construida de Bodegas"
+  "OFFICES_PROJECT_SUB_TYPE": "Oficinas"
+  "CELLARS_PROJECT_SUB_TYPE": "Bodegas"
+  "STRIP_CENTERS_PROJECT_SUB_TYPE": "Strip Centers"
+  "HOUSES_PROJECT_SUB_TYPE": "Casas"
+  "DEPARTMENTS_PROJECT_SUB_TYPE": "Departamentos"
+  "RENT_SURFACE": "Superficie de Arriendo"
+  "TOTAL_PROJECTS_COUNT": "Cantidad de Proyectos"
+  "TOTAL_CELLARS": "Total de Bodegas"
+  "TOTAL_AVAIL_CELLARS": "Total Bodegas Disponibles"
+  "AVG_CELLARS_BUILT_SURFACE": "Sup Promedio Bodegas Construidas"
+  "AVG_CELLARS_AVAIL_SURFACE": "Sup Promedio Bodegas Disponible"
+  "OCCUPATION_PERCENT_MIN": "Porcentaje de Ocupacion Min"
+  "OCCUPATION_PERCENT_MAX": "Porcentaje de Ocupacion Max"
+  "OCCUPATION_PERCENT_AVG": "Porcentaje de Ocupacion Promedio"
+  "VACANCY_PERCENT_MIN": "Porcentaje de Vacancia Min"
+  "VACANCY_PERCENT_MAX": "Porcentaje de Vacancia Max"
+  "VACANCY_PERCENT_AVG": "Porcentaje de Vacancia Promedio"
+  "VACANCY_PERCENT": "Porcentaje de Vacancia"
+  "MIN_UFM2": "Valores Venta UF/m2 Minimo"
+  "MAX_UFM2": "Valores Venta UF/m2 Maximo"
+  "AVG_UFM2": "Valores Venta UF/m2 Promedio"
+  "MIN_HIRE_UFM2": "Arriendo UF/m2 Minimo"
+  "MAX_HIRE_UFM2": "Arriendo UF/m2 Maximo"
+  "AVG_HIRE_UFM2": "Arriendo UF/m2 Promedio"
+  "STRIP_TOTAL_SHOPS": "Cantidad Locales"
+  "STRIP_SHOP_CATEGORIES": "Cantidad de Rubros"
+  "CHECK_COMMERCIAL_PROJECT_SUBJECT": "Verificacion de Proyectos Comerciales"
+  "CHECK_COMMERCIAL_PROJECT_TITLE" : "Proyecto Comercial a Verificar"
+  "MIN_TERRACE_AREA": "Superficie Minima Terraza (m2)"
+  "MAX_TERRACE_AREA": "Superficie Maxima Terraza (m2)"
+  "AVG_TERRACE_AREA": "Superficie Promedio Terraza (m2)"
+  "OFFICE_SURFACE_OFFICE_SURFACE": "Superficie de Oficinas"
+  "OFFICE_SURFACE_COMMERCE_SURFACE": "Superficie de Comercio"
+  "OFFICE_SURFACE_PARKING_SURFACE": "Superficie de Estacionamiento"
+  "OFFICE_SURFACE_EQUIPAMENT_SURFACE": "Superficie de Equipamiento"
+  "OFFICE_SURFACE_OTHER_SURFACE": "Otras Superficies"
+  "UNKNOWN_SURFACE": "Superficie Desconocida"
+  "TRANSACTION_HEATMAP_TITLE": "Densidad"
+  "LOW_HEATMAP_LEGEND_VALUE": "Baja"
+  "HIGH_HEATMAP_LEGEND_VALUE": "Alta"
+  "GLACIER_POI_LEGEND_LABEL": "Glaciar"
+  "SPRING_POI_LEGEND_LABEL": "Fuente"
+  "MUSEUM_POI_LEGEND_LABEL": "Museo"
+  "FAST_FOOD_RESTAURANT_POI_LEGEND_LABEL": "Restaurante de comida rapida"
+  "THEATER_POI_LEGEND_LABEL": "Teatro"
+  "STADIUM_POI_LEGEND_LABEL": "Estadio"
+  "COLLEGE_POI_LEGEND_LABEL": "Colegio"
+  "BUILDING_POI_LEGEND_LABEL": "Edificio"
+  "PLAYGROUND_POI_LEGEND_LABEL": "Zona de juegos"
+  "PUBLIC_TELEPHONE_POI_LEGEND_LABEL": "Telefono publico"
+  "PEAK_POI_LEGEND_LABEL": "Cumbre"
+  "CAMP_SITE_POI_LEGEND_LABEL": "Camping"
+  "EQUESTRIAN_POI_LEGEND_LABEL": "Ecuestre"
+  "TOLL_BOOTH_POI_LEGEND_LABEL": "Peaje"
+  "GOLF_POI_LEGEND_LABEL": "Golf"
+  "PLACE_OF_WORSHIP_POI_LEGEND_LABEL": "Lugar de Culto"
+  "TENNIS_POI_LEGEND_LABEL": "Tenis"
+  "TAXI_POI_LEGEND_LABEL": "Taxi"
+  "STOP_SIGN_POI_LEGEND_LABEL": "Señal de stop"
+  "AIRPORT_TERMINAL_POI_LEGEND_LABEL": "Aeropuerto"
+  "LIGHTHOUSE_POI_LEGEND_LABEL": "Faro"
+  "SWIMMING_POI_LEGEND_LABEL": "Piscina"
+  "UNIVERSITY_POI_LEGEND_LABEL": "Universidad"
+  "SIGNIFICANT_TREE_POI_LEGEND_LABEL": "Arbol significativo"
+  "VIEW_POINT_POI_LEGEND_LABEL": "Punto de vista"
+  "POST_OFFICE_POI_LEGEND_LABEL": "Oficina de correos"
+  "FUEL_POI_LEGEND_LABEL": "Combustible"
+  "SCHOOL_POI_LEGEND_LABEL": "Escuela"
+  "CAFE_POI_LEGEND_LABEL": "Cafe"
+  "SERVIPAG_POI_LEGEND_LABEL": "Servipago"
+  "FIRE_STATION_POI_LEGEND_LABEL": "Estacion de bomberos"
+  "RECREATION_GROUND_POI_LEGEND_LABEL": "Zona de recreo"
+  "TOILETS_POI_LEGEND_LABEL": "Baños"
+  "GUEST_HOUSE_POI_LEGEND_LABEL": "Casa de huespedes"
+  "SKATEBOARD_POI_LEGEND_LABEL": "Patineta"
+  "AERODROME_POI_LEGEND_LABEL": "Aerodromo"
+  "VETERINARY_POI_LEGEND_LABEL": "Veterinaria"
+  "HOSTEL_POI_LEGEND_LABEL": "Hostel"
+  "LEVEL_CROSSING_POI_LEGEND_LABEL": "Paso a nivel"
+  "MULTI_SPORT_POI_LEGEND_LABEL": "Mutisport"
+  "ATTRACTION_POI_LEGEND_LABEL": "Atraccion"
+  "PICNIC_SPOT_POI_LEGEND_LABEL": "Picnic"
+  "PHARMACY_POI_LEGEND_LABEL": "Farmacia"
+  "FOUNTAIN_POI_LEGEND_LABEL": "Fuente"
+  "TOWNHALL_POI_LEGEND_LABEL": "Ayuntamiento"
+  "SKIING_POI_LEGEND_LABEL": "Esqui"
+  "PEDESTRIAN_CROSSING_POI_LEGEND_LABEL": "Paso de peatones"
+  "BUS_STATION_POI_LEGEND_LABEL": "Estacion de autobus"
+  "PUBLIC_PIECES_OF_ART_POI_LEGEND_LABEL": "Piezas de arte publico"
+  "CURRENCY_EXCHANGE_POI_LEGEND_LABEL": "Cambio de divisas"
+  "CINEMA_POI_LEGEND_LABEL": "Cine"
+  "BANK_POI_LEGEND_LABEL": "Banco"
+  "SUBWAY_ENTRANCE_POI_LEGEND_LABEL": "Entrada de metro"
+  "RETAIL_POI_LEGEND_LABEL": "Venta al por menor"
+  "CHALET_POI_LEGEND_LABEL": "Chalet"
+  "POLICE_STATION_POI_LEGEND_LABEL": "Estacion de policia"
+  "HALT_POI_LEGEND_LABEL": "Parada"
+  "RAILWAY_STATION_POI_LEGEND_LABEL": "Estacion de tren"
+  "SHOPPING_POI_LEGEND_LABEL": "Shopping"
+  "RUGBY_POI_LEGEND_LABEL": "Rugby"
+  "VOLCANO_POI_LEGEND_LABEL": "Volcan"
+  "RAILWAY_CROSSING_POI_LEGEND_LABEL": "Cruce de ferrocarril"
+  "HOSPITAL_POI_LEGEND_LABEL": "Hospital"
+  "FERRY_STOP_POI_LEGEND_LABEL": "Embarcadero"
+  "TOWER_POI_LEGEND_LABEL": "Torre"
+  "INFORMATION_SOURCE_POI_LEGEND_LABEL": "Informacion"
+  "BICYCLE_PARKING_POI_LEGEND_LABEL": "Aparcamiento de bicicletas"
+  "PARK_POI_LEGEND_LABEL": "Parque"
+  "BICYCLE_RENTAL_POI_LEGEND_LABEL": "Alquiler de bicicletas"
+  "GRAVE_YARD_POI_LEGEND_LABEL": "Cementerio"
+  "PARKING_POI_LEGEND_LABEL": "Estacionamiento"
+  "PRISON_POI_LEGEND_LABEL": "Prision"
+  "THEME_PARK_POI_LEGEND_LABEL": "Parque Tematico"
+  "LIBRARY_POI_LEGEND_LABEL": "Biblioteca"
+  "PUB_POI_LEGEND_LABEL": "Pub"
+  "BUS_STOP_POI_LEGEND_LABEL": "Parada de autobus"
+  "RESTAURANT_POI_LEGEND_LABEL": "Restaurante"
+  "ATM_POI_LEGEND_LABEL": "Atm"
+  "POWER_TOWER_POI_LEGEND_LABEL": "Torre de energia"
+  "SPORTS_CENTER_POI_LEGEND_LABEL": "Polideportivo"
+  "COURT_HOUSE_POI_LEGEND_LABEL": "Palacio de Justicia"
+  "SOCCER_POI_LEGEND_LABEL": "Futbol"
+  "HOTEL_POI_LEGEND_LABEL": "Hotel"
+  "COLEGIO_POI_LEGEND_LABEL": "Colegio"
+  "BANCO_POI_LEGEND_LABEL": "Banco"
+  "CENTRO_COMERCIAL_POI_LEGEND_LABEL": "Centro Comercial"
+  "CENTRO_DE_PAGO_POI_LEGEND_LABEL": "Centro de Pago"
+  "EDUCACION_SUPERIOR_POI_LEGEND_LABEL": "Educacion Superior"
+  "ESTACION_METRO_POI_LEGEND_LABEL": "Estacion Metro"
+  "FARMACIA_POI_LEGEND_LABEL": "Farmacia"
+  "SALUD_POI_LEGEND_LABEL": "Salud"
+  "SUPERMERCADO_POI_LEGEND_LABEL": "Supermercado"
+  "SALES_PROJECT_LEGEND_STOCK_UNITS" : "Disponibilidad Total"
+  "SALES_PROJECT_LEGEND_UF_VALUE" : "Valor uf/total"
+  "SALES_PROJECT_LEGEND_UF_M2" : "Valor uf/m2"
+  "SALES_PROJECT_LEGEND_SELLING_SPEED" : "Velocidad de venta"
+  "ALL_COUNTIES_LABEL" : "Total por bimestre"
+  "ALL_QUARTER_COUNTIES_LABEL" : "Total por Trimestre"
+  "TRANSACTIONS": "Compraventas CBR"
+  "BUILDING_REGULATIONS": "Normativa y Subdivision Predial"
+  "DEMOGRAPHY": "Demografia y Gasto"
+  "PROJECTS": "Proyectos Residenciales"
+  "FUTURE_PROJECTS": "Permisos y Ante-Proyectos"
+  "OFFICES": "Oficinas"
+  "STRIP_CENTERS": "Strip Centers"
+  "USERS": "Usuarios"
+  "GROUPS": "Grupos"
+  "DATA_SOURCES": "Origenes de datos"
+  "APPLICATION_STATUSES": "Estados de la aplicacion"
+  "REPORTS": "Reportes"
+  "SELECTION_DRAWING": "Seleccion"
+  "PERMISSIONS": "Permisos"
+  "MAP": "Mapa"
+  "GENERAL": "General"
+  "WIDGET": "Widget"
+  "DOWNLOAD_DATA":  "Download"
+  "SELECTION": "Seleccion"
+  "VIEW_MAP_POINTS": "Capa de puntos"
+  "VIEW_MAP_GRADUATED_POINTS": "Capa de puntos graduados"
+  "VIEW_POIS": "Capa de Puntos de Interes"
+  "VIEW_MAP_HEATMAP": "Capa de Heatmaps"
+  "VIEW_MAP_ISOLINES": "Capa de Isolineas"
+  "CHECK": "Solicitar verificacion de datos"
+  "PERIOD": "Periodos de tiempo"
+  "SHOW_FEATURE_INFO": "Informacion del punto/poligono"
+  "SHOW_PREDIAL_SURFACE": "Superficie de predios"
+  "SHOW_WIDGETS": "Mostrar Widgets"
+  "SUGGEST": "Sugerencias de busqueda"
+  "SEARCH": "Busqueda"
+  "TRANSACTIONS_QUARTER": "Transacciones por trimestre"
+  "TRANSACTIONS_PERIOD": "Transacciones por Bimestre"
+  "UF_PERIOD": "UF por Bimestre"
+  "AVERAGE_UF_PERIOD": "Precio promedio UF por Bimestre"
+  "TRANSACTIONS_UF": "Transacciones por UF"
+  "DOWNLOAD_HARD_DATA": "Descargar datos"
+  "DOWNLOAD_PDF_REPORT": "Descargar reporte PDF"
+  "VIEW_MAP_POLYGON": "Capa de poligonos"
+  "SELECT": "Seleccion"
+  "GET_COUNTY_PDF": "Descarga de PDF de la comuna"
+  "CONSTRUCTIVITY": "Coeficiente de constructibilidad"
+  "LAND_OCUPATION": "Coeficiente de ocupacion del suelo"
+  "CONSTRUCTIVITY_LIMITS": "Limites de constructibilidad"
+  "LAND_OCUPATION_LIMITS": "Limites de ocupacion del suelo"
+  "ALLOWED_USE_LIST": "Usos de suelo"
+  "VIEW_MAP_VORONOI": "Capa de Voronoi"
+  "EXPENSES_GRID": "Grilla de gastos"
+  "FEATURE_INFO_DETAIL": "Detalles informacion puntual"
+  "EXECUTIVES": "Ejecutivos"
+  "TABLE": "Tabla"
+  "DETAILS": "Detalles"
+  "CREDITS_DISTRIBUTION": "Distribucion por Estado Cliente"
+  "CREDITS_HISTORY": "Historico Estado Clientes"
+  "AGENCIES_DISTRIBUTION": "Distribucion por Inmobiliaria"
+  "EXECUTIVES_DISTRIBUTION": "Distribucion por Ejecutivo"
+  "EFFICIENCY_RATES_HISTORY": "Historico Tasas de Eficiencia"
+  "BANK_OFFICES_DISTRIBUTION": "Distribución por Sucursal"
+  "PROJECTIONS": "Proyecciones"
+  "EXPENSES": "Gastos"
+  "CENSUS_BY_PREPONDERANT": "Categoria predominante"
+  "USABLE_AREA": "Superficie util (m2)"
+  "FLOOR": "Cantidad de pisos"
+  "UF": "Valor UF"
+  "GROUND_AREA": "Superficie terreno/terraza"
+  "MIX": "Mix"
+  "SALES_BIMESTER": "Oferta, ventas y disponibilidad"
+  "UNIT_BIMESTER": "Cantidad nuevas unidades"
+  "PARTICIPATION_PERMISSION": "Participacion antigüedad permiso"
+  "PREVIOUS_PERMISSION": "Variacion nuevos permisos"
+  "PREVIOUS_UNIT": "Variacion nuevas unidades"
+  "CELLAR_TYPE_TOTAL_SURFACE": "Tipo de bodega"
+  "TOTAL_VS_VACANCY_SURFACE": "Superfice total VS vacancia"
+  "CELLARS_SURFACE_VS_OFFICES_SURFACE": "Superficie total de bodegas VS oficinas"
+  "CELLAR_VS_VACANCY_SURFACE": "Superficie bodegas VS vacancia"
+  "UF_M2_RENTAL_BIMESTER": "UF/m2 arriendo"
+  "SURFACE_DISTRIBUTION": "Distribucion de superficie"
+  "OCUPATION_VACANCY_BIMESTER": "Ocupacion y vacancia"
+  "UF_M2_SALE_BIMESTER": "UF/m2 venta"
+  "TOTAL_VS_RENTAL_SURFACE": "Superficie total VS alquiladas"
+  "CREATE": "Crear"
+  "EDIT": "Editar"
+  "UPDATE": "Actualizar"
+  "DELETE": "Eliminar"
+  "SHOW": "Mostrar"
+  "LIST": "Listar"
+  "INDEX": "Índice"
+  "DESTROY": "Eliminar"
+  "NEW": "Nuevo"
+  "FIND": "Encontrar"
+  "SHOW_CONFIGURATION": "Mostrar boton de configuracion"
+  "UPLOAD": "Subir"
+  "SHOW_STATUS_BUTTON": "Mostrar boton de estados"
+  "BUILDING_REGULATION": "Normativa"
+  "COMMERCIAL_CELLARS": "Bodegas"
+  "COMMERCIAL_OFFICES": "Oficinas"
+  "COMMERCIAL_STRIP_CENTERS": "Strip Centers"
+  "TRANSACTIONS_DATA": "Datos de transacciones"
+  "PROJECTS_DATA": "Datos de proyectos"
+  "FUTURE_PROJECTS_DATA": "Datos de proyectos futuros"
+  "COMMERCIAL_CELLARS_DATA": "Datos de Bodegas"
+  "COMMERCIAL_OFFICES_DATA": "Datos de Oficinas"
+  "COMMERCIAL_STRIP_CENTERS_DATA": "Datos de Strip Centers"
+  "SELECTION_COUNTY": "Seleccion por comuna"
+  "SELECTION_BUFFER": "Seleccion por buffer"
+  "SELECTION_POLYGON": "Seleccion por poligono"
+  "SELECTION_POINT": "Seleccion por click"
+  "ALL": "Todos"
+  "NONE": "Ninguno"
+  "ADMINISTRATION": "Administracion"
+  "CENSUS_SOURCES": "Censo"
+  "CATEGORIES": "Categorias"
+  "SUB_CATEGORIES": "Subcategorias"
+  "EDITING": "Editando"
+  "USER": "Usuario"
+  "USERS": "Usuarios"
+  "UPDATE": "Actualizar"
+  "EMAIL": "Correo electronico"
+  "COMPANY": "Empresa"
+  "CITY": "Ciudad"
+  "IS_TEMPORAL": "Temporal?"
+  "DISABLED": "Deshabilitado?"
+  "ENABLED": "Habilitado?"
+  "PASSWORD": "Contraseña"
+  "LISTING": "Listado de"
+  "SHOWING": "Datos de"
+  "AREYOUSURE": "¿Estas seguro?"
+  "YES": "Si"
+  "NO": "No"
+  "BACK": "Volver"
+  "SUCCESSFULLY": "Satisfactoriamente"
+  "UPDATED": "Actualizado"
+  "CREATED": "Creado"
+  "ALLOW_SAVE_ME": "Permitir Guardar mis datos"
+  "HISTORICAL_SALE": "Venta mensual Historica"
+  "MIN_USABLE_SQUARE_METERS": "Superficie Útil Minimo"
+  "MAX_USABLE_SQUARE_METERS": "Superficie Útil Maximo"
+  "AVG_USABLE_SQUARE_METERS": "Superficie Útil Promedio"
+  "MIN_UF_VALUE": "Precio UF Minimo"
+  "MAX_UF_VALUE": "Precio UF Maximo"
+  "AVG_UF_VALUE": "Precio UF Promedio"
+  "MONTHLY_SALES": "Volumen de venta mensual"
+  "ALLOW_SAVE_ME": "Permitir Guardar mis datos"
+  "COUNTIES": "Comunas"
+  "ADMIN/USERS": "Administracion de usuarios"
+  "ADMIN/FUTURE_PROJECTS": "Administracion de proyectos futuros"
+  "ADMIN/HOME": "Panel de control"
+  "ADMIN/TRANSACTIONS": "Administracion de transacciones"
+  "EXPORT_DATA": "Exportar datos CSV"
+  "ADMIN/PROJECTS": "Administracion de proyectos"
+  "ADMIN/UF_CONVERSIONS": "Administracion de Tabla de Conversion de UF"
+  "ADMIN/COUNTY_UFS": "Administracion de Rango de Valores UF"
+  "ADMIN/IMPORT_PROCESSES": "Importar Shapes"
+  "ADMIN/CLOSED_QUARTERS": "Trimestres Cerrados"
+  "ADMIN/SURVEYORS": "Encuestadores"
+  "ADMIN/COUNTIES": "Administracion de Comunas"
+  "BANK/PROJECTS": "Administración Banca - Feedback/planificación"
+  "BANK/CREDITS": "Administración Banca - Prospectos"
+  "BANK/USERS": "Administración Banca - Usuarios"
+  "BANK/CLIENTS": "Administración Banca - Clientes"
+  "BANK/RELATED_CREDITS": "Administración Banca - Créditos relacionados"
+  "BANK/REPORTS": "Administración Banca - Gestión y Seguimiento"
+  "DOWNLOAD_XLS": "Descarga clientes en .xls"
+  "SETTINGS": "Configuración"
+  "UPDATE_SETTINGS": "Actualización Configuración"
+  "ANALYSIS": "Análisis"
+  "BENCHMARKING_LIST": "Benchmarking Listado"
+  "BENCHMARKING": "Benchmarking"
+  "AVG_TRANSACTIONS_BIMESTER": "Promedio Transacciones/Bimestre"
+  "AVG_UF_VOLUME_BIMESTER": "Promedio Volumen Total UF/Bimestre"
+  "COUNTIES": "Comunas"
+  "OFFICES_DATA": "Datos de oficinas"
+  "UNAUTHORIZED": "No esta autorizado para acceder a este servicio."
+  "FORBIDDEN": "Necesita iniciar una sesion para acceder a este servicio."
+  "LOCKED": "El servicio se encuentra bloqueado. Posiblemente se haya iniciado otra sesion con el mismo usuario."
+  "SHARED_STATUS_SUBJECT": "Inciti: se ha compartido un estado"
+  "SHARED_STATUS_MESSAGE": "El usuario: %{user_name} ha compartido el estado: %{status_name}"
+  "TRANSACTION_LEGEND_CALCULATED_VALUE": "Valor UF"
+  "TRANSACTION_LEGEND_UF_M2": "UF/M2"
+  "AVAILABLE_SURFACE_OFFICES": "Superficie Disponible Oficinas en Venta"
+  "HIRE_SURFACE_OFFICES": "Superficie Disponible Oficinas en Arriendo"
+  "OFFICES_SURFACE_M2": "Superficie Oficinas m2"
+  "AVG_AVAILABLE_SURFACE": "Promedio Superficie Disponible m2"
+  "ABSORPTION_PERCENT_MIN": "Porcentaje de Absorcion Min"
+  "ABSORPTION_PERCENT_MAX": "Porcentaje de Absorcion Max"
+  "ABSORPTION_PERCENT_AVG": "Porcentaje de Absorcion Promedio"
+  "ABSORPTION_PERCENT": "Porcentaje de Absorcion"
+  "LOG_CHART_LOGGIN_TITLE": "Cantidad de Visitas por dia a Inciti"
+  "LOG_CHART_Y_AXIS": "Cantidad"
+  "LOG_CHART_SERIES_LABEL": "Ingresos"
+  "LOG_CHART_MODULE_TITLE": "Cantidad de Ingresos a los Layers o Modulos"
+  "LOG_CHART_AREA_Y_AXIS": "Tiempo"
+  "LOG_LINE_UTIL_MODULE": "Tiempo de Utilizacion Por dia"
+  "LOG_PIE_UTIL_MODULE_PERCENTAGE": "Porcentaje de Utilizacion"
+  "BAD_LOGIN_MESSAGE": "Usuario o contraseña incorrectos. Intente nuevamente."
+  "DISABLE_USER_MESSAGE": "El usuario ha sido deshabilitado."
+  "XLS": "Excel"
+  "DEMO": "Demo"
+  "BOOST": "Boost"
+  "PROJECTS_BY_AGENCY": "Proyectos por Inmobiliaria"
+  "PROJECTS_BY_EXECUTIVE": "Proyectos por Ejecutivo"
+  "CATEGORY_TOTALS": "Totales por Categoria"
+  "UFM2_VALID_VALUES": "Valores Dentro de la Desviacion"
+  "UFM2_INVALID_VALUES": "Valores Fuera de la Desviacion"
+  "UF_M2": "Uf/M2"
+  "TRANSACTIONS_UF_M2": "Uf/m2"
+  "TRANSACTION_UF_M2": "Uf/m2"
+  "UFM2_AVERAGE": "Valor de la Media"
+  "PARTIAL": "Parcial"
+  "BIMESTER": "Bimestre"
+  "QUARTER": "Trimestre"
+  "DATE_FROM": "Desde"
+  "DATE_TO": "Hasta"
+  "VISITS": "Visitas"
+  "USER_LOG": "Log de Usuarios"
+  "USER_INCITI_24_CREATED": "Inciti: Usuario Registrado"
+  "RECEIPT_INFORMATION": "Orden de compra. Informacion de Facturacion"
+  "SHOW_SELLER_INFO": "Mostrar informacion del Vendedor y Comprador"
+  "AND_MORE": " y Mas"
+  "MILLONS": "millones"
+  "FUTURE_PROJECT_TYPE": "Tipo de Expediente"
+  "DESTINATION_TYPE": "Tipo de Destino"
+  "M2_BUILT_BIMESTER": "M2 Construidos por Bimestre"
+  "FUTURE_PROJECT_RATES": "Tasas"
+  "INCITI24_USERS": "Usuarios de Inciti Flex "
+  "ORDERS": "Ordenes de Compra"
+  "WEEK": "1 Semana"
+  "DAY": "1 Dia"
+  "ACTIVE_LAYERS": "Capas Activas"
+  "FUTURE_PROJECT_TYPES": "Tipo de Fuente"
+  "INCTI24_SOURCES": "¿Como se entero de la plataforma Inciti.com?"
+  "OFFICE_TYPES": "Tipo de Oficina"
+  "STOCK_AVAILABLE_OFFICE_SURFACE": "Superficie Disponible Oficinas en Venta"
+  "HIRE_AVAILABLE_OFFICE_SURFACE": "Superficie Disponible Oficinas en Arriendo"
+  "OFFICE_UF_VALUE": "UF/M2 Oficinas en Venta"
+  "OFFICE_HIRE_UF_VALUE": "UF/M2 Oficinas en Arriendo"
+  "OFFICE_VACANCY_BIMESTER": "Vacancia Oficinas en Venta"
+  "HIRE_VACANCY_BIMESTER": "Vacancia Oficinas en Arriendo"
+  "TOTAL_OFFICE": "Total Unidades de Oficinas"
+  "SURF_TOTAL_UNITS": "Disponible Venta (m2)"
+  "SUFT_HIRE_TOTAL_UNITS": "Disponible Arriendo (m2)"
+  "SOLD_SURFACE_TOTAL": "Oferta Oficinas en Venta (m2)"
+  "SOLD_M2": "Vendido Oficinas en Venta (m2)"
+  "HIRE_M2": "Arrendado Oficinas (m2)"
+  "STOCK_M2": "Disponible Venta (m2)"
+  "HIRE_STOCK_M2": "Disponible Arriendo (m2)"
+  "SOLD_SURFACE_M2": "Superficie Vendida (m2)"
+  "AVAIL_SURFACE_M2": "Superficie Disponible en Venta (m2)"
+  "HIRE_SOLD_SURFACE_M2": "Superficie Arrendada (m2)"
+  "HIRE_AVAIL_SURFACE_M2": "Superficie Disponible en Arriendo (m2)"
+  "AVG_UF_M2_SOLD": "Precio Venta Uf/m2"
+  "AVG_UF_M2_HIRE": "Precio Arriendo Uf/m2"
+  "SALE_VOLUME": "Volumen Venta Mensual"
+  "HIRE_VOLUME": "Volumen Arriendo Mensual"
+  "INSCRIPTION_DATE_FROM": "Fecha Inscripción Desde"
+  "INSCRIPTION_DATE_TO": "Fecha Inscripción Hasta"
+  "ID_FROM": "ID Desde"
+  "ID_TO": "ID Hasta"
+  "EXPORT_CSV_BETWEEN_IDS": "Exportar a csv las transacciones entre ID"
+  "EXPORT_CSV_BETWEEN_DATES": "Exportar a csv las transacciones entre Fechas"
+  "DESTINATION_PROJECT_TYPE": "Tipo de Destino (Torta)"
+  "STOCK_MONTH_SALE_OFFICES": "Meses para Agotar Stock Oficinas Venta"
+  "STOCK_MONTH_HIRE_OFFICES": "Meses para Agotar Stock Oficinas Arriendo"
+  "TOTAL_SOLD_OFFICE": "Total Unidades Oficinas en Venta"
+  "TOTAL_HIRE_OFFICE": "Total Unidades Oficinas en Arriendo"
+  "INCITIFLEX_USERS": "Usuarios de IncitiFlex"
+  "TRANSACTIONS_SUMMARY": "Descargar widgets en XLS"
+  "PROJECTS_SUMMARY": "Descargar widgets en XLS"
+  "OFFICES_SUMMARY": "Descargar widgets en XLS"
+  "FUTURE_PROJECTS_SUMMARY": "Descargar widgets en XLS"
+  "TRANSACTIONS_KML": "Descargar transacciones en KML"
+  "PROJECTS_KML": "Descargar proyectos en KML"
+  "OFFICES_KML": "Descargar oficinas en KML"
+  "FUTURE_PROJECTS_KML": "Descargar permisos en KML"
+  "PM2": "Precio M2"
+
+  get_pp_utiles: "PP Utiles"
+  get_pp_utiles_terrace: "PP Utiles Terraza"
+  get_sale_months: Meses en venta
+  get_pp_uf_m2: PP Uf m2
+  get_pp_uf: PP Uf
+  get_vhmo: VHMO
+  get_percent_venta: "% Vendido"
+  get_pp_uf_dis: PP Uf Dis
+  get_total_available: Dis m2
+  get_vhmd: VHMD
+  get_masd: MASD
+  get_pxq: PxQ
+  get_pxq_d: PxQ Dis
+  get_pp_terreno: PP Utiles Terreno
+
