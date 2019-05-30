@@ -196,7 +196,10 @@ Congo.map_utils = function(){
   counties = function(){
     let bimester, year;
     if (groupLayer !=undefined){
-      map.removeLayer(groupLayer);
+      groupLayer.eachLayer(function(layer) { 
+      console.log(layer);
+        groupLayer.removeLayer(layer);});
+      //map.removeLayer(groupLayer);
     }
 
     typeGeometry = Congo.map_utils.typeGeometry;
@@ -214,6 +217,27 @@ Congo.map_utils = function(){
     year = Congo.dashboards.config.year;
     bimester = Congo.dashboards.config.bimester;
     county_id = Congo.dashboards.config.county_id;
+
+    layer_type = Congo.dashboards.config.layer_type;
+    switch(layer_type) {
+      case 'transactions_info':
+          Congo.transactions.action_dashboards.indicator_transactions();
+      break;
+      case 'future_types_info':
+          Congo.future_projects.action_dashboards.indicator_future_projects();
+      break;
+      case 'projects_feature_info':
+        Congo.projects.action_dashboards.indicator_projects();
+      break;
+      case 'building_regulations_info':
+      break;
+    }
+
+
+
+
+
+
     switch(typeGeometry) {
       case 'circle':
         centerpt = Congo.map_utils.centerpt;
@@ -225,7 +249,6 @@ Congo.map_utils = function(){
         cql_filter ="WITHIN(the_geom, Polygon(("+polygon_size+"))) AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'point':
-
         cql_filter = "county_id='"+ county_id + "' AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       default:
@@ -234,7 +257,7 @@ Congo.map_utils = function(){
     }
 
     groupLayer = L.layerGroup();
-    layer_type = Congo.dashboards.config.layer_type;
+
     style_layer = Congo.dashboards.config.style_layer;
     env = Congo.dashboards.config.env;
 
@@ -272,6 +295,9 @@ Congo.map_utils = function(){
     source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
     groupLayer.addLayer(source_layers);
     groupLayer.addTo(map);
+
+
+
 
     var htmlLegend1and2 = L.control.htmllegend({
       position: 'bottomleft',

@@ -22,7 +22,6 @@ Congo.future_projects.action_graduated_points = function(){
         })
         Congo.dashboards.config.style_layer= 'graduated_points_calculated_value';
         Congo.dashboards.config.env= env1;
-
         Congo.map_utils.counties();
       }
     })
@@ -42,11 +41,13 @@ Congo.future_projects.action_dashboards = function(){
 
   indicator_future_projects = function(){
 
+    county_id = Congo.dashboards.config.county_id;
+
     $.ajax({
       type: 'GET',
       url: '/future_projects/future_projects_summary.json',
       datatype: 'json',
-      data: {to_year:"2018", locale:"es", periods_quantity: "5", to_period: "6", county_id:"52" },
+      data: {to_year:"2018", locale:"es", periods_quantity: "5", to_period: "6", county_id: county_id },
       success: function(data){
 
         // Eliminamos el overlay
