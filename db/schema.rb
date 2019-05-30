@@ -10,13 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_18_121541) do
+ActiveRecord::Schema.define(version: 2019_05_27_144635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "postgis"
   enable_extension "postgis_topology"
+
+  create_table "agencies", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "building_regulation_land_use_types", force: :cascade do |t|
     t.bigint "building_regulation_id"
@@ -136,6 +142,29 @@ ActiveRecord::Schema.define(version: 2019_05_18_121541) do
     t.index ["county_id"], name: "index_future_projects_on_county_id"
     t.index ["future_project_type_id"], name: "index_future_projects_on_future_project_type_id"
     t.index ["project_type_id"], name: "index_future_projects_on_project_type_id"
+  end
+
+  create_table "import_errors", force: :cascade do |t|
+    t.integer "import_process_id"
+    t.text "message"
+    t.integer "row_index"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "import_processes", force: :cascade do |t|
+    t.string "status"
+    t.string "file_path"
+    t.integer "processed"
+    t.integer "inserted"
+    t.integer "updated"
+    t.integer "failed"
+    t.bigint "user_id"
+    t.string "data_source"
+    t.string "original_filename"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_import_processes_on_user_id"
   end
 
   create_table "land_use_types", force: :cascade do |t|
@@ -416,6 +445,7 @@ ActiveRecord::Schema.define(version: 2019_05_18_121541) do
   add_foreign_key "future_projects", "counties"
   add_foreign_key "future_projects", "future_project_types"
   add_foreign_key "future_projects", "project_types"
+  add_foreign_key "import_processes", "users"
   add_foreign_key "project_instance_mixes", "project_instances"
   add_foreign_key "project_instances", "project_statuses"
   add_foreign_key "project_instances", "projects"
@@ -484,6 +514,43 @@ ActiveRecord::Schema.define(version: 2019_05_18_121541) do
         ELSE (total_units - stock_units) / m::numeric END) as vhmu;
         END;
       $function$
+  SQL
+  create_function :cleangeometry, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.cleangeometry(geometry)
+       RETURNS geometry
+       LANGUAGE plpgsql
+      AS $function$DECLARE
+      inGeom ALIAS for $1;
+      outGeom geometry;
+      tmpLinestring geometry;
+
+      Begin
+
+        outGeom := NULL;
+
+        IF (GeometryType(inGeom) = 'POLYGON' OR GeometryType(inGeom) = 'MULTIPOLYGON') THEN
+          if not isValid(inGeom) THEN
+            tmpLinestring := st_union(st_multi(st_boundary(inGeom)),st_pointn(boundary(inGeom),1));
+            outGeom = buildarea(tmpLinestring);
+            IF (GeometryType(inGeom) = 'MULTIPOLYGON') THEN
+              RETURN st_multi(outGeom);
+            ELSE
+              RETURN outGeom;
+          END IF;
+        else
+          RETURN inGeom;
+          END IF;
+        ELSIF (GeometryType(inGeom) = 'LINESTRING') THEN
+          outGeom := st_union(st_multi(inGeom),st_pointn(inGeom,1));
+          RETURN outGeom;
+        ELSIF (GeometryType(inGeom) = 'MULTILINESTRING') THEN
+          outGeom := multi(st_union(st_multi(inGeom),st_pointn(inGeom,1)));
+          RETURN outGeom;
+        ELSE
+          RAISE NOTICE 'The input type % is not supported',GeometryType(inGeom);
+          RETURN inGeom;
+          END IF;
+          End;$function$
   SQL
 
   create_trigger :layer_integrity_checks, sql_definition: <<-SQL
