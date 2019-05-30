@@ -42,12 +42,14 @@ Congo.future_projects.action_dashboards = function(){
   indicator_future_projects = function(){
 
     county_id = Congo.dashboards.config.county_id;
+    to_year = Congo.dashboards.config.year;
+    to_bimester = Congo.dashboards.config.bimester;
 
     $.ajax({
       type: 'GET',
       url: '/future_projects/future_projects_summary.json',
       datatype: 'json',
-      data: {to_year:"2018", locale:"es", periods_quantity: "5", to_period: "6", county_id: county_id },
+      data: {to_year: to_year, locale:"es", periods_quantity: "5", to_period: to_bimester, county_id: county_id },
       success: function(data){
 
         // Eliminamos el overlay
