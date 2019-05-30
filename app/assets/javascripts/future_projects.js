@@ -275,6 +275,11 @@ Congo.future_projects.action_dashboards = function(){
             } else if (chart_type == 'pie') { // Pie
 
               var chart_options = {
+                onClick: function(c, i) {
+                  e = i[0];
+                  var x_value = this.data.labels[e._index];
+                  console.log(x_value);
+                },
                 responsive: true,
                 title: {
                   display: false,
@@ -309,6 +314,11 @@ Congo.future_projects.action_dashboards = function(){
             } else { // Line
 
               var chart_options = {
+                onClick: function(c, i) {
+                  e = i[0];
+                  var x_value = this.data.labels[e._index];
+                  console.log(x_value);
+                },
                 responsive: true,
                 title: {
                   display: false,
