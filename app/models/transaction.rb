@@ -267,6 +267,7 @@ class Transaction < ApplicationRecord
                  stddev(transactions.calculated_value) as deviation,
                  ROUND((ROUND(SUM(1 / sample_factor)) / COUNT(DISTINCT(year, bimester)))) as avg_trans_count,
                  (SUM(calculated_value) / COUNT(DISTINCT(year, bimester))) as avg_uf_volume').
+                joins(build_joins.join(" ") ).
     where(build_conditions(filters)).order("uf_min_value").first
 
     return result if global_transactions.nil?
@@ -531,13 +532,13 @@ class Transaction < ApplicationRecord
       end
     conditions += "active = true #{Util.and}"
 
-    # unless filters.has_key? :boost
-    #   conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
-    #   conditions += WhereBuilder.build_bimesters_condition(filters[:periods], filters[:years]) if filters.has_key? :periods
-    # end
+     unless filters.has_key? :boost
+       conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
+       conditions += WhereBuilder.build_bimesters_condition(filters[:periods], filters[:years]) if filters.has_key? :periods
+     end
 
-    # conditions += build_ids_conditions(filters, widget)
-    # conditions += build_calculated_value_condition(filters, widget)
+     conditions += build_ids_conditions(filters, widget)
+     conditions += build_calculated_value_condition(filters, widget)
     #FILTER DATA BY COUNTIES ASSOCIATED TO THE USER
     #ver que hace esto
     #   conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
