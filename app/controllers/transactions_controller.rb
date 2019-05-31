@@ -133,6 +133,7 @@ class TransactionsController < ApplicationController
       @first_period[:year] = @period.last[:year] unless @period.nil?
       @first_period[:period] = @period.last[:period] unless @period.nil?
     end
+    render json: {data: @period}
   end
 
   def property_type
