@@ -63,6 +63,9 @@ Congo.map_utils = function(){
           map.removeLayer(layer);
         });
       }
+      
+      Congo.dashboards.config.county_id = '';
+      Congo.map_utils.size_box = '';
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
       poly(typeGeometry);
@@ -78,6 +81,9 @@ Congo.map_utils = function(){
           map.removeLayer(layer);
         });
       }
+      Congo.dashboards.config.county_id = '';
+      Congo.map_utils.centerpt = '';
+      Congo.map_utils.radius = '';
       map.doubleClickZoom.disable();
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
@@ -92,6 +98,9 @@ Congo.map_utils = function(){
           map.removeLayer(layer);
         });
       }
+      Congo.map_utils.centerpt = '';
+      Congo.map_utils.radius = '';
+      Congo.map_utils.size_box = '';
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
       poly(typeGeometry);
@@ -195,105 +204,93 @@ Congo.map_utils = function(){
     let bimester, year;
     if (groupLayer !=undefined){
       groupLayer.eachLayer(function(layer) { 
-      console.log(layer);
         groupLayer.removeLayer(layer);});
       //map.removeLayer(groupLayer);
     }
 
-    typeGeometry = Congo.map_utils.typeGeometry;
-    county_id = Congo.dashboards.config.county_id;
     layer_type = Congo.dashboards.config.layer_type;
-    
+
+    switch(layer_type) {
+      case 'transactions_info':
+        $.ajax({
+          async: false,
+          type: 'GET',
+          url: '/transactions/period.json',
+          datatype: 'json',
+          success: function(data){
+            Congo.dashboards.config.year = data['data'][0]['year'];
+            Congo.dashboards.config.bimester = data['data'][0]['period'];
+          }
+        });
+        year = Congo.dashboards.config.year;
+        bimester = Congo.dashboards.config.bimester;
+        Congo.transactions.action_dashboards.indicator_transactions();
+        break;
+      case 'future_types_info':
+        $.ajax({
+          async: false,
+          type: 'GET',
+          url: '/future_projects/period.json',
+          datatype: 'json',
+          success: function(data){
+            Congo.dashboards.config.year = data['year'];
+            Congo.dashboards.config.bimester = data['period'];
+          }
+        });
+
+        year = Congo.dashboards.config.year;
+        bimester = Congo.dashboards.config.bimester;
+        Congo.future_projects.action_dashboards.indicator_future_projects();
+        break;
+      case 'projects_feature_info':
+        Congo.projects.action_dashboards.indicator_projects();
+        break;
+      case 'building_regulations_info':
+        $.ajax({
+          async: false,
+          type: 'GET',
+          url: '/dashboards/filter_period.json',
+          datatype: 'json',
+          success: function(data){
+            Congo.dashboards.config.year = data['year'];
+            Congo.dashboards.config.bimester = data['bimester'];
+          }
+        });
+        year = Congo.dashboards.config.year;
+        bimester = Congo.dashboards.config.bimester;
+        break;
+    }
+
+
+    typeGeometry = Congo.map_utils.typeGeometry;
     switch(typeGeometry) {
       case 'circle':
         centerpt = Congo.map_utils.centerpt;
         radius = Congo.map_utils.radius;
-        Congo.dashboards.config.county_id = '';
-        Congo.map_utils.size_box = '';
         cql_filter ="DWITHIN(the_geom,Point("+center+"),"+radius+",kilometers) AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'polygon':
-
-        Congo.dashboards.config.county_id = '';
-        Congo.map_utils.centerpt = '';
-        Congo.map_utils.radius = '';
         polygon_size = Congo.map_utils.size_box;
         cql_filter ="WITHIN(the_geom, Polygon(("+polygon_size+"))) AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'point':
-        Congo.map_utils.centerpt = '';
-        Congo.map_utils.radius = '';
-        Congo.map_utils.size_box = '';
+        county_id = Congo.dashboards.config.county_id;
         cql_filter = "county_id='"+ county_id + "' AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       default:
         Congo.map_utils.centerpt = '';
         Congo.map_utils.radius = '';
         Congo.map_utils.size_box = '';
+        county_id = Congo.dashboards.config.county_id;
         cql_filter = "county_id='"+ county_id + "' AND bimester='"+ bimester +"' AND year='"+ year+"'";
         break;
     }
-
-
-    $.ajax({
-      async: false,
-      type: 'GET',
-      url: '/dashboards/filter_period.json',
-      datatype: 'json',
-      success: function(data){
-        Congo.dashboards.config.year = data['year'];
-        Congo.dashboards.config.bimester = data['bimester'];
-      }
-    });
-
-    year = Congo.dashboards.config.year;
-    bimester = Congo.dashboards.config.bimester;
-
-    switch(layer_type) {
-      case 'transactions_info':
-    $.ajax({
-      async: false,
-      type: 'GET',
-      url: '/transactions/period.json',
-      datatype: 'json',
-      success: function(data){
-        Congo.dashboards.config.year = data['data'][0]['year'];
-        Congo.dashboards.config.bimester = data['data'][0]['period'];
-      }
-    });
-    year = Congo.dashboards.config.year;
-    bimester = Congo.dashboards.config.bimester;
-    Congo.transactions.action_dashboards.indicator_transactions();
-      break;
-      case 'future_types_info':
-    $.ajax({
-      async: false,
-      type: 'GET',
-      url: '/future_projects/period.json',
-      datatype: 'json',
-      success: function(data){
-        Congo.dashboards.config.year = data['year'];
-        Congo.dashboards.config.bimester = data['period'];
-      }
-    });
-    year = Congo.dashboards.config.year;
-    bimester = Congo.dashboards.config.bimester;
-          Congo.future_projects.action_dashboards.indicator_future_projects();
-      break;
-      case 'projects_feature_info':
-        Congo.projects.action_dashboards.indicator_projects();
-      break;
-      case 'building_regulations_info':
-      break;
-    }
-
-
 
     groupLayer = L.layerGroup();
 
     style_layer = Congo.dashboards.config.style_layer;
     env = Congo.dashboards.config.env;
-
+      console.log(cql_filter);
     if(county_id != ''){
       var options = {
 
@@ -356,7 +353,7 @@ Congo.map_utils = function(){
           }
         }]
       }],
-      
+
       collapseSimple: true,
       detectStretched: true,
       collapsedOnInit: true,
