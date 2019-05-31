@@ -49,13 +49,19 @@ Congo.future_projects.action_dashboards = function(){
       data: {to_year:"2018", locale:"es", periods_quantity: "5", to_period: "6", county_id:"52" },
       success: function(data){
 
-        // Eliminamos el overlay
-        $(".overlay").remove();
 
-        // Creamos y adjuntamos el overlay
-        var overlay = document.createElement('div');
-        overlay.className = 'overlay';
-        $('#map').before(overlay);
+        // Comprobamos si el overlay no está creado y adjuntado
+        if ($('.overlay').length == 0) {
+
+          // Creamos y adjuntamos el overlay
+          var overlay = document.createElement('div');
+          overlay.className = 'overlay';
+          $('#map').before(overlay);
+
+        };
+
+        // Eliminamos los chart-containter de la capa anterior
+        $(".chart-container").remove();
 
         // Separamos la información
         for (var i = 0; i < data.length; i++) {
@@ -66,7 +72,8 @@ Congo.future_projects.action_dashboards = function(){
 
           // Creamos el div contenedor
           var chart_container = document.createElement('div');
-          chart_container.className = 'chart-container'+i+' card';
+          chart_container.className = 'chart-container card';
+          chart_container.id = 'chart-container'+i;
 
           // Creamos el card-header
           var card_header = document.createElement('div');
@@ -91,7 +98,7 @@ Congo.future_projects.action_dashboards = function(){
 
           // Adjuntamos los elementos
           $('.overlay').append(chart_container);
-          $('.chart-container'+i).append(card_header, collapse);
+          $('#chart-container'+i).append(card_header, collapse);
           $('#collapse'+i).append(card_body);
           $('#header'+i).append(card_header_button, card_header_title);
 
@@ -363,7 +370,7 @@ Congo.future_projects.action_dashboards = function(){
         var boxArray = document.getElementsByClassName("overlay");
         var boxes = Array.prototype.slice.call(boxArray);
         dragula({ containers: boxes });
-        
+
       } // Cierra success
     }) // Cierra ajax
   } // Cierra indicator_future_projects
