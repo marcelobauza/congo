@@ -5,7 +5,7 @@ class Admin::PeriodsController < ApplicationController
   # GET /admin/periods
   # GET /admin/periods.json
   def index
-    @periods = Period.all
+    @periods = Period.all.order(year: :desc, bimester: :desc)
   end
 
   # GET /admin/periods/1
