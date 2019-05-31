@@ -3,7 +3,7 @@ id = '<%= @county[0].id %>'
 Congo.dashboards.config.county_name = name;
 Congo.dashboards.config.county_id = id;
 
-// Comprobamos si existe el overlay
+// Comprobamos si el overlay no está creado y adjuntado
 if ($('.overlay').length == 0) {
 
   // Creamos y adjuntamos el overlay
@@ -13,7 +13,7 @@ if ($('.overlay').length == 0) {
 
 };
 
-// Comprobamos si existe el filter_container
+// Comprobamos si el filter_container no está creado y adjuntado
 if ($('#filter-container').length == 0) {
 
   // Creamos el div contenedor
