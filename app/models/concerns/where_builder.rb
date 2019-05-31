@@ -79,22 +79,21 @@ module WhereBuilder
     query = query.chomp(Util.or) + ")#{Util.and}"
   end 
 
-#def self.build_range_periods_by_bimester(to_period, to_year, quantity, useView = false)
-#  query = "("
-#  bimesters = Period.get_periods(to_period.to_i, to_year.to_i, quantity, 1)
-#
-#  if(!useView=
-#     bimesters.each do |b|
-#    query += "(bimester = #{b[:period]} and year = #{b[:year]})#{Util.or}"
-#     end
-#  else
-#    bimesters.each do |b|
-#      query += "(project_instance_views.bimester = #{b[:period]} and project_instance_views.year = #{b[:year]})#{Util.or}"
-#    end
-#  end
-#
-#  query = query.chomp(Util.or) + ")#{Util.and}"
-#end
+def self.build_range_periods_by_bimester(to_period, to_year, quantity, useView = false)
+  query = "("
+  bimesters = Period.get_periods(to_period.to_i, to_year.to_i, quantity, 1)
+  if(!useView)
+     bimesters.each do |b|
+    query += "(bimester = #{b[:period]} and year = #{b[:year]})#{Util.or}"
+     end
+  else
+    bimesters.each do |b|
+      query += "(project_instance_views.bimester = #{b[:period]} and project_instance_views.year = #{b[:year]})#{Util.or}"
+    end
+  end
+
+  query = query.chomp(Util.or) + ")#{Util.and}"
+end
 
 def self.build_quarters_condition(periods, years)
   query = "("
