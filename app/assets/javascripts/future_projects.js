@@ -44,12 +44,23 @@ Congo.future_projects.action_dashboards = function(){
     county_id = Congo.dashboards.config.county_id;
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
+    radius = Congo.map_utils.radius * 1000;
+    centerPoint = Congo.map_utils.centerpt;
+    wkt = Congo.map_utils.size_box;
+
+    if (county_id != ''){
+          data ={to_year: to_year, to_period: to_bimester, county_id: county_id};
+    }else if(centerPoint !=''){
+      data = {to_year: to_year, to_period: to_bimester, centerpt: centerPoint, radius: radius};
+    }else{
+      data = {to_year: to_year, to_period: to_bimester, wkt: wkt};
+    }
 
     $.ajax({
       type: 'GET',
       url: '/future_projects/future_projects_summary.json',
       datatype: 'json',
-      data: {to_year: to_year, locale:"es", periods_quantity: "5", to_period: to_bimester, county_id: county_id },
+      data: data,
       success: function(data){
 
         // Eliminamos el overlay

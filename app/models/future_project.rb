@@ -283,7 +283,6 @@ class FutureProject < ApplicationRecord
     joins = []
     joins << "INNER JOIN future_project_types ON future_project_types.id = future_projects.future_project_type_id"
     joins << "INNER JOIN project_types ON project_types.id = future_projects.project_type_id"
-    #joins << "INNER JOIN user_expirations ON user_expirations.county_id = future_projects.county_id" if User.current.is_count_down?
     joins
   end
 
@@ -323,10 +322,12 @@ class FutureProject < ApplicationRecord
   end
 
   def self.conditions(filters, self_not_filter=nil)
-    if filters[:county_id].nil?
+    if !filters[:county_id].nil?
+      conditions = "county_id = #{filters[:county_id]}" + Util.and
+    elsif !filters[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
-      conditions = "county_id = #{filters[:county_id]}" + Util.and
+      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
 
     conditions += "active = true #{Util.and}"
