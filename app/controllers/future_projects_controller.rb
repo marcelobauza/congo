@@ -208,7 +208,7 @@ class FutureProjectsController < ApplicationController
         @first_period[:period] = @period.last[:period]
       end
     end
-
+    render json: {data: @period}
   end
 
   def suggest

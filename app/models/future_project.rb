@@ -390,24 +390,22 @@ class FutureProject < ApplicationRecord
   end
 
   def self.get_last_period
-    period = FutureProject.find(:first,
-                                :select => "future_projects.year, future_projects.bimester",
-                                :joins => build_joins.join(" "),
-                                :conditions => "active = true",
-                                :group => "bimester, year",
-                                :order => "year desc, bimester desc")
+    period = FutureProject.select("future_projects.year, future_projects.bimester").
+                           joins(build_joins.join(" ")).
+                           where("active = true").
+                           group("bimester, year").
+                           order("year desc, bimester desc").first
 
     return nil if period.nil?
     Period.get_periods(period.bimester, period.year, BIMESTER_QUANTITY, 1)
   end
 
   def self.get_first_bimester_with_future_projects
-    period = FutureProject.find(:first,
-                                :select => "future_projects.year, future_projects.bimester",
-                                :joins => build_joins.join(" "),
-                                :conditions => "active = true",
-                                :group => "year, bimester",
-                                :order => "year, bimester")
+    period = FutureProject.select("future_projects.year, future_projects.bimester").
+                           joins(build_joins.join(" ")).
+                           where("active = true").
+                           group("year, bimester").
+                           order("year, bimester").first
 
     return nil if period.nil?
     return {:period => period.bimester, :year => period.year}

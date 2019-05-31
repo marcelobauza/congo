@@ -226,18 +226,17 @@ Congo.map_utils = function(){
         bimester = Congo.dashboards.config.bimester;
         Congo.transactions.action_dashboards.indicator_transactions();
         break;
-      case 'future_types_info':
+      case 'future_projects_info':
         $.ajax({
           async: false,
           type: 'GET',
           url: '/future_projects/period.json',
           datatype: 'json',
           success: function(data){
-            Congo.dashboards.config.year = data['year'];
-            Congo.dashboards.config.bimester = data['period'];
+            Congo.dashboards.config.year = data['data'][0]['year'];
+            Congo.dashboards.config.bimester = data['data'][0]['period'];
           }
         });
-
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.future_projects.action_dashboards.indicator_future_projects();
@@ -290,7 +289,6 @@ Congo.map_utils = function(){
 
     style_layer = Congo.dashboards.config.style_layer;
     env = Congo.dashboards.config.env;
-      console.log(cql_filter);
     if(county_id != ''){
       var options = {
 
