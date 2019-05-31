@@ -267,7 +267,7 @@ class Transaction < ApplicationRecord
                  stddev(transactions.calculated_value) as deviation,
                  ROUND((ROUND(SUM(1 / sample_factor)) / COUNT(DISTINCT(year, bimester)))) as avg_trans_count,
                  (SUM(calculated_value) / COUNT(DISTINCT(year, bimester))) as avg_uf_volume').
-    where(county_id: filters[:county_id]).order("uf_min_value").first
+    where(build_conditions(filters)).order("uf_min_value").first
 
     return result if global_transactions.nil?
 
@@ -468,11 +468,13 @@ class Transaction < ApplicationRecord
 
       conditions = "active = true #{Util.and}"
 
-      if filters[:wkt].nil?
-        conditions += "transactions.county_id = #{filters[:county_id]}#{Util.and}"
-      else
+      if !filters[:wkt].nil?
         conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and  
-      end
+      elsif !filters[:centerpt].nil?
+        conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
+        else
+          conditions += "transactions.county_id = #{filters[:county_id]}#{Util.and}"
+        end
 
       conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
       conditions += build_ids_conditions(filters)
@@ -484,9 +486,8 @@ class Transaction < ApplicationRecord
         joins(build_joins.join(" ")).
         where(conditions). 
         group('bimester, year').
-        order('year, bimester')
-
-      trans_group[:value] = t[0].value.to_f.round(2) unless t.nil?
+        order('year, bimester').first
+      trans_group[:value] = t.value.to_f.round(2) unless t.nil?
       result << trans_group
     end
     return result.reverse
@@ -520,10 +521,13 @@ class Transaction < ApplicationRecord
   end
 
   def self.build_conditions(filters, widget=nil)
-    if filters[:county_id].nil?
+
+    if !filters[:county_id].nil?
+      conditions = "transactions.county_id = #{filters[:county_id]}" + Util.and
+    elsif !filters[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
-      conditions = "transactions.county_id = #{filters[:county_id]}" + Util.and
+      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
     conditions += "active = true #{Util.and}"
 
@@ -802,8 +806,8 @@ class Transaction < ApplicationRecord
     county_id = params['county_id']
     values = Transaction.select("COUNT(*) as counter, ROUND(calculated_value / 10) as value").
       where(bimester: bimester, year: year, county_id: county_id).where("calculated_value > ?", 1).
-                           group("ROUND(calculated_value / 10)").
-                           order("counter desc").first
+      group("ROUND(calculated_value / 10)").
+      order("counter desc").first
     result = Array.new
     ranges = get_valid_ranges_interval(values)
 
@@ -812,7 +816,7 @@ class Transaction < ApplicationRecord
     end
 
     result << ranges[ranges.count - 1]["max"].to_i
-@rr = result
+    @rr = result
     return result
   end
 

@@ -44,11 +44,28 @@ Congo.transactions.action_dashboards = function(){
 
   indicator_transactions = function(){
 
+    county_id = Congo.dashboards.config.county_id;
+    to_year = Congo.dashboards.config.year;
+    to_bimester = Congo.dashboards.config.bimester;
+    radius = Congo.map_utils.radius * 1000;
+    centerPoint = Congo.map_utils.centerpt;
+    wkt = Congo.map_utils.size_box;
+
+    if (county_id != ''){
+          data ={to_year: to_year, to_period: to_bimester, county_id: county_id};
+    }else if(centerPoint !=''){
+      data = {to_year: to_year, to_period: to_bimester, centerpt: centerPoint, radius: radius};
+    }else{
+      data = {to_year: to_year, to_period: to_bimester, wkt: wkt};
+    }
+
+    console.log(data);
+
     $.ajax({
       type: 'GET',
       url: '/transactions/transactions_summary.json',
       datatype: 'json',
-      data: {to_year:"2018", locale:"es", periods_quantity: "5", to_period: "6", county_id:"52" },
+      data: data,
       success: function(data){
 
         // Eliminamos el overlay

@@ -27,17 +27,12 @@ class TransactionsController < ApplicationController
 
       ptypes = property_type
       stypes = seller_type
-      transactions_by_periods = Transaction.group_transaction_county_and_bimester(params)
+      #transactions_by_periods = Transaction.group_transaction_county_and_bimester(params)
       uf_periods = uf_period
-      
-
       average_uf_periods = average_uf_period
       transactions_ufs = transactions_uf
 
       #GENERAL
-      #result = {:sheet => "Resumen", :data => []}
-      #result[:data] << ["Información General"]
-
       data =[]
       result=[]
       general_data.each do |item|
@@ -54,8 +49,6 @@ class TransactionsController < ApplicationController
       end
       result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
 
-
-
     #TIPO DE VENDEDOR
 
       data =[]
@@ -65,43 +58,43 @@ class TransactionsController < ApplicationController
 
       result.push({"title":"Tipo de Vendedor", "series":[{"data": data}]})
 
-      #TRANSACCIONES POR BIMESTRE
+      ##TRANSACCIONES POR BIMESTRE
 
-      # data =[]
-      # counties_count = (transactions_by_periods.first.size - 3) / 2
+      ## data =[]
+      ## counties_count = (transactions_by_periods.first.size - 3) / 2
 
-      # label = ["Bimestre"]
+      ## label = ["Bimestre"]
 
-      # 1.upto(counties_count).each do |idx|
-      #   label << transactions_by_periods.first["y#{idx}_label".to_sym]
-      # end
+      ## 1.upto(counties_count).each do |idx|
+      ##   label << transactions_by_periods.first["y#{idx}_label".to_sym]
+      ## end
 
-      # result[:data] << label
+      ## result[:data] << label
 
-      # transactions_by_periods.each do |tb|
-      #   val = [tb[:label]]
+      ## transactions_by_periods.each do |tb|
+      ##   val = [tb[:label]]
 
-      #   1.upto(counties_count).each do |idx|
-      #     if tb["y#{idx}_value".to_sym].nil?
-      #       val << 0
-      #     else
-      #       val << tb["y#{idx}_value".to_sym].to_i
-      #     end
-      #   end
+      ##   1.upto(counties_count).each do |idx|
+      ##     if tb["y#{idx}_value".to_sym].nil?
+      ##       val << 0
+      ##     else
+      ##       val << tb["y#{idx}_value".to_sym].to_i
+      ##     end
+      ##   end
 
-      #   result[:data] << val
-      # end
+      ##   result[:data] << val
+      ## end
 
-      #UF PERIOD
+      ##UF PERIOD
 
-      data =[]
-      uf_periods.each do |ufp|
-        data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
-      end
-      result.push({"title":"UF / Bimestre", "series":[{"data": data}]})
+      #data =[]
+      #uf_periods.each do |ufp|
+      #  data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
+      #end
+      #result.push({"title":"UF / Bimestre", "series":[{"data": data}]})
 
 
-      #AVERAGE UF PERIOD
+      ##AVERAGE UF PERIOD
 
       data =[]
       average_uf_periods.each do |aup|
@@ -121,7 +114,7 @@ class TransactionsController < ApplicationController
       result.push({"title":"Transacciones / UF", "series":[{"data": data}]})
 
     rescue
-      result[:data] = ["Sin datos"]
+      result = {data: "Sin datos"}
     end
 
 

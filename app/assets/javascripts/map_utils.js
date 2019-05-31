@@ -221,6 +221,18 @@ Congo.map_utils = function(){
     layer_type = Congo.dashboards.config.layer_type;
     switch(layer_type) {
       case 'transactions_info':
+    $.ajax({
+      async: false,
+      type: 'GET',
+      url: '/transactions/period.json',
+      datatype: 'json',
+      success: function(data){
+        Congo.dashboards.config.year = data['year'];
+        Congo.dashboards.config.bimester = data['bimester'];
+      }
+    });
+    year = Congo.dashboards.config.year;
+    bimester = Congo.dashboards.config.bimester;
           Congo.transactions.action_dashboards.indicator_transactions();
       break;
       case 'future_types_info':
