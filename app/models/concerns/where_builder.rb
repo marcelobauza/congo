@@ -5,6 +5,10 @@ module WhereBuilder
     "ST_Within(the_geom, ST_GeomFromText('#{wkt}', #{Util::WGS84_SRID}))"
   end
 
+  def self.build_within_condition_radius(center_pt, radius)
+    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius})"
+  end
+
   def self.build_intersection_condition(wkt)
     "ST_Intersection(the_geom, ST_GeomFromText('#{wkt}', #{Util::WGS84_SRID}))"
   end
