@@ -50,8 +50,6 @@ if ($('#filter-container').length == 0) {
 
 };
 
-// TODO: Agregar validación para que no se duplique el item
-
 var filter_item = document.createElement('div');
 filter_item.className = 'text-white bg-secondary px-2 py-1 rounded';
 var filter_item_id = name.split(" ").join("_");
@@ -64,9 +62,14 @@ filter_item.id = 'item-'+filter_item_id;
 var close_button_item = '<button type="button" class="close">&times;</button>';
 var text_item = 'Comuna: '+name;
 
-// Adjunta el item
-$('#filter-body').append(filter_item);
-$('#item-'+filter_item_id).append(text_item, close_button_item);
+// Comprobamos si el item no está adjuntado
+if ($('#item-'+filter_item_id).length == 0) {
+
+  // Adjunta el item
+  $('#filter-body').append(filter_item);
+  $('#item-'+filter_item_id).append(text_item, close_button_item);
+
+};
 
 Congo.map_utils.counties();
 $('#modal-counties').on('hidden.bs.modal', function () {
