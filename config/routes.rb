@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'dashboards/filter_period'
   get 'counties/find' => 'counties#find'
   get 'transactions/transactions_summary' => 'transactions#transactions_summary'
+  get 'transactions/period' => 'transactions#period'
   get 'projects/projects_summary' => 'projects#projects_summary'
   get 'future_projects/future_projects_summary' => 'future_projects#future_projects_summary'
   
