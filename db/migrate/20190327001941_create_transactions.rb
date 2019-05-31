@@ -18,10 +18,10 @@ class CreateTransactions < ActiveRecord::Migration[5.2]
       t.integer :year
       t.decimal :sample_factor
       t.references :county
-      t.date :quarter
+      t.integer :quarter
       t.st_point :the_geom, :srid => 4326, :with_z => false
       t.integer :year
-      t.decimal :sample_factor, precision: 8, scale:2 , dafault: 1.0
+      t.decimal :sample_factor, precision: 12, scale:2 , dafault: 1.0
       t.integer :cellar, default: 0
       t.integer :parkingi, default: 0
       t.string :role
@@ -32,7 +32,7 @@ class CreateTransactions < ActiveRecord::Migration[5.2]
       t.string :lot
       t.string :block
       t.string :village
-      t.decimal :surface, precision: 8 , scale: 2
+      t.decimal :surface, precision: 12 , scale: 2
       t.string :requiring_entity
       t.string :comments
       t.references  :user
@@ -40,10 +40,10 @@ class CreateTransactions < ActiveRecord::Migration[5.2]
       t.boolean :active, default: true 
       t.integer :bimester
       t.integer :code_sii
-      t.decimal :total_surface_building , precision: 8, scale: 2
-      t.decimal :total_surface_terrain, precision: 8, scale: 2 
-      t.decimal :uf_m2_u, precision: 8, scale: 2 
-      t.decimal :uf_m2_t, precision: 8, scale: 2 
+      t.decimal :total_surface_building , precision: 12, scale: 2
+      t.decimal :total_surface_terrain, precision: 12, scale: 2 
+      t.decimal :uf_m2_u, precision: 12, scale: 2 
+      t.decimal :uf_m2_t, precision: 12, scale: 2 
       t.string :building_regulation
       t.string :role_1 
       t.string :role_2
