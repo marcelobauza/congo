@@ -201,7 +201,7 @@ Congo.map_utils = function(){
   }
 
   counties = function(){
-    let bimester, year;
+    let bimester, year, filter_for_layer;
     if (groupLayer !=undefined){
       groupLayer.eachLayer(function(layer) { 
         groupLayer.removeLayer(layer);});
@@ -225,6 +225,7 @@ Congo.map_utils = function(){
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.transactions.action_dashboards.indicator_transactions();
+        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')"; 
         break;
       case 'future_projects_info':
         $.ajax({
@@ -240,23 +241,14 @@ Congo.map_utils = function(){
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.future_projects.action_dashboards.indicator_future_projects();
+        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')"; 
         break;
       case 'projects_feature_info':
         Congo.projects.action_dashboards.indicator_projects();
+        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')"; 
         break;
       case 'building_regulations_info':
-        $.ajax({
-          async: false,
-          type: 'GET',
-          url: '/dashboards/filter_period.json',
-          datatype: 'json',
-          success: function(data){
-            Congo.dashboards.config.year = data['year'];
-            Congo.dashboards.config.bimester = data['bimester'];
-          }
-        });
-        year = Congo.dashboards.config.year;
-        bimester = Congo.dashboards.config.bimester;
+        filter_layer = ''; 
         break;
     }
 
@@ -266,25 +258,26 @@ Congo.map_utils = function(){
       case 'circle':
         centerpt = Congo.map_utils.centerpt;
         radius = Congo.map_utils.radius;
-        cql_filter ="DWITHIN(the_geom,Point("+center+"),"+radius+",kilometers) AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        cql_filter ="DWITHIN(the_geom,Point("+center+"),"+radius+",kilometers)"+ filter_layer;
         break;
       case 'polygon':
         polygon_size = Congo.map_utils.size_box;
-        cql_filter ="WITHIN(the_geom, Polygon(("+polygon_size+"))) AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        cql_filter ="WITHIN(the_geom, Polygon(("+polygon_size+"))) "+ filter_layer;
         break;
       case 'point':
         county_id = Congo.dashboards.config.county_id;
-        cql_filter = "county_id='"+ county_id + "' AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        cql_filter = "county_id='"+ county_id + "'"+   filter_layer;
         break;
       default:
         Congo.map_utils.centerpt = '';
         Congo.map_utils.radius = '';
         Congo.map_utils.size_box = '';
         county_id = Congo.dashboards.config.county_id;
-        cql_filter = "county_id='"+ county_id + "' AND bimester='"+ bimester +"' AND year='"+ year+"'";
+        cql_filter = "county_id='"+ county_id +"'"+ filter_layer;
         break;
     }
 
+    console.log(cql_filter);
     groupLayer = L.layerGroup();
 
     style_layer = Congo.dashboards.config.style_layer;
