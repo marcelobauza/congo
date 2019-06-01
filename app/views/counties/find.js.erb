@@ -2,7 +2,75 @@ name = '<%= @county[0].name %>'
 id = '<%= @county[0].id %>'
 Congo.dashboards.config.county_name = name;
 Congo.dashboards.config.county_id = id;
-$('#filter').replaceWith('<div class="filter" id="filter"> Comuna: '+ name + '   </div>');
+
+// Comprobamos si el overlay no está creado y adjuntado
+if ($('.overlay').length == 0) {
+
+  // Creamos y adjuntamos el overlay
+  var overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  $('#map').before(overlay);
+
+};
+
+// Comprobamos si el filter_container no está creado y adjuntado
+if ($('#filter-container').length == 0) {
+
+  // Creamos el div contenedor
+  var filter_container = document.createElement('div');
+  filter_container.className = 'card';
+  filter_container.id = 'filter-container';
+
+  // Creamos el card-header
+  var filter_card_h = document.createElement('div');
+  filter_card_h.className = 'card-header';
+  filter_card_h.id = 'filter-header';
+
+  // Creamos el collapse
+  var filter_collapse = document.createElement('div');
+  filter_collapse.className = 'collapse show';
+  filter_collapse.id = 'filter-collapse';
+
+  // Creamos el card-body
+  var filter_card_b = document.createElement('div');
+  filter_card_b.className = 'card-body';
+  filter_card_b.id = 'filter-body';
+
+  // TODO: Crear filter_card_h_title y filter_card_h_button dinámicos
+
+  // Creamos título y boton minimizar
+  var filter_card_h_button = '<button type="button" class="close" data-toggle="collapse" data-target="#filter-collapse"><i class="fas fa-window-minimize"></i></button>'
+  var filter_card_h_title = '<b>Filtros</b>'
+
+  // Adjuntamos los elementos
+  $('.overlay').append(filter_container);
+  $('#filter-container').append(filter_card_h, filter_collapse);
+  $('#filter-collapse').append(filter_card_b);
+  $('#filter-header').append(filter_card_h_button, filter_card_h_title);
+
+};
+
+var filter_item = document.createElement('div');
+filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
+var filter_item_id = name.split(" ").join("_");
+filter_item.id = 'item-'+filter_item_id;
+
+// TODO: Crear text_item y close_button_item cerrar dinámicos
+// TODO: Hacer que funcione el close_button_item
+// TODO: Incluir los filtros de los gráficos
+
+var close_button_item = '<button type="button" class="close">&times;</button>';
+var text_item = 'Comuna: '+name;
+
+// Comprobamos si el item no está adjuntado
+if ($('#item-'+filter_item_id).length == 0) {
+
+  // Adjunta el item
+  $('#filter-body').append(filter_item);
+  $('#item-'+filter_item_id).append(text_item, close_button_item);
+
+};
+
 Congo.map_utils.counties();
 $('#modal-counties').on('hidden.bs.modal', function () {
   $(this).remove();

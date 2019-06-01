@@ -63,13 +63,19 @@ Congo.future_projects.action_dashboards = function(){
       data: data,
       success: function(data){
 
-        // Eliminamos el overlay
-        $(".overlay").remove();
 
-        // Creamos y adjuntamos el overlay
-        var overlay = document.createElement('div');
-        overlay.className = 'overlay';
-        $('#map').before(overlay);
+        // Comprobamos si el overlay no está creado y adjuntado
+        if ($('.overlay').length == 0) {
+
+          // Creamos y adjuntamos el overlay
+          var overlay = document.createElement('div');
+          overlay.className = 'overlay';
+          $('#map').before(overlay);
+
+        };
+
+        // Eliminamos los chart-containter de la capa anterior
+        $(".chart-container").remove();
 
         // Separamos la información
         for (var i = 0; i < data.length; i++) {
@@ -80,7 +86,8 @@ Congo.future_projects.action_dashboards = function(){
 
           // Creamos el div contenedor
           var chart_container = document.createElement('div');
-          chart_container.className = 'chart-container'+i+' card';
+          chart_container.className = 'chart-container card';
+          chart_container.id = 'chart-container'+i;
 
           // Creamos el card-header
           var card_header = document.createElement('div');
@@ -105,7 +112,7 @@ Congo.future_projects.action_dashboards = function(){
 
           // Adjuntamos los elementos
           $('.overlay').append(chart_container);
-          $('.chart-container'+i).append(card_header, collapse);
+          $('#chart-container'+i).append(card_header, collapse);
           $('#collapse'+i).append(card_body);
           $('#header'+i).append(card_header_button, card_header_title);
 
@@ -289,9 +296,24 @@ Congo.future_projects.action_dashboards = function(){
             } else if (chart_type == 'pie') { // Pie
 
               var chart_options = {
+                onClick: function(c, i) {
+                  var x_value = this.data.labels[i[0]._index];
+                  var title = this.options.title.text;
+                  var filter_item = document.createElement('div');
+                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  var filter_item_id = x_value.split(" ").join("_");
+                  filter_item.id = 'item-'+filter_item_id;
+                  var close_button_item = '<button type="button" class="close">&times;</button>';
+                  var text_item = title+': '+x_value;
+                  if ($('#item-'+filter_item_id).length == 0) {
+                    $('#filter-body').append(filter_item);
+                    $('#item-'+filter_item_id).append(text_item, close_button_item);
+                  };
+                },
                 responsive: true,
                 title: {
                   display: false,
+                  text: title
                 },
                 legend: {
                   display: false,
@@ -323,9 +345,28 @@ Congo.future_projects.action_dashboards = function(){
             } else { // Line
 
               var chart_options = {
+                onClick: function(c, i) {
+                  var x_value = this.data.labels[i[0]._index];
+                  console.log(x_value);
+                  var title = this.options.title.text;
+                  var filter_item = document.createElement('div');
+                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  console.log(filter_item);
+                  var filter_item_id = x_value.split("/").join("_");
+                  filter_item.id = 'item-'+filter_item_id;
+                  console.log(filter_item_id);
+                  var close_button_item = '<button type="button" class="close">&times;</button>';
+                  var text_item = title+': '+x_value;
+                  console.log(text_item);
+                  if ($('#item-'+filter_item_id).length == 0) {
+                    $('#filter-body').append(filter_item);
+                    $('#item-'+filter_item_id).append(text_item, close_button_item);
+                  };
+                },
                 responsive: true,
                 title: {
                   display: false,
+                  text: title
                 },
                 legend: {
                   display: false,
@@ -367,7 +408,7 @@ Congo.future_projects.action_dashboards = function(){
         var boxArray = document.getElementsByClassName("overlay");
         var boxes = Array.prototype.slice.call(boxArray);
         dragula({ containers: boxes });
-        
+
       } // Cierra success
     }) // Cierra ajax
   } // Cierra indicator_future_projects
