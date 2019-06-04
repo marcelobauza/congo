@@ -1,0 +1,7 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Expedientes Municipales") do |sheet|
+sheet.add_row [X,Y,Código, Dirección, Comuna, Tipo Expediente, Numero Expediente, Fecha Expediente, Rol, Destino, Propietario, Representante Legal, Arquitecto, Altura Pisos, Viviendas, Estacionamientos, Oficinas, Locales, Total m2, Util m2, Terreno m2, Fecha Catastro, Bimestre, Año]
+  @xl.each do |row|
+sheet.add_row [row.id, row.id, row.code, row.address]
+        end
+        end

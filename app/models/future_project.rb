@@ -322,6 +322,7 @@ class FutureProject < ApplicationRecord
   end
 
   def self.conditions(filters, self_not_filter=nil)
+
     if !filters[:county_id].nil?
       conditions = "county_id = #{filters[:county_id]}" + Util.and
     elsif !filters[:wkt].nil?
@@ -330,14 +331,15 @@ class FutureProject < ApplicationRecord
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
 
+
     conditions += "active = true #{Util.and}"
 
     unless filters.has_key? :boost
       conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
       conditions += bimester_condition(filters, self_not_filter)
     end
-
     conditions += ids_conditions(filters, self_not_filter)
+
     #conditions += "future_projects.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
     conditions.chomp!(Util.and)
     conditions
@@ -466,4 +468,14 @@ class FutureProject < ApplicationRecord
     end
     return result
   end
+  
+  def self.reports(filters)
+  @bb = filters
+    cond_query = conditions(filters, nil)
+    @future_projects = FutureProject.where(cond_query)
+    @future_projects
+  end
+
+
+
 end

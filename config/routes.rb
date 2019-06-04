@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   get 'future_projects/graduated_points' => 'future_projects#graduated_points'
   get 'projects/dashboards' => 'projects#dashboards'
   get 'building_regulations/dashboards' => 'building_regulations#dashboards'
+  get 'reports/index' => 'reports#index'
+  get 'reports/future_projects_data' => 'reports#future_projects_data'
   
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do

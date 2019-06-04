@@ -14,6 +14,7 @@ class FutureProjectsController < ApplicationController
 
   def future_projects_summary
     result = {:sheet => "Resumen", :data => []}
+    session[:data] = params
 
     begin
       general_data = general
