@@ -72,7 +72,5 @@ if ($('#item-'+filter_item_id).length == 0) {
 };
 
 Congo.map_utils.counties();
-$('#modal-counties').on('hidden.bs.modal', function () {
-  $(this).remove();
-});
-$("#modal-counties").modal('hide');
+
+$('#modal-counties').modal('hide')
