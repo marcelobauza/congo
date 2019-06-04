@@ -297,9 +297,24 @@ Congo.projects.action_dashboards = function(){
               };
 
               var chart_options = {
+                onClick: function(c, i) {
+                  var x_value = this.data.labels[i[0]._index];
+                  var title = this.options.title.text;
+                  var filter_item = document.createElement('div');
+                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  var filter_item_id = x_value.split(" ").join("_");
+                  filter_item.id = 'item-'+filter_item_id;
+                  var close_button_item = '<button type="button" class="close">&times;</button>';
+                  var text_item = title+': '+x_value;
+                  if ($('#item-'+filter_item_id).length == 0) {
+                    $('#filter-body').append(filter_item);
+                    $('#item-'+filter_item_id).append(text_item, close_button_item);
+                  };
+                },
                 responsive: true,
                 title: {
                   display: false,
+                  text: title
                 },
                 legend: {
                   display: false,
@@ -326,9 +341,24 @@ Congo.projects.action_dashboards = function(){
             } else if (chart_type == 'pie') { // Pie
 
               var chart_options = {
+                onClick: function(c, i) {
+                  var x_value = this.data.labels[i[0]._index];
+                  var title = this.options.title.text;
+                  var filter_item = document.createElement('div');
+                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  var filter_item_id = x_value.split(" ").join("_");
+                  filter_item.id = 'item-'+filter_item_id;
+                  var close_button_item = '<button type="button" class="close">&times;</button>';
+                  var text_item = title+': '+x_value;
+                  if ($('#item-'+filter_item_id).length == 0) {
+                    $('#filter-body').append(filter_item);
+                    $('#item-'+filter_item_id).append(text_item, close_button_item);
+                  };
+                },
                 responsive: true,
                 title: {
                   display: false,
+                  text: title
                 },
                 legend: {
                   display: false,
@@ -360,9 +390,24 @@ Congo.projects.action_dashboards = function(){
             } else { // Line
 
               var chart_options = {
+                onClick: function(c, i) {
+                  var x_value = this.data.labels[i[0]._index];
+                  var title = this.options.title.text;
+                  var filter_item = document.createElement('div');
+                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  var filter_item_id = x_value.split("/").join("_");
+                  filter_item.id = 'item-'+filter_item_id;
+                  var close_button_item = '<button type="button" class="close">&times;</button>';
+                  var text_item = title+': '+x_value;
+                  if ($('#item-'+filter_item_id).length == 0) {
+                    $('#filter-body').append(filter_item);
+                    $('#item-'+filter_item_id).append(text_item, close_button_item);
+                  };
+                },
                 responsive: true,
                 title: {
                   display: false,
+                  text: title
                 },
                 legend: {
                   display: false,
