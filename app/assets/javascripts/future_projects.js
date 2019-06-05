@@ -342,6 +342,11 @@ Congo.future_projects.action_dashboards = function(){
                   var close_button_item = '<button type="button" class="close">&times;</button>';
                   var text_item = title+': '+x_tick;
                   if ($('#item-'+filter_item_id).length == 0) {
+                    if (title == 'Tipo de Expendiente') {
+                      Congo.future_projects.config.future_project_type_ids.push(x_tick_id);
+                    } else {
+                      Congo.future_projects.config.project_type_ids.push(x_tick_id);
+                    };
                     $('#filter-body').append(filter_item);
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
                   };
@@ -395,6 +400,9 @@ Congo.future_projects.action_dashboards = function(){
                   console.log(text_item);
                   var text_item = 'Periodo: '+x_tick;
                   if ($('#item-'+filter_item_id).length == 0) {
+                    var periods_years = x_tick.split("/");
+                    Congo.future_projects.config.periods.push(periods_years[0]);
+                    Congo.future_projects.config.years.push(periods_years[1]);
                     $('#filter-body').append(filter_item);
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
                   };
