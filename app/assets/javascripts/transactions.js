@@ -59,8 +59,6 @@ Congo.transactions.action_dashboards = function(){
       data = {to_year: to_year, to_period: to_bimester, wkt: wkt};
     }
 
-    console.log(data);
-
     $.ajax({
       type: 'GET',
       url: '/transactions/transactions_summary.json',

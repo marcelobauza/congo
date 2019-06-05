@@ -398,7 +398,6 @@ Congo.future_projects.action_dashboards = function(){
 
               var chart_options = {
                 onClick: function(c, i) {
-                  console.log(x_value);
                   var title = this.options.title.text;
 
                   // Almacena los valores del chart
@@ -407,12 +406,9 @@ Congo.future_projects.action_dashboards = function(){
                   // Crea el filtro
                   var filter_item = document.createElement('div');
                   filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
-                  console.log(filter_item);
                   var filter_item_id = x_tick.split("/").join("_");
                   filter_item.id = 'item-'+filter_item_id;
-                  console.log(filter_item_id);
                   var close_button_item = '<button type="button" class="close">&times;</button>';
-                  console.log(text_item);
                   var text_item = 'Periodo: '+x_tick;
 
                   // Valida si el item del filtro existe

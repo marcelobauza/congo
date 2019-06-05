@@ -277,7 +277,6 @@ Congo.map_utils = function(){
         break;
     }
 
-    console.log(cql_filter);
     groupLayer = L.layerGroup();
 
     style_layer = Congo.dashboards.config.style_layer;
