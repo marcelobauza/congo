@@ -66,6 +66,9 @@ Congo.transactions.action_dashboards = function(){
       data: data,
       success: function(data){
 
+        // Establece el nombre de la capa en el navbar
+        $('#layer-name').text('Compraventas CBR');
+
         // Comprobamos si el overlay no está creado y adjuntado
         if ($('.overlay').length == 0) {
 

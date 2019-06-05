@@ -23,6 +23,9 @@ Congo.projects.action_dashboards = function(){
       data: {to_year:"2018", locale:"es", periods_quantity: "5", to_period: "6", county_id:"52" },
       success: function(data){
 
+        // Establece el nombre de la capa en el navbar
+        $('#layer-name').text('Proyectos Residenciales');
+
         // Comprobamos si el overlay no está creado y adjuntado
         if ($('.overlay').length == 0) {
 

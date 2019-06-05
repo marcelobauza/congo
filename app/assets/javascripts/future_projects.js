@@ -97,6 +97,9 @@ Congo.future_projects.action_dashboards = function(){
       data: data,
       success: function(data){
 
+        // Establece el nombre de la capa en el navbar
+        $('#layer-name').text('Expedientes Municipales');
+
         // Comprobamos si el overlay no está creado y adjuntado
         if ($('.overlay').length == 0) {
 
