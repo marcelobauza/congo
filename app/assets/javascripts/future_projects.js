@@ -198,6 +198,7 @@ Congo.future_projects.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
+                  id: [0,1,2],
                   backgroundColor: [
                     '#424949',
                     '#7F8C8D',
@@ -211,6 +212,7 @@ Congo.future_projects.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
+                  id: [3,4,5,6,7,8,9,10,11],
                   backgroundColor: [
                     '#4D5656',
                     '#5F6A6A',
