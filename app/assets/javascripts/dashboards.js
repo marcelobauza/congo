@@ -13,7 +13,7 @@ Congo.dashboards.config= {
 
 Congo.dashboards.action_index = function(){
   init= function(){
-    Congo.map_utils.init();  
+    Congo.map_utils.init();
   }
   return {
     init: init,
