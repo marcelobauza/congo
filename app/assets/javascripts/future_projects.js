@@ -349,6 +349,7 @@ Congo.future_projects.action_dashboards = function(){
                     };
                     $('#filter-body').append(filter_item);
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
+                    indicator_future_projects();
                   };
                 },
                 responsive: true,
@@ -405,6 +406,7 @@ Congo.future_projects.action_dashboards = function(){
                     Congo.future_projects.config.years.push(periods_years[1]);
                     $('#filter-body').append(filter_item);
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
+                    indicator_future_projects();
                   };
                 },
                 responsive: true,
