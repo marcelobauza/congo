@@ -1,11 +1,16 @@
 Congo.namespace('future_projects.action_graduated_points');
 Congo.namespace('future_projects.action_dashboards');
 
-Congo.future_projects.config= {
+Congo.future_projects.config = {
   county_name: '',
   county_id: '',
-  layer_type: 'future_projects_info'
+  layer_type: 'future_projects_info',
+  future_project_type_ids: [],
+  project_type_ids: [],
+  periods: [],
+  years: []
 }
+
 Congo.future_projects.action_graduated_points = function(){
 
   init=function(){
@@ -47,14 +52,43 @@ Congo.future_projects.action_dashboards = function(){
     radius = Congo.map_utils.radius * 1000;
     centerPoint = Congo.map_utils.centerpt;
     wkt = Congo.map_utils.size_box;
+    future_project_type_ids = Congo.future_projects.config.future_project_type_ids;
+    project_type_ids = Congo.future_projects.config.project_type_ids;
+    periods = Congo.future_projects.config.periods;
+    years = Congo.future_projects.config.years;
 
-    if (county_id != ''){
-          data ={to_year: to_year, to_period: to_bimester, county_id: county_id};
-    }else if(centerPoint !=''){
-      data = {to_year: to_year, to_period: to_bimester, centerpt: centerPoint, radius: radius};
-    }else{
-      data = {to_year: to_year, to_period: to_bimester, wkt: wkt};
-    }
+    if (county_id != '') {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        future_project_type_ids: future_project_type_ids,
+        project_type_ids: project_type_ids,
+        periods: periods,
+        years: years,
+        county_id: county_id
+      };
+    } else if (centerPoint != '') {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        future_project_type_ids: future_project_type_ids,
+        project_type_ids: project_type_ids,
+        periods: periods,
+        years: years,
+        centerpt: centerPoint,
+        radius: radius
+      };
+    } else {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        future_project_type_ids: future_project_type_ids,
+        project_type_ids: project_type_ids,
+        periods: periods,
+        years: years,
+        wkt: wkt
+      };
+    };
 
     $.ajax({
       type: 'GET',
@@ -62,7 +96,6 @@ Congo.future_projects.action_dashboards = function(){
       datatype: 'json',
       data: data,
       success: function(data){
-
 
         // Comprobamos si el overlay no está creado y adjuntado
         if ($('.overlay').length == 0) {
