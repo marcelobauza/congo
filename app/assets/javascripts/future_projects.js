@@ -398,7 +398,6 @@ Congo.future_projects.action_dashboards = function(){
 
               var chart_options = {
                 onClick: function(c, i) {
-                  var title = this.options.title.text;
 
                   // Almacena los valores del chart
                   var x_tick = this.data.labels[i[0]._index];
