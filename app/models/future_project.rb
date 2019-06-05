@@ -331,7 +331,6 @@ class FutureProject < ApplicationRecord
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
 
-
     conditions += "active = true #{Util.and}"
 
     unless filters.has_key? :boost
@@ -477,5 +476,202 @@ class FutureProject < ApplicationRecord
   end
 
 
+  def self.summary f
+
+    filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
+    begin
+      general_data = FutureProject.general_info(filters)
+
+      types = FutureProject.future_project_type(filters)
+      desttypes =FutureProject.destination_project_type(filters)
+      dtypes = FutureProject.destination_type(filters)
+
+      ubimester = FutureProject.unit_bimester(filters)
+      m2bimester = FutureProject.m2_built_bimester(filters)
+      rates = FutureProject.future_project_rates_1(filters)
+      #GENERAL
+
+      data =[]
+      result=[]
+      general_data.each do |item|
+        data.push("name": item[:label], "count":item[:value].to_i)
+      end
+      result.push({"title":"Información General", "data": data})
+
+      #TIPO DE EXPEDIENTE
+      data =[]
+      types.each_pair do |key, value|
+        type_future_projects = FutureProjectType.find(key)
+        data.push("name": type_future_projects.name.capitalize, "count":value.to_i, "id":type_future_projects.id)
+      end
+      result.push({"title":"Tipo de Expendiente", "series":[{"data": data}]})
+
+      #TIPO DE DESTINO PIE
+      data =[]
+      desttypes.each do |item|
+        data.push("name": item["project_type_name"], "count": item["value"].to_i, "id":item["project_id"])
+      end
+      result.push({"title":"Tipo de Destino Pie",  "series": [{"data": data}]})
+      ##TIPO DE DESTINO BAR
+      categories = []
+      series = []
+      count = 0
+      dtypes.each do |item|
+        label = item[:type]
+        data =[]
+        item[:values].each do |itm|
+          data.push("name": itm["project_type"], "count": itm["value"].to_i)
+        end
+        categories.push({"label": label, "data": data} )
+        count = count + 1
+      end
+      result.push({"title": "Tipo de Destino Bar", "series":categories})
+
+      #UNIDADES NUEVAS POR BIMESTRE
+      categories = []
+      a = []
+      p = []
+      r = []
+      ubimester.last.each do |item|
+        @item = item
+        item[:values].each do |itm|
+
+          if itm["y_label"] == 'ANTEPROYECTO'
+            a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
+
+          end
+          if itm["y_label"] == 'PERMISO DE EDIFICACION'
+            p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
+
+          end
+
+          if itm["y_label"] == 'RECEPCION MUNICIPAL'
+            r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
+
+          end
+        end
+      end
+      categories.push({"label": "Anteproyecto", "data": a})
+      categories.push({"label": "Permiso Edif.", "data": p})
+      categories.push({"label": "Recep. Munic.", "data": r})
+      result.push({"title": "Cantidad de Nuevas Unidades / Bimestre", "series": categories})
+
+      #SUPERFICIE EDIFICADA POR EXPEDIENTE
+
+      categories = []
+      a = []
+      p = []
+      r = []
+      m2bimester.last.each do |item|
+
+        item[:values].each do |itm|
+
+          if itm["y_label"] == 'ANTEPROYECTO'
+            a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
+          end
+          if itm["y_label"] == 'PERMISO DE EDIFICACION'
+            p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
+          end
+
+          if itm["y_label"] == 'RECEPCION MUNICIPAL'
+            r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
+          end
+        end
+      end
+      categories.push({"label": "Anteproyecto", "data": a})
+      categories.push({"label": "Permiso Edif.", "data": p})
+      categories.push({"label": "Recep. Munic.", "data": r})
+      result.push({"title": "Superficie Edificada Por Expediente", "series": categories })
+
+      #TASAS
+      categories=[]
+      p = []
+      r = []
+      rates.each do |item|
+        p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:perm_rate] )
+        r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:recept_rate] )
+      end
+      categories.push({"label": "Tasa Permiso / Anteproyecto", "data": p})
+      categories.push({"label": "Tasa Recepciones / Permisos", "data": r})
+      result.push({"title": "Tasas", "series":categories})
+
+    rescue
+      result[:data] = ["Sin datos"]
+    end
+
+  end
+
+  def self.general_info params
+@pp = params
+
+rates, global_information = FutureProject.find_globals(params)
+    @general = []
+    return if global_information.nil?
+    global_information.each do |typ|
+      @general << {:label => I18n.t(:TOTAL_PERMISSIONS) + " " + typ["name"].titleize, :value => typ["count_project"]}
+    end
+    global_information.each do |typ|
+      @general << {:label => I18n.t(:AVG_PERMISSIONS) + " " + typ["name"].titleize, :value => typ["avg_project_bim"]}
+    end
+
+    global_information.each do |typ|
+      @general << {:label =>I18n.t(:M2_BUILT_PERMISSIONS) + " " + typ["name"].titleize, :value => typ["total_surface"]}
+    end
+
+    global_information.each do |typ|
+      @general << {:label => I18n.t(:AVG_M2_BUILT_PERMISSIONS) + " " + typ["name"].titleize, :value => typ["avg_surface"]}
+    end
+
+    @general << {:label => I18n.t(:PERMISSION_DRAFT_RATE), :value => rates[:permission_draft_rate]}
+    @general << {:label => I18n.t(:RECEPTION_PERMISSION_RATE), :value => rates[:reception_permission_rate]}
+  end
+
+
+  def self.future_project_type params
+    @types = FutureProject.group_by_project_type('future_project_types', params)
+  end
+
+  def self.destination_type params
+    @types = FutureProject.units_by_project_type(params)
+  end
+
+  def self.destination_project_type params
+    @types = FutureProject.projects_by_destination_project_type(params, 'project_types')
+  end
+
+  def self.unit_bimester params
+    @fut_types, @projects = FutureProject.future_projects_by_period("COUNT", "unit_bimester", params)
+  end
+
+  def self.m2_built_bimester params
+    @fut_types, @projects = FutureProject.future_projects_by_period("SUM", "m2_built_bimester", params)
+  end
+
+  def self.future_project_rates_1 params
+    @projects = FutureProject.future_project_rates("future_project_rates", params)
+  end
+
+  def self.benchmarking_list params
+    @bench_projects = FutureProjectResult.get_benchmarking_project_list(params[:result_id], params[:project_id])
+    @current_project = FutureProject.find(params[:project_id])
+  end
+
+  def self.benchmarking params
+    @projects = FutureProject.get_bench_values(params[:project_ids])
+  end
+
+
+  def self.suggest params
+    @suggests = FutureProjectResult.get_search_suggests(params)
+  end
+
+  def self.search params
+    @updated = FutureProjectResult.search(params)
+  end
+
+  def self.around_pois params
+    pois = Poi.get_around_pois(params[:id], "future_projects", params[:wkt])
+    render :xml => pois.to_xml(:skip_instruct => true, :skip_types => true, :dasherize => false)
+  end
 
 end
