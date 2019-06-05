@@ -332,14 +332,15 @@ Congo.future_projects.action_dashboards = function(){
 
               var chart_options = {
                 onClick: function(c, i) {
-                  var x_value = this.data.labels[i[0]._index];
+                  var x_tick = this.data.labels[i[0]._index];
+                  var x_tick_id = this.data.datasets[0].id[i[0]._index];
                   var title = this.options.title.text;
                   var filter_item = document.createElement('div');
                   filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
-                  var filter_item_id = x_value.split(" ").join("_");
+                  var filter_item_id = x_tick.split(" ").join("_");
                   filter_item.id = 'item-'+filter_item_id;
                   var close_button_item = '<button type="button" class="close">&times;</button>';
-                  var text_item = title+': '+x_value;
+                  var text_item = title+': '+x_tick;
                   if ($('#item-'+filter_item_id).length == 0) {
                     $('#filter-body').append(filter_item);
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
@@ -381,18 +382,18 @@ Congo.future_projects.action_dashboards = function(){
 
               var chart_options = {
                 onClick: function(c, i) {
-                  var x_value = this.data.labels[i[0]._index];
                   console.log(x_value);
                   var title = this.options.title.text;
+                  var x_tick = this.data.labels[i[0]._index];
                   var filter_item = document.createElement('div');
                   filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
                   console.log(filter_item);
-                  var filter_item_id = x_value.split("/").join("_");
+                  var filter_item_id = x_tick.split("/").join("_");
                   filter_item.id = 'item-'+filter_item_id;
                   console.log(filter_item_id);
                   var close_button_item = '<button type="button" class="close">&times;</button>';
-                  var text_item = title+': '+x_value;
                   console.log(text_item);
+                  var text_item = 'Periodo: '+x_tick;
                   if ($('#item-'+filter_item_id).length == 0) {
                     $('#filter-body').append(filter_item);
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
