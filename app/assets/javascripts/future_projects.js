@@ -343,7 +343,7 @@ Congo.future_projects.action_dashboards = function(){
                   filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
                   var filter_item_id = x_tick.split(" ").join("_");
                   filter_item.id = 'item-'+filter_item_id;
-                  var close_button_item = '<button type="button" class="close">&times;</button>';
+                  var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
                   var text_item = title+': '+x_tick;
 
                   // Valida si el item del filtro existe
@@ -361,6 +361,12 @@ Congo.future_projects.action_dashboards = function(){
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
                     indicator_future_projects();
                   };
+
+                  // Elimina item del filtro
+                  $('#close-'+filter_item_id).click(function() {
+                    $('#item-'+filter_item_id).remove();
+                  });
+
                 }, // Cierra onClick function
                 responsive: true,
                 title: {
@@ -407,7 +413,7 @@ Congo.future_projects.action_dashboards = function(){
                   filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
                   var filter_item_id = x_tick.split("/").join("_");
                   filter_item.id = 'item-'+filter_item_id;
-                  var close_button_item = '<button type="button" class="close">&times;</button>';
+                  var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
                   var text_item = 'Periodo: '+x_tick;
 
                   // Valida si el item del filtro existe
@@ -423,6 +429,12 @@ Congo.future_projects.action_dashboards = function(){
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
                     indicator_future_projects();
                   };
+
+                  // Elimina item del filtro
+                  $('#close-'+filter_item_id).click(function() {
+                    $('#item-'+filter_item_id).remove();
+                  });
+
                 }, // Cierra onClick function
                 responsive: true,
                 title: {

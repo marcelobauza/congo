@@ -59,7 +59,7 @@ filter_item.id = 'item-'+filter_item_id;
 // TODO: Hacer que funcione el close_button_item
 // TODO: Incluir los filtros de los gráficos
 
-var close_button_item = '<button type="button" class="close">&times;</button>';
+var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
 var text_item = 'Comuna: '+name;
 
 // Comprobamos si el item no está adjuntado
@@ -70,6 +70,11 @@ if ($('#item-'+filter_item_id).length == 0) {
   $('#item-'+filter_item_id).append(text_item, close_button_item);
 
 };
+
+// Elimina item del filtro
+$('#close-'+filter_item_id).click(function() {
+  $('#item-'+filter_item_id).remove();
+});
 
 Congo.map_utils.counties();
 
