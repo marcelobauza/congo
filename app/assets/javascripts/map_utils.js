@@ -63,7 +63,7 @@ Congo.map_utils = function(){
           map.removeLayer(layer);
         });
       }
-      
+
       Congo.dashboards.config.county_id = '';
       Congo.map_utils.size_box = '';
       editableLayers = new L.FeatureGroup();
@@ -87,7 +87,7 @@ Congo.map_utils = function(){
       map.doubleClickZoom.disable();
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
-      Congo.map_utils.typeGeometry = typeGeometry; 
+      Congo.map_utils.typeGeometry = typeGeometry;
       poly(typeGeometry);
     });
 
@@ -114,8 +114,8 @@ Congo.map_utils = function(){
         var centerPt = layer.getLatLng();
         var radius = layer.getRadius();
         Congo.map_utils.radius = (radius/1000);
-        center = centerPt.lng +" " + centerPt.lat; 
-        Congo.map_utils.typeGeometry = typeGeometry; 
+        center = centerPt.lng +" " + centerPt.lat;
+        Congo.map_utils.typeGeometry = typeGeometry;
         Congo.map_utils.centerpt = center;
         editableLayers.addLayer(layer);
       }
@@ -134,8 +134,8 @@ Congo.map_utils = function(){
 
         layer = e.layer
         var centerPt = layer.getLatLng();
-        center = centerPt.lng +" " + centerPt.lat; 
-        Congo.map_utils.typeGeometry = typeGeometry; 
+        center = centerPt.lng +" " + centerPt.lat;
+        Congo.map_utils.typeGeometry = typeGeometry;
         Congo.map_utils.centerpt = center;
 
         $.ajax({
@@ -191,9 +191,9 @@ Congo.map_utils = function(){
         break;
 
     }
-    HandlerGeometry.enable();       
+    HandlerGeometry.enable();
 
-  }  
+  }
 
   function BoundingBox(){
     var bounds = map.getBounds().getSouthWest().lng + "," + map.getBounds().getSouthWest().lat + "," + map.getBounds().getNorthEast().lng + "," + map.getBounds().getNorthEast().lat;
@@ -203,7 +203,7 @@ Congo.map_utils = function(){
   counties = function(){
     let bimester, year, filter_for_layer;
     if (groupLayer !=undefined){
-      groupLayer.eachLayer(function(layer) { 
+      groupLayer.eachLayer(function(layer) {
         groupLayer.removeLayer(layer);});
       //map.removeLayer(groupLayer);
     }
@@ -225,7 +225,7 @@ Congo.map_utils = function(){
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.transactions.action_dashboards.indicator_transactions();
-        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')"; 
+        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'future_projects_info':
         $.ajax({
@@ -241,14 +241,14 @@ Congo.map_utils = function(){
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.future_projects.action_dashboards.indicator_future_projects();
-        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')"; 
+        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'projects_feature_info':
         Congo.projects.action_dashboards.indicator_projects();
-        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')"; 
+        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'building_regulations_info':
-        filter_layer = ''; 
+        filter_layer = '';
         break;
     }
 
