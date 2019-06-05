@@ -188,11 +188,13 @@ Congo.future_projects.action_dashboards = function(){
 
               var name = [];
               var count = [];
+              var id = [];
 
               // Extraemos los datos de las series
               $.each(data, function(c, d){
                 name.push(d['name'])
                 count.push(d['count'])
+                id.push(d['id'])
               })
 
               // Guardamos "datasets" y "chart_type"
@@ -201,7 +203,7 @@ Congo.future_projects.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  id: [0,1,2],
+                  id: id,
                   backgroundColor: [
                     '#424949',
                     '#7F8C8D',
@@ -215,7 +217,7 @@ Congo.future_projects.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  id: [3,4,5,6,7,8,9,10,11],
+                  id: id,
                   backgroundColor: [
                     '#4D5656',
                     '#5F6A6A',
