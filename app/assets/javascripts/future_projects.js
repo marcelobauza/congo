@@ -212,7 +212,7 @@ Congo.future_projects.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Tipo de Destino Pie') {
+              if (title == 'Tipo de Destino' && series.length == 1) {
                 chart_type = 'pie';
                 datasets.push({
                   label: label,
@@ -232,7 +232,7 @@ Congo.future_projects.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Tipo de Destino Bar') {
+              if (title == 'Tipo de Destino' && series.length > 1) {
                 chart_type = 'bar';
                 cantidad = count.length;
                 rancolor = randomColor({

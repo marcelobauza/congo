@@ -511,7 +511,7 @@ class FutureProject < ApplicationRecord
       desttypes.each do |item|
         data.push("name": item["project_type_name"], "count": item["value"].to_i, "id":item["project_id"])
       end
-      result.push({"title":"Tipo de Destino Pie",  "series": [{"data": data}]})
+      result.push({"title":"Tipo de Destino",  "series": [{"data": data}]})
       ##TIPO DE DESTINO BAR
       categories = []
       series = []
@@ -525,7 +525,7 @@ class FutureProject < ApplicationRecord
         categories.push({"label": label, "data": data} )
         count = count + 1
       end
-      result.push({"title": "Tipo de Destino Bar", "series":categories})
+      result.push({"title": "Tipo de Destino", "series":categories})
 
       #UNIDADES NUEVAS POR BIMESTRE
       categories = []
