@@ -188,11 +188,13 @@ Congo.future_projects.action_dashboards = function(){
 
               var name = [];
               var count = [];
+              var id = [];
 
               // Extraemos los datos de las series
               $.each(data, function(c, d){
                 name.push(d['name'])
                 count.push(d['count'])
+                id.push(d['id'])
               })
 
               // Guardamos "datasets" y "chart_type"
@@ -201,7 +203,7 @@ Congo.future_projects.action_dashboards = function(){
                 datasets.push({
                   label: label,
                   data: count,
-                  id: [0,1,2],
+                  id: id,
                   backgroundColor: [
                     '#424949',
                     '#7F8C8D',
@@ -210,12 +212,12 @@ Congo.future_projects.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Tipo de Destino Pie') {
+              if (title == 'Tipo de Destino' && series.length == 1) {
                 chart_type = 'pie';
                 datasets.push({
                   label: label,
                   data: count,
-                  id: [3,4,5,6,7,8,9,10,11],
+                  id: id,
                   backgroundColor: [
                     '#4D5656',
                     '#5F6A6A',
@@ -230,7 +232,7 @@ Congo.future_projects.action_dashboards = function(){
                 })
               }
 
-              if (title == 'Tipo de Destino Bar') {
+              if (title == 'Tipo de Destino' && series.length > 1) {
                 chart_type = 'bar';
                 cantidad = count.length;
                 rancolor = randomColor({
@@ -345,12 +347,12 @@ Congo.future_projects.action_dashboards = function(){
                   var filter_item = document.createElement('div');
                   filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
                   var filter_item_id = x_tick.split(" ").join("_");
-                  filter_item.id = 'item-'+filter_item_id;
+                  filter_item.id = 'item-'+filter_item_id+'-'+x_tick_id;
                   var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
                   var text_item = title+': '+x_tick;
 
                   // Valida si el item del filtro existe
-                  if ($('#item-'+filter_item_id).length == 0) {
+                  if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
 
                     // Almacena la variable global dependiendo del chart
                     if (title == 'Tipo de Expendiente') {
@@ -361,13 +363,35 @@ Congo.future_projects.action_dashboards = function(){
 
                     // Adjunta el item del filtro y recarga los datos
                     $('#filter-body').append(filter_item);
-                    $('#item-'+filter_item_id).append(text_item, close_button_item);
+                    $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
                     indicator_future_projects();
                   };
 
                   // Elimina item del filtro
                   $('#close-'+filter_item_id).click(function() {
-                    $('#item-'+filter_item_id).remove();
+
+                    if (title == 'Tipo de Expendiente') {
+                      var active_items = Congo.future_projects.config.future_project_type_ids;
+                    } else {
+                      var active_items = Congo.future_projects.config.project_type_ids;
+                    };
+
+                    var item_full_id = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
+                    item_full_id = item_full_id.split("-")
+                    var item_id = item_full_id[2]
+
+                    var active_items_updated = $.grep(active_items, function(n, i) {
+                      return n != item_id;
+                    });
+
+                    if (title == 'Tipo de Expendiente') {
+                      Congo.future_projects.config.future_project_type_ids = active_items_updated;
+                    } else {
+                      Congo.future_projects.config.project_type_ids = active_items_updated;
+                    };
+
+                    $('#item-'+filter_item_id+'-'+x_tick_id).remove();
+
                   });
 
                 }, // Cierra onClick function
@@ -420,7 +444,7 @@ Congo.future_projects.action_dashboards = function(){
                   var text_item = 'Periodo: '+x_tick;
 
                   // Valida si el item del filtro existe
-                  if ($('#item-'+filter_item_id).length == 0) {
+                  if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
 
                     // Almacena la variable global
                     var periods_years = x_tick.split("/");
@@ -429,13 +453,13 @@ Congo.future_projects.action_dashboards = function(){
 
                     // Adjunta el item del filtro y recarga los datos
                     $('#filter-body').append(filter_item);
-                    $('#item-'+filter_item_id).append(text_item, close_button_item);
+                    $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
                     indicator_future_projects();
                   };
 
                   // Elimina item del filtro
                   $('#close-'+filter_item_id).click(function() {
-                    $('#item-'+filter_item_id).remove();
+                    $('#item-'+filter_item_id+'-'+x_tick_id).remove();
                   });
 
                 }, // Cierra onClick function
