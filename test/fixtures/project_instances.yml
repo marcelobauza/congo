@@ -6,13 +6,9 @@ one:
   bimester: 1
   year: 1
   active: false
-  DEFAULT: MyString
-  'true': MyString
   comments: MyString
   cadastre: MyString
   validated: false
-  DEFAULT: MyString
-  'false': MyString
 
 two:
   project: two
@@ -20,10 +16,6 @@ two:
   bimester: 1
   year: 1
   active: false
-  DEFAULT: MyString
-  'true': MyString
   comments: MyString
   cadastre: MyString
   validated: false
-  DEFAULT: MyString
-  'false': MyString

@@ -4,8 +4,6 @@ one:
   project_instance: one
   mix_id: 1
   percentage: 
-  DEFAULT: MyString
-  0: MyString
   stock_units: 1
   mix_m2_field: 
   mix_m2_built: 
@@ -34,8 +32,6 @@ two:
   project_instance: two
   mix_id: 1
   percentage: 
-  DEFAULT: MyString
-  0: MyString
   stock_units: 1
   mix_m2_field: 
   mix_m2_built: 

@@ -5,11 +5,8 @@ one:
   name: MyString
   address: MyString
   floors: 1
-  DEFAULT: MyString
-  0: MyString
   county_id: 1
   agency_id: MyString
-  integer: MyString
   project_type_id: 1
   the_geom: 
   build_date: MyString
@@ -25,11 +22,8 @@ two:
   name: MyString
   address: MyString
   floors: 1
-  DEFAULT: MyString
-  0: MyString
   county_id: 1
   agency_id: MyString
-  integer: MyString
   project_type_id: 1
   the_geom: 
   build_date: MyString

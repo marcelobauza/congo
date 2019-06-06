@@ -6,7 +6,7 @@ one:
   name: MyString
   role_number: MyString
   file_number: MyString
-  file_data: 2019-04-20
+  file_date: 2019-04-20
   owner: MyString
   legal_agent: MyString
   architect: MyString
@@ -36,7 +36,7 @@ two:
   name: MyString
   role_number: MyString
   file_number: MyString
-  file_data: 2019-04-20
+  file_date: 2019-04-20
   owner: MyString
   legal_agent: MyString
   architect: MyString
