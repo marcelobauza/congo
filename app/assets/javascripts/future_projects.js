@@ -391,7 +391,7 @@ Congo.future_projects.action_dashboards = function(){
                     };
 
                     $('#item-'+filter_item_id+'-'+x_tick_id).remove();
-
+                    indicator_future_projects();
                   });
 
                 }, // Cierra onClick function
