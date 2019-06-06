@@ -69,8 +69,8 @@
         <a class="dropdown-item dropdown-item-navbar1" href="#"><i class="fas fa-chart-pie" title="Selector de Gráficos" style="font-size: 26px"></i></a>
         <a class="dropdown-item dropdown-item-navbar1" href="#"><i class="fas fa-file-pdf" title="Informes PDF" style="font-size: 26px"></i></a>
         <a class="dropdown-item dropdown-item-navbar1" href="#"><i class="fas fa-database" title="Bases Históricas (Boost)" style="font-size: 26px"></i></a>
-        <a class="dropdown-item dropdown-item-navbar1" href="#"><i class="fas fa-file-excel" title="Bases XLS" style="font-size: 26px"></i></a>
-        <%= link_to reports_index_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %> <i class="fas fa-chart-bar" title="Gráficos en XLS" style="font-size: 26px"></i><% end %>
+        <%= link_to reports_index_path(), class: "dropdown-item dropdown-item-navbar1 reports", remote: true, id:"base"  do  %> <i class="fas fa-file-excel" title="Bases XLS" style="font-size: 26px"></i><% end %> 
+        <%= link_to reports_index_path(), class: "dropdown-item dropdown-item-navbar1 reports", remote: true,  id:"graph"  do  %> <i class="fas fa-chart-bar" title="Gráficos en XLS" style="font-size: 26px"></i><% end %>
         <a class="dropdown-item dropdown-item-navbar1" href="#"><i class="fas fa-globe" title="Descargar KML" style="font-size: 26px"></i></a>
         <a class="dropdown-item dropdown-item-navbar1" href="#"><i class="fas fa-plus" title="Equipamiento y Servicios" style="font-size: 26px"></i></a>
       </div>

@@ -8,7 +8,8 @@ Congo.dashboards.config= {
   style_layer: 'poi_new',
   bimester: '',
   year: '',
-  env: ''
+  env: '',
+  kind_reports: ''
 }
 
 Congo.dashboards.action_index = function(){

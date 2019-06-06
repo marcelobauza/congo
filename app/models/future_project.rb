@@ -429,13 +429,15 @@ class FutureProject < ApplicationRecord
     bimesters = []
 
     if filters[:to_period].nil?
-      first = FutureProject.find(:first, :select => "bimester, year",
-                                 :conditions => "active = true", 
-                                 :group => "year, bimester", :order => "year, bimester")
+      first = FutureProject.select("bimester, year").
+                            where("active = true"). 
+                            group("year, bimester").
+                            order("year, bimester").first
 
-      last = FutureProject.find(:first, :select => "bimester, year",
-                                :conditions => "active = true", 
-                                :group => "year, bimester", :order => "year desc, bimester desc")
+      last = FutureProject.select("bimester, year").
+                           where("active = true").
+                           group("year, bimester").
+                           order("year desc, bimester desc").first
 
       bimesters = Period.get_between_periods(first.bimester.to_i, first.year.to_i, last.bimester.to_i, last.year.to_i, 1)
     else
