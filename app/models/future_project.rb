@@ -60,7 +60,7 @@ class FutureProject < ApplicationRecord
   def save_future_project_data(geom, data, year, bimester, future_type)
     ic = Iconv.new('UTF-8', 'ISO-8859-1')
     p_type = ProjectType.get_project_type_by_first_letter(data["TIPO"])
-    
+
     county = County.find_by_code(data["COD_COM"].to_i.to_s)
     number_next_project = county.number_last_project_future + 1
     self.code = county.code.to_s + "-EM-"+ number_next_project.to_s
@@ -143,7 +143,7 @@ class FutureProject < ApplicationRecord
 
     joins = build_joins.join(" ")
 
-    totals = FutureProject.select(select). 
+    totals = FutureProject.select(select).
       joins(joins).
       where(cond_query).
       group("future_project_types.name").
@@ -190,7 +190,7 @@ class FutureProject < ApplicationRecord
     cond = conditions(filters, widget)
 
     fut_types = FutureProject.select("DISTINCT future_project_types.name").
-      joins(build_joins.join(" ")). 
+      joins(build_joins.join(" ")).
       where(cond).
       order('future_project_types.name').map { |typ| typ.name }
 
@@ -214,8 +214,8 @@ class FutureProject < ApplicationRecord
     cond = conditions(filters)
 
     FutureProjectType.all.each do |typ|
-      future = FutureProject.select(select). 
-        joins(build_joins.join(" ")). 
+      future = FutureProject.select(select).
+        joins(build_joins.join(" ")).
         where(cond + Util.and + "future_project_type_id = #{typ.id}").
         group("project_types.name").
         order("project_types.name")
@@ -223,7 +223,7 @@ class FutureProject < ApplicationRecord
       result << {:type => typ.name, :values => future }
     end
     result
-  end 
+  end
 
   def self.projects_by_destination_project_type(filters, widget)
     projects = FutureProject.select("COUNT(*) as value, project_types.name as project_type_name, project_types.id as project_id").
@@ -231,8 +231,8 @@ class FutureProject < ApplicationRecord
       where(conditions(filters, widget)).
       group("project_types.name, project_types.id").
       order("project_types.name")
-    projects 
-  end 
+    projects
+  end
 
   def self.future_project_rates(widget, filters)
     bimesters = get_bimesters(filters)
@@ -266,7 +266,7 @@ class FutureProject < ApplicationRecord
   end
 
   def self.get_bench_values(ids)
-    projects= FutureProject.all(:joins => :future_project_type, 
+    projects= FutureProject.all(:joins => :future_project_type,
                                 :include => :future_project_type,
                                 :conditions => "future_projects.id IN (#{ids.join(',')})")
 
@@ -367,7 +367,7 @@ class FutureProject < ApplicationRecord
 
   def self.get_periods_query(period, year)
     conditions = "("
-    conditions += WhereBuilder.build_equal_condition('future_projects.bimester', period) 
+    conditions += WhereBuilder.build_equal_condition('future_projects.bimester', period)
     conditions += Util.and
       conditions += WhereBuilder.build_equal_condition('future_projects.year', year)
     conditions += ")"
@@ -430,11 +430,11 @@ class FutureProject < ApplicationRecord
 
     if filters[:to_period].nil?
       first = FutureProject.find(:first, :select => "bimester, year",
-                                 :conditions => "active = true", 
+                                 :conditions => "active = true",
                                  :group => "year, bimester", :order => "year, bimester")
 
       last = FutureProject.find(:first, :select => "bimester, year",
-                                :conditions => "active = true", 
+                                :conditions => "active = true",
                                 :group => "year, bimester", :order => "year desc, bimester desc")
 
       bimesters = Period.get_between_periods(first.bimester.to_i, first.year.to_i, last.bimester.to_i, last.year.to_i, 1)
@@ -467,7 +467,7 @@ class FutureProject < ApplicationRecord
     end
     return result
   end
-  
+
   def self.reports(filters)
   @bb = filters
     cond_query = conditions(filters, nil)

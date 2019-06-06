@@ -383,7 +383,7 @@ Congo.future_projects.action_dashboards = function(){
                     var active_items_updated = $.grep(active_items, function(n, i) {
                       return n != item_id;
                     });
-                    
+
                     if (title == 'Tipo de Expendiente') {
                       Congo.future_projects.config.future_project_type_ids = active_items_updated;
                     } else {
