@@ -19,17 +19,17 @@ class FutureProject < ApplicationRecord
 
   #validate :point_is_located_within_the_specified_county, :unless => "county.nil?"
 
-  #validates_numericality_of :floors, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "floors.blank?"
-  #validates_numericality_of :undergrounds, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "undergrounds.blank?"
-  #validates_numericality_of :total_units, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "total_units.blank?"
-  #validates_numericality_of :total_parking, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "total_parking.blank?"
-  #validates_numericality_of :total_commercials, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "total_commercials.blank?"
-  #validates_numericality_of :m2_approved, :greater_than_or_equal_to => 0, :unless => "m2_approved.blank?"
-  #validates_numericality_of :m2_built, :greater_than_or_equal_to => 0, :unless => 'm2_built.blank?'
-  #validates_numericality_of :m2_field, :greater_than_or_equal_to => 0, :unless => 'm2_field.blank?'
+  # validates_numericality_of :floors, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "floors.blank?"
+  # validates_numericality_of :undergrounds, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "undergrounds.blank?"
+  # validates_numericality_of :total_units, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "total_units.blank?"
+  # validates_numericality_of :total_parking, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "total_parking.blank?"
+  # validates_numericality_of :total_commercials, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "total_commercials.blank?"
+  # validates_numericality_of :m2_approved, :greater_than_or_equal_to => 0, :unless => "m2_approved.blank?"
+  # validates_numericality_of :m2_built, :greater_than_or_equal_to => 0, :unless => 'm2_built.blank?'
+  # validates_numericality_of :m2_field, :greater_than_or_equal_to => 0, :unless => 'm2_field.blank?'
 
-  #named_scope :by_project, lambda { |t| {:conditions => {:project_type_id => t}} unless t.blank? }
-  # named_scope :by_future_project_type, lambda { |t| {:conditions => {:future_project_type_id => t}} unless t.blank? }
+  # named_scope :by_project, lambda { |t| {:conditions => {:project_type_id => t}} unless t.blank? }
+  #  named_scope :by_future_project_type, lambda { |t| {:conditions => {:future_project_type_id => t}} unless t.blank? }
 
   BIMESTER_QUANTITY = 6
 
@@ -43,11 +43,6 @@ class FutureProject < ApplicationRecord
 
   def county_name
     self.county.try(:name)
-  end
-
-  def digitizer_name
-    return self.digitizer.complete_name unless self.digitizer.nil?
-    I18n.translate :unknown
   end
 
   def file_date=(val)
@@ -114,23 +109,6 @@ class FutureProject < ApplicationRecord
   def longitude
     @longitude ||= self.the_geom.x if self.the_geom
     return @longitude ? @longitude : ""
-  end
-
-
-  def self.get_points_count_by_filters(filters, column)
-    FutureProject.count(:joins => build_joins.join(" "), :conditions => "#{conditions(filters)} AND #{column} >= 1")
-  end
-
-  def self.get_heat_map_points_count_by_filters(filters)
-    FutureProject.count(:joins => build_joins.join(" "), :conditions => conditions(filters))
-  end
-
-  def self.get_query_for_results(filters, result_id)
-    sub_query = "SELECT #{result_id} as result_id, future_projects.id as future_project_id, future_projects.the_geom, "
-    sub_query += "future_projects.m2_built, #{MapUtil::HEATMAP_VALUE} as heatmap_value, "
-    sub_query += "future_project_types.color as marker_color FROM future_projects " + build_joins.join(" ") + " "
-    sub_query += "WHERE #{conditions(filters)}"
-    sub_query
   end
 
   def self.find_globals(filters)
@@ -265,13 +243,13 @@ class FutureProject < ApplicationRecord
     result.reverse
   end
 
-  def self.get_bench_values(ids)
-    projects= FutureProject.all(:joins => :future_project_type,
-                                :include => :future_project_type,
-                                :conditions => "future_projects.id IN (#{ids.join(',')})")
+  # def self.get_bench_values(ids)
+  #   projects= FutureProject.all(:joins => :future_project_type,
+  #                               :include => :future_project_type,
+  #                               :conditions => "future_projects.id IN (#{ids.join(',')})")
 
-    return projects
-  end
+  #   return projects
+  # end
 
   private
 
@@ -296,30 +274,30 @@ class FutureProject < ApplicationRecord
       :selected_county => self.county.name) unless point_county.id == self.county_id
   end
 
-  def self.values_by_period(widget, select, filters, bimesters)
-    result = []
-    cond = conditions(filters, widget)
+  # def self.values_by_period(widget, select, filters, bimesters)
+  #   result = []
+  #   cond = conditions(filters, widget)
 
-    bimesters.each do |bimester|
-      cond_query = get_periods_query(bimester[:period], bimester[:year]) + Util.and
-        cond_query += cond
+  #   bimesters.each do |bimester|
+  #     cond_query = get_periods_query(bimester[:period], bimester[:year]) + Util.and
+  #       cond_query += cond
 
-      project = FutureProject.find(:first,
-                                   :select => select,
-                                   :joins => build_joins.join(" "),
-                                   :conditions => cond_query,
-                                   :group => 'future_projects.year, future_projects.bimester',
-                                   :order => 'future_projects.year, future_projects.bimester')
+  #     project = FutureProject.find(:first,
+  #                                  :select => select,
+  #                                  :joins => build_joins.join(" "),
+  #                                  :conditions => cond_query,
+  #                                  :group => 'future_projects.year, future_projects.bimester',
+  #                                  :order => 'future_projects.year, future_projects.bimester')
 
-      if project.nil?
-        result << {:value => "null", :bimester => bimester[:period], :year => bimester[:year]}
-      else
-        result << {:value => project[:value], :bimester => bimester[:period], :year => bimester[:year]}
-      end
-    end
+  #     if project.nil?
+  #       result << {:value => "null", :bimester => bimester[:period], :year => bimester[:year]}
+  #     else
+  #       result << {:value => project[:value], :bimester => bimester[:period], :year => bimester[:year]}
+  #     end
+  #   end
 
-    result.reverse
-  end
+  #   result.reverse
+  # end
 
   def self.conditions(filters, self_not_filter=nil)
 
@@ -379,12 +357,12 @@ class FutureProject < ApplicationRecord
 
     #PROJECT TYPES
     if filters.has_key? :project_type_ids and self_not_filter != 'project_types'
-      conditions += WhereBuilder.build_in_condition("project_types.id", filters[:project_type_ids]) + Util.and
+      conditions += WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) + Util.and
     end
 
     #FUTURE PROJECT TYPES
     if filters.has_key? :future_project_type_ids and self_not_filter != 'future_project_types'
-      conditions += WhereBuilder.build_in_condition("future_project_types.id", filters[:future_project_type_ids]) + Util.and
+      conditions += WhereBuilder.build_in_condition("future_project_type_id", filters[:future_project_type_ids]) + Util.and
     end
 
     conditions
@@ -483,7 +461,8 @@ class FutureProject < ApplicationRecord
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
     begin
       general_data = FutureProject.general_info(filters)
-
+      p "general_data"
+      @ggg = general_data
       types = FutureProject.future_project_type(filters)
       desttypes =FutureProject.destination_project_type(filters)
       dtypes = FutureProject.destination_type(filters)
@@ -615,17 +594,15 @@ rates, global_information = FutureProject.find_globals(params)
     global_information.each do |typ|
       @general << {:label => I18n.t(:AVG_PERMISSIONS) + " " + typ["name"].titleize, :value => typ["avg_project_bim"]}
     end
-
     global_information.each do |typ|
       @general << {:label =>I18n.t(:M2_BUILT_PERMISSIONS) + " " + typ["name"].titleize, :value => typ["total_surface"]}
     end
-
     global_information.each do |typ|
       @general << {:label => I18n.t(:AVG_M2_BUILT_PERMISSIONS) + " " + typ["name"].titleize, :value => typ["avg_surface"]}
     end
-
     @general << {:label => I18n.t(:PERMISSION_DRAFT_RATE), :value => rates[:permission_draft_rate]}
     @general << {:label => I18n.t(:RECEPTION_PERMISSION_RATE), :value => rates[:reception_permission_rate]}
+
   end
 
 
@@ -676,4 +653,26 @@ rates, global_information = FutureProject.find_globals(params)
     render :xml => pois.to_xml(:skip_instruct => true, :skip_types => true, :dasherize => false)
   end
 
+  #Review
+
+  # def digitizer_name
+  #   return self.digitizer.complete_name unless self.digitizer.nil?
+  #   I18n.translate :unknown
+  # end
+
+  # def self.get_points_count_by_filters(filters, column)
+  #   FutureProject.count(:joins => build_joins.join(" "), :conditions => "#{conditions(filters)} AND #{column} >= 1")
+  # end
+
+  # def self.get_heat_map_points_count_by_filters(filters)
+  #   FutureProject.count(:joins => build_joins.join(" "), :conditions => conditions(filters))
+  # end
+
+  # def self.get_query_for_results(filters, result_id)
+  #   sub_query = "SELECT #{result_id} as result_id, future_projects.id as future_project_id, future_projects.the_geom, "
+  #   sub_query += "future_projects.m2_built, #{MapUtil::HEATMAP_VALUE} as heatmap_value, "
+  #   sub_query += "future_project_types.color as marker_color FROM future_projects " + build_joins.join(" ") + " "
+  #   sub_query += "WHERE #{conditions(filters)}"
+  #   sub_query
+  # end
 end
