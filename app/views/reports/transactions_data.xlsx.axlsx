@@ -1,0 +1,7 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
+sheet.add_row ['Tipo','Dirección', 'Comuna', 'Depto','Plano','ROL','Foja','Numero','Fecha','Comprador','Rut Comprador','Tipo de Vendedor','UF','Est.','Bod.','sup.t_te','Sup_l_cons','uf_m2_u','uf_m2_t','Valor Real','Bimestre','Año','Codigo Destino','Codigo Material','Año Construccion']
+@transaction.each do |row|
+sheet.add_row [row.property_type_name, row.address, row.county_name, row.department, row.blueprint, row.role,row.sheet, row.number, row.inscription_date,row.buyer_name, row.buyer_rut, row.seller_type_name, row.uf_value, row.parkingi, row.cellar, row.total_surface_terrain, row.total_surface_building, row.uf_m2_u, row.uf_m2_t, row.real_value, row.bimester, row.year, row.code_destination, row.code_material, row.year_sii]
+end
+end

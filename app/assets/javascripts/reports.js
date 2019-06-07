@@ -16,11 +16,19 @@ Congo.reports = function(){
           break;
       }
       break;
-    case 'f':
+    case 'transactions_info':
+      switch(kind_reports){
+        case 'graph':
+          url = '/reports/transactions_data.xlsx';
+          break;
+        case 'base':
+          url = '/reports/transactions_summary.xlsx';
+          break;
+      }
       break;
 
     default:
 
   }
-  window.location = url;
+  window.open(url, '_blank');
 }

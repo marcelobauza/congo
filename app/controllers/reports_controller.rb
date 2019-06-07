@@ -80,6 +80,22 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.xlsx 
     end
-
   end
+
+  def transactions_data
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @transaction = Transaction.reports(filters)
+    respond_to do |format|
+      format.xlsx 
+    end
+  
+  end
+
+  def transactions_summary
+  end
+
+
+
+
+
 end

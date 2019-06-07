@@ -840,4 +840,10 @@ class Transaction < ApplicationRecord
     ranges[index_min..index_max]
 
   end
+  def self.reports(filters)
+  @bb = filters
+    cond_query = build_conditions(filters, nil)
+    @transactions = Transaction.where(cond_query)
+    @transactions
+  end
 end

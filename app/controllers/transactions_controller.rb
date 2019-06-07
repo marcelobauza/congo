@@ -14,6 +14,7 @@ class TransactionsController < ApplicationController
 
   def transactions_summary
     result =[]
+    session[:data] = params
 
     begin
       global_transactions = Transaction.find_globals(params)
