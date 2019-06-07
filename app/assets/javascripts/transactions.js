@@ -64,10 +64,20 @@ Congo.transactions.action_dashboards = function(){
       url: '/transactions/transactions_summary.json',
       datatype: 'json',
       data: data,
-      success: function(data){
+      beforeSend: function() {
+        // Mostramos el spinner
+        $("#spinner").show();
 
         // Establece el nombre de la capa en el navbar
         $('#layer-name').text('Compraventas CBR');
+
+        // Eliminamos los chart-containter de la capa anterior
+        $(".chart-container").remove();
+      },
+      success: function(data){
+
+        // Ocultamos el spinner
+        $("#spinner").hide();
 
         // Comprobamos si el overlay no está creado y adjuntado
         if ($('.overlay').length == 0) {
@@ -78,9 +88,6 @@ Congo.transactions.action_dashboards = function(){
           $('#map').before(overlay);
 
         };
-
-        // Eliminamos los chart-containter de la capa anterior
-        $(".chart-container").remove();
 
         // Separamos la información
         for (var i = 0; i < data.length; i++) {

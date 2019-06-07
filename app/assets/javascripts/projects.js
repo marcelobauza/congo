@@ -21,10 +21,20 @@ Congo.projects.action_dashboards = function(){
       url: '/projects/projects_summary.json',
       datatype: 'json',
       data: {to_year:"2018", locale:"es", periods_quantity: "5", to_period: "6", county_id:"52" },
-      success: function(data){
+      beforeSend: function() {
+        // Mostramos el spinner
+        $("#spinner").show();
 
         // Establece el nombre de la capa en el navbar
         $('#layer-name').text('Proyectos Residenciales');
+
+        // Eliminamos los chart-containter de la capa anterior
+        $(".chart-container").remove();
+      },
+      success: function(data){
+
+        // Ocultamos el spinner
+        $("#spinner").hide();
 
         // Comprobamos si el overlay no está creado y adjuntado
         if ($('.overlay').length == 0) {
@@ -35,9 +45,6 @@ Congo.projects.action_dashboards = function(){
           $('#map').before(overlay);
 
         };
-
-        // Eliminamos los chart-containter de la capa anterior
-        $(".chart-container").remove();
 
         // Separamos la información
         for (var i = 0; i < data.length; i++) {

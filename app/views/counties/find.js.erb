@@ -3,6 +3,11 @@ id = '<%= @county[0].id %>'
 Congo.dashboards.config.county_name = name;
 Congo.dashboards.config.county_id = id;
 
+function addSpinner() {
+  var spinner = $('<div class="spinner-border float-right" role="status" id="spinner"></div>');
+  $('#filter-container').after(spinner);
+}
+
 // Comprobamos si el overlay no está creado y adjuntado
 if ($('.overlay').length == 0) {
 
@@ -49,6 +54,8 @@ if ($('#filter-container').length == 0) {
   $('#filter-header').append(filter_card_h_button, filter_card_h_title);
 
 };
+
+addSpinner();
 
 var filter_item = document.createElement('div');
 filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';

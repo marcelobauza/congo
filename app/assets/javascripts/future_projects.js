@@ -95,10 +95,20 @@ Congo.future_projects.action_dashboards = function(){
       url: '/future_projects/future_projects_summary.json',
       datatype: 'json',
       data: data,
-      success: function(data){
+      beforeSend: function() {
+        // Mostramos el spinner
+        $("#spinner").show();
 
         // Establece el nombre de la capa en el navbar
         $('#layer-name').text('Expedientes Municipales');
+
+        // Eliminamos los chart-containter de la capa anterior
+        $(".chart-container").remove();
+      },
+      success: function(data){
+
+        // Ocultamos el spinner
+        $("#spinner").hide();
 
         // Comprobamos si el overlay no está creado y adjuntado
         if ($('.overlay').length == 0) {
@@ -109,9 +119,6 @@ Congo.future_projects.action_dashboards = function(){
           $('#map').before(overlay);
 
         };
-
-        // Eliminamos los chart-containter de la capa anterior
-        $(".chart-container").remove();
 
         // Separamos la información
         for (var i = 0; i < data.length; i++) {
