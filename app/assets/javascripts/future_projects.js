@@ -104,6 +104,10 @@ Congo.future_projects.action_dashboards = function(){
 
         // Eliminamos los chart-containter de la capa anterior
         $(".chart-container").remove();
+
+        // Eliminamos los filtros de la capa anterior
+        $('.filter-projects').remove();
+        $('.filter-transactions').remove();
       },
       success: function(data){
 
@@ -352,7 +356,7 @@ Congo.future_projects.action_dashboards = function(){
 
                   // Crea el filtro
                   var filter_item = document.createElement('div');
-                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  filter_item.className = 'filter-future-projects text-white bg-secondary px-2 mb-1 py-1 rounded';
                   var filter_item_id = x_tick.split(" ").join("_");
                   filter_item.id = 'item-'+filter_item_id+'-'+x_tick_id;
                   var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
@@ -444,7 +448,7 @@ Congo.future_projects.action_dashboards = function(){
 
                   // Crea el filtro
                   var filter_item = document.createElement('div');
-                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  filter_item.className = 'filter-future-projects text-white bg-secondary px-2 mb-1 py-1 rounded';
                   var filter_item_id = x_tick.split("/").join("-");
                   filter_item.id = 'item-'+filter_item_id;
                   var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';

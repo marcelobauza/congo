@@ -73,6 +73,10 @@ Congo.transactions.action_dashboards = function(){
 
         // Eliminamos los chart-containter de la capa anterior
         $(".chart-container").remove();
+
+        // Eliminamos los filtros de la capa anterior
+        $('.filter-future-projects').remove();
+        $('.filter-projects').remove();
       },
       success: function(data){
 
