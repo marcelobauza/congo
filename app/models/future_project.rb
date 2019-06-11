@@ -188,16 +188,21 @@ class FutureProject < ApplicationRecord
 
   def self.units_by_project_type(filters)
     result = []
-    select = "COUNT(*) as value, project_types.name as project_type"
+    select = "COUNT(*) as value, future_project_types.name  as future_project_type, future_project_type_id"
     cond = conditions(filters)
 
-    FutureProjectType.all.each do |typ|
-      future = FutureProject.select(select).
-        joins(build_joins.join(" ")).
-        where(cond + Util.and + "future_project_type_id = #{typ.id}").
-        group("project_types.name").
-        order("project_types.name")
+     ProjectType.all.each do |typ|
+       future = FutureProject.select(select).
+         joins(build_joins.join(" ")).
+        where(cond + Util.and + "project_type_id = #{typ.id}").
+        group("future_project_type_id, future_project_types.name")
 
+    # FutureProjectType.all.each do |typ|
+    #   future = FutureProject.select(select).
+    #     joins(build_joins.join(" ")).
+    #     where(cond + Util.and + "future_project_type_id = #{typ.id}").
+    #     group("project_types.name").
+    #     order("project_types.name")
       result << {:type => typ.name, :values => future }
     end
     result
@@ -466,7 +471,6 @@ class FutureProject < ApplicationRecord
       types = FutureProject.future_project_type(filters)
       desttypes =FutureProject.destination_project_type(filters)
       dtypes = FutureProject.destination_type(filters)
-
       ubimester = FutureProject.unit_bimester(filters)
       m2bimester = FutureProject.m2_built_bimester(filters)
       rates = FutureProject.future_project_rates_1(filters)
@@ -500,8 +504,9 @@ class FutureProject < ApplicationRecord
       dtypes.each do |item|
         label = item[:type]
         data =[]
+
         item[:values].each do |itm|
-          data.push("name": itm["project_type"], "count": itm["value"].to_i)
+          data.push("name": itm["future_project_type"].capitalize, "count": itm["value"].to_i)
         end
         categories.push({"label": label, "data": data} )
         count = count + 1

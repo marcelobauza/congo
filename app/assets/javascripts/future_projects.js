@@ -110,7 +110,6 @@ Congo.future_projects.action_dashboards = function(){
         $('.filter-transactions').remove();
       },
       success: function(data){
-
         // Ocultamos el spinner
         $("#spinner").hide();
 
@@ -545,7 +544,8 @@ Congo.future_projects.action_dashboards = function(){
         var boxes = Array.prototype.slice.call(boxArray);
         dragula({ containers: boxes });
 
-      } // Cierra success
+      }, // Cierra success
+    error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
     }) // Cierra ajax
   } // Cierra indicator_future_projects
 
