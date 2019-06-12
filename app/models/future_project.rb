@@ -512,22 +512,21 @@ class FutureProject < ApplicationRecord
       a = []
       p = []
       r = []
-      ubimester.last.each do |item|
-        @item = item
-        item[:values].each do |itm|
+      ubimester.last.each_with_index do |item, i|
 
-          if itm["y_label"] == 'ANTEPROYECTO'
-            a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
-
+           a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+          item[:values].each do |itm|
+            if itm["y_label"] == 'ANTEPROYECTO'
+              a[i][:count] = itm["y_value"]
           end
           if itm["y_label"] == 'PERMISO DE EDIFICACION'
-            p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
-
+            p[i][:count] = itm["y_value"]
           end
 
           if itm["y_label"] == 'RECEPCION MUNICIPAL'
-            r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
-
+            r[i][:count] = itm["y_value"]
           end
         end
       end
@@ -542,19 +541,24 @@ class FutureProject < ApplicationRecord
       a = []
       p = []
       r = []
-      m2bimester.last.each do |item|
+      m2bimester.last.each_with_index do |item, i |
+       
+           a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
 
         item[:values].each do |itm|
 
+
           if itm["y_label"] == 'ANTEPROYECTO'
-            a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
+              a[i][:count] = itm["y_value"]
           end
           if itm["y_label"] == 'PERMISO DE EDIFICACION'
-            p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
+            p[i][:count] = itm["y_value"]
           end
 
           if itm["y_label"] == 'RECEPCION MUNICIPAL'
-            r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":itm["y_value"] )
+            r[i][:count] = itm["y_value"]
           end
         end
       end
