@@ -46,7 +46,7 @@ class ProjectsController < ApplicationController
 
       data =[]
       pstatus.each do |item|
-        data.push("name": item.name.capitalize, "count": item.value.to_i)
+        data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end
       result.push({"title":"Estado del Proyecto", "series":[{"data": data}]})
 
@@ -54,7 +54,7 @@ class ProjectsController < ApplicationController
       data =[]
 
       ptypes.each do |item|
-        data.push("name": item.name.capitalize, "count": item.value.to_i)
+        data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end
       result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
 
@@ -65,8 +65,8 @@ class ProjectsController < ApplicationController
       sold_units =[]
       categories=[]
       pmixes.each do |item|
-        stock_units.push("name":item.mix_type, "count": item[:stock_units])
-        sold_units.push("name":item.mix_type, "count": item[:sold_units])
+        stock_units.push("name":item.mix_type, "count": item[:stock_units], "id":item.id)
+        sold_units.push("name":item.mix_type, "count": item[:sold_units], "id":item.id)
       end
       categories.push({"label":"Venta Total", "data": sold_units});
       categories.push({"label":"Disponibilidad", "data": stock_units});
