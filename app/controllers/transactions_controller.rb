@@ -46,7 +46,7 @@ class TransactionsController < ApplicationController
       data =[]
 
       ptypes.each do |prop|
-        data.push("name": prop.name.capitalize, "count": prop.value.to_i)
+        data.push("name": prop.name.capitalize, "count": prop.value.to_i, "id":prop.id)
       end
       result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
 
@@ -54,7 +54,7 @@ class TransactionsController < ApplicationController
 
       data =[]
       stypes.each do |seller|
-        data.push({"name": seller.name.capitalize, "count":seller.value.to_i})
+        data.push({"name": seller.name.capitalize, "count":seller.value.to_i, "id":seller.id})
       end
 
       result.push({"title":"Tipo de Vendedor", "series":[{"data": data}]})
