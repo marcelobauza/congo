@@ -188,22 +188,18 @@ class FutureProject < ApplicationRecord
 
   def self.units_by_project_type(filters)
     result = []
-    select = "COUNT(*) as value, future_project_types.name  as future_project_type, future_project_type_id"
+    select = "COUNT(*) as value"
     cond = conditions(filters)
 
      ProjectType.all.each do |typ|
-       future = FutureProject.select(select).
+       data = []
+       FutureProjectType.all.each do |fpt|
+       future = FutureProject.
          joins(build_joins.join(" ")).
-        where(cond + Util.and + "project_type_id = #{typ.id}").
-        group("future_project_type_id, future_project_types.name")
-
-    # FutureProjectType.all.each do |typ|
-    #   future = FutureProject.select(select).
-    #     joins(build_joins.join(" ")).
-    #     where(cond + Util.and + "future_project_type_id = #{typ.id}").
-    #     group("project_types.name").
-    #     order("project_types.name")
-      result << {:type => typ.name, :values => future }
+         where(cond + Util.and + "project_type_id = #{typ.id}"+ Util.and +  "future_project_type_id = #{fpt.id}").count
+        data.push({name: fpt.name, count: future})
+    end
+      result << {:type => typ.name, values: data }
     end
     result
   end
@@ -466,8 +462,6 @@ class FutureProject < ApplicationRecord
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
     begin
       general_data = FutureProject.general_info(filters)
-      p "general_data"
-      @ggg = general_data
       types = FutureProject.future_project_type(filters)
       desttypes =FutureProject.destination_project_type(filters)
       dtypes = FutureProject.destination_type(filters)
@@ -506,7 +500,7 @@ class FutureProject < ApplicationRecord
         data =[]
 
         item[:values].each do |itm|
-          data.push("name": itm["future_project_type"].capitalize, "count": itm["value"].to_i)
+          data.push("name": itm[:name].capitalize, "count": itm[:count].to_i)
         end
         categories.push({"label": label, "data": data} )
         count = count + 1
