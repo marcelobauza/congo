@@ -442,19 +442,64 @@ Congo.projects.action_dashboards = function(){
 
               var chart_options = {
                 onClick: function(c, i) {
-                  var x_value = this.data.labels[i[0]._index];
+
+                  // Almacena los valores del chart
+                  var x_tick = this.data.labels[i[0]._index];
+                  var x_tick_id = this.data.datasets[0].id[i[0]._index];
                   var title = this.options.title.text;
+
+                  // Crea el filtro
                   var filter_item = document.createElement('div');
-                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
-                  var filter_item_id = x_value.split(" ").join("_");
-                  filter_item.id = 'item-'+filter_item_id;
-                  var close_button_item = '<button type="button" class="close">&times;</button>';
-                  var text_item = title+': '+x_value;
-                  if ($('#item-'+filter_item_id).length == 0) {
+                  filter_item.className = 'filter-projects text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  var filter_item_id = x_tick.split(" ").join("_");
+                  filter_item.id = 'item-'+filter_item_id+'-'+x_tick_id;
+                  var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
+                  var text_item = title+': '+x_tick;
+
+                  // Valida si el item del filtro existe
+                  if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
+
+                    // Almacena la variable global dependiendo del chart
+                    if (title == 'Estado del Proyecto') {
+                      Congo.projects.config.project_status_ids.push(x_tick_id);
+                    } else {
+                      Congo.projects.config.project_type_ids.push(x_tick_id);
+                    };
+
+                    // Adjunta el item del filtro y recarga los datos
                     $('#filter-body').append(filter_item);
-                    $('#item-'+filter_item_id).append(text_item, close_button_item);
+                    $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
+                    indicator_projects();
                   };
-                },
+
+                  // Elimina item del filtro
+                  $('#close-'+filter_item_id).click(function() {
+
+                    if (title == 'Estado del Proyecto') {
+                      var active_items = Congo.projects.config.project_status_ids;
+                    } else {
+                      var active_items = Congo.projects.config.project_type_ids;
+                    };
+
+                    var item_full_id = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
+                    item_full_id = item_full_id.split("-")
+                    var item_id = item_full_id[2]
+
+                    var active_items_updated = $.grep(active_items, function(n, i) {
+                      return n != item_id;
+                    });
+
+                    if (title == 'Estado del Proyecto') {
+                      Congo.projects.config.project_status_ids = active_items_updated;
+                    } else {
+                      Congo.projects.config.project_type_ids = active_items_updated;
+                    };
+
+                    $('#item-'+filter_item_id+'-'+x_tick_id).remove();
+                    indicator_projects();
+                  });
+
+                }, // Cierra onClick function
                 responsive: true,
                 title: {
                   display: false,
