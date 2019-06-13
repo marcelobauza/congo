@@ -641,7 +641,7 @@ Congo.projects.action_dashboards = function(){
 
       } // Cierra success
     }) // Cierra ajax
-  } // Cierra indicator_future_projects
+  } // Cierra indicator_projects
 
   return {
     init: init,
