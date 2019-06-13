@@ -4,7 +4,13 @@ Congo.namespace('transactions.action_dashboards');
 Congo.transactions.config= {
   county_name: '',
   county_id: '',
-  layer_type: 'transactions_info'
+  layer_type: 'transactions_info',
+  property_type_ids: [],
+  seller_type_ids: [],
+  periods: [],
+  years: [],
+  from_calculated_value: [],
+  to_calculated_value: []
 }
 
 Congo.transactions.action_graduated_points = function(){
@@ -50,13 +56,50 @@ Congo.transactions.action_dashboards = function(){
     radius = Congo.map_utils.radius * 1000;
     centerPoint = Congo.map_utils.centerpt;
     wkt = Congo.map_utils.size_box;
+    property_type_ids = Congo.transactions.config.property_type_ids;
+    seller_type_ids = Congo.transactions.config.seller_type_ids;
+    periods = Congo.transactions.config.periods;
+    years = Congo.transactions.config.years;
+    from_calculated_value = Congo.transactions.config.from_calculated_value;
+    to_calculated_value = Congo.transactions.config.to_calculated_value;
 
-    if (county_id != ''){
-          data ={to_year: to_year, to_period: to_bimester, county_id: county_id};
-    }else if(centerPoint !=''){
-      data = {to_year: to_year, to_period: to_bimester, centerpt: centerPoint, radius: radius};
-    }else{
-      data = {to_year: to_year, to_period: to_bimester, wkt: wkt};
+    if (county_id != '') {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        property_type_ids: property_type_ids,
+        seller_type_ids: seller_type_ids,
+        periods: periods,
+        years: years,
+        from_calculated_value: from_calculated_value,
+        to_calculated_value: to_calculated_value,
+        county_id: county_id
+      };
+    } else if (centerPoint != '') {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        property_type_ids: property_type_ids,
+        seller_type_ids: seller_type_ids,
+        periods: periods,
+        years: years,
+        from_calculated_value: from_calculated_value,
+        to_calculated_value: to_calculated_value,
+        centerpt: centerPoint,
+        radius: radius
+      };
+    } else {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        property_type_ids: property_type_ids,
+        seller_type_ids: seller_type_ids,
+        periods: periods,
+        years: years,
+        from_calculated_value: from_calculated_value,
+        to_calculated_value: to_calculated_value,
+        wkt: wkt
+      };
     }
 
     $.ajax({
