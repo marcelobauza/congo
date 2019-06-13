@@ -3,7 +3,17 @@ Congo.namespace('projects.action_dashboards');
 Congo.projects.config= {
   county_name: '',
   county_id: '',
-  layer_type: 'projects_info'
+  layer_type: 'projects_info',
+  project_status_ids: [],
+  project_type_ids: [],
+  mix_ids: [],
+  periods: [],
+  years: [],
+  from_floor: [],
+  to_floor: [],
+  from_uf_value: [],
+  to_uf_value: [],
+  project_agency_ids: []
 }
 
 Congo.projects.action_dashboards = function(){
@@ -16,11 +26,82 @@ Congo.projects.action_dashboards = function(){
 
   indicator_projects = function(){
 
+    county_id = Congo.dashboards.config.county_id;
+    to_year = Congo.dashboards.config.year;
+    to_bimester = Congo.dashboards.config.bimester;
+    radius = Congo.map_utils.radius * 1000;
+    centerPoint = Congo.map_utils.centerpt;
+    wkt = Congo.map_utils.size_box;
+    project_status_ids = Congo.projects.config.project_status_ids;
+    project_type_ids = Congo.projects.config.project_type_ids;
+    mix_ids = Congo.projects.config.mix_ids;
+    periods = Congo.projects.config.periods;
+    years = Congo.projects.config.years;
+    from_floor = Congo.projects.config.from_floor;
+    to_floor = Congo.projects.config.to_floor;
+    from_uf_value = Congo.projects.config.from_uf_value;
+    to_uf_value = Congo.projects.config.to_uf_value;
+    project_agency_ids = Congo.projects.config.project_agency_ids;
+
+    if (county_id != '') {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        periods_quantity: "5",
+        project_status_ids: project_status_ids,
+        project_type_ids: project_type_ids,
+        mix_ids: mix_ids,
+        periods: periods,
+        years: years,
+        from_floor: from_floor,
+        to_floor: to_floor,
+        from_uf_value: from_uf_value,
+        to_uf_value: to_uf_value,
+        project_agency_ids: project_agency_ids,
+        county_id: county_id
+      };
+    } else if (centerPoint != '') {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        periods_quantity: "5",
+        project_status_ids: project_status_ids,
+        project_type_ids: project_type_ids,
+        mix_ids: mix_ids,
+        periods: periods,
+        years: years,
+        from_floor: from_floor,
+        to_floor: to_floor,
+        from_uf_value: from_uf_value,
+        to_uf_value: to_uf_value,
+        project_agency_ids: project_agency_ids,
+        centerpt: centerPoint,
+        radius: radius
+      };
+    } else {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        periods_quantity: "5",
+        project_status_ids: project_status_ids,
+        project_type_ids: project_type_ids,
+        mix_ids: mix_ids,
+        periods: periods,
+        years: years,
+        from_floor: from_floor,
+        to_floor: to_floor,
+        from_uf_value: from_uf_value,
+        to_uf_value: to_uf_value,
+        project_agency_ids: project_agency_ids,
+        wkt: wkt
+      };
+    };
+
     $.ajax({
       type: 'GET',
       url: '/projects/projects_summary.json',
       datatype: 'json',
-      data: {to_year:"2018", locale:"es", periods_quantity: "5", to_period: "6", county_id:"52" },
+      data: data,
       beforeSend: function() {
         // Mostramos el spinner
         $("#spinner").show();
