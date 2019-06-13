@@ -536,19 +536,63 @@ Congo.projects.action_dashboards = function(){
 
               var chart_options = {
                 onClick: function(c, i) {
-                  var x_value = this.data.labels[i[0]._index];
-                  var title = this.options.title.text;
+
+                  // Almacena los valores del chart
+                  var x_tick = this.data.labels[i[0]._index];
+
+                  // Crea el filtro
                   var filter_item = document.createElement('div');
-                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
-                  var filter_item_id = x_value.split("/").join("_");
+                  filter_item.className = 'filter-projects text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  var filter_item_id = x_tick.split("/").join("-");
                   filter_item.id = 'item-'+filter_item_id;
-                  var close_button_item = '<button type="button" class="close">&times;</button>';
-                  var text_item = title+': '+x_value;
+                  var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
+                  var text_item = 'Periodo: '+x_tick;
+
+                  // Valida si el item del filtro existe
                   if ($('#item-'+filter_item_id).length == 0) {
+
+                    // Almacena la variable global
+                    var periods_years = x_tick.split("/");
+                    Congo.projects.config.periods.push(periods_years[0]);
+                    Congo.projects.config.years.push(20+periods_years[1]);
+
+                    // Adjunta el item del filtro y recarga los datos
                     $('#filter-body').append(filter_item);
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
+                    indicator_projects();
                   };
-                },
+
+                  // Elimina item del filtro
+                  $('#close-'+filter_item_id).click(function() {
+
+                    var active_periods = Congo.projects.config.periods;
+                    var active_years = Congo.projects.config.years;
+
+                    var item_full_id = $('#item-'+filter_item_id).attr('id');
+
+                    item_full_id = item_full_id.split("-");
+                    var period_id = item_full_id[1];
+                    var year_id = item_full_id[2];
+
+                    var periods_updated = $.grep(active_periods, function(n, i) {
+                      return n != period_id;
+                    });
+
+                    var period_position = active_periods.indexOf(period_id);
+
+                    var years_updated = $.grep(active_years, function(n, i) {
+                      return i != period_position;
+                    });
+
+                    Congo.projects.config.periods = periods_updated;
+                    Congo.projects.config.years = years_updated;
+
+                    $('#item-'+filter_item_id).remove();
+                    indicator_projects();
+
+                  });
+
+                }, // Cierra onClick function
                 responsive: true,
                 title: {
                   display: false,
