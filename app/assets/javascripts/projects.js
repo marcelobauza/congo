@@ -384,58 +384,189 @@ Congo.projects.action_dashboards = function(){
             // Guardamos "options"
             if (chart_type == 'bar') { // Bar
 
-              // Seteamos los ticks
+              // Armamos las opciones de Total Distribución por Mix por separado
               if (title == 'Total Distribución por Mix') {
-                var ticks = {
-                  display: false,
-                }
-              } else {
-                var ticks = {
-                  autoSkip: false,
-                  maxRotation: 12,
-                }
-              };
 
-              var chart_options = {
-                onClick: function(c, i) {
-                  var x_value = this.data.labels[i[0]._index];
-                  var title = this.options.title.text;
-                  var filter_item = document.createElement('div');
-                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
-                  var filter_item_id = x_value.split(" ").join("_");
-                  filter_item.id = 'item-'+filter_item_id;
-                  var close_button_item = '<button type="button" class="close">&times;</button>';
-                  var text_item = title+': '+x_value;
-                  if ($('#item-'+filter_item_id).length == 0) {
-                    $('#filter-body').append(filter_item);
-                    $('#item-'+filter_item_id).append(text_item, close_button_item);
-                  };
-                },
-                responsive: true,
-                title: {
-                  display: false,
-                  text: title
-                },
-                legend: {
-                  display: false,
-                },
-                plugins: {
-                  datalabels: {
+                var chart_options = {
+                  onClick: function(c, i) {
+
+                    // Almacena los valores del chart
+                    var x_tick = this.data.labels[i[0]._index];
+                    var x_tick_id = this.data.datasets[0].id[i[0]._index];
+                    var title = this.options.title.text;
+
+                    // Crea el filtro
+                    var filter_item = document.createElement('div');
+                    filter_item.className = 'filter-projects text-white bg-secondary px-2 mb-1 py-1 rounded';
+                    var filter_item_id = x_tick.split(",").join("_");
+                    filter_item.id = 'item-'+filter_item_id+'-'+x_tick_id;
+                    var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
+                    var text_item = title+': '+x_tick;
+
+                    // Valida si el item del filtro existe
+                    if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
+
+                      // Almacena la variable global
+                      Congo.projects.config.mix_ids.push(x_tick_id);
+
+                      // Adjunta el item del filtro y recarga los datos
+                      $('#filter-body').append(filter_item);
+                      $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
+                      indicator_projects();
+                    };
+
+                    // Elimina item del filtro
+                    $('#close-'+filter_item_id).click(function() {
+
+                      var active_items = Congo.projects.config.mix_ids;
+                      console.log(active_items);
+
+                      var item_full_id = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
+                      item_full_id = item_full_id.split("-")
+                      var item_id = item_full_id[2]
+
+                      var active_items_updated = $.grep(active_items, function(n, i) {
+                        return n != item_id;
+                      });
+
+                      Congo.projects.config.mix_ids = active_items_updated;
+
+                      $('#item-'+filter_item_id+'-'+x_tick_id).remove();
+                      indicator_projects();
+
+                    });
+
+                  }, // Cierra onClick function
+                  responsive: true,
+                  title: {
+                    display: false,
+                    text: title
+                  },
+                  legend: {
                     display: false,
                   },
-                },
-                scales: {
-                  xAxes: [{
-                    stacked: true,
-                    ticks: ticks
-                  }],
-                  yAxes: [{
-                    stacked: true,
-                    ticks: {
-                      beginAtZero: true,
+                  plugins: {
+                    datalabels: {
+                      display: false,
                     },
-                  }],
-                }
+                  },
+                  scales: {
+                    xAxes: [{
+                      stacked: true,
+                      ticks: {
+                        display: false,
+                      }
+                    }],
+                    yAxes: [{
+                      stacked: true,
+                      ticks: {
+                        beginAtZero: true,
+                      },
+                    }],
+                  }
+                };
+              } else {
+
+                var chart_options = {
+                  onClick: function(c, i) {
+
+                    // Almacena los valores del chart
+                    var x_tick = this.data.labels[i[0]._index];
+                    var title = this.options.title.text;
+
+                    // Crea el filtro
+                    var filter_item = document.createElement('div');
+                    filter_item.className = 'filter-projects text-white bg-secondary px-2 mb-1 py-1 rounded';
+                    var filter_item_id = x_tick.split(" ").join("");
+                    filter_item.id = 'item-'+filter_item_id;
+                    var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
+                    var text_item = title+': '+x_tick;
+
+                    // Valida si el item del filtro existe
+                    if ($('#item-'+filter_item_id).length == 0) {
+
+                      // Almacena la variable global dependiendo del chart
+                      var filter_item_id_split = filter_item_id.split("-");
+                      if (title == 'Cantidad de Pisos') {
+                        Congo.projects.config.from_floor.push(filter_item_id_split[0]);
+                        Congo.projects.config.to_floor.push(filter_item_id_split[1]);
+                      } else {
+                        Congo.projects.config.from_uf_value.push(filter_item_id_split[0]);
+                        Congo.projects.config.to_uf_value.push(filter_item_id_split[1]);
+                      };
+
+                      // Adjunta el item del filtro y recarga los datos
+                      $('#filter-body').append(filter_item);
+                      $('#item-'+filter_item_id).append(text_item, close_button_item);
+                      indicator_projects();
+                    };
+
+                    // Elimina item del filtro
+                    $('#close-'+filter_item_id).click(function() {
+                      if (title == 'Cantidad de Pisos') {
+                        var active_item_from = Congo.projects.config.from_floor;
+                        var active_item_to = Congo.projects.config.to_floor;
+                      } else {
+                        var active_item_from = Congo.projects.config.from_uf_value;
+                        var active_item_to = Congo.projects.config.to_uf_value;
+                      };
+
+                      var item_full_id = $('#item-'+filter_item_id).attr('id');
+
+                      item_full_id = item_full_id.split("-");
+                      var from_floor_id = item_full_id[1];
+                      var to_floor_id = item_full_id[2];
+
+                      var active_item_from_updated = $.grep(active_item_from, function(n, i) {
+                        return n != from_floor_id;
+                      });
+
+                      var active_item_to_updated = $.grep(active_item_to, function(n, i) {
+                        return n != to_floor_id;
+                      });
+                      if (title == 'Cantidad de Pisos') {
+                        Congo.projects.config.from_floor = active_item_from_updated;
+                        Congo.projects.config.to_floor = active_item_to_updated;
+                      } else {
+                        Congo.projects.config.from_uf_value = active_item_from_updated;
+                        Congo.projects.config.to_uf_value = active_item_to_updated;
+                      };
+
+                      $('#item-'+filter_item_id).remove();
+                      indicator_projects();
+
+                    });
+
+                  }, // Cierra onClick function
+                  responsive: true,
+                  title: {
+                    display: false,
+                    text: title
+                  },
+                  legend: {
+                    display: false,
+                  },
+                  plugins: {
+                    datalabels: {
+                      display: false,
+                    },
+                  },
+                  scales: {
+                    xAxes: [{
+                      stacked: true,
+                      ticks: {
+                        autoSkip: false,
+                        maxRotation: 12,
+                      }
+                    }],
+                    yAxes: [{
+                      stacked: true,
+                      ticks: {
+                        beginAtZero: true,
+                      },
+                    }],
+                  }
+                };
               };
 
             } else if (chart_type == 'pie') { // Pie
@@ -552,7 +683,7 @@ Congo.projects.action_dashboards = function(){
                   if ($('#item-'+filter_item_id).length == 0) {
 
                     // Almacena la variable global
-                    var periods_years = x_tick.split("/");
+                    var periods_years = x_tick.split("/"); // NOTE: Reveer el uso de x_tick en vez de filter_item_id
                     Congo.projects.config.periods.push(periods_years[0]);
                     Congo.projects.config.years.push(20+periods_years[1]);
 
