@@ -314,19 +314,61 @@ Congo.transactions.action_dashboards = function(){
 
               var chart_options = {
                 onClick: function(c, i) {
-                  var x_value = this.data.labels[i[0]._index];
+
+                  // Almacena los valores del chart
+                  var x_tick = this.data.labels[i[0]._index];
                   var title = this.options.title.text;
+
+                  // Crea el filtro
                   var filter_item = document.createElement('div');
-                  filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
-                  var filter_item_id = x_value.split(" ").join("_");
+                  filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
+                  var filter_item_id = x_tick.split(" ").join("").split(".").join("");
                   filter_item.id = 'item-'+filter_item_id;
-                  var close_button_item = '<button type="button" class="close">&times;</button>';
-                  var text_item = title+': '+x_value;
+                  var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
+                  var text_item = title+': '+x_tick;
+
+                  // Valida si el item del filtro existe
                   if ($('#item-'+filter_item_id).length == 0) {
+
+                    // Almacena la variable global dependiendo del chart
+                    var filter_item_id_split = filter_item_id.split("-");
+                    Congo.transactions.config.from_calculated_value.push(filter_item_id_split[0]);
+                    Congo.transactions.config.to_calculated_value.push(filter_item_id_split[1]);
+
+                    // Adjunta el item del filtro y recarga los datos
                     $('#filter-body').append(filter_item);
                     $('#item-'+filter_item_id).append(text_item, close_button_item);
+                    indicator_transactions();
                   };
-                },
+
+                  // Elimina item del filtro
+                  $('#close-'+filter_item_id).click(function() {
+                    var active_item_from = Congo.transactions.config.from_calculated_value;
+                    var active_item_to = Congo.transactions.config.to_calculated_value;
+
+                    var item_full_id = $('#item-'+filter_item_id).attr('id');
+
+                    item_full_id = item_full_id.split("-");
+                    var from_item_id = item_full_id[1];
+                    var to_item_id = item_full_id[2];
+
+                    var active_item_from_updated = $.grep(active_item_from, function(n, i) {
+                      return n != from_item_id;
+                    });
+
+                    var active_item_to_updated = $.grep(active_item_to, function(n, i) {
+                      return n != to_item_id;
+                    });
+
+                    Congo.transactions.config.from_calculated_value = active_item_from_updated;
+                    Congo.transactions.config.to_calculated_value = active_item_to_updated;
+
+                    $('#item-'+filter_item_id).remove();
+                    indicator_transactions();
+
+                  });
+
+                }, // Cierra onClick function
                 responsive: true,
                 title: {
                   display: false,
