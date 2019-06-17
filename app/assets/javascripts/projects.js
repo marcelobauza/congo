@@ -419,7 +419,6 @@ Congo.projects.action_dashboards = function(){
                     $('#close-'+filter_item_id).click(function() {
 
                       var active_items = Congo.projects.config.mix_ids;
-                      console.log(active_items);
 
                       var item_full_id = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
                       item_full_id = item_full_id.split("-")
@@ -480,6 +479,9 @@ Congo.projects.action_dashboards = function(){
                     var filter_item_id = x_tick.split(" ").join("");
                     filter_item.id = 'item-'+filter_item_id;
                     var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
+                    if (title == 'Unidades Proyecto por Rango UF') {
+                      title = 'Valor UF';
+                    }
                     var text_item = title+': '+x_tick;
 
                     // Valida si el item del filtro existe
