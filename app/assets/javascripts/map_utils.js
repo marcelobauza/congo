@@ -248,6 +248,7 @@ Congo.map_utils = function(){
         filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'building_regulations_info':
+        Congo.building_regulations.action_dashboards.indicator_building_regulations();
         filter_layer = '';
         break;
     }
