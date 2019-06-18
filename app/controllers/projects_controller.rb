@@ -32,6 +32,7 @@ class ProjectsController < ApplicationController
       sbim = sales_bimester
       cfloor = floor
       uf_ranges = Project.projects_by_ranges('uf_avg_percent', params)
+      agencies = projects_by_agency
 
       result =[]
       data =[]
@@ -180,6 +181,13 @@ class ProjectsController < ApplicationController
         data.push("name": (item.min_value.to_i.to_s + " - " + item.max_value.to_i.to_s), "count": item.value.to_i)
       end
       result.push({"title":"Unidades Proyecto por Rango UF", "series":[{"data": data}]})
+
+      data =[]
+      agencies.each do |agency|
+        data.push("name": agency.name, "id":agency.id)
+      end
+    result.push({"title": "Agencias por proyectos", "data":data})
+
 
     rescue
       #result[:data] = ["Sin datos"]
@@ -343,11 +351,11 @@ class ProjectsController < ApplicationController
   def projects_by_agency
     @agencies = Project.projects_group_by_count('agencies', params, false)
 
-    respond_to do |format|
-      format.xml { render :template => "projects/projects_by_agency" }
-      format.html
-      format.json { render :json => @agencies }
-    end
+    #respond_to do |format|
+    #  format.xml { render :template => "projects/projects_by_agency" }
+    #  format.html
+    #  format.json { render :json => @agencies }
+    #end
   end
 
   def around_pois
