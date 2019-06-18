@@ -547,8 +547,9 @@ Congo.future_projects.action_dashboards = function(){
 
       }, // Cierra success
       error: function(jqXHR, textStatus, errorThrown) {
-        var alert = '<div class="alert alert-asd m-2 alert-warning alert-dismissible fade show" role="alert"> Por favor, realice la selección de los datos para deplegar la información de la capa. <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div>'
-        $('#map').before(alert);
+        // Mostramos advertencia para que se realice la selección de los datos
+        var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert"> Por favor, realice la selección de los datos para deplegar la información de la capa. <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div>'
+        $('#alerts').append(alert);
       } // Cierra error
     }) // Cierra ajax
   } // Cierra indicator_future_projects
