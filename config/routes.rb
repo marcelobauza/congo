@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get 'dashboards/filter_county_for_lon_lat'
   get 'dashboards/filter_period'
   get 'counties/find' => 'counties#find'
+  get 'building_regulations/allowed_use_list' => 'building_regulations#allowed_use_list'
+  get 'building_regulations/building_regulations_filters' => 'building_regulations#building_regulations_filters'
   get 'transactions/transactions_summary' => 'transactions#transactions_summary'
   get 'transactions/period' => 'transactions#period'
   get 'projects/projects_summary' => 'projects#projects_summary'
