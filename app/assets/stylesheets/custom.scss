@@ -133,3 +133,13 @@ div.dropdown-menu-navbar1.show {
 .fa-window-minimize {
   font-size: 12px;
 }
+
+// Alert
+.alert {
+  position: absolute !important;
+  z-index: 9999 !important;
+}
+#alerts {
+  justify-content: center;
+  display: flex;
+}
