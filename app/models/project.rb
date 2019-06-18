@@ -411,7 +411,7 @@ class Project < ApplicationRecord
     query_condition = " year = #{filters[:to_year]}  " 
     query_condition += " and bimester = #{filters[:to_period]} "
     query_condition += " and  county_id = #{filters[:county_id]} "  if filters.has_key? :county_id 
-    query_condition += " and project_type_id  = #{filters[:project_type_ids]} " if filters.has_key? :project_type_ids
+    query_condition += "and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
     query_condition += " and ST_Within(the_geom, ST_GeomFromText('#{filters[:wkt]}',4326)) " if filters.has_key? :wkt
 
 
