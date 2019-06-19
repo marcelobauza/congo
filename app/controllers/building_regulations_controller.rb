@@ -4,10 +4,10 @@ class BuildingRegulationsController < ApplicationController
   def building_regulations_filters
     result = []
     @a = constructivity
-    result.push({"label":"Indice Constructivilidad", "min":@a[:min], "max":@a[:max]})
-    @e = allowed_use_list    
-    
-    result.push({"label":"Usos permitidos", "data":@e})
+    result.push({"label":"Coeficiente de Constructibilidad", "min":@a[:min], "max":@a[:max]})
+    @e = allowed_use_list
+
+    result.push({"label":"Uso Permitido", "data":@e})
     render json: result
   end
 
