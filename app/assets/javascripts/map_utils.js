@@ -9,9 +9,10 @@ Congo.map_utils.config={
 }
 
 Congo.map_utils = function(){
-  var url, map, groupLayer, editableLayers, HandlerGeometry, typeGeometry ;
+  var url, map, groupLayer, editableLayers, HandlerGeometry, typeGeometry , layerControl, sourcePois, overlays;
   var init = function(){
     url = window.location.hostname;
+    
     var streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       updateWhenIdle: false,
@@ -50,11 +51,14 @@ Congo.map_utils = function(){
     }) );
 
     baseMaps = {
-      //"Grayscale": grayscale,
+      "Grayscale": grayscale,
       "Streets": streets,
     };
+var overlays =  {
+      };
+    layerControl = L.control.layers(baseMaps, overlays, {position: 'topleft'}).addTo(map);
 
-    layerControl = L.control.layers(baseMaps, '', {position: 'topleft'}).addTo(map);
+
 
     $('#select_circle').on('click', function(event) {
       typeGeometry='circle';
@@ -208,6 +212,12 @@ Congo.map_utils = function(){
       //map.removeLayer(groupLayer);
     }
 
+    if (sourcePois !=undefined){
+      map.removeLayer(sourcePois);
+
+    }
+    map.removeControl(layerControl);
+    layerControl = L.control.layers(baseMaps, overlays, {position: 'topleft'}).addTo(map);
     layer_type = Congo.dashboards.config.layer_type;
 
     switch(layer_type) {
@@ -253,21 +263,23 @@ Congo.map_utils = function(){
         break;
     }
 
-
     typeGeometry = Congo.map_utils.typeGeometry;
     switch(typeGeometry) {
       case 'circle':
         centerpt = Congo.map_utils.centerpt;
         radius = Congo.map_utils.radius;
         cql_filter ="DWITHIN(the_geom,Point("+center+"),"+radius+",kilometers)"+ filter_layer;
+        cql_filter_pois ="DWITHIN(the_geom,Point("+center+"),"+radius+",kilometers)";
         break;
       case 'polygon':
         polygon_size = Congo.map_utils.size_box;
         cql_filter ="WITHIN(the_geom, Polygon(("+polygon_size+"))) "+ filter_layer;
+        cql_filter_pois ="WITHIN(the_geom, Polygon(("+polygon_size+"))) ";
         break;
       case 'point':
         county_id = Congo.dashboards.config.county_id;
         cql_filter = "county_id='"+ county_id + "'"+   filter_layer;
+        cql_filter_pois = "county_id='"+ county_id + "'";
         break;
       default:
         Congo.map_utils.centerpt = '';
@@ -275,6 +287,7 @@ Congo.map_utils = function(){
         Congo.map_utils.size_box = '';
         county_id = Congo.dashboards.config.county_id;
         cql_filter = "county_id='"+ county_id +"'"+ filter_layer;
+        cql_filter_pois = "county_id='"+ county_id + "'";
         break;
     }
 
@@ -282,6 +295,23 @@ Congo.map_utils = function(){
 
     style_layer = Congo.dashboards.config.style_layer;
     env = Congo.dashboards.config.env;
+    //POIS
+      var options_info = {
+        layers: "inciti_v2:pois_infos",//nombre de la capa (ver get capabilities)
+        format: 'image/png',
+        transparent: 'true',
+        opacity: 1,
+        version: '1.0.0',//wms version (ver get capabilities)
+        tiled: true,
+        styles: 'pois_info',
+        INFO_FORMAT: 'application/json',
+        format_options: 'callback:getJson',
+        CQL_FILTER: cql_filter_pois
+      };
+      sourcePois = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_info);
+
+    layerControl.addOverlay(sourcePois, "Puntos Interes");
+
     if(county_id != ''){
       var options = {
 
@@ -315,6 +345,7 @@ Congo.map_utils = function(){
       CQL_FILTER: cql_filter  };
     source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
     groupLayer.addLayer(source_layers);
+    layerControl.addOverlay(groupLayer, "Datos");
     groupLayer.addTo(map);
 
     var htmlLegend = L.control.htmllegend({
