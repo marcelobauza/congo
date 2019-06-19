@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_27_144635) do
+ActiveRecord::Schema.define(version: 2019_06_19_125841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -22,6 +22,15 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "agency_rols", force: :cascade do |t|
+    t.string "rol"
+    t.integer "project_id"
+    t.bigint "agency_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agency_id"], name: "index_agency_rols_on_agency_id"
   end
 
   create_table "building_regulation_land_use_types", force: :cascade do |t|
@@ -43,17 +52,89 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
     t.bigint "density_type_id"
     t.bigint "county_id"
     t.string "comments"
-    t.string "hectarea_inhabitants"
     t.string "grouping"
     t.string "parkings"
     t.integer "am_cc"
-    t.string "aminciti"
-    t.string "icinciti"
-    t.string "osinciti"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "icinciti"
+    t.decimal "osinciti"
+    t.decimal "aminciti"
+    t.decimal "hectarea_inhabitants"
     t.index ["county_id"], name: "index_building_regulations_on_county_id"
     t.index ["density_type_id"], name: "index_building_regulations_on_density_type_id"
+  end
+
+  create_table "census", force: :cascade do |t|
+    t.integer "age_0_9"
+    t.integer "age_10_19"
+    t.integer "age_20_29"
+    t.integer "age_30_39"
+    t.integer "age_40_49"
+    t.integer "age_50_59"
+    t.integer "age_60_69"
+    t.integer "age_70_79"
+    t.integer "age_80_more"
+    t.integer "home_1p"
+    t.integer "home_2p"
+    t.integer "home_3p"
+    t.integer "home_4p"
+    t.integer "home_5p"
+    t.integer "owner"
+    t.integer "leased"
+    t.integer "transferred"
+    t.integer "free"
+    t.integer "possession"
+    t.integer "male"
+    t.integer "female"
+    t.integer "married"
+    t.integer "coexist"
+    t.integer "single"
+    t.integer "canceled"
+    t.integer "separated"
+    t.integer "widowed"
+    t.integer "m_status_total"
+    t.integer "not_attended"
+    t.integer "basic"
+    t.integer "high_school"
+    t.integer "cft"
+    t.integer "ip"
+    t.integer "university"
+    t.integer "education_level_total"
+    t.integer "salaried"
+    t.integer "domestic_service"
+    t.integer "independient"
+    t.integer "employee_employer"
+    t.integer "unpaid_familiar"
+    t.integer "labor_total"
+    t.integer "abc1"
+    t.integer "c2"
+    t.integer "c3"
+    t.integer "d"
+    t.integer "e"
+    t.integer "socio_economic_total"
+    t.integer "homes_abc1"
+    t.integer "homes_c2"
+    t.integer "homes_c3"
+    t.integer "homes_d"
+    t.integer "homes_e"
+    t.integer "predominant"
+    t.bigint "census_source_id"
+    t.bigint "county_id"
+    t.decimal "block"
+    t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
+    t.integer "homes_total"
+    t.integer "population_total"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["census_source_id"], name: "index_census_on_census_source_id"
+    t.index ["county_id"], name: "index_census_on_county_id"
+  end
+
+  create_table "census_sources", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "counties", id: :integer, default: nil, force: :cascade do |t|
@@ -190,6 +271,21 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "poi_subcategories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pois", force: :cascade do |t|
+    t.string "name"
+    t.bigint "poi_subcategory_id"
+    t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["poi_subcategory_id"], name: "index_pois_on_poi_subcategory_id"
+  end
+
   create_table "project_instance_mixes", force: :cascade do |t|
     t.bigint "project_instance_id"
     t.bigint "mix_id"
@@ -296,59 +392,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "transactions", id: :serial, force: :cascade do |t|
-    t.integer "property_type_id"
-    t.string "address", limit: 255
-    t.integer "sheet"
-    t.integer "number"
-    t.date "inscription_date"
-    t.string "buyer_name", limit: 255
-    t.integer "seller_type_id"
-    t.string "department", limit: 255
-    t.string "blueprint", limit: 255
-    t.decimal "real_value"
-    t.decimal "calculated_value"
-    t.integer "quarter"
-    t.integer "year"
-    t.decimal "sample_factor", default: "1.0"
-    t.integer "county_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.geometry "the_geom", limit: {:srid=>4326, :type=>"st_point"}
-    t.integer "cellar", default: 0
-    t.integer "parking", default: 0
-    t.string "role", limit: 255
-    t.string "seller_name", limit: 255
-    t.string "buyer_rut", limit: 255
-    t.decimal "uf_m2"
-    t.integer "tome"
-    t.string "lot", limit: 255
-    t.string "block", limit: 255
-    t.string "village", limit: 255
-    t.decimal "surface"
-    t.string "requiring_entity", limit: 255
-    t.text "comments"
-    t.integer "user_id"
-    t.integer "surveyor_id"
-    t.boolean "active", default: true
-    t.integer "bimester"
-    t.integer "code_sii"
-    t.decimal "total_surface_building", precision: 8, scale: 2
-    t.decimal "total_surface_terrain", precision: 8, scale: 2
-    t.decimal "uf_m2_u", precision: 8, scale: 2
-    t.decimal "uf_m2_t", precision: 8, scale: 2
-    t.string "building_regulation", limit: 250
-    t.string "role_1", limit: 255
-    t.string "role_2", limit: 255
-    t.text "code_destination"
-    t.text "code_material"
-    t.text "year_sii"
-    t.string "role_associated"
-    t.index ["property_type_id", "seller_type_id", "user_id"], name: "idx_transaction", order: "NULLS FIRST"
-    t.index ["role"], name: "rol_number", order: "NULLS FIRST"
-  end
-
-  create_table "transactions_new", id: :bigint, default: -> { "nextval('transactions_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "transactions", id: :bigint, default: nil, force: :cascade do |t|
     t.bigint "property_type_id"
     t.string "address"
     t.integer "sheet"
@@ -361,10 +405,9 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
     t.decimal "uf_value"
     t.decimal "real_value"
     t.decimal "calculated_value"
-    t.date "quarter"
     t.date "quarter_date"
     t.integer "year"
-    t.decimal "sample_factor", precision: 8, scale: 2
+    t.decimal "sample_factor", precision: 12, scale: 2
     t.bigint "county_id"
     t.geometry "the_geom", limit: {:srid=>4326, :type=>"st_point"}
     t.integer "cellar", default: 0
@@ -377,7 +420,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
     t.string "lot"
     t.string "block"
     t.string "village"
-    t.decimal "surface", precision: 8, scale: 2
+    t.decimal "surface", precision: 12, scale: 2
     t.string "requiring_entity"
     t.string "comments"
     t.bigint "user_id"
@@ -385,10 +428,10 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
     t.boolean "active", default: true
     t.integer "bimester"
     t.integer "code_sii"
-    t.decimal "total_surface_building", precision: 8, scale: 2
-    t.decimal "total_surface_terrain", precision: 8, scale: 2
-    t.decimal "uf_m2_u", precision: 8, scale: 2
-    t.decimal "uf_m2_t", precision: 8, scale: 2
+    t.decimal "total_surface_building", precision: 12, scale: 2
+    t.decimal "total_surface_terrain", precision: 12, scale: 2
+    t.decimal "uf_m2_u", precision: 12, scale: 2
+    t.decimal "uf_m2_t", precision: 12, scale: 2
     t.string "building_regulation"
     t.string "role_1"
     t.string "role_2"
@@ -398,6 +441,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
     t.string "role_associated"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "quarter"
     t.index ["county_id"], name: "index_transactions_on_county_id"
     t.index ["property_type_id"], name: "index_transactions_on_property_type_id"
     t.index ["seller_type_id"], name: "index_transactions_on_seller_type_id"
@@ -436,85 +480,20 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
-  add_foreign_key "building_regulation_land_use_types", "building_regulations"
-  add_foreign_key "building_regulation_land_use_types", "land_use_types"
+  add_foreign_key "agency_rols", "agencies"
   add_foreign_key "building_regulations", "counties"
   add_foreign_key "building_regulations", "density_types"
+  add_foreign_key "census", "census_sources"
+  add_foreign_key "census", "counties"
   add_foreign_key "county_ufs", "counties"
   add_foreign_key "county_ufs", "property_types"
   add_foreign_key "future_projects", "counties"
   add_foreign_key "future_projects", "future_project_types"
   add_foreign_key "future_projects", "project_types"
   add_foreign_key "import_processes", "users"
-  add_foreign_key "project_instance_mixes", "project_instances"
+  add_foreign_key "pois", "poi_subcategories"
   add_foreign_key "project_instances", "project_statuses"
-  add_foreign_key "project_instances", "projects"
 
-  create_function :masud, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.masud(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      DECLARE m int;
-      BEGIN
-        m = months2(cadastre, sale_date);
-        RETURN ( SELECT CASE (total_units - stock_units) WHEN 0 THEN 0 
-        ELSE CASE m WHEN 0 THEN null
-        ELSE (stock_units / ((total_units - stock_units)::double precision /m)) END
-                                                      END) as masud;
-
-                                                  END;
-                                                  $function$
-  SQL
-  create_function :months2, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.months2(cadastre character varying, sale_date character varying)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-        
-      	RETURN (select (date_part('year', to_date(cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(sale_date, 'DD/MM/YYYY'))) * 12 +
-      (date_part('month', to_date(cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(sale_date, 'DD/MM/YYYY'))));
-
-      END;
-      $function$
-  SQL
-  create_function :pp_utiles, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.pp_utiles(proj_instance_id bigint)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      declare disp int;
-      BEGIN
-        disp = (select sum(pim.stock_units)
-          from project_instance_mixes pim
-          where pim.project_instance_id = proj_instance_id);
-
-        if (disp = 0) then
-          return 0;
-        else
-          RETURN (select sum(pim.mix_usable_square_meters * pim.stock_units)/disp::int 
-            as pp_utiles
-            from project_instance_mixes pim
-            where pim.project_instance_id = proj_instance_id);
-        end if;
-                                          END;
-                                          $function$
-  SQL
-  create_function :vhmu, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.vhmu(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      DECLARE m int;
-      BEGIN
-
-        m = months2(cadastre, sale_date);
-        RETURN (  SELECT CASE m WHEN 0 THEN 1
-        ELSE (total_units - stock_units) / m::numeric END) as vhmu;
-        END;
-      $function$
-  SQL
   create_function :cleangeometry, sql_definition: <<-SQL
       CREATE OR REPLACE FUNCTION public.cleangeometry(geometry)
        RETURNS geometry
@@ -552,16 +531,188 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
           END IF;
           End;$function$
   SQL
+  create_function :cleangeometry1, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.cleangeometry1(geometry)
+       RETURNS geometry
+       LANGUAGE plpgsql
+      AS $function$DECLARE
+        inGeom ALIAS for $1;
+        outGeom geometry;
+        tmpLinestring geometry;
+
+      Begin
+
+        outGeom := NULL;
+
+        IF (GeometryType(inGeom) = 'POLYGON' OR GeometryType(inGeom) = 'MULTIPOLYGON') THEN
+          if not isValid(inGeom) THEN
+            tmpLinestring := st_union(st_multi(st_boundary(inGeom)),st_pointn(boundary(inGeom),1));
+            outGeom = buildarea(tmpLinestring);
+            IF (GeometryType(inGeom) = 'MULTIPOLYGON') THEN
+              RETURN st_multi(outGeom);
+            ELSE
+              RETURN outGeom;
+            END IF;
+          else
+            RETURN inGeom;
+          END IF;
+        ELSIF (GeometryType(inGeom) = 'LINESTRING') THEN
+          outGeom := st_union(st_multi(inGeom),st_pointn(inGeom,1));
+          RETURN outGeom;
+        ELSIF (GeometryType(inGeom) = 'MULTILINESTRING') THEN
+          outGeom := multi(st_union(st_multi(inGeom),st_pointn(inGeom,1)));
+          RETURN outGeom;
+        ELSE
+          RAISE NOTICE 'The input type % is not supported',GeometryType(inGeom);
+          RETURN inGeom;
+        END IF;
+      End;$function$
+  SQL
+  create_function :masud, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.masud(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      DECLARE m int;
+      BEGIN
+        m = months2(cadastre, sale_date);
+        RETURN ( SELECT CASE (total_units - stock_units) WHEN 0 THEN 0 
+        ELSE CASE m WHEN 0 THEN null
+        ELSE (stock_units / ((total_units - stock_units)::double precision /m)) END
+                                                      END) as masud;
+
+                                                  END;
+                                                  $function$
+  SQL
+  create_function :months, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.months(proj_instance_id integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+        BEGIN
+            
+            RETURN (select (date_part('year', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(p.sale_date, 'DD/MM/YYYY'))) * 12 +
+              (date_part('month', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(p.sale_date, 'DD/MM/YYYY')))
+              from project_instances pi inner join projects p
+              on pi.project_id = p.id where pi.id = proj_instance_id) as months;
+
+          END;
+          $function$
+  SQL
+  create_function :months2, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.months2(cadastre character varying, sale_date character varying)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+        
+      	RETURN (select (date_part('year', to_date(cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(sale_date, 'DD/MM/YYYY'))) * 12 +
+      (date_part('month', to_date(cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(sale_date, 'DD/MM/YYYY'))));
+
+      END;
+      $function$
+  SQL
+  create_function :pp_uf, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_uf(proj_instance_id integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      declare t_m2 real;
+      BEGIN
+        t_m2 = (select sum(total_m2) from project_instance_mix_views
+          where project_instance_id = proj_instance_id);
+
+        if (t_m2 = 0) then
+          return 0;
+        else
+          RETURN (select (sum(total_m2 * uf_avg_percent)/t_m2)
+            as pp_uf
+            from project_instance_mix_views
+            where project_instance_id = proj_instance_id);
+        end if;
+                                            END;
+                                            $function$
+  SQL
+  create_function :pp_utiles, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_utiles(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      declare disp int;
+      BEGIN
+        disp = (select sum(pim.stock_units)
+          from project_instance_mixes pim
+          where pim.project_instance_id = proj_instance_id);
+
+        if (disp = 0) then
+          return 0;
+        else
+          RETURN (select sum(pim.mix_usable_square_meters * pim.stock_units)/disp::int 
+            as pp_utiles
+            from project_instance_mixes pim
+            where pim.project_instance_id = proj_instance_id);
+        end if;
+                                          END;
+                                          $function$
+  SQL
+  create_function :vhmu, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.vhmu(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      DECLARE m int;
+      BEGIN
+
+        m = months2(cadastre, sale_date);
+        RETURN (  SELECT CASE m WHEN 0 THEN 1
+        ELSE (total_units - stock_units) / m::numeric END) as vhmu;
+        END;
+      $function$
+  SQL
 
   create_trigger :layer_integrity_checks, sql_definition: <<-SQL
       CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE PROCEDURE topology.layertrigger()
   SQL
 
+  create_view "building_regulations_info", sql_definition: <<-SQL
+      SELECT building_regulations.id,
+      building_regulations.building_zone,
+      ( SELECT array_to_string(array_agg(land_use_types.abbreviation), ','::text) AS array_to_string
+             FROM (building_regulation_land_use_types
+               JOIN land_use_types ON ((building_regulation_land_use_types.land_use_type_id = land_use_types.id)))
+            WHERE (building_regulation_land_use_types.building_regulation_id = building_regulations.id)) AS land_use,
+      building_regulations.the_geom,
+      round(building_regulations.construct, 1) AS construct,
+      round(building_regulations.land_ocupation, 1) AS land_ocupation,
+      building_regulations.hectarea_inhabitants AS max_density,
+      building_regulations."grouping",
+      building_regulations.site,
+      building_regulations.comments,
+      building_regulations.aminciti AS am_cc,
+      building_regulations.parkings,
+      building_regulations.updated_at,
+      building_regulations.county_id,
+      density_types.color
+     FROM (building_regulations
+       JOIN density_types ON ((building_regulations.density_type_id = density_types.id)))
+    ORDER BY building_regulations.updated_at DESC;
+  SQL
   create_view "counties_info", sql_definition: <<-SQL
       SELECT counties.id,
       counties.name,
       counties.the_geom
      FROM counties;
+  SQL
+  create_view "demography", sql_definition: <<-SQL
+      SELECT st_voronoipolygons(st_collect(census.the_geom)) AS voronoi_geom,
+      census.abc1,
+      census.c2,
+      census.c3,
+      census.d,
+      census.e,
+      census.census_source_id
+     FROM census
+    GROUP BY census.abc1, census.c2, census.c3, census.d, census.e, census.census_source_id;
   SQL
   create_view "future_projects_info", sql_definition: <<-SQL
       SELECT future_projects.id,
@@ -594,8 +745,26 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
       future_projects.the_geom,
       future_projects.t_ofi,
       future_projects.created_at,
-      future_projects.updated_at
-     FROM future_projects;
+      future_projects.updated_at,
+      future_project_types.color AS marker_color
+     FROM (future_projects
+       JOIN future_project_types ON ((future_projects.future_project_type_id = future_project_types.id)));
+  SQL
+  create_view "future_projects_voronoi", sql_definition: <<-SQL
+      SELECT st_intersection(voronoi.geom, ( SELECT counties.the_geom
+             FROM counties
+            WHERE (counties.id = 50))) AS inters,
+      future_projects.bimester,
+      future_projects.county_id,
+      future_projects.year
+     FROM ( SELECT (st_dump(st_voronoipolygons(st_collect(future_projects_1.the_geom), (0)::double precision, ( SELECT counties.the_geom
+                     FROM counties
+                    WHERE (counties.id = 50))))).geom AS geom
+             FROM future_projects future_projects_1
+            WHERE (future_projects_1.county_id = 50)) voronoi,
+      future_projects
+    WHERE (st_within(future_projects.the_geom, voronoi.geom) AND (future_projects.county_id = 50) AND (future_projects.bimester = ANY (ARRAY[2, 3, 6])) AND (future_projects.year = 2018))
+    GROUP BY voronoi.geom, future_projects.bimester, future_projects.year, future_projects.county_id;
   SQL
   create_view "project_instance_mix_views", sql_definition: <<-SQL
       SELECT pim.project_instance_id,
@@ -776,7 +945,6 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
       transactions.updated_at,
       transactions.the_geom,
       transactions.cellar,
-      transactions.parking,
       transactions.role,
       transactions.seller_name,
       transactions.buyer_rut,
@@ -805,28 +973,5 @@ ActiveRecord::Schema.define(version: 2019_05_27_144635) do
       transactions.year_sii,
       transactions.role_associated
      FROM transactions;
-  SQL
-  create_view "building_regulations_info", sql_definition: <<-SQL
-      SELECT building_regulations.id,
-      building_regulations.building_zone,
-      ( SELECT array_to_string(array_agg(land_use_types.abbreviation), ','::text) AS array_to_string
-             FROM (building_regulation_land_use_types
-               JOIN land_use_types ON ((building_regulation_land_use_types.land_use_type_id = land_use_types.id)))
-            WHERE (building_regulation_land_use_types.building_regulation_id = building_regulations.id)) AS land_use,
-      building_regulations.the_geom,
-      round(building_regulations.construct, 1) AS construct,
-      round(building_regulations.land_ocupation, 1) AS land_ocupation,
-      building_regulations.hectarea_inhabitants AS max_density,
-      building_regulations."grouping",
-      building_regulations.site,
-      building_regulations.comments,
-      building_regulations.aminciti AS am_cc,
-      building_regulations.parkings,
-      building_regulations.updated_at,
-      building_regulations.county_id,
-      density_types.color
-     FROM (building_regulations
-       JOIN density_types ON ((building_regulations.density_type_id = density_types.id)))
-    ORDER BY building_regulations.updated_at DESC;
   SQL
 end
