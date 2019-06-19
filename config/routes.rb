@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :pois
+  resources :poi_subcategories
   get 'dashboards/index'
   get 'dashboards/graduated_points'
   get 'dashboards/filter_county_for_lon_lat'

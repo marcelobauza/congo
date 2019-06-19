@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @poi.name %>
+</p>
+
+<p>
+  <strong>Poi subcategory:</strong>
+  <%= @poi.poi_subcategory %>
+</p>
+
+<p>
+  <strong>The geom:</strong>
+  <%= @poi.the_geom %>
+</p>
+
+<%= link_to 'Edit', edit_poi_path(@poi) %> |
+<%= link_to 'Back', pois_path %>
