@@ -16,6 +16,43 @@ Congo.projects.config= {
   project_agency_ids: []
 }
 
+function addInmoFilter(id, name) {
+
+  Congo.projects.config.project_agency_ids.push(id);
+
+  $('#filter-body').append(
+    $('<div>', {
+        'class': 'filter-projects text-white bg-secondary px-2 mb-1 py-1 rounded',
+        'id': 'item-inmo-'+id,
+        'text': 'Inmobiliaria: '+name
+    }).append(
+      $('<button>', {
+          'type': 'button',
+          'class': 'close',
+          'id': 'close-inmo-'+id,
+          'text': '×',
+          'onclick': 'delInmoFilter('+id+', "'+name+'")'
+      })
+    )
+  );
+  indicator_projects();
+};
+
+function delInmoFilter(id, name) {
+
+  var active_inmo = Congo.projects.config.project_agency_ids;
+
+  var inmo_updated = $.grep(active_inmo, function(n, i) {
+    return n != id;
+  });
+
+  Congo.projects.config.project_agency_ids = inmo_updated;
+
+  $('#item-inmo-'+id).remove();
+  indicator_projects();
+
+}
+
 Congo.projects.action_dashboards = function(){
 
   init=function(){
@@ -184,7 +221,7 @@ Congo.projects.action_dashboards = function(){
             })
 
           // Gráficos
-          } else {
+          } else if (title != "Inmobiliarias") {
 
             var datasets = [];
 
@@ -764,6 +801,33 @@ Congo.projects.action_dashboards = function(){
             var chart_canvas = document.getElementById('canvas'+i).getContext('2d');
             var final_chart = new Chart(chart_canvas, chart_settings);
 
+          // Inmobiliarias
+          } else if (title == "Inmobiliarias") {
+
+            console.log('Entra a Inmobiliarias');
+
+            $('#body'+i).addClass('card-inmobiliarias');
+
+            $("<div>", {
+                'class': 'list-group'
+            }).appendTo('#body'+i)
+
+            var info = reg['data'];
+
+            // Extraemos los datos y los adjuntamos al div contenedor
+            $.each(info, function(y, z){
+              name = z['name'];
+              id = z['id']
+
+              $("<button>", {
+                  'type': 'button',
+                  'id': 'inmo-'+id,
+                  'onclick': 'addInmoFilter('+id+', "'+name+'")',
+                  'class': 'list-group-item list-group-item-action',
+                  'text': name
+              }).appendTo('.list-group')
+
+            }) // Cierra each
           } // Cierra if
         } // Cierra for
 

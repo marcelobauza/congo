@@ -186,7 +186,7 @@ class ProjectsController < ApplicationController
       agencies.each do |agency|
         data.push("name": agency.name, "id":agency.id)
       end
-    result.push({"title": "Agencias por proyectos", "data":data})
+    result.push({"title": "Inmobiliarias", "data":data})
 
 
     rescue
