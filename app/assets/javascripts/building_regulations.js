@@ -84,6 +84,52 @@ Congo.building_regulations.action_dashboards = function(){
       success: function(data){
       console.log(data);
 
+        // Ocultamos el spinner
+        $("#spinner").hide();
+
+        // Comprobamos si el overlay no está creado y adjuntado
+        if ($('.overlay').length == 0) {
+
+          // Creamos y adjuntamos el overlay
+          var overlay = document.createElement('div');
+          overlay.className = 'overlay';
+          $('#map').before(overlay);
+
+        };
+
+        console.log(data);
+
+        // Creamos el div contenedor
+        var chart_container = document.createElement('div');
+        chart_container.className = 'chart-container card';
+        chart_container.id = 'chart-container';
+
+        // Creamos el card-header
+        var card_header = document.createElement('div');
+        card_header.className = 'card-header';
+        card_header.id = 'header';
+
+        // Creamos el collapse
+        var collapse = document.createElement('div');
+        collapse.className = 'collapse show';
+        collapse.id = 'collapse';
+
+        // Creamos el card-body
+        var card_body = document.createElement('div');
+        card_body.className = 'card-body';
+        card_body.id = 'body';
+
+        // TODO: Crear título y boton minimizar dinámicos
+
+        // Creamos título y boton minimizar
+        var card_header_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse" aria-expanded="true" aria-controls="collapse" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
+        var card_header_title = '<b>Filtrar Información por:</b>'
+
+        // Adjuntamos los elementos
+        $('.overlay').append(chart_container);
+        $('#chart-container').append(card_header, collapse);
+        $('#collapse').append(card_body);
+        $('#header').append(card_header_button, card_header_title);
 
       }
     })
