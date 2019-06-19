@@ -3,7 +3,12 @@ Congo.namespace('building_regulations.action_dashboards');
 Congo.building_regulations.config= {
   county_name: '',
   county_id: '',
-  layer_type: 'building_regulations_info'
+  layer_type: 'building_regulations_info',
+  from_construct: [],
+  to_construct: [],
+  from_land_ocupation: [],
+  to_land_ocupation: [],
+  allowed_use_ids: []
 }
 
 Congo.building_regulations.action_dashboards = function(){
@@ -14,25 +19,44 @@ Congo.building_regulations.action_dashboards = function(){
 
   }
 
-
   indicator_building_regulations = function(){
-  
+
     county_id = Congo.dashboards.config.county_id;
     radius = Congo.map_utils.radius * 1000;
     centerPoint = Congo.map_utils.centerpt;
     wkt = Congo.map_utils.size_box;
-    
+    from_construct = Congo.building_regulations.config.from_construct;
+    to_construct = Congo.building_regulations.config.to_construct;
+    from_land_ocupation = Congo.building_regulations.config.from_land_ocupation;
+    to_land_ocupation = Congo.building_regulations.config.to_land_ocupation;
+    allowed_use_ids = Congo.building_regulations.config.allowed_use_ids;
+
     if (county_id != '') {
       data = {
+        from_construct: from_construct,
+        to_construct: to_construct,
+        from_land_ocupation: from_land_ocupation,
+        to_land_ocupation: to_land_ocupation,
+        allowed_use_ids: allowed_use_ids,
         county_id: county_id
       };
     } else if (centerPoint != '') {
       data = {
+        from_construct: from_construct,
+        to_construct: to_construct,
+        from_land_ocupation: from_land_ocupation,
+        to_land_ocupation: to_land_ocupation,
+        allowed_use_ids: allowed_use_ids,
         centerpt: centerPoint,
         radius: radius
       };
     } else {
       data = {
+        from_construct: from_construct,
+        to_construct: to_construct,
+        from_land_ocupation: from_land_ocupation,
+        to_land_ocupation: to_land_ocupation,
+        allowed_use_ids: allowed_use_ids,
         wkt: wkt
       };
     };
