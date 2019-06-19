@@ -806,10 +806,8 @@ Congo.projects.action_dashboards = function(){
 
             console.log('Entra a Inmobiliarias');
 
-            $('#body'+i).addClass('card-inmobiliarias');
-
             $("<div>", {
-                'class': 'list-group'
+                'class': 'list-group border'
             }).appendTo('#body'+i)
 
             var info = reg['data'];
