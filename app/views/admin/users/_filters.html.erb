@@ -1,0 +1,21 @@
+<%= form_tag admin_users_path, method: :get do %>
+
+<div class="row">
+  <div class="col-md-4">
+    <span class="label success"><%= t('activerecord.attributes.user.role')%></span>
+    	<%= select("user", :role_id, roles_for_select, { :include_blank => true }) %>
+  </div>
+  <div class="col-md-4">
+    <span class="label success"> E-Mail</span>
+    <%= text_field("user", :email, :class => "lower-case") %>
+  </div>
+  <div class="col-md-4">
+    <span class="label success">Nombre</span>
+    <%= text_field("user", :complete_name) %>
+  </div>
+
+	<div class="span2">
+  	<%= submit_tag t('menu.transaction.search'), :class => "btn success" %>
+	</div>
+</div>
+<% end %>

@@ -1,5 +1,6 @@
+<%= render :partial => 'filters' %>
 <div class="span">
-  <table class="bordered-table zebra-striped">
+  <table class="table bordered-table zebra-striped">
     <thead>
       <tr>
         <th><%= User.human_attribute_name :name %></th>
@@ -25,12 +26,12 @@
           <td><%=h user.role_id unless user.role_id.nil? %></td>
           <td>
             <div class="ui-state-default ui-corner-all" title="<%= t 'actions.edit' %>">
-              <%= link_to "", edit_user_path(user), :class => "ui-icon ui-icon-pencil" %>
+              <%= link_to "", edit_admin_user_path(user), :class => "ui-icon ui-icon-pencil" %>
             </div>
           </td>
           <td>
             <div class="ui-state-default ui-corner-all" title="<%= t 'actions.delete' %>">
-              <%= link_to "", user_path(user), :confirm => t('questions.are_you_sure'), :method => :delete, :class => "ui-icon ui-icon-trash" %>
+              <%= link_to "", admin_user_path(user), :confirm => t('questions.are_you_sure'), :method => :delete, :class => "ui-icon ui-icon-trash" %>
             </div>
           </td>
         </tr>

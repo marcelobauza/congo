@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     resources :projects
     resources :project_mixes
     resources :roles
+    resources :users 
     get 'dashboards/index'
   root 'dashboards#index'
   end
@@ -55,7 +56,7 @@ Rails.application.routes.draw do
   resources :project_types
   resources :seller_types
   devise_for :users
-  resources :users 
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'dashboards#index'
 end

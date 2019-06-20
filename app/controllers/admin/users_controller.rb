@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Admin::UsersController < ApplicationController
   
   layout 'admin'
   before_action :set_user, only: [:show, :edit, :update, :destroy]
@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all.paginate(:page => params[:page], :per_page => 15)
+    @users = User.get_users_by_filters(params).paginate(:page => params[:page], :per_page => 15)
   end
 
   # GET /users/1
