@@ -1,3 +1,4 @@
+Congo.namespace('future_projects.action_heatmap');
 Congo.namespace('future_projects.action_graduated_points');
 Congo.namespace('future_projects.action_dashboards');
 
@@ -10,6 +11,18 @@ Congo.future_projects.config = {
   periods: [],
   years: []
 }
+
+Congo.future_projects.action_heatmap = function(){
+
+  init=function(){
+
+        Congo.dashboards.config.style_layer= 'heatmap_test_future_projects';
+        Congo.map_utils.counties();
+  }
+  return {
+    init: init,
+  }
+}();
 
 Congo.future_projects.action_graduated_points = function(){
 

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :poi_subcategories
   get 'dashboards/index'
   get 'dashboards/graduated_points'
+  get 'dashboards/heatmap'
   get 'dashboards/filter_county_for_lon_lat'
   get 'dashboards/filter_period'
   get 'counties/find' => 'counties#find'

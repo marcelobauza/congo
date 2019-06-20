@@ -5,6 +5,8 @@ class DashboardsController < ApplicationController
   def graduated_points
   end
 
+  def heatmap
+  end
   
   def filter_county_for_lon_lat
     @county= County.find_by_lon_lat(params[:lon], params[:lat])

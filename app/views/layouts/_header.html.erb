@@ -55,7 +55,7 @@
       </button>
       <div class="dropdown-menu dropdown-menu-navbar1" aria-labelledby="navbarDropdown">
         <%= link_to dashboards_graduated_points_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %><i class="fas fa-braille" title="Puntos Proporcionales" style="font-size: 26px"></i><% end %>
-        <a class="dropdown-item dropdown-item-navbar1" href="#"><i class="fas fa-fire" title="Heatmap" style="font-size: 26px"></i></a>
+        <%= link_to dashboards_heatmap_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %><i class="fas fa-fire" title="Heatmap" style="font-size: 26px"></i><% end %>
         <a class="dropdown-item dropdown-item-navbar1" href="#"><i class="fas fa-dot-circle" title="Isolíneas" style="font-size: 26px"></i></a>
       </div>
     </div>
