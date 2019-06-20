@@ -5,7 +5,7 @@ Congo.dashboards.config= {
   county_name: '',
   county_id: '',
   layer_type: 'future_projects_info',
-  style_layer: 'poi_new',
+  style_layer: 'future_projects_normal_point',
   bimester: '',
   year: '',
   env: '',
