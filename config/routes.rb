@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     resources :project_instances
     resources :projects
     resources :project_mixes
+    resources :roles
     get 'dashboards/index'
   root 'dashboards#index'
   end
