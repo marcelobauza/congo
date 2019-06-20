@@ -14,9 +14,6 @@ class FutureProjectsController < ApplicationController
 
   def future_projects_summary
     session[:data] = params
-
-    #file_path = Xls.generate [result], "/xls", {:file_name => "#{Time.now.strftime("%Y-%m-%d_%H.%M")}_expedientes", :clean_directory_path => true}
-    #send_file file_path, :type => "application/excel"
     @result = FutureProject.summary(params)
     return @result
   end
