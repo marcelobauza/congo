@@ -16,8 +16,21 @@ Congo.dashboards.action_index = function(){
   init= function(){
     Congo.map_utils.init();
   }
+
+  // Creamos el overlay
+  create_overlay = function(){
+    if ($('.overlay').length == 0) {
+      $('#map').before(
+        $('<div>', {
+            'class': 'overlay'
+        })
+      );
+    };
+  };
+
   return {
     init: init,
+    create_overlay: create_overlay
   }
 }();
 

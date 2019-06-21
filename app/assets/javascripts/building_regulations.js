@@ -123,16 +123,6 @@ Congo.building_regulations.action_dashboards = function(){
         // Ocultamos el spinner
         $("#spinner").hide();
 
-        // Comprobamos si el overlay no está creado y adjuntado
-        if ($('.overlay').length == 0) {
-
-          // Creamos y adjuntamos el overlay
-          var overlay = document.createElement('div');
-          overlay.className = 'overlay';
-          $('#map').before(overlay);
-
-        };
-
         // Creamos el div contenedor
         var chart_container = document.createElement('div');
         chart_container.className = 'chart-container card';
