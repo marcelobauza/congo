@@ -14,6 +14,16 @@ Congo.dashboards.config= {
 
 Congo.dashboards.action_index = function(){
   init= function(){
+        $.ajax({
+          async: false,
+          type: 'GET',
+          url: '/dashboards/filter_period.json',
+          datatype: 'json',
+          success: function(data){
+            Congo.dashboards.config.year = data['year'];
+            Congo.dashboards.config.bimester = data['bimester'];
+          }
+        });
     Congo.map_utils.init();
   }
 
