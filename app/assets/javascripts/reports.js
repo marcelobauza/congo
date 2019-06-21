@@ -26,6 +26,17 @@ Congo.reports = function(){
           break;
       }
       break;
+    case 'projects_feature_info':
+      switch(kind_reports){
+        case 'graph':
+          url = '/reports/projects_data.xlsx';
+          break;
+        case 'base':
+          url = '/reports/projects_summary.xlsx';
+          break;
+      }
+      break;
+
 
     default:
 
