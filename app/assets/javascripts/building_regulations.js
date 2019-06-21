@@ -128,10 +128,97 @@ Congo.building_regulations.action_dashboards = function(){
         $('#collapse').append(card_body);
         $('#header').append(card_header_button, card_header_title);
 
-      }
-    })
+        // Separamos la información
+        for (var i = 0; i < data.length; i++) {
 
-  }
+          var reg = data[i];
+          var label = reg['label'];
+
+          if (label == "Coeficiente de Constructibilidad") {
+
+            var min = reg['min'];
+            var max = reg['max'];
+            var to;
+            var from;
+
+            // Levantamos los valores de "to" y "from"
+            if (Congo.building_regulations.config.to_construct == '') {
+              to = max
+            } else {
+              to = Congo.building_regulations.config.to_construct
+            };
+            from = Congo.building_regulations.config.from_construct;
+
+            // Agrega el título y el range_slider
+            $('#body').append(
+              $("<b>", {
+                  'text': label
+              }),
+              $("<input>", {
+                'id': 'range_slider_coef_const'
+              })
+            );
+
+            $("#range_slider_coef_const").ionRangeSlider({
+              skin: "flat",
+              type: 'double',
+              grid: true,
+              min: min,
+              max: max,
+              step: 0.1,
+              from: from,
+              to: to,
+              onFinish: function (data) {
+
+                // Almacena los datos en la variable global
+                Congo.building_regulations.config.from_construct = data.from;
+                Congo.building_regulations.config.to_construct = data.to;
+
+                // Si no existe el filtro, lo crea
+                if ($('#item-construct').length == 0) {
+
+                  $('#filter-body').append(
+                    $("<div>", {
+                        'class': 'filter-building-regulations text-white bg-secondary px-2 mb-1 py-1 rounded',
+                        'id': 'item-construct',
+                        'text': 'Coeficiente de Constructibilidad >= '+data.from+' <= '+data.to
+                    })
+                  );
+
+                // Si existe el filtro, solo modifica el texto
+                } else {
+                  $('#item-construct').text('Coeficiente de Constructibilidad >= '+data.from+' <= '+data.to);
+                };
+
+                // Agrega el close button
+                $('#item-construct').append(
+                  $("<button>", {
+                      'class': 'close',
+                      'id': 'close-item-construct',
+                      'type': 'button',
+                      'text': '×'
+                  })
+                )
+                indicator_building_regulations();
+
+              }, // Cierra onFinish
+            }); // Cierra ionRangeSlider
+
+            // Elimina el filtro
+            $('#close-item-construct').click(function() {
+              Congo.building_regulations.config.from_construct = '';
+              Congo.building_regulations.config.to_construct = '';
+              $('#item-construct').remove();
+              indicator_building_regulations();
+            });
+
+          } // Cierra if Coeficiente de Constructibilidad
+
+        } // Cierra for
+      } // Cierra success
+    }) // Cierra ajax
+  } // Cierra indicator_building_regulations
+
   return {
     init: init,
     indicator_building_regulations: indicator_building_regulations
