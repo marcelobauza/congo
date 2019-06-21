@@ -11,6 +11,43 @@ Congo.building_regulations.config= {
   allowed_use_ids: []
 }
 
+function addUsoFilter(id, name) {
+
+  Congo.building_regulations.config.allowed_use_ids.push(id);
+
+  $('#filter-body').append(
+    $('<div>', {
+        'class': 'filter-building-regulations text-white bg-secondary px-2 mb-1 py-1 rounded',
+        'id': 'item-uso-'+id,
+        'text': 'Uso Permitido: '+name
+    }).append(
+      $('<button>', {
+          'type': 'button',
+          'class': 'close',
+          'id': 'close-uso-'+id,
+          'text': '×',
+          'onclick': 'delUsoFilter('+id+', "'+name+'")'
+      })
+    )
+  );
+  indicator_building_regulations();
+};
+
+function delUsoFilter(id, name) {
+
+  var active_uso = Congo.building_regulations.config.allowed_use_ids;
+
+  var uso_updated = $.grep(active_uso, function(n, i) {
+    return n != id;
+  });
+
+  Congo.building_regulations.config.allowed_use_ids = uso_updated;
+
+  $('#item-uso-'+id).remove();
+  indicator_building_regulations();
+
+}
+
 Congo.building_regulations.action_dashboards = function(){
 
   init=function(){
@@ -133,6 +170,39 @@ Congo.building_regulations.action_dashboards = function(){
 
           var reg = data[i];
           var label = reg['label'];
+
+          if (label == "Uso Permitido") {
+
+            var info = reg['data'];
+
+            // Agrega el título y el list_group
+            $('#body').append(
+              $("<b>", {
+                  'text': label
+              }),
+              $("<div>", {
+                'class': 'list-group border',
+                'id': 'uso-list'
+              })
+            );
+
+            // Extraemos los datos y los adjuntamos al list_group
+            $.each(info, function(y, z){
+              name = z['name'];
+              id = z['id']
+
+              $('#uso-list').append(
+                $("<button>", {
+                    'type': 'button',
+                    'id': 'uso-'+id,
+                    'onclick': 'addUsoFilter('+id+', "'+name+'")',
+                    'class': 'list-group-item list-group-item-action',
+                    'text': name
+                })
+              )
+
+            }) // Cierra each
+          } // Cierra if Uso Permitido
 
           if (label == "Coeficiente de Constructibilidad") {
 
