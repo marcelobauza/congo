@@ -82,7 +82,6 @@ Congo.building_regulations.action_dashboards = function(){
         $('.filter-projects').remove();
       },
       success: function(data){
-      console.log(data);
 
         // Ocultamos el spinner
         $("#spinner").hide();
@@ -96,8 +95,6 @@ Congo.building_regulations.action_dashboards = function(){
           $('#map').before(overlay);
 
         };
-
-        console.log(data);
 
         // Creamos el div contenedor
         var chart_container = document.createElement('div');
