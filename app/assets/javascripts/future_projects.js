@@ -70,6 +70,11 @@ Congo.future_projects.action_dashboards = function(){
     periods = Congo.future_projects.config.periods;
     years = Congo.future_projects.config.years;
 
+    // Sino se ralizó la selección, se lanza un alert
+    if (county_id == '' && centerPoint == undefined && wkt == undefined) {
+      Congo.dashboards.action_index.empty_selection_alert();
+    }
+
     if (county_id != '') {
       data = {
         to_year: to_year,
@@ -544,9 +549,6 @@ Congo.future_projects.action_dashboards = function(){
         } // Cierra for
       }, // Cierra success
       error: function(jqXHR, textStatus, errorThrown) {
-        // Mostramos advertencia para que se realice la selección de los datos
-        var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert"> Por favor, realice la selección de los datos para deplegar la información de la capa. <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div>'
-        $('#alerts').append(alert);
       } // Cierra error
     }) // Cierra ajax
   } // Cierra indicator_future_projects

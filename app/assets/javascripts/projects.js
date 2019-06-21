@@ -80,6 +80,11 @@ Congo.projects.action_dashboards = function(){
     to_uf_value = Congo.projects.config.to_uf_value;
     project_agency_ids = Congo.projects.config.project_agency_ids;
 
+    // Sino se ralizó la selección, se lanza un alert
+    if (county_id == '' && centerPoint == undefined && wkt == undefined) {
+      Congo.dashboards.action_index.empty_selection_alert();
+    }
+
     if (county_id != '') {
       data = {
         to_year: to_year,

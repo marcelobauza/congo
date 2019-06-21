@@ -63,6 +63,11 @@ Congo.transactions.action_dashboards = function(){
     from_calculated_value = Congo.transactions.config.from_calculated_value;
     to_calculated_value = Congo.transactions.config.to_calculated_value;
 
+    // Sino se ralizó la selección, se lanza un alert
+    if (county_id == '' && centerPoint == undefined && wkt == undefined) {
+      Congo.dashboards.action_index.empty_selection_alert();
+    }
+
     if (county_id != '') {
       data = {
         to_year: to_year,

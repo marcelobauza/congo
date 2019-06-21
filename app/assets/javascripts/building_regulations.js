@@ -68,6 +68,11 @@ Congo.building_regulations.action_dashboards = function(){
     to_land_ocupation = Congo.building_regulations.config.to_land_ocupation;
     allowed_use_ids = Congo.building_regulations.config.allowed_use_ids;
 
+    // Sino se ralizó la selección, se lanza un alert
+    if (county_id == '' && centerPoint == undefined && wkt == undefined) {
+      Congo.dashboards.action_index.empty_selection_alert();
+    }
+
     if (county_id != '') {
       data = {
         from_construct: from_construct,

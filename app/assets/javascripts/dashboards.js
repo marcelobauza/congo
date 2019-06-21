@@ -33,9 +33,15 @@ Congo.dashboards.action_index = function(){
     });
   };
 
+  empty_selection_alert = function() {
+    var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert"> Por favor, realice la selección de los datos para deplegar la información de la capa. <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
+    $('#alerts').append(alert);
+  }
+
   return {
     init: init,
-    create_overlay: create_overlay
+    create_overlay: create_overlay,
+    empty_selection_alert: empty_selection_alert
   }
 }();
 
