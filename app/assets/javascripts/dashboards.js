@@ -26,6 +26,11 @@ Congo.dashboards.action_index = function(){
         })
       );
     };
+
+    // Aplicamos drag and drop
+    dragula({
+      containers: Array.prototype.slice.call($('.overlay'))
+    });
   };
 
   return {

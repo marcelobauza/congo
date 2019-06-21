@@ -542,12 +542,6 @@ Congo.future_projects.action_dashboards = function(){
 
           } // Cierra if
         } // Cierra for
-
-        // Drag and Drop
-        var boxArray = document.getElementsByClassName("overlay");
-        var boxes = Array.prototype.slice.call(boxArray);
-        dragula({ containers: boxes });
-
       }, // Cierra success
       error: function(jqXHR, textStatus, errorThrown) {
         // Mostramos advertencia para que se realice la selección de los datos
