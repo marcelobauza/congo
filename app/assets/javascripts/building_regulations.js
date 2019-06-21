@@ -4,10 +4,10 @@ Congo.building_regulations.config= {
   county_name: '',
   county_id: '',
   layer_type: 'building_regulations_info',
-  from_construct: [],
-  to_construct: [],
-  from_land_ocupation: [],
-  to_land_ocupation: [],
+  from_construct: '',
+  to_construct: '',
+  from_land_ocupation: '',
+  to_land_ocupation: '',
   allowed_use_ids: []
 }
 
