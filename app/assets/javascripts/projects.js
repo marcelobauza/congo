@@ -799,8 +799,6 @@ Congo.projects.action_dashboards = function(){
           // Inmobiliarias
           } else if (title == "Inmobiliarias") {
 
-            console.log('Entra a Inmobiliarias');
-
             $("<div>", {
                 'class': 'list-group border'
             }).appendTo('#body'+i)
