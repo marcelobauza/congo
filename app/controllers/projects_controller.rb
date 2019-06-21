@@ -323,6 +323,7 @@ class ProjectsController < ApplicationController
       @first_period[:year] = @period.last[:year] unless @period.nil?
       @first_period[:bimester] = @period.last[:bimester] unless @period.nil?
     end
+    render json: {data: @period}
   end
 
   def suggest

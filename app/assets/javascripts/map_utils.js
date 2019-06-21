@@ -254,6 +254,18 @@ var overlays =  {
         filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'projects_feature_info':
+        $.ajax({
+          async: false,
+          type: 'GET',
+          url: '/projects/period.json',
+          datatype: 'json',
+          success: function(data){
+            Congo.dashboards.config.year = data['data'][0]['year'];
+            Congo.dashboards.config.bimester = data['data'][0]['period'];
+          }
+        });
+        year = Congo.dashboards.config.year;
+        bimester = Congo.dashboards.config.bimester;
         Congo.projects.action_dashboards.indicator_projects();
         filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
