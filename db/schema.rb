@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_19_125841) do
+ActiveRecord::Schema.define(version: 2019_06_20_043308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -382,6 +382,13 @@ ActiveRecord::Schema.define(version: 2019_06_19_125841) do
   create_table "property_types", force: :cascade do |t|
     t.string "name"
     t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "name"
+    t.boolean "read_only"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -973,5 +980,14 @@ ActiveRecord::Schema.define(version: 2019_06_19_125841) do
       transactions.year_sii,
       transactions.role_associated
      FROM transactions;
+  SQL
+  create_view "pois_infos", sql_definition: <<-SQL
+      SELECT p.name,
+      ps.name AS subcategories,
+      p.the_geom,
+      counties.id AS county_id
+     FROM ((pois p
+       JOIN poi_subcategories ps ON ((p.poi_subcategory_id = ps.id)))
+       JOIN counties ON (st_contains(counties.the_geom, p.the_geom)));
   SQL
 end
