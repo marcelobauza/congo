@@ -1,0 +1,2 @@
+class ProjectHomeReport < ApplicationRecord
+end

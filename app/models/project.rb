@@ -1193,4 +1193,10 @@ result = self.save
       end
     end
   end
+
+  def self.reports filters
+  @project_departments = ProjectDepartmentReport.where(county_id: filters[:county_id], year: filters[:to_year], bimester: filters[:to_period]).limit(11)
+  @project_homes = ProjectHomeReport.where(county_id: filters[:county_id], year: filters[:to_year], bimester: filters[:to_period]).limit(11)
+    return @project_homes, @project_departments
+  end
 end

@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   get 'reports/future_projects_data' => 'reports#future_projects_data'
   get 'reports/future_projects_summary' => 'reports#future_projects_summary'
   get 'reports/transactions_data' => 'reports#transactions_data'
+  get 'reports/projects_data' => 'reports#projects_data'
+  get 'reports/projects_summary' => 'reports#projects_summary'
   
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do

@@ -94,8 +94,16 @@ class ReportsController < ApplicationController
   def transactions_summary
   end
 
+  def projects_data
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @project_homes, @project_departments = Project.reports(filters)
+    respond_to do |format|
+      format.xlsx 
+    end
 
+  end
 
-
+  def projects_summary
+  end
 
 end
