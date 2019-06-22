@@ -1,12 +1,12 @@
 class Project < ApplicationRecord
- # acts_as_indexed :fields => [:name, :address, :code]
+  # acts_as_indexed :fields => [:name, :address, :code]
 
   has_many :project_instances, :dependent => :destroy
   has_many :project_instance_mixes, :through => :project_instances
   has_many :project_statuses, :through => :project_instances
+  belongs_to :project_type
   has_many :agency_rols
   has_many :agencies, :through => :agency_rols
-  has_many :inspections
 
   belongs_to :project_type
   belongs_to :county
@@ -30,9 +30,9 @@ class Project < ApplicationRecord
     :floors,
     :longitude,
     :latitude
-  
+
   validate :point_is_located_within_the_specified_county, :unless => Proc.new { |t| t.county.blank? or t.longitude.blank? or t.latitude.blank? }
-#  validates_numericality_of :floors, :only_integer => true, :unless => 'floors.blank?'
+  #  validates_numericality_of :floors, :only_integer => true, :unless => 'floors.blank?'
 
   validates_each :build_date, :sale_date, :transfer_date do |record, attr, value|
     if value.split('/').count != 3
@@ -64,13 +64,13 @@ class Project < ApplicationRecord
 
   def self.parcel_project(project)
 
-        parcel = Project.find_by_sql("select p.gid from parcels p, projects r where st_contains (p.the_geom, r.the_geom) and r.id = #{project}")
-        return parcel
+    parcel = Project.find_by_sql("select p.gid from parcels p, projects r where st_contains (p.the_geom, r.the_geom) and r.id = #{project}")
+    return parcel
   end
-  
+
   def self.parcels 
-        parcels = Util.execute("select distinct(p.gid) as gid, st_astext(p.the_geom), p.area_name from parcels p, report_emis r  where st_contains(p.the_geom, r.the_geom)  ")
-        parcels
+    parcels = Util.execute("select distinct(p.gid) as gid, st_astext(p.the_geom), p.area_name from parcels p, report_emis r  where st_contains(p.the_geom, r.the_geom)  ")
+    parcels
   end
 
   def self.emi(not_project, project_type_id, wkt, bimester, year,  county_id = nil)
@@ -94,79 +94,76 @@ class Project < ApplicationRecord
     conditions += " and bimester = #{bimester }"
     conditions += " and year = #{year }"
     projects = ProjectInstanceMixView.find(:all, 
-                              :select => selects,
-                              :joins => joins,
-                              :conditions =>  conditions,
-                              :order => "project_instance_mix_views.the_geom"
-                           ) 
- return projects; 
+                                           :select => selects,
+                                           :joins => joins,
+                                           :conditions =>  conditions,
+                                           :order => "project_instance_mix_views.the_geom"
+                                          ) 
+    return projects; 
   end
 
   def self.generate_map_images(wkt, result_id, layer_type, directory, name, parcel_id = nil )
-    
-    uf_m2 = false
-		#Buffer
-		buffer_token = Buffer.create_buffer(wkt)
-		bottom_left, top_right = Buffer.get_buffer_bounding_box(buffer_token)
 
-		#MAP IMAGES
-		map = MapUtil.new
+    uf_m2 = false
+    #Buffer
+    buffer_token = Buffer.create_buffer(wkt)
+    bottom_left, top_right = Buffer.get_buffer_bounding_box(buffer_token)
+
+    #MAP IMAGES
+    map = MapUtil.new
 
     layer_name ="EMI_LAYER_TYPE"
     geoserver = GeoServerUtil.new(layer_name)
 
-		geoserver.layer_type[:value_column].each_with_index do |column, i|
-	#GEOSERVER ATTRIBUTES
-			map.attributes[:bottom_left] = bottom_left
-			map.attributes[:top_right] = top_right
-			map.attributes[:directory] = directory
+    geoserver.layer_type[:value_column].each_with_index do |column, i|
+      #GEOSERVER ATTRIBUTES
+      map.attributes[:bottom_left] = bottom_left
+      map.attributes[:top_right] = top_right
+      map.attributes[:directory] = directory
 
-			map.attributes[:wms_config] = geoserver.build_geoserver_wms_emi_configuration(buffer_token, result_id, i, uf_m2, parcel_id)
-      
+      map.attributes[:wms_config] = geoserver.build_geoserver_wms_emi_configuration(buffer_token, result_id, i, uf_m2, parcel_id)
+
       #CREATE WMS IMAGES FOR REPORTS
-#			base = map.build_report_base_wms_image
-#			mask = map.build_report_mask_wms_images
-			map.build_report_emi_points_wms_images(name)
+      #			base = map.build_report_base_wms_image
+      #			mask = map.build_report_mask_wms_images
+      map.build_report_emi_points_wms_images(name)
 
-  end
+    end
   end
 
   def self.kpi(county_id, year_from, year_to, bimester, project_type_id, polygon_id )
 
     if  ((county_id.empty? || polygon_id.empty?) && year_from.empty? && year_to.empty? && bimester.empty? && project_type_id.empty?) 
-    
+
       return;
     end
 
-    
-      if !county_id.empty?    
-    sql_county_code = ("select code from counties where id = #{county_id}")
-    county_code_exec = Util.execute(sql_county_code)
-    county_code  = county_code_exec[0]['code'].to_i
-      end
+
+    if !county_id.empty?    
+      sql_county_code = ("select code from counties where id = #{county_id}")
+      county_code_exec = Util.execute(sql_county_code)
+      county_code  = county_code_exec[0]['code'].to_i
+    end
     bim_from, bim_to = 1, 6
 
     if bimester != "0"
       bim_from, bim_to = bimester, bimester
     end
 
-      if !county_id.empty?    
+    if !county_id.empty?    
 
       result = ("select inciti_kpi_generate_primary_data(#{county_code}, #{year_from}, #{year_to}, #{bim_from}, #{bim_to}, #{project_type_id})")
 
-      else
+    else
 
-    result = ("select kpi__polygon_generate_primary_data(#{polygon_id}, #{year_from}, #{year_to}, #{bim_from}, #{bim_to}, #{project_type_id})")
+      result = ("select kpi__polygon_generate_primary_data(#{polygon_id}, #{year_from}, #{year_to}, #{bim_from}, #{bim_to}, #{project_type_id})")
 
-      end
-
+    end
     kpi = Util.execute(result)
 
   end
 
   def self.getPrimaryEvolution ()
-  
-    
   end
 
   def self.getCountyEvolution ()
@@ -213,7 +210,7 @@ class Project < ApplicationRecord
     select += " projects.name,"
     select += " (select name from agencies a inner join agency_rols ar on a.id  = ar.agency_id where ar.project_id = projects.id and rol ilike 'INMOBILIARIA' limit 1) as agency,"
     select += " county_name(projects.county_id) as countyname, "
-    
+
     if !search.nil?
       letter =  search.at(6)
       letter = letter.delete('"')
@@ -225,7 +222,7 @@ class Project < ApplicationRecord
     end
 
     if ( project_type == '1')
-        
+
       select += " min((t_min + t_max) /2)   as ps_terreno_min, "
       select += " max((t_min + t_max)/2 ) as ps_terreno_max, " 
       select += " min(round((pim.uf_min * (1::numeric - pim.percentage / 100::numeric) + pim.uf_max * (1::numeric - pim.percentage / 100::numeric)) / 2::numeric / (pim.mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) AS uf_m2_ut_min, "
@@ -233,7 +230,7 @@ class Project < ApplicationRecord
       select += " round(sum((mix_usable_square_meters * pim.total_units) * round((pim.uf_min * (1::numeric - pim.percentage / 100::numeric) + pim.uf_max * (1::numeric - pim.percentage / 100::numeric)) / 2::numeric / (pim.mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) / sum(mix_usable_square_meters * pim.total_units), 1) as pp_UFm2ut,"
 
     else
-      
+
       select += " projects.floors,"
       select += " min(pim.mix_terrace_square_meters) as min_terrazas,"
       select += " max(pim.mix_terrace_square_meters) as max_terrazas,"
@@ -241,8 +238,8 @@ class Project < ApplicationRecord
       select += " max(round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + mix_terrace_square_meters * 0.5),1)) AS uf_m2_max,"
       select += " round(sum((mix_usable_square_meters * pim.total_units) * round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + mix_terrace_square_meters * 0.5),1)) / sum(mix_usable_square_meters * pim.total_units), 1)  as pp_UFm2ut,"
 
-    select += " round((sum(pim.mix_usable_square_meters * pim.total_units) / sum(pim.total_units))::numeric, 1)  as pp_utiles,"
-    select += " round(sum(pim.mix_terrace_square_meters * pim.total_units) / sum(pim.total_units), 1)  as pp_terrazas,"
+      select += " round((sum(pim.mix_usable_square_meters * pim.total_units) / sum(pim.total_units))::numeric, 1)  as pp_utiles,"
+      select += " round(sum(pim.mix_terrace_square_meters * pim.total_units) / sum(pim.total_units), 1)  as pp_terrazas,"
     end
 
     select += " min(pim.mix_usable_square_meters) as Min_utiles,"
@@ -262,7 +259,7 @@ class Project < ApplicationRecord
     select += " round((vhmd(pi.id) * pp_uf_dis(pi.id) / 1000::double precision)::numeric,1) AS pxq_d,"
     select += " ps.name as status"
 
-    
+
     conditions = " 1 = 1" 
     conditions += " and projects.project_type_id = #{project_type}" if !project_type.nil?
     conditions += " and bimester = #{bimester } " if !bimester.nil?
@@ -270,20 +267,19 @@ class Project < ApplicationRecord
     conditions += " and year = #{year} " if !year.nil?
     conditions += " and code = '#{search}'"  if !search.nil?
     groups = "project_id, bimester, year, code, projects.name, agency, floors,  uf_min_percent, uf_max_percent, pp_uf, uf_m2, pxq, status, pxq_d, agency,  countyname, project_type_id"
-    
+
     Project.find(:all,
-                                :select => select,
-                                :joins => @joins.uniq.join(" "),
-                                :conditions => conditions,
-                                :group => groups,
-                                :order => ('year, bimester'))
+                 :select => select,
+                 :joins => @joins.uniq.join(" "),
+                 :conditions => conditions,
+                 :group => groups,
+                 :order => ('year, bimester'))
 
   end
 
 
   def self.find_globals(filters)
-    @joins = Array.new
-
+    
     select =  "COUNT(DISTINCT(project_instance_mix_views.project_id)) AS project_count, SUM(project_instance_mix_views.total_units) AS total_units, "
     select += "SUM(project_instance_mix_views.total_units - project_instance_mix_views.stock_units) AS total_sold, "
     select += "SUM(project_instance_mix_views.stock_units) AS total_stock, "
@@ -303,11 +299,17 @@ class Project < ApplicationRecord
     select += "SUM(vhmu) AS vhmo, "
     select += "SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) AS vhmd, "
     select += "CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) "
-    select += "ELSE SUM(project_instance_mix_views.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END AS masd "
+    select += "ELSE SUM(project_instance_mix_views.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END AS masd, "
+    select += "MIN(uf_m2) as min_uf_m2, "
+    select += "MAX(uf_m2) as max_uf_m2, "
+    select += "AVG(uf_m2) as avg_uf_m2, "
+    select += "MIN(uf_min_percent) as min_uf, "
+    select += "MAX(uf_max_percent) as max_uf, "
+    select += "AVG(uf_avg_percent) as avg_uf"
 
 
     ProjectInstanceMixView.select(select).
-                                where(build_conditions_new(filters, nil, false)).first
+      where(build_conditions_new(filters, nil, false)).first
   end
 
   def self.get_query_for_results(filters, result_id, map_columns)
@@ -362,10 +364,10 @@ class Project < ApplicationRecord
     select += ", #{widget}.color" if has_color
 
     ProjectInstanceMixView.select( "#{select}, COUNT(#{widget}.name) as value").
-                            joins(@joins.uniq.join(" ")).
-                            where(build_conditions_new(filters, widget)).
-                            group(select).
-                            order("#{widget}.name")
+      joins(@joins.uniq.join(" ")).
+      where(build_conditions_new(filters, widget)).
+      group(select).
+      order("#{widget}.name")
   end
 
   def self.projects_sum_by_stock(filters)
@@ -400,7 +402,7 @@ class Project < ApplicationRecord
     select += " MAX(mix_usable_square_meters) as max, "
     select += "(SUM(total_units * COALESCE(mix_usable_square_meters,0)) / SUM(total_units)) as avg,"
     select += "year, bimester "
-    
+
     values_by_period3("usable_area", select, filters, load_min_avg_max_values)
 
   end
@@ -419,6 +421,7 @@ class Project < ApplicationRecord
     ranges = get_valid_ranges(values, widget) 
 
     total_ranges = ranges.count - 1
+
     result = Array.new
 
     0.upto(total_ranges) do |i|
@@ -429,7 +432,7 @@ class Project < ApplicationRecord
       end
       cond = "#{query_condition} AND " + WhereBuilder.build_between_condition("ROUND(#{widget})", ranges[i]["min"].to_i, ranges[i]["max"].to_i)
       proj = ProjectInstanceMixView.select(select).
-                                where(cond).first
+        where(cond).first
 
       result << proj
     end
@@ -528,9 +531,9 @@ class Project < ApplicationRecord
       cond_query = get_periods_query_new(bimester[:period], bimester[:year]) + condition
 
       project = ProjectInstanceMixView.select(select).
-                                       where(cond_query).
-                                       group('year, bimester').
-                                       order('year, bimester').first
+        where(cond_query).
+        group('year, bimester').
+        order('year, bimester').first
 
       proc.call result, project, bimester
     end
@@ -568,18 +571,18 @@ class Project < ApplicationRecord
 
 
     if filters.has_key? :mix_ids
-    query = " mix_id = #{filters[:mix_ids].join(',')} and " 
-    query += build_conditions_new(filters, widget, false) 
+      query = " mix_id = #{filters[:mix_ids].join(',')} and " 
+      query += build_conditions_new(filters, widget, false) 
     else
-    query = build_conditions_new(filters, widget, false) 
+      query = build_conditions_new(filters, widget, false) 
     end 
 
 
     ProjectInstanceMixView.select(select).
-                           joins(@joins.uniq.join(" ")).
-                           where( query).
-                           group("project_mixes.mix_type, project_mixes.id").
-                           order("project_mixes.mix_type")
+      joins(@joins.uniq.join(" ")).
+      where( query).
+      group("project_mixes.mix_type, project_mixes.id").
+      order("project_mixes.mix_type")
   end
 
   def save_project_data(data, project_type, geom)
@@ -626,7 +629,7 @@ class Project < ApplicationRecord
     self.general_observation = data['gral_ob']
 
 
-result = self.save
+    result = self.save
     County.update(county.id, :sales_project_data => true) unless county.nil? if result
     result
   end
@@ -654,59 +657,59 @@ result = self.save
     end
   end
 
-  def self.values_by_period(widget, select, filters, proc)
-    result = []
-    @joins = Array.new
+  # def self.values_by_period(widget, select, filters, proc)
+  #   result = []
+  #   @joins = Array.new
 
 
-    joins_by_widget(widget)
-    joins_by_filter(filters)
+  #   joins_by_widget(widget)
+  #   joins_by_filter(filters)
 
-    condition = Util.and + build_conditions(filters, widget)
-    bimesters = get_bimesters filters
+  #   condition = Util.and + build_conditions(filters, widget)
+  #   bimesters = get_bimesters filters
 
-    bimesters.each do |bimester|
-      cond_query = get_periods_query(bimester[:period], bimester[:year]) + condition
+  #   bimesters.each do |bimester|
+  #     cond_query = get_periods_query(bimester[:period], bimester[:year]) + condition
 
-      project = Project.find(:first,
-                             :select => select,
-                             :joins => @joins.uniq.join(" "),
-                             :conditions => cond_query,
-                             :group => 'year, bimester',
-                             :order => 'year, bimester')
+  #     project = Project.find(:first,
+  #                            :select => select,
+  #                            :joins => @joins.uniq.join(" "),
+  #                            :conditions => cond_query,
+  #                            :group => 'year, bimester',
+  #                            :order => 'year, bimester')
 
-      proc.call result, project, bimester
-    end
+  #     proc.call result, project, bimester
+  #   end
 
-    result.reverse
-  end
+  #   result.reverse
+  # end
 
-  def self.values_by_period2(widget, select, filters, proc)
-    result = []
-    @joins = Array.new
-    @joins << "INNER JOIN project_instance_views ON project_instance_views.id = project_instance_id "
+  #def self.values_by_period2(widget, select, filters, proc)
+  #  result = []
+  #  @joins = Array.new
+  #  @joins << "INNER JOIN project_instance_views ON project_instance_views.id = project_instance_id "
 
-    #joins_by_widget(widget)
-    #joins_by_filter(filters)
+  #  #joins_by_widget(widget)
+  #  #joins_by_filter(filters)
 
-    condition = Util.and + build_conditions(filters, widget, true)
-    bimesters = get_bimesters filters
+  #  condition = Util.and + build_conditions(filters, widget, true)
+  #  bimesters = get_bimesters filters
 
-    bimesters.each do |bimester|
-      cond_query = get_periods_query_for_view(bimester[:period], bimester[:year]) + condition
+  #  bimesters.each do |bimester|
+  #    cond_query = get_periods_query_for_view(bimester[:period], bimester[:year]) + condition
 
-      project = ProjectInstanceMixView.find(:first,
-                                            :select => select,
-                                            :joins => @joins.uniq.join(" "),
-                                            :conditions => cond_query,
-                                            :group => 'project_instance_mix_views.year, project_instance_mix_views.bimester',
-                                            :order => 'project_instance_mix_views.year, project_instance_mix_views.bimester')
+  #    project = ProjectInstanceMixView.find(:first,
+  #                                          :select => select,
+  #                                          :joins => @joins.uniq.join(" "),
+  #                                          :conditions => cond_query,
+  #                                          :group => 'project_instance_mix_views.year, project_instance_mix_views.bimester',
+  #                                          :order => 'project_instance_mix_views.year, project_instance_mix_views.bimester')
 
-      proc.call result, project, bimester
-    end
+  #    proc.call result, project, bimester
+  #  end
 
-    result.reverse
-  end
+  #  result.reverse
+  #end
 
   def self.get_first_bimester_with_projects
     period = ProjectInstance.find(:first,
@@ -806,7 +809,7 @@ result = self.save
   end
 
   def self.build_conditions(filters, self_not_filter=nil, useView = false)
-    
+
     @conditions = ''
     unless filters[:county_id].nil? and filters[:wkt].nil?
       if filters[:county_id].nil?
@@ -815,12 +818,10 @@ result = self.save
         @conditions = "county_id = #{filters[:county_id]}" + Util.and
         end
     end
-    #@conditions += "(projects.bank_project = false OR projects.bank_project IS NULL) #{Util.and}"
-    #@conditions += "project_instances.active = true #{Util.and}"
     @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView) if filters.has_key? :to_period
     @conditions += bimesters_condition(filters, self_not_filter, useView)
     @conditions += ids_conditions(filters, self_not_filter, useView)
-   @conditions += between_condition(filters, self_not_filter)
+    @conditions += between_condition(filters, self_not_filter)
     @conditions += "county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
     @conditions.chomp!(Util.and)
     @conditions
@@ -909,17 +910,17 @@ result = self.save
     end
 
     #FILTERS THE PROJECTS BY A RANGE OF UF VALUES
-#    if filters.has_key? :from_uf_value
-#      p "paso por el filtro"
-#      conditions += "( "
-#      0.upto(filters[:from_uf_value].length - 1) do |i|
-#        conditions += WhereBuilder.build_between_condition('project_instance_mix_views.uf_avg_percent', filters[:from_uf_value][i], filters[:to_uf_value][i])
-#        conditions += Util.and
-#      end
+    #    if filters.has_key? :from_uf_value
+    #      p "paso por el filtro"
+    #      conditions += "( "
+    #      0.upto(filters[:from_uf_value].length - 1) do |i|
+    #        conditions += WhereBuilder.build_between_condition('project_instance_mix_views.uf_avg_percent', filters[:from_uf_value][i], filters[:to_uf_value][i])
+    #        conditions += Util.and
+    #      end
 
-#      conditions.chomp!(Util.and)
-#      conditions += " )" + Util.and
-#    end
+    #      conditions.chomp!(Util.and)
+    #      conditions += " )" + Util.and
+    #    end
 
     conditions
   end
@@ -999,12 +1000,12 @@ result = self.save
 
 =end
 
-#MIXES funciona
-        if filters.has_key? :mix_ids and self_not_filter != 'mix'
-              conditions += "project_instance_views.id  IN(SELECT project_instance_id "
-                    conditions += "FROM project_instance_mixes WHERE mix_id IN(#{filters[:mix_ids].join(",")}))"
-                          conditions += Util.and
-                              end
+    #MIXES funciona
+    if filters.has_key? :mix_ids and self_not_filter != 'mix'
+      conditions += "project_instance_views.id  IN(SELECT project_instance_id "
+      conditions += "FROM project_instance_mixes WHERE mix_id IN(#{filters[:mix_ids].join(",")}))"
+      conditions += Util.and
+    end
 
     if filters.has_key? :project_agency_ids and self_not_filter != 'agencies'
       conditions += " projects.agency_id IN (#{filters[:project_agency_ids].join(",")}) "
@@ -1032,13 +1033,13 @@ result = self.save
     end
 
 
-#MIXES funciona 
-        if filters.has_key? :mix_ids and self_not_filter != 'mix'
-              conditions += "project_instance_mix_views.project_instance_id  IN(SELECT project_instance_id "
-                    conditions += "FROM project_instance_mixes WHERE mix_id IN(#{filters[:mix_ids].join(",")}))"
-                          conditions += Util.and
-                              end
-#terminar condicion con la relacion de las agencias
+    #MIXES funciona 
+    if filters.has_key? :mix_ids and self_not_filter != 'mix'
+      conditions += "project_instance_mix_views.project_instance_id  IN(SELECT project_instance_id "
+      conditions += "FROM project_instance_mixes WHERE mix_id IN(#{filters[:mix_ids].join(",")}))"
+      conditions += Util.and
+    end
+    #terminar condicion con la relacion de las agencias
     #AGENCIES
     if filters.has_key? :project_agency_ids and self_not_filter != 'agencies'
       conditions += " project_instance_mix_views.agency_id IN (#{filters[:project_agency_ids].join(",")}) "
@@ -1046,7 +1047,7 @@ result = self.save
       conditions += Util.and
     end
 
-    
+
 =begin
 
     #MIXES
@@ -1163,7 +1164,7 @@ result = self.save
 
   def generate_code
     return unless self.code.nil? 
-   
+
     select = "select code from projects where county_id = #{self.county.id} order by id desc limit 2;"
     result = Util.execute(select)
     code = result[0]['code'].split('-')[1]
@@ -1191,6 +1192,200 @@ result = self.save
       if !(1..12).include? m.to_i
         self.build_date.errors.add_to_base("El mes debe ser un valor entre 1 y 12 (dd/mm/aaaa)")
       end
+    end
+  end
+
+  def self.summary f
+
+    filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
+    begin
+      global_information = Project.find_globals(filters)
+      general_data = [
+        {:label => "TOTAL_PROJECTS_COUNT", :value => global_information[:project_count]},
+        {:label => "MIN_SELLING_SPEED", :value => global_information[:min_selling_speed]},
+        {:label => "MAX_SELLING_SPEED", :value => global_information[:max_selling_speed]},
+        {:label => "AVG_SELLING_SPEED", :value => global_information[:avg_selling_speed]},
+        {:label => "TOTAL_STOCK", :value => global_information[:total_units]},
+        {:label => "SELLS", :value => global_information[:total_sold]},
+        {:label => "AVAILABLE_STOCK", :value => global_information[:total_stock]},
+        {:label => "MONTHS_TO_SPEND", :value => global_information[:spend_stock_months]},
+        {:label => "UF_MIN_VALUE", :value => global_information[:min_uf]},
+        {:label => "UF_MAX_VALUE", :value => global_information[:max_uf]},
+        {:label => "UF_AVERAGE", :value => global_information[:avg_uf]},
+        {:label => "UF_MIN_M2_VALUE", :value => global_information[:min_uf_m2]},
+        {:label => "UF_MAX_M2_VALUE", :value => global_information[:max_uf_m2]},
+        {:label => "UF_AVERAGE_M2", :value => global_information[:avg_uf_m2]}
+      ]
+      pstatus = Project.projects_group_by_count('project_statuses', filters, false)
+      ptypes = Project.projects_group_by_count('project_types', filters, true)
+      pmixes = Project.projects_group_by_mix('mix', filters)
+      avai = Project.projects_sum_by_stock(filters)
+      uf_values = Project.projects_by_uf(filters)
+      uf_m2_values = Project.projects_by_uf_m2(filters)
+      uarea = Project.projects_by_usable_area(filters)
+      garea = Project.projects_by_ground_area('ground_area', filters)
+      sbim = Project.projects_count_by_period('sale_bimester', filters)
+      cfloor = Project.projects_by_ranges('floors', filters)
+      uf_ranges = Project.projects_by_ranges('uf_avg_percent', filters)
+      agencies = Project.projects_group_by_count('agencies', filters, false)
+
+      result =[]
+      data =[]
+      #GENERAL
+      general_data.each do |item|
+        data.push("name": item[:label], "count":item[:value].to_i)
+      end
+
+    result.push({"title":"Información General", "data": data})
+
+      ##ESTADO PROYECTO
+
+      data =[]
+      pstatus.each do |item|
+        data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
+      end
+      result.push({"title":"Estado del Proyecto", "series":[{"data": data}]})
+
+      ##TIPO PROYECTO
+      data =[]
+
+      ptypes.each do |item|
+        data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
+      end
+      result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
+
+      ##MIX
+      data =[]
+
+      stock_units =[]
+      sold_units =[]
+      categories=[]
+      pmixes.each do |item|
+        stock_units.push("name":item.mix_type, "count": item[:stock_units], "id":item.id)
+        sold_units.push("name":item.mix_type, "count": item[:sold_units], "id":item.id)
+      end
+      categories.push({"label":"Venta Total", "data": sold_units});
+      categories.push({"label":"Disponibilidad", "data": stock_units});
+      result.push({"title":"Total Distribución por Mix", "series":categories})
+
+      ##OFERTA, VENTA
+      total_units=[]
+      sold_units=[]
+      stock_units=[]
+      categories=[]
+      avai.each do |item|
+        total_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:total_units].to_i)
+        sold_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:sold_units].to_i)
+        stock_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:stock_units].to_i)
+      end
+      categories.push({"label":"Oferta", "data": total_units});
+      categories.push({"label":"Venta", "data": sold_units});
+      categories.push({"label":"Disponibilidad", "data": stock_units});
+      result.push({"title":"Oferta, Venta y Disponibilidad por Bimestre", "series":categories})
+
+      ##VALOR UF BIMESTRE
+      #result[:data] << [""]
+      min =[]
+      max =[]
+      avg =[]
+      categories=[]
+      uf_values.each do |item|
+        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
+        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
+        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+      end
+
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
+      categories.push({"label":"Promedio", "data": avg});
+
+      result.push({"title":"Valor UF por Bimestre", "series":categories})
+
+      ##VALOR UF/M2 BIMESTRE
+      min =[]
+      max =[]
+      avg =[]
+      categories=[]
+      uf_m2_values.each do |item|
+        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
+        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
+        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+      end
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
+      categories.push({"label":"Promedio", "data": avg});
+
+      result.push({"title":"UF/m2 por Bimestre", "series":categories})
+
+      ##SUP UTIL BIMESTRE
+      min =[]
+      max =[]
+      avg =[]
+      categories=[]
+      uarea.each do |item|
+        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
+        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
+        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+      end
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
+      categories.push({"label":"Promedio", "data": avg});
+
+      result.push({"title":"Superficie Útil (m2) por Bimestre", "series":categories})
+
+      ##SUP TERR BIMESTRE
+      min =[]
+      max =[]
+      avg =[]
+      categories=[]
+      #result[:data] << [""]
+      #result[:data] << ["Superficie Terreno/Terraza(m2) por Bimestre"]
+      #result[:data] << ["Bimestre", "Mínimo", "Máximo", "Promedio"]
+
+      garea.each do |item|
+        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
+        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
+        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+      end
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
+      categories.push({"label":"Promedio", "data": avg});
+
+      result.push({"title":"Superficie Terreno/Terraza (m2) por Bimestre", "series":categories})
+
+      ##CANT PROYECTOS BIMESTER
+      data =[]
+
+      sbim.each do |item|
+        data.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:value].to_i)
+      end
+      result.push({"title":"Cantidad de Proyectos por Bimestre", "series":[{"data": data}]})
+
+      ##CANT PISOS
+      data =[]
+
+      cfloor.each do |item|
+        data.push("name": (item.min_value.to_i.to_s + " - " + item.max_value.to_i.to_s), "count": item.value.to_i)
+      end
+      result.push({"title":"Cantidad de Pisos", "series":[{"data": data}]})
+
+      ##UNIDADES POR RANGO UF
+      data =[]
+
+      uf_ranges.each do |item|
+        data.push("name": (item.min_value.to_i.to_s + " - " + item.max_value.to_i.to_s), "count": item.value.to_i)
+      end
+      result.push({"title":"Unidades Proyecto por Rango UF", "series":[{"data": data}]})
+
+      data =[]
+      agencies.each do |agency|
+        data.push("name": agency.name, "id":agency.id)
+      end
+    result.push({"title": "Inmobiliarias", "data":data})
+
+
+    rescue
+      #result[:data] = ["Sin datos"]
     end
   end
 

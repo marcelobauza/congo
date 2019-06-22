@@ -1,0 +1,86 @@
+wb = xlsx_package.workbook
+title = wb.styles.add_style(:bg_color => "FFFF0000", :fg_color=>"#FF000000", :sz=>14,  :border=> {:style => :thin, :color => "FFFF0000"})
+wb.add_worksheet(name: "PRV") do |sheet|
+  sheet.add_row ["Informacion General"], :style=> title
+  @info.each do |r|
+  sheet.add_row [r[0], r[1]]
+        end
+  sheet.add_row([])
+  sheet.add_row ["Estado del Proyecto"], :style=> title
+
+  sheet.add_row ["Estado", "Total de Proyectos"], :style=> title
+@pstatus.each do |r|
+  sheet.add_row [r[0], r[1]]
+        end
+  sheet.add_row([])
+  sheet.add_row ["Tipo de Propiedad"], :style=> title
+  sheet.add_row ["Tipo", "Total de Proyectos"], :style=> title
+@ptypes.each do |r|
+  sheet.add_row [r[0], r[1]]
+end
+
+  sheet.add_row([])
+  sheet.add_row ["Total distribución por mix"], :style=> title
+  sheet.add_row ["Mix", "Disponible", "Venta Total"], :style=> title
+@pm.each do |p|
+  sheet.add_row [p[:mix_type], p[:stock_units], p[:sold_units]]  
+end
+
+  sheet.add_row([])
+  sheet.add_row ["Oferta, Venta y Disponibilidad por Bimestre"], :style=> title
+  sheet.add_row ["Bimestre", "Oferta", "Venta", "Disponibilidad"], :style=> title
+@avai.each do |av|
+  sheet.add_row [av[:bimester],av[:total_units], av[:sold_units], av[:stock_units]]
+end
+
+
+  sheet.add_row([])
+  sheet.add_row ["Valor UF por Bimestre"], :style=> title
+  sheet.add_row ["Bimestre", "Minimo", "Maximo", "Promedio"], :style=> title
+@ufb.each do |ufb|
+  sheet.add_row [ufb[:bimester],ufb[:min], ufb[:max], ufb[:avg]]
+end
+
+  sheet.add_row([])
+  sheet.add_row ["Valor UF/m2 por Bimestre"], :style=> title
+  sheet.add_row ["Bimestre", "Minimo", "Maximo", "Promedio"], :style=> title
+@ufm2b.each do |ufb|
+  sheet.add_row [ufb[:bimester],ufb[:min], ufb[:max], ufb[:avg]]
+end
+
+  sheet.add_row([])
+  sheet.add_row ["Superficie útil(m2) por Bimestre"], :style=> title
+  sheet.add_row ["Bimestre", "Minimo", "Maximo", "Promedio"], :style=> title
+@sup_u_m2.each do |su|
+  sheet.add_row [su[:bimester],su[:min], su[:max], su[:avg]]
+end
+
+  sheet.add_row([])
+  sheet.add_row ["Superficie Terreno/Terraza(m2) por Bimestre"], :style=> title
+  sheet.add_row ["Bimestre", "Minimo", "Maximo", "Promedio"], :style=> title
+@ground_area.each do |g|
+  sheet.add_row [g[:bimester],g[:min], g[:max], g[:avg]]
+end
+
+  sheet.add_row([])
+  sheet.add_row ["Cantidad de proyectos por bimestre"], :style=> title
+  sheet.add_row ["Bimestre", "Cantidad Proyectos"], :style=> title
+@total_projects_bimester.each do |t|
+  sheet.add_row [t[:bimester],t[:total_units]]
+end
+
+
+  sheet.add_row([])
+  sheet.add_row ["Cantidad de pisos"], :style=> title
+  sheet.add_row ["Cantidad de Pisos", "Cantidad Proyectos"], :style=> title
+@floor.each do |f|
+  sheet.add_row [f[:name],f[:value]]
+end
+  
+  sheet.add_row([])
+  sheet.add_row ["Unidades de proyecto por rango UF"], :style=> title
+  sheet.add_row ["Rango", "Cantidad Proyectos"], :style=> title
+@range.each do |r|
+  sheet.add_row [r[:name],r[:value]]
+end
+  end

@@ -3,201 +3,10 @@ class ProjectsController < ApplicationController
   end
 
  def projects_summary
-    begin
-      global_information = Project.find_globals(params)
-      general_data = [
-        {:label => t(:TOTAL_PROJECTS_COUNT), :value => global_information[:project_count]},
-        {:label => t(:MIN_SELLING_SPEED), :value => global_information[:min_selling_speed]},
-        {:label => t(:MAX_SELLING_SPEED), :value => global_information[:max_selling_speed]},
-        {:label => t(:AVG_SELLING_SPEED), :value => global_information[:avg_selling_speed]},
-        {:label => t(:TOTAL_STOCK), :value => global_information[:total_units]},
-        {:label => t(:SELLS), :value => global_information[:total_sold]},
-        {:label => t(:AVAILABLE_STOCK), :value => global_information[:total_stock]},
-        {:label => t(:MONTHS_TO_SPEND), :value => global_information[:spend_stock_months]},
-        {:label => t(:UF_MIN_VALUE), :value => global_information[:min_uf]},
-        {:label => t(:UF_MAX_VALUE), :value => global_information[:max_uf]},
-        {:label => t(:UF_AVERAGE), :value => global_information[:avg_uf]},
-        {:label => t(:UF_MIN_M2_VALUE), :value => global_information[:min_uf_m2]},
-        {:label => t(:UF_MAX_M2_VALUE), :value => global_information[:max_uf_m2]},
-        {:label => t(:UF_AVERAGE_M2), :value => global_information[:avg_uf_m2]}
-      ]
-      pstatus = Project.projects_group_by_count('project_statuses', params, false)
-      ptypes = project_type
-      pmixes = mix
-      avai = availability
-      uf_values = uf
-      uf_m2_values = uf_m2
-      uarea = usable_area
-      garea = ground_area
-      sbim = sales_bimester
-      cfloor = floor
-      uf_ranges = Project.projects_by_ranges('uf_avg_percent', params)
-      agencies = projects_by_agency
-
-      result =[]
-      data =[]
-      #GENERAL
-      general_data.each do |item|
-        data.push("name": item[:label], "count":item[:value].to_i)
-      end
-
-    result.push({"title":"Información General", "data": data})
-
-      ##ESTADO PROYECTO
-
-      data =[]
-      pstatus.each do |item|
-        data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
-      end
-      result.push({"title":"Estado del Proyecto", "series":[{"data": data}]})
-
-      ##TIPO PROYECTO
-      data =[]
-
-      ptypes.each do |item|
-        data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
-      end
-      result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
-
-      ##MIX
-      data =[]
-
-      stock_units =[]
-      sold_units =[]
-      categories=[]
-      pmixes.each do |item|
-        stock_units.push("name":item.mix_type, "count": item[:stock_units], "id":item.id)
-        sold_units.push("name":item.mix_type, "count": item[:sold_units], "id":item.id)
-      end
-      categories.push({"label":"Venta Total", "data": sold_units});
-      categories.push({"label":"Disponibilidad", "data": stock_units});
-      result.push({"title":"Total Distribución por Mix", "series":categories})
-
-      ##OFERTA, VENTA
-      total_units=[]
-      sold_units=[]
-      stock_units=[]
-      categories=[]
-      avai.each do |item|
-        total_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:total_units].to_i)
-        sold_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:sold_units].to_i)
-        stock_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:stock_units].to_i)
-      end
-      categories.push({"label":"Oferta", "data": total_units});
-      categories.push({"label":"Venta", "data": sold_units});
-      categories.push({"label":"Disponibilidad", "data": stock_units});
-      result.push({"title":"Oferta, Venta y Disponibilidad por Bimestre", "series":categories})
-
-      ##VALOR UF BIMESTRE
-      #result[:data] << [""]
-      min =[]
-      max =[]
-      avg =[]
-      categories=[]
-      uf_values.each do |item|
-        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
-        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
-        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
-      end
-
-      categories.push({"label":"Mínimo", "data": min});
-      categories.push({"label":"Máximo", "data": max});
-      categories.push({"label":"Promedio", "data": avg});
-
-      result.push({"title":"Valor UF por Bimestre", "series":categories})
-
-      ##VALOR UF/M2 BIMESTRE
-      min =[]
-      max =[]
-      avg =[]
-      categories=[]
-      uf_m2_values.each do |item|
-        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
-        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
-        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
-      end
-      categories.push({"label":"Mínimo", "data": min});
-      categories.push({"label":"Máximo", "data": max});
-      categories.push({"label":"Promedio", "data": avg});
-
-      result.push({"title":"UF/m2 por Bimestre", "series":categories})
-
-      ##SUP UTIL BIMESTRE
-      min =[]
-      max =[]
-      avg =[]
-      categories=[]
-      uarea.each do |item|
-        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
-        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
-        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
-      end
-      categories.push({"label":"Mínimo", "data": min});
-      categories.push({"label":"Máximo", "data": max});
-      categories.push({"label":"Promedio", "data": avg});
-
-      result.push({"title":"Superficie Útil (m2) por Bimestre", "series":categories})
-
-      ##SUP TERR BIMESTRE
-      min =[]
-      max =[]
-      avg =[]
-      categories=[]
-      #result[:data] << [""]
-      #result[:data] << ["Superficie Terreno/Terraza(m2) por Bimestre"]
-      #result[:data] << ["Bimestre", "Mínimo", "Máximo", "Promedio"]
-
-      garea.each do |item|
-        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
-        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
-        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
-      end
-      categories.push({"label":"Mínimo", "data": min});
-      categories.push({"label":"Máximo", "data": max});
-      categories.push({"label":"Promedio", "data": avg});
-
-      result.push({"title":"Superficie Terreno/Terraza (m2) por Bimestre", "series":categories})
-
-      ##CANT PROYECTOS BIMESTER
-      data =[]
-
-      sbim.each do |item|
-        data.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:value].to_i)
-      end
-      result.push({"title":"Cantidad de Proyectos por Bimestre", "series":[{"data": data}]})
-
-      ##CANT PISOS
-      data =[]
-
-      cfloor.each do |item|
-        data.push("name": (item.min_value.to_i.to_s + " - " + item.max_value.to_i.to_s), "count": item.value.to_i)
-      end
-      result.push({"title":"Cantidad de Pisos", "series":[{"data": data}]})
-
-      ##UNIDADES POR RANGO UF
-      data =[]
-
-      uf_ranges.each do |item|
-        data.push("name": (item.min_value.to_i.to_s + " - " + item.max_value.to_i.to_s), "count": item.value.to_i)
-      end
-      result.push({"title":"Unidades Proyecto por Rango UF", "series":[{"data": data}]})
-
-      data =[]
-      agencies.each do |agency|
-        data.push("name": agency.name, "id":agency.id)
-      end
-    result.push({"title": "Inmobiliarias", "data":data})
-
-
-    rescue
-      #result[:data] = ["Sin datos"]
-    end
-    #file_path = Xls.generate [result], "/xls", {:file_name => "#{Time.now.strftime("%Y-%m-%d_%H.%M")}_residenciales", :clean_directory_path => true}
-    #send_file file_path, :type => "application/excel"
-    @result = result
+    session[:data] = params
+    @result = Project.summary params
     return @result
   end
-
 
  def general
     global_information = Project.find_globals(params)
@@ -269,21 +78,21 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def project_type
-    @types = Project.projects_group_by_count('project_types', params, true)
-  end
+  # def project_type
+  #   @types = Project.projects_group_by_count('project_types', params, true)
+  # end
 
-  def availability
-    @stock = Project.projects_sum_by_stock(params)
-  end
+  # def availability
+  #   @stock = Project.projects_sum_by_stock(params)
+  # end
 
-  def usable_area
-    @usable_area = Project.projects_by_usable_area(params)
-  end
+  # def usable_area
+  #   @usable_area = Project.projects_by_usable_area(params)
+  # end
 
-  def floor
-    @floor = Project.projects_by_ranges('floors', params)
-  end
+  # def floor
+  #   @floor = Project.projects_by_ranges('floors', params)
+  # end
 
   def uf_value
     @uf_value = Project.projects_by_ranges('uf_avg_percent', params)
@@ -295,25 +104,25 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def uf
-    @uf = Project.projects_by_uf(params)
-  end
+  # def uf
+  #   @uf = Project.projects_by_uf(params)
+  # end
 
-  def uf_m2
-    @uf_m2 = Project.projects_by_uf_m2(params)
-  end
+  # def uf_m2
+  #   @uf_m2 = Project.projects_by_uf_m2(params)
+  # end
 
-  def ground_area
-    @ground_area = Project.projects_by_ground_area('ground_area', params)
-  end
+  # def ground_area
+  #   @ground_area = Project.projects_by_ground_area('ground_area', params)
+  # end
 
-  def mix
-    @mix = Project.projects_group_by_mix('mix', params)
-  end
+  # def mix
+  #   @mix = Project.projects_group_by_mix('mix', params)
+  # end
 
-  def sales_bimester
-    @sales = Project.projects_count_by_period('sale_bimester', params)
-  end
+  # def sales_bimester
+  #   @sales = Project.projects_count_by_period('sale_bimester', params)
+  # end
 
   def period
     @period = Project.get_last_period
@@ -349,15 +158,15 @@ class ProjectsController < ApplicationController
     @monthly_sales = ProjectInstance.monthly_sales_volume(params[:project_ids])
   end
 
-  def projects_by_agency
-    @agencies = Project.projects_group_by_count('agencies', params, false)
+  # def projects_by_agency
+  #   @agencies = Project.projects_group_by_count('agencies', params, false)
 
     #respond_to do |format|
     #  format.xml { render :template => "projects/projects_by_agency" }
     #  format.html
     #  format.json { render :json => @agencies }
     #end
-  end
+  #end
 
   def around_pois
     project_id = ProjectInstance.find(params[:id]).project_id

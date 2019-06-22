@@ -14,10 +14,9 @@ class ReportsController < ApplicationController
     @tipo_expediente=[]
     @tipo_destino=[]
     @tipo_destino_bar=[]
-
     @title = []
+
     @xl2.each do |data|
-      @dd = data
       if (data[:title] == 'Información General') 
         @info=[]
         data[:data].each do |v|
@@ -88,7 +87,7 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.xlsx 
     end
-  
+
   end
 
   def transactions_summary
@@ -104,6 +103,133 @@ class ReportsController < ApplicationController
   end
 
   def projects_summary
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @summary = Project.summary filters
+    @info=[]
+    @pstatus=[]
+    @ptypes=[]
+
+    @summary.each do |data|
+
+      if (data[:title] == 'Información General') 
+        data[:data].each do |v|
+          @info.push([v[:name], v[:count]])
+        end
+      end
+    
+      if (data[:title]== 'Estado del Proyecto')
+        data[:series][0][:data].each do |v|
+          @pstatus.push([v[:name], v[:count]])
+        end
+      end
+
+      if (data[:title]== 'Tipo de Propiedad')
+        data[:series][0][:data].each do |v|
+          @ptypes.push([v[:name], v[:count]])
+        end
+      end
+    end
+      result=[]
+      pmixes = Project.projects_group_by_mix('mix', filters)
+
+    pmixes.each do |item|
+      value_1 = item[:mix_type]
+      value_2 = item[:stock_units]
+      value_3 = item[:sold_units]
+      result.push({"mix_type":value_1, "stock_units":value_2, "sold_units":value_3 })
+    end
+    @pm = result
+
+      result =[]
+      avai = Project.projects_sum_by_stock(filters)
+      avai.each do |av|
+      total_units = av[:total_units].to_i rescue 0
+      sold_units = av[:sold_units].to_i rescue 0
+      stock_units = av[:stock_units].to_i rescue 0
+      bimester = av[:bimester].to_s + "/" + av[:year].to_s[2,3]
+      
+      result.push({"bimester":bimester, "total_units":total_units, "sold_units":sold_units, "stock_units":stock_units})
+
+      end
+    @avai = result
+
+
+    result =[]
+   uf_values = Project.projects_by_uf(filters)
+
+   uf_values.each do |ufb|
+      max = ufb[:max].to_i rescue 0
+      min = ufb[:min].to_i rescue 0
+      avg = ufb[:avg].to_i rescue 0
+      bimester = ufb[:bimester].to_s + "/" + ufb[:year].to_s[2,3]
+      result.push({"bimester":bimester,"max":max, "min":min,"avg":avg})
+   end
+@ufb=result
+    result =[]
+   ufm2_values = Project.projects_by_uf_m2(filters)
+
+   ufm2_values.each do |ufb|
+      max = ufb[:max].to_i rescue 0
+      min = ufb[:min].to_i rescue 0
+      avg = ufb[:avg].to_i rescue 0
+      bimester = ufb[:bimester].to_s + "/" + ufb[:year].to_s[2,3]
+      result.push({"bimester":bimester,"max":max, "min":min,"avg":avg})
+   end
+@ufm2b=result
+
+    result =[]
+   sup_area = Project.projects_by_usable_area(filters)
+
+   sup_area.each do |su|
+      max = su[:max].to_i rescue 0
+      min = su[:min].to_i rescue 0
+      avg = su[:avg].to_i rescue 0
+      bimester = su[:bimester].to_s + "/" + su[:year].to_s[2,3]
+      result.push({"bimester":bimester,"max":max, "min":min,"avg":avg})
+   end
+@sup_u_m2=result
+
+
+    result =[]
+   ground_area = Project.projects_by_ground_area('ground_area',filters)
+
+   ground_area.each do |st|
+      max = st[:max].to_i rescue 0
+      min = st[:min].to_i rescue 0
+      avg = st[:avg].to_i rescue 0
+      bimester = st[:bimester].to_s + "/" + st[:year].to_s[2,3]
+      result.push({"bimester":bimester,"max":max, "min":min,"avg":avg})
+   end
+@ground_area=result
+    
+      result =[]
+      sbim = Project.projects_count_by_period('sale_bimester', filters)
+    sbim.each do |sb|
+      total_units = sb[:value]
+      bimester = sb[:bimester].to_s + "/" + sb[:year].to_s[2,3]
+      result.push("bimester":bimester, "total_units":total_units)
+    end
+@total_projects_bimester = result
+      
+    result =[]
+    cfloor = Project.projects_by_ranges('floors', filters)
+    cfloor.each do |cf|
+      name = cf[:min_value].to_s + " - " + cf[:max_value].to_s
+      value = cf[:value].to_i rescue 0
+    result.push({"name":name, "value":value})
+    end
+
+    @floor = result
+
+    result =[]
+    uf_range = Project.projects_by_ranges('uf_avg_percent', filters)
+    uf_range.each do |ufr|
+      name = ufr[:min_value].to_s + " - " + ufr[:max_value].to_s
+      value = ufr[:value].to_i rescue 0
+    result.push({"name":name, "value":value})
+    end
+    @range = result
+
   end
 
 end
