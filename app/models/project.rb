@@ -1396,24 +1396,25 @@ class Project < ApplicationRecord
   end
 
   def self.reports_pdf filters
+    select = "projects.code, "
     select = "projects.name, "
     select += "projects.address, "
-    select += "sum (pim.total_units) as total_units, "
-    select += "sum(pim.stock_units) as stock_units, "
-    select += "(sum(pim.total_units) - sum(pim.stock_units)) as  sold_units, "
-    select += "sum (CASE masud(pim.total_units, pim.stock_units, cadastre, projects.sale_date) "
+    select += "sum (project_instance_mixes.total_units) as total_units, "
+    select += "sum(project_instance_mixes.stock_units) as stock_units, "
+    select += "(sum(project_instance_mixes.total_units) - sum(project_instance_mixes.stock_units)) as  sold_units, "
+    select += "sum (CASE masud(project_instance_mixes.total_units, project_instance_mixes.stock_units, cadastre, projects.sale_date) "
     select += "WHEN 0 THEN 0::real "
-    select += "ELSE vhmu(pim.total_units, pim.stock_units, cadastre, projects.sale_date) "
+    select += "ELSE vhmu(project_instance_mixes.total_units, project_instance_mixes.stock_units, cadastre, projects.sale_date) "
     select += "END) AS vhmud, "
-    select += "agencies.name as agency_name, "
-    select += "project_types.name as project_type_name, "
+    select += "project_types.name as project_types_name, "
     select += "project_statuses.name as status"
 
 
-    @data = Project.joins(project_instances:[:project_status, :project_instance_mixes]).where(county_id: 50).limit(10)
+    @data = Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
+                     where(county_id: 50, project_type_id: 2).
+                     select(select).
+                     group(:code, :name, :address, :project_types_name, :status ).
+                     limit(10)
  
   end
-
-
-
 end
