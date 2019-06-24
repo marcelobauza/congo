@@ -145,6 +145,9 @@ Congo.transactions.action_dashboards = function(){
         // Ocultamos el spinner
         $("#spinner").hide();
 
+        // Creamos el overlay
+        Congo.dashboards.action_index.create_overlay();
+
         // Separamos la información
         for (var i = 0; i < data.length; i++) {
 

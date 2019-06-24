@@ -143,6 +143,9 @@ Congo.building_regulations.action_dashboards = function(){
         // Ocultamos el spinner
         $("#spinner").hide();
 
+        // Creamos el overlay
+        Congo.dashboards.action_index.create_overlay();
+
         // Creamos el div contenedor
         var chart_container = document.createElement('div');
         chart_container.className = 'chart-container card';
