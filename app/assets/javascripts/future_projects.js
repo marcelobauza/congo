@@ -277,6 +277,8 @@ Congo.future_projects.action_dashboards = function(){
                   data: count,
                   backgroundColor: rancolor,
                 })
+                // Renombramos los name para evitar superposición en el chart
+                name = ["Anteproyecto", "Permiso Edif.", "Recep. Munic."];
               }
 
               if (title == 'Cantidad de Nuevas Unidades / Bimestre') {
