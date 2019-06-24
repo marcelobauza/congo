@@ -10,9 +10,11 @@ Congo.reports = function(){
       switch(kind_reports){
         case 'graph':
           url = '/reports/future_projects_data.xlsx';
+          window.open(url, '_blank');
           break;
         case 'base':
           url = '/reports/future_projects_summary.xlsx';
+          window.open(url, '_blank');
           break;
       }
       break;
@@ -20,9 +22,11 @@ Congo.reports = function(){
       switch(kind_reports){
         case 'graph':
           url = '/reports/transactions_data.xlsx';
+          window.open(url, '_blank');
           break;
         case 'base':
           url = '/reports/transactions_summary.xlsx';
+          window.open(url, '_blank');
           break;
       }
       break;
@@ -30,9 +34,14 @@ Congo.reports = function(){
       switch(kind_reports){
         case 'graph':
           url = '/reports/projects_data.xlsx';
+          window.open(url, '_blank');
           break;
         case 'base':
           url = '/reports/projects_summary.xlsx';
+          window.open(url, '_blank');
+          break;
+        case 'pdf':
+          url = projects_report_pdf();
           break;
       }
       break;
@@ -41,5 +50,5 @@ Congo.reports = function(){
     default:
 
   }
-  window.open(url, '_blank');
+//  window.open(url, '_blank');
 }

@@ -1,5 +1,6 @@
 Congo.namespace('projects.action_dashboards');
 
+
 Congo.projects.config= {
   county_name: '',
   county_id: '',
@@ -15,6 +16,23 @@ Congo.projects.config= {
   to_uf_value: [],
   project_agency_ids: []
 }
+
+function projects_report_pdf(){
+
+    $.ajax({
+      type: 'GET',
+      url: '/reports/projects_pdf.json',
+      datatype: 'json',
+      data: data,
+      success: function(data){
+
+        console.log(data);
+
+      }
+    })
+}
+
+
 
 function addInmoFilter(id, name) {
 

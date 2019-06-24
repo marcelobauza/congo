@@ -1394,4 +1394,26 @@ class Project < ApplicationRecord
   @project_homes = ProjectHomeReport.where(county_id: filters[:county_id], year: filters[:to_year], bimester: filters[:to_period]).limit(11)
     return @project_homes, @project_departments
   end
+
+  def self.reports_pdf filters
+    select = "projects.name, "
+    select += "projects.address, "
+    select += "sum (pim.total_units) as total_units, "
+    select += "sum(pim.stock_units) as stock_units, "
+    select += "(sum(pim.total_units) - sum(pim.stock_units)) as  sold_units, "
+    select += "sum (CASE masud(pim.total_units, pim.stock_units, cadastre, projects.sale_date) "
+    select += "WHEN 0 THEN 0::real "
+    select += "ELSE vhmu(pim.total_units, pim.stock_units, cadastre, projects.sale_date) "
+    select += "END) AS vhmud, "
+    select += "agencies.name as agency_name, "
+    select += "project_types.name as project_type_name, "
+    select += "project_statuses.name as status"
+
+
+    @data = Project.joins(project_instances:[:project_status, :project_instance_mixes]).where(county_id: 50).limit(10)
+ 
+  end
+
+
+
 end
