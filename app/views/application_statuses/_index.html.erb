@@ -1,0 +1,41 @@
+<div class="modal fade" id="modal-load" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Session </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+<h1>Application Statuses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th colspan=3></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @application_statuses.each do |application_status| %>
+      <tr>
+        <td><%= application_status.name %></td>
+        <td><%= application_status.description %></td>
+        <td><%= link_to "Cargar", application_statuses_load_path(id:application_status.id), remote: true  %></td>
+        <td>Compartir</td>
+        <td><%= link_to 'Destroy', application_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+    
+  <%= link_to "Nuevo", new_application_status_path(), remote: true %>
+
+
+    </div>
+  </div>
+</div>

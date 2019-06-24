@@ -53,7 +53,7 @@ Congo.transactions.action_dashboards = function(){
     county_id = Congo.dashboards.config.county_id;
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
-    radius = Congo.map_utils.radius * 1000;
+    radius = Congo.map_utils.radius;
     centerPoint = Congo.map_utils.centerpt;
     wkt = Congo.map_utils.size_box;
     property_type_ids = Congo.transactions.config.property_type_ids;
@@ -62,6 +62,9 @@ Congo.transactions.action_dashboards = function(){
     years = Congo.transactions.config.years;
     from_calculated_value = Congo.transactions.config.from_calculated_value;
     to_calculated_value = Congo.transactions.config.to_calculated_value;
+    type_geometry = Congo.dashboards.config.typeGeometry;
+    layer_type = Congo.dashboards.config.layer_type;
+    style_layer = Congo.dashboards.config.style_layer;
 
     // Sino se ralizó la selección, se lanza un alert
     if (county_id == '' && centerPoint == undefined && wkt == undefined) {
@@ -78,7 +81,10 @@ Congo.transactions.action_dashboards = function(){
         years: years,
         from_calculated_value: from_calculated_value,
         to_calculated_value: to_calculated_value,
-        county_id: county_id
+        county_id: county_id,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
       };
     } else if (centerPoint != '') {
       data = {
@@ -91,7 +97,11 @@ Congo.transactions.action_dashboards = function(){
         from_calculated_value: from_calculated_value,
         to_calculated_value: to_calculated_value,
         centerpt: centerPoint,
-        radius: radius
+        radius: radius,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+
       };
     } else {
       data = {
@@ -103,7 +113,11 @@ Congo.transactions.action_dashboards = function(){
         years: years,
         from_calculated_value: from_calculated_value,
         to_calculated_value: to_calculated_value,
-        wkt: wkt
+        wkt: wkt,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+
       };
     }
 

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: 
+  description: MyString
+  user_id,: MyString
+  polygon: MyText
+  layer_type: 
+  filters: 
+
+two:
+  name: 
+  description: MyString
+  user_id,: MyString
+  polygon: MyText
+  layer_type: 
+  filters: 

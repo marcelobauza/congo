@@ -9,7 +9,11 @@ Congo.dashboards.config= {
   bimester: '',
   year: '',
   env: '',
-  kind_reports: ''
+  kind_reports: '',
+  radius: 0,
+  centerpt: '',
+  size_box: '',
+  typeGeometry: '',
 }
 
 Congo.dashboards.action_index = function(){

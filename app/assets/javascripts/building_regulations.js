@@ -59,7 +59,7 @@ Congo.building_regulations.action_dashboards = function(){
   indicator_building_regulations = function(){
 
     county_id = Congo.dashboards.config.county_id;
-    radius = Congo.map_utils.radius * 1000;
+    radius = Congo.map_utils.radius;
     centerPoint = Congo.map_utils.centerpt;
     wkt = Congo.map_utils.size_box;
     from_construct = Congo.building_regulations.config.from_construct;
@@ -67,6 +67,9 @@ Congo.building_regulations.action_dashboards = function(){
     from_land_ocupation = Congo.building_regulations.config.from_land_ocupation;
     to_land_ocupation = Congo.building_regulations.config.to_land_ocupation;
     allowed_use_ids = Congo.building_regulations.config.allowed_use_ids;
+    type_geometry = Congo.dashboards.config.typeGeometry;
+    layer_type = Congo.dashboards.config.layer_type;
+    style_layer = Congo.dashboards.config.style_layer;
 
     // Sino se ralizó la selección, se lanza un alert
     if (county_id == '' && centerPoint == undefined && wkt == undefined) {
@@ -80,7 +83,11 @@ Congo.building_regulations.action_dashboards = function(){
         from_land_ocupation: from_land_ocupation,
         to_land_ocupation: to_land_ocupation,
         allowed_use_ids: allowed_use_ids,
-        county_id: county_id
+        county_id: county_id,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+
       };
     } else if (centerPoint != '') {
       data = {
@@ -90,7 +97,11 @@ Congo.building_regulations.action_dashboards = function(){
         to_land_ocupation: to_land_ocupation,
         allowed_use_ids: allowed_use_ids,
         centerpt: centerPoint,
-        radius: radius
+        radius: radius,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+
       };
     } else {
       data = {
@@ -99,7 +110,11 @@ Congo.building_regulations.action_dashboards = function(){
         from_land_ocupation: from_land_ocupation,
         to_land_ocupation: to_land_ocupation,
         allowed_use_ids: allowed_use_ids,
-        wkt: wkt
+        wkt: wkt,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+
       };
     };
 

@@ -1,18 +1,16 @@
 Congo.namespace('map_utils');
 
 Congo.map_utils.config={
-  radius: 0,
-  centerpt: '',
   cql_filter: '',
-  typeGeometry: '',
-  size_box: ''
+
+
 }
 
 Congo.map_utils = function(){
   var url, map, groupLayer, editableLayers, HandlerGeometry, typeGeometry , layerControl, sourcePois, overlays;
   var init = function(){
     url = window.location.hostname;
-    
+
     var streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       updateWhenIdle: false,
@@ -86,12 +84,12 @@ var overlays =  {
         });
       }
       Congo.dashboards.config.county_id = '';
-      Congo.map_utils.centerpt = '';
-      Congo.map_utils.radius = '';
+      Congo.dashboards.config.centerpt = '';
+      Congo.dashboards.config.radius = '';
       map.doubleClickZoom.disable();
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
-      Congo.map_utils.typeGeometry = typeGeometry;
+      Congo.dashboards.config.typeGeometry = typeGeometry;
       poly(typeGeometry);
     });
 
@@ -102,9 +100,9 @@ var overlays =  {
           map.removeLayer(layer);
         });
       }
-      Congo.map_utils.centerpt = '';
-      Congo.map_utils.radius = '';
-      Congo.map_utils.size_box = '';
+      Congo.dashboards.config.centerpt = '';
+      Congo.dashboards.config.radius = '';
+      Congo.dashboards.config.size_box = '';
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
       poly(typeGeometry);
@@ -117,10 +115,10 @@ var overlays =  {
         layer = e.layer
         var centerPt = layer.getLatLng();
         var radius = layer.getRadius();
-        Congo.map_utils.radius = (radius/1000);
+        Congo.dashboards.config.radius = (radius);
         center = centerPt.lng +" " + centerPt.lat;
-        Congo.map_utils.typeGeometry = typeGeometry;
-        Congo.map_utils.centerpt = center;
+        Congo.dashboards.config.typeGeometry = typeGeometry;
+        Congo.dashboards.config.centerpt = center;
         editableLayers.addLayer(layer);
       }
       if(typeGeometry == 'polygon'){
@@ -139,8 +137,8 @@ var overlays =  {
         layer = e.layer
         var centerPt = layer.getLatLng();
         center = centerPt.lng +" " + centerPt.lat;
-        Congo.map_utils.typeGeometry = typeGeometry;
-        Congo.map_utils.centerpt = center;
+        Congo.dashboards.config.typeGeometry = typeGeometry;
+        Congo.dashboards.config.centerpt = center;
 
         $.ajax({
           async: false,
@@ -275,16 +273,19 @@ var overlays =  {
         break;
     }
 
-    typeGeometry = Congo.map_utils.typeGeometry;
+    typeGeometry = Congo.dashboards.config.typeGeometry;
+    console.log(typeGeometry);
     switch(typeGeometry) {
       case 'circle':
-        centerpt = Congo.map_utils.centerpt;
-        radius = Congo.map_utils.radius;
-        cql_filter ="DWITHIN(the_geom,Point("+center+"),"+radius+",kilometers)"+ filter_layer;
-        cql_filter_pois ="DWITHIN(the_geom,Point("+center+"),"+radius+",kilometers)";
+        centerpt = Congo.dashboards.config.centerpt;
+        radius = Congo.dashboards.config.radius ;
+        console.log(radius);
+
+        cql_filter ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)"+ filter_layer;
+        cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",kilometers)";
         break;
       case 'polygon':
-        polygon_size = Congo.map_utils.size_box;
+        polygon_size = Congo.dashboards.config.size_box;
         cql_filter ="WITHIN(the_geom, Polygon(("+polygon_size+"))) "+ filter_layer;
         cql_filter_pois ="WITHIN(the_geom, Polygon(("+polygon_size+"))) ";
         break;

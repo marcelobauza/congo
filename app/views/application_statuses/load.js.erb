@@ -1,0 +1,23 @@
+let layer_type = "<%= @row[:filters]['layer_type'] %>"
+let to_period = "<%= @row[:filters]['to_period'] %>"
+let to_year = "<%= @row[:filters]['to_year'] %>"
+let radius = "<%= @row[:filters]['radius'] %>"
+let center_point = "<%= @row[:filters]['centerpt'] %>"
+let type_geometry = "<%= @row[:filters]['type_geometry'] %>"
+let county_id = "<%= @row[:filters]['county_id'] %>"
+let wkt = "<%= @row[:filters]['wkt'] %>"
+let style_layer = "<%= @row[:filters]['style_layer'] %>"
+
+Congo.dashboards.config.layer_type = layer_type;
+Congo.dashboards.config.radius =  radius;
+Congo.dashboards.config.centerpt = center_point;
+Congo.dashboards.config.bimester = to_period;
+Congo.dashboards.config.year = to_year;
+Congo.dashboards.config.typeGeometry = type_geometry;
+Congo.dashboards.config.county_id = county_id;
+Congo.dashboards.config.size_box = wkt;
+Congo.dashboards.config.style_layer = style_layer;
+
+Congo.map_utils.counties();
+
+$('#modal-load').modal('hide')

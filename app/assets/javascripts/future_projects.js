@@ -62,13 +62,16 @@ Congo.future_projects.action_dashboards = function(){
     county_id = Congo.dashboards.config.county_id;
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
-    radius = Congo.map_utils.radius * 1000;
-    centerPoint = Congo.map_utils.centerpt;
-    wkt = Congo.map_utils.size_box;
+    radius = Congo.dashboards.config.radius;
+    centerPoint = Congo.dashboards.config.centerpt;
+    wkt = Congo.dashboards.config.size_box;
     future_project_type_ids = Congo.future_projects.config.future_project_type_ids;
     project_type_ids = Congo.future_projects.config.project_type_ids;
     periods = Congo.future_projects.config.periods;
     years = Congo.future_projects.config.years;
+    type_geometry = Congo.dashboards.config.typeGeometry;
+    layer_type = Congo.dashboards.config.layer_type;
+    style_layer = Congo.dashboards.config.style_layer;
 
     // Sino se ralizó la selección, se lanza un alert
     if (county_id == '' && centerPoint == undefined && wkt == undefined) {
@@ -83,7 +86,10 @@ Congo.future_projects.action_dashboards = function(){
         project_type_ids: project_type_ids,
         periods: periods,
         years: years,
-        county_id: county_id
+        county_id: county_id,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
       };
     } else if (centerPoint != '') {
       data = {
@@ -94,7 +100,10 @@ Congo.future_projects.action_dashboards = function(){
         periods: periods,
         years: years,
         centerpt: centerPoint,
-        radius: radius
+        radius: radius,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
       };
     } else {
       data = {
@@ -104,7 +113,10 @@ Congo.future_projects.action_dashboards = function(){
         project_type_ids: project_type_ids,
         periods: periods,
         years: years,
-        wkt: wkt
+        wkt: wkt,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
       };
     };
 

@@ -15,7 +15,8 @@ Rails.application.routes.draw do
   get 'projects/projects_summary' => 'projects#projects_summary'
   get 'future_projects/future_projects_summary' => 'future_projects#future_projects_summary'
   get 'future_projects/period' => 'future_projects#period'
-  
+  get 'application_statuses/load' => 'application_statuses#load'
+
   get 'transactions/dashboards' => 'transactions#dashboards'
   get 'transactions/graduated_points' => 'transactions#graduated_points'
   get 'future_projects/dashboards' => 'future_projects#dashboards'
@@ -46,12 +47,11 @@ Rails.application.routes.draw do
     get 'dashboards/index'
   root 'dashboards#index'
   end
+  resources :application_statuses
   resources :land_use_types
   resources :density_types
   resources :building_regulations
-
   resources :project_statuses
-
   resources :counties
   resources :property_types
   resources :layer_types
