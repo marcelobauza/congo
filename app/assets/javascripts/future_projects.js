@@ -203,6 +203,7 @@ Congo.future_projects.action_dashboards = function(){
           } else {
 
             var datasets = [];
+            var serie_colour;
 
             // Extraemos las series
             $.each(series, function(a, b){
@@ -210,14 +211,77 @@ Congo.future_projects.action_dashboards = function(){
               var label = b['label']
               var data = b['data']
 
-              if (label == 'Anteproyecto') {
-                serie_colour = '#60c843'
-              }
-              if (label == 'Permiso Edif.' || label == 'Tasa Permiso / Anteproyecto') {
-                serie_colour = '#0f115b'
-              }
-              if (label == 'Recep. Munic.' || label == 'Tasa Recepciones / Permisos') {
-                serie_colour = '#eb2817'
+              // Setea los colores dependiendo de la serie
+              switch (label) {
+                case 'Departamento y Local Comercial':
+                  serie_colour = '#e48701'
+                  break;
+                case 'Equipamiento':
+                  serie_colour = '#a5bc4e'
+                  break;
+                case 'Departamentos':
+                  serie_colour = '#1b95d9'
+                  break;
+                case 'Local Comercial':
+                  serie_colour = '#caca9e'
+                  break;
+                case 'Oficinas':
+                  serie_colour = '#6693b0'
+                  break;
+                case 'Oficina y Local Comercial':
+                  serie_colour = '#f05e27'
+                  break;
+                case 'Departamento, Oficina y Local Comercial':
+                  serie_colour = '#86d1e4'
+                  break;
+                case 'Casas':
+                  serie_colour = '#e4f9a0'
+                  break;
+                case 'Bodega, Oficina, Comercio':
+                  serie_colour = '#ffd512'
+                  break;
+                case 'Departamento y Oficinas':
+                  serie_colour = '#6C3483'
+                  break;
+                case 'Industria':
+                  serie_colour = '#2ECC71'
+                  break;
+                case 'Bodega-Oficina':
+                  serie_colour = '#45B39D'
+                  break;
+                case 'Bodega':
+                  serie_colour = '#2874A6'
+                  break;
+                case 'Vivienda-Oficina':
+                  serie_colour = '#CB4335'
+                  break;
+                case 'Vivienda-Comercio':
+                  serie_colour = '#9C640C'
+                  break;
+                case 'Hotel & Restaurante':
+                  serie_colour = '#7B241C'
+                  break;
+                case 'Bodega, Comercio':
+                  serie_colour = '#145A32'
+                  break;
+                case 'Hotel, Oficina':
+                  serie_colour = '#F39C12'
+                  break;
+                case 'Anteproyecto':
+                  serie_colour = '#60c843'
+                  break;
+                case 'Permiso de Edificación':
+                  serie_colour = '#0f115b'
+                  break;
+                case 'Recepción Municipal':
+                  serie_colour = '#eb2817'
+                  break;
+                case 'Tasa Permiso / Anteproyecto':
+                  serie_colour = '#0f115b'
+                  break;
+                case 'Tasa Recepciones / Permisos':
+                  serie_colour = '#eb2817'
+                  break;
               }
 
               var name = [];
@@ -268,14 +332,10 @@ Congo.future_projects.action_dashboards = function(){
 
               if (title == 'Tipo de Destino' && series.length > 1) {
                 chart_type = 'bar';
-                cantidad = count.length;
-                rancolor = randomColor({
-                  luminosity: 'light',
-                })
                 datasets.push({
                   label: label,
                   data: count,
-                  backgroundColor: rancolor,
+                  backgroundColor: serie_colour,
                 })
                 // Renombramos los name para evitar superposición en el chart
                 name = ["Anteproyecto", "Permiso Edif.", "Recep. Munic."];
