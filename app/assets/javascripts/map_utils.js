@@ -148,7 +148,10 @@ var overlays =  {
           data: {lon: centerPt.lng, lat: centerPt.lat },
           success: function(data){
             Congo.dashboards.config.county_id = data['county_id'];
-          }
+            Congo.dashboards.config.county_name = data['county_name'];
+          },
+          error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
+
         })
       }
       counties();
