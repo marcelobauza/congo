@@ -1408,13 +1408,97 @@ class Project < ApplicationRecord
     select += "END) AS vhmud, "
     select += "project_types.name as project_types_name "
 
-    @data = Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
+    data = Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
                      where(county_id: 50, project_type_id: 2).
                      select(select).
                      group(:code, :name, :address, :project_types_name ).
                      limit(10)
-    @data 
+    data 
   end
+
+  def self.information_general_department filters
+
+    select = "COUNT(DISTINCT(project_id)) as project_count, "
+    select += "Min(vhmud) as min_selling_speed1, "
+    select += "Max(vhmud) as max_selling_speed1, "
+    select += "avg(vhmud) as avg_selling_speed1, "
+    select += "SUM(total_units) as total_units1, "
+    select += "SUM(project_instance_mix_views.stock_units) as total_stock1, "
+    select += "(SUM(total_units) - SUM(project_instance_mix_views.stock_units)) as total_sold, "
+    select += "round((CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 "
+    select += "END) ELSE SUM(project_instance_mix_views.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END),1) AS spend_stock_months1, "
+    select += "MIN(uf_min_percent) as min_uf1, "
+    select += "MAX(uf_max_percent) as max_uf1, "
+    select += "round((CASE SUM(project_instance_mix_views.total_m2) WHEN 0 THEN 0 ELSE SUM(project_instance_mix_views.total_m2 * project_instance_mix_views.uf_avg_percent)/SUM(project_instance_mix_views.total_m2)  END),1) AS  avg_uf1,"
+    select += "ROUND(MIN(project_instance_mix_views.uf_m2),2) as min_uf_m21, "
+    select += "ROUND(MAX(project_instance_mix_views.uf_m2),2) as max_uf_m21, "
+    select += "CASE SUM(project_instance_mix_views.total_m2) WHEN 0 THEN 0 else "
+    select += "round(SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.5 * mix_terrace_square_meters))),1) end as avg_uf_m2,"
+    select += "round(MIN(project_instance_mix_views.mix_usable_square_meters),1) as min_usable_square_m21, "
+    select += "MAX(mix_usable_square_meters) as max_usable_square_m21, "
+    select += "round((CASE SUM(project_instance_mix_views.total_units) WHEN 0 THEN 0 ELSE SUM(project_instance_mix_views.mix_usable_square_meters * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units)END),1) AS avg_usable_square_m21, "
+    select += "MIN(mix_terrace_square_meters) as min_terrace_square_m21, "
+    select += "MAX(mix_terrace_square_meters) as max_terrace_square_m21, "
+    select += "round(CASE SUM(project_instance_mix_views.total_units) WHEN 0 THEN 0 ELSE SUM(project_instance_mix_views.mix_terrace_square_meters * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units) END, 1) AS avg_terrace_square_m21, "
+    select += "MIN(project_instance_mix_views.uf_m2) as min_m2_field1, "
+    select += "MAX(project_instance_mix_views.uf_m2) as max_m2_field1, "
+    select += "(SUM(total_units * project_instance_mix_views.uf_m2) / SUM(total_units)) as avg_m2_field1, "
+    select += "MIN(total_m2) as min_m2_built1, "
+    select += "MAX(total_m2) as max_m2_built1, "
+    select += "(SUM(total_units * total_m2) / SUM(total_units)) as avg_m2_built1 "
+
+    data = ProjectInstanceMixView.
+                     where(county_id: 50, project_type_id: 2).
+                     select(select).
+                     limit(10)
+    data 
+
+  end
+
+
+  def self.information_general_house filters
+
+    select = "COUNT(DISTINCT(project_id)) as project_count, "
+    select += "Min(vhmud) as min_selling_speed, "
+    select += "Max(vhmud) as max_selling_speed, "
+    select += "avg(vhmud) as avg_selling_speed, "
+    select += "SUM(total_units) as total_units, "
+    select += "SUM(project_instance_mix_views.stock_units) as total_stock, "
+    select += "(SUM(total_units) - SUM(project_instance_mix_views.stock_units)) as total_sold, "
+    select += "CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) "
+    select += "ELSE SUM(project_instance_mix_views.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END AS spend_stock_months1, "
+    select += "MIN(uf_min_percent) as min_uf, "
+    select += "MAX(uf_max_percent) as max_uf, "
+    select += "ROUND(sum(uf_avg_percent * total_m2 )/ sum(total_m2),2) as avg_uf, "
+    select += "ROUND((MIN(project_instance_mix_views.uf_m2_home))::numeric,2) as min_uf_m2, "
+    select += "ROUND((MAX(project_instance_mix_views.uf_m2_home))::numeric ,2) as max_uf_m2, "
+    select += "CASE SUM(project_instance_mix_views.ps_terreno) WHEN 0 THEN 0 "
+    select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno))))  END AS avg_uf_m2, "
+    select += "MIN(mix_usable_square_meters) as min_usable_square_m2, "
+    select += "MAX(mix_usable_square_meters) as max_usable_square_m2, "
+    select += "CASE SUM(project_instance_mix_views.total_units) WHEN 0 THEN 0 "
+    select += "ELSE SUM(project_instance_mix_views.mix_usable_square_meters * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units)END AS avg_m2_util, "
+    select += "MIN(mix_terrace_square_meters) as min_terrace_square_m2, "
+    select += "MAX(mix_terrace_square_meters) as max_terrace_square_m2, "
+    select += "(SUM(total_units * mix_terrace_square_meters) / SUM(total_units)) as avg_terrace_square_m2, "
+    select += "MIN(project_instance_mix_views.uf_m2_home) as min_m2_field, "
+    select += "MAX(project_instance_mix_views.uf_m2_home) as max_m2_field, "
+    select += "SUM((project_instance_mix_views.t_min + project_instance_mix_views.t_max)/2 * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units) as avg_m2_field, "
+    select += "MIN(total_m2) as min_m2_built, "
+    select += "MAX(total_m2) as max_m2_built, "
+    select += "(SUM(total_units * total_m2) / SUM(total_units)) as avg_m2_built"
+     
+
+    data = ProjectInstanceMixView.
+                     where(county_id: 50, project_type_id: 1).
+                     select(select).
+                     limit(10)
+    data 
+  end
+
+
+
+
 
   def self.reports_pdf filters
 
@@ -1425,8 +1509,13 @@ class Project < ApplicationRecord
       uf_values = Project.projects_by_uf(filters)
       uf_m2_values = Project.projects_by_uf_m2(filters)
       pstatus = Project.projects_group_by_count('project_statuses', filters, false)
+      info_department = Project.information_general_department filters
+      info_house = Project.information_general_house filters
 
       result.push({"list_projet":list_project})
+      
+      result.push({"info_department": info_department})
+      result.push({"info_house": info_house})
       
       data =[]
       stock_units =[]
