@@ -1233,7 +1233,7 @@ class Project < ApplicationRecord
       data =[]
       #GENERAL
       general_data.each do |item|
-        data.push("name": item[:label], "count":item[:value].to_i)
+        data.push("name": item[:label], "count":"%.1f" % item[:value].to_f)
       end
 
     result.push({"title":"Información General", "data": data})
