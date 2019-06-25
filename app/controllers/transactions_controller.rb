@@ -115,7 +115,7 @@ class TransactionsController < ApplicationController
       result.push({"title":"Transacciones / UF", "series":[{"data": data}]})
 
     rescue
-      result = {data: "Sin datos"}
+      #result = {data: ""}
     end
 
 

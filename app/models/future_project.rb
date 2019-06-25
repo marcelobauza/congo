@@ -580,7 +580,7 @@ class FutureProject < ApplicationRecord
       result.push({"title": "Tasas", "series":categories})
 
     rescue
-      result[:data] = ["Sin datos"]
+      #result[:data] = ["Sin datos"]
     end
 
   end
