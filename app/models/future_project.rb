@@ -531,8 +531,8 @@ class FutureProject < ApplicationRecord
         end
       end
       categories.push({"label": "Anteproyecto", "data": a})
-      categories.push({"label": "Permiso Edif.", "data": p})
-      categories.push({"label": "Recep. Munic.", "data": r})
+      categories.push({"label": "Permiso de Edificación", "data": p})
+      categories.push({"label": "Recepción Municipal", "data": r})
       result.push({"title": "Cantidad de Nuevas Unidades / Bimestre", "series": categories})
 
       #SUPERFICIE EDIFICADA POR EXPEDIENTE
@@ -563,8 +563,8 @@ class FutureProject < ApplicationRecord
         end
       end
       categories.push({"label": "Anteproyecto", "data": a})
-      categories.push({"label": "Permiso Edif.", "data": p})
-      categories.push({"label": "Recep. Munic.", "data": r})
+      categories.push({"label": "Permiso de Edificación", "data": p})
+      categories.push({"label": "Recepción Municipal", "data": r})
       result.push({"title": "Superficie Edificada Por Expediente", "series": categories })
 
       #TASAS
