@@ -76,6 +76,9 @@ Congo.building_regulations.action_dashboards = function(){
       Congo.dashboards.action_index.empty_selection_alert();
     }
 
+    // Creamos el overlay
+    Congo.dashboards.action_index.create_overlay();
+
     // Si se realizó la selección por comuna/punto, agregamos el item al filtro
     if (county_id != '') {
       Congo.dashboards.action_index.add_county_filter_item()
@@ -147,9 +150,6 @@ Congo.building_regulations.action_dashboards = function(){
 
         // Ocultamos el spinner
         $("#spinner").hide();
-
-        // Creamos el overlay
-        Congo.dashboards.action_index.create_overlay();
 
         // Creamos el div contenedor
         var chart_container = document.createElement('div');

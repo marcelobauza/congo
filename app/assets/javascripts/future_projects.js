@@ -72,10 +72,14 @@ Congo.future_projects.action_dashboards = function(){
     type_geometry = Congo.dashboards.config.typeGeometry;
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
+
     // Sino se ralizó la selección, se lanza un alert
     if (county_id == '' && centerPoint == undefined && wkt == undefined) {
       Congo.dashboards.action_index.empty_selection_alert();
     }
+
+    // Creamos el overlay
+    Congo.dashboards.action_index.create_overlay();
 
     // Si se realizó la selección por comuna/punto, agregamos el item al filtro
     if (county_id != '') {
@@ -147,9 +151,6 @@ Congo.future_projects.action_dashboards = function(){
 
         // Ocultamos el spinner
         $("#spinner").hide();
-
-        // Creamos el overlay
-        Congo.dashboards.action_index.create_overlay();
 
         // Separamos la información
         for (var i = 0; i < data.length; i++) {

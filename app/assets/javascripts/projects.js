@@ -32,8 +32,6 @@ function projects_report_pdf(){
     })
 }
 
-
-
 function addInmoFilter(id, name) {
 
   Congo.projects.config.project_agency_ids.push(id);
@@ -105,6 +103,9 @@ Congo.projects.action_dashboards = function(){
     if (county_id == '' && centerPoint == undefined && wkt == undefined) {
       Congo.dashboards.action_index.empty_selection_alert();
     }
+
+    // Creamos el overlay
+    Congo.dashboards.action_index.create_overlay();
 
     // Si se realizó la selección por comuna/punto, agregamos el item al filtro
     if (county_id != '') {
@@ -200,9 +201,6 @@ Congo.projects.action_dashboards = function(){
 
         // Ocultamos el spinner
         $("#spinner").hide();
-
-        // Creamos el overlay
-        Congo.dashboards.action_index.create_overlay();
 
         // Separamos la información
         for (var i = 0; i < data.length; i++) {
