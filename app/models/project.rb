@@ -1201,20 +1201,20 @@ class Project < ApplicationRecord
     begin
       global_information = Project.find_globals(filters)
       general_data = [
-        {:label => "TOTAL_PROJECTS_COUNT", :value => global_information[:project_count]},
-        {:label => "MIN_SELLING_SPEED", :value => global_information[:min_selling_speed]},
-        {:label => "MAX_SELLING_SPEED", :value => global_information[:max_selling_speed]},
-        {:label => "AVG_SELLING_SPEED", :value => global_information[:avg_selling_speed]},
-        {:label => "TOTAL_STOCK", :value => global_information[:total_units]},
-        {:label => "SELLS", :value => global_information[:total_sold]},
-        {:label => "AVAILABLE_STOCK", :value => global_information[:total_stock]},
-        {:label => "MONTHS_TO_SPEND", :value => global_information[:spend_stock_months]},
-        {:label => "UF_MIN_VALUE", :value => global_information[:min_uf]},
-        {:label => "UF_MAX_VALUE", :value => global_information[:max_uf]},
-        {:label => "UF_AVERAGE", :value => global_information[:avg_uf]},
-        {:label => "UF_MIN_M2_VALUE", :value => global_information[:min_uf_m2]},
-        {:label => "UF_MAX_M2_VALUE", :value => global_information[:max_uf_m2]},
-        {:label => "UF_AVERAGE_M2", :value => global_information[:avg_uf_m2]}
+        {:label => I18n.t("TOTAL_PROJECTS_COUNT"), :value => global_information[:project_count]},
+        {:label => I18n.t("MIN_SELLING_SPEED"), :value => global_information[:min_selling_speed]},
+        {:label => I18n.t("MAX_SELLING_SPEED"), :value => global_information[:max_selling_speed]},
+        {:label => I18n.t("AVG_SELLING_SPEED"), :value => global_information[:avg_selling_speed]},
+        {:label => I18n.t("TOTAL_STOCK"), :value => global_information[:total_units]},
+        {:label => I18n.t("SELLS"), :value => global_information[:total_sold]},
+        {:label => I18n.t("AVAILABLE_STOCK"), :value => global_information[:total_stock]},
+        {:label => I18n.t("MONTHS_TO_SPEND"), :value => global_information[:spend_stock_months]},
+        {:label => I18n.t("UF_MIN_VALUE"), :value => global_information[:min_uf]},
+        {:label => I18n.t("UF_MAX_VALUE"), :value => global_information[:max_uf]},
+        {:label => I18n.t("UF_AVERAGE"), :value => global_information[:avg_uf]},
+        {:label => I18n.t("UF_MIN_M2_VALUE"), :value => global_information[:min_uf_m2]},
+        {:label => I18n.t("UF_MAX_M2_VALUE"), :value => global_information[:max_uf_m2]},
+        {:label => I18n.t("UF_AVERAGE_M2"), :value => global_information[:avg_uf_m2]}
       ]
       pstatus = Project.projects_group_by_count('project_statuses', filters, false)
       ptypes = Project.projects_group_by_count('project_types', filters, true)
