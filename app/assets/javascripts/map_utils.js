@@ -220,51 +220,20 @@ var overlays =  {
     map.removeControl(layerControl);
     layerControl = L.control.layers(baseMaps, overlays, {position: 'topleft'}).addTo(map);
     layer_type = Congo.dashboards.config.layer_type;
-
     switch(layer_type) {
       case 'transactions_info':
-        $.ajax({
-          async: false,
-          type: 'GET',
-          url: '/transactions/period.json',
-          datatype: 'json',
-          success: function(data){
-            Congo.dashboards.config.year = data['data'][0]['year'];
-            Congo.dashboards.config.bimester = data['data'][0]['period'];
-          }
-        });
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.transactions.action_dashboards.indicator_transactions();
         filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'future_projects_info':
-        $.ajax({
-          async: false,
-          type: 'GET',
-          url: '/future_projects/period.json',
-          datatype: 'json',
-          success: function(data){
-            Congo.dashboards.config.year = data['data'][0]['year'];
-            Congo.dashboards.config.bimester = data['data'][0]['period'];
-          }
-        });
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.future_projects.action_dashboards.indicator_future_projects();
         filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         break;
       case 'projects_feature_info':
-        $.ajax({
-          async: false,
-          type: 'GET',
-          url: '/projects/period.json',
-          datatype: 'json',
-          success: function(data){
-            Congo.dashboards.config.year = data['data'][0]['year'];
-            Congo.dashboards.config.bimester = data['data'][0]['period'];
-          }
-        });
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.projects.action_dashboards.indicator_projects();
