@@ -4,7 +4,7 @@ Congo.namespace('projects.action_dashboards');
 Congo.projects.config= {
   county_name: '',
   county_id: '',
-  layer_type: 'projects_info',
+  layer_type: 'projects_feature_info',
   project_status_ids: [],
   project_type_ids: [],
   mix_ids: [],

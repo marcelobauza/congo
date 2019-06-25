@@ -65,13 +65,11 @@ var overlays =  {
           map.removeLayer(layer);
         });
       }
-
       Congo.dashboards.config.county_id = '';
-      Congo.map_utils.size_box = '';
+      Congo.dashboards.config.size_box = [];
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
       poly(typeGeometry);
-
     });
 
     $('#select_polygon').on('click', function(event) {
@@ -84,6 +82,7 @@ var overlays =  {
         });
       }
       Congo.dashboards.config.county_id = '';
+      Congo.dashboards.config.size_box = [];
       Congo.dashboards.config.centerpt = '';
       Congo.dashboards.config.radius = '';
       map.doubleClickZoom.disable();
@@ -102,11 +101,12 @@ var overlays =  {
       }
       Congo.dashboards.config.centerpt = '';
       Congo.dashboards.config.radius = '';
-      Congo.dashboards.config.size_box = '';
+      Congo.dashboards.config.size_box = [];
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
+      console.log(Congo.dashboards.config.size_box);
       poly(typeGeometry);
-
+  
     });
 
     map.on('draw:created', function(e) {
