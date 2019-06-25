@@ -1395,7 +1395,7 @@ class Project < ApplicationRecord
     return @project_homes, @project_departments
   end
 
-  def self.reports_pdf filters
+  def self.list_projects filters
     select = "projects.code, "
     select = "projects.name, "
     select += "projects.address, "
@@ -1406,15 +1406,96 @@ class Project < ApplicationRecord
     select += "WHEN 0 THEN 0::real "
     select += "ELSE vhmu(project_instance_mixes.total_units, project_instance_mixes.stock_units, cadastre, projects.sale_date) "
     select += "END) AS vhmud, "
-    select += "project_types.name as project_types_name, "
-    select += "project_statuses.name as status"
-
+    select += "project_types.name as project_types_name "
 
     @data = Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
                      where(county_id: 50, project_type_id: 2).
                      select(select).
-                     group(:code, :name, :address, :project_types_name, :status ).
+                     group(:code, :name, :address, :project_types_name ).
                      limit(10)
- 
+    @data 
+  end
+
+  def self.reports_pdf filters
+
+      result =[]
+      list_project = list_projects filters
+      pmixes = Project.projects_group_by_mix('mix', filters)
+      avai = Project.projects_sum_by_stock(filters)
+      uf_values = Project.projects_by_uf(filters)
+      uf_m2_values = Project.projects_by_uf_m2(filters)
+      pstatus = Project.projects_group_by_count('project_statuses', filters, false)
+
+      result.push({"list_projet":list_project})
+      
+      data =[]
+      stock_units =[]
+      sold_units =[]
+      categories=[]
+      pmixes.each do |item|
+        stock_units.push("name":item.mix_type, "count": item[:stock_units], "id":item.id)
+        sold_units.push("name":item.mix_type, "count": item[:sold_units], "id":item.id)
+      end
+      categories.push({"label":"Venta Total", "data": sold_units});
+      categories.push({"label":"Disponibilidad", "data": stock_units});
+      result.push({"title":"Total Distribución por Mix", "series":categories})
+
+      ##OFERTA, VENTA
+      total_units=[]
+      sold_units=[]
+      stock_units=[]
+      categories=[]
+      avai.each do |item|
+        total_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:total_units].to_i)
+        sold_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:sold_units].to_i)
+        stock_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:stock_units].to_i)
+      end
+      categories.push({"label":"Oferta", "data": total_units});
+      categories.push({"label":"Venta", "data": sold_units});
+      categories.push({"label":"Disponibilidad", "data": stock_units});
+      result.push({"title":"Oferta, Venta y Disponibilidad por Bimestre", "series":categories})
+
+      ##VALOR UF BIMESTRE
+      #result[:data] << [""]
+      min =[]
+      max =[]
+      avg =[]
+      categories=[]
+      uf_values.each do |item|
+        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
+        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
+        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+      end
+
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
+      categories.push({"label":"Promedio", "data": avg});
+
+      result.push({"title":"Valor UF por Bimestre", "series":categories})
+
+      min =[]
+      max =[]
+      avg =[]
+      categories=[]
+      uf_m2_values.each do |item|
+        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
+        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
+        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+      end
+      categories.push({"label":"Mínimo", "data": min});
+      categories.push({"label":"Máximo", "data": max});
+      categories.push({"label":"Promedio", "data": avg});
+
+      result.push({"title":"UF/m2 por Bimestre", "series":categories})
+
+      ##ESTADO PROYECTO
+
+      data =[]
+      pstatus.each do |item|
+        data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
+      end
+      result.push({"title":"Estado del Proyecto", "series":[{"data": data}]})
+
+    result
   end
 end
