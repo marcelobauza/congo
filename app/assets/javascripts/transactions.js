@@ -53,9 +53,9 @@ Congo.transactions.action_dashboards = function(){
     county_id = Congo.dashboards.config.county_id;
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
-    radius = Congo.map_utils.radius;
-    centerPoint = Congo.map_utils.centerpt;
-    wkt = Congo.map_utils.size_box;
+    radius = Congo.dashboards.config.radius;
+    centerPoint = Congo.dashboards.config.centerpt;
+    wkt = Congo.dashboards.config.size_box;
     property_type_ids = Congo.transactions.config.property_type_ids;
     seller_type_ids = Congo.transactions.config.seller_type_ids;
     periods = Congo.transactions.config.periods;
@@ -113,7 +113,7 @@ Congo.transactions.action_dashboards = function(){
         years: years,
         from_calculated_value: from_calculated_value,
         to_calculated_value: to_calculated_value,
-        wkt: wkt,
+        wkt: JSON.stringify(wkt),
         type_geometry:type_geometry,
         layer_type: layer_type,
         style_layer: style_layer

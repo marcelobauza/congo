@@ -72,7 +72,6 @@ Congo.future_projects.action_dashboards = function(){
     type_geometry = Congo.dashboards.config.typeGeometry;
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
-
     // Sino se ralizó la selección, se lanza un alert
     if (county_id == '' && centerPoint == undefined && wkt == undefined) {
       Congo.dashboards.action_index.empty_selection_alert();
@@ -113,7 +112,7 @@ Congo.future_projects.action_dashboards = function(){
         project_type_ids: project_type_ids,
         periods: periods,
         years: years,
-        wkt: wkt,
+        wkt: JSON.stringify(wkt),
         type_geometry:type_geometry,
         layer_type: layer_type,
         style_layer: style_layer

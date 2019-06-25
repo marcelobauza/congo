@@ -84,9 +84,9 @@ Congo.projects.action_dashboards = function(){
     county_id = Congo.dashboards.config.county_id;
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
-    radius = Congo.map_utils.radius;
-    centerPoint = Congo.map_utils.centerpt;
-    wkt = Congo.map_utils.size_box;
+    radius = Congo.dashboards.config.radius;
+    centerPoint = Congo.dashboards.config.centerpt;
+    wkt = Congo.dashboards.config.size_box;
     project_status_ids = Congo.projects.config.project_status_ids;
     project_type_ids = Congo.projects.config.project_type_ids;
     mix_ids = Congo.projects.config.mix_ids;
@@ -164,7 +164,7 @@ Congo.projects.action_dashboards = function(){
         from_uf_value: from_uf_value,
         to_uf_value: to_uf_value,
         project_agency_ids: project_agency_ids,
-        wkt: wkt,
+        wkt: JSON.stringify(wkt),
         type_geometry:type_geometry,
         layer_type: layer_type,
         style_layer: style_layer

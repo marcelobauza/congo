@@ -12,7 +12,7 @@ Congo.dashboards.config= {
   kind_reports: '',
   radius: 0,
   centerpt: '',
-  size_box: '',
+  size_box: [],
   typeGeometry: '',
 }
 

@@ -59,9 +59,9 @@ Congo.building_regulations.action_dashboards = function(){
   indicator_building_regulations = function(){
 
     county_id = Congo.dashboards.config.county_id;
-    radius = Congo.map_utils.radius;
-    centerPoint = Congo.map_utils.centerpt;
-    wkt = Congo.map_utils.size_box;
+    radius = Congo.dashboards.config.radius;
+    centerPoint = Congo.dashboards.config.centerpt;
+    wkt = Congo.dashboards.config.size_box;
     from_construct = Congo.building_regulations.config.from_construct;
     to_construct = Congo.building_regulations.config.to_construct;
     from_land_ocupation = Congo.building_regulations.config.from_land_ocupation;
@@ -110,7 +110,7 @@ Congo.building_regulations.action_dashboards = function(){
         from_land_ocupation: from_land_ocupation,
         to_land_ocupation: to_land_ocupation,
         allowed_use_ids: allowed_use_ids,
-        wkt: wkt,
+        wkt: JSON.stringify(wkt),
         type_geometry:type_geometry,
         layer_type: layer_type,
         style_layer: style_layer

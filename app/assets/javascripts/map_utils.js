@@ -130,7 +130,7 @@ var overlays =  {
         arr1 = LatLngsToCoords(polygon[0]);
         arr1.push(arr1[0])
         size_box.push(arr1);
-        Congo.map_utils.size_box= size_box;
+        Congo.dashboards.config.size_box.push(size_box)
       }
       if(typeGeometry == 'point'){
 
@@ -156,10 +156,13 @@ var overlays =  {
   }
 
   var LatLngToCoords = function (LatLng, reverse) { // (LatLng, Boolean) -> Array
+    coord =[]
     var lat = parseFloat(LatLng.lat),
       lng = parseFloat(LatLng.lng);
-    coord = lng +" "+ lat;
-    return [coord];
+    //coord = lat +" "+ lng;
+    coord.push(lng);
+    coord.push(lat);
+    return coord;
   }
 
   var LatLngsToCoords = function (LatLngs, levelsDeep, reverse) { // (LatLngs, Number, Boolean) -> Array
@@ -169,7 +172,7 @@ var overlays =  {
 
     for (i = 0, len = LatLngs.length; i < len; i++) {
       coord =  LatLngToCoords(LatLngs[i]);
-      coords.push(coord);
+       coords.push(coord);
     }
     return coords;
   }
@@ -274,20 +277,25 @@ var overlays =  {
     }
 
     typeGeometry = Congo.dashboards.config.typeGeometry;
-    console.log(typeGeometry);
     switch(typeGeometry) {
       case 'circle':
         centerpt = Congo.dashboards.config.centerpt;
         radius = Congo.dashboards.config.radius ;
-        console.log(radius);
 
         cql_filter ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)"+ filter_layer;
         cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",kilometers)";
         break;
       case 'polygon':
+        coord_geoserver = [];
         polygon_size = Congo.dashboards.config.size_box;
-        cql_filter ="WITHIN(the_geom, Polygon(("+polygon_size+"))) "+ filter_layer;
-        cql_filter_pois ="WITHIN(the_geom, Polygon(("+polygon_size+"))) ";
+        $.each(polygon_size[0], function(a, b){
+            $.each(b, function(c,d){
+              coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
+            })
+        });
+
+        cql_filter ="WITHIN(the_geom,  Polygon(("+coord_geoserver+"))) "+ filter_layer;
+        cql_filter_pois ="WITHIN(the_geom, Polygon(("+coord_geoserver+"))) ";
         break;
       case 'point':
         county_id = Congo.dashboards.config.county_id;

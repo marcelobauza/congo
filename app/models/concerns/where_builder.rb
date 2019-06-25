@@ -2,8 +2,11 @@ module WhereBuilder
   extend ActiveSupport::Concern
 
   def self.build_within_condition(wkt)
-    "ST_Within(the_geom, ST_GeomFromText('#{wkt}', #{Util::WGS84_SRID}))"
+    polygon = JSON.parse(wkt)
+ "ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326), the_geom)"
+#    "ST_Within(the_geom, ST_GeomFromText('POLYGON((#{polygon[1]}))', #{Util::WGS84_SRID}))"
   end
+  
 
   def self.build_within_condition_radius(center_pt, radius)
     "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius})"

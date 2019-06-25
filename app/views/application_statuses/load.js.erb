@@ -5,7 +5,7 @@ let radius = "<%= @row[:filters]['radius'] %>"
 let center_point = "<%= @row[:filters]['centerpt'] %>"
 let type_geometry = "<%= @row[:filters]['type_geometry'] %>"
 let county_id = "<%= @row[:filters]['county_id'] %>"
-let wkt = "<%= @row[:filters]['wkt'] %>"
+let wkt = <%= @row[:filters]['wkt'] %>
 let style_layer = "<%= @row[:filters]['style_layer'] %>"
 
 Congo.dashboards.config.layer_type = layer_type;
