@@ -8,43 +8,6 @@ function addSpinner() {
   $('#filter-container').after(spinner);
 }
 
-// Comprobamos si el filter_container no está creado y adjuntado
-if ($('#filter-container').length == 0) {
-
-  // Creamos el div contenedor
-  var filter_container = document.createElement('div');
-  filter_container.className = 'card';
-  filter_container.id = 'filter-container';
-
-  // Creamos el card-header
-  var filter_card_h = document.createElement('div');
-  filter_card_h.className = 'card-header';
-  filter_card_h.id = 'filter-header';
-
-  // Creamos el collapse
-  var filter_collapse = document.createElement('div');
-  filter_collapse.className = 'collapse show';
-  filter_collapse.id = 'filter-collapse';
-
-  // Creamos el card-body
-  var filter_card_b = document.createElement('div');
-  filter_card_b.className = 'card-body';
-  filter_card_b.id = 'filter-body';
-
-  // TODO: Crear filter_card_h_title y filter_card_h_button dinámicos
-
-  // Creamos título y boton minimizar
-  var filter_card_h_button = '<button type="button" class="close" data-toggle="collapse" data-target="#filter-collapse"><i class="fas fa-window-minimize"></i></button>'
-  var filter_card_h_title = '<b>Filtros</b>'
-
-  // Adjuntamos los elementos
-  $('.overlay').append(filter_container);
-  $('#filter-container').append(filter_card_h, filter_collapse);
-  $('#filter-collapse').append(filter_card_b);
-  $('#filter-header').append(filter_card_h_button, filter_card_h_title);
-
-};
-
 addSpinner();
 
 // Creamos el item

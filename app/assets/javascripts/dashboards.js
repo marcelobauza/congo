@@ -32,14 +32,50 @@ Congo.dashboards.action_index = function(){
   }
 
   // Creamos el overlay
-  create_overlay = function(){
+  create_overlay = function() {
+
     if ($('.overlay').length == 0) {
+
       $('#map').before(
-        $('<div>', {
-            'class': 'overlay'
-        })
-      );
-    };
+        $('<div>', { // overlay
+          'class': 'overlay'
+        }).append(
+          $('<div>', { // card
+            'class': 'card',
+            'id': 'filter-container'
+          }).append(
+            $('<div>', { // card-header
+              'class': 'card-header',
+              'id': 'filter-header'
+            }).append(
+              $('<b>', { // título
+                'text': 'Filtros'
+              }),
+              $('<button>', { // boton cerrar
+                'class': 'close',
+                'id': 'filter-header',
+                'data-toggle': 'collapse',
+                'data-target': '#filter-collapse'
+              }).append(
+                $('<i>', { // icono minimizar
+                  'class': 'fas fa-window-minimize'
+                })
+              )
+            ),
+            $('<div>', { // collapse
+              'class': 'collapse show',
+              'id': 'filter-collapse'
+            }).append(
+              $('<div>', { // card-body
+                'class': 'card-body',
+                'id': 'filter-body'
+              })
+            )
+          )
+        )
+      )
+
+    }; // Cierra if overlay
 
     // Aplicamos drag and drop
     dragula({
