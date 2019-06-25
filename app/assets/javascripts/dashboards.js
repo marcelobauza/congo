@@ -101,7 +101,7 @@ Congo.dashboards.action_index = function(){
 
   return {
     init: init,
-    create_overlay: create_overlay,
+    create_overlay_and_filter_card: create_overlay_and_filter_card,
     empty_selection_alert: empty_selection_alert,
     add_county_filter_item: add_county_filter_item
   }
