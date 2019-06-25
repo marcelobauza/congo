@@ -11,15 +11,23 @@ class BuildingRegulation < ApplicationRecord
 	end
 
 	def self.group_by_constructivity filters
-    
         icinciti = find_by_columns_range(filters, "icinciti")
 	end
 
+
 	def self.group_by_land_ocupation filters
-		find_group_by_column filters, 'land_ocupation'
+		osinciti = find_by_columns_range(filters, 'osinciti')
 	end
 
-	def self.find_by_columns_range filters, column
+	def self.group_by_maximum_height filters
+		aminciti = find_by_columns_range(filters, 'aminciti')
+	end
+
+  def self.group_by_hectarea_inhabitants filters
+    hectarea_inhabitants = find_by_columns_range(filters, 'hectarea_inhabitants')
+  end
+	
+  def self.find_by_columns_range filters, column
     range = BuildingRegulation.select("min(#{column}), max(#{column})").
       where(build_interval_conditions(filters, column)).take
       range

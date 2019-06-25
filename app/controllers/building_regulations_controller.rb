@@ -3,14 +3,19 @@ class BuildingRegulationsController < ApplicationController
 
   def building_regulations_filters
     result = []
-    @a = constructivity
-    result.push({"label":"Coeficiente de Constructibilidad", "min":@a[:min], "max":@a[:max]})
-    @e = allowed_use_list
-
-    result.push({"label":"Uso Permitido", "data":@e})
+    @a = allowed_use_list
+    result.push({"label":"Uso Permitido", "data":@a})
+    @c = constructivity
+    result.push({"label":"Coeficiente de Constructibilidad", "min": @c[:min], "max": @c[:max]})
+    @l = land_ocupation
+    result.push({"label":"Ocupación de Suelo", "min": @l[:min], "max": @l[:max]})
+    @mh = maximum_height
+    result.push({"label":"Altura Máxima", "min": @mh[:min], "max": @mh[:max]})
+    
+    @hh = hectarea_inhabitants
+    result.push({"label":"Habitantes por Hectarea", "min": @hh[:min], "max": @hh[:max]})
     render json: result
   end
-
 
   def constructivity
     @construct = BuildingRegulation.group_by_constructivity(params)
@@ -20,6 +25,12 @@ class BuildingRegulationsController < ApplicationController
     @land_ocupation = BuildingRegulation.group_by_land_ocupation(params)
   end
 
+  def maximum_height
+      @maximum_height = BuildingRegulation.group_by_maximum_height(params)
+  end
+  def hectarea_inhabitants
+      @hectarea_inhabitants = BuildingRegulation.group_by_hectarea_inhabitants(params)
+  end
   def constructivity_limits
     @list = BuildingRegulation.get_construct_limits
   end
