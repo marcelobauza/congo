@@ -77,7 +77,7 @@ Congo.building_regulations.action_dashboards = function(){
     }
 
     // Creamos el overlay
-    Congo.dashboards.action_index.create_overlay();
+    Congo.dashboards.action_index.create_overlay_and_filter_card();
 
     // Si se realizó la selección por comuna/punto, agregamos el item al filtro
     if (county_id != '') {

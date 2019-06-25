@@ -32,7 +32,7 @@ Congo.dashboards.action_index = function(){
   }
 
   // Creamos el overlay
-  create_overlay = function() {
+  create_overlay_and_filter_card = function() {
 
     if ($('.overlay').length == 0) {
 
