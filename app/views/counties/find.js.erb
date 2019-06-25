@@ -10,17 +10,6 @@ function addSpinner() {
 
 addSpinner();
 
-// Creamos el item
-var filter_item = document.createElement('div');
-filter_item.className = 'text-white bg-secondary px-2 mb-1 py-1 rounded';
-filter_item.id = 'item-comuna';
-var text_item = 'Comuna: '+name;
-
-// Adjunta el item
-$('#item-comuna').remove();
-$('#filter-body').append(filter_item);
-$('#item-comuna').append(text_item);
-
 Congo.map_utils.counties();
 
 $('#modal-counties').modal('hide')

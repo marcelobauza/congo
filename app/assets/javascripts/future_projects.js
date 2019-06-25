@@ -77,6 +77,11 @@ Congo.future_projects.action_dashboards = function(){
       Congo.dashboards.action_index.empty_selection_alert();
     }
 
+    // Si se realizó la selección por comuna/punto, agregamos el item al filtro
+    if (county_id != '') {
+      Congo.dashboards.action_index.add_county_filter_item()
+    }
+
     if (county_id != '') {
       data = {
         to_year: to_year,
