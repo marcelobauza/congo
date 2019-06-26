@@ -1525,9 +1525,9 @@ class Project < ApplicationRecord
         stock_units.push("name":item.mix_type, "count": item[:stock_units], "id":item.id)
         sold_units.push("name":item.mix_type, "count": item[:sold_units], "id":item.id)
       end
-      categories.push({"label":"Venta Total", "data": sold_units});
-      categories.push({"label":"Disponibilidad", "data": stock_units});
-      result.push({"title":"Total Distribución por Mix", "series":categories})
+      categories.push({"label":"Vendidas", "data": sold_units});
+      categories.push({"label":"Disponibles", "data": stock_units});
+      result.push({"title":"Mix de Unidades", "series":categories})
 
       ##OFERTA, VENTA
       total_units=[]
@@ -1539,10 +1539,10 @@ class Project < ApplicationRecord
         sold_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:sold_units].to_i)
         stock_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:stock_units].to_i)
       end
-      categories.push({"label":"Oferta", "data": total_units});
-      categories.push({"label":"Venta", "data": sold_units});
-      categories.push({"label":"Disponibilidad", "data": stock_units});
-      result.push({"title":"Oferta, Venta y Disponibilidad por Bimestre", "series":categories})
+      categories.push({"label":"Oferta Total", "data": total_units});
+      categories.push({"label":"Ventas Total", "data": sold_units});
+      categories.push({"label":"Disponibilidad Total", "data": stock_units});
+      result.push({"title":"Evolución Stock Total, Venta y Disponibilidad", "series":categories})
 
       ##VALOR UF BIMESTRE
       #result[:data] << [""]
@@ -1556,11 +1556,11 @@ class Project < ApplicationRecord
         avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
       end
 
-      categories.push({"label":"Mínimo", "data": min});
-      categories.push({"label":"Máximo", "data": max});
-      categories.push({"label":"Promedio", "data": avg});
+      categories.push({"label":"UF Mínimo", "data": min});
+      categories.push({"label":"UF Máximo", "data": max});
+      categories.push({"label":"UF Promedio", "data": avg});
 
-      result.push({"title":"Valor UF por Bimestre", "series":categories})
+      result.push({"title":"Evolución Precio en UF", "series":categories})
 
       min =[]
       max =[]
@@ -1571,11 +1571,11 @@ class Project < ApplicationRecord
         max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
         avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
       end
-      categories.push({"label":"Mínimo", "data": min});
-      categories.push({"label":"Máximo", "data": max});
-      categories.push({"label":"Promedio", "data": avg});
+      categories.push({"label":"UF Mínimo", "data": min});
+      categories.push({"label":"UF Máximo", "data": max});
+      categories.push({"label":"UF Promedio", "data": avg});
 
-      result.push({"title":"UF/m2 por Bimestre", "series":categories})
+      result.push({"title":"Evolución Precio en UF/m2", "series":categories})
 
       ##ESTADO PROYECTO
 
@@ -1583,7 +1583,7 @@ class Project < ApplicationRecord
       pstatus.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end
-      result.push({"title":"Estado del Proyecto", "series":[{"data": data}]})
+      result.push({"title":"Estado de los Proyectos", "series":[{"data": data}]})
 
     result
   end
