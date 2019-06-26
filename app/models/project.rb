@@ -1587,4 +1587,32 @@ class Project < ApplicationRecord
 
     result
   end
+  def self.interval_graduated_points(params)
+@pp = params
+    if !params[:county_id].nil?
+      conditions = "county_id = #{params[:county_id]}"
+    elsif !params[:wkt].nil?
+      conditions = WhereBuilder.build_within_condition(params[:wkt])
+    else
+      conditions = WhereBuilder.build_within_condition_radius(params[:centerpt], params[:radius] )
+      end
+    
+    period_current = Period.get_period_current
+    bimester = period_current.bimester
+    year = period_current.year
+    values = ProjectInstanceMixView.select("COUNT(*) as counter, ROUND(stock_units / 10) as value").
+      where(bimester: bimester, year: year).where(conditions).where("stock_units > 0").
+      group("ROUND(stock_units / 10)").
+      order("counter desc").first
+
+    result = Array.new
+    unless values.nil?
+      seed = (values["value"].to_i * 10)
+      1.upto(Util::INTERVALS_QUANTITY) do
+        result << seed
+        seed += (values["value"].to_i * 10)
+      end
+    end
+    return result
+  end
 end

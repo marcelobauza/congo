@@ -1,4 +1,11 @@
 class ProjectsController < ApplicationController
+  
+
+  def graduated_points
+    @interval = Project.interval_graduated_points(params)
+    render json: {data: @interval}
+  end
+
   def dashboards
   end
 
