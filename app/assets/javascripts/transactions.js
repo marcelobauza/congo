@@ -17,11 +17,79 @@ Congo.transactions.action_graduated_points = function(){
 
   init=function(){
     var env1='';
+
+    county_id = Congo.dashboards.config.county_id;
+    to_year = Congo.dashboards.config.year;
+    to_bimester = Congo.dashboards.config.bimester;
+    radius = Congo.dashboards.config.radius;
+    centerPoint = Congo.dashboards.config.centerpt;
+    wkt = Congo.dashboards.config.size_box;
+    property_type_ids = Congo.transactions.config.property_type_ids;
+    seller_type_ids = Congo.transactions.config.seller_type_ids;
+    periods = Congo.transactions.config.periods;
+    years = Congo.transactions.config.years;
+    from_calculated_value = Congo.transactions.config.from_calculated_value;
+    to_calculated_value = Congo.transactions.config.to_calculated_value;
+    type_geometry = Congo.dashboards.config.typeGeometry;
+    layer_type = Congo.dashboards.config.layer_type;
+    style_layer = Congo.dashboards.config.style_layer;
+
+
+    if (county_id != '') {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        property_type_ids: property_type_ids,
+        seller_type_ids: seller_type_ids,
+        periods: periods,
+        years: years,
+        from_calculated_value: from_calculated_value,
+        to_calculated_value: to_calculated_value,
+        county_id: county_id,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+      };
+    } else if (centerPoint != '') {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        property_type_ids: property_type_ids,
+        seller_type_ids: seller_type_ids,
+        periods: periods,
+        years: years,
+        from_calculated_value: from_calculated_value,
+        to_calculated_value: to_calculated_value,
+        centerpt: centerPoint,
+        radius: radius,
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+
+      };
+    } else {
+      data = {
+        to_year: to_year,
+        to_period: to_bimester,
+        property_type_ids: property_type_ids,
+        seller_type_ids: seller_type_ids,
+        periods: periods,
+        years: years,
+        from_calculated_value: from_calculated_value,
+        to_calculated_value: to_calculated_value,
+        wkt: JSON.stringify(wkt),
+        type_geometry:type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+
+      };
+    }
+
     $.ajax({
       type: 'GET',
       url: '/transactions/graduated_points.json',
       datatype: 'json',
-      data: {county_id:"52" },
+      data: data,
       success: function(data){
         $.each(data['data'], function(index, value){
           str = 'interval'+index+':'+value+';';

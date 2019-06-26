@@ -429,13 +429,19 @@ class FutureProject < ApplicationRecord
   ########New Functions##################
   def self.interval_graduated_points(params)
 
-
+    if !params[:county_id].nil?
+      conditions = "county_id = #{params[:county_id]}"
+    elsif !params[:wkt].nil?
+      conditions = WhereBuilder.build_within_condition(params[:wkt])
+    else
+      conditions = WhereBuilder.build_within_condition_radius(params[:centerpt], params[:radius] )
+      end
+    
     period_current = Period.get_period_current
     bimester = period_current.bimester
     year = period_current.year
-    county_id = params['county_id']
     values = FutureProject.select("COUNT(*) as counter, ROUND(m2_built / 100) as value").
-      where(bimester: bimester, year: year, county_id: county_id).where("m2_built > ?", 1).
+      where(bimester: bimester, year: year).where(conditions).where("m2_built > ?", 1).
       group("ROUND(m2_built / 100)").
       order("counter desc").first
     result = Array.new

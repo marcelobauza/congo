@@ -804,9 +804,17 @@ class Transaction < ApplicationRecord
     period_current = Period.get_period_current
     bimester = period_current.bimester
     year = period_current.year
-    county_id = params['county_id']
+    
+    if !params[:county_id].nil?
+      conditions = "county_id = #{params[:county_id]}"
+    elsif !params[:wkt].nil?
+      conditions = WhereBuilder.build_within_condition(params[:wkt])
+    else
+      conditions = WhereBuilder.build_within_condition_radius(params[:centerpt], params[:radius] )
+      end
+
     values = Transaction.select("COUNT(*) as counter, ROUND(calculated_value / 10) as value").
-      where(bimester: bimester, year: year, county_id: county_id).where("calculated_value > ?", 1).
+      where(bimester: bimester, year: year).where(conditions).where("calculated_value > ?", 1).
       group("ROUND(calculated_value / 10)").
       order("counter desc").first
     result = Array.new
