@@ -19,17 +19,497 @@ Congo.projects.config= {
 
 function projects_report_pdf(){
 
-    $.ajax({
-      type: 'GET',
-      url: '/reports/projects_pdf.json',
-      datatype: 'json',
-      data: data,
-      success: function(data){
+  $.ajax({
+    type: 'GET',
+    url: '/reports/projects_pdf.json',
+    datatype: 'json',
+    data: data,
+    success: function(data){
 
-        console.log(data);
+      data = data['data']
 
-      }
-    })
+      console.log('data del report');
+      console.log(data);
+
+      // Creamos el doc
+      var doc = new jsPDF();
+
+      // ---------- PÁGINA UNO ---------- //
+
+      // Título
+      doc.setFontStyle("bold");
+      doc.setFontSize(22);
+      doc.text('Proyectos Residenciales en Venta', 105, 20, null, null, 'center');
+
+      // Subtítulo
+      doc.setFontSize(16);
+      doc.text('Polígono Seleccionado', 105, 30, null, null, 'center');
+
+      // Pie de página
+      doc.setFontStyle("bold");
+      doc.setFontSize(12);
+      doc.text('Fuente:', 20, 290);
+      doc.setFontStyle("normal");
+      doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+
+      // ---------- PÁGINA DOS ---------- //
+
+      // Agregamos una página
+      doc.addPage('a4', 'portrait')
+
+      // Subtítulo
+      doc.setFontStyle("bold");
+      doc.setFontSize(16);
+      doc.text('Listado de Proyectos', 105, 20, null, null, 'center');
+
+      // Pie de página
+      doc.setFontStyle("bold");
+      doc.setFontSize(12);
+      doc.text('Fuente:', 20, 290);
+      doc.setFontStyle("normal");
+      doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+
+      doc.line(10, 25, 200, 25);
+
+      for (var i = 0; i < 3; i++) {
+
+        var reg = data[i];
+        console.log(reg);
+
+        var list_projet = reg['list_projet'];
+        console.log(list_projet);
+
+        var line_num = 30
+
+        $.each(list_projet, function(a, b) {
+
+          var name = b['name']
+          var address = b['address']
+          var sold_units = b['sold_units']
+          var stock_units = b['stock_units']
+          var total_units = b['total_units']
+          var vhmud = b['vhmud']
+
+          // Convertimos integer a varchar
+          sold_units = sold_units.toString()
+          stock_units = stock_units.toString()
+          total_units = total_units.toString()
+          vhmud = vhmud.toString()
+
+          if (line_num > 260) {
+            doc.addPage('a4', 'portrait')
+            line_num = 25
+
+            doc.line(10, 20, 200, 20);
+
+            // Pie de página
+            doc.setFontStyle("bold");
+            doc.setFontSize(12);
+            doc.text('Fuente:', 20, 290);
+            doc.setFontStyle("normal");
+            doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+          }
+
+          // Cod
+          doc.setFontSize(12);
+          doc.setFontStyle("bold");
+          doc.text('Cod:', 10, line_num);
+          doc.setFontStyle("normal");
+          doc.text('', 22, line_num);
+
+          // Nombre
+          doc.setFontStyle("bold");
+          doc.text('Nombre:', 60, line_num);
+          doc.setFontStyle("normal");
+          doc.text(name, 80, line_num);
+
+          line_num = line_num+8
+
+          // Inmobiliaria
+          doc.setFontStyle("bold");
+          doc.text('Inmobiliaria:', 10, line_num);
+          doc.setFontStyle("normal");
+          doc.text('GRUPO MAGAL', 38, line_num);
+
+          line_num = line_num+8
+
+          // Dirección
+          doc.setFontStyle("bold");
+          doc.text('Dirección:', 10, line_num);
+          doc.setFontStyle("normal");
+          doc.text(address, 33, line_num);
+
+          line_num = line_num+8
+
+          // Oferta
+          doc.setFontStyle("bold");
+          doc.text('Oferta:', 10, line_num);
+          doc.setFontStyle("normal");
+          doc.text(total_units, 26, line_num);
+
+          // Venta
+          doc.setFontStyle("bold");
+          doc.text('Venta:', 62, line_num);
+          doc.setFontStyle("normal");
+          doc.text(sold_units, 77, line_num);
+
+          // Disponible
+          doc.setFontStyle("bold");
+          doc.text('Disponible:', 114, line_num);
+          doc.setFontStyle("normal");
+          doc.text(stock_units, 139, line_num);
+
+          // Velocidad
+          doc.setFontStyle("bold");
+          doc.text('Velocidad:', 169, line_num);
+          doc.setFontStyle("normal");
+          doc.text(vhmud, 193, line_num);
+
+          line_num = line_num+5
+
+          doc.line(10, line_num, 200, line_num);
+
+          line_num = line_num+8
+
+        }) // Cierra each
+
+      } // Cierra for
+      // ---------- PÁGINAS CHARTS ---------- //
+
+      doc.addPage('a4', 'portrait')
+
+      // Separamos la información
+      for (var i = 3; i < data.length; i++) {
+
+        var reg = data[i];
+        var title = reg['title'];
+        var series = reg['series'];
+        var datasets = [];
+
+        // Extraemos las series
+        $.each(series, function(a, b){
+
+          var label = b['label']
+          var data = b['data']
+
+          // Setea los colores dependiendo de la serie
+          switch (label) {
+            case 'UF Máximo':
+            case 'Oferta Total':
+            case 'Disponibles':
+              rgba_color = 'rgba(165, 188, 78, 0.5)'
+              rgb_colour = 'rgb(165, 188, 78)'
+              break;
+            case 'UF Mínimo':
+            case 'Disponibilidad Total':
+            case 'Vendidas':
+              rgba_color = 'rgba(228, 135, 1, 0.5)'
+              rgb_colour = 'rgb(228, 135, 1)'
+              break;
+            case 'UF Promedio':
+            case 'Ventas Total':
+              rgba_color = 'rgba(27, 149, 217, 0.5)'
+              rgb_colour = 'rgb(27, 149, 217)'
+              break;
+          }
+
+          var name = [];
+          var count = [];
+
+          // Extraemos los datos de las series
+          $.each(data, function(c, d){
+            name.push(d['name'])
+            count.push(d['count'])
+          })
+
+          // Guardamos "datasets" y "chart_type"
+          if (title == 'Mix de Unidades') {
+            chart_type = 'bar';
+            datasets.push({
+              label: label,
+              data: count,
+              backgroundColor: rgba_color,
+              borderColor: rgb_colour,
+              borderWidth: 1,
+            })
+          }
+
+          if (title == 'Evolución Stock Total, Venta y Disponibilidad') {
+            chart_type = 'line';
+            datasets.push({
+              label: label,
+              data: count,
+              fill: false,
+              borderColor: rgb_colour,
+              borderWidth: 3,
+              pointRadius: 0,
+              pointStyle: 'line',
+              lineTension: 0,
+            })
+          }
+
+          if (title == 'Evolución Precio en UF') {
+            chart_type = 'line';
+            datasets.push({
+              label: label,
+              data: count,
+              fill: false,
+              borderColor: rgb_colour,
+              borderWidth: 3,
+              pointRadius: 0,
+              pointStyle: 'line',
+              lineTension: 0,
+            })
+          }
+
+          if (title == 'Evolución Precio en UF/m2') {
+            chart_type = 'line';
+            datasets.push({
+              label: label,
+              data: count,
+              fill: false,
+              borderColor: rgb_colour,
+              borderWidth: 3,
+              pointRadius: 0,
+              pointStyle: 'line',
+              lineTension: 0,
+            })
+          }
+
+          if (title == 'Estado de los Proyectos') {
+            chart_type = 'pie';
+            datasets.push({
+              label: label,
+              data: count,
+              backgroundColor: [
+                'rgb(39,174,96)',
+                'rgb(231,76,60)',
+                'rgb(211,84,0)',
+                'rgb(41,128,185)',
+                'rgb(241,196,15)'
+              ],
+            })
+          }
+
+          chart_data = {
+            labels: name,
+            datasets: datasets
+          }
+
+        })
+
+        // Guardamos "options"
+        if (chart_type == 'bar') { // Bar
+
+          var chart_options = {
+            animation: false,
+            responsive: true,
+            title: {
+              display: false
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                fontColor: '#444',
+                fontSize: 12,
+              }
+            },
+            plugins: {
+              datalabels: {
+                align: 'center',
+                anchor: 'center',
+                color: '#444',
+                font: {
+                  size: 10
+                },
+                formatter: (value, ctx) => {
+                  // Mustra sólo los valores que estén por encima del 3%
+                  let sum = 0;
+                  let dataArr = ctx.chart.data.datasets[0].data;
+                  dataArr.map(data => {
+                      sum += data;
+                  });
+                  let percentage = (value*100 / sum).toFixed(2);
+                  if (percentage > 3) {
+                    return value;
+                  } else {
+                    return null;
+                  }
+                },
+              }
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+                ticks: {
+                  display: true,
+                  fontSize: 10,
+                  fontColor: '#444'
+                }
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  display: true,
+                  fontSize: 10,
+                  fontColor: '#444'
+                },
+              }],
+            }
+          };
+
+        } else if (chart_type == 'pie') { // Pie
+
+          var chart_options = {
+            animation: false,
+            responsive: true,
+            title: {
+              display: false
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                fontColor: '#444',
+                fontSize: 12,
+                usePointStyle: true,
+              }
+            },
+            plugins: {
+              datalabels: {
+                formatter: (value, ctx) => {
+                  // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                  let sum = 0;
+                  let dataArr = ctx.chart.data.datasets[0].data;
+                  dataArr.map(data => {
+                      sum += data;
+                  });
+                  let percentage = (value*100 / sum).toFixed(2);
+                  if (percentage > 3) {
+                    return percentage+'%';
+                  } else {
+                    return null;
+                  }
+                },
+                align: 'center',
+                anchor: 'center',
+    						color: 'white',
+    						font: {
+    							weight: 'bold'
+    						},
+    					}
+            },
+          };
+
+        } else { // Line
+
+          var chart_options = {
+            animation: false,
+            responsive: true,
+            title: {
+              display: false
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                fontColor: '#444',
+                fontSize: 12,
+                usePointStyle: true,
+              }
+            },
+            plugins: {
+              datalabels: {
+                align: 'start',
+                anchor: 'start',
+                color: '#444',
+                display: function(context) {
+                  return context.dataset.data[context.dataIndex] > 0;
+                },
+                font: {
+                  size: 10
+                },
+                formatter: Math.round
+              }
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+                ticks: {
+                  display: true,
+                  fontSize: 10,
+                  fontColor: '#444'
+                }
+              }],
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                  display: true,
+                  fontSize: 10,
+                  fontColor: '#444'
+                },
+              }],
+            }
+          };
+
+        } // Cierra else ("options")
+
+        var chart_settings = {
+          type: chart_type,
+          data: chart_data,
+          options: chart_options
+        }
+
+        // Creamos y adjuntamos el canvas
+        var canvas = document.createElement('canvas');
+        canvas.id = 'report-canvas-'+i;
+        $('#chart-report'+i).append(canvas);
+
+        var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
+        var final_chart = new Chart(chart_canvas, chart_settings);
+
+        var chart = final_chart.toBase64Image();
+
+        if (i % 2 == 1) {
+
+          // Título del gráfico
+          doc.setFontSize(16);
+          doc.text(title, 105, 20, null, null, 'center');
+
+          // Gráfico
+          doc.addImage(chart, 'JPEG', 9, 30);
+
+          // Pie de página
+          doc.setFontStyle("bold");
+          doc.setFontSize(12);
+          doc.text('Fuente:', 20, 290);
+          doc.setFontStyle("normal");
+          doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+
+        } else {
+
+          // Título del gráfico
+          doc.setFontSize(16);
+          doc.text(title, 105, 160, null, null, 'center');
+
+          // Gráfico
+          doc.addImage(chart, 'JPEG', 9, 170);
+
+          // Agrega nueva página
+          doc.addPage('a4', 'portrait')
+
+        } // Cierra if impar
+
+      } // Cierra for
+
+      // Descarga el archivo PDF
+      doc.save("ProjectosResidenciales.pdf");
+
+    }
+  })
+
 }
 
 function addInmoFilter(id, name) {
