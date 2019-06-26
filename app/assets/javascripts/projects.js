@@ -52,6 +52,128 @@ function projects_report_pdf(){
       doc.setFontStyle("normal");
       doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
 
+      // ---------- PÁGINA DOS ---------- //
+
+      // Agregamos una página
+      doc.addPage('a4', 'portrait')
+
+      // Subtítulo
+      doc.setFontStyle("bold");
+      doc.setFontSize(16);
+      doc.text('Listado de Proyectos', 105, 20, null, null, 'center');
+
+      // Pie de página
+      doc.setFontStyle("bold");
+      doc.setFontSize(12);
+      doc.text('Fuente:', 20, 290);
+      doc.setFontStyle("normal");
+      doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+
+      doc.line(10, 25, 200, 25);
+
+      for (var i = 0; i < 3; i++) {
+
+        var reg = data[i];
+        console.log(reg);
+
+        var list_projet = reg['list_projet'];
+        console.log(list_projet);
+
+        var line_num = 30
+
+        $.each(list_projet, function(a, b) {
+
+          var name = b['name']
+          var address = b['address']
+          var sold_units = b['sold_units']
+          var stock_units = b['stock_units']
+          var total_units = b['total_units']
+          var vhmud = b['vhmud']
+
+          // Convertimos integer a varchar
+          sold_units = sold_units.toString()
+          stock_units = stock_units.toString()
+          total_units = total_units.toString()
+          vhmud = vhmud.toString()
+
+          if (line_num > 260) {
+            doc.addPage('a4', 'portrait')
+            line_num = 25
+
+            doc.line(10, 20, 200, 20);
+
+            // Pie de página
+            doc.setFontStyle("bold");
+            doc.setFontSize(12);
+            doc.text('Fuente:', 20, 290);
+            doc.setFontStyle("normal");
+            doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+          }
+
+          // Cod
+          doc.setFontSize(12);
+          doc.setFontStyle("bold");
+          doc.text('Cod:', 10, line_num);
+          doc.setFontStyle("normal");
+          doc.text('', 22, line_num);
+
+          // Nombre
+          doc.setFontStyle("bold");
+          doc.text('Nombre:', 60, line_num);
+          doc.setFontStyle("normal");
+          doc.text(name, 80, line_num);
+
+          line_num = line_num+8
+
+          // Inmobiliaria
+          doc.setFontStyle("bold");
+          doc.text('Inmobiliaria:', 10, line_num);
+          doc.setFontStyle("normal");
+          doc.text('GRUPO MAGAL', 38, line_num);
+
+          line_num = line_num+8
+
+          // Dirección
+          doc.setFontStyle("bold");
+          doc.text('Dirección:', 10, line_num);
+          doc.setFontStyle("normal");
+          doc.text(address, 33, line_num);
+
+          line_num = line_num+8
+
+          // Oferta
+          doc.setFontStyle("bold");
+          doc.text('Oferta:', 10, line_num);
+          doc.setFontStyle("normal");
+          doc.text(total_units, 26, line_num);
+
+          // Venta
+          doc.setFontStyle("bold");
+          doc.text('Venta:', 62, line_num);
+          doc.setFontStyle("normal");
+          doc.text(sold_units, 77, line_num);
+
+          // Disponible
+          doc.setFontStyle("bold");
+          doc.text('Disponible:', 114, line_num);
+          doc.setFontStyle("normal");
+          doc.text(stock_units, 139, line_num);
+
+          // Velocidad
+          doc.setFontStyle("bold");
+          doc.text('Velocidad:', 169, line_num);
+          doc.setFontStyle("normal");
+          doc.text(vhmud, 193, line_num);
+
+          line_num = line_num+5
+
+          doc.line(10, line_num, 200, line_num);
+
+          line_num = line_num+8
+
+        }) // Cierra each
+
+      } // Cierra for
       // ---------- PÁGINAS CHARTS ---------- //
 
       doc.addPage('a4', 'portrait')
