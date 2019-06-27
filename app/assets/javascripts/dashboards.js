@@ -74,6 +74,8 @@ Congo.dashboards.action_index = function(){
           )
         )
       )
+      var spinner = $('<div class="spinner-border float-right mr-2" role="status" id="spinner"></div>');
+      $('#filter-container').after(spinner);
 
     }; // Cierra if overlay
 
