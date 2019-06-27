@@ -256,6 +256,15 @@ function projects_report_pdf(){
         }) // Cierra each
 
       } // Cierra for
+
+      // ---------- PÁGINA TRES ---------- //
+
+      doc.addPage('a4', 'portrait')
+
+      doc.setFontStyle("bold");
+      doc.setFontSize(14);
+      doc.text('Información General Departamentos', 105, 20, null, null, 'center');
+
       // ---------- PÁGINAS CHARTS ---------- //
 
       doc.addPage('a4', 'portrait')
