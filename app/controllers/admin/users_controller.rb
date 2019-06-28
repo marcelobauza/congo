@@ -22,6 +22,7 @@ class Admin::UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+     @user_counties = @user.counties
   end
 
   # POST /users
