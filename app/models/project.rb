@@ -414,8 +414,7 @@ class Project < ApplicationRecord
     query_condition += " and bimester = #{filters[:to_period]} "
     query_condition += " and  county_id = #{filters[:county_id]} "  if filters.has_key? :county_id 
     query_condition += "and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
-    query_condition += " and ST_Within(the_geom, ST_GeomFromText('#{filters[:wkt]}',4326)) " if filters.has_key? :wkt
-
+    query_condition += " and " + WhereBuilder.build_within_condition(filters[:wkt]) if filters.has_key? :wkt
 
     values = get_valid_min_max_limits(widget, filters)
     ranges = get_valid_ranges(values, widget) 
@@ -812,11 +811,14 @@ class Project < ApplicationRecord
 
     @conditions = ''
     unless filters[:county_id].nil? and filters[:wkt].nil?
-      if filters[:county_id].nil?
-        @conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
-      else
+      if !filters[:county_id].nil?
         @conditions = "county_id = #{filters[:county_id]}" + Util.and
-        end
+      elsif !filters[:wkt].nil? 
+          @conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
+      else
+        
+      @conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
+          end
     end
     @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView) if filters.has_key? :to_period
     @conditions += bimesters_condition(filters, self_not_filter, useView)
@@ -1224,9 +1226,11 @@ class Project < ApplicationRecord
       uf_m2_values = Project.projects_by_uf_m2(filters)
       uarea = Project.projects_by_usable_area(filters)
       garea = Project.projects_by_ground_area('ground_area', filters)
+
       sbim = Project.projects_count_by_period('sale_bimester', filters)
       cfloor = Project.projects_by_ranges('floors', filters)
       uf_ranges = Project.projects_by_ranges('uf_avg_percent', filters)
+
       agencies = Project.projects_group_by_count('agencies', filters, false)
 
       result =[]
@@ -1495,10 +1499,6 @@ class Project < ApplicationRecord
                      limit(10)
     data 
   end
-
-
-
-
 
   def self.reports_pdf filters
 
