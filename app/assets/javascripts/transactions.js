@@ -134,175 +134,199 @@ Congo.transactions.action_dashboards = function(){
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
 
-    // Sino se ralizó la selección, se lanza un alert
-    if (county_id == '' && centerPoint == undefined && wkt == undefined) {
+    // Sino se realizó la selección muestra un mensaje de alerta
+    if (county_id == '' && centerPoint == '' && wkt.length == 0) {
+
       Congo.dashboards.action_index.empty_selection_alert();
-    }
 
-    // Creamos el overlay
-    Congo.dashboards.action_index.create_overlay_and_filter_card();
-
-    // Si se realizó la selección por comuna/punto, agregamos el item al filtro
-    if (county_id != '') {
-      Congo.dashboards.action_index.add_county_filter_item()
-    }
-
-    if (county_id != '') {
-      data = {
-        to_year: to_year,
-        to_period: to_bimester,
-        property_type_ids: property_type_ids,
-        seller_type_ids: seller_type_ids,
-        periods: periods,
-        years: years,
-        from_calculated_value: from_calculated_value,
-        to_calculated_value: to_calculated_value,
-        county_id: county_id,
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-        style_layer: style_layer
-      };
-    } else if (centerPoint != '') {
-      data = {
-        to_year: to_year,
-        to_period: to_bimester,
-        property_type_ids: property_type_ids,
-        seller_type_ids: seller_type_ids,
-        periods: periods,
-        years: years,
-        from_calculated_value: from_calculated_value,
-        to_calculated_value: to_calculated_value,
-        centerpt: centerPoint,
-        radius: radius,
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-        style_layer: style_layer
-
-      };
+    // Si se realizó la selección, añade los elementos al dashboard
     } else {
-      data = {
-        to_year: to_year,
-        to_period: to_bimester,
-        property_type_ids: property_type_ids,
-        seller_type_ids: seller_type_ids,
-        periods: periods,
-        years: years,
-        from_calculated_value: from_calculated_value,
-        to_calculated_value: to_calculated_value,
-        wkt: JSON.stringify(wkt),
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-        style_layer: style_layer
 
-      };
-    }
+      // Creamos el overlay
+      Congo.dashboards.action_index.create_overlay_and_filter_card();
 
-    $.ajax({
-      type: 'GET',
-      url: '/transactions/transactions_summary.json',
-      datatype: 'json',
-      data: data,
-      beforeSend: function() {
-        // Mostramos el spinner
-        $("#spinner").show();
+      // Si se realizó la selección por comuna/punto, agregamos el item al filtro
+      if (county_id != '') {
+        Congo.dashboards.action_index.add_county_filter_item()
+      }
 
-        // Establece el nombre de la capa en el navbar
-        $('#layer-name').text('Compraventas CBR');
+      if (county_id != '') {
+        data = {
+          to_year: to_year,
+          to_period: to_bimester,
+          property_type_ids: property_type_ids,
+          seller_type_ids: seller_type_ids,
+          periods: periods,
+          years: years,
+          from_calculated_value: from_calculated_value,
+          to_calculated_value: to_calculated_value,
+          county_id: county_id,
+          type_geometry:type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+        };
+      } else if (centerPoint != '') {
+        data = {
+          to_year: to_year,
+          to_period: to_bimester,
+          property_type_ids: property_type_ids,
+          seller_type_ids: seller_type_ids,
+          periods: periods,
+          years: years,
+          from_calculated_value: from_calculated_value,
+          to_calculated_value: to_calculated_value,
+          centerpt: centerPoint,
+          radius: radius,
+          type_geometry:type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
 
-        // Eliminamos los chart-containter de la capa anterior
-        $(".chart-container").remove();
+        };
+      } else {
+        data = {
+          to_year: to_year,
+          to_period: to_bimester,
+          property_type_ids: property_type_ids,
+          seller_type_ids: seller_type_ids,
+          periods: periods,
+          years: years,
+          from_calculated_value: from_calculated_value,
+          to_calculated_value: to_calculated_value,
+          wkt: JSON.stringify(wkt),
+          type_geometry:type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
 
-        // Eliminamos los filtros de la capa anterior
-        $('.filter-future-projects').remove();
-        $('.filter-projects').remove();
-      },
-      success: function(data){
+        };
+      }
 
-        // Ocultamos el spinner
-        $("#spinner").hide();
+      $.ajax({
+        type: 'GET',
+        url: '/transactions/transactions_summary.json',
+        datatype: 'json',
+        data: data,
+        beforeSend: function() {
+          // Mostramos el spinner
+          $("#spinner").show();
 
-        // Separamos la información
-        for (var i = 0; i < data.length; i++) {
+          // Establece el nombre de la capa en el navbar
+          $('#layer-name').text('Compraventas CBR');
 
-          var reg = data[i];
-          var title = reg['title'];
-          var series = reg['series'];
+          // Eliminamos los chart-containter de la capa anterior
+          $(".chart-container").remove();
 
-          // Creamos el div contenedor
-          var chart_container = document.createElement('div');
-          chart_container.className = 'chart-container card';
-          chart_container.id = 'chart-container'+i;
+          // Eliminamos los filtros de la capa anterior
+          $('.filter-future-projects').remove();
+          $('.filter-projects').remove();
+        },
+        success: function(data){
 
-          // Creamos el card-header
-          var card_header = document.createElement('div');
-          card_header.className = 'card-header';
-          card_header.id = 'header'+i;
+          // Ocultamos el spinner
+          $("#spinner").hide();
 
-          // Creamos el collapse
-          var collapse = document.createElement('div');
-          collapse.className = 'collapse show';
-          collapse.id = 'collapse'+i;
+          // Separamos la información
+          for (var i = 0; i < data.length; i++) {
 
-          // Creamos el card-body
-          var card_body = document.createElement('div');
-          card_body.className = 'card-body';
-          card_body.id = 'body'+i;
+            var reg = data[i];
+            var title = reg['title'];
+            var series = reg['series'];
 
-          // TODO: Crear título y boton minimizar dinámicos
+            // Creamos el div contenedor
+            var chart_container = document.createElement('div');
+            chart_container.className = 'chart-container card';
+            chart_container.id = 'chart-container'+i;
 
-          // Creamos título y boton minimizar
-          var card_header_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
-          var card_header_title = '<b>'+title+'</b>'
+            // Creamos el card-header
+            var card_header = document.createElement('div');
+            card_header.className = 'card-header';
+            card_header.id = 'header'+i;
 
-          // Adjuntamos los elementos
-          $('.overlay').append(chart_container);
-          $('#chart-container'+i).append(card_header, collapse);
-          $('#collapse'+i).append(card_body);
-          $('#header'+i).append(card_header_button, card_header_title);
+            // Creamos el collapse
+            var collapse = document.createElement('div');
+            collapse.className = 'collapse show';
+            collapse.id = 'collapse'+i;
 
-          // Información General
-          if (title == "Información General") {
+            // Creamos el card-body
+            var card_body = document.createElement('div');
+            card_body.className = 'card-body';
+            card_body.id = 'body'+i;
 
-            var info = reg['data'];
+            // TODO: Crear título y boton minimizar dinámicos
 
-            // Extraemos y adjuntamos los datos al card-body
-            $.each(info, function(y, z){
-              name = z['name'];
-              label = z['count']
-              item = name+': '+label+'<br>';
-              $('#body'+i).append(item);
-            })
+            // Creamos título y boton minimizar
+            var card_header_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
+            var card_header_title = '<b>'+title+'</b>'
 
-          // Gráficos
-          } else {
+            // Adjuntamos los elementos
+            $('.overlay').append(chart_container);
+            $('#chart-container'+i).append(card_header, collapse);
+            $('#collapse'+i).append(card_body);
+            $('#header'+i).append(card_header_button, card_header_title);
 
-            var datasets = [];
+            // Información General
+            if (title == "Información General") {
 
-            // Extraemos las series
-            $.each(series, function(a, b){
+              var info = reg['data'];
 
-              var label = b['label']
-              var data = b['data']
-
-              var name = [];
-              var count = [];
-              var id = [];
-
-              // Extraemos los datos de las series
-              $.each(data, function(c, d){
-                name.push(d['name'])
-                count.push(d['count'])
-                id.push(d['id'])
+              // Extraemos y adjuntamos los datos al card-body
+              $.each(info, function(y, z){
+                name = z['name'];
+                label = z['count']
+                item = name+': '+label+'<br>';
+                $('#body'+i).append(item);
               })
 
-              // Guardamos "datasets" y "chart_type"
-              if (title == 'Tipo de Propiedad') { // Pie
-                chart_type = 'pie';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  id: id,
-                  backgroundColor: [
+            // Gráficos
+            } else {
+
+              var datasets = [];
+
+              // Extraemos las series
+              $.each(series, function(a, b){
+
+                var label = b['label']
+                var data = b['data']
+
+                var name = [];
+                var count = [];
+                var id = [];
+
+                // Extraemos los datos de las series
+                $.each(data, function(c, d){
+                  name.push(d['name'])
+                  count.push(d['count'])
+                  id.push(d['id'])
+                })
+
+                // Guardamos "datasets" y "chart_type"
+                if (title == 'Tipo de Propiedad') { // Pie
+                  chart_type = 'pie';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    id: id,
+                    backgroundColor: [
+                        '#4D5656',
+                        '#5F6A6A',
+                        '#717D7E',
+                        '#839192',
+                        '#95A5A6',
+                        '#AAB7B8',
+                        '#BFC9CA',
+                        '#D5DBDB',
+                        '#EAEDED',
+                        '#F4F6F6'
+                    ],
+                  })
+                }
+
+                if (title == 'Tipo de Vendedor') { // Pie
+                  chart_type = 'pie';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    id: id,
+                    backgroundColor: [
                       '#4D5656',
                       '#5F6A6A',
                       '#717D7E',
@@ -313,376 +337,356 @@ Congo.transactions.action_dashboards = function(){
                       '#D5DBDB',
                       '#EAEDED',
                       '#F4F6F6'
-                  ],
-                })
-              }
+                    ],
+                  })
+                }
 
-              if (title == 'Tipo de Vendedor') { // Pie
-                chart_type = 'pie';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  id: id,
-                  backgroundColor: [
-                    '#4D5656',
-                    '#5F6A6A',
-                    '#717D7E',
-                    '#839192',
-                    '#95A5A6',
-                    '#AAB7B8',
-                    '#BFC9CA',
-                    '#D5DBDB',
-                    '#EAEDED',
-                    '#F4F6F6'
-                  ],
-                })
-              }
+                // TODO: Falta agregar el chart de Transacciones / Bimestre (line)
+                // TODO: Organizar los colores en variables
 
-              // TODO: Falta agregar el chart de Transacciones / Bimestre (line)
-              // TODO: Organizar los colores en variables
+                if (title == 'UF / Bimestre') { // Line
+                  chart_type = 'line';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    fill: false,
+                    borderColor: '#f08939',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#F2F4F4',
+                    pointRadius: 3,
+                    lineTension: 0,
+                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBorderWidth: 3,
+                    pointHitRadius: 5,
+                  })
+                }
 
-              if (title == 'UF / Bimestre') { // Line
-                chart_type = 'line';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  fill: false,
-                  borderColor: '#f08939',
-                  borderWidth: 4,
-                  pointBackgroundColor: '#F2F4F4',
-                  pointRadius: 3,
-                  lineTension: 0,
-                  pointHoverBackgroundColor: '#F2F4F4',
-                  pointHoverBorderWidth: 3,
-                  pointHitRadius: 5,
-                })
-              }
+                if (title == 'Precio Promedio en UF / Bimestre') { // Line
+                  chart_type = 'line';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    fill: false,
+                    borderColor: '#f08939',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#F2F4F4',
+                    pointRadius: 3,
+                    lineTension: 0,
+                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBorderWidth: 3,
+                    pointHitRadius: 5,
+                  })
+                }
 
-              if (title == 'Precio Promedio en UF / Bimestre') { // Line
-                chart_type = 'line';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  fill: false,
-                  borderColor: '#f08939',
-                  borderWidth: 4,
-                  pointBackgroundColor: '#F2F4F4',
-                  pointRadius: 3,
-                  lineTension: 0,
-                  pointHoverBackgroundColor: '#F2F4F4',
-                  pointHoverBorderWidth: 3,
-                  pointHitRadius: 5,
-                })
-              }
+                if (title == 'Transacciones / UF') { // Bar
+                  chart_type = 'bar';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    backgroundColor: '#dddb58',
+                    borderColor: '#4D5656',
+                    borderWidth: 2,
+                    hoverBorderWidth: 3,
+                  })
+                }
 
-              if (title == 'Transacciones / UF') { // Bar
-                chart_type = 'bar';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  backgroundColor: '#dddb58',
-                  borderColor: '#4D5656',
-                  borderWidth: 2,
-                  hoverBorderWidth: 3,
-                })
-              }
+                chart_data = {
+                  labels: name,
+                  datasets: datasets
+                }
 
-              chart_data = {
-                labels: name,
-                datasets: datasets
-              }
+              })
 
-            })
+              // Guardamos "options"
+              if (chart_type == 'bar') { // Bar
 
-            // Guardamos "options"
-            if (chart_type == 'bar') { // Bar
+                var chart_options = {
+                  onClick: function(c, i) {
 
-              var chart_options = {
-                onClick: function(c, i) {
+                    // Almacena los valores del chart
+                    var x_tick = this.data.labels[i[0]._index];
+                    var title = this.options.title.text;
 
-                  // Almacena los valores del chart
-                  var x_tick = this.data.labels[i[0]._index];
-                  var title = this.options.title.text;
+                    // Crea el filtro
+                    var filter_item = document.createElement('div');
+                    filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
+                    var filter_item_id = x_tick.split(" ").join("").split(".").join("");
+                    filter_item.id = 'item-'+filter_item_id;
+                    var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
+                    var text_item = title+': '+x_tick;
 
-                  // Crea el filtro
-                  var filter_item = document.createElement('div');
-                  filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
-                  var filter_item_id = x_tick.split(" ").join("").split(".").join("");
-                  filter_item.id = 'item-'+filter_item_id;
-                  var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
-                  var text_item = title+': '+x_tick;
+                    // Valida si el item del filtro existe
+                    if ($('#item-'+filter_item_id).length == 0) {
 
-                  // Valida si el item del filtro existe
-                  if ($('#item-'+filter_item_id).length == 0) {
+                      // Almacena la variable global dependiendo del chart
+                      var filter_item_id_split = filter_item_id.split("-");
+                      Congo.transactions.config.from_calculated_value.push(filter_item_id_split[0]);
+                      Congo.transactions.config.to_calculated_value.push(filter_item_id_split[1]);
 
-                    // Almacena la variable global dependiendo del chart
-                    var filter_item_id_split = filter_item_id.split("-");
-                    Congo.transactions.config.from_calculated_value.push(filter_item_id_split[0]);
-                    Congo.transactions.config.to_calculated_value.push(filter_item_id_split[1]);
+                      // Adjunta el item del filtro y recarga los datos
+                      $('#filter-body').append(filter_item);
+                      $('#item-'+filter_item_id).append(text_item, close_button_item);
+                      indicator_transactions();
+                    };
 
-                    // Adjunta el item del filtro y recarga los datos
-                    $('#filter-body').append(filter_item);
-                    $('#item-'+filter_item_id).append(text_item, close_button_item);
-                    indicator_transactions();
-                  };
+                    // Elimina item del filtro
+                    $('#close-'+filter_item_id).click(function() {
+                      var active_item_from = Congo.transactions.config.from_calculated_value;
+                      var active_item_to = Congo.transactions.config.to_calculated_value;
 
-                  // Elimina item del filtro
-                  $('#close-'+filter_item_id).click(function() {
-                    var active_item_from = Congo.transactions.config.from_calculated_value;
-                    var active_item_to = Congo.transactions.config.to_calculated_value;
+                      var item_full_id = $('#item-'+filter_item_id).attr('id');
 
-                    var item_full_id = $('#item-'+filter_item_id).attr('id');
+                      item_full_id = item_full_id.split("-");
+                      var from_item_id = item_full_id[1];
+                      var to_item_id = item_full_id[2];
 
-                    item_full_id = item_full_id.split("-");
-                    var from_item_id = item_full_id[1];
-                    var to_item_id = item_full_id[2];
+                      var active_item_from_updated = $.grep(active_item_from, function(n, i) {
+                        return n != from_item_id;
+                      });
 
-                    var active_item_from_updated = $.grep(active_item_from, function(n, i) {
-                      return n != from_item_id;
+                      var active_item_to_updated = $.grep(active_item_to, function(n, i) {
+                        return n != to_item_id;
+                      });
+
+                      Congo.transactions.config.from_calculated_value = active_item_from_updated;
+                      Congo.transactions.config.to_calculated_value = active_item_to_updated;
+
+                      $('#item-'+filter_item_id).remove();
+                      indicator_transactions();
+
                     });
 
-                    var active_item_to_updated = $.grep(active_item_to, function(n, i) {
-                      return n != to_item_id;
-                    });
-
-                    Congo.transactions.config.from_calculated_value = active_item_from_updated;
-                    Congo.transactions.config.to_calculated_value = active_item_to_updated;
-
-                    $('#item-'+filter_item_id).remove();
-                    indicator_transactions();
-
-                  });
-
-                }, // Cierra onClick function
-                responsive: true,
-                title: {
-                  display: false,
-                  text: title
-                },
-                legend: {
-                  display: false,
-                },
-                plugins: {
-                  datalabels: {
+                  }, // Cierra onClick function
+                  responsive: true,
+                  title: {
+                    display: false,
+                    text: title
+                  },
+                  legend: {
                     display: false,
                   },
-                },
-                scales: {
-                  xAxes: [{
-                    stacked: true,
-                    ticks: {
-                      autoSkip: false,
-                      maxRotation: 30,
-                    }
-                  }],
-                  yAxes: [{
-                    stacked: true,
-                    ticks: {
-                      beginAtZero: true,
+                  plugins: {
+                    datalabels: {
+                      display: false,
                     },
-                  }],
-                }
-              };
-
-            } else if (chart_type == 'pie') { // Pie
-
-              // TODO: Configurar los datalabels utilizando el valor total
-
-              var chart_options = {
-                onClick: function(c, i) {
-
-                  // Almacena los valores del chart
-                  var x_tick = this.data.labels[i[0]._index];
-                  var x_tick_id = this.data.datasets[0].id[i[0]._index];
-                  var title = this.options.title.text;
-
-                  // Crea el filtro
-                  var filter_item = document.createElement('div');
-                  filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
-                  var filter_item_id = x_tick.split(" ").join("_");
-                  filter_item.id = 'item-'+filter_item_id+'-'+x_tick_id;
-                  var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
-                  var text_item = title+': '+x_tick;
-
-                  // Valida si el item del filtro existe
-                  if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
-
-                    // Almacena la variable global dependiendo del chart
-                    if (title == 'Tipo de Propiedad') {
-                      Congo.transactions.config.property_type_ids.push(x_tick_id);
-                    } else {
-                      Congo.transactions.config.seller_type_ids.push(x_tick_id);
-                    };
-
-                    // Adjunta el item del filtro y recarga los datos
-                    $('#filter-body').append(filter_item);
-                    $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
-                    indicator_transactions();
-                  };
-
-                  // Elimina item del filtro
-                  $('#close-'+filter_item_id).click(function() {
-
-                    if (title == 'Tipo de Propiedad') {
-                      var active_items = Congo.transactions.config.property_type_ids;
-                    } else {
-                      var active_items = Congo.transactions.config.seller_type_ids;
-                    };
-
-                    var item_full_id = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
-                    item_full_id = item_full_id.split("-")
-                    var item_id = item_full_id[2]
-
-                    var active_items_updated = $.grep(active_items, function(n, i) {
-                      return n != item_id;
-                    });
-
-                    if (title == 'Tipo de Propiedad') {
-                      Congo.transactions.config.property_type_ids = active_items_updated;
-                    } else {
-                      Congo.transactions.config.seller_type_ids = active_items_updated;
-                    };
-
-                    $('#item-'+filter_item_id+'-'+x_tick_id).remove();
-                    indicator_transactions();
-                  });
-
-                }, // Cierra onClick function
-                responsive: true,
-                title: {
-                  display: false,
-                  text: title
-                },
-                legend: {
-                  display: false,
-                },
-                plugins: {
-                  datalabels: {
-                    formatter: function(value, context) {
-                      return context.chart.data.labels[context.dataIndex];
-                    },
-                    display: function(context) {
-                      var dataset = context.dataset;
-                      var count = dataset.data.length;
-                      var value = dataset.data[context.dataIndex];
-                      return value > 1000;
-                    },
-                    font: {
-                      size: 11,
-                    },
-                    color: 'white',
-                    textStrokeColor: '#616A6B',
-                    textStrokeWidth: 1,
-                    textShadowColor: '#000000',
-                    textShadowBlur: 2,
-                    align: 'end',
+                  },
+                  scales: {
+                    xAxes: [{
+                      stacked: true,
+                      ticks: {
+                        autoSkip: false,
+                        maxRotation: 30,
+                      }
+                    }],
+                    yAxes: [{
+                      stacked: true,
+                      ticks: {
+                        beginAtZero: true,
+                      },
+                    }],
                   }
-                },
-              };
+                };
 
-            } else { // Line
+              } else if (chart_type == 'pie') { // Pie
 
-              var chart_options = {
-                onClick: function(c, i) {
+                // TODO: Configurar los datalabels utilizando el valor total
 
-                  // Almacena los valores del chart
-                  var x_tick = this.data.labels[i[0]._index];
+                var chart_options = {
+                  onClick: function(c, i) {
 
-                  // Crea el filtro
-                  var filter_item = document.createElement('div');
-                  filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
-                  var filter_item_id = x_tick.split("/").join("-");
-                  filter_item.id = 'item-'+filter_item_id;
-                  var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
-                  var text_item = 'Periodo: '+x_tick;
+                    // Almacena los valores del chart
+                    var x_tick = this.data.labels[i[0]._index];
+                    var x_tick_id = this.data.datasets[0].id[i[0]._index];
+                    var title = this.options.title.text;
 
-                  // Valida si el item del filtro existe
-                  if ($('#item-'+filter_item_id).length == 0) {
+                    // Crea el filtro
+                    var filter_item = document.createElement('div');
+                    filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
+                    var filter_item_id = x_tick.split(" ").join("_");
+                    filter_item.id = 'item-'+filter_item_id+'-'+x_tick_id;
+                    var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
+                    var text_item = title+': '+x_tick;
 
-                    // Almacena la variable global
-                    var periods_years = x_tick.split("/");
-                    Congo.transactions.config.periods.push(periods_years[0]);
-                    Congo.transactions.config.years.push(20+periods_years[1]);
+                    // Valida si el item del filtro existe
+                    if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
 
-                    // Adjunta el item del filtro y recarga los datos
-                    $('#filter-body').append(filter_item);
-                    $('#item-'+filter_item_id).append(text_item, close_button_item);
-                    indicator_transactions();
-                  };
+                      // Almacena la variable global dependiendo del chart
+                      if (title == 'Tipo de Propiedad') {
+                        Congo.transactions.config.property_type_ids.push(x_tick_id);
+                      } else {
+                        Congo.transactions.config.seller_type_ids.push(x_tick_id);
+                      };
 
-                  // Elimina item del filtro
-                  $('#close-'+filter_item_id).click(function() {
+                      // Adjunta el item del filtro y recarga los datos
+                      $('#filter-body').append(filter_item);
+                      $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
+                      indicator_transactions();
+                    };
 
-                    var active_periods = Congo.transactions.config.periods;
-                    var active_years = Congo.transactions.config.years;
+                    // Elimina item del filtro
+                    $('#close-'+filter_item_id).click(function() {
 
-                    var item_full_id = $('#item-'+filter_item_id).attr('id');
+                      if (title == 'Tipo de Propiedad') {
+                        var active_items = Congo.transactions.config.property_type_ids;
+                      } else {
+                        var active_items = Congo.transactions.config.seller_type_ids;
+                      };
 
-                    item_full_id = item_full_id.split("-");
-                    var period_id = item_full_id[1];
-                    var year_id = item_full_id[2];
+                      var item_full_id = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
+                      item_full_id = item_full_id.split("-")
+                      var item_id = item_full_id[2]
 
-                    var periods_updated = $.grep(active_periods, function(n, i) {
-                      return n != period_id;
+                      var active_items_updated = $.grep(active_items, function(n, i) {
+                        return n != item_id;
+                      });
+
+                      if (title == 'Tipo de Propiedad') {
+                        Congo.transactions.config.property_type_ids = active_items_updated;
+                      } else {
+                        Congo.transactions.config.seller_type_ids = active_items_updated;
+                      };
+
+                      $('#item-'+filter_item_id+'-'+x_tick_id).remove();
+                      indicator_transactions();
                     });
 
-                    var period_position = active_periods.indexOf(period_id);
-
-                    var years_updated = $.grep(active_years, function(n, i) {
-                      return i != period_position;
-                    });
-
-                    Congo.transactions.config.periods = periods_updated;
-                    Congo.transactions.config.years = years_updated;
-
-                    $('#item-'+filter_item_id).remove();
-                    indicator_transactions();
-
-                  });
-
-                }, // Cierra onClick function
-                responsive: true,
-                title: {
-                  display: false,
-                  text: title
-                },
-                legend: {
-                  display: false,
-                },
-                plugins: {
-                  datalabels: {
+                  }, // Cierra onClick function
+                  responsive: true,
+                  title: {
+                    display: false,
+                    text: title
+                  },
+                  legend: {
                     display: false,
                   },
-                },
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                      beginAtZero: true,
+                  plugins: {
+                    datalabels: {
+                      formatter: function(value, context) {
+                        return context.chart.data.labels[context.dataIndex];
+                      },
+                      display: function(context) {
+                        var dataset = context.dataset;
+                        var count = dataset.data.length;
+                        var value = dataset.data[context.dataIndex];
+                        return value > 1000;
+                      },
+                      font: {
+                        size: 11,
+                      },
+                      color: 'white',
+                      textStrokeColor: '#616A6B',
+                      textStrokeWidth: 1,
+                      textShadowColor: '#000000',
+                      textShadowBlur: 2,
+                      align: 'end',
+                    }
+                  },
+                };
+
+              } else { // Line
+
+                var chart_options = {
+                  onClick: function(c, i) {
+
+                    // Almacena los valores del chart
+                    var x_tick = this.data.labels[i[0]._index];
+
+                    // Crea el filtro
+                    var filter_item = document.createElement('div');
+                    filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
+                    var filter_item_id = x_tick.split("/").join("-");
+                    filter_item.id = 'item-'+filter_item_id;
+                    var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
+                    var text_item = 'Periodo: '+x_tick;
+
+                    // Valida si el item del filtro existe
+                    if ($('#item-'+filter_item_id).length == 0) {
+
+                      // Almacena la variable global
+                      var periods_years = x_tick.split("/");
+                      Congo.transactions.config.periods.push(periods_years[0]);
+                      Congo.transactions.config.years.push(20+periods_years[1]);
+
+                      // Adjunta el item del filtro y recarga los datos
+                      $('#filter-body').append(filter_item);
+                      $('#item-'+filter_item_id).append(text_item, close_button_item);
+                      indicator_transactions();
+                    };
+
+                    // Elimina item del filtro
+                    $('#close-'+filter_item_id).click(function() {
+
+                      var active_periods = Congo.transactions.config.periods;
+                      var active_years = Congo.transactions.config.years;
+
+                      var item_full_id = $('#item-'+filter_item_id).attr('id');
+
+                      item_full_id = item_full_id.split("-");
+                      var period_id = item_full_id[1];
+                      var year_id = item_full_id[2];
+
+                      var periods_updated = $.grep(active_periods, function(n, i) {
+                        return n != period_id;
+                      });
+
+                      var period_position = active_periods.indexOf(period_id);
+
+                      var years_updated = $.grep(active_years, function(n, i) {
+                        return i != period_position;
+                      });
+
+                      Congo.transactions.config.periods = periods_updated;
+                      Congo.transactions.config.years = years_updated;
+
+                      $('#item-'+filter_item_id).remove();
+                      indicator_transactions();
+
+                    });
+
+                  }, // Cierra onClick function
+                  responsive: true,
+                  title: {
+                    display: false,
+                    text: title
+                  },
+                  legend: {
+                    display: false,
+                  },
+                  plugins: {
+                    datalabels: {
+                      display: false,
                     },
-                  }],
-                }
-              };
+                  },
+                  scales: {
+                    yAxes: [{
+                      ticks: {
+                        beginAtZero: true,
+                      },
+                    }],
+                  }
+                };
 
-            } // Cierra else ("options")
+              } // Cierra else ("options")
 
-            var chart_settings = {
-              type: chart_type,
-              data: chart_data,
-              options: chart_options
-            }
+              var chart_settings = {
+                type: chart_type,
+                data: chart_data,
+                options: chart_options
+              }
 
-            // Creamos y adjuntamos el canvas
-            var canvas = document.createElement('canvas');
-            canvas.id = 'canvas'+i;
-            $('#body'+i).append(canvas);
+              // Creamos y adjuntamos el canvas
+              var canvas = document.createElement('canvas');
+              canvas.id = 'canvas'+i;
+              $('#body'+i).append(canvas);
 
-            var chart_canvas = document.getElementById('canvas'+i).getContext('2d');
-            var final_chart = new Chart(chart_canvas, chart_settings);
+              var chart_canvas = document.getElementById('canvas'+i).getContext('2d');
+              var final_chart = new Chart(chart_canvas, chart_settings);
 
-          } // Cierra if
-        } // Cierra for
-      } // Cierra success
-    }) // Cierra ajax
+            } // Cierra if
+          } // Cierra for
+        } // Cierra success
+      }) // Cierra ajax
+    } // Cierra if alert
   } // Cierra indicator_transactions
 
   return {
