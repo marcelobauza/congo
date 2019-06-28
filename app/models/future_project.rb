@@ -462,6 +462,19 @@ class FutureProject < ApplicationRecord
     @future_projects
   end
 
+  def self.envelope_points filters
+
+      filters = {to_year:2018, to_period: 6, county_id: 52}
+
+      select = "st_ymin(ST_ENVELOPE((st_collect(the_geom)))) as ymin, "
+      select += "st_xmin(ST_ENVELOPE((st_collect(the_geom)))) as xmin, "
+      select += "st_ymax(ST_ENVELOPE((st_collect(the_geom)))) as ymax, "
+      select += "st_xmax(ST_ENVELOPE((st_collect(the_geom)))) as xmax "
+
+      cond_query = conditions(filters, nil)
+      @env = FutureProject.where(cond_query).pluck(select)
+      @env
+  end
 
   def self.summary f
 
@@ -474,6 +487,8 @@ class FutureProject < ApplicationRecord
       ubimester = FutureProject.unit_bimester(filters)
       m2bimester = FutureProject.m2_built_bimester(filters)
       rates = FutureProject.future_project_rates_1(filters)
+      env_points = FutureProject.envelope_points(filters)
+
       #GENERAL
 
       data =[]
@@ -584,11 +599,14 @@ class FutureProject < ApplicationRecord
       categories.push({"label": "Tasa Permiso / Anteproyecto", "data": p})
       categories.push({"label": "Tasa Recepciones / Permisos", "data": r})
       result.push({"title": "Tasas", "series":categories})
-
+      data =[]  
+      env_points.each do |e|
+        data.push([e[0], e[1]], [e[2], e[3]])
+        end
+        result.push({"title": "env_points", "data":data})
     rescue
       #result[:data] = ["Sin datos"]
     end
-
   end
 
   def self.general_info params
