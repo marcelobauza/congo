@@ -40,7 +40,7 @@ class BuildingRegulationsController < ApplicationController
   end
 
   def allowed_use_list
-    @list = LandUseType.get_allowed_use_list(params[:county_id], params[:wkt])
+    @list = LandUseType.get_allowed_use_list(params[:county_id], params[:wkt], params[:centerpt], params[:radius])
     @list
   end
 

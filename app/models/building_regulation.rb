@@ -87,10 +87,13 @@ class BuildingRegulation < ApplicationRecord
 	end
 
 	def self.build_interval_conditions(filters, column)
-		if filters[:county_id].nil?
-		  cond = "ST_Intersects(the_geom, ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}))"
-		else
+		if !filters[:county_id].nil?
 		  cond = "county_id = #{filters[:county_id]}"
+    elsif !filters[:wkt].nil?
+      polygon = JSON.parse(filters[:wkt])
+    cond = "ST_Intersects(the_geom, ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326)', #{Util::WGS84_SRID})"
+		else
+      cond = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
 		end
     		  
 #		cond += build_range_condition(filters[:from_construct], filters[:to_construct], 'construct') if filters.has_key? :from_construct and filters.has_key? :to_construct and column != "construct"

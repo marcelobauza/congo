@@ -13,11 +13,12 @@ module WhereBuilder
   end
 
   def self.build_intersection_condition(wkt)
-    "ST_Intersection(the_geom, ST_GeomFromText('#{wkt}', #{Util::WGS84_SRID}))"
+    "ST_Intersection(the_geom, ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326)', #{Util::WGS84_SRID})"
   end
 
   def self.build_intersects_condition(wkt)
-    "ST_Intersects(the_geom, ST_GeomFromText('#{wkt}', #{Util::WGS84_SRID}))"
+    polygon = JSON.parse(wkt)
+    "ST_Intersects(the_geom, ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326)', #{Util::WGS84_SRID})"
   end
 
   def self.build_equal_condition(column, value)
