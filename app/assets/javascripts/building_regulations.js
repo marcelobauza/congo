@@ -71,240 +71,242 @@ Congo.building_regulations.action_dashboards = function(){
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
 
-    // Sino se ralizó la selección, se lanza un alert
-    if (county_id == '' && centerPoint == undefined && wkt == undefined) {
+    if (county_id == '' && centerPoint == '' && wkt.length == 0) {
+
       Congo.dashboards.action_index.empty_selection_alert();
-    }
 
-    // Creamos el overlay
-    Congo.dashboards.action_index.create_overlay_and_filter_card();
-
-    // Si se realizó la selección por comuna/punto, agregamos el item al filtro
-    if (county_id != '') {
-      Congo.dashboards.action_index.add_county_filter_item()
-    }
-
-    if (county_id != '') {
-      data = {
-        from_construct: from_construct,
-        to_construct: to_construct,
-        from_land_ocupation: from_land_ocupation,
-        to_land_ocupation: to_land_ocupation,
-        allowed_use_ids: allowed_use_ids,
-        county_id: county_id,
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-        style_layer: style_layer
-
-      };
-    } else if (centerPoint != '') {
-      data = {
-        from_construct: from_construct,
-        to_construct: to_construct,
-        from_land_ocupation: from_land_ocupation,
-        to_land_ocupation: to_land_ocupation,
-        allowed_use_ids: allowed_use_ids,
-        centerpt: centerPoint,
-        radius: radius,
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-        style_layer: style_layer
-
-      };
+    // Si se realizó la selección, añade los elementos al dashboard
     } else {
-      data = {
-        from_construct: from_construct,
-        to_construct: to_construct,
-        from_land_ocupation: from_land_ocupation,
-        to_land_ocupation: to_land_ocupation,
-        allowed_use_ids: allowed_use_ids,
-        wkt: JSON.stringify(wkt),
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-        style_layer: style_layer
 
+      // Creamos el overlay
+      Congo.dashboards.action_index.create_overlay_and_filter_card();
+
+      // Si se realizó la selección por comuna/punto, agregamos el item al filtro
+      if (county_id != '') {
+        Congo.dashboards.action_index.add_county_filter_item()
+      }
+
+      if (county_id != '') {
+        data = {
+          from_construct: from_construct,
+          to_construct: to_construct,
+          from_land_ocupation: from_land_ocupation,
+          to_land_ocupation: to_land_ocupation,
+          allowed_use_ids: allowed_use_ids,
+          county_id: county_id,
+          type_geometry:type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+
+        };
+      } else if (centerPoint != '') {
+        data = {
+          from_construct: from_construct,
+          to_construct: to_construct,
+          from_land_ocupation: from_land_ocupation,
+          to_land_ocupation: to_land_ocupation,
+          allowed_use_ids: allowed_use_ids,
+          centerpt: centerPoint,
+          radius: radius,
+          type_geometry:type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+
+        };
+      } else {
+        data = {
+          from_construct: from_construct,
+          to_construct: to_construct,
+          from_land_ocupation: from_land_ocupation,
+          to_land_ocupation: to_land_ocupation,
+          allowed_use_ids: allowed_use_ids,
+          wkt: JSON.stringify(wkt),
+          type_geometry:type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+
+        };
       };
-    };
 
-    $.ajax({
-      type: 'GET',
-      url: '/building_regulations/building_regulations_filters.json',
-      datatype: 'json',
-      data: data,
-      beforeSend: function() {
-        // Mostramos el spinner
-        $("#spinner").show();
+      $.ajax({
+        type: 'GET',
+        url: '/building_regulations/building_regulations_filters.json',
+        datatype: 'json',
+        data: data,
+        beforeSend: function() {
+          // Mostramos el spinner
+          $("#spinner").show();
 
-        // Establece el nombre de la capa en el navbar
-        $('#layer-name').text('Normativa');
+          // Establece el nombre de la capa en el navbar
+          $('#layer-name').text('Normativa');
 
-        // Eliminamos los chart-containter de la capa anterior
-        $(".chart-container").remove();
+          // Eliminamos los chart-containter de la capa anterior
+          $(".chart-container").remove();
 
-        // Eliminamos los filtros de la capa anterior
-        $('.filter-future-projects').remove();
-        $('.filter-transactions').remove();
-        $('.filter-projects').remove();
-      },
-      success: function(data){
+          // Eliminamos los filtros de la capa anterior
+          $('.filter-future-projects').remove();
+          $('.filter-transactions').remove();
+          $('.filter-projects').remove();
+        },
+        success: function(data){
 
-        // Ocultamos el spinner
-        $("#spinner").hide();
+          // Ocultamos el spinner
+          $("#spinner").hide();
 
-        // Creamos el div contenedor
-        var chart_container = document.createElement('div');
-        chart_container.className = 'chart-container card';
-        chart_container.id = 'chart-container';
+          // Creamos el div contenedor
+          var chart_container = document.createElement('div');
+          chart_container.className = 'chart-container card';
+          chart_container.id = 'chart-container';
 
-        // Creamos el card-header
-        var card_header = document.createElement('div');
-        card_header.className = 'card-header';
-        card_header.id = 'header';
+          // Creamos el card-header
+          var card_header = document.createElement('div');
+          card_header.className = 'card-header';
+          card_header.id = 'header';
 
-        // Creamos el collapse
-        var collapse = document.createElement('div');
-        collapse.className = 'collapse show';
-        collapse.id = 'collapse';
+          // Creamos el collapse
+          var collapse = document.createElement('div');
+          collapse.className = 'collapse show';
+          collapse.id = 'collapse';
 
-        // Creamos el card-body
-        var card_body = document.createElement('div');
-        card_body.className = 'card-body';
-        card_body.id = 'body';
+          // Creamos el card-body
+          var card_body = document.createElement('div');
+          card_body.className = 'card-body';
+          card_body.id = 'body';
 
-        // TODO: Crear título y boton minimizar dinámicos
+          // TODO: Crear título y boton minimizar dinámicos
 
-        // Creamos título y boton minimizar
-        var card_header_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse" aria-expanded="true" aria-controls="collapse" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
-        var card_header_title = '<b>Filtrar Información por:</b>'
+          // Creamos título y boton minimizar
+          var card_header_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse" aria-expanded="true" aria-controls="collapse" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
+          var card_header_title = '<b>Filtrar Información por:</b>'
 
-        // Adjuntamos los elementos
-        $('.overlay').append(chart_container);
-        $('#chart-container').append(card_header, collapse);
-        $('#collapse').append(card_body);
-        $('#header').append(card_header_button, card_header_title);
+          // Adjuntamos los elementos
+          $('.overlay').append(chart_container);
+          $('#chart-container').append(card_header, collapse);
+          $('#collapse').append(card_body);
+          $('#header').append(card_header_button, card_header_title);
 
-        // Separamos la información
-        for (var i = 0; i < data.length; i++) {
+          // Separamos la información
+          for (var i = 0; i < data.length; i++) {
 
-          var reg = data[i];
-          var label = reg['label'];
+            var reg = data[i];
+            var label = reg['label'];
 
-          if (label == "Uso Permitido") {
+            if (label == "Uso Permitido") {
 
-            var info = reg['data'];
+              var info = reg['data'];
 
-            // Agrega el título y el list_group
-            $('#body').append(
-              $("<b>", {
-                  'text': label
-              }),
-              $("<div>", {
-                'class': 'list-group border',
-                'id': 'uso-list'
-              })
-            );
-
-            // Extraemos los datos y los adjuntamos al list_group
-            $.each(info, function(y, z){
-              name = z['name'];
-              id = z['id']
-
-              $('#uso-list').append(
-                $("<button>", {
-                    'type': 'button',
-                    'id': 'uso-'+id,
-                    'onclick': 'addUsoFilter('+id+', "'+name+'")',
-                    'class': 'list-group-item list-group-item-action',
-                    'text': name
+              // Agrega el título y el list_group
+              $('#body').append(
+                $("<b>", {
+                    'text': label
+                }),
+                $("<div>", {
+                  'class': 'list-group border',
+                  'id': 'uso-list'
                 })
-              )
+              );
 
-            }) // Cierra each
-          } // Cierra if Uso Permitido
+              // Extraemos los datos y los adjuntamos al list_group
+              $.each(info, function(y, z){
+                name = z['name'];
+                id = z['id']
 
-          if (label == "Coeficiente de Constructibilidad") {
-
-            var min = reg['min'];
-            var max = reg['max'];
-            var to;
-            var from;
-
-            // Levantamos los valores de "to" y "from"
-            if (Congo.building_regulations.config.to_construct == '') {
-              to = max
-            } else {
-              to = Congo.building_regulations.config.to_construct
-            };
-            from = Congo.building_regulations.config.from_construct;
-
-            // Agrega el título y el range_slider
-            $('#body').append(
-              $("<b>", {
-                  'text': label
-              }),
-              $("<input>", {
-                'id': 'range_slider_coef_const'
-              })
-            );
-
-            $("#range_slider_coef_const").ionRangeSlider({
-              skin: "flat",
-              type: 'double',
-              grid: true,
-              min: min,
-              max: max,
-              step: 0.1,
-              from: from,
-              to: to,
-              onFinish: function (data) {
-
-                // Almacena los datos en la variable global
-                Congo.building_regulations.config.from_construct = data.from;
-                Congo.building_regulations.config.to_construct = data.to;
-
-                // Si no existe el filtro, lo crea
-                if ($('#item-construct').length == 0) {
-
-                  $('#filter-body').append(
-                    $("<div>", {
-                        'class': 'filter-building-regulations text-white bg-secondary px-2 mb-1 py-1 rounded',
-                        'id': 'item-construct',
-                        'text': 'Coeficiente de Constructibilidad >= '+data.from+' <= '+data.to
-                    })
-                  );
-
-                // Si existe el filtro, solo modifica el texto
-                } else {
-                  $('#item-construct').text('Coeficiente de Constructibilidad >= '+data.from+' <= '+data.to);
-                };
-
-                // Agrega el close button
-                $('#item-construct').append(
+                $('#uso-list').append(
                   $("<button>", {
-                      'class': 'close',
-                      'id': 'close-item-construct',
                       'type': 'button',
-                      'text': '×'
+                      'id': 'uso-'+id,
+                      'onclick': 'addUsoFilter('+id+', "'+name+'")',
+                      'class': 'list-group-item list-group-item-action',
+                      'text': name
                   })
                 )
+
+              }) // Cierra each
+            } // Cierra if Uso Permitido
+
+            if (label == "Coeficiente de Constructibilidad") {
+
+              var min = reg['min'];
+              var max = reg['max'];
+              var to;
+              var from;
+
+              // Levantamos los valores de "to" y "from"
+              if (Congo.building_regulations.config.to_construct == '') {
+                to = max
+              } else {
+                to = Congo.building_regulations.config.to_construct
+              };
+              from = Congo.building_regulations.config.from_construct;
+
+              // Agrega el título y el range_slider
+              $('#body').append(
+                $("<b>", {
+                    'text': label
+                }),
+                $("<input>", {
+                  'id': 'range_slider_coef_const'
+                })
+              );
+
+              $("#range_slider_coef_const").ionRangeSlider({
+                skin: "flat",
+                type: 'double',
+                grid: true,
+                min: min,
+                max: max,
+                step: 0.1,
+                from: from,
+                to: to,
+                onFinish: function (data) {
+
+                  // Almacena los datos en la variable global
+                  Congo.building_regulations.config.from_construct = data.from;
+                  Congo.building_regulations.config.to_construct = data.to;
+
+                  // Si no existe el filtro, lo crea
+                  if ($('#item-construct').length == 0) {
+
+                    $('#filter-body').append(
+                      $("<div>", {
+                          'class': 'filter-building-regulations text-white bg-secondary px-2 mb-1 py-1 rounded',
+                          'id': 'item-construct',
+                          'text': 'Coeficiente de Constructibilidad >= '+data.from+' <= '+data.to
+                      })
+                    );
+
+                  // Si existe el filtro, solo modifica el texto
+                  } else {
+                    $('#item-construct').text('Coeficiente de Constructibilidad >= '+data.from+' <= '+data.to);
+                  };
+
+                  // Agrega el close button
+                  $('#item-construct').append(
+                    $("<button>", {
+                        'class': 'close',
+                        'id': 'close-item-construct',
+                        'type': 'button',
+                        'text': '×'
+                    })
+                  )
+                  indicator_building_regulations();
+
+                }, // Cierra onFinish
+              }); // Cierra ionRangeSlider
+
+              // Elimina el filtro
+              $('#close-item-construct').click(function() {
+                Congo.building_regulations.config.from_construct = '';
+                Congo.building_regulations.config.to_construct = '';
+                $('#item-construct').remove();
                 indicator_building_regulations();
+              });
 
-              }, // Cierra onFinish
-            }); // Cierra ionRangeSlider
-
-            // Elimina el filtro
-            $('#close-item-construct').click(function() {
-              Congo.building_regulations.config.from_construct = '';
-              Congo.building_regulations.config.to_construct = '';
-              $('#item-construct').remove();
-              indicator_building_regulations();
-            });
-
-          } // Cierra if Coeficiente de Constructibilidad
-
-        } // Cierra for
-      } // Cierra success
-    }) // Cierra ajax
+            } // Cierra if Coeficiente de Constructibilidad
+          } // Cierra for
+        } // Cierra success
+      }) // Cierra ajax
+    } // Cierra if alert
   } // Cierra indicator_building_regulations
 
   return {
