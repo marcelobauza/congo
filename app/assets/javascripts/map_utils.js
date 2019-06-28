@@ -37,7 +37,7 @@ Congo.map_utils = function(){
     }) ;
 
     map.addControl( new L.Control.Search({
-      url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
+      url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=cl',
       jsonpParam: 'json_callback',
       propertyName: 'display_name',
       markerLocation: true,
