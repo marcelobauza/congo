@@ -1,71 +1,68 @@
-<%= simple_form_for([:admin,@user]) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
-  <% if @user.errors.any? %>
-    <div class="alert-message block-message error" xmlns="http://www.w3.org/1999/html">
-      <%= f.error_messages %>
-    </div>
-  <% end %>
-  <div class="row-fluid">
-    <div class="span8">
 
-      <div class="clearfix">
-        <%= f.label :password %>
-        <div class="input">
-          <%= f.password_field :password, :value => "" %>
+<div class="card shadow">
+  <div class="card-body">
+
+    <%= simple_form_for([:admin,@user]) do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+      <% if @user.errors.any? %>
+        <div class="alert-message block-message error" xmlns="http://www.w3.org/1999/html">
+          <%= f.error_messages %>
+        </div>
+      <% end %>
+
+      <div class="form-group row">
+        <%= f.label :password, class: "col-md-2 text-right" %>
+        <div class="col-md-3">
+          <%= f.password_field :password, class: "form-control", :value => "" %>
+        </div>
+      </div>
+      <div class="form-group row">
+        <%= f.label :complete_name, class: "col-md-2 text-right" %>
+        <div class="col-md-3">
+          <%= f.text_field :complete_name, class: "form-control" %>
         </div>
       </div>
 
-      <div class="clearfix">
-        <%= f.label :complete_name %>
-        <div class="input">
-          <%= f.text_field :complete_name %>
+      <div class="form-group row">
+        <%= f.label :rut, class: "col-md-2 text-right" %>
+        <div class="col-md-3">
+          <%= f.text_field :rut, class: "form-control" %>
         </div>
       </div>
 
-      <div class="clearfix">
-        <%= f.label :rut %>
-        <div class="input">
-          <%= f.text_field :rut %>
+      <div class="form-group row">
+        <%= f.label :email, class: "col-md-2 text-right" %>
+        <div class="col-md-3">
+          <%= f.text_field :email, class: "form-control" %>
         </div>
       </div>
 
-      <div class="clearfix">
-        <%= f.label :email %>
-        <div class="input">
-          <%= f.text_field :email %>
+      <div class="form-group row">
+        <%= f.label :company, class: "col-md-2 text-right" %>
+        <div class="col-md-3">
+          <%= f.text_field :company, class: "form-control" %>
         </div>
       </div>
 
-      <div class="clearfix">
-        <%= f.label :company %>
-        <div class="input">
-          <%= f.text_field :company %>
+      <div class="form-group row">
+        <%= f.label :city, class: "col-md-2 text-right" %>
+        <div class="col-md-3">
+          <%= f.text_field :city, class: "form-control" %>
         </div>
       </div>
 
-      <div class="clearfix">
-        <%= f.label :city %>
-        <div class="input">
-          <%= f.text_field :city %>
+      <div class="form-group row">
+        <%= f.label :is_temporal, class: "col-md-2 text-right" %>
+        <div class="col-md-3">
+          <label><%= f.check_box :is_temporal %></label>
         </div>
       </div>
 
-      <div class="clearfix">
-        <%= f.label :is_temporal %>
-        <div class="input">
-          <ul class="inputs-list">
-            <li><label><%= f.check_box :is_temporal %></label></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <%= f.label :disabled %>
-        <div class="input">
-          <ul class="inputs-list">
-            <li><label><%= f.check_box :disabled %></label></li>
-          </ul>
+      <div class="form-group row">
+        <%= f.label :disabled, class: "col-md-2 text-right" %>
+        <div class="col-md-3">
+          <label><%= f.check_box :disabled %></label>
         </div>
       </div>
 
@@ -80,29 +77,26 @@
         </div>
       <% end %>
 
-    </div>
-  </div>
-
-  <div class="clearfix">
-    <%= label_tag t('activerecord.models.role.one') %>
-    <div class="input">
-      <%= select("user", :role_id, roles_for_select) %>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="span8">
-      <%= label_tag t('activerecord.models.county.one') %>
-      <div class="input">
-        <%= select_tag 'user[county_ids][]', options_for_select(counties_for_select, @user_counties.map { |county| county.id }), :multiple => true, :size => 10 %><br/>
-        <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
+      <div class="form-group row">
+        <div class="col-md-2 text-right">
+          <%= label_tag t('activerecord.models.role.one') %>
+        </div>
+        <div class="col-md-3">
+          <%= select("user", :role_id, roles_for_select, {}, { :class => 'form-control'}) %>
+        </div>
       </div>
-    </div>
-    <div class="span8">
-      <div class="row">
-        <div class="inputs-list">
-          <table class="bordered-table zebra-striped">
-            <thead class="blue">
+
+      <div class="form-group row">
+        <div class="col-md-2 text-right">
+          <%= label_tag t('activerecord.models.county.one') %>
+        </div>
+        <div class="col-md-3">
+          <%= select_tag 'user[county_ids][]', options_for_select(counties_for_select, @user_counties.map { |county| county.id }), :multiple => true, :size => 10, :class => 'form-control' %><br/>
+          <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
+        </div>
+        <div class="col-md-3">
+          <table class="table table-striped table-hover table-bordered">
+            <thead>
               <tr>
                 <th><%= User.human_attribute_name :county_contract  %></th>
                 <th><%= User.human_attribute_name :expiration_date %></th>
@@ -111,23 +105,17 @@
           </table>
         </div>
       </div>
-    </div>
+
+      <div class="form-group row col-md-3">
+        <h2><%=h t('activerecord.attributes.user.permissions') %></h2>
+        <div class="btn" onclick="selectAll('modules')"><i class="far fa-check-square"></i></div>
+        <div class="btn" onclick="unselectAll('modules')"><i class="far fa-window-close"></i></div>
+      </div>
+      <div class="form-inputs"></div>
+
+      <div class="form-actions">
+        <%= f.button :submit, :class => 'btn btn-primary', value: "Guardar" %>
+      </div>
+    <% end %>
   </div>
-
-
-  <div class="row">
-    <div class="span12">
-      <ul class="title-with-actions">
-        <li><h2><%=h t('activerecord.attributes.user.permissions') %></h2></li>
-        <li><div class="ui-icon ui-icon-circle-check action" onclick="selectAll('modules')" /></li>
-        <li><div class="ui-icon ui-icon-circle-close action" onclick="unselectAll('modules')"/></li>
-      </ul>
-          </div>
-          </div>
-          <div class="form-inputs">
-          </div>
-
-          <div class="form-actions">
-            <%= f.button :submit %>
-          </div>
-        <% end %>
+</div>
