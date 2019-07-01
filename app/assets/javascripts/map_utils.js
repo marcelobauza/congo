@@ -261,7 +261,20 @@ var overlays =  {
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.projects.action_dashboards.indicator_projects();
+        
+        project_status_ids = Congo.projects.config.project_status_ids; 
+        project_type_ids = Congo.projects.config.project_type_ids;
         filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        if (project_status_ids.length > 0){
+
+          filter_layer = filter_layer + " AND project_status_id IN (" + project_status_ids + ")";
+        } 
+
+        if (project_type_ids.length > 0){
+          filter_layer = filter_layer + " AND project_type_id IN (" + project_type_ids + ")";
+        }
+
+
         break;
       case 'building_regulations_info':
         Congo.building_regulations.action_dashboards.indicator_building_regulations();
