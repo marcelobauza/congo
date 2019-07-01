@@ -524,7 +524,7 @@ Congo.future_projects.action_dashboards = function(){
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
                       $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
-                      indicator_future_projects();
+                      Congo.map_utils.counties();
                     };
 
                     // Elimina item del filtro
@@ -551,7 +551,7 @@ Congo.future_projects.action_dashboards = function(){
                       };
 
                       $('#item-'+filter_item_id+'-'+x_tick_id).remove();
-                      indicator_future_projects();
+                      Congo.map_utils.counties();
                     });
 
                   }, // Cierra onClick function
@@ -614,7 +614,8 @@ Congo.future_projects.action_dashboards = function(){
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
                       $('#item-'+filter_item_id).append(text_item, close_button_item);
-                      indicator_future_projects();
+                      Congo.map_utils.counties();
+
                     };
 
                     // Elimina item del filtro
@@ -643,7 +644,7 @@ Congo.future_projects.action_dashboards = function(){
                       Congo.future_projects.config.years = years_updated;
 
                       $('#item-'+filter_item_id).remove();
-                      indicator_future_projects();
+                      Congo.map_utils.counties();
 
                     });
 

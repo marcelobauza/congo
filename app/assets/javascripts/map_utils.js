@@ -228,13 +228,34 @@ var overlays =  {
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.transactions.action_dashboards.indicator_transactions();
+        property_type_ids = Congo.transactions.config.property_type_ids
+        seller_type_ids = Congo.transactions.config.seller_type_ids
         filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        if (property_type_ids.length > 0 ){
+          filter_layer = filter_layer + " AND property_type_id IN ("+ property_type_ids + ")";
+        }
+
+        if (seller_type_ids.length > 0){
+          filter_layer = filter_layer + " AND seller_type_id IN ("+ seller_type_ids + ")";
+        }
+
+
         break;
       case 'future_projects_info':
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.future_projects.action_dashboards.indicator_future_projects();
+        filter_future_project_type_ids = Congo.future_projects.config.future_project_type_ids;
+        filter_project_type_ids = Congo.future_projects.config.project_type_ids;
         filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+
+        if (filter_future_project_type_ids.length > 0) {
+          filter_layer = filter_layer + " AND future_project_type_id IN (" + filter_future_project_type_ids +")";
+        }
+      
+        if(filter_project_type_ids.length > 0){
+          filter_layer = filter_layer + " AND project_type_id IN (" + filter_project_type_ids +")";
+        }
         break;
       case 'projects_feature_info':
         year = Congo.dashboards.config.year;

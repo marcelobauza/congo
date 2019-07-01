@@ -426,7 +426,7 @@ Congo.transactions.action_dashboards = function(){
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
                       $('#item-'+filter_item_id).append(text_item, close_button_item);
-                      indicator_transactions();
+                      Congo.map_utils.counties();
                     };
 
                     // Elimina item del filtro
@@ -452,7 +452,7 @@ Congo.transactions.action_dashboards = function(){
                       Congo.transactions.config.to_calculated_value = active_item_to_updated;
 
                       $('#item-'+filter_item_id).remove();
-                      indicator_transactions();
+                      Congo.map_utils.counties();
 
                     });
 
@@ -520,7 +520,7 @@ Congo.transactions.action_dashboards = function(){
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
                       $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
-                      indicator_transactions();
+                      Congo.map_utils.counties();
                     };
 
                     // Elimina item del filtro
@@ -547,7 +547,7 @@ Congo.transactions.action_dashboards = function(){
                       };
 
                       $('#item-'+filter_item_id+'-'+x_tick_id).remove();
-                      indicator_transactions();
+                      Congo.map_utils.counties();
                     });
 
                   }, // Cierra onClick function
@@ -610,7 +610,7 @@ Congo.transactions.action_dashboards = function(){
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
                       $('#item-'+filter_item_id).append(text_item, close_button_item);
-                      indicator_transactions();
+                      Congo.map_utils.counties();
                     };
 
                     // Elimina item del filtro
@@ -639,7 +639,7 @@ Congo.transactions.action_dashboards = function(){
                       Congo.transactions.config.years = years_updated;
 
                       $('#item-'+filter_item_id).remove();
-                      indicator_transactions();
+                      Congo.map_utils.counties();
 
                     });
 
