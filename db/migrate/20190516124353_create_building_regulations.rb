@@ -10,13 +10,13 @@ class CreateBuildingRegulations < ActiveRecord::Migration[5.2]
       t.references :density_type, foreign_key: true
       t.references :county, foreign_key: true
       t.string :comments
-      t.string :hectarea_inhabitants
+      t.numeric :hectarea_inhabitants
       t.string :grouping
       t.string :parkings
       t.integer :am_cc
-      t.string :aminciti
-      t.string :icinciti
-      t.string :osinciti
+      t.numeric :aminciti
+      t.numeric :icinciti
+      t.numeric :osinciti
 
       t.timestamps
     end
