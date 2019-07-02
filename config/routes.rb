@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :pois
-  resources :poi_subcategories
+  resources :regions
   get 'dashboards/index'
   get 'dashboards/graduated_points'
   get 'dashboards/heatmap'
