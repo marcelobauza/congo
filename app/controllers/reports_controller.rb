@@ -1,4 +1,12 @@
 class ReportsController < ApplicationController
+
+  def future_projects_pdf
+
+  end
+
+
+
+
   def future_projects_data
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @xl = FutureProject.reports(filters)
@@ -79,6 +87,15 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.xlsx 
     end
+  end
+  
+
+  def transactions_pdf
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @transactions = Transaction.reports_pdf(filters)
+
+    render json: {"data":@transactions}
+
   end
 
   def transactions_data
