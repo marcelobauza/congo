@@ -17,7 +17,7 @@ class ApplicationStatusesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create application_status" do
     assert_difference('ApplicationStatus.count') do
-      post application_statuses_url, params: { application_status: { description: @application_status.description, filters: @application_status.filters, layer_type: @application_status.layer_type, name: @application_status.name, polygon: @application_status.polygon, user_id,: @application_status.user_id, } }
+      post application_statuses_url, params: { application_status: { description: @application_status.description, filters: @application_status.filters, layer_type_id: @application_status.layer_type_id, name: @application_status.name, polygon: @application_status.polygon, user_id: @application_status.user_id } }
     end
 
     assert_redirected_to application_status_url(ApplicationStatus.last)
@@ -34,7 +34,7 @@ class ApplicationStatusesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update application_status" do
-    patch application_status_url(@application_status), params: { application_status: { description: @application_status.description, filters: @application_status.filters, layer_type: @application_status.layer_type, name: @application_status.name, polygon: @application_status.polygon, user_id,: @application_status.user_id, } }
+    patch application_status_url(@application_status), params: { application_status: { description: @application_status.description, filters: @application_status.filters, layer_type_id: @application_status.layer_type_id, name: @application_status.name, polygon: @application_status.polygon, user_id: @application_status.user_id } }
     assert_redirected_to application_status_url(@application_status)
   end
 

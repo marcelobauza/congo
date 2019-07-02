@@ -10,7 +10,7 @@ one:
   future_project_data: false
   commercial_project_data: MyString
   code_sii: 1
-  name_last_project_future: 1
+  number_last_project_future: 1
 
 two:
   name: MyString
@@ -22,4 +22,4 @@ two:
   future_project_data: false
   commercial_project_data: MyString
   code_sii: 1
-  name_last_project_future: 1
+  number_last_project_future: 1

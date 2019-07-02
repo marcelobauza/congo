@@ -21,7 +21,7 @@ class CountiesTest < ApplicationSystemTestCase
     fill_in "Future project data", with: @county.future_project_data
     fill_in "Legislation data", with: @county.legislation_data
     fill_in "Name", with: @county.name
-    fill_in "Name last project future", with: @county.name_last_project_future
+    fill_in "Number last project future", with: @county.number_last_project_future
     fill_in "Sales project data", with: @county.sales_project_data
     fill_in "Transaction data", with: @county.transaction_data
     click_on "Create County"
@@ -41,7 +41,7 @@ class CountiesTest < ApplicationSystemTestCase
     fill_in "Future project data", with: @county.future_project_data
     fill_in "Legislation data", with: @county.legislation_data
     fill_in "Name", with: @county.name
-    fill_in "Name last project future", with: @county.name_last_project_future
+    fill_in "Number last project future", with: @county.number_last_project_future
     fill_in "Sales project data", with: @county.sales_project_data
     fill_in "Transaction data", with: @county.transaction_data
     click_on "Update County"

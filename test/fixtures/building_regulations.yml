@@ -10,13 +10,13 @@ one:
   density_type: one
   county: one
   comments: MyString
-  hectarea_inhabitants: MyString
+  hectarea_inhabitants: 1
   grouping: MyString
   parkings: MyString
   am_cc: 1
-  aminciti: MyString
-  icinciti: MyString
-  osinciti: MyString
+  aminciti: 1
+  icinciti: 1
+  osinciti: 1
 
 two:
   building_zone: MyString
@@ -28,10 +28,10 @@ two:
   density_type: two
   county: two
   comments: MyString
-  hectarea_inhabitants: MyString
+  hectarea_inhabitants: 2
   grouping: MyString
   parkings: MyString
   am_cc: 1
-  aminciti: MyString
-  icinciti: MyString
-  osinciti: MyString
+  aminciti: 2
+  icinciti: 2
+  osinciti: 2

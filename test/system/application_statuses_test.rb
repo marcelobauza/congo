@@ -16,10 +16,10 @@ class ApplicationStatusesTest < ApplicationSystemTestCase
 
     fill_in "Description", with: @application_status.description
     fill_in "Filters", with: @application_status.filters
-    fill_in "Layer type", with: @application_status.layer_type
+    fill_in "Layer type", with: @application_status.layer_type_id
     fill_in "Name", with: @application_status.name
     fill_in "Polygon", with: @application_status.polygon
-    fill_in "User id,", with: @application_status.user_id,
+    fill_in "User id,", with: @application_status.user_id
     click_on "Create Application status"
 
     assert_text "Application status was successfully created"
@@ -32,10 +32,10 @@ class ApplicationStatusesTest < ApplicationSystemTestCase
 
     fill_in "Description", with: @application_status.description
     fill_in "Filters", with: @application_status.filters
-    fill_in "Layer type", with: @application_status.layer_type
+    fill_in "Layer type", with: @application_status.layer_type_id
     fill_in "Name", with: @application_status.name
     fill_in "Polygon", with: @application_status.polygon
-    fill_in "User id,", with: @application_status.user_id,
+    fill_in "User id,", with: @application_status.user_id
     click_on "Update Application status"
 
     assert_text "Application status was successfully updated"

@@ -17,7 +17,7 @@ class CountiesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create county" do
     assert_difference('County.count') do
-      post counties_url, params: { county: { code: @county.code, code_sii: @county.code_sii, commercial_project_data: @county.commercial_project_data, demography_data: @county.demography_data, future_project_data: @county.future_project_data, legislation_data: @county.legislation_data, name: @county.name, name_last_project_future: @county.name_last_project_future, sales_project_data: @county.sales_project_data, transaction_data: @county.transaction_data } }
+      post counties_url, params: { county: { code: @county.code, code_sii: @county.code_sii, commercial_project_data: @county.commercial_project_data, demography_data: @county.demography_data, future_project_data: @county.future_project_data, legislation_data: @county.legislation_data, name: @county.name, number_last_project_future: @county.number_last_project_future, sales_project_data: @county.sales_project_data, transaction_data: @county.transaction_data } }
     end
 
     assert_redirected_to county_url(County.last)
@@ -34,7 +34,7 @@ class CountiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update county" do
-    patch county_url(@county), params: { county: { code: @county.code, code_sii: @county.code_sii, commercial_project_data: @county.commercial_project_data, demography_data: @county.demography_data, future_project_data: @county.future_project_data, legislation_data: @county.legislation_data, name: @county.name, name_last_project_future: @county.name_last_project_future, sales_project_data: @county.sales_project_data, transaction_data: @county.transaction_data } }
+    patch county_url(@county), params: { county: { code: @county.code, code_sii: @county.code_sii, commercial_project_data: @county.commercial_project_data, demography_data: @county.demography_data, future_project_data: @county.future_project_data, legislation_data: @county.legislation_data, name: @county.name, number_last_project_future: @county.number_last_project_future, sales_project_data: @county.sales_project_data, transaction_data: @county.transaction_data } }
     assert_redirected_to county_url(@county)
   end
 

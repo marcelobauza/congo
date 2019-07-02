@@ -3,15 +3,15 @@
 one:
   name: 
   description: MyString
-  user_id,: MyString
+  user_id: MyString
   polygon: MyText
-  layer_type: 
+  layer_type_id: 
   filters: 
 
 two:
   name: 
   description: MyString
-  user_id,: MyString
+  user_id: MyString
   polygon: MyText
-  layer_type: 
+  layer_type_id: 
   filters: 
