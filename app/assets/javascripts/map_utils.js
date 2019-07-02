@@ -231,6 +231,9 @@ var overlays =  {
     layerControl = L.control.layers(baseMaps, overlays, {position: 'topleft'}).addTo(map);
     layer_type = Congo.dashboards.config.layer_type;
     switch(layer_type) {
+      case 'census_voronoi':
+        filter_layer = "AND 1=1";
+      break;
       case 'transactions_info':
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;

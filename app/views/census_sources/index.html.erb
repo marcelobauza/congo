@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Census Sources</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @census_sources.each do |census_source| %>
+      <tr>
+        <td><%= census_source.name %></td>
+        <td><%= link_to 'Show', census_source %></td>
+        <td><%= link_to 'Edit', edit_census_source_path(census_source) %></td>
+        <td><%= link_to 'Destroy', census_source, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Census Source', new_census_source_path %>

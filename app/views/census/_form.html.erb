@@ -1,0 +1,71 @@
+
+<%= simple_form_for(@censu) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :age_0_9 %>
+    <%= f.input :age_10_19 %>
+    <%= f.input :age_20_29 %>
+    <%= f.input :age_30_39 %>
+    <%= f.input :age_40_49 %>
+    <%= f.input :age_50_59 %>
+    <%= f.input :age_60_69 %>
+    <%= f.input :age_70_79 %>
+    <%= f.input :age_80_more %>
+    <%= f.input :home_1p %>
+    <%= f.input :home_2p %>
+    <%= f.input :home_3p %>
+    <%= f.input :home_4p %>
+    <%= f.input :home_5p %>
+    <%= f.input :owner %>
+    <%= f.input :leased %>
+    <%= f.input :transferred %>
+    <%= f.input :free %>
+    <%= f.input :possession %>
+    <%= f.input :male %>
+    <%= f.input :female %>
+    <%= f.input :married %>
+    <%= f.input :coexist %>
+    <%= f.input :single %>
+    <%= f.input :canceled %>
+    <%= f.input :separated %>
+    <%= f.input :widowed %>
+    <%= f.input :m_status_total %>
+    <%= f.input :not_attended %>
+    <%= f.input :basic %>
+    <%= f.input :high_school %>
+    <%= f.input :cft %>
+    <%= f.input :ip %>
+    <%= f.input :university %>
+    <%= f.input :education_level_total %>
+    <%= f.input :salaried %>
+    <%= f.input :domestic_service %>
+    <%= f.input :independient %>
+    <%= f.input :employee_employer %>
+    <%= f.input :unpaid_familiar %>
+    <%= f.input :labor_total %>
+    <%= f.input :abc1 %>
+    <%= f.input :c2 %>
+    <%= f.input :c3 %>
+    <%= f.input :d %>
+    <%= f.input :e %>
+    <%= f.input :socio_economic_total %>
+    <%= f.input :homes_abc1 %>
+    <%= f.input :homes_c2 %>
+    <%= f.input :homes_c3 %>
+    <%= f.input :homes_d %>
+    <%= f.input :homes_e %>
+    <%= f.input :predominant %>
+    <%= f.association :census_source %>
+    <%= f.association :county %>
+    <%= f.input :block %>
+    <%= f.input :the_geom %>
+    <%= f.input :homes_total %>
+    <%= f.input :population_total %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

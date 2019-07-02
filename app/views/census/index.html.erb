@@ -1,0 +1,143 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Census</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Age 0 9</th>
+      <th>Age 10 19</th>
+      <th>Age 20 29</th>
+      <th>Age 30 39</th>
+      <th>Age 40 49</th>
+      <th>Age 50 59</th>
+      <th>Age 60 69</th>
+      <th>Age 70 79</th>
+      <th>Age 80 more</th>
+      <th>Home 1p</th>
+      <th>Home 2p</th>
+      <th>Home 3p</th>
+      <th>Home 4p</th>
+      <th>Home 5p</th>
+      <th>Owner</th>
+      <th>Leased</th>
+      <th>Transferred</th>
+      <th>Free</th>
+      <th>Possession</th>
+      <th>Male</th>
+      <th>Female</th>
+      <th>Married</th>
+      <th>Coexist</th>
+      <th>Single</th>
+      <th>Canceled</th>
+      <th>Separated</th>
+      <th>Widowed</th>
+      <th>M status total</th>
+      <th>Not attended</th>
+      <th>Basic</th>
+      <th>High school</th>
+      <th>Cft</th>
+      <th>Ip</th>
+      <th>University</th>
+      <th>Education level total</th>
+      <th>Salaried</th>
+      <th>Domestic service</th>
+      <th>Independient</th>
+      <th>Employee employer</th>
+      <th>Unpaid familiar</th>
+      <th>Labor total</th>
+      <th>Abc1</th>
+      <th>C2</th>
+      <th>C3</th>
+      <th>D</th>
+      <th>E</th>
+      <th>Socio economic total</th>
+      <th>Homes abc1</th>
+      <th>Homes c2</th>
+      <th>Homes c3</th>
+      <th>Homes d</th>
+      <th>Homes e</th>
+      <th>Predominant</th>
+      <th>Census source</th>
+      <th>County</th>
+      <th>Block</th>
+      <th>The geom</th>
+      <th>Homes total</th>
+      <th>Population total</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @census.each do |censu| %>
+      <tr>
+        <td><%= censu.age_0_9 %></td>
+        <td><%= censu.age_10_19 %></td>
+        <td><%= censu.age_20_29 %></td>
+        <td><%= censu.age_30_39 %></td>
+        <td><%= censu.age_40_49 %></td>
+        <td><%= censu.age_50_59 %></td>
+        <td><%= censu.age_60_69 %></td>
+        <td><%= censu.age_70_79 %></td>
+        <td><%= censu.age_80_more %></td>
+        <td><%= censu.home_1p %></td>
+        <td><%= censu.home_2p %></td>
+        <td><%= censu.home_3p %></td>
+        <td><%= censu.home_4p %></td>
+        <td><%= censu.home_5p %></td>
+        <td><%= censu.owner %></td>
+        <td><%= censu.leased %></td>
+        <td><%= censu.transferred %></td>
+        <td><%= censu.free %></td>
+        <td><%= censu.possession %></td>
+        <td><%= censu.male %></td>
+        <td><%= censu.female %></td>
+        <td><%= censu.married %></td>
+        <td><%= censu.coexist %></td>
+        <td><%= censu.single %></td>
+        <td><%= censu.canceled %></td>
+        <td><%= censu.separated %></td>
+        <td><%= censu.widowed %></td>
+        <td><%= censu.m_status_total %></td>
+        <td><%= censu.not_attended %></td>
+        <td><%= censu.basic %></td>
+        <td><%= censu.high_school %></td>
+        <td><%= censu.cft %></td>
+        <td><%= censu.ip %></td>
+        <td><%= censu.university %></td>
+        <td><%= censu.education_level_total %></td>
+        <td><%= censu.salaried %></td>
+        <td><%= censu.domestic_service %></td>
+        <td><%= censu.independient %></td>
+        <td><%= censu.employee_employer %></td>
+        <td><%= censu.unpaid_familiar %></td>
+        <td><%= censu.labor_total %></td>
+        <td><%= censu.abc1 %></td>
+        <td><%= censu.c2 %></td>
+        <td><%= censu.c3 %></td>
+        <td><%= censu.d %></td>
+        <td><%= censu.e %></td>
+        <td><%= censu.socio_economic_total %></td>
+        <td><%= censu.homes_abc1 %></td>
+        <td><%= censu.homes_c2 %></td>
+        <td><%= censu.homes_c3 %></td>
+        <td><%= censu.homes_d %></td>
+        <td><%= censu.homes_e %></td>
+        <td><%= censu.predominant %></td>
+        <td><%= censu.census_source %></td>
+        <td><%= censu.county %></td>
+        <td><%= censu.block %></td>
+        <td><%= censu.the_geom %></td>
+        <td><%= censu.homes_total %></td>
+        <td><%= censu.population_total %></td>
+        <td><%= link_to 'Show', censu %></td>
+        <td><%= link_to 'Edit', edit_censu_path(censu) %></td>
+        <td><%= link_to 'Destroy', censu, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Censu', new_censu_path %>

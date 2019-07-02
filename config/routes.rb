@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get 'future_projects/dashboards' => 'future_projects#dashboards'
   get 'future_projects/graduated_points' => 'future_projects#graduated_points'
   get 'projects/dashboards' => 'projects#dashboards'
+  get 'census/dashboards' => 'census#dashboards'
   get 'projects/graduated_points' => 'projects#graduated_points'
   get 'building_regulations/dashboards' => 'building_regulations#dashboards'
   get 'reports/index' => 'reports#index'
@@ -49,6 +50,8 @@ Rails.application.routes.draw do
   root 'dashboards#index'
   end
   resources :application_statuses
+  resources :census
+  resources :census_sources
   resources :land_use_types
   resources :density_types
   resources :building_regulations
