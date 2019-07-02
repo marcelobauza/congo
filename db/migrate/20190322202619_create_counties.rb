@@ -10,7 +10,7 @@ class CreateCounties < ActiveRecord::Migration[5.2]
       t.boolean :future_project_data
       t.string :commercial_project_data
       t.integer :code_sii
-      t.integer :name_last_project_future
+      t.integer :number_last_project_future
       t.st_polygon :the_geom
       t.timestamps
     end
