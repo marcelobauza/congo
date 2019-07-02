@@ -90,7 +90,7 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
   showGetFeatureInfo: function (err, latlng, info) {
     
 //    if (err) { console.log(err); return; } // do nothing if there's an error
-
+/*
         checked = $('#select').hasClass('active');
         if (!checked){
           var cc = info;
@@ -104,7 +104,7 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
           z.innerHTML = x;
           inn = document.body.appendChild(z);
 
-          if (!checked){
+          if (!checked){*/
             //    L.popup()
             //  .setLatLng(latlng)
             //  .setContent(inn)
@@ -114,8 +114,8 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
       .setLatLng(latlng)
       .setContent(content)
       .openOn(this._map);*/
-  }
-  }
+  //}
+ // }
   }
   
 });
