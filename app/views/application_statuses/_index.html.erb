@@ -22,7 +22,7 @@
           <tbody>
             <% @application_statuses.each do |application_status| %>
               <tr>
-                <td><%= application_status.created_at.strftime("%d/%m/%Y") %></td>
+                <td><%= application_status.created_at.strftime("%d/%m/%Y %H:%M:%S") %></td>
                 <td><%= application_status.name %></td>
                 <td><%= application_status.description %></td>
                 <td class="text-center"><%= link_to application_statuses_load_path(id:application_status.id), remote: true do %>  <i class="fas fa-cloud-download-alt icon-primary-colour" title="Cargar"></i> <% end %></td>
