@@ -182,6 +182,10 @@ var overlays =  {
 
   function poly(type){
 
+    if (typeof HandlerGeometry != 'undefined'){
+        HandlerGeometry.disable();
+    }
+
     switch(type) {
       case 'circle':
         HandlerGeometry = new L.Draw.Circle(map);
@@ -197,7 +201,6 @@ var overlays =  {
       case 'point':
         HandlerGeometry = new L.Draw.Marker(map, optionsDraw);
         break;
-
     }
     HandlerGeometry.enable();
 
@@ -210,10 +213,14 @@ var overlays =  {
 
   counties = function(){
     let bimester, year, filter_for_layer;
+    
+    if (typeof HandlerGeometry != 'undefined'){
+        HandlerGeometry.disable();
+    }
+
     if (groupLayer !=undefined){
       groupLayer.eachLayer(function(layer) {
         groupLayer.removeLayer(layer);});
-      //map.removeLayer(groupLayer);
     }
 
     if (sourcePois !=undefined){
