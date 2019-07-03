@@ -1,0 +1,20 @@
+layer_type = Congo.dashboards.config.layer_type;
+
+switch(layer_type){
+  case 'future_projects_info':
+     
+        Congo.dashboards.config.style_layer= 'future_projects_normal_point';
+//        Congo.map_utils.counties();
+    break;
+  case 'transactions_info':
+        Congo.dashboards.config.style_layer= 'poi_new';
+  ///      Congo.map_utils.counties();
+    break;
+  
+  case 'projects_feature_info':
+        Congo.dashboards.config.style_layer= 'poi_new';
+     //   Congo.map_utils.counties();
+    break;
+
+
+}
