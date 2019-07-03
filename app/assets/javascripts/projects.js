@@ -112,8 +112,6 @@ function projects_report_pdf(){
       // Creamos el doc
       var doc = new jsPDF();
 
-      // ---------- PÁGINA UNO ---------- //
-
       // Título
       doc.setFontStyle("bold");
       doc.setFontSize(22);
@@ -130,441 +128,18 @@ function projects_report_pdf(){
       doc.setFontStyle("normal");
       doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
 
-      // ---------- PÁGINA DOS ---------- //
-
-      // Agregamos una página
-      doc.addPage('a4', 'portrait')
-
-      // Subtítulo
-      doc.setFontStyle("bold");
-      doc.setFontSize(16);
-      doc.text('Listado de Proyectos', 105, 20, null, null, 'center');
-
-      // Pie de página
-      doc.setFontStyle("bold");
-      doc.setFontSize(12);
-      doc.text('Fuente:', 20, 290);
-      doc.setFontStyle("normal");
-      doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
-
-      doc.line(10, 25, 200, 25);
-
-      for (var i = 0; i < 3; i++) {
-
-        var reg = data[i];
-
-        var list_projet = reg['list_projet'];
-
-        var line_num = 30
-
-        $.each(list_projet, function(a, b) {
-
-          var name = b['name']
-          var address = b['address']
-          var sold_units = b['sold_units']
-          var stock_units = b['stock_units']
-          var total_units = b['total_units']
-          var vhmud = b['vhmud']
-
-          // Convertimos integer a varchar
-          sold_units = sold_units.toString()
-          stock_units = stock_units.toString()
-          total_units = total_units.toString()
-          vhmud = vhmud.toString()
-
-          if (line_num > 260) {
-            doc.addPage('a4', 'portrait')
-            line_num = 25
-
-            doc.line(10, 20, 200, 20);
-
-            // Pie de página
-            doc.setFontStyle("bold");
-            doc.setFontSize(12);
-            doc.text('Fuente:', 20, 290);
-            doc.setFontStyle("normal");
-            doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
-          }
-
-          // Cod
-          doc.setFontSize(12);
-          doc.setFontStyle("bold");
-          doc.text('Cod:', 10, line_num);
-          doc.setFontStyle("normal");
-          doc.text('', 22, line_num);
-
-          // Nombre
-          doc.setFontStyle("bold");
-          doc.text('Nombre:', 60, line_num);
-          doc.setFontStyle("normal");
-          doc.text(name, 80, line_num);
-
-          line_num = line_num+8
-
-          // Inmobiliaria
-          doc.setFontStyle("bold");
-          doc.text('Inmobiliaria:', 10, line_num);
-          doc.setFontStyle("normal");
-          doc.text('GRUPO MAGAL', 38, line_num);
-
-          line_num = line_num+8
-
-          // Dirección
-          doc.setFontStyle("bold");
-          doc.text('Dirección:', 10, line_num);
-          doc.setFontStyle("normal");
-          doc.text(address, 33, line_num);
-
-          line_num = line_num+8
-
-          // Oferta
-          doc.setFontStyle("bold");
-          doc.text('Oferta:', 10, line_num);
-          doc.setFontStyle("normal");
-          doc.text(total_units, 26, line_num);
-
-          // Venta
-          doc.setFontStyle("bold");
-          doc.text('Venta:', 62, line_num);
-          doc.setFontStyle("normal");
-          doc.text(sold_units, 77, line_num);
-
-          // Disponible
-          doc.setFontStyle("bold");
-          doc.text('Disponible:', 114, line_num);
-          doc.setFontStyle("normal");
-          doc.text(stock_units, 139, line_num);
-
-          // Velocidad
-          doc.setFontStyle("bold");
-          doc.text('Velocidad:', 169, line_num);
-          doc.setFontStyle("normal");
-          doc.text(vhmud, 193, line_num);
-
-          line_num = line_num+5
-
-          doc.line(10, line_num, 200, line_num);
-
-          line_num = line_num+8
-
-        }) // Cierra each
-
-      } // Cierra for
-
-      // ---------- PÁGINA TRES ---------- //
-
-      doc.addPage('a4', 'portrait')
-
-      doc.setFontStyle("bold");
-      doc.setFontSize(14);
-      doc.text('Información General Departamentos', 105, 20, null, null, 'center');
-
-      // ---------- PÁGINAS CHARTS ---------- //
-
-      doc.addPage('a4', 'portrait')
-
       // Separamos la información
-      for (var i = 3; i < data.length; i++) {
+      for (var i = 0; i < data.length; i++) {
 
-        var reg = data[i];
-        var title = reg['title'];
-        var series = reg['series'];
-        var datasets = [];
+        if (i == 0) { // Listado de Proyectos
 
-        // Extraemos las series
-        $.each(series, function(a, b){
+          // Agregamos una página
+          doc.addPage('a4', 'portrait')
 
-          var label = b['label']
-          var data = b['data']
-
-          // Setea los colores dependiendo de la serie
-          switch (label) {
-            case 'UF Máximo':
-            case 'Oferta Total':
-            case 'Disponibles':
-              rgba_color = 'rgba(165, 188, 78, 0.5)'
-              rgb_colour = 'rgb(165, 188, 78)'
-              break;
-            case 'UF Mínimo':
-            case 'Disponibilidad Total':
-            case 'Vendidas':
-              rgba_color = 'rgba(228, 135, 1, 0.5)'
-              rgb_colour = 'rgb(228, 135, 1)'
-              break;
-            case 'UF Promedio':
-            case 'Ventas Total':
-              rgba_color = 'rgba(27, 149, 217, 0.5)'
-              rgb_colour = 'rgb(27, 149, 217)'
-              break;
-          }
-
-          var name = [];
-          var count = [];
-
-          // Extraemos los datos de las series
-          $.each(data, function(c, d){
-            name.push(d['name'])
-            count.push(d['count'])
-          })
-
-          // Guardamos "datasets" y "chart_type"
-          if (title == 'Mix de Unidades') {
-            chart_type = 'bar';
-            datasets.push({
-              label: label,
-              data: count,
-              backgroundColor: rgba_color,
-              borderColor: rgb_colour,
-              borderWidth: 1,
-            })
-          }
-
-          if (title == 'Evolución Stock Total, Venta y Disponibilidad') {
-            chart_type = 'line';
-            datasets.push({
-              label: label,
-              data: count,
-              fill: false,
-              borderColor: rgb_colour,
-              borderWidth: 3,
-              pointRadius: 0,
-              pointStyle: 'line',
-              lineTension: 0,
-            })
-          }
-
-          if (title == 'Evolución Precio en UF') {
-            chart_type = 'line';
-            datasets.push({
-              label: label,
-              data: count,
-              fill: false,
-              borderColor: rgb_colour,
-              borderWidth: 3,
-              pointRadius: 0,
-              pointStyle: 'line',
-              lineTension: 0,
-            })
-          }
-
-          if (title == 'Evolución Precio en UF/m2') {
-            chart_type = 'line';
-            datasets.push({
-              label: label,
-              data: count,
-              fill: false,
-              borderColor: rgb_colour,
-              borderWidth: 3,
-              pointRadius: 0,
-              pointStyle: 'line',
-              lineTension: 0,
-            })
-          }
-
-          if (title == 'Estado de los Proyectos') {
-            chart_type = 'pie';
-            datasets.push({
-              label: label,
-              data: count,
-              backgroundColor: [
-                'rgb(39,174,96)',
-                'rgb(231,76,60)',
-                'rgb(211,84,0)',
-                'rgb(41,128,185)',
-                'rgb(241,196,15)'
-              ],
-            })
-          }
-
-          chart_data = {
-            labels: name,
-            datasets: datasets
-          }
-
-        })
-
-        // Guardamos "options"
-        if (chart_type == 'bar') { // Bar
-
-          var chart_options = {
-            animation: false,
-            responsive: true,
-            title: {
-              display: false
-            },
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                fontColor: '#444',
-                fontSize: 12,
-              }
-            },
-            plugins: {
-              datalabels: {
-                align: 'center',
-                anchor: 'center',
-                color: '#444',
-                font: {
-                  size: 10
-                },
-                formatter: (value, ctx) => {
-                  // Mustra sólo los valores que estén por encima del 3%
-                  let sum = 0;
-                  let dataArr = ctx.chart.data.datasets[0].data;
-                  dataArr.map(data => {
-                      sum += data;
-                  });
-                  let percentage = (value*100 / sum).toFixed(2);
-                  if (percentage > 3) {
-                    return value;
-                  } else {
-                    return null;
-                  }
-                },
-              }
-            },
-            scales: {
-              xAxes: [{
-                stacked: true,
-                ticks: {
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#444'
-                }
-              }],
-              yAxes: [{
-                stacked: true,
-                ticks: {
-                  beginAtZero: true,
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#444'
-                },
-              }],
-            }
-          };
-
-        } else if (chart_type == 'pie') { // Pie
-
-          var chart_options = {
-            animation: false,
-            responsive: true,
-            title: {
-              display: false
-            },
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                fontColor: '#444',
-                fontSize: 12,
-                usePointStyle: true,
-              }
-            },
-            plugins: {
-              datalabels: {
-                formatter: (value, ctx) => {
-                  // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
-                  let sum = 0;
-                  let dataArr = ctx.chart.data.datasets[0].data;
-                  dataArr.map(data => {
-                      sum += data;
-                  });
-                  let percentage = (value*100 / sum).toFixed(2);
-                  if (percentage > 3) {
-                    return percentage+'%';
-                  } else {
-                    return null;
-                  }
-                },
-                align: 'center',
-                anchor: 'center',
-    						color: 'white',
-    						font: {
-    							weight: 'bold'
-    						},
-    					}
-            },
-          };
-
-        } else { // Line
-
-          var chart_options = {
-            animation: false,
-            responsive: true,
-            title: {
-              display: false
-            },
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                fontColor: '#444',
-                fontSize: 12,
-                usePointStyle: true,
-              }
-            },
-            plugins: {
-              datalabels: {
-                align: 'start',
-                anchor: 'start',
-                color: '#444',
-                display: function(context) {
-                  return context.dataset.data[context.dataIndex] > 0;
-                },
-                font: {
-                  size: 10
-                },
-                formatter: Math.round
-              }
-            },
-            scales: {
-              xAxes: [{
-                stacked: true,
-                ticks: {
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#444'
-                }
-              }],
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true,
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#444'
-                },
-              }],
-            }
-          };
-
-        } // Cierra else ("options")
-
-        var chart_settings = {
-          type: chart_type,
-          data: chart_data,
-          options: chart_options
-        }
-
-        // Creamos y adjuntamos el canvas
-        var canvas = document.createElement('canvas');
-        canvas.id = 'report-canvas-'+i;
-        $('#chart-report'+i).append(canvas);
-
-        var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
-        var final_chart = new Chart(chart_canvas, chart_settings);
-
-        var chart = final_chart.toBase64Image();
-
-        if (i % 2 == 1) {
-
-          // Título del gráfico
+          // Subtítulo
+          doc.setFontStyle("bold");
           doc.setFontSize(16);
-          doc.text(title, 105, 20, null, null, 'center');
-
-          // Gráfico
-          doc.addImage(chart, 'JPEG', 9, 30);
+          doc.text('Listado de Proyectos', 105, 20, null, null, 'center');
 
           // Pie de página
           doc.setFontStyle("bold");
@@ -573,29 +148,651 @@ function projects_report_pdf(){
           doc.setFontStyle("normal");
           doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
 
-        } else {
+          doc.line(10, 25, 200, 25);
 
-          // Título del gráfico
-          doc.setFontSize(16);
-          doc.text(title, 105, 160, null, null, 'center');
+          var list_projet = data[i]['list_projet'];
 
-          // Gráfico
-          doc.addImage(chart, 'JPEG', 9, 170);
+          var line_num = 30
 
-          // Agrega nueva página
+          $.each(list_projet, function(a, b) {
+
+            var name = b['name']
+            var address = b['address']
+            var sold_units = b['sold_units']
+            var stock_units = b['stock_units']
+            var total_units = b['total_units']
+            var vhmud = b['vhmud']
+
+            // Convertimos integer a varchar
+            sold_units = sold_units.toString()
+            stock_units = stock_units.toString()
+            total_units = total_units.toString()
+            vhmud = vhmud.toString()
+
+            if (line_num > 260) {
+              doc.addPage('a4', 'portrait')
+              line_num = 25
+
+              doc.line(10, 20, 200, 20);
+
+              // Pie de página
+              doc.setFontStyle("bold");
+              doc.setFontSize(12);
+              doc.text('Fuente:', 20, 290);
+              doc.setFontStyle("normal");
+              doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+            }
+
+            // Cod
+            doc.setFontSize(12);
+            doc.setFontStyle("bold");
+            doc.text('Cod:', 10, line_num);
+            doc.setFontStyle("normal");
+            doc.text('', 22, line_num);
+
+            // Nombre
+            doc.setFontStyle("bold");
+            doc.text('Nombre:', 60, line_num);
+            doc.setFontStyle("normal");
+            doc.text(name, 80, line_num);
+
+            line_num = line_num+8
+
+            // Inmobiliaria
+            doc.setFontStyle("bold");
+            doc.text('Inmobiliaria:', 10, line_num);
+            doc.setFontStyle("normal");
+            doc.text('GRUPO MAGAL', 38, line_num);
+
+            line_num = line_num+8
+
+            // Dirección
+            doc.setFontStyle("bold");
+            doc.text('Dirección:', 10, line_num);
+            doc.setFontStyle("normal");
+            doc.text(address, 33, line_num);
+
+            line_num = line_num+8
+
+            // Oferta
+            doc.setFontStyle("bold");
+            doc.text('Oferta:', 10, line_num);
+            doc.setFontStyle("normal");
+            doc.text(total_units, 26, line_num);
+
+            // Venta
+            doc.setFontStyle("bold");
+            doc.text('Venta:', 62, line_num);
+            doc.setFontStyle("normal");
+            doc.text(sold_units, 77, line_num);
+
+            // Disponible
+            doc.setFontStyle("bold");
+            doc.text('Disponible:', 114, line_num);
+            doc.setFontStyle("normal");
+            doc.text(stock_units, 139, line_num);
+
+            // Velocidad
+            doc.setFontStyle("bold");
+            doc.text('Velocidad:', 169, line_num);
+            doc.setFontStyle("normal");
+            doc.text(vhmud, 193, line_num);
+
+            line_num = line_num+5
+
+            doc.line(10, line_num, 200, line_num);
+
+            line_num = line_num+8
+
+          }) // Cierra each
+        } else if (i == 1) { // Información General Departamentos
+
           doc.addPage('a4', 'portrait')
 
-        } // Cierra if impar
+          // Levantamos los valores de departamento
+          var info_department = data[i]['info_department'][0];
+
+          var min_selling_speed1 = info_department['min_selling_speed1']; //Venta Mensual Histórica Min
+          var max_selling_speed1 = info_department['max_selling_speed1']; //Venta Mensual Histórica Max
+          var avg_selling_speed1 = info_department['avg_selling_speed1']; //Venta Mensual Histórica Prom
+          var total_units1 = info_department['total_units1']; //Oferta
+          var total_sold = info_department['total_sold']; //Venta
+          var total_stock1 = info_department['total_stock1']; //Disponibilidad
+          var spend_stock_months1 = info_department['spend_stock_months1']; //Meses para agotar Stock
+          var min_uf_m21 = info_department['min_uf_m21']; //Valor UF/m2 Mínimo
+          var max_uf_m21 = info_department['max_uf_m21']; //Valor UF/m2 Máximo
+          var avg_uf_m2 = info_department['avg_uf_m2']; //Valor UF/m2 Promedio
+
+          var min_usable_square_m21 = info_department['min_usable_square_m21']; //Sup. Útil Mínima (m2)
+          var max_usable_square_m21 = info_department['max_usable_square_m21']; //Sup. Útil Máxima (m2)
+          var avg_usable_square_m21 = info_department['avg_usable_square_m21']; //Sup. Útil Promedio (m2)
+          var min_terrace_square_m21 = info_department['min_terrace_square_m21']; //Sup. Terraza Min. (m2)
+          var max_terrace_square_m21 = info_department['max_terrace_square_m21']; //Sup. Terraza Max. (m2)
+          var avg_terrace_square_m21 = info_department['avg_terrace_square_m21']; //Sup. Terraza Prom. (m2)
+          var min_uf1 = info_department['min_uf1']; //Valor UF Mínimo
+          var max_uf1 = info_department['max_uf1']; //Valor UF Máximo
+          var avg_uf1 = info_department['avg_uf1']; //Valor UF Promedio
+
+          // Cambiamos a string los valores que llegan como integer
+          min_selling_speed1 = min_selling_speed1.toString()
+          max_selling_speed1 = max_selling_speed1.toString()
+          avg_selling_speed1 = avg_selling_speed1.toString()
+          total_units1 = total_units1.toString()
+          total_sold = total_sold.toString()
+          total_stock1 = total_stock1.toString()
+          spend_stock_months1 = spend_stock_months1.toString()
+          min_uf_m21 = min_uf_m21.toString()
+          max_uf_m21 = max_uf_m21.toString()
+          avg_uf_m2 = avg_uf_m2.toString()
+
+          min_usable_square_m21 = min_usable_square_m21.toString()
+          max_usable_square_m21 = max_usable_square_m21.toString()
+          avg_usable_square_m21 = avg_usable_square_m21.toString()
+          min_terrace_square_m21 = min_terrace_square_m21.toString()
+          max_terrace_square_m21 = max_terrace_square_m21.toString()
+          avg_terrace_square_m21 = avg_terrace_square_m21.toString()
+          min_uf1 = min_uf1.toString()
+          max_uf1 = max_uf1.toString()
+          avg_uf1 = avg_uf1.toString()
+
+          // Subtítulo
+          doc.setFontStyle("bold");
+          doc.setFontSize(14);
+          doc.text('Información General Departamentos', 105, 20, null, null, 'center');
+
+          // Labels columna izquierda
+          doc.setFontSize(12);
+          doc.text('Venta Mensual Histórica Min:', 74, 40, null, null, 'right');
+          doc.text('Venta Mensual Histórica Max:', 74, 50, null, null, 'right');
+          doc.text('Venta Mensual Histórica Prom:', 74, 60, null, null, 'right');
+          doc.text('Oferta:', 74, 70, null, null, 'right');
+          doc.text('Venta:', 74, 80, null, null, 'right');
+          doc.text('Disponibilidad:', 74, 90, null, null, 'right');
+          doc.text('Meses para agotar Stock:', 74, 100, null, null, 'right');
+          doc.text('Valor UF/m2 Mínimo:', 74, 110, null, null, 'right');
+          doc.text('Valor UF/m2 Máximo:', 74, 120, null, null, 'right');
+          doc.text('Valor UF/m2 Promedio:', 74, 130, null, null, 'right');
+
+          // Valores columna izquierda
+          doc.setFontStyle("normal");
+          doc.text(min_selling_speed1, 76, 40);
+          doc.text(max_selling_speed1, 76, 50);
+          doc.text(avg_selling_speed1, 76, 60);
+          doc.text(total_units1, 76, 70);
+          doc.text(total_sold, 76, 80);
+          doc.text(total_stock1, 76, 90);
+          doc.text(spend_stock_months1, 76, 100);
+          doc.text(min_uf_m21, 76, 110);
+          doc.text(max_uf_m21, 76, 120);
+          doc.text(avg_uf_m2, 76, 130);
+
+          // Labels columna derecha
+          doc.setFontStyle("bold");
+          doc.text('Sup. Útil Mínima (m2):', 168, 40, null, null, 'right');
+          doc.text('Sup. Útil Máxima (m2):', 168, 50, null, null, 'right');
+          doc.text('Sup. Útil Promedio (m2):', 168, 60, null, null, 'right');
+          doc.text('Sup. Terraza Min. (m2):', 168, 70, null, null, 'right');
+          doc.text('Sup. Terraza Max. (m2):', 168, 80, null, null, 'right');
+          doc.text('Sup. Terraza Prom. (m2):', 168, 90, null, null, 'right');
+          doc.text('Valor UF Mínimo:', 168, 110, null, null, 'right');
+          doc.text('Valor UF Máximo:', 168, 120, null, null, 'right');
+          doc.text('Valor UF Promedio:', 168, 130, null, null, 'right');
+
+          // Valores columna derecha
+          doc.setFontStyle("normal");
+          doc.text(min_usable_square_m21, 170, 40);
+          doc.text(max_usable_square_m21, 170, 50);
+          doc.text(avg_usable_square_m21, 170, 60);
+          doc.text(min_terrace_square_m21, 170, 70);
+          doc.text(max_terrace_square_m21, 170, 80);
+          doc.text(avg_terrace_square_m21, 170, 90);
+          doc.text(min_uf1, 170, 110);
+          doc.text(max_uf1, 170, 120);
+          doc.text(avg_uf1, 170, 130);
+
+        } else if (i == 2) { // Información General Casas
+
+          // Levantamos los valores de casas
+          var info_house = data[i]['info_house'][0];
+
+          var min_selling_speed = info_house['min_selling_speed']; //Venta Mensual Histórica Min
+          var max_selling_speed = info_house['max_selling_speed']; //Venta Mensual Histórica Max
+          var avg_selling_speed = info_house['avg_selling_speed']; //Venta Mensual Histórica Prom
+          var total_units = info_house['total_units']; //Oferta
+          var total_sold = info_house['total_sold']; //Venta
+          var total_stock = info_house['total_stock']; //Disponibilidad
+          var spend_stock_months1 = info_house['spend_stock_months1']; //Meses para agotar Stock
+          var min_uf_m2 = info_house['min_uf_m2']; //Valor UF/m2 Mínimo
+          var max_uf_m2 = info_house['max_uf_m2']; //Valor UF/m2 Máximo
+          var avg_uf_m2 = info_house['avg_uf_m2']; //Valor UF/m2 Promedio
+
+          var min_usable_square_m2 = info_house['min_usable_square_m2']; //Sup. Útil Mínima (m2)
+          var max_usable_square_m2 = info_house['max_usable_square_m2']; //Sup. Útil Máxima (m2)
+          //var avg_usable_square_m2 = info_house['avg_usable_square_m2']; //Sup. Útil Promedio (m2)
+          var min_terrace_square_m2 = info_house['min_terrace_square_m2']; //Sup. Terraza Min. (m2)
+          var max_terrace_square_m2 = info_house['max_terrace_square_m2']; //Sup. Terraza Max. (m2)
+          var avg_terrace_square_m2 = info_house['avg_terrace_square_m2']; //Sup. Terraza Prom. (m2)
+          var min_uf = info_house['min_uf']; //Valor UF Mínimo
+          var max_uf = info_house['max_uf']; //Valor UF Máximo
+          var avg_uf = info_house['avg_uf']; //Valor UF Promedio
+
+          min_selling_speed = min_selling_speed.toString()
+          max_selling_speed = max_selling_speed.toString()
+          avg_selling_speed = avg_selling_speed.toString()
+          total_units = total_units.toString()
+          total_sold = total_sold.toString()
+          total_stock = total_stock.toString()
+          spend_stock_months1 = spend_stock_months1.toString()
+          min_uf_m2 = min_uf_m2.toString()
+          max_uf_m2 = max_uf_m2.toString()
+          avg_uf_m2 = avg_uf_m2.toString()
+
+          min_usable_square_m2 = min_usable_square_m2.toString()
+          max_usable_square_m2 = max_usable_square_m2.toString()
+          //avg_usable_square_m2 = avg_usable_square_m2.toString()
+          //min_terrace_square_m2 = min_terrace_square_m2.toString()
+          //max_terrace_square_m2 = max_terrace_square_m2.toString()
+          //avg_terrace_square_m2 = avg_terrace_square_m2.toString()
+          min_uf = min_uf.toString()
+          max_uf = max_uf.toString()
+          avg_uf = avg_uf.toString()
+
+          doc.setFontStyle("bold");
+          doc.setFontSize(14);
+          doc.text('Información General Casas', 105, 160, null, null, 'center');
+
+          // Labels columna izquierda
+          doc.setFontSize(12);
+          doc.text('Venta Mensual Histórica Min:', 74, 180, null, null, 'right');
+          doc.text('Venta Mensual Histórica Max:', 74, 190, null, null, 'right');
+          doc.text('Venta Mensual Histórica Prom:', 74, 200, null, null, 'right');
+          doc.text('Oferta:', 74, 210, null, null, 'right');
+          doc.text('Venta:', 74, 220, null, null, 'right');
+          doc.text('Disponibilidad:', 74, 230, null, null, 'right');
+          doc.text('Meses para agotar Stock:', 74, 240, null, null, 'right');
+          doc.text('Valor UF/m2 Mínimo:', 74, 250, null, null, 'right');
+          doc.text('Valor UF/m2 Máximo:', 74, 260, null, null, 'right');
+          doc.text('Valor UF/m2 Promedio:', 74, 270, null, null, 'right');
+
+          // Valores columna izquierda
+          doc.setFontStyle("normal");
+          doc.text(min_selling_speed, 76, 180);
+          doc.text(max_selling_speed, 76, 190);
+          doc.text(avg_selling_speed, 76, 200);
+          doc.text(total_units, 76, 210);
+          doc.text(total_sold, 76, 220);
+          doc.text(total_stock, 76, 230);
+          doc.text(spend_stock_months1, 76, 240);
+          doc.text(min_uf_m2, 76, 250);
+          doc.text(max_uf_m2, 76, 260);
+          doc.text(avg_uf_m2, 76, 270);
+
+          // Labels columna derecha
+          doc.setFontStyle("bold");
+          doc.text('Sup. Útil Mínima (m2):', 168, 180, null, null, 'right');
+          doc.text('Sup. Útil Máxima (m2):', 168, 190, null, null, 'right');
+          doc.text('Sup. Útil Promedio (m2):', 168, 200, null, null, 'right');
+          doc.text('Sup. Terraza Min. (m2):', 168, 210, null, null, 'right');
+          doc.text('Sup. Terraza Max. (m2):', 168, 220, null, null, 'right');
+          doc.text('Sup. Terraza Prom. (m2):', 168, 230, null, null, 'right');
+          doc.text('Valor UF Mínimo:', 168, 250, null, null, 'right');
+          doc.text('Valor UF Máximo:', 168, 260, null, null, 'right');
+          doc.text('Valor UF Promedio:', 168, 270, null, null, 'right');
+
+          // Valores columna derecha
+          doc.setFontStyle("normal");
+          doc.text(min_usable_square_m2, 170, 180);
+          doc.text(max_usable_square_m2, 170, 190);
+          //doc.text(avg_usable_square_m2, 170, 200);
+          //doc.text(min_terrace_square_m2, 170, 210);
+          //doc.text(max_terrace_square_m2, 170, 220);
+          //doc.text(avg_terrace_square_m2, 170, 230);
+          doc.text(min_uf, 170, 250);
+          doc.text(max_uf, 170, 260);
+          doc.text(avg_uf, 170, 270);
+
+          // Pie de página
+          doc.setFontStyle("bold");
+          doc.setFontSize(12);
+          doc.text('Fuente:', 20, 290);
+          doc.setFontStyle("normal");
+          doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+
+          doc.addPage('a4', 'portrait')
+
+        } else { // Gráficos
+
+          var reg = data[i];
+          var title = reg['title'];
+          var series = reg['series'];
+          var datasets = [];
+
+          // Extraemos las series
+          $.each(series, function(a, b){
+
+            var label = b['label']
+            var data = b['data']
+
+            // Setea los colores dependiendo de la serie
+            switch (label) {
+              case 'UF Máximo':
+              case 'Oferta Total':
+              case 'Disponibles':
+                rgba_color = 'rgba(165, 188, 78, 0.5)'
+                rgb_colour = 'rgb(165, 188, 78)'
+                break;
+              case 'UF Mínimo':
+              case 'Disponibilidad Total':
+              case 'Vendidas':
+                rgba_color = 'rgba(228, 135, 1, 0.5)'
+                rgb_colour = 'rgb(228, 135, 1)'
+                break;
+              case 'UF Promedio':
+              case 'Ventas Total':
+                rgba_color = 'rgba(27, 149, 217, 0.5)'
+                rgb_colour = 'rgb(27, 149, 217)'
+                break;
+            }
+
+            var name = [];
+            var count = [];
+
+            // Extraemos los datos de las series
+            $.each(data, function(c, d){
+              name.push(d['name'])
+              count.push(d['count'])
+            })
+
+            // Guardamos "datasets" y "chart_type"
+            if (title == 'Mix de Unidades') {
+              chart_type = 'bar';
+              datasets.push({
+                label: label,
+                data: count,
+                backgroundColor: rgba_color,
+                borderColor: rgb_colour,
+                borderWidth: 1,
+              })
+            }
+
+            if (title == 'Evolución Stock Total, Venta y Disponibilidad') {
+              chart_type = 'line';
+              datasets.push({
+                label: label,
+                data: count,
+                fill: false,
+                borderColor: rgb_colour,
+                borderWidth: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
+                lineTension: 0,
+              })
+            }
+
+            if (title == 'Evolución Precio en UF') {
+              chart_type = 'line';
+              datasets.push({
+                label: label,
+                data: count,
+                fill: false,
+                borderColor: rgb_colour,
+                borderWidth: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
+                lineTension: 0,
+              })
+            }
+
+            if (title == 'Evolución Precio en UF/m2') {
+              chart_type = 'line';
+              datasets.push({
+                label: label,
+                data: count,
+                fill: false,
+                borderColor: rgb_colour,
+                borderWidth: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
+                lineTension: 0,
+              })
+            }
+
+            if (title == 'Estado de los Proyectos') {
+              chart_type = 'pie';
+              datasets.push({
+                label: label,
+                data: count,
+                backgroundColor: [
+                  'rgb(39,174,96)',
+                  'rgb(231,76,60)',
+                  'rgb(211,84,0)',
+                  'rgb(41,128,185)',
+                  'rgb(241,196,15)'
+                ],
+              })
+            }
+
+            chart_data = {
+              labels: name,
+              datasets: datasets
+            }
+
+          })
+
+          // Guardamos "options"
+          if (chart_type == 'bar') { // Bar
+
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#444',
+                  fontSize: 12,
+                }
+              },
+              plugins: {
+                datalabels: {
+                  align: 'center',
+                  anchor: 'center',
+                  color: '#444',
+                  font: {
+                    size: 10
+                  },
+                  formatter: (value, ctx) => {
+                    // Mustra sólo los valores que estén por encima del 3%
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value*100 / sum).toFixed(2);
+                    if (percentage > 3) {
+                      return value;
+                    } else {
+                      return null;
+                    }
+                  },
+                }
+              },
+              scales: {
+                xAxes: [{
+                  stacked: true,
+                  ticks: {
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#444'
+                  }
+                }],
+                yAxes: [{
+                  stacked: true,
+                  ticks: {
+                    beginAtZero: true,
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#444'
+                  },
+                }],
+              }
+            };
+
+          } else if (chart_type == 'pie') { // Pie
+
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#444',
+                  fontSize: 12,
+                  usePointStyle: true,
+                }
+              },
+              plugins: {
+                datalabels: {
+                  formatter: (value, ctx) => {
+                    // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value*100 / sum).toFixed(2);
+                    if (percentage > 3) {
+                      return percentage+'%';
+                    } else {
+                      return null;
+                    }
+                  },
+                  align: 'center',
+                  anchor: 'center',
+                  color: 'white',
+                  font: {
+                    weight: 'bold'
+                  },
+                }
+              },
+            };
+
+          } else { // Line
+
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#444',
+                  fontSize: 12,
+                  usePointStyle: true,
+                }
+              },
+              plugins: {
+                datalabels: {
+                  align: 'start',
+                  anchor: 'start',
+                  color: '#444',
+                  display: function(context) {
+                    return context.dataset.data[context.dataIndex] > 0;
+                  },
+                  font: {
+                    size: 10
+                  },
+                  formatter: Math.round
+                }
+              },
+              scales: {
+                xAxes: [{
+                  stacked: true,
+                  ticks: {
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#444'
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true,
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#444'
+                  },
+                }],
+              }
+            };
+
+          } // Cierra else ("options")
+
+          var chart_settings = {
+            type: chart_type,
+            data: chart_data,
+            options: chart_options
+          }
+
+          // Creamos y adjuntamos el canvas
+          var canvas = document.createElement('canvas');
+          canvas.id = 'report-canvas-'+i;
+          $('#chart-report'+i).append(canvas);
+
+          var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
+          var final_chart = new Chart(chart_canvas, chart_settings);
+
+          var chart = final_chart.toBase64Image();
+
+          if (i % 2 == 1) {
+
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.text(title, 105, 20, null, null, 'center');
+
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 30);
+
+            // Pie de página
+            doc.setFontStyle("bold");
+            doc.setFontSize(12);
+            doc.text('Fuente:', 20, 290);
+            doc.setFontStyle("normal");
+            doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+
+          } else {
+
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.text(title, 105, 160, null, null, 'center');
+
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 170);
+
+            // Agrega nueva página
+            doc.addPage('a4', 'portrait')
+
+          } // Cierra if impar
+
+        } // Cierra if
 
       } // Cierra for
 
       // Descarga el archivo PDF
       doc.save("ProjectosResidenciales.pdf");
 
-    }
-  })
-
-}
+    } // Cierra success
+  }) // Cierra ajax
+} // Cierra function projects_report_pdf
 
 function addInmoFilter(id, name) {
 
