@@ -85,7 +85,6 @@ Congo.projects.action_graduated_points = function(){
         $.each(data['data'], function(index, value){
           str = 'interval'+index+':'+value+';';
           env1 = env1.concat(str);
-          console.log(env1);
         })
         Congo.dashboards.config.style_layer= 'stock_units_graduated_points';
         Congo.dashboards.config.env= env1;
@@ -109,9 +108,6 @@ function projects_report_pdf(){
     success: function(data){
 
       data = data['data']
-
-      console.log('data del report');
-      console.log(data);
 
       // Creamos el doc
       var doc = new jsPDF();
@@ -156,10 +152,8 @@ function projects_report_pdf(){
       for (var i = 0; i < 3; i++) {
 
         var reg = data[i];
-        console.log(reg);
 
         var list_projet = reg['list_projet'];
-        console.log(list_projet);
 
         var line_num = 30
 
@@ -772,8 +766,6 @@ Congo.projects.action_dashboards = function(){
           $('.filter-transactions').remove();
         },
         success: function(data){
-
-          console.log(data);
 
           // Ocultamos el spinner
           $("#spinner").hide();
