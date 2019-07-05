@@ -158,7 +158,7 @@ class FutureProject < ApplicationRecord
   def self.group_by_project_type(widget, filters)
     
     cond_query = condition_period_current(filters) + Util.and  if !filters[:to_period].nil?
-    cond_query += conditions(filters, true)
+    cond_query += conditions(filters, widget)
     FutureProject.joins(build_joins.join(" ")).where(cond_query).group(:future_project_type_id).count(:id)
   end
 
@@ -335,7 +335,7 @@ class FutureProject < ApplicationRecord
     unless filters.has_key? :boost or self_not_filter == true
       conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
     end
-    if filters.has_key? :project_type_ids or filters.has_key? :future_project_type_ids 
+    if filters.has_key? :project_type_ids or filters.has_key? :future_project_type_ids
     conditions +=  ids_conditions(filters, self_not_filter)
     #conditions += "future_projects.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
     end
