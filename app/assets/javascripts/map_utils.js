@@ -319,35 +319,39 @@ var overlays =  {
         cql_filter_pois = "county_id='"+ county_id + "'";
         break;
       default:
-        Congo.map_utils.centerpt = '';
-        Congo.map_utils.radius = '';
-        Congo.map_utils.size_box = '';
+      if(typeof(editableLayers)!=='undefined'){
+        editableLayers.eachLayer(function (layer) {
+          map.removeLayer(layer);
+        });
+      }
+        Congo.dashboards.config.centerpt = '';
+        Congo.dashboards.config.radius = 0;
+        Congo.dashboards.config.size_box = [];
         county_id = Congo.dashboards.config.county_id;
         cql_filter = "county_id='"+ county_id +"'"+ filter_layer;
         cql_filter_pois = "county_id='"+ county_id + "'";
         break;
     }
-
     groupLayer = L.layerGroup();
 
     style_layer = Congo.dashboards.config.style_layer;
     env = Congo.dashboards.config.env;
     //POIS
-      var options_info = {
-        layers: "inciti_v2:pois_infos",//nombre de la capa (ver get capabilities)
-        format: 'image/png',
-        transparent: 'true',
-        opacity: 1,
-        version: '1.0.0',//wms version (ver get capabilities)
-        tiled: true,
-        styles: 'pois_info',
-        INFO_FORMAT: 'application/json',
-        format_options: 'callback:getJson',
-        CQL_FILTER: cql_filter_pois
-      };
-      sourcePois = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_info);
+    var options_info = {
+      layers: "inciti_v2:pois_infos",//nombre de la capa (ver get capabilities)
+      format: 'image/png',
+      transparent: 'true',
+      opacity: 1,
+      version: '1.0.0',//wms version (ver get capabilities)
+      tiled: true,
+      styles: 'pois_info',
+      INFO_FORMAT: 'application/json',
+      format_options: 'callback:getJson',
+      CQL_FILTER: cql_filter_pois
+    };
+    sourcePois = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_info);
 
-    layerControl.addOverlay(sourcePois, "Puntos Interes");
+    layerControl.addOverlay(sourcePois, "Equipamientos y Servicios");
 
     if(county_id != ''){
       var options = {
