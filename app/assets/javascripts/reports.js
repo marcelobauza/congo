@@ -9,11 +9,12 @@ Congo.reports = function(){
     case 'future_projects_info':
       switch(kind_reports){
         case 'graph':
-          url = '/reports/future_projects_data.xlsx';
+          url = '/reports/future_projects_summary.xlsx';
           window.open(url, '_blank');
           break;
         case 'base':
-          url = '/reports/future_projects_summary.xlsx';
+          url = '/reports/future_projects_data.xlsx';
+
           window.open(url, '_blank');
           break;
       }
