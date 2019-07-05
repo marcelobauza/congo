@@ -512,7 +512,7 @@ class FutureProject < ApplicationRecord
       data =[]
       result=[]
       general_data.each do |item|
-        data.push("name": item[:label], "count":"%.1f" % item[:value].to_f)
+        data.push("name": item[:label], "count":("%.1f" % item[:value]).to_f)
       end
       result.push({"title":"Información General", "data": data})
 
