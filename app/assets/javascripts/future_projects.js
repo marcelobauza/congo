@@ -374,7 +374,7 @@ Congo.future_projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Tipo de Destino' && series.length == 1) {
+                if (title == 'Tipo de Destino') {
                   chart_type = 'pie';
                   datasets.push({
                     label: label,
@@ -394,7 +394,7 @@ Congo.future_projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Tipo de Destino' && series.length > 1) {
+                if (title == 'Tipo de Expediente / Destino') {
                   chart_type = 'bar';
                   datasets.push({
                     label: label,
@@ -405,7 +405,7 @@ Congo.future_projects.action_dashboards = function(){
                   name = ["Anteproyecto", "Permiso Edif.", "Recep. Munic."];
                 }
 
-                if (title == 'Cantidad de Nuevas Unidades / Bimestre') {
+                if (title == 'Cantidad de Unidades / Bimestre') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
