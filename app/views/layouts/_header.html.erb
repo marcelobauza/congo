@@ -27,7 +27,7 @@
       </button>
       <div class="dropdown-menu dropdown-menu-navbar1" aria-labelledby="navbarDropdown">
         <%= link_to "#", id: "select_point", class: "dropdown-item dropdown-item-navbar1", remote: true do %> <i class="icon-primary-colour fas fa-map-pin" title="Punto" style="font-size: 26px"></i> <%end %>
-        <%= link_to counties_path(), remote: true, 'class' => 'dropdown-item dropdown-item-navbar1', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class="icon-primary-colour fas fa-clipboard-list chart-modal" title="Listado" style="font-size: 26px"></i> <% end %>
+        <%= link_to counties_index_path(), remote: true, 'class' => 'dropdown-item dropdown-item-navbar1', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class="icon-primary-colour fas fa-clipboard-list chart-modal" title="Listado" style="font-size: 26px"></i> <% end %>
         <%= link_to "#", id: "select_polygon", class: "dropdown-item dropdown-item-navbar1", remote: true do %> <i class="icon-primary-colour fas fa-draw-polygon" title="Trazado" style="font-size: 26px"></i> <%end %>
         <%= link_to "#", id: "select_circle", class: "dropdown-item dropdown-item-navbar1", remote: true do %> <i class="icon-primary-colour fas fa-circle-notch" title="Radio" style="font-size: 26px"></i> <%end %>
       </div>

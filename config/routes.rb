@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   resources :regions
   get 'dashboards/index'
+  get 'counties/index'
   get 'dashboards/graduated_points'
   get 'dashboards/heatmap'
   get 'dashboards/filter_county_for_lon_lat'
@@ -46,17 +47,20 @@ Rails.application.routes.draw do
     resources :project_mixes
     resources :roles
     resources :users 
+    resources :counties
     get 'dashboards/index'
   root 'dashboards#index'
   end
   resources :application_statuses
+  resources :pois
+  resources :poi_subcategories
   resources :census
   resources :census_sources
   resources :land_use_types
   resources :density_types
   resources :building_regulations
   resources :project_statuses
-  resources :counties
+  
   resources :property_types
   resources :layer_types
   resources :future_project_types
