@@ -7,7 +7,7 @@ Congo.map_utils.config={
 }
 
 Congo.map_utils = function(){
-  var url, map, groupLayer, editableLayers, HandlerGeometry, typeGeometry , layerControl, sourcePois, overlays;
+  var url, map, groupLayer, editableLayers, HandlerGeometry, typeGeometry , layerControl, sourcePois, overlays, htmlLegend;
   var init = function(){
     url = window.location.hostname;
 
@@ -261,11 +261,29 @@ var overlays =  {
 
         if (filter_future_project_type_ids.length > 0) {
           filter_layer = filter_layer + " AND future_project_type_id IN (" + filter_future_project_type_ids +")";
+
         }
       
         if(filter_project_type_ids.length > 0){
           filter_layer = filter_layer + " AND project_type_id IN (" + filter_project_type_ids +")";
         }
+
+        $.ajax({
+          async: false,
+          type: 'GET',
+          url: '/future_project_types/legend_points.json',
+          datatype: 'json',
+          data: {future_project_type_ids: filter_future_project_type_ids },
+          success: function(data){
+            legend = data;
+          },
+          error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
+
+        })
+
+        remove_legend();
+        legend_points(legend);
+
         break;
       case 'projects_feature_info':
         year = Congo.dashboards.config.year;
@@ -283,8 +301,7 @@ var overlays =  {
         if (project_type_ids.length > 0){
           filter_layer = filter_layer + " AND project_type_id IN (" + project_type_ids + ")";
         }
-
-
+        remove_legend();
         break;
       case 'building_regulations_info':
         Congo.building_regulations.action_dashboards.indicator_building_regulations();
@@ -385,38 +402,43 @@ var overlays =  {
       env: env,
       CQL_FILTER: cql_filter  };
     source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
+
     groupLayer.addLayer(source_layers);
     layerControl.addOverlay(groupLayer, "Datos");
     groupLayer.addTo(map);
 
-    var htmlLegend = L.control.htmllegend({
-      position: 'bottomleft',
-      legends: [{
-        name: "ver name",
-        layer: source_layers ,
-        elements: [{
-          label: '',
-          html: '',
-          style: {
-            'background-color': 'red',
-            'width': '10px',
-            'height': '10px'
-          }
-        }]
-      },{
-        name: "ver name1",
-        layer: source_layers ,
-        elements: [{
-          label: '',
-          html: '',
-          style: {
-            'background-color': 'blue',
-            'width': '10px',
-            'height': '10px'
-          }
-        }]
-      }],
 
+    groupLayer.addTo(map);
+    return;
+  }
+
+  function remove_legend(){
+    if(typeof(htmlLegend)!=='undefined'){
+    map.removeControl(htmlLegend);
+    }
+  }
+
+
+  function legend_points(params){
+    var options = [];
+ //   remove_legend();
+$.each(params, function(a,value){
+    options.push({
+      name: value['name'],
+        elements: [{
+          html: '',
+          style: {
+            'background-color': value['color'],
+            'width': '10px',
+            'height': '10px'
+          }
+        }]
+    }
+    )
+})
+     htmlLegend = L.control.htmllegend({
+      position: 'bottomleft',
+      legends: options,
       collapseSimple: true,
       detectStretched: true,
       collapsedOnInit: true,
@@ -424,13 +446,17 @@ var overlays =  {
       visibleIcon: 'icon icon-eye',
       hiddenIcon: 'icon icon-eye-slash'
     })
-    map.addControl(htmlLegend)
-    groupLayer.addTo(map);
-    return;
+    
+map.addControl(htmlLegend)
+
+
+
   }
+
 
   return{
     init:init,
-    counties: counties
+    counties: counties,
+    legend_points: legend_points
   }
 }();

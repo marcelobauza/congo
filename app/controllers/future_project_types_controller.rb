@@ -1,6 +1,12 @@
 class FutureProjectTypesController < ApplicationController
   before_action :set_future_project_type, only: [:show, :edit, :update, :destroy]
 
+  def legend_points
+
+    @legend = FutureProjectType.where(id: params[:future_project_type_ids]) if params.has_key? :future_project_type_ids
+    @legend = FutureProjectType.all if !params.has_key? :future_project_type_ids
+    render json: @legend
+  end
   # GET /future_project_types
   # GET /future_project_types.json
   def index
