@@ -111,14 +111,26 @@ class FutureProject < ApplicationRecord
     return @longitude ? @longitude : ""
   end
 
+  def self.condition_period_current(filters)
+      
+    query = "(bimester= #{filters[:to_period]} #{Util.and} year = #{filters[:to_year]} " 
+    if   filters.has_key? :periods
+      query += Util.or
+    0.upto(filters[:periods].count - 1   ) do |i|
+      query += "(bimester = #{filters[:periods][i]} AND year = #{filters[:years][i]})#{Util.or}"
+    end
+      query.chomp!(Util.or)
+  end
+    query += ")"
+  end
+
+
   def self.find_globals(filters)
     select = "COUNT(*) as count_project, (COUNT(*)/ CAST(COUNT(DISTINCT (year,bimester)) AS FLOAT) ) as avg_project_bim, "
     select += "SUM(future_projects.m2_built) as total_surface, ROUND(AVG(future_projects.m2_built), 2) as avg_surface, future_project_types.name"
-
-    periods = Period.get_periods(filters[:to_period].to_i, filters[:to_year].to_i, BIMESTER_QUANTITY, 1)
-    cond_query = build_period_condition(periods) + Util.and
-      cond_query = conditions(filters, nil)
-
+    cond_query =''
+    cond_query += condition_period_current(filters) + Util.and  if !filters[:to_period].nil?
+    cond_query += conditions(filters, true)
     joins = build_joins.join(" ")
 
     totals = FutureProject.select(select).
@@ -144,7 +156,9 @@ class FutureProject < ApplicationRecord
   end
 
   def self.group_by_project_type(widget, filters)
-    cond_query = conditions(filters, widget)
+    
+    cond_query = condition_period_current(filters) + Util.and  if !filters[:to_period].nil?
+    cond_query += conditions(filters, true)
     FutureProject.joins(build_joins.join(" ")).where(cond_query).group(:future_project_type_id).count(:id)
   end
 
@@ -189,14 +203,15 @@ class FutureProject < ApplicationRecord
   def self.units_by_project_type(filters)
     result = []
     select = "COUNT(*) as value"
-    cond = conditions(filters)
+    cond_query = condition_period_current(filters) + Util.and  if !filters[:to_period].nil?
+    cond_query += conditions(filters)
 
      ProjectType.all.each do |typ|
        data = []
        FutureProjectType.all.each do |fpt|
        future = FutureProject.
          joins(build_joins.join(" ")).
-         where(cond + Util.and + "project_type_id = #{typ.id}"+ Util.and +  "future_project_type_id = #{fpt.id}").count
+         where(cond_query + Util.and + "project_type_id = #{typ.id}"+ Util.and +  "future_project_type_id = #{fpt.id}").count
         data.push({name: fpt.name, count: future})
     end
       result << {:type => typ.name, values: data }
@@ -205,9 +220,13 @@ class FutureProject < ApplicationRecord
   end
 
   def self.projects_by_destination_project_type(filters, widget)
+
+    cond_query = condition_period_current(filters) + Util.and  if !filters[:to_period].nil?
+    cond_query += conditions(filters, widget)
+
     projects = FutureProject.select("COUNT(*) as value, project_types.name as project_type_name, project_types.id as project_id").
       joins(build_joins.join(" ")).
-      where(conditions(filters, widget)).
+      where(cond_query).
       group("project_types.name, project_types.id").
       order("project_types.name")
     projects
@@ -302,31 +321,32 @@ class FutureProject < ApplicationRecord
 
   def self.conditions(filters, self_not_filter=nil)
 
+    conditions = ""
+
     if !filters[:county_id].nil?
-      conditions = "county_id = #{filters[:county_id]}" + Util.and
+      conditions += "county_id = #{filters[:county_id]}" + Util.and
     elsif !filters[:wkt].nil?
-      conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
+      conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
-      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
+      conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
-
     conditions += "active = true #{Util.and}"
-
-    unless filters.has_key? :boost
+    
+    unless filters.has_key? :boost or self_not_filter == true
       conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
-      conditions += bimester_condition(filters, self_not_filter)
     end
-    conditions += ids_conditions(filters, self_not_filter)
-
+    if filters.has_key? :project_type_ids or filters.has_key? :future_project_type_ids 
+    conditions +=  ids_conditions(filters, self_not_filter)
     #conditions += "future_projects.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
+    end
     conditions.chomp!(Util.and)
     conditions
   end
 
   def self.bimester_condition(filters, self_not_filter)
     conditions = ""
+    if filters.has_key? :periods 
 
-    if filters.has_key? :periods and (self_not_filter == 'project_types' or self_not_filter.nil?)
       conditions += WhereBuilder.build_bimesters_condition(filters[:periods], filters[:years])
     end
 
@@ -335,11 +355,9 @@ class FutureProject < ApplicationRecord
 
   def self.build_period_condition(bimesters)
     conditions = "("
-
     bimesters.each do |bimester|
       conditions += get_periods_query(bimester[:period], bimester[:year]) + Util.or
     end
-
     conditions.chomp!(Util.or)
     conditions + ")"
   end
@@ -481,13 +499,13 @@ class FutureProject < ApplicationRecord
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
     begin
       general_data = FutureProject.general_info(filters)
-      types = FutureProject.future_project_type(filters)
-      desttypes =FutureProject.destination_project_type(filters)
-      dtypes = FutureProject.destination_type(filters)
+      types = FutureProject.group_by_project_type('future_project_types', filters)
+      desttypes = FutureProject.projects_by_destination_project_type(filters, 'project_types')
+      dtypes = FutureProject.units_by_project_type(filters)
       ubimester = FutureProject.unit_bimester(filters)
       m2bimester = FutureProject.m2_built_bimester(filters)
-      rates = FutureProject.future_project_rates_1(filters)
-      env_points = FutureProject.envelope_points(filters)
+      #rates = FutureProject.future_project_rates_1(filters)
+      #env_points = FutureProject.envelope_points(filters)
 
       #GENERAL
 
@@ -526,7 +544,7 @@ class FutureProject < ApplicationRecord
         categories.push({"label": label, "data": data} )
         count = count + 1
       end
-      result.push({"title": "Tipo de Destino", "series":categories})
+      result.push({"title": "Tipo de Expediente / Destino", "series":categories})
 
       #UNIDADES NUEVAS POR BIMESTRE
       categories = []
@@ -554,7 +572,7 @@ class FutureProject < ApplicationRecord
       categories.push({"label": "Anteproyecto", "data": a})
       categories.push({"label": "Permiso de Edificación", "data": p})
       categories.push({"label": "Recepción Municipal", "data": r})
-      result.push({"title": "Cantidad de Nuevas Unidades / Bimestre", "series": categories})
+      result.push({"title": "Cantidad de Unidades / Bimestre", "series": categories})
 
       #SUPERFICIE EDIFICADA POR EXPEDIENTE
 
@@ -587,25 +605,7 @@ class FutureProject < ApplicationRecord
       categories.push({"label": "Permiso de Edificación", "data": p})
       categories.push({"label": "Recepción Municipal", "data": r})
       result.push({"title": "Superficie Edificada Por Expediente", "series": categories })
-
-      #TASAS
-      categories=[]
-      p = []
-      r = []
-      rates.each do |item|
-        p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:perm_rate] )
-        r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":item[:recept_rate] )
-      end
-      categories.push({"label": "Tasa Permiso / Anteproyecto", "data": p})
-      categories.push({"label": "Tasa Recepciones / Permisos", "data": r})
-      result.push({"title": "Tasas", "series":categories})
-      data =[]  
-      env_points.each do |e|
-        data.push([e[0], e[1]], [e[2], e[3]])
-        end
-        result.push({"title": "env_points", "data":data})
     rescue
-      #result[:data] = ["Sin datos"]
     end
   end
 
@@ -633,17 +633,9 @@ rates, global_information = FutureProject.find_globals(params)
   end
 
 
-  def self.future_project_type params
-    @types = FutureProject.group_by_project_type('future_project_types', params)
-  end
-
-  def self.destination_type params
-    @types = FutureProject.units_by_project_type(params)
-  end
-
-  def self.destination_project_type params
-    @types = FutureProject.projects_by_destination_project_type(params, 'project_types')
-  end
+  #def self.destination_type params
+  #  @types = FutureProject.units_by_project_type(params)
+  #end
 
   def self.unit_bimester params
     @fut_types, @projects = FutureProject.future_projects_by_period("COUNT", "unit_bimester", params)
