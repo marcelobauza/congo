@@ -341,12 +341,6 @@ Congo.future_projects.action_dashboards = function(){
                   case 'Recepción Municipal':
                     serie_colour = '#eb2817'
                     break;
-                  case 'Tasa Permiso / Anteproyecto':
-                    serie_colour = '#0f115b'
-                    break;
-                  case 'Tasa Recepciones / Permisos':
-                    serie_colour = '#eb2817'
-                    break;
                 }
 
                 var name = [];
@@ -432,23 +426,6 @@ Congo.future_projects.action_dashboards = function(){
                     borderWidth: 4,
                     pointRadius: 1,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
-                    pointHoverBorderWidth: 3,
-                    pointHitRadius: 5,
-                  })
-                }
-
-                if (title == 'Tasas') {
-                  chart_type = 'line';
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    fill: false,
-                    borderColor: serie_colour,
-                    borderWidth: 4,
-                    pointRadius: 1,
-                    lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
