@@ -371,22 +371,30 @@ var overlays =  {
     layerControl.addOverlay(sourcePois, "Equipamientos y Servicios");
 
     if(county_id != ''){
-      var options = {
-
-        layers: "inciti_v2:counties_info",//nombre de la capa (ver get capabilities)
-        format: 'image/png',
-        transparent: 'true',
-        opacity: 1,
-        version: '1.0.0',//wms version (ver get capabilities)
-        tiled: true,
-        styles: 'polygon',
-        INFO_FORMAT: 'application/json',
-        format_options: 'callback:getJson',
+      var owsrootUrl = 'http://localhost:8080/geoserver/ows';
+      var defaultParameters = {
+        service: 'WFS',
+        version: '1.0.0',
+        request: 'GetFeature',
+        typeName: 'inciti_v2:counties_info',
+        outputFormat: 'application/json',
         CQL_FILTER: "id='"+ county_id + "'"
-      };
-      source = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options);
+      }
+      var parameters = L.Util.extend(defaultParameters);
+      var URL = owsrootUrl + L.Util.getParamString(parameters);
+      $.ajax({
+        url: URL,
+        success: function (data) {
+          var geojson = new L.geoJson(data, {
+            style: {"color":"#2ECCFA","weight":2},
+          }
+          ).addTo(map) 
+          map.fitBounds(geojson.getBounds());
 
-      groupLayer.addLayer(source);
+          ;
+        }
+      });
+
     }
     var options_layers = {
 
