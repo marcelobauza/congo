@@ -409,7 +409,7 @@ Congo.transactions.action_dashboards = function(){
 
                     // Crea el filtro
                     var filter_item = document.createElement('div');
-                    filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
+                    filter_item.className = 'filter-transactions text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow';
                     var filter_item_id = x_tick.split(" ").join("").split(".").join("");
                     filter_item.id = 'item-'+filter_item_id;
                     var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
@@ -501,7 +501,7 @@ Congo.transactions.action_dashboards = function(){
 
                     // Crea el filtro
                     var filter_item = document.createElement('div');
-                    filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
+                    filter_item.className = 'filter-transactions text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow';
                     var filter_item_id = x_tick.split(" ").join("_");
                     filter_item.id = 'item-'+filter_item_id+'-'+x_tick_id;
                     var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
@@ -593,7 +593,7 @@ Congo.transactions.action_dashboards = function(){
 
                     // Crea el filtro
                     var filter_item = document.createElement('div');
-                    filter_item.className = 'filter-transactions text-white bg-secondary px-2 mb-1 py-1 rounded';
+                    filter_item.className = 'filter-transactions text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow';
                     var filter_item_id = x_tick.split("/").join("-");
                     filter_item.id = 'item-'+filter_item_id;
                     var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';

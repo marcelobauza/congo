@@ -89,7 +89,7 @@ Congo.dashboards.action_index = function(){
     $('#item-comuna').remove();
     $('#filter-body').append(
       $('<div>', { // item
-        'class': 'text-white bg-secondary px-2 mb-1 py-1 rounded',
+        'class': 'text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
         'id': 'item-comuna',
         'text': 'Comuna: '+Congo.dashboards.config.county_name
       })

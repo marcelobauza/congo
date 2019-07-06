@@ -17,7 +17,7 @@ function addUsoFilter(id, name) {
 
   $('#filter-body').append(
     $('<div>', {
-        'class': 'filter-building-regulations text-white bg-secondary px-2 mb-1 py-1 rounded',
+        'class': 'filter-building-regulations text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
         'id': 'item-uso-'+id,
         'text': 'Uso Permitido: '+name
     }).append(
@@ -269,7 +269,7 @@ Congo.building_regulations.action_dashboards = function(){
 
                     $('#filter-body').append(
                       $("<div>", {
-                          'class': 'filter-building-regulations text-white bg-secondary px-2 mb-1 py-1 rounded',
+                          'class': 'filter-building-regulations text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
                           'id': 'item-construct',
                           'text': 'Coeficiente de Constructibilidad >= '+data.from+' <= '+data.to
                       })
