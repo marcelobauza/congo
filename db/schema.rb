@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_28_172644) do
+ActiveRecord::Schema.define(version: 2019_07_05_152531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(version: 2019_06_28_172644) do
     t.string "zip_file_updated_at"
     t.integer "code_sii"
     t.integer "number_last_project_future"
+    t.boolean "enabled", default: false
     t.index ["the_geom"], name: "sidx_counties_the_geom", using: :gist
   end
 
