@@ -976,7 +976,7 @@ Congo.projects.action_dashboards = function(){
 
             // Creamos el div contenedor
             var chart_container = document.createElement('div');
-            chart_container.className = 'chart-container card';
+            chart_container.className = 'chart-container card text-light bg-primary';
             chart_container.id = 'chart-container'+i;
 
             // Creamos el card-header
