@@ -29,7 +29,7 @@ body {
   z-index: 401;
   background-color: rgba(23, 32, 42, 0.1);
   pointer-events: auto;
-  overflow: auto
+  overflow-y: scroll;
 }
 
 // Signin
