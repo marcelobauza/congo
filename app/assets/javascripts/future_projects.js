@@ -410,7 +410,7 @@ Congo.future_projects.action_dashboards = function(){
                     borderWidth: 4,
                     pointRadius: 1,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -426,6 +426,7 @@ Congo.future_projects.action_dashboards = function(){
                     borderWidth: 4,
                     pointRadius: 1,
                     lineTension: 0,
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -460,12 +461,20 @@ Congo.future_projects.action_dashboards = function(){
                       ticks: {
                         autoSkip: false,
                         maxRotation: 0,
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
                       },
                     }],
                     yAxes: [{
                       stacked: true,
                       ticks: {
                         beginAtZero: true,
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
                       },
                     }],
                   }
@@ -555,8 +564,8 @@ Congo.future_projects.action_dashboards = function(){
                       font: {
                         size: 11,
                       },
-                      color: 'white',
                       textStrokeColor: '#616A6B',
+                      color: '#e8ebef',
                       textStrokeWidth: 1,
                       textShadowColor: '#000000',
                       textShadowBlur: 2,
@@ -641,9 +650,21 @@ Congo.future_projects.action_dashboards = function(){
                     },
                   },
                   scales: {
+                    xAxes: [{
+                      ticks: {
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
+                      },
+                    }],
                     yAxes: [{
                       ticks: {
                         beginAtZero: true,
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
                       },
                     }],
                   }
