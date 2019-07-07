@@ -277,70 +277,73 @@ Congo.future_projects.action_dashboards = function(){
                 var data = b['data']
 
                 // Setea los colores dependiendo de la serie
-                switch (label) {
-                  case 'Departamento y Local Comercial':
-                    serie_colour = '#E74C3C'
-                    break;
-                  case 'Equipamiento':
-                    serie_colour = '#BB8FCE'
-                    break;
-                  case 'Departamentos':
-                    serie_colour = '#85C1E9'
-                    break;
-                  case 'Local Comercial':
-                    serie_colour = '#16A085'
-                    break;
-                  case 'Oficinas':
-                    serie_colour = '#F39C12'
-                    break;
-                  case 'Oficina y Local Comercial':
-                    serie_colour = '#F1C40F'
-                    break;
-                  case 'Departamento, Oficina y Local Comercial':
-                    serie_colour = '#D35400'
-                    break;
-                  case 'Casas':
-                    serie_colour = '#BDC3C7'
-                    break;
-                  case 'Bodega, Oficina, Comercio':
-                    serie_colour = '#34495E'
-                    break;
-                  case 'Departamento y Oficinas':
-                    serie_colour = '#27AE60'
-                    break;
-                  case 'Industria':
-                    serie_colour = '#C0392B'
-                    break;
-                  case 'Bodega-Oficina':
-                    serie_colour = '#9B59B6'
-                    break;
-                  case 'Bodega':
-                    serie_colour = '#2980B9'
-                    break;
-                  case 'Vivienda-Oficina':
-                    serie_colour = '#1ABC9C'
-                    break;
-                  case 'Vivienda-Comercio':
-                    serie_colour = '#F0B27A'
-                    break;
-                  case 'Hotel & Restaurante':
-                    serie_colour = '#ECF0F1'
-                    break;
-                  case 'Bodega, Comercio':
-                    serie_colour = '#7F8C8D'
-                    break;
-                  case 'Hotel, Oficina':
-                    serie_colour = '#82E0AA'
-                    break;
-                  case 'Anteproyecto':
-                    serie_colour = '#2ECC71'
-                    break;
-                  case 'Permiso de Edificación':
-                    serie_colour = '#3498DB'
-                    break;
-                  case 'Recepción Municipal':
-                    serie_colour = '#E67E22'
-                    break;
+                if (title == 'Tipo de Expediente / Destino' || title == 'Cantidad de Unidades / Bimestre' || title == 'Superficie Edificada Por Expediente') {
+
+                  switch (label) {
+                    case 'Departamento y Local Comercial':
+                      serie_colour = '#E74C3C'
+                      break;
+                    case 'Equipamiento':
+                      serie_colour = '#BB8FCE'
+                      break;
+                    case 'Departamentos':
+                      serie_colour = '#85C1E9'
+                      break;
+                    case 'Local Comercial':
+                      serie_colour = '#16A085'
+                      break;
+                    case 'Oficinas':
+                      serie_colour = '#F39C12'
+                      break;
+                    case 'Oficina y Local Comercial':
+                      serie_colour = '#F1C40F'
+                      break;
+                    case 'Departamento, Oficina y Local Comercial':
+                      serie_colour = '#D35400'
+                      break;
+                    case 'Casas':
+                      serie_colour = '#BDC3C7'
+                      break;
+                    case 'Bodega, Oficina, Comercio':
+                      serie_colour = '#34495E'
+                      break;
+                    case 'Departamento y Oficinas':
+                      serie_colour = '#27AE60'
+                      break;
+                    case 'Industria':
+                      serie_colour = '#C0392B'
+                      break;
+                    case 'Bodega-Oficina':
+                      serie_colour = '#9B59B6'
+                      break;
+                    case 'Bodega':
+                      serie_colour = '#2980B9'
+                      break;
+                    case 'Vivienda-Oficina':
+                      serie_colour = '#1ABC9C'
+                      break;
+                    case 'Vivienda-Comercio':
+                      serie_colour = '#F0B27A'
+                      break;
+                    case 'Hotel & Restaurante':
+                      serie_colour = '#ECF0F1'
+                      break;
+                    case 'Bodega, Comercio':
+                      serie_colour = '#7F8C8D'
+                      break;
+                    case 'Hotel, Oficina':
+                      serie_colour = '#82E0AA'
+                      break;
+                    case 'Anteproyecto':
+                      serie_colour = '#2ECC71'
+                      break;
+                    case 'Permiso de Edificación':
+                      serie_colour = '#3498DB'
+                      break;
+                    case 'Recepción Municipal':
+                      serie_colour = '#E67E22'
+                      break;
+                  }
                 }
 
                 var name = [];
