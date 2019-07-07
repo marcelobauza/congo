@@ -346,12 +346,86 @@ Congo.future_projects.action_dashboards = function(){
                 var name = [];
                 var count = [];
                 var id = [];
+                var name_colour = [];
+                var colour;
 
                 // Extraemos los datos de las series
                 $.each(data, function(c, d){
                   name.push(d['name'])
                   count.push(d['count'])
                   id.push(d['id'])
+
+                  // Setea los colores dependiendo del label
+                  if (title == 'Tipo de Expendiente' || title == 'Tipo de Destino') {
+                    switch (d['name']) {
+                      case 'Departamento y Local Comercial':
+                        colour = '#E74C3C'
+                        break;
+                      case 'Equipamiento':
+                        colour = '#BB8FCE'
+                        break;
+                      case 'Departamentos':
+                        colour = '#85C1E9'
+                        break;
+                      case 'Local Comercial':
+                        colour = '#16A085'
+                        break;
+                      case 'Oficinas':
+                        colour = '#F39C12'
+                        break;
+                      case 'Oficina y Local Comercial':
+                        colour = '#F1C40F'
+                        break;
+                      case 'Departamento, Oficina y Local Comercial':
+                        colour = '#D35400'
+                        break;
+                      case 'Casas':
+                        colour = '#BDC3C7'
+                        break;
+                      case 'Bodega, Oficina, Comercio':
+                        colour = '#34495E'
+                        break;
+                      case 'Departamento y Oficinas':
+                        colour = '#27AE60'
+                        break;
+                      case 'Industria':
+                        colour = '#C0392B'
+                        break;
+                      case 'Bodega-Oficina':
+                        colour = '#9B59B6'
+                        break;
+                      case 'Bodega':
+                        colour = '#2980B9'
+                        break;
+                      case 'Vivienda-Oficina':
+                        colour = '#1ABC9C'
+                        break;
+                      case 'Vivienda-Comercio':
+                        colour = '#F0B27A'
+                        break;
+                      case 'Hotel & Restaurante':
+                        colour = '#ECF0F1'
+                        break;
+                      case 'Bodega, Comercio':
+                        colour = '#7F8C8D'
+                        break;
+                      case 'Hotel, Oficina':
+                        colour = '#82E0AA'
+                        break;
+                      case 'Anteproyecto':
+                        colour = '#2ECC71'
+                        break;
+                      case 'Permiso de edificacion':
+                        colour = '#3498DB'
+                        break;
+                      case 'Recepcion municipal':
+                        colour = '#E67E22'
+                        break;
+                    }
+
+                    name_colour.push(colour)
+                  }
+
                 })
 
                 // Guardamos "datasets" y "chart_type"
@@ -361,11 +435,7 @@ Congo.future_projects.action_dashboards = function(){
                     label: label,
                     data: count,
                     id: id,
-                    backgroundColor: [
-                      '#424949',
-                      '#7F8C8D',
-                      '#E5E8E8'
-                    ],
+                    backgroundColor: name_colour,
                   })
                 }
 
@@ -375,17 +445,7 @@ Congo.future_projects.action_dashboards = function(){
                     label: label,
                     data: count,
                     id: id,
-                    backgroundColor: [
-                      '#4D5656',
-                      '#5F6A6A',
-                      '#717D7E',
-                      '#839192',
-                      '#95A5A6',
-                      '#AAB7B8',
-                      '#BFC9CA',
-                      '#D5DBDB',
-                      '#F4F6F6'
-                    ],
+                    backgroundColor: name_colour,
                   })
                 }
 
