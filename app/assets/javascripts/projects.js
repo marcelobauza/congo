@@ -1044,12 +1044,44 @@ Congo.projects.action_dashboards = function(){
                 var name = [];
                 var count = [];
                 var id = [];
+                var name_colour = [];
+                var colour;
 
                 // Extraemos los datos de las series
                 $.each(data, function(c, d){
                   name.push(d['name'])
                   count.push(d['count'])
                   id.push(d['id'])
+
+                  // Setea los colores dependiendo del label
+                  if (title == 'Estado del Proyecto' || title == 'Tipo de Propiedad') {
+                    switch (d['name']) {
+                      case 'No iniciado':
+                        colour = '#F1C40F'
+                        break;
+                      case 'Excavaciones':
+                        colour = '#F39C12'
+                        break;
+                      case 'Obra gruesa':
+                        colour = '#E67E22'
+                        break;
+                      case 'Terminaciones':
+                        colour = '#D35400'
+                        break;
+                      case 'Finalizado':
+                        colour = '#E74C3C'
+                        break;
+                      case 'Departamentos':
+                        colour = '#3498DB'
+                        break;
+                      case 'Casas':
+                        colour = '#1ABC9C'
+                        break;
+                    }
+
+                    name_colour.push(colour)
+                  }
+
                 })
 
                 // Guardamos "datasets" y "chart_type"
@@ -1059,12 +1091,7 @@ Congo.projects.action_dashboards = function(){
                     label: label,
                     data: count,
                     id: id,
-                    backgroundColor: [
-                        '#424949',
-                        '#616A6B',
-                        '#99A3A4',
-                        '#F2F4F4'
-                    ],
+                    backgroundColor: name_colour,
                   })
                 }
 
@@ -1074,9 +1101,7 @@ Congo.projects.action_dashboards = function(){
                     label: label,
                     data: count,
                     id: id,
-                    backgroundColor: [
-                        '#424949'
-                    ],
+                    backgroundColor: name_colour,
                   })
                 }
 
