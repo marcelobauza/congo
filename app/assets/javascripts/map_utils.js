@@ -386,10 +386,13 @@ var overlays =  {
         url: URL,
         success: function (data) {
           var geojson = new L.geoJson(data, {
-            style: {"color":"#2ECCFA","weight":2},
+            style: {"color":"#2ECCFA","weight":2, "fillOpacity": 0},
+            zIndex:1
           }
-          ).addTo(map) 
+          );
+
           map.fitBounds(geojson.getBounds());
+          groupLayer.addLayer(geojson);
 
           ;
         }
@@ -408,7 +411,9 @@ var overlays =  {
       INFO_FORMAT: 'application/json',
       format_options: 'callback:getJson',
       env: env,
-      CQL_FILTER: cql_filter  };
+      CQL_FILTER: cql_filter,
+      clickable: 'false',
+      zIndex: 99};
     source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
 
     groupLayer.addLayer(source_layers);
