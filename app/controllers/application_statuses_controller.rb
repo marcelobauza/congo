@@ -12,7 +12,7 @@ class ApplicationStatusesController < ApplicationController
   end
 
   def colleagues
-    @colleagues = User.where(company: current_user.company).where.not(id: current_user.id)
+    @colleagues = User.where(company: current_user.company).where.not(id: current_user.id).or(User.where(role_id: 6)).select(:id, :complete_name).order(:complete_name)
     @row_to_share = params[:id]
   end
 

@@ -7,6 +7,10 @@ class User < ApplicationRecord
   has_and_belongs_to_many :counties
   belongs_to :role
 
+  def to_s
+    self.complete_name
+  end
+
   def self.current
     Thread.current[:user]
   end
