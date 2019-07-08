@@ -9,7 +9,7 @@ module WhereBuilder
   
 
   def self.build_within_condition_radius(center_pt, radius)
-    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius})"
+    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius}, false)"
   end
 
   def self.build_intersection_condition(wkt)
