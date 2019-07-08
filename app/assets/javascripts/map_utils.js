@@ -316,7 +316,7 @@ var overlays =  {
         radius = Congo.dashboards.config.radius ;
 
         cql_filter ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)"+ filter_layer;
-        cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",kilometers)";
+        cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)";
         break;
       case 'polygon':
         coord_geoserver = [];
