@@ -1024,6 +1024,7 @@ Congo.projects.action_dashboards = function(){
             } else if (title != "Inmobiliarias") {
 
               var datasets = [];
+              var serie_colour;
 
               // Extraemos las series
               $.each(series, function(a, b){
@@ -1031,14 +1032,24 @@ Congo.projects.action_dashboards = function(){
                 var label = b['label']
                 var data = b['data']
 
-                if (label == 'Máximo' || label == 'Oferta') {
-                  serie_colour = '#a5bc4e'
-                }
-                if (label == 'Mínimo' || label == 'Disponibilidad') {
-                  serie_colour = '#e48701'
-                }
-                if (label == 'Promedio' || label == 'Venta' || label == 'Venta Total') {
-                  serie_colour = '#1b95d9'
+                // Setea los colores dependiendo de la serie
+                if (title == 'Total Distribución por Mix' || title == 'Oferta, Venta y Disponibilidad por Bimestre' || title == 'Valor UF por Bimestre' || title == 'UF/m2 por Bimestre' || title == 'Superficie Útil (m2) por Bimestre' || title == 'Superficie Terreno/Terraza (m2) por Bimestre') {
+
+                  switch (label) {
+                    case 'Máximo':
+                    case 'Oferta':
+                      serie_colour = '#42d964'
+                      break;
+                    case 'Promedio':
+                    case 'Venta':
+                    case 'Venta Total':
+                      serie_colour = '#58b9e2'
+                      break;
+                    case 'Mínimo':
+                    case 'Disponibilidad':
+                      serie_colour = '#f99c00'
+                      break;
+                  }
                 }
 
                 var name = [];
