@@ -271,8 +271,9 @@ Congo.transactions.action_dashboards = function(){
               // Extraemos y adjuntamos los datos al card-body
               $.each(info, function(y, z){
                 name = z['name'];
-                label = z['count']
-                item = name+': '+label+'<br>';
+                count = z['count']
+                count = count.toLocaleString('es-ES')
+                item = name+': '+count+'<br>';
                 $('#body'+i).append(item);
               })
 
