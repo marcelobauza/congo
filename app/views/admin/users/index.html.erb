@@ -9,7 +9,6 @@
           <th><%= User.human_attribute_name :email %></th>
           <th><%= User.human_attribute_name :company %></th>
           <th><%= User.human_attribute_name :disabled %></th>
-          <th><%= User.human_attribute_name :is_temporal %></th>
           <th><%= User.human_attribute_name :role %></th>
           <th></th>
           <th></th>
@@ -23,7 +22,6 @@
             <td><%=h user.email %></td>
             <td><%=h user.company %></td>
             <td><%=h user.disabled  ? t(:YES) : t(:NO) %></td>
-            <td><%=h user.is_temporal ? t(:YES) : t(:NO) %></td>
             <td><%=h user.role_id unless user.role_id.nil? %></td>
             <td><%= link_to edit_admin_user_path(user) do %> <i class="fas fa-edit text-dark"></i> <%end %></td>
             <td>
