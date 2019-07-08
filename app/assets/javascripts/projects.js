@@ -1024,6 +1024,7 @@ Congo.projects.action_dashboards = function(){
             } else if (title != "Inmobiliarias") {
 
               var datasets = [];
+              var serie_colour;
 
               // Extraemos las series
               $.each(series, function(a, b){
@@ -1031,25 +1032,67 @@ Congo.projects.action_dashboards = function(){
                 var label = b['label']
                 var data = b['data']
 
-                if (label == 'Máximo' || label == 'Oferta') {
-                  serie_colour = '#a5bc4e'
-                }
-                if (label == 'Mínimo' || label == 'Disponibilidad') {
-                  serie_colour = '#e48701'
-                }
-                if (label == 'Promedio' || label == 'Venta' || label == 'Venta Total') {
-                  serie_colour = '#1b95d9'
+                // Setea los colores dependiendo de la serie
+                if (title == 'Total Distribución por Mix' || title == 'Oferta, Venta y Disponibilidad por Bimestre' || title == 'Valor UF por Bimestre' || title == 'UF/m2 por Bimestre' || title == 'Superficie Útil (m2) por Bimestre' || title == 'Superficie Terreno/Terraza (m2) por Bimestre') {
+
+                  switch (label) {
+                    case 'Máximo':
+                    case 'Oferta':
+                      serie_colour = '#42d964'
+                      break;
+                    case 'Promedio':
+                    case 'Venta':
+                    case 'Venta Total':
+                      serie_colour = '#58b9e2'
+                      break;
+                    case 'Mínimo':
+                    case 'Disponibilidad':
+                      serie_colour = '#f99c00'
+                      break;
+                  }
                 }
 
                 var name = [];
                 var count = [];
                 var id = [];
+                var name_colour = [];
+                var colour;
 
                 // Extraemos los datos de las series
                 $.each(data, function(c, d){
                   name.push(d['name'])
                   count.push(d['count'])
                   id.push(d['id'])
+
+                  // Setea los colores dependiendo del label
+                  if (title == 'Estado del Proyecto' || title == 'Tipo de Propiedad') {
+                    switch (d['name']) {
+                      case 'No iniciado':
+                        colour = '#F1C40F'
+                        break;
+                      case 'Excavaciones':
+                        colour = '#F39C12'
+                        break;
+                      case 'Obra gruesa':
+                        colour = '#E67E22'
+                        break;
+                      case 'Terminaciones':
+                        colour = '#D35400'
+                        break;
+                      case 'Finalizado':
+                        colour = '#E74C3C'
+                        break;
+                      case 'Departamentos':
+                        colour = '#58b9e2'
+                        break;
+                      case 'Casas':
+                        colour = '#42d964'
+                        break;
+                    }
+
+                    name_colour.push(colour)
+                  }
+
                 })
 
                 // Guardamos "datasets" y "chart_type"
@@ -1059,12 +1102,7 @@ Congo.projects.action_dashboards = function(){
                     label: label,
                     data: count,
                     id: id,
-                    backgroundColor: [
-                        '#424949',
-                        '#616A6B',
-                        '#99A3A4',
-                        '#F2F4F4'
-                    ],
+                    backgroundColor: name_colour,
                   })
                 }
 
@@ -1074,9 +1112,7 @@ Congo.projects.action_dashboards = function(){
                     label: label,
                     data: count,
                     id: id,
-                    backgroundColor: [
-                        '#424949'
-                    ],
+                    backgroundColor: name_colour,
                   })
                 }
 
@@ -1100,7 +1136,7 @@ Congo.projects.action_dashboards = function(){
                     borderWidth: 4,
                     pointRadius: 1,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -1116,7 +1152,7 @@ Congo.projects.action_dashboards = function(){
                     borderWidth: 4,
                     pointRadius: 1,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -1132,7 +1168,7 @@ Congo.projects.action_dashboards = function(){
                     borderWidth: 4,
                     pointRadius: 1,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -1148,7 +1184,7 @@ Congo.projects.action_dashboards = function(){
                     borderWidth: 4,
                     pointRadius: 1,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -1164,7 +1200,7 @@ Congo.projects.action_dashboards = function(){
                     borderWidth: 4,
                     pointRadius: 1,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -1176,12 +1212,12 @@ Congo.projects.action_dashboards = function(){
                     label: label,
                     data: count,
                     fill: false,
-                    borderColor: '#f08939',
+                    borderColor: '#58b9e2',
                     borderWidth: 4,
-                    pointBackgroundColor: '#F2F4F4',
+                    pointBackgroundColor: '#e8ebef',
                     pointRadius: 3,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -1192,10 +1228,7 @@ Congo.projects.action_dashboards = function(){
                   datasets.push({
                     label: label,
                     data: count,
-                    backgroundColor: '#dddb58',
-                    borderColor: '#4D5656',
-                    borderWidth: 2,
-                    hoverBorderWidth: 3,
+                    backgroundColor: '#58b9e2',
                   })
                 }
 
@@ -1204,10 +1237,7 @@ Congo.projects.action_dashboards = function(){
                   datasets.push({
                     label: label,
                     data: count,
-                    backgroundColor: '#dddb58',
-                    borderColor: '#4D5656',
-                    borderWidth: 2,
-                    hoverBorderWidth: 3,
+                    backgroundColor: '#58b9e2',
                   })
                 }
 
@@ -1291,12 +1321,20 @@ Congo.projects.action_dashboards = function(){
                         stacked: true,
                         ticks: {
                           display: false,
-                        }
+                          fontColor: '#e8ebef'
+                        },
+                        gridLines: {
+                          color: "#2c2e34"
+                        },
                       }],
                       yAxes: [{
                         stacked: true,
                         ticks: {
                           beginAtZero: true,
+                          fontColor: '#e8ebef'
+                        },
+                        gridLines: {
+                          color: "#2c2e34"
                         },
                       }],
                     }
@@ -1396,12 +1434,20 @@ Congo.projects.action_dashboards = function(){
                         ticks: {
                           autoSkip: false,
                           maxRotation: 12,
-                        }
+                          fontColor: '#e8ebef'
+                        },
+                        gridLines: {
+                          color: "#2c2e34"
+                        },
                       }],
                       yAxes: [{
                         stacked: true,
                         ticks: {
                           beginAtZero: true,
+                          fontColor: '#e8ebef'
+                        },
+                        gridLines: {
+                          color: "#2c2e34"
                         },
                       }],
                     }
@@ -1492,8 +1538,8 @@ Congo.projects.action_dashboards = function(){
                       font: {
                         size: 11,
                       },
-                      color: 'white',
                       textStrokeColor: '#616A6B',
+                      color: '#e8ebef',
                       textStrokeWidth: 1,
                       textShadowColor: '#000000',
                       textShadowBlur: 2,
@@ -1577,9 +1623,21 @@ Congo.projects.action_dashboards = function(){
                     },
                   },
                   scales: {
+                    xAxes: [{
+                      ticks: {
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
+                      },
+                    }],
                     yAxes: [{
                       ticks: {
                         beginAtZero: true,
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
                       },
                     }],
                   }

@@ -335,13 +335,13 @@ Congo.future_projects.action_dashboards = function(){
                       serie_colour = '#82E0AA'
                       break;
                     case 'Anteproyecto':
-                      serie_colour = '#2ECC71'
+                      serie_colour = '#42d964'
                       break;
                     case 'Permiso de Edificación':
-                      serie_colour = '#3498DB'
+                      serie_colour = '#58b9e2'
                       break;
                     case 'Recepción Municipal':
-                      serie_colour = '#E67E22'
+                      serie_colour = '#f99c00'
                       break;
                   }
                 }
@@ -416,13 +416,13 @@ Congo.future_projects.action_dashboards = function(){
                         colour = '#82E0AA'
                         break;
                       case 'Anteproyecto':
-                        colour = '#2ECC71'
+                        colour = '#42d964'
                         break;
                       case 'Permiso de edificacion':
-                        colour = '#3498DB'
+                        colour = '#58b9e2'
                         break;
                       case 'Recepcion municipal':
-                        colour = '#E67E22'
+                        colour = '#f99c00'
                         break;
                     }
 

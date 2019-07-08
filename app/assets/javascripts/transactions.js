@@ -291,12 +291,44 @@ Congo.transactions.action_dashboards = function(){
                 var name = [];
                 var count = [];
                 var id = [];
+                var name_colour = [];
+                var colour;
 
                 // Extraemos los datos de las series
                 $.each(data, function(c, d){
                   name.push(d['name'])
                   count.push(d['count'])
                   id.push(d['id'])
+
+                  // Setea los colores dependiendo del label
+                  if (title == 'Tipo de Propiedad' || title == 'Tipo de Vendedor') {
+                    switch (d['name']) {
+                      case 'Propietario':
+                        colour = '#85C1E9'
+                        break;
+                      case 'Inmobiliaria':
+                        colour = '#5DADE2'
+                        break;
+                      case 'Empresa':
+                        colour = '#3498DB'
+                        break;
+                      case 'Banco':
+                        colour = '#2E86C1'
+                        break;
+                      case 'Cooperativa':
+                        colour = '#2874A6'
+                        break;
+                      case 'Municipalidad':
+                        colour = '#21618C'
+                        break;
+                      case 'Sin informacion':
+                        colour = '#1B4F72'
+                        break;
+                    }
+
+                    name_colour.push(colour)
+                  }
+
                 })
 
                 // Guardamos "datasets" y "chart_type"
@@ -306,18 +338,7 @@ Congo.transactions.action_dashboards = function(){
                     label: label,
                     data: count,
                     id: id,
-                    backgroundColor: [
-                        '#4D5656',
-                        '#5F6A6A',
-                        '#717D7E',
-                        '#839192',
-                        '#95A5A6',
-                        '#AAB7B8',
-                        '#BFC9CA',
-                        '#D5DBDB',
-                        '#EAEDED',
-                        '#F4F6F6'
-                    ],
+                    backgroundColor: name_colour,
                   })
                 }
 
@@ -327,18 +348,7 @@ Congo.transactions.action_dashboards = function(){
                     label: label,
                     data: count,
                     id: id,
-                    backgroundColor: [
-                      '#4D5656',
-                      '#5F6A6A',
-                      '#717D7E',
-                      '#839192',
-                      '#95A5A6',
-                      '#AAB7B8',
-                      '#BFC9CA',
-                      '#D5DBDB',
-                      '#EAEDED',
-                      '#F4F6F6'
-                    ],
+                    backgroundColor: name_colour,
                   })
                 }
 
@@ -351,12 +361,12 @@ Congo.transactions.action_dashboards = function(){
                     label: label,
                     data: count,
                     fill: false,
-                    borderColor: '#f08939',
+                    borderColor: '#58b9e2',
                     borderWidth: 4,
-                    pointBackgroundColor: '#F2F4F4',
+                    pointBackgroundColor: '#e8ebef',
                     pointRadius: 3,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -368,12 +378,12 @@ Congo.transactions.action_dashboards = function(){
                     label: label,
                     data: count,
                     fill: false,
-                    borderColor: '#f08939',
+                    borderColor: '#58b9e2',
                     borderWidth: 4,
-                    pointBackgroundColor: '#F2F4F4',
+                    pointBackgroundColor: '#e8ebef',
                     pointRadius: 3,
                     lineTension: 0,
-                    pointHoverBackgroundColor: '#F2F4F4',
+                    pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
                   })
@@ -384,10 +394,7 @@ Congo.transactions.action_dashboards = function(){
                   datasets.push({
                     label: label,
                     data: count,
-                    backgroundColor: '#dddb58',
-                    borderColor: '#4D5656',
-                    borderWidth: 2,
-                    hoverBorderWidth: 3,
+                    backgroundColor: '#58b9e2',
                   })
                 }
 
@@ -477,12 +484,20 @@ Congo.transactions.action_dashboards = function(){
                       ticks: {
                         autoSkip: false,
                         maxRotation: 30,
-                      }
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
+                      },
                     }],
                     yAxes: [{
                       stacked: true,
                       ticks: {
                         beginAtZero: true,
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
                       },
                     }],
                   }
@@ -574,8 +589,8 @@ Congo.transactions.action_dashboards = function(){
                       font: {
                         size: 11,
                       },
-                      color: 'white',
                       textStrokeColor: '#616A6B',
+                      color: '#e8ebef',
                       textStrokeWidth: 1,
                       textShadowColor: '#000000',
                       textShadowBlur: 2,
@@ -659,9 +674,21 @@ Congo.transactions.action_dashboards = function(){
                     },
                   },
                   scales: {
+                    xAxes: [{
+                      ticks: {
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
+                      },
+                    }],
                     yAxes: [{
                       ticks: {
                         beginAtZero: true,
+                        fontColor: '#e8ebef'
+                      },
+                      gridLines: {
+                        color: "#2c2e34"
                       },
                     }],
                   }
