@@ -1196,6 +1196,14 @@ class Project < ApplicationRecord
       end
     end
   end
+  def self.house_general(global_information)
+p "paso"
+        general_data =  {:label => I18n.t(:AVG_M2_FIELD), :value => NumberFormatter.format(global_information[:ps_terreno], true)} 
+end
+  def  self.department_general(global_information)
+
+        general_data = {:label => I18n.t(:AVG_TERRACE_AREA), :value => NumberFormatter.format(global_information[:pp_terrace], true)} 
+end
 
   def self.summary f
 
@@ -1203,21 +1211,23 @@ class Project < ApplicationRecord
     begin
       global_information = Project.find_globals(filters)
       general_data = [
-        {:label => I18n.t("TOTAL_PROJECTS_COUNT"), :value => global_information[:project_count]},
-        {:label => I18n.t("MIN_SELLING_SPEED"), :value => global_information[:min_selling_speed]},
-        {:label => I18n.t("MAX_SELLING_SPEED"), :value => global_information[:max_selling_speed]},
-        {:label => I18n.t("AVG_SELLING_SPEED"), :value => global_information[:avg_selling_speed]},
-        {:label => I18n.t("TOTAL_STOCK"), :value => global_information[:total_units]},
-        {:label => I18n.t("SELLS"), :value => global_information[:total_sold]},
-        {:label => I18n.t("AVAILABLE_STOCK"), :value => global_information[:total_stock]},
-        {:label => I18n.t("MONTHS_TO_SPEND"), :value => global_information[:spend_stock_months]},
-        {:label => I18n.t("UF_MIN_VALUE"), :value => global_information[:min_uf]},
-        {:label => I18n.t("UF_MAX_VALUE"), :value => global_information[:max_uf]},
-        {:label => I18n.t("UF_AVERAGE"), :value => global_information[:avg_uf]},
-        {:label => I18n.t("UF_MIN_M2_VALUE"), :value => global_information[:min_uf_m2]},
-        {:label => I18n.t("UF_MAX_M2_VALUE"), :value => global_information[:max_uf_m2]},
-        {:label => I18n.t("UF_AVERAGE_M2"), :value => global_information[:avg_uf_m2]}
+        {:label => I18n.t(:TOTAL_PROJECTS_COUNT), :value => NumberFormatter.format(global_information[:project_count], false)},
+        {:label => I18n.t(:TOTAL_STOCK), :value => NumberFormatter.format(global_information[:total_units], false)},
+        {:label => I18n.t(:SELLS), :value => NumberFormatter.format(global_information[:total_sold], false)},
+        {:label => I18n.t(:AVAILABLE_STOCK), :value => NumberFormatter.format(global_information[:total_stock], false)},
+        {:label => I18n.t(:PP_UTILES), :value => NumberFormatter.format(global_information[:pp_utiles], true)},
+        {:label => I18n.t(:PP_UF), :value => NumberFormatter.format(global_information[:pp_uf], false)},
+        {:label => I18n.t(:PP_UF_M2), :value => NumberFormatter.format(global_information[:pp_uf_dis_dpto], true)},
+        {:label => I18n.t(:PP_UF_M2_C), :value => NumberFormatter.format(global_information[:pp_uf_dis_home], true)},
+        {:label => I18n.t(:VHMO), :value => NumberFormatter.format(global_information[:vhmo], true)},
+        {:label => I18n.t(:VHMD), :value => NumberFormatter.format(global_information[:vhmd], true)},
+        {:label => I18n.t(:MASD), :value => NumberFormatter.format(global_information[:masd], true)}
       ]
+
+      general_data << house_general(global_information) if !global_information[:ps_terreno].nil?
+      general_data << department_general(global_information) if !global_information[:pp_terrace].nil?
+
+
       pstatus = Project.projects_group_by_count('project_statuses', filters, false)
       ptypes = Project.projects_group_by_count('project_types', filters, true)
       pmixes = Project.projects_group_by_mix('mix', filters)
