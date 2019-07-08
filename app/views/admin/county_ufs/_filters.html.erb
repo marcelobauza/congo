@@ -1,0 +1,7 @@
+<%= form_tag admin_county_ufs_path, method: :get  do |f| %>
+    <div class="alert-message block-message success">
+          <%= select_tag :county_id, options_for_select(@counties), :class => "text" %>
+              <%= select_tag :property_type_id, options_for_select(@property_types), :class => "text" %>
+                  <%= submit_tag t('menu.county_uf.search'), :class => "btn success" %>
+                    </div>
+              <% end %>

@@ -2,13 +2,7 @@
 
 
 <h1>Admin County Ufs</h1>
-<% form_tag admin_county_ufs_path, :method => 'get', :html => {:class => 'form-stacked'} do |f| %>
-    <div class="alert-message block-message success">
-          <%= select_tag :county_id, options_for_select(@counties), :class => "text" %>
-              <%= select_tag :property_type_id, options_for_select(@property_types), :class => "text" %>
-                  <%= submit_tag t('menu.county_uf.search'), :class => "btn success" %>
-                    </div>
-              <% end %>
+<%= render :partial => "filters" %>
 <table>
   <thead>
     <tr>
@@ -21,7 +15,7 @@
   </thead>
 
   <tbody>
-    <% @admin_county_ufs.each do |admin_county_uf| %>
+    <% @county_ufs.each do |admin_county_uf| %>
       <tr>
         <td><%= admin_county_uf.county.name %></td>
         <td><%= admin_county_uf.property_type.name %></td>
@@ -34,7 +28,5 @@
     <% end %>
   </tbody>
 </table>
-
 <br>
 
-<%= link_to 'New Admin County Uf', new_admin_county_uf_path %>

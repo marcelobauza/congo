@@ -10,8 +10,7 @@ class Admin::CountyUfsController < ApplicationController
 
     @counties = County.select("id, name").order(:name).map {|c| [c.name, c.id]}
     @counties.insert(0, ["", nil])
-    @county_ufs = CountyUf.where(county_id: params[:county_id]).where(property_type_id: params[:property_type_id]).paginate(page: params[:page])
-    @admin_county_ufs = CountyUf.all
+    @county_ufs = CountyUf.by_county(params[:county_id]).by_property_type(params[:property_type_id]).paginate(:page => params[:page])
   end
 
   # GET /admin/county_ufs/1
