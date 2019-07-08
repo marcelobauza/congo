@@ -11,6 +11,23 @@ class ApplicationStatusesController < ApplicationController
   end
   end
 
+  def colleagues
+    @colleagues = User.where(company: current_user.company).where.not(id: current_user.id)
+    @row_to_share = params[:id]
+  end
+
+  def share_users
+    @row_filter = ApplicationStatus.where(id: params[:share_users]['row_to_share']).select(:filters, :name)
+    @ids = params[:share_users][:ids].reject(&:blank?) 
+@ids.each do |id|
+        ApplicationStatus.create(user_id: id, filters: @row_filter[0]['filters'], name: @row_filter[0]['name'])
+    end
+    respond_to do |f|
+        f.js
+  end
+  end
+
+
   def index
     @application_statuses = ApplicationStatus.where(user_id: current_user.id)
   end

@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   get 'future_projects/future_projects_summary' => 'future_projects#future_projects_summary'
   get 'future_projects/period' => 'future_projects#period'
   get 'application_statuses/load' => 'application_statuses#load'
+  get 'application_statuses/colleagues' => 'application_statuses#colleagues'
+  get 'application_statuses/share_users' => 'application_statuses#share_users'
 
   get 'transactions/dashboards' => 'transactions#dashboards'
   get 'transactions/graduated_points' => 'transactions#graduated_points'
