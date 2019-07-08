@@ -212,7 +212,22 @@ var overlays =  {
   }
 
   counties = function(){
-    let bimester, year, filter_for_layer;
+    let bimester, year, filter_for_layer, filter_layer;
+
+        $.ajax({
+          async: false,
+          type: 'GET',
+          url: '/counties/counties_users.json',
+          datatype: 'json',
+          success: function(data){
+            if (data.length > 0 ){
+            filter_layer = "AND county_id IN(" +data +")";
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
+
+        })
+
     
     if (typeof HandlerGeometry != 'undefined'){
         HandlerGeometry.disable();
@@ -232,7 +247,7 @@ var overlays =  {
     layer_type = Congo.dashboards.config.layer_type;
     switch(layer_type) {
       case 'census_voronoi':
-        filter_layer = "AND 1=1";
+        filter_layer = filter_layer +  "AND 1=1";
       break;
       case 'transactions_info':
         year = Congo.dashboards.config.year;
@@ -240,7 +255,10 @@ var overlays =  {
         Congo.transactions.action_dashboards.indicator_transactions();
         property_type_ids = Congo.transactions.config.property_type_ids
         seller_type_ids = Congo.transactions.config.seller_type_ids
-        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        
+
+        filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+
         if (property_type_ids.length > 0 ){
           filter_layer = filter_layer + " AND property_type_id IN ("+ property_type_ids + ")";
         }
@@ -257,7 +275,7 @@ var overlays =  {
         Congo.future_projects.action_dashboards.indicator_future_projects();
         filter_future_project_type_ids = Congo.future_projects.config.future_project_type_ids;
         filter_project_type_ids = Congo.future_projects.config.project_type_ids;
-        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
 
         if (filter_future_project_type_ids.length > 0) {
           filter_layer = filter_layer + " AND future_project_type_id IN (" + filter_future_project_type_ids +")";
@@ -292,7 +310,7 @@ var overlays =  {
         
         project_status_ids = Congo.projects.config.project_status_ids; 
         project_type_ids = Congo.projects.config.project_type_ids;
-        filter_layer = "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         if (project_status_ids.length > 0){
 
           filter_layer = filter_layer + " AND project_status_id IN (" + project_status_ids + ")";

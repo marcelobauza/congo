@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'dashboards/filter_period'
   get 'future_project_types/legend_points'
   get 'counties/find' => 'counties#find'
+  get 'counties/counties_users' => 'counties#counties_users'
   get 'building_regulations/allowed_use_list' => 'building_regulations#allowed_use_list'
   get 'building_regulations/building_regulations_filters' => 'building_regulations#building_regulations_filters'
   get 'transactions/transactions_summary' => 'transactions#transactions_summary'

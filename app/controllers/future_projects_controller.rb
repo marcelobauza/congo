@@ -14,6 +14,7 @@ class FutureProjectsController < ApplicationController
 
   def future_projects_summary
     session[:data] = params
+    params[:user_id] = current_user.id
     @result = FutureProject.summary(params)
     return @result
   end

@@ -15,4 +15,15 @@ class CountiesController < ApplicationController
       format.js 
     end
   end
+
+  def counties_users 
+    @counties = CountiesUser.where(user_id: current_user.id).pluck(:county_id)
+   
+    render json: @counties
+  end
+
+
+
+
+
 end

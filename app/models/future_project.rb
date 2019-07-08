@@ -337,8 +337,9 @@ class FutureProject < ApplicationRecord
     end
     if filters.has_key? :project_type_ids or filters.has_key? :future_project_type_ids
     conditions +=  ids_conditions(filters, self_not_filter)
-    #conditions += "future_projects.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
     end
+    conditions += "future_projects.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
+
     conditions.chomp!(Util.and)
     conditions
   end
