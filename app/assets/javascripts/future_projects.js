@@ -193,8 +193,10 @@ Congo.future_projects.action_dashboards = function(){
         datatype: 'json',
         data: data,
         beforeSend: function() {
-          // Mostramos el spinner
+          // Mostramos el spinner y deshabilitamos los botones
           $("#spinner").show();
+          $('.btn').addClass('disabled')
+          $('.close').prop('disabled', true);
 
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('Expedientes Municipales');
@@ -208,8 +210,10 @@ Congo.future_projects.action_dashboards = function(){
         },
         success: function(data) {
 
-          // Ocultamos el spinner
+          // Ocultamos el spinner y habilitamos los botones
           $("#spinner").hide();
+          $('.btn').removeClass('disabled')
+          $('.close').prop('disabled', false);
 
           // Separamos la información
           for (var i = 0; i < data.length; i++) {
