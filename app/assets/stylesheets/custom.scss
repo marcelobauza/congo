@@ -150,3 +150,31 @@ div.dropdown-menu-navbar1.show {
   overflow-y: scroll;
   height: 70vh;
 }
+
+// Slider
+.irs--flat .irs-from, .irs--flat .irs-to, .irs--flat .irs-single { // label
+    color: e8ebef !important;
+    background-color: #58b9e2 !important;
+}
+.irs--flat .irs-bar { // barra
+    background-color: #58b9e2 !important;
+}
+.irs--flat .irs-grid-text { // texto
+    color: #e8ebef !important;
+}
+.irs--flat .irs-grid-pol { // regla
+    background-color: #e8ebef !important;
+}
+.irs--flat .irs-line { // barra fondo
+    background-color: #e8ebef !important;
+}
+.irs--flat .irs-min, .irs--flat .irs-max { // label fondo
+    color: #798088 !important;
+    background-color: #e8ebef !important;
+}
+.irs--flat .irs-handle>i:first-child { // límite
+    background-color: #44a5ce !important;
+}
+.irs--flat .irs-from:before, .irs--flat .irs-to:before, .irs--flat .irs-single:before { // label triánulo
+    border-top-color: #58b9e2 !important;
+}
