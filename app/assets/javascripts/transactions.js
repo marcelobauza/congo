@@ -52,9 +52,6 @@ Congo.transactions.action_graduated_points = function(){
       };
     } else if (centerPoint != '') {
 
-      // Eliminamos filtro comuna
-      $('#item-comuna').remove();
-      
       data = {
         to_year: to_year,
         to_period: to_bimester,
@@ -72,9 +69,6 @@ Congo.transactions.action_graduated_points = function(){
 
       };
     } else {
-
-      // Eliminamos filtro comuna
-      $('#item-comuna').remove();
 
       data = {
         to_year: to_year,
@@ -174,6 +168,10 @@ Congo.transactions.action_dashboards = function(){
           style_layer: style_layer
         };
       } else if (centerPoint != '') {
+
+        // Eliminamos filtro comuna
+        $('#item-comuna').remove();
+
         data = {
           to_year: to_year,
           to_period: to_bimester,
@@ -191,6 +189,10 @@ Congo.transactions.action_dashboards = function(){
 
         };
       } else {
+
+        // Eliminamos filtro comuna
+        $('#item-comuna').remove();
+
         data = {
           to_year: to_year,
           to_period: to_bimester,
