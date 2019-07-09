@@ -877,12 +877,11 @@ Congo.projects.action_dashboards = function(){
       // Creamos el overlay
       Congo.dashboards.action_index.create_overlay_and_filter_card();
 
-      // Si se realizó la selección por comuna/punto, agregamos el item al filtro
       if (county_id != '') {
-        Congo.dashboards.action_index.add_county_filter_item()
-      }
 
-      if (county_id != '') {
+        // Agregamos filtro Comuna
+        Congo.dashboards.action_index.add_county_filter_item()
+
         data = {
           to_year: to_year,
           to_period: to_bimester,
@@ -901,8 +900,8 @@ Congo.projects.action_dashboards = function(){
           type_geometry:type_geometry,
           layer_type: layer_type,
           style_layer: style_layer
-
         };
+
       } else if (centerPoint != '') {
 
         // Eliminamos filtro comuna
@@ -927,8 +926,8 @@ Congo.projects.action_dashboards = function(){
           type_geometry:type_geometry,
           layer_type: layer_type,
           style_layer: style_layer
-
         };
+
       } else {
 
         // Eliminamos filtro comuna
@@ -952,8 +951,8 @@ Congo.projects.action_dashboards = function(){
           type_geometry:type_geometry,
           layer_type: layer_type,
           style_layer: style_layer
-
         };
+
       };
 
       $.ajax({
