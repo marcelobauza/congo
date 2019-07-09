@@ -1068,25 +1068,25 @@ Congo.projects.action_dashboards = function(){
                   if (title == 'Estado del Proyecto' || title == 'Tipo de Propiedad') {
                     switch (d['name']) {
                       case 'No iniciado':
-                        colour = '#F1C40F'
+                        colour = '#3498DB'
                         break;
                       case 'Excavaciones':
-                        colour = '#F39C12'
+                        colour = '#D6EAF8'
                         break;
                       case 'Obra gruesa':
-                        colour = '#E67E22'
+                        colour = '#2874A6'
                         break;
                       case 'Terminaciones':
-                        colour = '#D35400'
+                        colour = '#1B4F72'
                         break;
                       case 'Finalizado':
-                        colour = '#E74C3C'
+                        colour = '#85C1E9'
                         break;
                       case 'Departamentos':
                         colour = '#58b9e2'
                         break;
                       case 'Casas':
-                        colour = '#42d964'
+                        colour = '#1B4F72'
                         break;
                     }
 
