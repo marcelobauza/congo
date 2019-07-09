@@ -13,24 +13,29 @@ Congo.building_regulations.config= {
 
 function addUsoFilter(id, name) {
 
-  Congo.building_regulations.config.allowed_use_ids.push(id);
+  if ($('#item-uso-'+id).length == 0) {
 
-  $('#filter-body').append(
-    $('<div>', {
-        'class': 'filter-building-regulations text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
-        'id': 'item-uso-'+id,
-        'text': 'Uso Permitido: '+name
-    }).append(
-      $('<button>', {
-          'type': 'button',
-          'class': 'close',
-          'id': 'close-uso-'+id,
-          'text': '×',
-          'onclick': 'delUsoFilter('+id+', "'+name+'")'
-      })
-    )
-  );
-  indicator_building_regulations();
+    Congo.building_regulations.config.allowed_use_ids.push(id);
+
+    $('#filter-body').append(
+      $('<div>', {
+          'class': 'filter-building-regulations text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
+          'id': 'item-uso-'+id,
+          'text': 'Uso Permitido: '+name
+      }).append(
+        $('<button>', {
+            'type': 'button',
+            'class': 'close',
+            'id': 'close-uso-'+id,
+            'text': '×',
+            'onclick': 'delUsoFilter('+id+', "'+name+'")'
+        })
+      )
+    );
+    indicator_building_regulations();
+    
+  };
+
 };
 
 function delUsoFilter(id, name) {
