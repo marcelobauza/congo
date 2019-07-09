@@ -904,6 +904,10 @@ Congo.projects.action_dashboards = function(){
 
         };
       } else if (centerPoint != '') {
+
+        // Eliminamos filtro comuna
+        $('#item-comuna').remove();
+
         data = {
           to_year: to_year,
           to_period: to_bimester,
@@ -926,6 +930,10 @@ Congo.projects.action_dashboards = function(){
 
         };
       } else {
+
+        // Eliminamos filtro comuna
+        $('#item-comuna').remove();
+
         data = {
           to_year: to_year,
           to_period: to_bimester,

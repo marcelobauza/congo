@@ -56,6 +56,10 @@ Congo.future_projects.action_graduated_points = function(){
         style_layer: style_layer
       };
     } else if (centerPoint != '') {
+
+      // Eliminamos filtro comuna
+      $('#item-comuna').remove();
+
       data = {
         to_year: to_year,
         to_period: to_bimester,
@@ -70,6 +74,10 @@ Congo.future_projects.action_graduated_points = function(){
         style_layer: style_layer
       };
     } else {
+
+      // Eliminamos filtro comuna
+      $('#item-comuna').remove();
+
       data = {
         to_year: to_year,
         to_period: to_bimester,

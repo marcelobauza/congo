@@ -33,7 +33,7 @@ function addUsoFilter(id, name) {
       )
     );
     indicator_building_regulations();
-    
+
   };
 
 };
@@ -105,6 +105,10 @@ Congo.building_regulations.action_dashboards = function(){
 
         };
       } else if (centerPoint != '') {
+
+        // Eliminamos filtro comuna
+        $('#item-comuna').remove();
+
         data = {
           from_construct: from_construct,
           to_construct: to_construct,
@@ -119,6 +123,10 @@ Congo.building_regulations.action_dashboards = function(){
 
         };
       } else {
+
+        // Eliminamos filtro comuna
+        $('#item-comuna').remove();
+
         data = {
           from_construct: from_construct,
           to_construct: to_construct,
