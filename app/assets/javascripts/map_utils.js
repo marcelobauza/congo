@@ -212,7 +212,8 @@ var overlays =  {
   }
 
   counties = function(){
-    let bimester, year, filter_for_layer, filter_layer;
+    var bimester, year, filter_for_layer;
+    var filter_layer = "AND 1 = 1 ";
 
         $.ajax({
           async: false,
