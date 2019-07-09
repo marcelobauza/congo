@@ -172,3 +172,11 @@ div.dropdown-menu-navbar1.show {
 .irs--flat .irs-from:before, .irs--flat .irs-to:before, .irs--flat .irs-single:before { // label triánulo
     border-top-color: #58b9e2 !important;
 }
+
+// Text selection
+::selection {
+  background: #58b9e2;
+}
+::-moz-selection {
+  background: #58b9e2;
+}
