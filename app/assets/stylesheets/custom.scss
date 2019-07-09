@@ -114,35 +114,29 @@ div.dropdown-menu-navbar1.show {
 .pagination {
     font-size: 12px;
 }
-
 .pagination > * {
     margin-right: 0.1em;
     padding: 0.3em 0.4em;
 }
-
 .pagination a {
+    color: #e8ebef;
+}
+.pagination a:hover {
+    background: #44a5ce none repeat scroll 0 0;
+    text-shadow: 1px 1px 1px #58b9e2;
     color: #000;
 }
-
-.pagination a:hover {
-    background: #c0392b none repeat scroll 0 0;
-    text-shadow: 1px 1px 1px #e74c3c;
-    color: white;
-}
-
 .pagination a:active {
     text-shadow: none;
-    color: white;
+    color: #000;
 }
-
 .pagination .current {
-    background: #c0392b none repeat scroll 0 0;
-    color: white;
-    text-shadow: 1px 1px 1px #e74c3c;
+    background: #44a5ce none repeat scroll 0 0;
+    color: #000;
+    text-shadow: 1px 1px 1px #58b9e2;
 }
-
 .pagination .disabled {
-    color: #C0C0C0;
+    color: #798088;
 }
 
 //  Sesions modal
