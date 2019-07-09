@@ -45,9 +45,12 @@ Congo.dashboards.action_index = function(){
             'id': 'filter-container'
           }).append(
             $('<div>', { // card-header
-              'class': 'card-header',
+              'class': 'card-header pl-3',
               'id': 'filter-header'
             }).append(
+              $('<span>', { // handle
+                'class': 'fas fa-arrows-alt handle border border-dark'
+              }),
               $('<b>', { // título
                 'text': 'Filtros'
               }),
@@ -81,7 +84,10 @@ Congo.dashboards.action_index = function(){
 
     // Aplicamos drag and drop
     dragula({
-      containers: Array.prototype.slice.call($('.overlay'))
+      containers: Array.prototype.slice.call($('.overlay')),
+      moves: function(el, container, handle) {
+        return handle.classList.contains('handle') || handle.parentNode.classList.contains('handle');
+      }
     });
   };
 
