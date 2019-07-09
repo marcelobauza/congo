@@ -796,24 +796,29 @@ function projects_report_pdf(){
 
 function addInmoFilter(id, name) {
 
-  Congo.projects.config.project_agency_ids.push(id);
+  if ($('#item-inmo-'+id).length == 0) {
 
-  $('#filter-body').append(
-    $('<div>', {
-        'class': 'filter-projects text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
-        'id': 'item-inmo-'+id,
-        'text': 'Inmobiliaria: '+name
-    }).append(
-      $('<button>', {
-          'type': 'button',
-          'class': 'close',
-          'id': 'close-inmo-'+id,
-          'text': '×',
-          'onclick': 'delInmoFilter('+id+', "'+name+'")'
-      })
-    )
-  );
-  Congo.map_utils.counties();
+    Congo.projects.config.project_agency_ids.push(id);
+
+    $('#filter-body').append(
+      $('<div>', {
+          'class': 'filter-projects text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
+          'id': 'item-inmo-'+id,
+          'text': 'Inmobiliaria: '+name
+      }).append(
+        $('<button>', {
+            'type': 'button',
+            'class': 'close',
+            'id': 'close-inmo-'+id,
+            'text': '×',
+            'onclick': 'delInmoFilter('+id+', "'+name+'")'
+        })
+      )
+    );
+    Congo.map_utils.counties();
+
+  };
+
 };
 
 function delInmoFilter(id, name) {
