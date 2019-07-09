@@ -299,7 +299,7 @@ Congo.building_regulations.action_dashboards = function(){
               }); // Cierra ionRangeSlider
 
               // Elimina el filtro
-              $('#close-item-construct').click(function() {
+              $('#close-item-construct').unbind('click').click(function() {
                 Congo.building_regulations.config.from_construct = '';
                 Congo.building_regulations.config.to_construct = '';
                 $('#item-construct').remove();
@@ -307,6 +307,86 @@ Congo.building_regulations.action_dashboards = function(){
               });
 
             } // Cierra if Coeficiente de Constructibilidad
+
+            if (label == "Ocupación de Suelo") {
+
+              var min = reg['min'];
+              var max = reg['max'];
+              var to;
+              var from;
+
+              // Levantamos los valores de "to" y "from"
+              if (Congo.building_regulations.config.to_land_ocupation == '') {
+                to = max
+              } else {
+                to = Congo.building_regulations.config.to_land_ocupation
+              };
+              from = Congo.building_regulations.config.from_land_ocupation;
+
+              // Agrega el título y el range_slider
+              $('#body').append(
+                $("<b>", {
+                    'text': label
+                }),
+                $("<input>", {
+                  'id': 'range_slider_ocup_suelo'
+                })
+              );
+
+              $("#range_slider_ocup_suelo").ionRangeSlider({
+                skin: "flat",
+                type: 'double',
+                grid: true,
+                min: min,
+                max: max,
+                step: 0.1,
+                from: from,
+                to: to,
+                onFinish: function (data) {
+
+                  // Almacena los datos en la variable global
+                  Congo.building_regulations.config.from_land_ocupation = data.from;
+                  Congo.building_regulations.config.to_land_ocupation = data.to;
+
+                  // Si no existe el filtro, lo crea
+                  if ($('#item-suelo').length == 0) {
+
+                    $('#filter-body').append(
+                      $("<div>", {
+                          'class': 'filter-building-regulations text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
+                          'id': 'item-suelo',
+                          'text': 'Ocupación de Suelo >= '+data.from+' <= '+data.to
+                      })
+                    );
+
+                  // Si existe el filtro, solo modifica el texto
+                  } else {
+                    $('#item-suelo').text('Ocupación de Suelo >= '+data.from+' <= '+data.to);
+                  };
+
+                  // Agrega el close button
+                  $('#item-suelo').append(
+                    $("<button>", {
+                        'class': 'close',
+                        'id': 'close-item-suelo',
+                        'type': 'button',
+                        'text': '×'
+                    })
+                  )
+                  indicator_building_regulations();
+
+                }, // Cierra onFinish
+              }); // Cierra ionRangeSlider
+
+              // Elimina el filtro
+              $('#close-item-suelo').unbind('click').click(function() {
+                Congo.building_regulations.config.from_land_ocupation = '';
+                Congo.building_regulations.config.to_land_ocupation = '';
+                $('#item-suelo').remove();
+                indicator_building_regulations();
+              });
+
+            } // Cierra if Ocupación de Suelo
           } // Cierra for
         } // Cierra success
       }) // Cierra ajax
