@@ -23,7 +23,7 @@
             <td><%=h user.company %></td>
             <td><%=h user.disabled  ? t(:YES) : t(:NO) %></td>
             <td><%=h user.role_id unless user.role_id.nil? %></td>
-            <td><%= link_to edit_admin_user_path(user) do %> <i class="fas fa-edit text-dark"></i> <%end %></td>
+            <td><%= link_to edit_admin_user_path(user) do %> <i class="fas fa-edit text-secondary"></i> <%end %></td>
             <td>
               <div class="ui-state-default ui-corner-all" title="<%= t 'actions.delete' %>">
                 <%= link_to "", admin_user_path(user), :confirm => t('questions.are_you_sure'), :method => :delete, :class => "ui-icon ui-icon-trash" %>
