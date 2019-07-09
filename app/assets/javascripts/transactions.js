@@ -220,6 +220,7 @@ Congo.transactions.action_dashboards = function(){
           // Eliminamos los filtros de la capa anterior
           $('.filter-future-projects').remove();
           $('.filter-projects').remove();
+          $('.filter-building-regulations').remove();
         },
         success: function(data){
 
