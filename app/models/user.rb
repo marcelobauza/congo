@@ -27,7 +27,7 @@ class User < ApplicationRecord
 
     role_id = params[:user][:role_id] unless params[:user].nil?
     email = params[:user][:email] unless params[:user].nil?
-    disabled = params[:disabled] #unless params[:is_acive].nil?
+    disabled = params[:user][:disabled] unless params[:disabled].nil?
     nombre = params[:user][:complete_name] unless params[:user].nil?
 
     User.select("users.*").
@@ -59,7 +59,7 @@ class User < ApplicationRecord
       end
     end
 
-    if !filters[:disabled].nil?
+    if filters[:disabled] == '1'
       if (!conditions.nil?)
         conditions += Util.and
           conditions += WhereBuilder.build_equal_condition("disabled", "TRUE")
