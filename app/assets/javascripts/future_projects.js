@@ -196,7 +196,7 @@ Congo.future_projects.action_dashboards = function(){
           layer_type: layer_type,
           style_layer: style_layer
         };
-        
+
       };
 
       $.ajax({
@@ -242,7 +242,7 @@ Congo.future_projects.action_dashboards = function(){
 
             // Creamos el card-header
             var card_header = document.createElement('div');
-            card_header.className = 'card-header';
+            card_header.className = 'card-header pl-3';
             card_header.id = 'header'+i;
 
             // Creamos el collapse
@@ -258,6 +258,7 @@ Congo.future_projects.action_dashboards = function(){
             // TODO: Crear título y boton minimizar dinámicos
 
             // Creamos título y boton minimizar
+            var card_handle = '<span class="fas fa-arrows-alt handle border border-dark">'
             var card_header_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
             var card_header_title = '<b>'+title+'</b>'
 
@@ -265,7 +266,7 @@ Congo.future_projects.action_dashboards = function(){
             $('.overlay').append(chart_container);
             $('#chart-container'+i).append(card_header, collapse);
             $('#collapse'+i).append(card_body);
-            $('#header'+i).append(card_header_button, card_header_title);
+            $('#header'+i).append(card_handle, card_header_button, card_header_title);
 
             // Información General
             if (title == "Información General") {

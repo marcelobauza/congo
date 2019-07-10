@@ -180,3 +180,11 @@ div.dropdown-menu-navbar1.show {
 ::-moz-selection {
   background: #58b9e2;
 }
+
+// Handle para drag&drop
+.handle {
+  padding: 4px;
+  margin-right: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: move;
+}
