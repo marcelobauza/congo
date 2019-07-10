@@ -234,12 +234,16 @@ Congo.building_regulations.action_dashboards = function(){
 
               // Agrega el título y el list_group
               $('#body').append(
-                $("<b>", {
-                    'text': label
+                $("<h6>", {
+                  'class': 'card-subtitle mb-2',
+                  'text': label
                 }),
                 $("<div>", {
                   'class': 'list-group border',
                   'id': 'uso-list'
+                }),
+                $("<div>", {
+                  'class': 'dropdown-divider',
                 })
               );
 
@@ -278,11 +282,15 @@ Congo.building_regulations.action_dashboards = function(){
 
               // Agrega el título y el range_slider
               $('#body').append(
-                $("<b>", {
-                    'text': label
+                $("<h6>", {
+                  'class': 'card-subtitle mb-2',
+                  'text': label
                 }),
                 $("<input>", {
                   'id': 'range_slider_coef_const'
+                }),
+                $("<div>", {
+                  'class': 'dropdown-divider',
                 })
               );
 
@@ -358,11 +366,15 @@ Congo.building_regulations.action_dashboards = function(){
 
               // Agrega el título y el range_slider
               $('#body').append(
-                $("<b>", {
-                    'text': label
+                $("<h6>", {
+                  'class': 'card-subtitle mb-2',
+                  'text': label
                 }),
                 $("<input>", {
                   'id': 'range_slider_ocup_suelo'
+                }),
+                $("<div>", {
+                  'class': 'dropdown-divider',
                 })
               );
 
