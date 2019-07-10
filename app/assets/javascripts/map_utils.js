@@ -268,6 +268,7 @@ var overlays =  {
           filter_layer = filter_layer + " AND seller_type_id IN ("+ seller_type_ids + ")";
         }
 
+        remove_legend();
 
         break;
       case 'future_projects_info':
