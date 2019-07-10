@@ -4,11 +4,15 @@ Congo.building_regulations.config= {
   county_name: '',
   county_id: '',
   layer_type: 'building_regulations_info',
+  allowed_use_ids: [],
   from_construct: '',
   to_construct: '',
   from_land_ocupation: '',
   to_land_ocupation: '',
-  allowed_use_ids: []
+  from_max_height: '',
+  to_max_height: '',
+  from_inhabitants_hectare: '',
+  to_inhabitants_hectare: '',
 }
 
 function addUsoFilter(id, name) {
@@ -67,11 +71,15 @@ Congo.building_regulations.action_dashboards = function(){
     radius = Congo.dashboards.config.radius;
     centerPoint = Congo.dashboards.config.centerpt;
     wkt = Congo.dashboards.config.size_box;
+    allowed_use_ids = Congo.building_regulations.config.allowed_use_ids;
     from_construct = Congo.building_regulations.config.from_construct;
     to_construct = Congo.building_regulations.config.to_construct;
     from_land_ocupation = Congo.building_regulations.config.from_land_ocupation;
     to_land_ocupation = Congo.building_regulations.config.to_land_ocupation;
-    allowed_use_ids = Congo.building_regulations.config.allowed_use_ids;
+    from_max_height = Congo.building_regulations.config.from_max_height;
+    to_max_height = Congo.building_regulations.config.to_max_height;
+    from_inhabitants_hectare = Congo.building_regulations.config.from_inhabitants_hectare;
+    to_inhabitants_hectare = Congo.building_regulations.config.to_inhabitants_hectare;
     type_geometry = Congo.dashboards.config.typeGeometry;
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
@@ -92,11 +100,15 @@ Congo.building_regulations.action_dashboards = function(){
         Congo.dashboards.action_index.add_county_filter_item()
 
         data = {
+          allowed_use_ids: allowed_use_ids,
           from_construct: from_construct,
           to_construct: to_construct,
           from_land_ocupation: from_land_ocupation,
           to_land_ocupation: to_land_ocupation,
-          allowed_use_ids: allowed_use_ids,
+          from_max_height: from_max_height,
+          to_max_height: to_max_height,
+          from_inhabitants_hectare: from_inhabitants_hectare,
+          to_inhabitants_hectare: to_inhabitants_hectare,
           county_id: county_id,
           type_geometry:type_geometry,
           layer_type: layer_type,
@@ -109,11 +121,15 @@ Congo.building_regulations.action_dashboards = function(){
         $('#item-comuna').remove();
 
         data = {
+          allowed_use_ids: allowed_use_ids,
           from_construct: from_construct,
           to_construct: to_construct,
           from_land_ocupation: from_land_ocupation,
           to_land_ocupation: to_land_ocupation,
-          allowed_use_ids: allowed_use_ids,
+          from_max_height: from_max_height,
+          to_max_height: to_max_height,
+          from_inhabitants_hectare: from_inhabitants_hectare,
+          to_inhabitants_hectare: to_inhabitants_hectare,
           centerpt: centerPoint,
           radius: radius,
           type_geometry:type_geometry,
@@ -127,11 +143,15 @@ Congo.building_regulations.action_dashboards = function(){
         $('#item-comuna').remove();
 
         data = {
+          allowed_use_ids: allowed_use_ids,
           from_construct: from_construct,
           to_construct: to_construct,
           from_land_ocupation: from_land_ocupation,
           to_land_ocupation: to_land_ocupation,
-          allowed_use_ids: allowed_use_ids,
+          from_max_height: from_max_height,
+          to_max_height: to_max_height,
+          from_inhabitants_hectare: from_inhabitants_hectare,
+          to_inhabitants_hectare: to_inhabitants_hectare,
           wkt: JSON.stringify(wkt),
           type_geometry:type_geometry,
           layer_type: layer_type,
