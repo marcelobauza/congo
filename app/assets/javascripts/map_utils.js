@@ -130,6 +130,9 @@ var overlays =  {
         arr1 = LatLngsToCoords(polygon[0]);
         arr1.push(arr1[0])
         size_box.push(arr1);
+        let area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+        Congo.dashboards.config.area = area;
+
         Congo.dashboards.config.size_box.push(size_box)
       }
       if(typeGeometry == 'point'){
@@ -277,8 +280,10 @@ var overlays =  {
         Congo.future_projects.action_dashboards.indicator_future_projects();
         filter_future_project_type_ids = Congo.future_projects.config.future_project_type_ids;
         filter_project_type_ids = Congo.future_projects.config.project_type_ids;
-        filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
-
+        boost = Congo.dashboards.config.boost;
+        if (boost == false){
+          filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        }        
         if (filter_future_project_type_ids.length > 0) {
           filter_layer = filter_layer + " AND future_project_type_id IN (" + filter_future_project_type_ids +")";
 
