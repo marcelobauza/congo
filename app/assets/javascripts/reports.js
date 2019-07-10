@@ -22,11 +22,12 @@ Congo.reports = function(){
     case 'transactions_info':
       switch(kind_reports){
         case 'graph':
-          url = '/reports/transactions_data.xlsx';
+          url = '/reports/transactions_summary.xlsx';
           window.open(url, '_blank');
           break;
         case 'base':
-          url = '/reports/transactions_summary.xlsx';
+          url = '/reports/transactions_data.xlsx';
+
           window.open(url, '_blank');
           break;
       }
@@ -34,11 +35,13 @@ Congo.reports = function(){
     case 'projects_feature_info':
       switch(kind_reports){
         case 'graph':
-          url = '/reports/projects_data.xlsx';
+
+          url = '/reports/projects_summary.xlsx';
           window.open(url, '_blank');
           break;
         case 'base':
-          url = '/reports/projects_summary.xlsx';
+          
+          url = '/reports/projects_data.xlsx';
           window.open(url, '_blank');
           break;
         case 'pdf':
