@@ -14,10 +14,24 @@ Congo.dashboards.config= {
   centerpt: '',
   size_box: [],
   typeGeometry: '',
+  boost: false,
+  area :0
 }
 
 Congo.dashboards.action_index = function(){
   init= function(){
+  $('#boost').on('click', function(){
+      area = Congo.dashboards.config.area;
+      radius = Congo.dashboards.config.radius;
+    console.log(area);
+    console.log(radius);
+    if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)){
+        Congo.dashboards.config.boost = true;
+        Congo.map_utils.counties();
+    }else{
+        console.log("es muy grande");
+    }
+  })
         $.ajax({
           async: false,
           type: 'GET',
@@ -30,6 +44,9 @@ Congo.dashboards.action_index = function(){
         });
     Congo.map_utils.init();
   }
+
+
+
 
   // Creamos el overlay
   create_overlay_and_filter_card = function() {

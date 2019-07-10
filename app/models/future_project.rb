@@ -121,7 +121,7 @@ class FutureProject < ApplicationRecord
     end
       query.chomp!(Util.or)
   end
-    query += ")"
+    query += ")" + Util.and 
   end
 
 
@@ -129,7 +129,10 @@ class FutureProject < ApplicationRecord
     select = "COUNT(*) as count_project, (COUNT(*)/ CAST(COUNT(DISTINCT (year,bimester)) AS FLOAT) ) as avg_project_bim, "
     select += "SUM(future_projects.m2_built) as total_surface, ROUND(AVG(future_projects.m2_built), 2) as avg_surface, future_project_types.name"
     cond_query =''
-    cond_query += condition_period_current(filters) + Util.and  if !filters[:to_period].nil?
+
+    unless filters.has_key? :boost
+      cond_query += condition_period_current(filters)  if !filters[:to_period].nil?
+    end
     cond_query += conditions(filters, true)
     joins = build_joins.join(" ")
 
@@ -157,7 +160,10 @@ class FutureProject < ApplicationRecord
 
   def self.group_by_project_type(widget, filters)
     
-    cond_query = condition_period_current(filters) + Util.and  if !filters[:to_period].nil?
+    cond_query =''
+    unless filters.has_key? :boost
+      cond_query += condition_period_current(filters)  if !filters[:to_period].nil?
+    end
     cond_query += conditions(filters, widget)
     FutureProject.joins(build_joins.join(" ")).where(cond_query).group(:future_project_type_id).count(:id)
   end
@@ -203,7 +209,10 @@ class FutureProject < ApplicationRecord
   def self.units_by_project_type(filters)
     result = []
     select = "COUNT(*) as value"
-    cond_query = condition_period_current(filters) + Util.and  if !filters[:to_period].nil?
+    cond_query =''
+    unless filters.has_key? :boost
+      cond_query += condition_period_current(filters)  if !filters[:to_period].nil?
+    end
     cond_query += conditions(filters)
 
      ProjectType.all.each do |typ|
@@ -221,7 +230,10 @@ class FutureProject < ApplicationRecord
 
   def self.projects_by_destination_project_type(filters, widget)
 
-    cond_query = condition_period_current(filters) + Util.and  if !filters[:to_period].nil?
+    cond_query =''
+    unless filters.has_key? :boost
+      cond_query += condition_period_current(filters)   if !filters[:to_period].nil?
+    end
     cond_query += conditions(filters, widget)
 
     projects = FutureProject.select("COUNT(*) as value, project_types.name as project_type_name, project_types.id as project_id").
@@ -331,7 +343,7 @@ class FutureProject < ApplicationRecord
       conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
     conditions += "active = true #{Util.and}"
-    
+   
     unless filters.has_key? :boost or self_not_filter == true
       conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
     end
@@ -496,7 +508,6 @@ class FutureProject < ApplicationRecord
   end
 
   def self.summary f
-
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
     begin
       general_data = FutureProject.general_info(filters)
