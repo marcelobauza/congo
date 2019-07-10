@@ -278,8 +278,8 @@ class Project < ApplicationRecord
   end
 
 
-  def self.find_globals(filters)
-    
+  def self.find_globals(filters, range)
+   
     select =  "COUNT(DISTINCT(project_instance_mix_views.project_id)) AS project_count, SUM(project_instance_mix_views.total_units) AS total_units, "
     select += "SUM(project_instance_mix_views.total_units - project_instance_mix_views.stock_units) AS total_sold, "
     select += "SUM(project_instance_mix_views.stock_units) AS total_stock, "
@@ -309,7 +309,7 @@ class Project < ApplicationRecord
 
 
     ProjectInstanceMixView.select(select).
-      where(build_conditions_new(filters, nil, false)).first
+      where(build_conditions_new(filters, nil, false, range)).first
   end
 
   def self.get_query_for_results(filters, result_id, map_columns)
@@ -325,30 +325,8 @@ class Project < ApplicationRecord
     query
   end
 
-  def self.get_points_count_by_filters(filters, column)
-    @joins = Array.new
-    @joins << "INNER JOIN project_instance_views ON project_instance_views.project_id = projects.id "
-    joins_by_filter(filters)
-
-    Project.find(:first,
-                 :select => "count(distinct(project_instance_views.project_id)) as count_all",
-                 :joins => @joins.uniq.join(" "),
-                 :conditions => "#{build_conditions(filters, nil, false)} AND project_instance_views.#{column} >= 1").count_all.to_i
-  end
-
-  def self.get_heat_map_points_count_by_filters(filters)
-    @joins = Array.new
-    @joins << "INNER JOIN project_instance_views ON project_instance_views.project_id = projects.id "
-    joins_by_filter(filters)
-
-    Project.find(:first,
-                 :select => "count(distinct(project_instance_views.project_id)) as count_all",
-                 :joins => @joins.uniq.join(" "),
-                 :conditions => "#{build_conditions(filters, nil, false)}").count_all.to_i
-  end
-
   #FIND PROJECTS BY WIDGETS. COUNT
-  def self.projects_group_by_count(widget, filters, has_color)
+  def self.projects_group_by_count(widget, filters, has_color, range)
     @joins = Array.new
 
     case widget
@@ -365,7 +343,7 @@ class Project < ApplicationRecord
 
     ProjectInstanceMixView.select( "#{select}, COUNT(#{widget}.name) as value").
       joins(@joins.uniq.join(" ")).
-      where(build_conditions_new(filters, widget)).
+      where(build_conditions_new(filters, widget, false, range)).
       group(select).
       order("#{widget}.name")
   end
@@ -479,12 +457,7 @@ class Project < ApplicationRecord
     sub_range_5 = {"min" => 21, "max" => 50}
 
     ranges_result << sub_range_1 << sub_range_2 << sub_range_3 << sub_range_4 << sub_range_5 
-
-
   end
-
-
-
 
   #TODO: Cambiar! traer de la base de datos!
   def self.get_ranges
@@ -807,44 +780,27 @@ class Project < ApplicationRecord
     value_column
   end
 
-  def self.build_conditions(filters, self_not_filter=nil, useView = false)
+
+  def self.build_conditions_new(filters, self_not_filter=nil, useView = false, range=true)
 
     @conditions = ''
-    unless filters[:county_id].nil? and filters[:wkt].nil?
-      if !filters[:county_id].nil?
-        @conditions = "county_id = #{filters[:county_id]}" + Util.and
-      elsif !filters[:wkt].nil? 
-          @conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
-      else
-        
-      @conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
-          end
+    if !filters[:county_id].nil?
+      @conditions += "county_id = #{filters[:county_id]}" + Util.and
+    elsif !filters[:wkt].nil?
+      @conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
+    else
+      @conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
+      end
+    if filters.has_key? :to_period and range == true
+      @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView)     
+    else
+      @conditions += "bimester = #{filters[:to_period]} AND year = #{filters[:to_year]}" 
     end
-    @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView) if filters.has_key? :to_period
-    @conditions += bimesters_condition(filters, self_not_filter, useView)
-    @conditions += ids_conditions(filters, self_not_filter, useView)
-    @conditions += between_condition(filters, self_not_filter)
-    @conditions += "county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
-    @conditions.chomp!(Util.and)
-    @conditions
-  end
 
-
-  def self.build_conditions_new(filters, self_not_filter=nil, useView = false)
-
-    @conditions = ''
-    unless filters[:county_id].nil? and filters[:wkt].nil?
-      if filters[:county_id].nil?
-        @conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
-      else
-        @conditions = "county_id = #{filters[:county_id]}" + Util.and
-        end
-    end
-    @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView) if filters.has_key? :to_period
     @conditions += bimesters_condition(filters, self_not_filter, useView)
     @conditions += ids_conditions_new(filters, self_not_filter, useView)
     @conditions += between_condition_new(filters, self_not_filter)
-    #@conditions += "county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
+    @conditions += "county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
     @conditions.chomp!(Util.and)
     @conditions
   end
@@ -1208,7 +1164,7 @@ end
 
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
     begin
-      global_information = Project.find_globals(filters)
+      global_information = Project.find_globals(filters, false)
       general_data = [
         {label: I18n.t(:TOTAL_PROJECTS_COUNT), value: global_information[:project_count]},
         {label: I18n.t(:TOTAL_STOCK), value: global_information[:total_units]},
@@ -1227,8 +1183,8 @@ end
       general_data << department_general(global_information) if !global_information[:pp_terrace].nil?
 
 
-      pstatus = Project.projects_group_by_count('project_statuses', filters, false)
-      ptypes = Project.projects_group_by_count('project_types', filters, true)
+      pstatus = Project.projects_group_by_count('project_statuses', filters, false,false)
+      ptypes = Project.projects_group_by_count('project_types', filters, true, false)
       pmixes = Project.projects_group_by_mix('mix', filters)
       avai = Project.projects_sum_by_stock(filters)
       uf_values = Project.projects_by_uf(filters)
@@ -1240,13 +1196,14 @@ end
       cfloor = Project.projects_by_ranges('floors', filters)
       uf_ranges = Project.projects_by_ranges('uf_avg_percent', filters)
 
-      agencies = Project.projects_group_by_count('agencies', filters, false)
+      agencies = Project.projects_group_by_count('agencies', filters, false, false)
 
       result =[]
       data =[]
       #GENERAL
       general_data.each do |item|
-        data.push("name": item[:label], "count": ("%.1f" % item[:value]).to_f)
+
+        data.push("name": item[:label], "count": ("%.1f" % item[:value]).to_f) if !item[:value].nil?
       end
 
     result.push({"title":"Información General", "data": data})
@@ -1516,7 +1473,7 @@ end
       avai = Project.projects_sum_by_stock(filters)
       uf_values = Project.projects_by_uf(filters)
       uf_m2_values = Project.projects_by_uf_m2(filters)
-      pstatus = Project.projects_group_by_count('project_statuses', filters, false)
+      pstatus = Project.projects_group_by_count('project_statuses', filters, false, false)
       info_department = Project.information_general_department filters
       info_house = Project.information_general_house filters
 
