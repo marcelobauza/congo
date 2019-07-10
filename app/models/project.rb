@@ -1197,12 +1197,11 @@ class Project < ApplicationRecord
     end
   end
   def self.house_general(global_information)
-p "paso"
-        general_data =  {:label => I18n.t(:AVG_M2_FIELD), :value => NumberFormatter.format(global_information[:ps_terreno], true)} 
+        general_data =  {label: I18n.t(:AVG_M2_FIELD), value: global_information[:ps_terreno]} 
 end
   def  self.department_general(global_information)
 
-        general_data = {:label => I18n.t(:AVG_TERRACE_AREA), :value => NumberFormatter.format(global_information[:pp_terrace], true)} 
+        general_data = {label: I18n.t(:AVG_TERRACE_AREA), value: global_information[:pp_terrace]} 
 end
 
   def self.summary f
@@ -1211,17 +1210,17 @@ end
     begin
       global_information = Project.find_globals(filters)
       general_data = [
-        {:label => I18n.t(:TOTAL_PROJECTS_COUNT), :value => NumberFormatter.format(global_information[:project_count], false)},
-        {:label => I18n.t(:TOTAL_STOCK), :value => NumberFormatter.format(global_information[:total_units], false)},
-        {:label => I18n.t(:SELLS), :value => NumberFormatter.format(global_information[:total_sold], false)},
-        {:label => I18n.t(:AVAILABLE_STOCK), :value => NumberFormatter.format(global_information[:total_stock], false)},
-        {:label => I18n.t(:PP_UTILES), :value => NumberFormatter.format(global_information[:pp_utiles], true)},
-        {:label => I18n.t(:PP_UF), :value => NumberFormatter.format(global_information[:pp_uf], false)},
-        {:label => I18n.t(:PP_UF_M2), :value => NumberFormatter.format(global_information[:pp_uf_dis_dpto], true)},
-        {:label => I18n.t(:PP_UF_M2_C), :value => NumberFormatter.format(global_information[:pp_uf_dis_home], true)},
-        {:label => I18n.t(:VHMO), :value => NumberFormatter.format(global_information[:vhmo], true)},
-        {:label => I18n.t(:VHMD), :value => NumberFormatter.format(global_information[:vhmd], true)},
-        {:label => I18n.t(:MASD), :value => NumberFormatter.format(global_information[:masd], true)}
+        {label: I18n.t(:TOTAL_PROJECTS_COUNT), value: global_information[:project_count]},
+        {label: I18n.t(:TOTAL_STOCK), value: global_information[:total_units]},
+        {label: I18n.t(:SELLS), value: global_information[:total_sold]},
+        {label: I18n.t(:AVAILABLE_STOCK), value: global_information[:total_stock]},
+        {label: I18n.t(:PP_UTILES), value: global_information[:pp_utiles]},
+        {label: I18n.t(:PP_UF), value: global_information[:pp_uf]},
+        {label: I18n.t(:PP_UF_M2), value: global_information[:pp_uf_dis_dpto]},
+        {label: I18n.t(:PP_UF_M2_C), value: global_information[:pp_uf_dis_home]},
+        {label: I18n.t(:VHMO), value: global_information[:vhmo]},
+        {label: I18n.t(:VHMD), value: global_information[:vhmd]},
+        {label: I18n.t(:MASD), value: global_information[:masd]}
       ]
 
       general_data << house_general(global_information) if !global_information[:ps_terreno].nil?
@@ -1247,11 +1246,10 @@ end
       data =[]
       #GENERAL
       general_data.each do |item|
-        data.push("name": item[:label], "count":("%.1f" % item[:value]).to_f)
+        data.push("name": item[:label], "count": ("%.1f" % item[:value]).to_f)
       end
 
     result.push({"title":"Información General", "data": data})
-
       ##ESTADO PROYECTO
 
       data =[]
