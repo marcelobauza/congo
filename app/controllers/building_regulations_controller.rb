@@ -11,9 +11,9 @@ class BuildingRegulationsController < ApplicationController
     result.push({"label":"Ocupación de Suelo", "min": @l[:min], "max": @l[:max]})
     @mh = maximum_height
     result.push({"label":"Altura Máxima", "min": @mh[:min], "max": @mh[:max]})
-    
+
     @hh = hectarea_inhabitants
-    result.push({"label":"Habitantes por Hectarea", "min": @hh[:min], "max": @hh[:max]})
+    result.push({"label":"Habitantes por Hectárea", "min": @hh[:min], "max": @hh[:max]})
     render json: result
   end
 
