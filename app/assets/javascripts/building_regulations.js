@@ -504,6 +504,88 @@ Congo.building_regulations.action_dashboards = function(){
               });
 
             } // Cierra if Altura Máxima
+
+            if (label == "Habitantes por Hectárea") {
+
+              var min = reg['min'];
+              var max = reg['max'];
+              var to;
+              var from;
+
+              // Levantamos los valores de "to" y "from"
+              if (Congo.building_regulations.config.to_inhabitants_hectare == '') {
+                to = max
+              } else {
+                to = Congo.building_regulations.config.to_inhabitants_hectare
+              };
+              from = Congo.building_regulations.config.from_inhabitants_hectare;
+
+              // Agrega el título y el range_slider
+              $('#body').append(
+                $("<h6>", {
+                  'class': 'card-subtitle mb-2',
+                  'text': label
+                }),
+                $("<input>", {
+                  'id': 'range_slider_hab_hect'
+                })
+              );
+
+              $("#range_slider_hab_hect").ionRangeSlider({
+                skin: "flat",
+                type: 'double',
+                grid: true,
+                min: min,
+                max: max,
+                step: 10,
+                from: from,
+                to: to,
+                onFinish: function (data) {
+
+                  // Almacena los datos en la variable global
+                  Congo.building_regulations.config.from_inhabitants_hectare = data.from;
+                  Congo.building_regulations.config.to_inhabitants_hectare = data.to;
+
+                  // Si no existe el filtro, lo crea
+                  if ($('#item-habitantes').length == 0) {
+
+                    $('#filter-body').append(
+                      $("<div>", {
+                          'class': 'filter-building-regulations text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
+                          'id': 'item-habitantes',
+                          'text': 'Habitantes por Hectárea >= '+data.from+' <= '+data.to
+                      })
+                    );
+
+                  // Si existe el filtro, solo modifica el texto
+                  } else {
+                    $('#item-habitantes').text('Habitantes por Hectárea >= '+data.from+' <= '+data.to);
+                  };
+
+                  // Agrega el close button
+                  $('#item-habitantes').append(
+                    $("<button>", {
+                        'class': 'close',
+                        'id': 'close-item-habitantes',
+                        'type': 'button',
+                        'text': '×'
+                    })
+                  )
+                  indicator_building_regulations();
+
+                }, // Cierra onFinish
+              }); // Cierra ionRangeSlider
+
+              // Elimina el filtro
+              $('#close-item-habitantes').unbind('click').click(function() {
+                Congo.building_regulations.config.from_inhabitants_hectare = '';
+                Congo.building_regulations.config.to_inhabitants_hectare = '';
+                $('#item-habitantes').remove();
+                indicator_building_regulations();
+              });
+
+            } // Cierra if Habitantes por Hectárea
+
           } // Cierra for
         } // Cierra success
       }) // Cierra ajax
