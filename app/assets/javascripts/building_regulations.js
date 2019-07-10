@@ -420,6 +420,90 @@ Congo.building_regulations.action_dashboards = function(){
               });
 
             } // Cierra if Ocupación de Suelo
+
+            if (label == "Altura Máxima") {
+
+              var min = reg['min'];
+              var max = reg['max'];
+              var to;
+              var from;
+
+              // Levantamos los valores de "to" y "from"
+              if (Congo.building_regulations.config.to_max_height == '') {
+                to = max
+              } else {
+                to = Congo.building_regulations.config.to_max_height
+              };
+              from = Congo.building_regulations.config.from_max_height;
+
+              // Agrega el título y el range_slider
+              $('#body').append(
+                $("<h6>", {
+                  'class': 'card-subtitle mb-2',
+                  'text': label
+                }),
+                $("<input>", {
+                  'id': 'range_slider_alt_max'
+                }),
+                $("<div>", {
+                  'class': 'dropdown-divider',
+                })
+              );
+
+              $("#range_slider_alt_max").ionRangeSlider({
+                skin: "flat",
+                type: 'double',
+                grid: true,
+                min: min,
+                max: max,
+                step: 0.1,
+                from: from,
+                to: to,
+                onFinish: function (data) {
+
+                  // Almacena los datos en la variable global
+                  Congo.building_regulations.config.from_max_height = data.from;
+                  Congo.building_regulations.config.to_max_height = data.to;
+
+                  // Si no existe el filtro, lo crea
+                  if ($('#item-altura').length == 0) {
+
+                    $('#filter-body').append(
+                      $("<div>", {
+                          'class': 'filter-building-regulations text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
+                          'id': 'item-altura',
+                          'text': 'Altura Máxima >= '+data.from+' <= '+data.to
+                      })
+                    );
+
+                  // Si existe el filtro, solo modifica el texto
+                  } else {
+                    $('#item-altura').text('Altura Máxima >= '+data.from+' <= '+data.to);
+                  };
+
+                  // Agrega el close button
+                  $('#item-altura').append(
+                    $("<button>", {
+                        'class': 'close',
+                        'id': 'close-item-altura',
+                        'type': 'button',
+                        'text': '×'
+                    })
+                  )
+                  indicator_building_regulations();
+
+                }, // Cierra onFinish
+              }); // Cierra ionRangeSlider
+
+              // Elimina el filtro
+              $('#close-item-altura').unbind('click').click(function() {
+                Congo.building_regulations.config.from_max_height = '';
+                Congo.building_regulations.config.to_max_height = '';
+                $('#item-altura').remove();
+                indicator_building_regulations();
+              });
+
+            } // Cierra if Altura Máxima
           } // Cierra for
         } // Cierra success
       }) // Cierra ajax
