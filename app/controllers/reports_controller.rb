@@ -257,5 +257,12 @@ class ReportsController < ApplicationController
 
   end
 
+  def transactions_pdf
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @pdf = Transaction.reports_pdf filters
+    
+    render json: {"data":@pdf}
+
+  end
 
 end

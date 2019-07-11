@@ -844,6 +844,37 @@ class Transaction < ApplicationRecord
 
   end
 
+  def self.avg_surface_line_build(filters)
+
+    result = []
+    counties = ["sum_counties"]
+
+    periods = get_bimesters(filters)
+    select = "transactions.bimester::text || '/' || transactions.year::text as name ,  "
+    select += "round(avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as value "
+      if !filters[:county_id].nil?
+        conditions = "transactions.county_id = #{filters[:county_id]}#{Util.and}"
+      elsif !filters[:wkt].nil?
+        conditions = "ST_Within(transactions.the_geom, ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}))#{Util.and}"  
+      else
+        conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}) and "
+      end
+      
+      conditions += "active = true #{Util.and}"
+      conditions += build_ids_conditions(filters)
+      periods.each do |per|
+        conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.or}"
+      end
+    conditions = conditions.chomp(Util.or)
+      #arreglar user.current
+      #conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
+
+      trans = Transaction.
+        where(conditions).
+        group('year, bimester').
+        order('year, bimester').
+        pluck(select)
+  end
 
   def self.summary params
     result =[]

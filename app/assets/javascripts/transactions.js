@@ -13,6 +13,21 @@ Congo.transactions.config= {
   to_calculated_value: []
 }
 
+
+function transactions_report_pdf(){
+
+    $.ajax({
+         type: 'GET',
+          url: '/reports/transactions_pdf.json',
+          datatype: 'json',
+          data: data,
+          success: function(data){
+                      console.log(data);
+                }
+        })
+}
+
+
 Congo.transactions.action_graduated_points = function(){
 
   init=function(){

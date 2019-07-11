@@ -30,6 +30,9 @@ Congo.reports = function(){
 
           window.open(url, '_blank');
           break;
+        case 'pdf':
+          url = transactions_report_pdf();
+          break;
       }
       break;
     case 'projects_feature_info':
