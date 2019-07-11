@@ -972,10 +972,11 @@ Congo.projects.action_dashboards = function(){
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();
 
-          // Eliminamos los filtros de la capa anterior
-          $('.filter-future-projects').remove();
-          $('.filter-building-regulations').remove();
-          $('.filter-transactions').remove();
+          // Mostramos el filtro de la capa y ocultamos los demás
+          $('.filter-building-regulations').hide();
+          $('.filter-transactions').hide();
+          $('.filter-projects').show();
+          $('.filter-future-projects').hide();
         },
         success: function(data){
 

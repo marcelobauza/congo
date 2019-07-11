@@ -227,10 +227,11 @@ Congo.transactions.action_dashboards = function(){
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();
 
-          // Eliminamos los filtros de la capa anterior
-          $('.filter-future-projects').remove();
-          $('.filter-projects').remove();
-          $('.filter-building-regulations').remove();
+          // Mostramos el filtro de la capa y ocultamos los demás
+          $('.filter-building-regulations').hide();
+          $('.filter-transactions').show();
+          $('.filter-projects').hide();
+          $('.filter-future-projects').hide();
         },
         success: function(data){
 
