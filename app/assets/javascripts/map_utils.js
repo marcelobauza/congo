@@ -259,10 +259,11 @@ var overlays =  {
         Congo.transactions.action_dashboards.indicator_transactions();
         property_type_ids = Congo.transactions.config.property_type_ids
         seller_type_ids = Congo.transactions.config.seller_type_ids
+        boost = Congo.dashboards.config.boost;
         
-
-        filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
-
+        if (boost == false){
+          filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        }
         if (property_type_ids.length > 0 ){
           filter_layer = filter_layer + " AND property_type_id IN ("+ property_type_ids + ")";
         }

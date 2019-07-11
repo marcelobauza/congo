@@ -139,6 +139,7 @@ Congo.transactions.action_dashboards = function(){
     type_geometry = Congo.dashboards.config.typeGeometry;
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
+    boost = Congo.dashboards.config.boost;
 
     // Sino se realizó la selección muestra un mensaje de alerta
     if (county_id == '' && centerPoint == '' && wkt.length == 0) {
@@ -214,6 +215,9 @@ Congo.transactions.action_dashboards = function(){
 
       };
 
+ if (boost == true){
+               data['boost'] =  boost;
+             }
       $.ajax({
         type: 'GET',
         url: '/transactions/transactions_summary.json',
