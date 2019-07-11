@@ -58,7 +58,7 @@ Congo.dashboards.action_index = function(){
           'class': 'overlay'
         }).append(
           $('<div>', { // card
-            'class': 'card text-light bg-primary',
+            'class': 'card text-light bg-primary sticky-top',
             'id': 'filter-container'
           }).append(
             $('<div>', { // card-header
