@@ -288,13 +288,14 @@ class Transaction < ApplicationRecord
 
   def self.group_transaction_county_and_bimester(filters)
     result = []
-    counties = ["sum_counties"]
+    counties = []
 
     periods = get_bimesters(filters)
-    select = "counties.name as county, ROUND(SUM(1 / sample_factor)) as value, bimester, year"
+    select = "counties.name as county, ROUND(SUM(1 / sample_factor)) as value"
 
-    #periods.each do |per|
-      #trans_group = {:period => per[:period], :year => per[:year], :counties => []}
+    periods.each do |per|
+      trans_group = {:period => per[:period], :year => per[:year], :counties => []}
+
       if !filters[:county_id].nil?
         conditions = "transactions.county_id = #{filters[:county_id]}#{Util.and}"
       elsif !filters[:wkt].nil?
@@ -302,60 +303,56 @@ class Transaction < ApplicationRecord
       else
         conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}) and "
       end
-      
-      conditions += "active = true #{Util.and}"
-      conditions += build_calculated_value_condition(filters)
-      conditions += build_ids_conditions(filters)
-      periods.each do |per|
-        conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.or}"
-      end
-    conditions = conditions.chomp(Util.or)
 
-      #arreglar user.current
-      #conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
+      conditions += "active = true #{Util.and}"
+      conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
+      conditions += build_ids_conditions(filters)
+      conditions += build_calculated_value_condition(filters)
+      conditions += "transactions.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
+      conditions = conditions.chomp!(Util.and)
+
       joins = build_joins
       joins << "INNER JOIN counties ON counties.id = transactions.county_id"
 
-      trans = Transaction.
-        joins(:county).
-        where(conditions).
-        group('county, year, bimester').
-        order('county,year, bimester').
-        pluck(select)
-
-
+      trans = Transaction.where(conditions).select(select).
+        joins(joins.join(" ")).
+      group('counties.name, year, bimester').
+      order('year, bimester')
       unless trans.nil?
-        result.push(trans.group_by { |county| county[0]  })
+        trans_group[:counties] = trans
+        trans.each {|t| counties << t["county"]}
       end
-    
-      # counties.uniq!
-    # values = []
-    # result.each do |q|
 
-      # item = {:period => q[:period], :year => q[:year], :label => q[:period].to_s + "/" + q[:year].to_s[2,3]}
-      # values_sum = 0
+      result << trans_group
+    end
 
-      # counties.each do |county|
-      #   index = counties.index(county) + 1
-      #   item["y#{index}_label".to_sym] = county
-      #   item["y#{index}_value".to_sym] = "null"
+    counties.uniq!
+    values = []
+    result.each do |q|
+      item = {:period => q[:period], :year => q[:year], :label => q[:period].to_s + "/" + q[:year].to_s[2,3]}
+      values_sum = 0
 
-      #   q[:counties].each { |c| 
-      #     item["y#{index}_value".to_sym] = c[1] if c[0] == county 
-      #   }
-      #   values_sum += item["y#{index}_value".to_sym].to_i
-      # end
+      counties.each do |county|
 
-      # if q[:counties].count == 0
-      #   item["y1_value".to_sym] = "null"
-      # else
-      #   item["y1_label".to_sym] = I18n.t(:ALL_COUNTIES_LABEL)
-      #   values_sum == 0 ? item["y1_value".to_sym] = 0 : item["y1_value".to_sym] = values_sum
-      # end
+        index = counties.index(county) + 1
+        item["y#{index}_label".to_sym] = county
+        item["y#{index}_value".to_sym] = "null"
 
-      # values << item
-    # end
-    # return values.reverse
+        q[:counties].each { |c| item["y#{index}_value".to_sym] = c.value if c["county"] == county }
+        values_sum += item["y#{index}_value".to_sym].to_i
+
+      end
+      
+     # if q[:counties].exists?
+      #  item["y1_value".to_sym] = "null"
+     # else
+     #   item["y1_label".to_sym] = I18n.t(:ALL_COUNTIES_LABEL)
+     #   values_sum == 0 ? item["y1_value".to_sym] = 0 : item["y1_value".to_sym] = values_sum
+     # end
+      
+      values << item
+    end
+    return values.reverse
   end
 
   def self.group_transactions_by_uf(filters)
@@ -893,35 +890,26 @@ class Transaction < ApplicationRecord
       result.push({"title":"Tipo de Vendedor", "series":[{"data": data}]})
 
       #TRANSACCIONES POR BIMESTRE
+      data =[]
+      counties_count = (transactions_by_periods.first.size - 3) / 2
+      0.upto(counties_count).each do |idx|
+        data.push([transactions_by_periods.first["y#{idx}_label".to_sym]])
+      end
 
-       data =[]
-       counties_count = (transactions_by_periods.first.size - 3) / 2
+      transactions_by_periods.each_with_index do |tb, i|
 
-       label = ["Bimestre"]
-
-       #1.upto(counties_count).each do |idx|
-       #  label << transactions_by_periods.first["y#{idx}_label".to_sym]
-       #end
-
-       #result[:data] << label
-
-       transactions_by_periods.each do |tb|
-        # val = [tb[:label]]
-          data.push(tb)
-
-         #1.upto(counties_count).each do |idx|
-         #  if tb["y#{idx}_value".to_sym].nil?
-         #    val << 0
-         #  else
-         #    val << tb["y#{idx}_value".to_sym].to_i
-         #  end
-         #end
-
-         #result[:data] << val
-       end
-       result.push({"title":"Transacciones por Bimestre", "series":[{"data": data}] })
+         1.upto(counties_count ).each do |idx|
+        if tb["y#{idx}_value".to_sym].nil?
+            data.push(tb["y#{idx}_value".to_sym], nil, tb[:period], tb[:year])
+          else
+            data[idx].push([tb["y#{idx}_value".to_sym], tb[:period], tb[:year]])
+        end
+      end
+  end
+  
+      result.push({"title":"Transactions por bimester", "series":[{"data": data}]})
+      
       #UF PERIOD
-
       data =[]
       uf_periods.each do |ufp|
         data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
