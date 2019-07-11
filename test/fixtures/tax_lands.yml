@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  rol_number: MyString
+  address: MyString
+  destination_code: MyString
+  land_m2: MyString
+
+two:
+  rol_number: MyString
+  address: MyString
+  destination_code: MyString
+  land_m2: MyString

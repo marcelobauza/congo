@@ -1,0 +1,2 @@
+class TaxUsefulSurface < ApplicationRecord
+end

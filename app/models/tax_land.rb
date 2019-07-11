@@ -1,0 +1,2 @@
+class TaxLand < ApplicationRecord
+end
