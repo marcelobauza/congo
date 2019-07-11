@@ -762,6 +762,12 @@ Congo.future_projects.action_dashboards = function(){
                       display: false,
                     },
                   },
+                  tooltips: {
+                    mode: 'point',
+                  },
+                  hover: {
+                    mode: 'point',
+                  },
                   scales: {
                     xAxes: [{
                       ticks: {
