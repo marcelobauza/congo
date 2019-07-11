@@ -836,6 +836,10 @@ function delInmoFilter(id, name) {
 
 }
 
+function maxCard(i){
+  $('#chart-container'+i).toggleClass('card-max fixed-top')
+}
+
 Congo.projects.action_dashboards = function(){
 
   init=function(){
@@ -1012,18 +1016,17 @@ Congo.projects.action_dashboards = function(){
             card_body.className = 'card-body';
             card_body.id = 'body'+i;
 
-            // TODO: Crear título y boton minimizar dinámicos
-
-            // Creamos título y boton minimizar
+            // Creamos handle, título y botones
             var card_handle = '<span class="fas fa-arrows-alt handle border border-dark">'
-            var card_header_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
             var card_header_title = '<b>'+title+'</b>'
+            var card_min_button = '<button class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize" style="width: 24px; height: 12px"></i></button>'
+            var card_max_button = '<button class="close" id="card-max-'+i+'" onclick="maxCard('+i+')"><i class="fas fa-window-maximize" style="width: 24px; height: 12px"></i></button>'
 
             // Adjuntamos los elementos
             $('.overlay').append(chart_container);
             $('#chart-container'+i).append(card_header, collapse);
             $('#collapse'+i).append(card_body);
-            $('#header'+i).append(card_handle, card_header_button, card_header_title);
+            $('#header'+i).append(card_handle, card_header_title, card_max_button, card_min_button);
 
             // Información General
             if (title == "Información General") {

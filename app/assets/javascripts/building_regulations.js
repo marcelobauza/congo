@@ -214,14 +214,14 @@ Congo.building_regulations.action_dashboards = function(){
 
           // Creamos título y boton minimizar
           var card_handle = '<span class="fas fa-arrows-alt handle border border-dark">'
-          var card_header_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse" aria-expanded="true" aria-controls="collapse" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
+          var card_min_button = '<button type="button" class="close" data-toggle="collapse" data-target="#collapse" aria-expanded="true" aria-controls="collapse" aria-label="Minimize"><i class="fas fa-window-minimize"></i></button>'
           var card_header_title = '<b>Filtrar Información por:</b>'
 
           // Adjuntamos los elementos
           $('.overlay').append(chart_container);
           $('#chart-container').append(card_header, collapse);
           $('#collapse').append(card_body);
-          $('#header').append(card_handle, card_header_button, card_header_title);
+          $('#header').append(card_handle, card_min_button, card_header_title);
 
           // Separamos la información
           for (var i = 0; i < data.length; i++) {

@@ -188,3 +188,16 @@ div.dropdown-menu-navbar1.show {
   background-color: rgba(0, 0, 0, 0.3);
   cursor: move;
 }
+
+// Card Maximizado
+.card-max {
+  display: block;
+  z-index: 9999;
+  position: fixed;
+  width: auto;
+  height: auto;
+  top: 11% !important;
+  right: 17% !important;
+  left: 17% !important;
+  bottom: auto !important;
+}
