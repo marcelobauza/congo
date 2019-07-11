@@ -522,8 +522,6 @@ Congo.transactions.action_dashboards = function(){
 
               } else if (chart_type == 'pie') { // Pie
 
-                // TODO: Configurar los datalabels utilizando el valor total
-
                 var chart_options = {
                   onClick: function(c, i) {
 
@@ -614,14 +612,20 @@ Congo.transactions.action_dashboards = function(){
                   },
                   plugins: {
                     datalabels: {
-                      formatter: function(value, context) {
-                        return context.chart.data.labels[context.dataIndex];
-                      },
-                      display: function(context) {
-                        var dataset = context.dataset;
-                        var count = dataset.data.length;
-                        var value = dataset.data[context.dataIndex];
-                        return value > 1000;
+                      formatter: (value, ctx) => {
+                        // Mustra sólo los labels cuyo valor sea mayor al 4%
+                        let sum = 0;
+                        var label = ctx.chart.data.labels[ctx.dataIndex]
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value*100 / sum).toFixed(2);
+                        if (percentage > 4) {
+                          return label;
+                        } else {
+                          return null;
+                        }
                       },
                       font: {
                         size: 11,
