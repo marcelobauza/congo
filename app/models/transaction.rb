@@ -983,12 +983,62 @@ end
 
       result =[]
       info = Transaction.information_of_transactions filters
+      result.push({"info": info})
+
+
+      ptypes = PropertyType.group_transactions_by_prop_types(filters)
+      stypes = SellerType.group_transactions_by_seller_type(filters)
+      transactions_by_periods = Transaction.group_transaction_county_and_bimester(filters)
+      uf_periods = Transaction.group_transaction_criteria_by_period(filters, Transaction::SUM_CRITERIA)
+      avg_surface_line_build = avg_surface_line_build(filters)
+
+      data=[]
+
+      avg_surface_line_build.each do |avg|
+        data.push("name": avg[0], "count": avg[1].to_f )
+      end
+
+      result.push({"title":"Superficie Linea Construcción (útil m2) por Bimestre", "series":[{"data": data}]})
+
+      data =[]
+      ptypes.each do |prop|
+        data.push("name": prop.name.capitalize, "count": prop.value.to_i, "id":prop.id)
+      end
+      result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
+
+      data =[]
+      stypes.each do |seller|
+        data.push({"name": seller.name.capitalize, "count":seller.value.to_i, "id":seller.id})
+      end
+
+      result.push({"title":"Tipo de Vendedor", "series":[{"data": data}]})
+
+
+
+
+       data =[]
+       counties_count = (transactions_by_periods.first.size - 3) / 2
+
+       label = ["Bimestre"]
+       transactions_by_periods.each do |tb|
+          data.push(tb)
+       end
+       result.push({"title":"Transacciones por Bimestre", "series":[{"data": data}] })
+
+      data =[]
+      uf_periods.each do |ufp|
+        data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
+      end
+      result.push({"title":"UF / Bimestre", "series":[{"data": data}]})
+
+
+
+
 
   end
 
   def self.information_of_transactions filters
 
-      filters = {to_year:2018, to_period: 6, centerpt:"-70.76431274414064 -33.394743034427684", radius:"6041.534456586407"}
     cond_query = build_conditions(filters, nil)
     
     select = "COUNT(transactions.id) AS transactions_count, "
