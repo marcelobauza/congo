@@ -301,7 +301,7 @@ class Transaction < ApplicationRecord
       elsif !filters[:wkt].nil?
         conditions = "ST_Within(transactions.the_geom, ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}))#{Util.and}"  
       else
-        conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}) and "
+        conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}, false) and "
       end
 
       conditions += "active = true #{Util.and}"
