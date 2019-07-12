@@ -324,122 +324,175 @@ Congo.transactions.action_dashboards = function(){
               // Extraemos las series
               $.each(series, function(a, b){
 
-                var label = b['label']
-                var data = b['data']
+                if (title == 'Transactions por bimester') {
 
-                var name = [];
-                var count = [];
-                var id = [];
-                var name_colour = [];
-                var colour;
+                  var data = b['data']
 
-                // Extraemos los datos de las series
-                $.each(data, function(c, d){
-                  name.push(d['name'])
-                  count.push(d['count'])
-                  id.push(d['id'])
+                  // ACA SEPARAMOS TODAS LAS COMUNAS
+                  for (var i = 1; i < data.length; i++) {
 
-                  // Setea los colores dependiendo del label
-                  if (title == 'Tipo de Propiedad' || title == 'Tipo de Vendedor') {
-                    switch (d['name']) {
-                      case 'Propietario':
-                        colour = '#85C1E9'
-                        break;
-                      case 'Inmobiliaria':
-                        colour = '#5DADE2'
-                        break;
-                      case 'Empresa':
-                        colour = '#3498DB'
-                        break;
-                      case 'Banco':
-                        colour = '#2E86C1'
-                        break;
-                      case 'Cooperativa':
-                        colour = '#2874A6'
-                        break;
-                      case 'Municipalidad':
-                        colour = '#21618C'
-                        break;
-                      case 'Sin informacion':
-                        colour = '#1B4F72'
-                        break;
+                    var reg = data[i];
+
+                    var label = reg[0]
+
+                    var name = [];
+                    var count = [];
+
+                    // Separamos los bimestres de la comuna
+                    for (var a = 1; a < reg.length; a++) {
+                      var bim = reg[a]
+
+                      var cantidad = bim[0]
+                      var periodo = bim[1]
+                      var año = bim[2]
+                      var nombre = periodo+'/'+año
+
+                      name.push(nombre)
+                      count.push(cantidad)
+
+                    } // Cierra for bimestre
+
+                    if (title == 'Transactions por bimester') { // Line
+                      chart_type = 'line';
+                      datasets.push({
+                        label: label,
+                        data: count,
+                        fill: false,
+                        borderColor: '#58b9e2',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#e8ebef',
+                        pointRadius: 3,
+                        lineTension: 0,
+                        pointHoverBackgroundColor: '#e8ebef',
+                        pointHoverBorderWidth: 3,
+                        pointHitRadius: 5,
+                      })
                     }
 
-                    name_colour.push(colour)
+                    chart_data = {
+                      labels: name,
+                      datasets: datasets
+                    }
+
+                  } // Cierra for comunas
+
+                } else {
+
+                  var label = b['label']
+                  var data = b['data']
+
+                  var name = [];
+                  var count = [];
+                  var id = [];
+                  var name_colour = [];
+                  var colour;
+
+                  // Extraemos los datos de las series
+                  $.each(data, function(c, d){
+                    name.push(d['name'])
+                    count.push(d['count'])
+                    id.push(d['id'])
+
+                    // Setea los colores dependiendo del label
+                    if (title == 'Tipo de Propiedad' || title == 'Tipo de Vendedor') {
+                      switch (d['name']) {
+                        case 'Propietario':
+                          colour = '#85C1E9'
+                          break;
+                        case 'Inmobiliaria':
+                          colour = '#5DADE2'
+                          break;
+                        case 'Empresa':
+                          colour = '#3498DB'
+                          break;
+                        case 'Banco':
+                          colour = '#2E86C1'
+                          break;
+                        case 'Cooperativa':
+                          colour = '#2874A6'
+                          break;
+                        case 'Municipalidad':
+                          colour = '#21618C'
+                          break;
+                        case 'Sin informacion':
+                          colour = '#1B4F72'
+                          break;
+                      }
+
+                      name_colour.push(colour)
+                    }
+
+                  })
+
+                  // Guardamos "datasets" y "chart_type"
+                  if (title == 'Tipo de Propiedad') { // Pie
+                    chart_type = 'pie';
+                    datasets.push({
+                      label: label,
+                      data: count,
+                      id: id,
+                      backgroundColor: name_colour,
+                    })
                   }
 
-                })
+                  if (title == 'Tipo de Vendedor') { // Pie
+                    chart_type = 'pie';
+                    datasets.push({
+                      label: label,
+                      data: count,
+                      id: id,
+                      backgroundColor: name_colour,
+                    })
+                  }
 
-                // Guardamos "datasets" y "chart_type"
-                if (title == 'Tipo de Propiedad') { // Pie
-                  chart_type = 'pie';
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    id: id,
-                    backgroundColor: name_colour,
-                  })
-                }
+                  if (title == 'UF / Bimestre') { // Line
+                    chart_type = 'line';
+                    datasets.push({
+                      label: label,
+                      data: count,
+                      fill: false,
+                      borderColor: '#58b9e2',
+                      borderWidth: 4,
+                      pointBackgroundColor: '#e8ebef',
+                      pointRadius: 3,
+                      lineTension: 0,
+                      pointHoverBackgroundColor: '#e8ebef',
+                      pointHoverBorderWidth: 3,
+                      pointHitRadius: 5,
+                    })
+                  }
 
-                if (title == 'Tipo de Vendedor') { // Pie
-                  chart_type = 'pie';
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    id: id,
-                    backgroundColor: name_colour,
-                  })
-                }
+                  if (title == 'Precio Promedio en UF / Bimestre') { // Line
+                    chart_type = 'line';
+                    datasets.push({
+                      label: label,
+                      data: count,
+                      fill: false,
+                      borderColor: '#58b9e2',
+                      borderWidth: 4,
+                      pointBackgroundColor: '#e8ebef',
+                      pointRadius: 3,
+                      lineTension: 0,
+                      pointHoverBackgroundColor: '#e8ebef',
+                      pointHoverBorderWidth: 3,
+                      pointHitRadius: 5,
+                    })
+                  }
 
-                // TODO: Falta agregar el chart de Transacciones / Bimestre (line)
-                // TODO: Organizar los colores en variables
+                  if (title == 'Transacciones / UF') { // Bar
+                    chart_type = 'bar';
+                    datasets.push({
+                      label: label,
+                      data: count,
+                      backgroundColor: '#58b9e2',
+                    })
+                  }
 
-                if (title == 'UF / Bimestre') { // Line
-                  chart_type = 'line';
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    fill: false,
-                    borderColor: '#58b9e2',
-                    borderWidth: 4,
-                    pointBackgroundColor: '#e8ebef',
-                    pointRadius: 3,
-                    lineTension: 0,
-                    pointHoverBackgroundColor: '#e8ebef',
-                    pointHoverBorderWidth: 3,
-                    pointHitRadius: 5,
-                  })
-                }
+                  chart_data = {
+                    labels: name,
+                    datasets: datasets
+                  }
 
-                if (title == 'Precio Promedio en UF / Bimestre') { // Line
-                  chart_type = 'line';
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    fill: false,
-                    borderColor: '#58b9e2',
-                    borderWidth: 4,
-                    pointBackgroundColor: '#e8ebef',
-                    pointRadius: 3,
-                    lineTension: 0,
-                    pointHoverBackgroundColor: '#e8ebef',
-                    pointHoverBorderWidth: 3,
-                    pointHitRadius: 5,
-                  })
-                }
-
-                if (title == 'Transacciones / UF') { // Bar
-                  chart_type = 'bar';
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    backgroundColor: '#58b9e2',
-                  })
-                }
-
-                chart_data = {
-                  labels: name,
-                  datasets: datasets
                 }
 
               })
