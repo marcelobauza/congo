@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_05_152531) do
+ActiveRecord::Schema.define(version: 2019_07_10_233825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -426,6 +426,28 @@ ActiveRecord::Schema.define(version: 2019_07_05_152531) do
 
   create_table "seller_types", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tax_lands", force: :cascade do |t|
+    t.string "rol_number"
+    t.string "address"
+    t.string "destination_code"
+    t.string "land_m2"
+    t.integer "county_sii_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tax_useful_surfaces", force: :cascade do |t|
+    t.string "rol_number"
+    t.integer "building_sequence_number"
+    t.string "year"
+    t.decimal "m2_built"
+    t.string "destination_code"
+    t.integer "county_sii_id"
+    t.string "code_material"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
