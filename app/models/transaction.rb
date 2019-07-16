@@ -844,14 +844,25 @@ class Transaction < ApplicationRecord
 
   end
 
-  def self.avg_surface_line_build(filters)
+  def self.group_avg_by_chart_pdf(filters, option)
 
     result = []
     counties = ["sum_counties"]
 
     periods = get_bimesters(filters)
     select = "transactions.bimester::text || '/' || transactions.year::text as name ,  "
-    select += "round(avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as value "
+    
+    case option
+      when 'avg_surface_line_build'
+        select += "round(avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as value "
+      when 'avg_uf_m2_u'
+        select += " round(avg(transactions.calculated_value / (select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as value "
+      when 'avg_land'
+        select +=" round(avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as value"
+      when 'avg_uf_m2_land'
+        select +=" round(avg(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) as value"
+  end
+
       if !filters[:county_id].nil?
         conditions = "transactions.county_id = #{filters[:county_id]}#{Util.and}"
       elsif !filters[:wkt].nil?
@@ -990,22 +1001,20 @@ end
       stypes = SellerType.group_transactions_by_seller_type(filters)
       transactions_by_periods = Transaction.group_transaction_county_and_bimester(filters)
       uf_periods = Transaction.group_transaction_criteria_by_period(filters, Transaction::SUM_CRITERIA)
-      avg_surface_line_build = avg_surface_line_build(filters)
+      average_uf_periods = Transaction.group_transaction_criteria_by_period(filters, Transaction::AVG_CRITERIA)
+      avg_surface_line_build = group_avg_by_chart_pdf(filters, 'avg_surface_line_build')
+      avg_uf_m2_u = group_avg_by_chart_pdf(filters, 'avg_uf_m2_u')
+      avg_land = group_avg_by_chart_pdf(filters, 'avg_land')
+      avg_uf_m2_land = group_avg_by_chart_pdf(filters, 'avg_uf_m2_land')
 
-      data=[]
-
-      avg_surface_line_build.each do |avg|
-        data.push("name": avg[0], "count": avg[1].to_f )
-      end
-
-      result.push({"title":"Superficie Linea Construcción (útil m2) por Bimestre", "series":[{"data": data}]})
-
+      #TIPO DE PROPIEDAD
       data =[]
       ptypes.each do |prop|
         data.push("name": prop.name.capitalize, "count": prop.value.to_i, "id":prop.id)
       end
       result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
 
+    #TIPO DE VENDEDOR
       data =[]
       stypes.each do |seller|
         data.push({"name": seller.name.capitalize, "count":seller.value.to_i, "id":seller.id})
@@ -1013,27 +1022,74 @@ end
 
       result.push({"title":"Tipo de Vendedor", "series":[{"data": data}]})
 
+      #TRANSACCIONES POR BIMESTRE
+      data =[]
+      counties_count = (transactions_by_periods.first.size - 3) / 2
+      0.upto(counties_count).each do |idx|
+        data.push([transactions_by_periods.first["y#{idx}_label".to_sym]])
+      end
 
+      transactions_by_periods.each_with_index do |tb, i|
 
+         1.upto(counties_count ).each do |idx|
+        if tb["y#{idx}_value".to_sym].nil?
+            data.push(tb["y#{idx}_value".to_sym], nil, tb[:period], tb[:year])
+          else
+            data[idx].push([tb["y#{idx}_value".to_sym], tb[:period], tb[:year]])
+        end
+      end
+  end
+  
+      result.push({"title":"Transactions por bimester", "series":[{"data": data}]})
 
-       data =[]
-       counties_count = (transactions_by_periods.first.size - 3) / 2
-
-       label = ["Bimestre"]
-       transactions_by_periods.each do |tb|
-          data.push(tb)
-       end
-       result.push({"title":"Transacciones por Bimestre", "series":[{"data": data}] })
-
+      #UF PERIOD
       data =[]
       uf_periods.each do |ufp|
         data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
       end
-      result.push({"title":"UF / Bimestre", "series":[{"data": data}]})
+      result.push({"title":"Volumen Venta Total UF por Bimestre", "series":[{"data": data}]})
 
+      ##AVERAGE UF PERIOD
+      data =[]
+      average_uf_periods.each do |aup|
+        data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
+      end
 
+      result.push({"title":"Precio Promedio en UF / Bimestre", "series":[{"data": data}]})
 
+      #AVG SURFACE LINE BUILD
+      data=[]
+      avg_surface_line_build.each do |avg|
+        data.push("name": avg[0], "count": avg[1].to_f )
+      end
 
+      result.push({"title":"Superficie Linea Construcción (útil m2) por Bimestre", "series":[{"data": data}]})
+
+      #AVG UF M2 U
+      data=[]
+      avg_uf_m2_u.each do |avg|
+        data.push("name": avg[0], "count": avg[1].to_f )
+      end
+
+      result.push({"title":"Precio UFm2 en base Util por Bimestre", "series":[{"data": data}]})
+
+      #AVG LAND
+      data=[]
+      avg_land.each do |avg|
+        data.push("name": avg[0], "count": avg[1].to_f )
+      end
+
+      result.push({"title":"Superficie Terreno (m2) por Bimestre", "series":[{"data": data}]})
+
+      #AVG UF M2 LAND
+      data=[]
+      avg_uf_m2_land.each do |avg|
+        data.push("name": avg[0], "count": avg[1].to_f )
+      end
+
+      result.push({"title":"Precio UFm2 en base Terreno por Bimestre", "series":[{"data": data}]})
+      
+      result
 
   end
 
