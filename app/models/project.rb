@@ -1106,6 +1106,40 @@ class Project < ApplicationRecord
     bimesters
   end
 
+  def self.periods bimester, year
+    where(project_instances: {bimester:  bimester, year: year})
+  end
+
+  def self.method_selection filters
+
+    if !filters[:county_id].nil?
+      where(county_id: filters[:county_id])
+    elsif !filters[:wkt].nil?
+      where(WhereBuilder.build_within_condition(filters[:wkt]))
+    else
+      where(WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ))
+    end
+  end
+
+  def self.download_csv filters
+    data = Project.joins(:project_instances).select("st_x(the_geom) as longitude, st_y(the_geom) as latitude",:name).
+      method_selection(filters).
+      periods(filters[:to_period], filters[:to_year]) 
+    data
+  end
+
+  def self.to_csv(options = {})
+    desired_column = ['latitude','longitude', 'name']
+    header_names = ['Latitud', 'Longitud', 'Nombre']
+
+    CSV.generate(options) do |csv|
+      csv << header_names
+      all.each do |product|
+        csv << product.attributes.values_at(*desired_column)
+      end
+    end
+  end
+
   private
 
   def get_agency_by_rol(rol)
@@ -1580,4 +1614,6 @@ end
     end
     return result
   end
+
+
 end

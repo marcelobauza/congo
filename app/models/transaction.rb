@@ -1130,7 +1130,23 @@ end
     select +="round(max(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) as max_uf_m2_land "
 
     data = Transaction.where(cond_query)
-
     data
+  end
+def self.download_csv filters
+
+    cond_query = build_conditions(filters, nil)
+    data = Transaction.where(cond_query).
+            select("st_x(the_geom) as longitude, st_y(the_geom) as latitude", :calculated_value, :address )
+end
+
+  def self.to_csv(options = {})
+  desired_column = ['latitude', 'longitude', 'calculated_value', 'address']
+  header_names = ['Latitud', 'Longitud', 'Uf value', 'Direccion']
+    CSV.generate(options) do |csv|
+      csv << header_names
+      all.each do |product|
+        csv << product.attributes.values_at(*desired_column)
+      end
+    end
   end
 end
