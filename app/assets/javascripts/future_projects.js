@@ -111,6 +111,47 @@ function maxCard(i){
   $('#chart-container'+i).toggleClass('card-max fixed-top')
 }
 
+
+future_projects_popup= function(id){
+
+  bimester = Congo.dashboards.config.bimester;
+  year = Congo.dashboards.config.year;
+
+  data = {id: id, bimester: bimester, year: year}; 
+  $.ajax({
+    type: 'GET',
+    url: '/future_projects/index.json',
+    datatype: 'json',
+    data: data,
+    success: function(data) {
+      $('#future_project_fields').empty();
+      $('#future_project_fields').append('<div>Bimestre: '+ data.bimester +'</div>');
+      $('#future_project_fields').append('<div>Año: '+ data.year +'</div>');
+      $('#future_project_fields').append('<div>Direccion: '+ data.address +'</div>');
+      $('#future_project_fields').append('<div>Expediente: '+ data.future_project_type.name +'</div>');
+      $('#future_project_fields').append('<div>Destino: '+ data.project_type.name +'</div>');
+      $('#future_project_fields').append('<div>Nombre: '+ data.name +'</div>');
+      $('#future_project_fields').append('<div>Nro de Expediente: '+ data.file_number +'</div>');
+      $('#future_project_fields').append('<div>Fecha Expediente: '+ data.file_date +'</div>');
+      $('#future_project_fields').append('<div>Propietario: '+ data.owner +'</div>');
+      $('#future_project_fields').append('<div>Rep. Legal: '+ data.legal_agent +'</div>');
+      $('#future_project_fields').append('<div>Arquitecto: '+ data.architect +'</div>');
+      $('#future_project_fields').append('<div>Cantidad Pisos: '+ data.floors +'</div>');
+      $('#future_project_fields').append('<div>Total de Subterraneos: '+ data.undergrounds +'</div>');
+      $('#future_project_fields').append('<div>Total de Unidades: '+ data.total_units +'</div>');
+      $('#future_project_fields').append('<div>Total de Estacionamientos: '+ data.total_parkings  +'</div>');
+      $('#future_project_fields').append('<div>Total de Locales Comerciales: '+ data.total_commercials +'</div>');
+      $('#future_project_fields').append('<div>Superficie Aprobada (m2): '+ data.m2_approved +'</div>');
+      $('#future_project_fields').append('<div>Superficie Edificada (m2): '+ data.m2_built +'</div>');
+      $('#future_project_fields').append('<div>Superficie Terreno (m2): '+ data.m2_field +'</div>');
+      $('#future_project_fields').append('<div>Comentarios: '+ data.comments +'</div>');
+      $('#leaflet_modal').modal('show');
+    }
+  });
+}
+
+
+
 Congo.future_projects.action_dashboards = function(){
 
   init=function(){

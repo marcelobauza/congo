@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :regions
   get 'dashboards/index'
   get 'counties/index'
+  get 'future_projects/index'
   get 'dashboards/graduated_points'
   get 'dashboards/heatmap'
   get 'dashboards/filter_county_for_lon_lat'

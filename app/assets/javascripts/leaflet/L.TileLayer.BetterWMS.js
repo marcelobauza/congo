@@ -88,36 +88,25 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
   },
 
   showGetFeatureInfo: function (err, latlng, info) {
-    
-//    if (err) { console.log(err); return; } // do nothing if there's an error
-/*
-        checked = $('#select').hasClass('active');
-        if (!checked){
-          var cc = info;
-          var prop = cc['features'][0]['properties'];
-          var z = document.createElement('p'); // is a node
-          var x = []
-          $.each(prop, function(a,b){
-            x.push('<b>' + a + ': </b> ' + b + '</br>');
-          })
+if (info['features'].length > 0 ) {
+          let prop = info['features'][0]['properties'];
 
-          z.innerHTML = x;
-          inn = document.body.appendChild(z);
+  layer_type = Congo.dashboards.config.layer_type;
 
-          if (!checked){*/
-            //    L.popup()
-            //  .setLatLng(latlng)
-            //  .setContent(inn)
-            //  .openOn(this._map);
-    // Otherwise show the content in a popup, or something.
-/*    L.popup({ maxWidth: 800})
-      .setLatLng(latlng)
-      .setContent(content)
-      .openOn(this._map);*/
-  //}
- // }
-  }
-  
+  switch (layer_type) {
+    case 'future_projects_info':
+      future_projects_popup(prop.id); 
+    break;
+    case 'transactions_info':
+      break;
+    case 'projects_feature_info':
+      break;
+    case 'building_regulations_info':
+      break;
+    //$('#leaflet_modal').modal('show');
+}
+  } 
+  } 
 });
 
 L.tileLayer.betterWms = function (url, options) {

@@ -1,5 +1,16 @@
 class FutureProjectsController < ApplicationController
   before_action :set_future_project, only: [:show, :edit, :update, :destroy]
+  
+  def index
+    #@data = FutureProject.where(bimester: params[:bimester], year: params[:year], id: params[:id])
+
+    @data = FutureProject.where( id: params[:id]).first
+    respond_to do |f|
+      f.json
+    end
+    
+  end
+
 
   def graduated_points
     @interval = FutureProject.interval_graduated_points(params)
