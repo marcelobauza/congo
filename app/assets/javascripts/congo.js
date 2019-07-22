@@ -52,9 +52,8 @@ Congo.init = function() {
   //end patch
   
   var body = document.body,
-    controller = body.getAttribute( "data-controller" ),
+    controller = body.getAttribute( "data-controller" ).replace(/\//g, "_"),
     action = body.getAttribute( "data-action" );
-
   Congo.exec("common");
   Congo.exec(controller, action);
 }
