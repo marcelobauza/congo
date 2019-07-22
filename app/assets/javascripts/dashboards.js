@@ -15,7 +15,8 @@ Congo.dashboards.config= {
   size_box: [],
   typeGeometry: '',
   boost: false,
-  area :0
+  area :0,
+  draw_active: false
 }
 
 Congo.dashboards.action_index = function(){

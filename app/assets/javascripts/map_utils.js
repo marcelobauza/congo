@@ -2,8 +2,6 @@ Congo.namespace('map_utils');
 
 Congo.map_utils.config={
   cql_filter: '',
-
-
 }
 
 Congo.map_utils = function(){
@@ -104,13 +102,13 @@ var overlays =  {
       Congo.dashboards.config.size_box = [];
       editableLayers = new L.FeatureGroup();
       map.addLayer(editableLayers);
-      console.log(Congo.dashboards.config.size_box);
       poly(typeGeometry);
   
     });
 
     map.on('draw:created', function(e) {
-
+      
+      Congo.dashboards.config.draw_active = true;
       if(typeGeometry == 'circle'){
         layer = e.layer
         var centerPt = layer.getLatLng();
@@ -157,8 +155,10 @@ var overlays =  {
 
         })
       }
+      Congo.dashboards.config.draw_active = false;
       counties();
     });
+
   }
 
   var LatLngToCoords = function (LatLng, reverse) { // (LatLng, Boolean) -> Array
