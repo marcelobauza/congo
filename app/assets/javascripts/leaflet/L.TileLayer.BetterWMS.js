@@ -98,8 +98,10 @@ if (info['features'].length > 0 ) {
       future_projects_popup(prop.id); 
     break;
     case 'transactions_info':
+      transactions_popup(prop.id);
       break;
     case 'projects_feature_info':
+      projects_popup(prop.id);
       break;
     case 'building_regulations_info':
       break;

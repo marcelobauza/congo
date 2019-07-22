@@ -14,17 +14,42 @@ Congo.transactions.config= {
 }
 
 
+transactions_popup = function(id){
+
+  bimester = Congo.dashboards.config.bimester;
+  year = Congo.dashboards.config.year;
+
+  data = {id: id, bimester: bimester, year: year}; 
+  $.ajax({
+    type: 'GET',
+    url: '/transactions/index.json',
+    datatype: 'json',
+    data: data,
+    success: function(data) {
+      $('#future_project_fields').empty();
+      $('#future_project_fields').append('<div>Bimestre: '+ data.bimester +'</div>');
+      $('#future_project_fields').append('<div>Año: '+ data.year +'</div>');
+      $('#future_project_fields').append('<div>Direccion: '+ data.address +'</div>');
+      $('#future_project_fields').append('<div>Tipo de Propiedad: '+ data.property_types.name +'</div>');
+      $('#future_project_fields').append('<div>Tipo de Vendedor: '+ data.seller_types.name +'</div>');
+      $('#future_project_fields').append('<div>Vendedor: '+ data.seller_name +'</div>');
+      $('#future_project_fields').append('<div>Comprador: '+ data.buyer_name +'</div>');
+      $('#future_project_fields').append('<div>Foja: '+ data.sheet +'</div>');
+      $('#future_project_fields').append('<div>Numero: '+ data.number +'</div>');
+      $('#future_project_fields').append('<div>Fecha de Inscripcion: '+ data.inscription_date +'</div>');
+      $('#future_project_fields').append('<div>Departamento: '+ data.department +'</div>');
+      $('#future_project_fields').append('<div>Valor UF: '+ data.uf_value +'</div>');
+      $('#future_project_fields').append('<div>Plano: '+ data.blueprint +'</div>');
+      $('#future_project_fields').append('<div>Bodega: '+ data.cellar +'</div>');
+      $('#future_project_fields').append('<div>Estacionamiento: '+ data.parkingi +'</div>');
+      $('#future_project_fields').append('<div>Rol: '+ data.role +'</div>');
+      $('#leaflet_modal').modal('show');
+    }
+  })
+}
+
 function transactions_report_pdf(){
 
-    $.ajax({
-         type: 'GET',
-          url: '/reports/transactions_pdf.json',
-          datatype: 'json',
-          data: data,
-          success: function(data){
-                      console.log(data);
-                }
-        })
 }
 
 

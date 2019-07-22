@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   get 'dashboards/index'
   get 'counties/index'
   get 'future_projects/index'
+  get 'projects/index'
+  get 'transactions/index'
   get 'dashboards/graduated_points'
   get 'dashboards/heatmap'
   get 'dashboards/filter_county_for_lon_lat'

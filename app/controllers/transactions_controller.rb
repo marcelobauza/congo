@@ -1,6 +1,14 @@
 class TransactionsController < ApplicationController
   include NumberFormatter
 
+  def index
+    @data = Transaction.where(bimester: params[:bimester], year: params[:year], id: params[:id]).first
+    respond_to do |f|
+      f.json
+    end
+  end
+
+
   def graduated_points
       @interval = Transaction.interval_graduated_points(params)
       render json: {data: @interval}

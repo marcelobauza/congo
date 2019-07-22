@@ -1,5 +1,11 @@
 class ProjectsController < ApplicationController
-  
+
+  def index
+    @data = ProjectInstanceMixView.data_popup(params[:id], params[:bimester], params[:year])
+    respond_to do |f|
+      f.json
+    end
+  end
 
   def graduated_points
     @interval = Project.interval_graduated_points(params)

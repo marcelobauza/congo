@@ -19,6 +19,37 @@ Congo.projects.config= {
   project_agency_ids: []
 }
 
+projects_popup = function(id){
+
+  bimester = Congo.dashboards.config.bimester;
+  year = Congo.dashboards.config.year;
+
+  data = {id: id, bimester: bimester, year: year}; 
+  $.ajax({
+    type: 'GET',
+    url: '/projects/index.json',
+    datatype: 'json',
+    data: data,
+    success: function(data) {
+      $('#future_project_fields').empty();
+      $('#future_project_fields').append('<div>Bimestre: '+ data.bimester +'</div>');
+      $('#future_project_fields').append('<div>Año: '+ data.year +'</div>');
+      $('#future_project_fields').append('<div>Direccion: '+ data.address +'</div>');
+      $('#future_project_fields').append('<div>Nombre: '+ data.name +'</div>');
+      $('#future_project_fields').append('<div>Estado: '+ data.project_status.name  +'</div>');
+      $('#future_project_fields').append('<div>Total de Unidades: '+ data.total_units  +'</div>');
+      $('#future_project_fields').append('<div>Disponibilidad Total: '+ data.stock_units  +'</div>');
+      $('#future_project_fields').append('<div>Venta Total: '+ data.sold_units  +'</div>');
+      $('#future_project_fields').append('<div>Cantidad de Pisos: '+ data.floors  +'</div>');
+      $('#future_project_fields').append('<div>UF/m2: '+ data.uf_m2  +'</div>');
+      $('#future_project_fields').append('<div>Fecha Inicio Construcción: '+ data.build_date  +'</div>');
+      $('#future_project_fields').append('<div>Fecha Inicio Ventas:  '+ data.sale_date  +'</div>');
+      $('#future_project_fields').append('<div>Fecha Entrega '+ data.transfer_date  +'</div>');
+      $('#leaflet_modal').modal('show');
+    }
+  })
+}
+
 Congo.projects.action_graduated_points = function(){
 
   init=function(){
