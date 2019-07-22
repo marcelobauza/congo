@@ -39,7 +39,7 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
         request: 'GetFeatureInfo',
         service: 'WMS',
         srs: 'EPSG:4326',
-        styles: 'poi_new',
+        //styles: 'poi_new',
         transparent: this.wmsParams.transparent,
         version: this.wmsParams.version,      
         format: this.wmsParams.format,
@@ -49,7 +49,8 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
         layers: this.wmsParams.layers,
         query_layers: this.wmsParams.layers,
         INFO_FORMAT: 'application/json',
-        format_options: 'callback:getJson'
+        format_options: 'callback:getJson',
+        CQL_FILTER: this.wmsParams.CQL_FILTER
       };
 
     params[params.version === '1.3.0' ? 'i' : 'x'] = point.x;
