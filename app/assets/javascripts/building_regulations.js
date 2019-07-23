@@ -15,6 +15,34 @@ Congo.building_regulations.config= {
   to_inhabitants_hectare: '',
 }
 
+building_regulations_popup = function(id){
+
+    data = {id: id};
+  $.ajax({
+    type: 'GET',
+    url: '/building_regulations/index.json',
+    datatype: 'json',
+    data: data,
+    success: function(data) {
+    land_use_types = [];
+      $.each(data.land_use_types, function(a, b){
+        land_use_types.push(b.name);
+      });
+
+      $('#future_project_fields').empty();
+      $('#future_project_fields').append('<div>Normativa de Edificacion: '+ data.building_zone +'</div>');
+      $('#future_project_fields').append('<div>Usos Permitidos:' + land_use_types +' </div>');
+      $('#future_project_fields').append('<div>Constructibilidad: '+ data.construct +'</div>');
+      $('#future_project_fields').append('<div>Ocupacion Suelo: '+ data.osinciti +'</div>');
+      $('#future_project_fields').append('<div>Densidad Maxima (Hab/ha): '+ data.hectarea_inhabitants +'</div>');
+      $('#future_project_fields').append('<div>Sistema Agrupamiento: '+ data.grouping +'</div>');
+      $('#future_project_fields').append('<div>Altura Construcción: '+ data.aminciti +'</div>');
+      $('#future_project_fields').append('<div>Superficie Predio: '+ data.area + ' </div>');
+      $('#leaflet_modal').modal('show');
+    }  
+  })
+}
+
 
 function building_regulations_report_pdf() {
 

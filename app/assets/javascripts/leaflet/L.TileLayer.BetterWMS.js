@@ -105,6 +105,7 @@ if (info['features'].length > 0 ) {
       projects_popup(prop.id);
       break;
     case 'building_regulations_info':
+      building_regulations_popup(prop.id);
       break;
     //$('#leaflet_modal').modal('show');
 }

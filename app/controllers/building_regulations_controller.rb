@@ -1,6 +1,13 @@
 class BuildingRegulationsController < ApplicationController
   before_action :set_building_regulation, only: [:show, :edit, :update, :destroy]
 
+  def index
+    @data = BuildingRegulation.info_popup(params[:id])
+    respond_to do |f|
+      f.json
+    end
+  end
+
   def building_regulations_filters
     result = []
     @a = allowed_use_list
@@ -52,9 +59,6 @@ class BuildingRegulationsController < ApplicationController
 
   # GET /building_regulations
   # GET /building_regulations.json
-  def index
-    @building_regulations = BuildingRegulation.all
-  end
 
   # GET /building_regulations/1
   # GET /building_regulations/1.json
