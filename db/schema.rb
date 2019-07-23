@@ -438,6 +438,7 @@ ActiveRecord::Schema.define(version: 2019_07_10_233825) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "land_m2"
+    t.index ["rol_number"], name: "tax_lands_rol_number_idx"
   end
 
   create_table "tax_useful_surfaces", force: :cascade do |t|
@@ -451,7 +452,9 @@ ActiveRecord::Schema.define(version: 2019_07_10_233825) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["county_sii_id"], name: "idx_county_sii_id", order: "NULLS FIRST"
+    t.index ["county_sii_id"], name: "tax_useful_surfaces_county_sii_id_idx"
     t.index ["rol_number"], name: "role_id_tax"
+    t.index ["rol_number"], name: "tax_useful_surfaces_rol_number_idx"
   end
 
   create_table "transactions", id: :bigint, default: nil, force: :cascade do |t|
