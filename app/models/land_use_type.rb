@@ -16,7 +16,7 @@ class LandUseType < ApplicationRecord
         polygon = JSON.parse(wkt)
         coonditions = "ST_Intersects(the_geom, ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326)', #{Util::WGS84_SRID})"
       else
-        conditions = WhereBuilder.build_within_condition_radius(centerpt, radius )
+        conditions = WhereBuilder.build_within_condition_radius(centerpt, radius, true )
       end
       return LandUseType.select(select).joins(:building_regulations).where(conditions).order('abbreviation')
     end
