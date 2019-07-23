@@ -340,6 +340,7 @@ var overlays =  {
       case 'building_regulations_info':
         Congo.building_regulations.action_dashboards.indicator_building_regulations();
         filter_layer = '';
+        remove_legend();
         break;
     }
 
