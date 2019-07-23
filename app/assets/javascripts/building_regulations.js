@@ -16,20 +16,176 @@ Congo.building_regulations.config= {
 }
 
 
-function building_regulations_report_pdf(){
+function building_regulations_report_pdf() {
 
-    $.ajax({
-         type: 'GET',
-          url: '/reports/building_regulations_pdf.json',
-          datatype: 'json',
-          data: data,
-          success: function(data){
-                      console.log(data);
-                }
-        })
+  $.ajax({
+    type: 'GET',
+    url: '/reports/building_regulations_pdf.json',
+    datatype: 'json',
+    data: data,
+    success: function(data) {
 
-}
+      data = data['data']
 
+      // Creamos el doc
+      var doc = new jsPDF();
+
+      // Título
+      doc.setFontStyle("bold");
+      doc.setFontSize(22);
+      doc.text('Informe de Normativa', 105, 20, null, null, 'center');
+
+      // Subtítulo
+      doc.setFontSize(16);
+      doc.text('Polígono Seleccionado', 105, 30, null, null, 'center');
+
+      // Pie de página
+      doc.setFontStyle("bold");
+      doc.setFontSize(12);
+      doc.text('Fuente:', 20, 290);
+      doc.setFontStyle("normal");
+      doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
+
+      // Agregamos una página
+      doc.addPage('a4', 'portrait')
+
+      // Párrafo 1
+      doc.setFontSize(12);
+      doc.text('La información respecto a la subdivisión predial mínima, constructibilidad y ocupación de suelo está', 10, 20);
+      doc.text('basada preferentemente en el uso de suelo residencial (RES), exceptuando aquellas zonas cuyo uso', 10, 28);
+      doc.text('es exclusivo, por ejemplo EQUIP, IND, etc.', 10, 36);
+
+      // Párrafo 2
+      doc.text('La información respecto de altura máxima de edificación esta basada en el sistema de agrupamiento', 10, 52);
+      doc.text('aislado.', 10, 60);
+
+      // Párrafo 3
+      doc.text('Se recomienda consultar la nomenclatura de usos (RES, IND, AV, etc.) en el botón “Usos de Suelo”.', 10, 76);
+
+      // Párrafo 4
+      doc.text('Para obtener mayor detalle respecto a condiciones normativas de cada zona, se recomienda hacer', 10, 92);
+      doc.text('clic en “Descargar Normativa” para obtener la ordenanza local y modificaciones vigentes si', 10, 100);
+      doc.text('corresponde.', 10, 108);
+
+      // Pie de página
+      doc.setFontStyle("bold");
+      doc.setFontSize(12);
+      doc.text('Fuente:', 20, 290);
+      doc.setFontStyle("normal");
+      doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
+
+      // Separamos los datos
+      for (var i = 0; i < data.length; i++) {
+        var reg = data[i]
+
+        var am_cc = reg['am_cc']
+        var aminciti = reg['aminciti']
+        var building_zone = reg['building_zone']
+        var construct = reg['construct']
+        var density_type_id = reg['density_type_id']
+        var hectarea_inhabitants = reg['hectarea_inhabitants']
+        var icinciti = reg['icinciti']
+        var id = reg['id']
+        var land_ocupation = reg['land_ocupation']
+        var osinciti = reg['osinciti']
+
+        // Cambiamos a string los valores que llegan como integer
+        am_cc = am_cc.toString()
+        aminciti = aminciti.toString()
+        building_zone = building_zone.toString()
+        //construct = construct.toString()
+        density_type_id = density_type_id.toString()
+        hectarea_inhabitants = hectarea_inhabitants.toString()
+        icinciti = icinciti.toString()
+        //id = id.toString()
+        //land_ocupation = land_ocupation.toString()
+        osinciti = osinciti.toString()
+
+        if (i % 2 == 1) { // impar
+
+          // Agregamos una página
+          doc.addPage('a4', 'portrait')
+
+          // Labels columna arriba
+          doc.setFontStyle("bold");
+          doc.setFontSize(12);
+          doc.text('Normativa de Edificación:', 83, 20, null, null, 'right');
+          doc.text('Altura Máxima:', 83, 30, null, null, 'right');
+          doc.text('Zona:', 83, 40, null, null, 'right');
+          doc.text('Uso Permitido:', 83, 50, null, null, 'right');
+          doc.text('Constructibilidad:', 83, 60, null, null, 'right');
+          doc.text('Ocupación de suelo:', 83, 70, null, null, 'right');
+          doc.text('Web:', 83, 80, null, null, 'right');
+          doc.text('Densidad:', 83, 90, null, null, 'right');
+          doc.text('Densidad Máxima:', 83, 100, null, null, 'right');
+          doc.text('Última actualización:', 83, 110, null, null, 'right');
+          doc.text('Subdivisión predial mínima m2:', 83, 120, null, null, 'right');
+
+          // Valores columna arriba
+          doc.setFontStyle("normal");
+          doc.text(building_zone, 85, 20);
+          doc.text(aminciti, 85, 30);
+          doc.text('null', 85, 40);
+          doc.text('null', 85, 50);
+          //doc.text(construct, 85, 60);
+          doc.text(osinciti, 85, 70);
+          doc.text('null', 85, 80);
+          doc.text('null', 85, 90);
+          doc.text(density_type_id, 85, 100);
+          doc.text('null', 85, 110);
+          doc.text('null', 85, 120);
+
+          // Pie de página
+          doc.setFontStyle("bold");
+          doc.setFontSize(12);
+          doc.text('Fuente:', 20, 290);
+          doc.setFontStyle("normal");
+          doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
+
+
+        } else { // par
+
+          // Separador
+          doc.line(10, 140, 200, 140);
+
+          // Labels columna abajo
+          doc.setFontStyle("bold");
+          doc.setFontSize(12);
+          doc.text('Normativa de Edificación', 83, 160, null, null, 'right');
+          doc.text('Altura Máxima:', 83, 170, null, null, 'right');
+          doc.text('Zona:', 83, 180, null, null, 'right');
+          doc.text('Uso Permitido:', 83, 190, null, null, 'right');
+          doc.text('Constructibilidad:', 83, 200, null, null, 'right');
+          doc.text('Ocupación de suelo:', 83, 210, null, null, 'right');
+          doc.text('Web:', 83, 220, null, null, 'right');
+          doc.text('Densidad:', 83, 230, null, null, 'right');
+          doc.text('Densidad Máxima:', 83, 240, null, null, 'right');
+          doc.text('Última actualización:', 83, 250, null, null, 'right');
+          doc.text('Subdivisión predial mínima m2:', 83, 260, null, null, 'right');
+
+          // Valores columna abajo
+          doc.setFontStyle("normal");
+          doc.text(building_zone, 85, 160);
+          doc.text(aminciti, 85, 170);
+          doc.text('null', 85, 180);
+          doc.text('null', 85, 190);
+          //doc.text(construct, 85, 200);
+          doc.text(osinciti, 85, 210);
+          doc.text('null', 85, 220);
+          doc.text('null', 85, 230);
+          doc.text(density_type_id, 85, 240);
+          doc.text('null', 85, 250);
+          doc.text('null', 85, 260);
+
+        } // Cierra else par/impar
+      } // Cierra for
+
+      // Descarga el archivo PDF
+      doc.save("Reporte_Normativa.pdf");
+
+    } // Cierra success
+  }) // Cierra ajax
+} // Cierra function building_regulations_report_pdf
 
 function addUsoFilter(id, name) {
 
