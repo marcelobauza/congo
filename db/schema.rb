@@ -434,10 +434,10 @@ ActiveRecord::Schema.define(version: 2019_07_10_233825) do
     t.string "rol_number"
     t.string "address"
     t.string "destination_code"
-    t.string "land_m2"
     t.integer "county_sii_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "land_m2"
   end
 
   create_table "tax_useful_surfaces", force: :cascade do |t|
@@ -450,6 +450,8 @@ ActiveRecord::Schema.define(version: 2019_07_10_233825) do
     t.string "code_material"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["county_sii_id"], name: "idx_county_sii_id", order: "NULLS FIRST"
+    t.index ["rol_number"], name: "role_id_tax"
   end
 
   create_table "transactions", id: :bigint, default: nil, force: :cascade do |t|
@@ -897,6 +899,21 @@ ActiveRecord::Schema.define(version: 2019_07_10_233825) do
        JOIN density_types ON ((building_regulations.density_type_id = density_types.id)))
     ORDER BY building_regulations.updated_at DESC;
   SQL
+  create_view "census_voronoi", sql_definition: <<-SQL
+      SELECT st_intersection(voronoi.geom, ( SELECT counties.the_geom
+             FROM counties
+            WHERE (counties.id = 50))) AS inters,
+      census.homes_total,
+      census.county_id
+     FROM ( SELECT (st_dump(st_voronoipolygons(st_collect(census_1.the_geom), (0)::double precision, ( SELECT counties.the_geom
+                     FROM counties
+                    WHERE (counties.id = 50))))).geom AS geom
+             FROM census census_1
+            WHERE (census_1.county_id = 50)) voronoi,
+      census
+    WHERE (st_within(census.the_geom, voronoi.geom) AND (census.county_id = 50))
+    GROUP BY voronoi.geom, census.homes_total, census.county_id;
+  SQL
   create_view "counties_info", sql_definition: <<-SQL
       SELECT counties.id,
       counties.name,
@@ -1311,12 +1328,14 @@ ActiveRecord::Schema.define(version: 2019_07_10_233825) do
       projects.transfer_date,
       projects.pilot_opening_date,
       project_instances.comments,
-      projects.county_id
+      projects.county_id,
+      projects.project_type_id,
+      project_instances.project_status_id
      FROM (((project_instances
        JOIN project_instance_mixes ON ((project_instances.id = project_instance_mixes.project_instance_id)))
        JOIN projects ON ((projects.id = project_instances.project_id)))
        JOIN project_statuses ON ((project_instances.project_status_id = project_statuses.id)))
-    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors;
+    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors, projects.project_type_id, project_instances.project_status_id;
   SQL
   create_view "transactions_info", sql_definition: <<-SQL
       SELECT transactions.id,
