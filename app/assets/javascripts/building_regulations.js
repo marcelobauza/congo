@@ -30,7 +30,6 @@ function building_regulations_report_pdf(){
 
 }
 
-
 function addUsoFilter(id, name) {
 
   if ($('#item-uso-'+id).length == 0) {
@@ -52,7 +51,7 @@ function addUsoFilter(id, name) {
         })
       )
     );
-    indicator_building_regulations();
+    Congo.map_utils.counties();
 
   };
 
@@ -69,7 +68,7 @@ function delUsoFilter(id, name) {
   Congo.building_regulations.config.allowed_use_ids = uso_updated;
 
   $('#item-uso-'+id).remove();
-  indicator_building_regulations();
+  Congo.map_utils.counties();
 
 }
 
@@ -351,7 +350,7 @@ Congo.building_regulations.action_dashboards = function(){
                         'text': '×'
                     })
                   )
-                  indicator_building_regulations();
+                  Congo.map_utils.counties();
 
                 }, // Cierra onFinish
               }); // Cierra ionRangeSlider
@@ -361,7 +360,7 @@ Congo.building_regulations.action_dashboards = function(){
                 Congo.building_regulations.config.from_construct = '';
                 Congo.building_regulations.config.to_construct = '';
                 $('#item-construct').remove();
-                indicator_building_regulations();
+                Congo.map_utils.counties();
               });
 
             } // Cierra if Coeficiente de Constructibilidad
@@ -435,7 +434,7 @@ Congo.building_regulations.action_dashboards = function(){
                         'text': '×'
                     })
                   )
-                  indicator_building_regulations();
+                  Congo.map_utils.counties();
 
                 }, // Cierra onFinish
               }); // Cierra ionRangeSlider
@@ -445,7 +444,7 @@ Congo.building_regulations.action_dashboards = function(){
                 Congo.building_regulations.config.from_land_ocupation = '';
                 Congo.building_regulations.config.to_land_ocupation = '';
                 $('#item-suelo').remove();
-                indicator_building_regulations();
+                Congo.map_utils.counties();
               });
 
             } // Cierra if Ocupación de Suelo
@@ -519,7 +518,7 @@ Congo.building_regulations.action_dashboards = function(){
                         'text': '×'
                     })
                   )
-                  indicator_building_regulations();
+                  Congo.map_utils.counties();
 
                 }, // Cierra onFinish
               }); // Cierra ionRangeSlider
@@ -529,7 +528,7 @@ Congo.building_regulations.action_dashboards = function(){
                 Congo.building_regulations.config.from_max_height = '';
                 Congo.building_regulations.config.to_max_height = '';
                 $('#item-altura').remove();
-                indicator_building_regulations();
+                Congo.map_utils.counties();
               });
 
             } // Cierra if Altura Máxima
@@ -600,7 +599,7 @@ Congo.building_regulations.action_dashboards = function(){
                         'text': '×'
                     })
                   )
-                  indicator_building_regulations();
+                  Congo.map_utils.counties();
 
                 }, // Cierra onFinish
               }); // Cierra ionRangeSlider
@@ -610,7 +609,7 @@ Congo.building_regulations.action_dashboards = function(){
                 Congo.building_regulations.config.from_inhabitants_hectare = '';
                 Congo.building_regulations.config.to_inhabitants_hectare = '';
                 $('#item-habitantes').remove();
-                indicator_building_regulations();
+                Congo.map_utils.counties();
               });
 
             } // Cierra if Habitantes por Hectárea

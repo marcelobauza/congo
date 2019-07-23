@@ -339,7 +339,39 @@ var overlays =  {
         break;
       case 'building_regulations_info':
         Congo.building_regulations.action_dashboards.indicator_building_regulations();
+        from_construct = Congo.building_regulations.config.from_construct;
+        to_construct = Congo.building_regulations.config.to_construct;
+        from_land_ocupation =   Congo.building_regulations.config.from_land_ocupation;
+        to_land_ocupation =   Congo.building_regulations.config.to_land_ocupation;
+        from_max_height = Congo.building_regulations.config.from_max_height;
+        to_max_height = Congo.building_regulations.config.to_max_height;
+        from_inh_hectare = Congo.building_regulations.config.from_inhabitants_hectare;
+        to_inh_hectare = Congo.building_regulations.config.to_inhabitants_hectare;
+        allowed_use_ids = Congo.building_regulations.config.allowed_use_ids;
+        
         filter_layer = '';
+        console.log(allowed_use_ids.length);
+        if (allowed_use_ids.length > 0 ){
+            filter_layer = filter_layer + " AND land_use_type_id IN ("+ allowed_use_ids + ")";
+        }
+
+
+        if (from_construct != '' && to_construct != '' ){
+          filter_layer = filter_layer + "AND construct between " + from_construct + " AND "+ to_construct ;
+        }
+        if (from_land_ocupation != '' && to_land_ocupation != ''){
+          filter_layer = filter_layer + "AND land_ocupation between " + from_land_ocupation + " AND "+ to_land_ocupation ;
+        }
+
+        if (from_max_height !='' && to_max_height != ''){
+          filter_layer = filter_layer + "AND am_cc between " + from_max_height + " AND "+ to_max_height ;
+        }
+        
+        if ((from_inh_hectare !='' || typeof(from_inh_hectare)=== 'undefined')  && (to_inh_hectare != '' || typeof(to_inh_hectarea)==='undefined') ){
+          filter_layer = filter_layer + "AND max_density between " + from_inh_hectare + " AND "+ to_inh_hectare ;
+        }
+
+
         remove_legend();
         break;
     }
