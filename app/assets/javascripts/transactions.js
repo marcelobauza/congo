@@ -189,7 +189,7 @@ function transactions_report_pdf(){
         // Extraemos las series
         $.each(series, function(a, b){
 
-          if (title == 'Transactions por bimester') {
+          if (title == 'Transacciones / Bimestre') {
 
             var data = b['data']
 
@@ -217,7 +217,7 @@ function transactions_report_pdf(){
 
               } // Cierra for bimestre
 
-              if (title == 'Transactions por bimester') { // Line
+              if (title == 'Transacciones / Bimestre') { // Line
                 chart_type = 'line';
                 datasets.push({
                   label: label,
@@ -273,7 +273,7 @@ function transactions_report_pdf(){
               })
             }
 
-            if (title == 'Transactions por bimester') { // Line
+            if (title == 'Transacciones / Bimestre') { // Line
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -852,7 +852,7 @@ Congo.transactions.action_dashboards = function(){
               // Extraemos las series
               $.each(series, function(a, b){
 
-                if (title == 'Transactions por bimester') {
+                if (title == 'Transacciones / Bimestre') {
 
                   var data = b['data']
 
@@ -880,7 +880,7 @@ Congo.transactions.action_dashboards = function(){
 
                     } // Cierra for bimestre
 
-                    if (title == 'Transactions por bimester') { // Line
+                    if (title == 'Transacciones / Bimestre') { // Line
                       chart_type = 'line';
                       datasets.push({
                         label: label,

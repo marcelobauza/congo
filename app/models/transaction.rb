@@ -949,7 +949,7 @@ class Transaction < ApplicationRecord
       end
   end
   
-      result.push({"title":"Transactions por bimester", "series":[{"data": data}]})
+      result.push({"title":"Transacciones / Bimestre", "series":[{"data": data}]})
       
       #UF PERIOD
       data =[]
@@ -1040,7 +1040,7 @@ end
       end
   end
   
-      result.push({"title":"Transactions por bimester", "series":[{"data": data}]})
+      result.push({"title":"Transacciones / Bimestre", "series":[{"data": data}]})
 
       #UF PERIOD
       data =[]
