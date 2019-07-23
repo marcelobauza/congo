@@ -14,7 +14,6 @@ Congo.reports = function(){
           break;
         case 'base':
           url = '/reports/future_projects_data.xlsx';
-
           window.open(url, '_blank');
           break;
       }
@@ -52,7 +51,11 @@ Congo.reports = function(){
           break;
       }
       break;
-
+    case 'building_regulations_info':
+      switch(kind_reports){
+        case 'pdf':
+          url = building_regulations_report_pdf();
+      }
 
     default:
 

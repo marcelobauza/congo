@@ -15,6 +15,22 @@ Congo.building_regulations.config= {
   to_inhabitants_hectare: '',
 }
 
+
+function building_regulations_report_pdf(){
+
+    $.ajax({
+         type: 'GET',
+          url: '/reports/building_regulations_pdf.json',
+          datatype: 'json',
+          data: data,
+          success: function(data){
+                      console.log(data);
+                }
+        })
+
+}
+
+
 function addUsoFilter(id, name) {
 
   if ($('#item-uso-'+id).length == 0) {

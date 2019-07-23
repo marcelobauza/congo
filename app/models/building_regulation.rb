@@ -14,7 +14,6 @@ class BuildingRegulation < ApplicationRecord
         icinciti = find_by_columns_range(filters, "icinciti")
 	end
 
-
 	def self.group_by_land_ocupation filters
 		osinciti = find_by_columns_range(filters, 'osinciti')
 	end
@@ -35,11 +34,13 @@ class BuildingRegulation < ApplicationRecord
 
 
 	def self.build_where_condition(filters)
-	  if filters[:county_id].nil?
-      conditions = WhereBuilder.build_intersects_condition(filters[:wkt])
+    if !filters[:county_id].nil?
+      conditions += "county_id = #{filters[:county_id]}" + Util.and
+    elsif !filters[:wkt].nil?
+      conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
-      conditions = "county_id = #{filters[:county_id]}"
-    end
+      conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
+      end
 		conditions += build_conditions(filters)
 		conditions
 	end
@@ -102,6 +103,15 @@ class BuildingRegulation < ApplicationRecord
 		#cond += "#{Util.and}building_regulations.county_id IN(#{User.current.county_ids.join(",")})" if User.current.county_ids.length > 0
 		cond
 	end
+  def self.build_conditions(filters)
+    cond = ""
+    cond += build_range_condition(filters[:from_construct], filters[:to_construct], 'construct') if filters.has_key? :from_construct and filters.has_key? :to_construct
+    cond += build_range_condition(filters[:from_land_ocupation], filters[:to_land_ocupation], 'land_ocupation') if filters.has_key? :from_land_ocupation and filters.has_key? :to_land_ocupation
+    cond += build_in_condition(filters[:allowed_use_ids], 'building_regulation_land_use_types.land_use_type_id')  if filters.has_key? :allowed_use_ids and filters.has_key? :allowed_use_ids
+    #cond += "#{Util.and}building_regulations.county_id IN(#{User.current.county_ids.join(",")})" if User.current.county_ids.length > 0
+    cond
+  end
+
 
 	def self.build_in_condition values, column
 		" AND " + column + " IN(" + values.join(",") + ")"
@@ -181,4 +191,9 @@ class BuildingRegulation < ApplicationRecord
 			BuildingRegulationLandUseType.create(:building_regulation_id => build_id, :land_use_type_id => land_use_id)
 		end
 	end
+  
+  def self.reports_pdf filters 
+    fields = [:building_zone, :construct, :land_ocupation, :density_type_id, :am_cc, :icinciti, :osinciti, :aminciti, :hectarea_inhabitants]
+             @pdf = BuildingRegulation.where(build_where_condition(filters)).group(fields).select(fields)
+  end
 end
