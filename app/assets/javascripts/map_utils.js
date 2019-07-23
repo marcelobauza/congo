@@ -191,7 +191,15 @@ var overlays =  {
 
     switch(type) {
       case 'circle':
-        HandlerGeometry = new L.Draw.Circle(map);
+        var optionsDraw={
+          shapeOptions: {
+            fill: true,
+            zIndexOffset: 2000,
+            color: '#d3d800'
+
+        }
+        }
+        HandlerGeometry = new L.Draw.Circle(map, optionsDraw);
         break;
       case 'polygon':
         var optionsDraw={
