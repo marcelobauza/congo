@@ -32,16 +32,16 @@ class BuildingRegulation < ApplicationRecord
       range
 	end
 
-
 	def self.build_where_condition(filters)
     if !filters[:county_id].nil?
-      conditions += "county_id = #{filters[:county_id]}" + Util.and
+      conditions = "county_id = #{filters[:county_id]}" + Util.and
     elsif !filters[:wkt].nil?
-      conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
+      conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
-      conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
+      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius], true ) + Util.and
       end
 		conditions += build_conditions(filters)
+    conditions.chomp!(Util.and)
 		conditions
 	end
 
@@ -94,7 +94,7 @@ class BuildingRegulation < ApplicationRecord
       polygon = JSON.parse(filters[:wkt])
     cond = "ST_Intersects(the_geom, ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326))"
 		else
-      cond = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
+      cond = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius], true )
 		end
     		  
 #		cond += build_range_condition(filters[:from_construct], filters[:to_construct], 'construct') if filters.has_key? :from_construct and filters.has_key? :to_construct and column != "construct"
