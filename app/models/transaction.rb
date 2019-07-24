@@ -299,7 +299,8 @@ class Transaction < ApplicationRecord
       if !filters[:county_id].nil?
         conditions = "transactions.county_id = #{filters[:county_id]}#{Util.and}"
       elsif !filters[:wkt].nil?
-        conditions = "ST_Within(transactions.the_geom, ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}))#{Util.and}"  
+        polygon = JSON.parse(filters[:wkt])
+        conditions = "ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326), transactions.the_geom) #{Util.and}"
       else
         conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}, false) and "
       end
@@ -475,7 +476,7 @@ class Transaction < ApplicationRecord
       conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
       conditions += build_ids_conditions(filters)
       conditions += build_calculated_value_condition(filters)
-      #      conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
+      conditions += "transactions.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
       conditions = conditions.chomp!(Util.and)
 
       t = Transaction.select(select).
@@ -877,8 +878,7 @@ class Transaction < ApplicationRecord
         conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.or}"
       end
     conditions = conditions.chomp(Util.or)
-      #arreglar user.current
-      #conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
+      conditions += "transactions.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
 
       trans = Transaction.
         where(conditions).
