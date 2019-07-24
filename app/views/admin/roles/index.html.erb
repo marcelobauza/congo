@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <div class="card shadow">
   <div class="card-body">
     <div class="form-row">
@@ -7,7 +5,7 @@
         <h2>Roles</h2>
       </div>
       <div class="col-md-6 text-right">
-        <%= link_to 'Nuevo Rol', new_admin_role_path, :class => 'btn btn-primary' %>
+        <%= link_to 'Nuevo', new_admin_role_path, :class => 'btn btn-primary' %>
       </div>
     </div>
   </div>
@@ -16,7 +14,7 @@
 <div class="card shadow">
   <div class="card-body">
     <table class="table table-striped table-hover table-bordered">
-      
+
       <thead>
         <tr>
           <th>Nombre</th>
@@ -31,7 +29,7 @@
             <td><%= role.name %></td>
             <td><%= role.read_only %></td>
             <td class="text-center"><%= link_to edit_admin_role_path(role) do %>  <i class="fas fa-edit" title="Editar"></i> <% end %></td>
-            <td class="text-center"><%= link_to admin_role_path(role), method: :delete, data: { confirm: 'Are you sure?' } do %> <i class="fas fa-trash-alt " title="Eliminar"></i> <%end%></td>
+            <td class="text-center"><%= link_to admin_role_path(role), method: :delete, data: { confirm: '¿Está seguro?' } do %> <i class="fas fa-trash-alt " title="Eliminar"></i> <%end%></td>
           </tr>
         <% end %>
       </tbody>
