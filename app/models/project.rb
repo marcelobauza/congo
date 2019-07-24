@@ -532,7 +532,7 @@ class Project < ApplicationRecord
   end
 
   #FIND PROJECTS BY MIX TYPE
-  def self.projects_group_by_mix(widget, filters)
+  def self.projects_group_by_mix(widget, filters, range)
     @joins = Array.new
     #BUILD JOINS
     joins_by_widget(widget)
@@ -541,12 +541,11 @@ class Project < ApplicationRecord
               sum(project_instance_mix_views.total_units - project_instance_mix_views.stock_units) as sold_units, "
     select += "project_mixes.mix_type, project_mixes.id"
 
-
     if filters.has_key? :mix_ids
       query = " mix_id = #{filters[:mix_ids].join(',')} and " 
-      query += build_conditions_new(filters, widget, false) 
+      query += build_conditions_new(filters, widget, false, range) 
     else
-      query = build_conditions_new(filters, widget, false) 
+      query = build_conditions_new(filters, widget, false, range) 
     end 
 
 
@@ -794,17 +793,20 @@ class Project < ApplicationRecord
     if filters.has_key? :to_period and range == true
       @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView)     
     else
-      @conditions += "bimester = #{filters[:to_period]} AND year = #{filters[:to_year]}" 
+      @conditions += "bimester = #{filters[:to_period]} AND year = #{filters[:to_year]}" + Util.and
+
     end
 
-    @conditions += bimesters_condition(filters, self_not_filter, useView)
+    if range == true
+      @conditions += bimesters_condition(filters, self_not_filter, useView)
+      @conditions += between_condition_new(filters, self_not_filter)
+    end
     @conditions += ids_conditions_new(filters, self_not_filter, useView)
-    @conditions += between_condition_new(filters, self_not_filter)
+
     @conditions += "county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
     @conditions.chomp!(Util.and)
     @conditions
   end
-
 
   def self.bimesters_condition(filters, self_not_filter, useView = false)
     conditions = ""
@@ -1219,7 +1221,7 @@ end
 
       pstatus = Project.projects_group_by_count('project_statuses', filters, false,false)
       ptypes = Project.projects_group_by_count('project_types', filters, true, false)
-      pmixes = Project.projects_group_by_mix('mix', filters)
+      pmixes = Project.projects_group_by_mix('mix', filters, false)
       avai = Project.projects_sum_by_stock(filters)
       uf_values = Project.projects_by_uf(filters)
       uf_m2_values = Project.projects_by_uf_m2(filters)
@@ -1503,7 +1505,7 @@ end
 
       result =[]
       list_project = list_projects filters
-      pmixes = Project.projects_group_by_mix('mix', filters)
+      pmixes = Project.projects_group_by_mix('mix', filters, false)
       avai = Project.projects_sum_by_stock(filters)
       uf_values = Project.projects_by_uf(filters)
       uf_m2_values = Project.projects_by_uf_m2(filters)

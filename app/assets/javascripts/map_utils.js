@@ -223,6 +223,7 @@ var overlays =  {
   }
 
   counties = function(){
+
     var bimester, year, filter_for_layer;
     var filter_layer = "AND 1 = 1 ";
 
@@ -326,14 +327,17 @@ var overlays =  {
         
         project_status_ids = Congo.projects.config.project_status_ids; 
         project_type_ids = Congo.projects.config.project_type_ids;
+        agency_ids = Congo.projects.config.project_agency_ids;
         filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         if (project_status_ids.length > 0){
-
           filter_layer = filter_layer + " AND project_status_id IN (" + project_status_ids + ")";
         } 
 
         if (project_type_ids.length > 0){
           filter_layer = filter_layer + " AND project_type_id IN (" + project_type_ids + ")";
+        }
+        if (agency_ids.length > 0){
+          filter_layer = filter_layer + " AND agency_id IN (" + agency_ids + ")";
         }
         remove_legend();
         break;
