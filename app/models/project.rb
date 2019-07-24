@@ -628,60 +628,6 @@ class Project < ApplicationRecord
     end
   end
 
-  # def self.values_by_period(widget, select, filters, proc)
-  #   result = []
-  #   @joins = Array.new
-
-
-  #   joins_by_widget(widget)
-  #   joins_by_filter(filters)
-
-  #   condition = Util.and + build_conditions(filters, widget)
-  #   bimesters = get_bimesters filters
-
-  #   bimesters.each do |bimester|
-  #     cond_query = get_periods_query(bimester[:period], bimester[:year]) + condition
-
-  #     project = Project.find(:first,
-  #                            :select => select,
-  #                            :joins => @joins.uniq.join(" "),
-  #                            :conditions => cond_query,
-  #                            :group => 'year, bimester',
-  #                            :order => 'year, bimester')
-
-  #     proc.call result, project, bimester
-  #   end
-
-  #   result.reverse
-  # end
-
-  #def self.values_by_period2(widget, select, filters, proc)
-  #  result = []
-  #  @joins = Array.new
-  #  @joins << "INNER JOIN project_instance_views ON project_instance_views.id = project_instance_id "
-
-  #  #joins_by_widget(widget)
-  #  #joins_by_filter(filters)
-
-  #  condition = Util.and + build_conditions(filters, widget, true)
-  #  bimesters = get_bimesters filters
-
-  #  bimesters.each do |bimester|
-  #    cond_query = get_periods_query_for_view(bimester[:period], bimester[:year]) + condition
-
-  #    project = ProjectInstanceMixView.find(:first,
-  #                                          :select => select,
-  #                                          :joins => @joins.uniq.join(" "),
-  #                                          :conditions => cond_query,
-  #                                          :group => 'project_instance_mix_views.year, project_instance_mix_views.bimester',
-  #                                          :order => 'project_instance_mix_views.year, project_instance_mix_views.bimester')
-
-  #    proc.call result, project, bimester
-  #  end
-
-  #  result.reverse
-  #end
-
   def self.get_first_bimester_with_projects
     period = ProjectInstance.find(:first,
                                   :select => "project_instances.year, project_instances.bimester",
@@ -779,9 +725,7 @@ class Project < ApplicationRecord
     value_column
   end
 
-
   def self.build_conditions_new(filters, self_not_filter=nil, useView = false, range=true)
-
     @conditions = ''
     if !filters[:county_id].nil?
       @conditions += "county_id = #{filters[:county_id]}" + Util.and
@@ -850,13 +794,6 @@ class Project < ApplicationRecord
   def self.between_condition(filters, self_not_filter)
     conditions = ""
 
-    #FILTERS THE DIFERENT INSTANCES FOR THE SAME PROJECT BY THEIRS DATE
-
-    #  if filters.has_key? :from_instance_date
-    #    conditions += WhereBuilder.build_between_condition('project_instances.instance_date', filters[:from_instance_date], filters[:to_instance_date])
-
-    # end
-
     #FILTERS THE PROJECTS BY A RANGE OF FLOORS
     if filters.has_key? :from_floor
       conditions += "( "
@@ -869,30 +806,10 @@ class Project < ApplicationRecord
       conditions += " )" + Util.and
     end
 
-    #FILTERS THE PROJECTS BY A RANGE OF UF VALUES
-    #    if filters.has_key? :from_uf_value
-    #      p "paso por el filtro"
-    #      conditions += "( "
-    #      0.upto(filters[:from_uf_value].length - 1) do |i|
-    #        conditions += WhereBuilder.build_between_condition('project_instance_mix_views.uf_avg_percent', filters[:from_uf_value][i], filters[:to_uf_value][i])
-    #        conditions += Util.and
-    #      end
-
-    #      conditions.chomp!(Util.and)
-    #      conditions += " )" + Util.and
-    #    end
-
     conditions
   end
   def self.between_condition_new(filters, self_not_filter)
     conditions = ""
-
-    #FILTERS THE DIFERENT INSTANCES FOR THE SAME PROJECT BY THEIRS DATE
-
-    #  if filters.has_key? :from_instance_date
-    #    conditions += WhereBuilder.build_between_condition('project_instances.instance_date', filters[:from_instance_date], filters[:to_instance_date])
-
-    # end
 
     #FILTERS THE PROJECTS BY A RANGE OF FLOORS
     if filters.has_key? :from_floor
@@ -943,23 +860,6 @@ class Project < ApplicationRecord
       end
     end
 
-=begin
-    #AGENCIES
-    if filters.has_key? :project_agency_ids and self_not_filter != 'agencies'
-      conditions += WhereBuilder.build_in_condition("projects.agency_id", filters[:project_agency_ids])
-      conditions += Util.and
-    end
-
-    #MIXES
-    if filters.has_key? :mix_ids and self_not_filter != 'mix'
-      conditions += "project_instance_mix_views.mix_id IN (#{filters[:mix_ids].join(",")})"
-      conditions += Util.and
-    end
-
-
-
-=end
-
     #MIXES funciona
     if filters.has_key? :mix_ids and self_not_filter != 'mix'
       conditions += "project_instance_views.id  IN(SELECT project_instance_id "
@@ -969,7 +869,6 @@ class Project < ApplicationRecord
 
     if filters.has_key? :project_agency_ids and self_not_filter != 'agencies'
       conditions += " projects.agency_id IN (#{filters[:project_agency_ids].join(",")}) "
-
       conditions += Util.and
     end
 
@@ -1002,32 +901,9 @@ class Project < ApplicationRecord
     #terminar condicion con la relacion de las agencias
     #AGENCIES
     if filters.has_key? :project_agency_ids and self_not_filter != 'agencies'
-      conditions += " project_instance_mix_views.agency_id IN (#{filters[:project_agency_ids].join(",")}) "
-
+      conditions += "  project_instance_mix_views.agency_id IN (#{filters[:project_agency_ids].join(",")}) "
       conditions += Util.and
     end
-
-
-=begin
-
-    #MIXES
-    if filters.has_key? :mix_ids and self_not_filter != 'mix'
-      conditions += "project_instance_mix_views.mix_id IN (#{filters[:mix_ids].join(",")})"
- #     conditions += "FROM project_instance_mix_views  WHERE IN(#{filters[:mix_ids].join(",")}))"
-      conditions += Util.and
-
-    end
-
-
-
-    #AGENCIES
-    if filters.has_key? :project_agency_ids and self_not_filter != 'agencies'
-      conditions += WhereBuilder.build_in_condition("projects.agency_id", filters[:project_agency_ids])
-      conditions += Util.and
-    end
-
-=end
-
     conditions
 
   end
@@ -1050,7 +926,6 @@ class Project < ApplicationRecord
     end
 
     if filters.has_key? :project_status_ids
-      #@joins << "INNER JOIN project_instances ON project_instances.project_id = projects.id "
       @joins << "INNER JOIN project_statuses ON project_statuses.id = project_instance_views.project_status_id "
     end
 

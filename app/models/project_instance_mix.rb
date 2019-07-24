@@ -1,6 +1,5 @@
 class ProjectInstanceMix < ApplicationRecord
   belongs_to :project_instance
- # belongs_to :project_instance
   belongs_to :project_mix, :foreign_key => :mix_id
   has_one :project_instance_mix_view
 
