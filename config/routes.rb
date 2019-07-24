@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'future_projects/index'
   get 'projects/index'
   get 'transactions/index'
+  get 'building_regulations/index'
   get 'dashboards/graduated_points'
   get 'dashboards/heatmap'
   get 'dashboards/filter_county_for_lon_lat'
