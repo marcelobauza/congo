@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :categories
   resources :regions
   get 'dashboards/index'
   get 'counties/index'
