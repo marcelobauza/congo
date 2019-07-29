@@ -1,0 +1,17 @@
+<%= form_tag admin_future_projects_path, :method => 'get' do |f| %>
+  <div class="row">
+    <div class="span4">
+      <span class="label success"><%= t('activerecord.attributes.future_project.future_project_type_id')%></span>
+      <%= select "", :future_project_type_id, future_project_types_for_select, {:include_blank => true} %>
+    </div>
+
+    <div class="span4">
+      <span class="label success"><%= t('activerecord.attributes.future_project.project_type_id')%></span>
+      <%= select "", :project_type_id, project_types_for_select, {:include_blank => true} %>
+    </div>
+
+    <div class="span6">
+      <%= submit_tag t('menu.future_project.search'), :class => "btn success" %>
+    </div>
+  </div>
+<% end %>
