@@ -5,7 +5,10 @@ class Admin::FutureProjectsController < ApplicationController
   # GET /future_projects
   # GET /future_projects.json
   def index
-    @future_projects = FutureProject.all.paginate(page: params[:page])
+    @future_projects = FutureProject.where(nil)
+    @future_projects = @future_projects.future_project_type_filter(params[:future_project_type_id]) if !params[:future_project_type_id].nil?
+    @future_projects = @future_projects.project_type_filter(params[:project_type_id]) if !params[:project_type_id].nil?
+    @future_projects = @future_projects.all.paginate(page: params[:page])
   end
 
   # GET /future_projects/1
@@ -43,7 +46,7 @@ class Admin::FutureProjectsController < ApplicationController
   def update
     respond_to do |format|
       if @future_project.update(future_project_params)
-        format.html { redirect_to @future_project, notice: 'Future project was successfully updated.' }
+        format.html { redirect_to admin_future_projects_path(), notice: 'Future project was successfully updated.' }
         format.json { render :show, status: :ok, location: @future_project }
       else
         format.html { render :edit }

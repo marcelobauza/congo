@@ -45,6 +45,17 @@ class FutureProject < ApplicationRecord
     self.county.try(:name)
   end
 
+  def self.future_project_type_filter future_project_type_id
+    return all unless !future_project_type_id.empty?
+    where(future_project_type_id: future_project_type_id) 
+
+  end
+
+  def self.project_type_filter project_type_id
+    return all  unless  !project_type_id.empty?
+    where(project_type_id: project_type_id)
+  end
+
   def file_date=(val)
 
     self[:file_date] = val
