@@ -1,7 +1,12 @@
 class Admin::PeriodsController < ApplicationController
   before_action :set_admin_period, only: [:show, :edit, :update, :destroy]
   layout 'admin'
-
+  
+  def active_periods
+      @periods = Period.where(active: "true").order(year: :desc, bimester: :desc).select(:bimester, :year)
+      render json: {data: @periods}
+  end
+  
   # GET /admin/periods
   # GET /admin/periods.json
   def index

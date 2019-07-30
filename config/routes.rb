@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :categories
   resources :regions
   get 'dashboards/index'
+
   get 'counties/index'
   get 'future_projects/index'
   get 'projects/index'
@@ -54,6 +55,7 @@ Rails.application.routes.draw do
   
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
+    get 'periods/active_periods'
     resources :agencies
     resources :periods
     resources :import_processes
@@ -69,6 +71,7 @@ Rails.application.routes.draw do
     resources :counties
     resources :surveyors
     get 'dashboards/index'
+
   root 'dashboards#index'
   end
   resources :application_statuses

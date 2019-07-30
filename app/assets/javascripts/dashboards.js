@@ -16,7 +16,8 @@ Congo.dashboards.config= {
   typeGeometry: '',
   boost: false,
   area :0,
-  draw_active: false
+  draw_active: false,
+  slider_period: []
 }
 
 Congo.dashboards.action_index = function(){
@@ -24,8 +25,6 @@ Congo.dashboards.action_index = function(){
   $('#boost').on('click', function(){
       area = Congo.dashboards.config.area;
       radius = Congo.dashboards.config.radius;
-    console.log(area);
-    console.log(radius);
     if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)){
         Congo.dashboards.config.boost = true;
         Congo.map_utils.counties();
@@ -44,10 +43,22 @@ Congo.dashboards.action_index = function(){
           }
         });
     Congo.map_utils.init();
+           
+        $.ajax({
+          async: false,
+          type: 'GET',
+          data: {enable: "true"},
+          url: '/admin/periods/active_periods.json',
+          datatype: 'json',
+          success: function(data){
+            $.each(data, function(key, period){
+              $.each(period, function(a, value){
+               Congo.dashboards.config.slider_period.push(value.bimester +"/"+value.year);
+              })
+            })
+          }
+        });
   }
-
-
-
 
   // Creamos el overlay
   create_overlay_and_filter_card = function() {
