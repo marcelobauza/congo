@@ -2,6 +2,8 @@
 
 <!-- Future Projects -->
     <%= render partial: 'filters' %>
+    <%= will_paginate @future_projects %>
+    <%= link_to 'New Future Project', new_admin_future_project_path %>
 <div class="col-md-12 overflow-auto">
   <table class="table table-striped table-hover table-bordered">
     <thead>
@@ -42,4 +44,4 @@
 
 <br>
 
-<%= link_to 'New Future Project', new_admin_future_project_path %>
+
