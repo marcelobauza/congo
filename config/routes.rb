@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   resources :categories
   resources :regions
   get 'dashboards/index'
@@ -66,6 +67,7 @@ Rails.application.routes.draw do
     resources :roles
     resources :users 
     resources :counties
+    resources :surveyors
     get 'dashboards/index'
   root 'dashboards#index'
   end

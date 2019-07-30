@@ -1,0 +1,2 @@
+class Surveyor < ApplicationRecord
+end

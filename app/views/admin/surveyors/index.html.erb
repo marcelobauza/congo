@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Surveyors</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @surveyors.each do |surveyor| %>
+      <tr>
+        <td><%= surveyor.name %></td>
+        <td><%= link_to 'Edit', edit_admin_surveyor_path(surveyor) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Surveyor', new_admin_surveyor_path() %>
