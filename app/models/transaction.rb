@@ -758,7 +758,7 @@ class Transaction < ApplicationRecord
   end
 
   def build_geom
-    self.the_geom = Point.from_x_y(self.longitude.to_f, self.latitude.to_f, 4326) if self.latitude and self.longitude
+    self.the_geom = "POINT(#{self.longitude.to_f} #{self.latitude.to_f})" if self.latitude and self.longitude
   end
 
   def self.build_ids_conditions(filters, self_not_filter=nil)
