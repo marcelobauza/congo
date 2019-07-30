@@ -24,10 +24,9 @@ class User < ApplicationRecord
   end
 
   def self.get_users_by_filters(params)
-
     role_id = params[:user][:role_id] unless params[:user].nil?
     email = params[:user][:email] unless params[:user].nil?
-    disabled = params[:user][:disabled] unless params[:disabled].nil?
+    disabled = params[:user][:disabled] unless params[:user].nil?
     nombre = params[:user][:complete_name] unless params[:user].nil?
 
     User.select("users.*").
