@@ -1,7 +1,6 @@
 module PropertyTypesHelper
 
-
   def property_type_for_select
-    PropertyType.all.select(:id,:name).order(:name).map {|t| [t.name, t.id]}
+    PropertyType.select(:id,:name).order(:name).map {|t| [t.name, t.id]}
 end
 end
