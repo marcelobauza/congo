@@ -6,6 +6,8 @@ class Admin::TransactionsController < ApplicationController
   # GET /transactions
   # GET /transactions.json
   def index
+    @transactions = Transaction.where(nil)
+    @transactions = @transactions.number_filter(params[:number]) if params.has_key? :number
     @transactions = Transaction.all.paginate(page: params[:page])
   end
 
@@ -44,7 +46,7 @@ class Admin::TransactionsController < ApplicationController
   def update
     respond_to do |format|
       if @transaction.update(transaction_params)
-        format.html { redirect_to @transaction, notice: 'Transaction was successfully updated.' }
+        format.html { redirect_to admin_transactions_path(), notice: 'Transaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @transaction }
       else
         format.html { render :edit }
@@ -71,6 +73,6 @@ class Admin::TransactionsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def transaction_params
-    params.fetch(:transaction, {})
+    params.require(:transaction).permit(:property_type_id, :address, :sheet, :number, :inscription_date, :buyer_name, :seller_type_id, :department, :blueprint, :uf_value, :real_value, :calculated_value, :quarter,:year, :sample_factor, :county_id, :the_geom, :cellar, :parkingi, :role, :seller_name, :buller_rut, :uf_m2, :tome, :lot, :block, :village, :surface, :requiring_entity, :commments, :user_id, :surveyor_id, :active, :bimester, :code_sii, :total_surface_building, :total_surface_terrain, :uf_m2_u, :uf_m2_t, :building_regulation, :role_1, :role_2, :code_destination, :code_material, :year_sii  )
   end
 end

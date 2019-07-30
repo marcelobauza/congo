@@ -2,6 +2,7 @@
 
 <!-- Transactions -->
 
+    <%= render partial: 'filters' %>
 <div class="col-md-12">
   <table class="table table-striped table-hover table-bordered">
     <thead>
@@ -42,7 +43,9 @@
           <td><%= transaction.quarter %></td>
           <td><%= transaction.year %></td>
           <td><%= transaction.county_name %></td>
-          <td> <% link_to edit_admin_transaction_path(transaction), :class => "ui-state-default ui-corner-all", :title => t('actions.edit') do %> <div class="ui-icon ui-icon-pencil"></div> <% end %> </td>
+          <td><%= number_with_precision(transaction.calculated_value, precision: 1) %></td>
+          <td><%= number_with_precision(transaction.uf_m2, precision: 1) %></td>
+          <td><%= link_to "Edit", edit_admin_transaction_path(transaction) %> </td>
         </tr>
       <% end %>
     </tbody>

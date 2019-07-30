@@ -1,0 +1,23 @@
+<%= form_tag admin_transactions_path, :method => 'get' do |f| %>
+  <div class="row">
+
+    <div class="span4">
+      <span class="label success"><%= t('activerecord.attributes.transaction.number')%></span>
+      <%= text_field_tag :number %>
+    </div>
+    <div class="span4">
+      <span class="label success"><%= t('activerecord.attributes.transaction.role')%></span>
+      <%= text_field_tag :role %>
+    </div>
+    <div class="span4">
+      <span class="label success"><%= t('activerecord.attributes.transaction.property_type')%></span>
+      <%= select_tag :property_type_id, options_for_select(property_type_for_select), :class => "text" %>
+    </div>
+
+    <div class="span6">
+      <span class="label success"><%= t('activerecord.attributes.transaction.inscription_date')%></span>
+      <%= text_field_tag :inscription_date %>
+      <%= submit_tag t('menu.transaction.search'), :class => "btn success" %>
+    </div>
+  </div>
+<% end %>

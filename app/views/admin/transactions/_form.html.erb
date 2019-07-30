@@ -3,9 +3,279 @@
   <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
   <div class="form-inputs">
-  </div>
+    <% if @transaction.errors.any? %>
+      <div class="alert-message block-message error">
+        <ul class="panel-body">
+          <% @transaction.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
-<% end %>
+    <div class="row">
+      <div class="span4">
+        <div  class="clearfix">
+          <%= f.label :inscription_date %>
+          <div class="input">
+            <div class="inline-inputs">
+              <%= date_select :inscription_date, {:start_year => 2008, 
+                                                  :end_year => Date.today.year, :use_month_numbers => true }, 
+                                                  {:class => "mini"} %>
+            </div>
+            <span class="help-block">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      <div class="span4">
+        <div  class="clearfix">
+          <%= f.label :tome %>
+          <div class="input">
+            <%= f.text_field :tome, :class => "text" %>
+            <span class="help-block">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      <div class="span4">
+        <div class="clearfix">
+          <%= f.label :sheet %>
+          <div class="input">
+            <%= f.text_field :sheet, :class => "text"%>
+            <span class="help-block">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      <div class="span4">
+        <div  class="clearfix">
+          <%= f.label :number %>
+          <div class="input">
+            <%= f.text_field :number, :class => "text"%>
+            <span class="help-block">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      <div class="span4">
+        <div  class="clearfix">
+          <%= f.label :buyer_rut %>
+          <div class="input">
+            <%= f.text_field :buyer_rut, :class => "text"%>
+            <span class="help-block"><%= t 'form.hint.transaction.buyer_rut' %></span>
+          </div>
+        </div>
+      </div>
+      <div class="span4">
+        <div  class="clearfix">
+          <%= f.label :buyer_name %>
+          <div class="input">
+            <%= f.text_field :buyer_name, :class => "text"%>
+            <span class="help-block">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      <div class="span4">
+        <div  class="clearfix">
+          <%= f.label :seller_name %>
+          <div class="input">
+            <%= f.text_field :seller_name, :class => "text"%>
+            <span class="help-block">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      <div class="span4">
+        <div  class="clearfix">
+          <%= f.label :seller_type %>
+          <div class="input">
+            <%= f.select :seller_type_id, seller_types_for_select, { :prompt => t(:select_item_from_list) }, :class => "text"%>
+            <span class="help-block">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="span2">
+        <div  class="clearfix">
+          <%= f.label :active %>
+          <div class="input">
+            <%= f.check_box :active%>
+            <span class="help-block">&nbsp;</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="span8">
+          <div class="clearfix">
+            <%= f.label :address %>
+            <div class="input">
+              <%= f.text_field :address, :class => "text span8"%>
+              <div id="geocodingResult"></div>
+              <span class="help-inline"><%= t 'form.hint.transaction.address' %></span>
+            </div>
+          </div>
+          <div  class="clearfix">
+            <%= f.label :county %>
+            <div class="input">
+              <%= f.select :county_id, counties_for_select, { :prompt => t(:select_item_from_list) }, :class => "text"%>
+              <%= f.label :code_sii %>
+              <%= f.text_field :code_sii %>
+
+            </div>
+          </div>
+        </div>
+        <div id="admin_map"></div>
+        <div class="span8">
+          <%= f.hidden_field :longitude %>
+          <%= f.hidden_field :latitude %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="span4">
+          <div class="clearfix">
+            <%= f.label :lot %>
+            <div class="input">
+              <%= f.text_field :lot, :class => "text"%>
+              <span class="help-block">&nbsp;</span>
+            </div>
+          </div>
+
+
+          <div class="span4">
+            <div class="clearfix">
+              <%= f.label :block %>
+              <div class="input">
+                <%= f.text_field :block, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div class="clearfix">
+              <%= f.label :village %>
+              <div class="input">
+                <%= f.text_field :village, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div  class="clearfix">
+              <%= f.label :department %>
+              <div class="input">
+                <%= f.text_field :department, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div  class="clearfix">
+              <%= f.label :parkingi %>
+              <div class="input">
+                <%= f.text_field :parkingi, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div  class="clearfix">
+              <%= f.label :cellar %>
+              <div class="input">
+                <%= f.text_field :cellar, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div  class="clearfix">
+              <%= f.label :property_type %>
+              <div class="input">
+                <%= f.select :property_type_id, property_type_for_select, { :prompt => t(:select_item_from_list) }, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div class="clearfix">
+              <%= f.label :surface %>
+              <div class="input">
+                <%= f.text_field :surface, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div class="clearfix">
+              <%= f.label :blueprint %>
+              <div class="input">
+                <%= f.text_field :blueprint, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div class="clearfix">
+              <%= f.label :real_value %>
+              <div class="span4">
+                <div class="input">
+                  <%= f.text_field :real_value, :class => "span3"%>
+                  <input type="button" id="calculate_uf" value="UF" class="btn success" />
+                  <span class="help-block">&nbsp;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div class="clearfix">
+              <%= f.label :uf_value %>
+              <div class="input">
+                <%= f.text_field :calculated_value, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div  class="clearfix">
+              <%= f.label :uf_m2 %>
+              <div class="input">
+                <%= f.text_field :uf_m2, :readonly => true, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div class="clearfix">
+              <%= f.label :role %>
+              <div class="input">
+                <%= f.text_field :role, :class => "text"%>
+                <span class="help-block"><%= t 'form.hint.transaction.role' %></span>
+              </div>        
+            </div>
+          </div>
+
+          <div class="span4">
+            <div  class="clearfix">
+              <%= f.label :requiring_entity %>
+              <div class="input">
+                <%= f.text_field :requiring_entity, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+          <div class="span4">
+            <div  class="clearfix">
+              <%= f.label :surveyor %>
+              <div class="input">
+                <%= f.select :surveyor_id, surveyors_for_select, { :prompt => t(:select_item_from_list) }, :class => "text"%>
+                <span class="help-block">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="span4">
+          <div  class="clearfix">
+
+            <div class="form-actions">
+              <%= f.button :submit %>
+            </div>
+          </div>
+        <% end %>
