@@ -225,12 +225,11 @@ class Transaction < ApplicationRecord
 
     conditions = "rol_number = '#{self.role}'  #{Util.and} "
     conditions += "county_sii_id = #{self.code_sii}" 
-    self.total_surface_terrain = TaxLand.sum('land_m2', :conditions => conditions) 
-    self.total_surface_building = TaxUsefulSurface.sum('m2_built', :conditions => conditions) 
+    self.total_surface_terrain = TaxLand.where(conditions).sum('land_m2')
+    self.total_surface_building = TaxUsefulSurface.where(conditions).sum('m2_built')
     self.uf_m2_u = self.calculated_value / self.total_surface_building unless self.total_surface_building == 0 or self.total_surface_building.nil?
     self.uf_m2_t = self.calculated_value / self.total_surface_terrain unless self.total_surface_terrain == 0 or self.total_surface_terrain.nil?
-    building_regulation = BuildingRegulation.find(:first,  :conditions =>"county_id = #{self.county_id} #{Util.and} ST_Contains(the_geom, ST_Transform(ST_GeomFromText('POINT(#{self.longitude} #{self.latitude})',4326),4326)) " )
-
+    building_regulation = BuildingRegulation.where("county_id = #{self.county_id} #{Util.and} ST_Contains(the_geom, ST_Transform(ST_GeomFromText('POINT(#{self.longitude} #{self.latitude})',4326),4326)) " ).first
     self.building_regulation = building_regulation.name_ze.to_s unless building_regulation.nil?
   end
 
