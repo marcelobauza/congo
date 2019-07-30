@@ -8,7 +8,10 @@ class Admin::TransactionsController < ApplicationController
   def index
     @transactions = Transaction.where(nil)
     @transactions = @transactions.number_filter(params[:number]) if params.has_key? :number
-    @transactions = Transaction.all.paginate(page: params[:page])
+    @transactions = @transactions.role_filter(params[:role]) if params.has_key? :role
+    @transactions = @transactions.property_type_filter(params[:property_type_id]) if params.has_key? :property_type_id
+    @transactions = @transactions.inscription_date_filter(params[:inscription_date]) if params.has_key? :inscription_date
+    @transactions = @transactions.all.paginate(page: params[:page])
   end
 
   # GET /transactions/1

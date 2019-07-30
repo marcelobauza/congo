@@ -52,6 +52,30 @@ class Transaction < ApplicationRecord
   COUNT_CRITERIA = 1
   AVG_CRITERIA = 2
 
+
+  def self.number_filter number
+    return all unless !number.empty?
+    where(number: number)
+  end
+
+  def self.role_filter role
+    return all unless !role.empty?
+    where(role: role)
+  end
+
+  def self.property_type_filter property_type_id
+    return all unless !property_type_id.empty?
+    where(property_type_id: property_type_id)
+  end
+
+  def self.inscription_date_filter inscription_date
+    return all unless !inscription_date.empty?
+    where(inscription_date: inscription_date)
+  end
+
+
+
+
   def  self.pois params
 
     @joins = " INNER JOIN property_types ON property_types.id = transactions.property_type_id "
