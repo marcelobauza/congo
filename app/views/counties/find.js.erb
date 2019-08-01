@@ -1,8 +1,10 @@
+ids = []
 name = '<%= @county[0].name %>'
-id = '<%= @county[0].id %>'
+ids.push(<%= @county.ids %>)
+    Congo.dashboards.config.county_id = ids;
+
 
 Congo.dashboards.config.county_name = name;
-Congo.dashboards.config.county_id = id;
 Congo.dashboards.config.typeGeometry = '';
 
 Congo.map_utils.counties();
