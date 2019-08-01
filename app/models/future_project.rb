@@ -345,9 +345,8 @@ class FutureProject < ApplicationRecord
   def self.conditions(filters, self_not_filter=nil)
 
     conditions = ""
-
     if !filters[:county_id].nil?
-      conditions += "county_id = #{filters[:county_id]}" + Util.and
+      conditions += WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
     elsif !filters[:wkt].nil?
       conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
@@ -472,7 +471,7 @@ class FutureProject < ApplicationRecord
   def self.interval_graduated_points(params)
 
     if !params[:county_id].nil?
-      conditions = "county_id = #{params[:county_id]}"
+      conditions = WhereBuilder.build_in_condition("county_id",params[:county_id])
     elsif !params[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(params[:wkt])
     else
