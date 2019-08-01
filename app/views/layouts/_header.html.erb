@@ -24,10 +24,7 @@
         <i class="fas fa-map-pin" title="Selección"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-navbar1" aria-labelledby="navbarDropdown">
-        <%= link_to "#", id: "select_point", class: "dropdown-item dropdown-item-navbar1", remote: true do %> <i class=" fas fa-map-pin" title="Pin" style="font-size: 26px"></i> <%end %>
         <%= link_to counties_index_path(), remote: true, 'class' => 'dropdown-item dropdown-item-navbar1', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class=" fas fa-clipboard-list chart-modal" title="Comunas" style="font-size: 26px"></i> <% end %>
-        <%= link_to "#", id: "select_polygon", class: "dropdown-item dropdown-item-navbar1", remote: true do %> <i class=" fas fa-draw-polygon" title="Polígono" style="font-size: 26px"></i> <%end %>
-        <%= link_to "#", id: "select_circle", class: "dropdown-item dropdown-item-navbar1", remote: true do %> <i class=" far fa-circle" title="Radio" style="font-size: 26px"></i> <%end %>
       </div>
     </div>
 
@@ -55,7 +52,6 @@
         <a class="dropdown-item dropdown-item-navbar1" href="#"><i class=" fas fa-circle" title="Puntos" style="font-size: 13px"></i></a>
         <%= link_to dashboards_graduated_points_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %><i class=" fas fa-braille" title="Puntos Proporcionales" style="font-size: 22px"></i><% end %>
         <%= link_to dashboards_heatmap_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %><i class=" fas fa-fire" title="Mapa de Calor" style="font-size: 26px"></i><% end %>
-        <a class="dropdown-item dropdown-item-navbar1" href="#"><i class=" far fa-dot-circle" title="Isolíneas" style=" font-size: 26px"></i></a>
       </div>
     </div>
 
