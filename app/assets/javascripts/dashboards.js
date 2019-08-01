@@ -139,6 +139,50 @@ Congo.dashboards.action_index = function() {
     )
   }
 
+  add_time_slider = function() {
+
+    if ($('#range_slider_time').length == 0) {
+
+      // Agregamos el slider al card de "Filtros"
+      $('#filter-body').prepend(
+        $("<input>", {
+          'id': 'range_slider_time'
+        }),
+        $("<div>", {
+          'class': 'dropdown-divider',
+        })
+      )
+
+      // Levantamos los datos de los periodos y del periodo actual
+      var slider_periods = Congo.dashboards.config.slider_periods
+      var actual_slider_period = to_bimester + '/' + to_year
+
+      // Implementamos ionRangeSlider
+      $("#range_slider_time").ionRangeSlider({
+        skin: "flat",
+        grid: true,
+        min: slider_periods[0],
+        max: slider_periods[slider_periods.length - 1],
+        from: actual_slider_period,
+        values: slider_periods,
+        onFinish: function(data) {
+
+          var data = data.from_value.split("/")
+          var updated_bimester = data[0]
+          var updated_year = data[1]
+
+          // Actualizamos el periodo actual
+          Congo.dashboards.config.bimester = updated_bimester
+          Congo.dashboards.config.year = updated_year
+
+          // Recargamos la capa
+          Congo.map_utils.counties();
+
+        }, // Cierra onFinish
+      }); // Cierra ionRangeSlider
+    } // If length
+  } // Cierra add_time_slider
+
   empty_selection_alert = function() {
     var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert"> Por favor, realice la selección de los datos para deplegar la información de la capa. <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
     $('#alerts').append(alert);
@@ -148,7 +192,8 @@ Congo.dashboards.action_index = function() {
     init: init,
     create_overlay_and_filter_card: create_overlay_and_filter_card,
     empty_selection_alert: empty_selection_alert,
-    add_county_filter_item: add_county_filter_item
+    add_county_filter_item: add_county_filter_item,
+    add_time_slider: add_time_slider,
   }
 }();
 

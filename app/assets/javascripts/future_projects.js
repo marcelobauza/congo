@@ -150,50 +150,6 @@ future_projects_popup= function(id){
   });
 }
 
-function addTimeSlider() {
-
-  if ($('#range_slider_time').length == 0) {
-
-    // Agregamos el slider al card de "Filtros"
-    $('#filter-body').prepend(
-      $("<input>", {
-        'id': 'range_slider_time'
-      }),
-      $("<div>", {
-        'class': 'dropdown-divider',
-      })
-    )
-
-    // Levantamos los datos de los periodos y del periodo actual
-    var slider_periods = Congo.dashboards.config.slider_periods
-    var actual_slider_period = to_bimester + '/' + to_year
-
-    // Implementamos ionRangeSlider
-    $("#range_slider_time").ionRangeSlider({
-      skin: "flat",
-      grid: true,
-      min: slider_periods[0],
-      max: slider_periods[slider_periods.length - 1],
-      from: actual_slider_period,
-      values: slider_periods,
-      onFinish: function(data) {
-
-        var data = data.from_value.split("/")
-        var updated_bimester = data[0]
-        var updated_year = data[1]
-
-        // Actualizamos el periodo actual
-        Congo.dashboards.config.bimester = updated_bimester
-        Congo.dashboards.config.year = updated_year
-
-        // Recargamos la capa
-        Congo.map_utils.counties();
-
-      }, // Cierra onFinish
-    }); // Cierra ionRangeSlider
-  } // If length
-} // Cierra addTimeSlider
-
 Congo.future_projects.action_dashboards = function(){
 
   init=function(){
@@ -227,8 +183,9 @@ Congo.future_projects.action_dashboards = function(){
     // Si se realizó la selección, añade los elementos al dashboard
     } else {
 
-      // Creamos el overlay
+      // Creamos el overlay y el time_slider
       Congo.dashboards.action_index.create_overlay_and_filter_card();
+      Congo.dashboards.action_index.add_time_slider();
 
       if (county_id != '') {
 
@@ -313,9 +270,6 @@ Congo.future_projects.action_dashboards = function(){
           $('.filter-transactions').hide();
           $('.filter-projects').hide();
           $('.filter-future-projects').show();
-
-          // Mostramos el time-slider
-          addTimeSlider()
         },
         success: function(data) {
 
