@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_10_233825) do
+ActiveRecord::Schema.define(version: 2019_07_29_233211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -76,6 +76,15 @@ ActiveRecord::Schema.define(version: 2019_07_10_233825) do
     t.decimal "hectarea_inhabitants"
     t.index ["county_id"], name: "index_building_regulations_on_county_id"
     t.index ["density_type_id"], name: "index_building_regulations_on_density_type_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name_en"
+    t.string "name_es"
+    t.boolean "income"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "census", force: :cascade do |t|
@@ -425,6 +434,12 @@ ActiveRecord::Schema.define(version: 2019_07_10_233825) do
   end
 
   create_table "seller_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "surveyors", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
