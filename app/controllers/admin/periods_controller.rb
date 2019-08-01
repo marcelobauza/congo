@@ -3,7 +3,7 @@ class Admin::PeriodsController < ApplicationController
   layout 'admin'
   
   def active_periods
-      @periods = Period.where(active: "true").order(year: :desc, bimester: :desc).select(:bimester, :year)
+      @periods = Period.where(active: "true").order(year: :asc, bimester: :asc).select(:bimester, :year)
       render json: {data: @periods}
   end
   
