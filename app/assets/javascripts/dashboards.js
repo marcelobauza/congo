@@ -3,7 +3,7 @@ Congo.namespace('dashboards.action_graduated_points');
 
 Congo.dashboards.config = {
   county_name: '',
-  county_id: '',
+  county_id: [],
   layer_type: 'future_projects_info',
   style_layer: 'future_projects_normal_point',
   bimester: '',

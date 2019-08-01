@@ -62,28 +62,28 @@ Congo.map_utils = function(){
       "Satelital": satellite,
       "Night": dark
     };
-var overlays =  {
-      };
+    var overlays =  {
+    };
     layerControl = L.control.layers(baseMaps, overlays, {position: 'topleft'}).addTo(map);
 
 
-
-    $('#select_circle').on('click', function(event) {
-      typeGeometry='circle';
-      if(typeof(editableLayers)!=='undefined'){
-        editableLayers.eachLayer(function (layer) {
-          map.removeLayer(layer);
-        });
+    editableLayers = new L.FeatureGroup();
+    var drawControl = new L.Control.Draw({
+      draw:{
+        polyline: false, 
+        rectangle: false,
+        circlemarker: false,
+      },
+      edit: {
+        featureGroup: editableLayers,
+        edit: true,
+        remove: false,
+        marker: false
       }
-      Congo.dashboards.config.county_id = '';
-      Congo.dashboards.config.size_box = [];
-      editableLayers = new L.FeatureGroup();
-      map.addLayer(editableLayers);
-      poly(typeGeometry);
     });
-
-    $('#select_polygon').on('click', function(event) {
-      typeGeometry='polygon';
+    map.addControl(drawControl);
+    map.on(L.Draw.Event.CREATED, function (event) {
+      var typeGeometry = event.layerType;
       size_box = [];
 
       if(typeof(editableLayers)!=='undefined'){
@@ -91,86 +91,97 @@ var overlays =  {
           map.removeLayer(layer);
         });
       }
-      Congo.dashboards.config.county_id = '';
-      Congo.dashboards.config.size_box = [];
-      Congo.dashboards.config.centerpt = '';
-      Congo.dashboards.config.radius = '';
-      map.doubleClickZoom.disable();
-      editableLayers = new L.FeatureGroup();
-      map.addLayer(editableLayers);
-      Congo.dashboards.config.typeGeometry = typeGeometry;
-      poly(typeGeometry);
-    });
 
-    $('#select_point').on('click', function(event) {
-      typeGeometry='point';
-      if(typeof(editableLayers)!=='undefined'){
-        editableLayers.eachLayer(function (layer) {
-          map.removeLayer(layer);
-        });
-      }
-      Congo.dashboards.config.centerpt = '';
-      Congo.dashboards.config.radius = '';
-      Congo.dashboards.config.size_box = [];
-      editableLayers = new L.FeatureGroup();
-      map.addLayer(editableLayers);
-      poly(typeGeometry);
-  
-    });
-
-    map.on('draw:created', function(e) {
-      
-      Congo.dashboards.config.draw_active = true;
-      if(typeGeometry == 'circle'){
-        layer = e.layer
-        var centerPt = layer.getLatLng();
-        var radius = layer.getRadius();
-        Congo.dashboards.config.radius = (radius);
-        center = centerPt.lng +" " + centerPt.lat;
+      layer = event.layer;
+      if (typeGeometry == 'polygon'){ 
+        Congo.dashboards.config.county_id = '';
+        Congo.dashboards.config.size_box = [];
+        Congo.dashboards.config.centerpt = '';
+        Congo.dashboards.config.radius = '';
+        map.doubleClickZoom.disable();
         Congo.dashboards.config.typeGeometry = typeGeometry;
-        Congo.dashboards.config.centerpt = center;
-        editableLayers.addLayer(layer);
-      }
-      if(typeGeometry == 'polygon'){
         var arr1 = []
-        var type = e.layerType,
-          layer = e.layer;
+
         polygon = layer.getLatLngs();
-        editableLayers.addLayer(layer);
         arr1 = LatLngsToCoords(polygon[0]);
         arr1.push(arr1[0])
         size_box.push(arr1);
+
         let area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
         Congo.dashboards.config.area = area;
-
         Congo.dashboards.config.size_box.push(size_box)
       }
-      if(typeGeometry == 'point'){
 
-        layer = e.layer
-        var centerPt = layer.getLatLng();
-        center = centerPt.lng +" " + centerPt.lat;
+      if (typeGeometry == 'circle'){
+
+        Congo.dashboards.config.county_id = '';
+        Congo.dashboards.config.size_box = [];
+        var centerpt = layer.getLatLng();
+        var radius = layer.getRadius();
+        Congo.dashboards.config.radius = (radius);
+        center = centerpt.lng +" " + centerpt.lat;
+        Congo.dashboards.config.typeGeometry = typeGeometry;
+        Congo.dashboards.config.centerpt = center;
+      }
+
+      if (typeGeometry == 'marker'){
+
+        Congo.dashboards.config.centerpt = '';
+        Congo.dashboards.config.radius = '';
+        Congo.dashboards.config.county_id = [];
+        Congo.dashboards.config.size_box = [];
+
+        centerpt = layer.getLatLng();
+        center = centerpt.lng +" " + centerpt.lat;
         Congo.dashboards.config.typeGeometry = typeGeometry;
         Congo.dashboards.config.centerpt = center;
 
         $.ajax({
           async: false,
-          type: 'GET',
+          type: 'get',
           url: '/dashboards/filter_county_for_lon_lat.json',
           datatype: 'json',
-          data: {lon: centerPt.lng, lat: centerPt.lat },
+          data: {lon: centerpt.lng, lat: centerpt.lat },
           success: function(data){
-            Congo.dashboards.config.county_id = data['county_id'];
+            Congo.dashboards.config.county_id.push([data['county_id']]);
             Congo.dashboards.config.county_name = data['county_name'];
           },
-          error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
-
+          error: function (jqxhr, textstatus, errorthrown) { console.log("algo malo paso"); }
         })
       }
-      Congo.dashboards.config.draw_active = false;
+      editableLayers.addLayer(layer).addTo(map);
       counties();
     });
 
+    map.on(L.Draw.Event.EDITED, function (event) { 
+
+      layer = event.layers;
+      if (typeGeometry == 'polygon'){
+        size_box = [];
+        arr1 = []
+        Congo.dashboards.config.size_box=[];
+
+        layer.eachLayer(function (layer) {
+          polygon = layer.getLatLngs();
+        });
+        arr1 = LatLngsToCoords(polygon[0]);
+        arr1.push(arr1[0])
+        size_box.push(arr1);
+        let area = L.GeometryUtil.geodesicArea(polygon[0]);
+        Congo.dashboards.config.area = area;
+        Congo.dashboards.config.size_box.push(size_box)
+      }
+      if (typeGeometry == 'circle'){
+        layer.eachLayer(function (layer) {
+          centerpt = layer.getLatLng();
+          radius = layer.getRadius();
+        });
+        Congo.dashboards.config.radius = (radius);
+        center = centerpt.lng +" " + centerpt.lat;
+      }
+      counties();
+
+    })
   }
 
   var LatLngToCoords = function (LatLng, reverse) { // (LatLng, Boolean) -> Array
@@ -190,43 +201,9 @@ var overlays =  {
 
     for (i = 0, len = LatLngs.length; i < len; i++) {
       coord =  LatLngToCoords(LatLngs[i]);
-       coords.push(coord);
+      coords.push(coord);
     }
     return coords;
-  }
-
-  function poly(type){
-
-    if (typeof HandlerGeometry != 'undefined'){
-        HandlerGeometry.disable();
-    }
-
-    switch(type) {
-      case 'circle':
-        var optionsDraw={
-          shapeOptions: {
-            fill: true,
-            zIndexOffset: 2000,
-            color: '#d3d800'
-
-        }
-        }
-        HandlerGeometry = new L.Draw.Circle(map, optionsDraw);
-        break;
-      case 'polygon':
-        var optionsDraw={
-          shapeOptions: {
-            color: '#d3d800',
-          }
-        }
-        HandlerGeometry = new L.Draw.Polygon(map, optionsDraw);
-        break;
-      case 'point':
-        HandlerGeometry = new L.Draw.Marker(map, optionsDraw);
-        break;
-    }
-    HandlerGeometry.enable();
-
   }
 
   function BoundingBox(){
@@ -239,33 +216,31 @@ var overlays =  {
     var bimester, year, filter_for_layer;
     var filter_layer = "AND 1 = 1 ";
 
-        $.ajax({
-          async: false,
-          type: 'GET',
-          url: '/counties/counties_users.json',
-          datatype: 'json',
-          success: function(data){
-            if (data.length > 0 ){
-            filter_layer = "AND county_id IN(" +data +")";
-            }
-          },
-          error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
+    $.ajax({
+      async: false,
+      type: 'GET',
+      url: '/counties/counties_users.json',
+      datatype: 'json',
+      success: function(data){
+        if (data.length > 0 ){
+          filter_layer = "AND county_id IN(" +data +")";
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
+    })
 
-        })
-
-    
     if (typeof HandlerGeometry != 'undefined'){
-        HandlerGeometry.disable();
+      HandlerGeometry.disable();
     }
 
     if (groupLayer !=undefined){
       groupLayer.eachLayer(function(layer) {
-        groupLayer.removeLayer(layer);});
+        groupLayer.removeLayer(layer);
+      });
     }
 
     if (sourcePois !=undefined){
       map.removeLayer(sourcePois);
-
     }
     map.removeControl(layerControl);
     layerControl = L.control.layers(baseMaps, overlays, {position: 'topleft'}).addTo(map);
@@ -273,7 +248,7 @@ var overlays =  {
     switch(layer_type) {
       case 'census_voronoi':
         filter_layer = filter_layer +  "AND 1=1";
-      break;
+        break;
       case 'transactions_info':
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
@@ -281,7 +256,7 @@ var overlays =  {
         property_type_ids = Congo.transactions.config.property_type_ids
         seller_type_ids = Congo.transactions.config.seller_type_ids
         boost = Congo.dashboards.config.boost;
-        
+
         if (boost == false){
           filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         }
@@ -308,9 +283,7 @@ var overlays =  {
         }        
         if (filter_future_project_type_ids.length > 0) {
           filter_layer = filter_layer + " AND future_project_type_id IN (" + filter_future_project_type_ids +")";
-
         }
-      
         if(filter_project_type_ids.length > 0){
           filter_layer = filter_layer + " AND project_type_id IN (" + filter_project_type_ids +")";
         }
@@ -336,7 +309,7 @@ var overlays =  {
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.projects.action_dashboards.indicator_projects();
-        
+
         project_status_ids = Congo.projects.config.project_status_ids; 
         project_type_ids = Congo.projects.config.project_type_ids;
         agency_ids = Congo.projects.config.project_agency_ids;
@@ -364,11 +337,10 @@ var overlays =  {
         from_inh_hectare = Congo.building_regulations.config.from_inhabitants_hectare;
         to_inh_hectare = Congo.building_regulations.config.to_inhabitants_hectare;
         allowed_use_ids = Congo.building_regulations.config.allowed_use_ids;
-        
+
         filter_layer = '';
-        console.log(allowed_use_ids.length);
         if (allowed_use_ids.length > 0 ){
-            filter_layer = filter_layer + " AND land_use_type_id IN ("+ allowed_use_ids + ")";
+          filter_layer = filter_layer + " AND land_use_type_id IN ("+ allowed_use_ids + ")";
         }
 
 
@@ -382,16 +354,17 @@ var overlays =  {
         if (from_max_height !='' && to_max_height != ''){
           filter_layer = filter_layer + "AND am_cc between " + from_max_height + " AND "+ to_max_height ;
         }
-        
+
         if ((from_inh_hectare !='' || typeof(from_inh_hectare)=== 'undefined')  && (to_inh_hectare != '' || typeof(to_inh_hectarea)==='undefined') ){
           filter_layer = filter_layer + "AND max_density between " + from_inh_hectare + " AND "+ to_inh_hectare ;
         }
-
 
         remove_legend();
         break;
     }
 
+    var coord_geoserver = [];
+    var polygon_size;
     typeGeometry = Congo.dashboards.config.typeGeometry;
     switch(typeGeometry) {
       case 'circle':
@@ -402,34 +375,34 @@ var overlays =  {
         cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)";
         break;
       case 'polygon':
-        coord_geoserver = [];
         polygon_size = Congo.dashboards.config.size_box;
         $.each(polygon_size[0], function(a, b){
-            $.each(b, function(c,d){
-              coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
-            })
+          $.each(b, function(c,d){
+            coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
+          })
         });
 
         cql_filter ="WITHIN(the_geom,  Polygon(("+coord_geoserver+"))) "+ filter_layer;
         cql_filter_pois ="WITHIN(the_geom, Polygon(("+coord_geoserver+"))) ";
         break;
-      case 'point':
+      case 'marker':
         county_id = Congo.dashboards.config.county_id;
         cql_filter = "county_id='"+ county_id + "'"+   filter_layer;
         cql_filter_pois = "county_id='"+ county_id + "'";
         break;
       default:
-      if(typeof(editableLayers)!=='undefined'){
-        editableLayers.eachLayer(function (layer) {
-          map.removeLayer(layer);
-        });
-      }
+        if(typeof(editableLayers)!=='undefined'){
+          editableLayers.eachLayer(function (layer) {
+            map.removeLayer(layer);
+          });
+        }
         Congo.dashboards.config.centerpt = '';
         Congo.dashboards.config.radius = 0;
         Congo.dashboards.config.size_box = [];
         county_id = Congo.dashboards.config.county_id;
-        cql_filter = "county_id='"+ county_id +"'"+ filter_layer;
-        cql_filter_pois = "county_id='"+ county_id + "'";
+        console.log(county_id);
+        cql_filter = "county_id IN ("+ county_id +") "+ filter_layer;
+        cql_filter_pois = "county_id IN ("+ county_id + ")";
         break;
     }
     groupLayer = L.layerGroup();
@@ -461,7 +434,7 @@ var overlays =  {
         request: 'GetFeature',
         typeName: 'inciti_v2:counties_info',
         outputFormat: 'application/json',
-        CQL_FILTER: "id='"+ county_id + "'"
+        CQL_FILTER: "county_id IN("+ county_id + ")"
       }
       var parameters = L.Util.extend(defaultParameters);
       var URL = owsrootUrl + L.Util.getParamString(parameters);
@@ -502,25 +475,21 @@ var overlays =  {
     groupLayer.addLayer(source_layers);
     layerControl.addOverlay(groupLayer, "Datos");
     groupLayer.addTo(map);
-
-
-    groupLayer.addTo(map);
     return;
-  }
-
+    }
+  //}
   function remove_legend(){
     if(typeof(htmlLegend)!=='undefined'){
-    map.removeControl(htmlLegend);
+      map.removeControl(htmlLegend);
     }
   }
 
 
   function legend_points(params){
     var options = [];
- //   remove_legend();
-$.each(params, function(a,value){
-    options.push({
-      name: value['name'],
+    $.each(params, function(a,value){
+      options.push({
+        name: value['name'],
         elements: [{
           html: '',
           style: {
@@ -529,10 +498,10 @@ $.each(params, function(a,value){
             'height': '10px'
           }
         }]
-    }
-    )
-})
-     htmlLegend = L.control.htmllegend({
+      }
+      )
+    })
+    htmlLegend = L.control.htmllegend({
       position: 'bottomleft',
       legends: options,
       collapseSimple: true,
@@ -542,13 +511,9 @@ $.each(params, function(a,value){
       visibleIcon: 'icon icon-eye',
       hiddenIcon: 'icon icon-eye-slash'
     })
-    
-map.addControl(htmlLegend)
 
-
-
+    map.addControl(htmlLegend)
   }
-
 
   return{
     init:init,
