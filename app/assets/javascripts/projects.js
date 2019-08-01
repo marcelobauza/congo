@@ -909,8 +909,9 @@ Congo.projects.action_dashboards = function(){
     // Si se realizó la selección, añade los elementos al dashboard
     } else {
 
-      // Creamos el overlay
+      // Creamos el overlay y el time_slider
       Congo.dashboards.action_index.create_overlay_and_filter_card();
+      Congo.dashboards.action_index.add_time_slider();
 
       if (county_id != '') {
 
