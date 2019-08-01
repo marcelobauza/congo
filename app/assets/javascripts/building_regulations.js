@@ -267,7 +267,9 @@ Congo.building_regulations.action_dashboards = function(){
 
   indicator_building_regulations = function(){
 
-    county_id = Congo.dashboards.config.county_id;
+    $.each(Congo.dashboards.config.county_id, function(a,b){
+       county_id =b;
+    })
     radius = Congo.dashboards.config.radius;
     centerPoint = Congo.dashboards.config.centerpt;
     wkt = Congo.dashboards.config.size_box;

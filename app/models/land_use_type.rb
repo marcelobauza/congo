@@ -11,7 +11,7 @@ class LandUseType < ApplicationRecord
       
       conditions = ""
       if !county_id.nil?
-        conditions = "county_id = #{county_id}"
+        conditions = WhereBuilder.build_in_condition("county_id",county_id)
       elsif centerpt.nil?
         polygon = JSON.parse(wkt)
         coonditions = "ST_Intersects(the_geom, ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326)', #{Util::WGS84_SRID})"

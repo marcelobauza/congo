@@ -34,7 +34,7 @@ class BuildingRegulation < ApplicationRecord
 
 	def self.build_where_condition(filters)
     if !filters[:county_id].nil?
-      conditions = "county_id = #{filters[:county_id]}" + Util.and
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
     elsif !filters[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
@@ -89,7 +89,7 @@ class BuildingRegulation < ApplicationRecord
 
 	def self.build_interval_conditions(filters, column)
 		if !filters[:county_id].nil?
-		  cond = "county_id = #{filters[:county_id]}"
+      cond = WhereBuilder.build_in_condition("county_id",filters[:county_id])
     elsif !filters[:wkt].nil?
       polygon = JSON.parse(filters[:wkt])
     cond = "ST_Intersects(the_geom, ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326))"
