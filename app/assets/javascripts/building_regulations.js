@@ -382,6 +382,9 @@ Congo.building_regulations.action_dashboards = function(){
           $('.filter-transactions').hide();
           $('.filter-projects').hide();
           $('.filter-future-projects').hide();
+
+          // Eliminamos el time_slider
+          $('#time_slider_item').remove()
         },
         success: function(data){
 
