@@ -145,12 +145,16 @@ Congo.dashboards.action_index = function() {
 
       // Agregamos el slider al card de "Filtros"
       $('#filter-body').prepend(
-        $("<input>", {
-          'id': 'time_slider'
-        }),
-        $("<div>", {
-          'class': 'dropdown-divider',
-        })
+        $('<div>', {
+          'id': 'time_slider_item'
+        }).append(
+          $("<input>", {
+            'id': 'time_slider'
+          }),
+          $("<div>", {
+            'class': 'dropdown-divider',
+          })
+        )
       )
 
       // Levantamos los datos de los periodos y del periodo actual
