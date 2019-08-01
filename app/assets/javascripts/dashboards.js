@@ -17,7 +17,7 @@ Congo.dashboards.config = {
   boost: false,
   area: 0,
   draw_active: false,
-  slider_period: []
+  slider_periods: []
 }
 
 Congo.dashboards.action_index = function() {
@@ -59,7 +59,7 @@ Congo.dashboards.action_index = function() {
       success: function(data) {
         $.each(data, function(key, period) {
           $.each(period, function(a, value) {
-            Congo.dashboards.config.slider_period.push(value.bimester + "/" + value.year);
+            Congo.dashboards.config.slider_periods.push(value.bimester + "/" + value.year);
           })
         })
       }
