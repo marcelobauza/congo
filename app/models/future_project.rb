@@ -153,20 +153,7 @@ class FutureProject < ApplicationRecord
       group("future_project_types.name").
       order("future_project_types.name")
 
-    draft = FutureProject.joins(joins).
-      where(cond_query + Util.and + "future_project_types.name = 'ANTEPROYECTO'").count
-
-    perm = FutureProject.joins(joins).
-      where(cond_query + Util.and + "future_project_types.name = 'PERMISO DE EDIFICACION'").count
-
-    recept = FutureProject.joins(joins).
-      where(cond_query + Util.and + "future_project_types.name = 'RECEPCION MUNICIPAL'").count
-
-    draft.to_f == 0 ? perm_rate = 0 : perm_rate = (perm.to_f / draft.to_f).round(2)
-    perm.to_f == 0 ? recept_rate = 0: recept_rate = (recept.to_f / perm.to_f).round(2)
-
-    rates = {:permission_draft_rate => perm_rate, :reception_permission_rate => recept_rate}
-    return rates, totals
+    return  totals
   end
 
   def self.group_by_project_type(widget, filters)
@@ -526,11 +513,8 @@ class FutureProject < ApplicationRecord
       dtypes = FutureProject.units_by_project_type(filters)
       ubimester = FutureProject.unit_bimester(filters)
       m2bimester = FutureProject.m2_built_bimester(filters)
-      #rates = FutureProject.future_project_rates_1(filters)
-      #env_points = FutureProject.envelope_points(filters)
 
       #GENERAL
-
       data =[]
       result=[]
       general_data.each do |item|
@@ -634,7 +618,7 @@ class FutureProject < ApplicationRecord
   def self.general_info params
 @pp = params
 
-rates, global_information = FutureProject.find_globals(params)
+ global_information = FutureProject.find_globals(params)
     @general = []
     return if global_information.nil?
     global_information.each do |typ|
@@ -649,8 +633,7 @@ rates, global_information = FutureProject.find_globals(params)
     global_information.each do |typ|
       @general << {:label => I18n.t(:AVG_M2_BUILT_PERMISSIONS) + " " + typ["name"].titleize, :value => typ["avg_surface"]}
     end
-    @general << {:label => I18n.t(:PERMISSION_DRAFT_RATE), :value => rates[:permission_draft_rate]}
-    @general << {:label => I18n.t(:RECEPTION_PERMISSION_RATE), :value => rates[:reception_permission_rate]}
+    @general
 
   end
 
