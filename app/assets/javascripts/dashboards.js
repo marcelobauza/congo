@@ -141,12 +141,12 @@ Congo.dashboards.action_index = function() {
 
   add_time_slider = function() {
 
-    if ($('#range_slider_time').length == 0) {
+    if ($('#time_slider').length == 0) {
 
       // Agregamos el slider al card de "Filtros"
       $('#filter-body').prepend(
         $("<input>", {
-          'id': 'range_slider_time'
+          'id': 'time_slider'
         }),
         $("<div>", {
           'class': 'dropdown-divider',
@@ -158,7 +158,7 @@ Congo.dashboards.action_index = function() {
       var actual_slider_period = to_bimester + '/' + to_year
 
       // Implementamos ionRangeSlider
-      $("#range_slider_time").ionRangeSlider({
+      $("#time_slider").ionRangeSlider({
         skin: "flat",
         grid: true,
         min: slider_periods[0],
