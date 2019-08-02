@@ -18,7 +18,6 @@
       <thead>
         <tr>
           <th>Nombre</th>
-          <th>Solo Lectura</th>
           <th colspan="2" class="text-center">Acciones</th>
         </tr>
       </thead>
@@ -27,7 +26,6 @@
         <% @roles.each do |role| %>
           <tr>
             <td><%= role.name %></td>
-            <td><%= role.read_only %></td>
             <td class="text-center"><%= link_to edit_admin_role_path(role) do %>  <i class="fas fa-edit" title="Editar"></i> <% end %></td>
             <td class="text-center"><%= link_to admin_role_path(role), method: :delete, data: { confirm: '¿Está seguro?' } do %> <i class="fas fa-trash-alt " title="Eliminar"></i> <%end%></td>
           </tr>
