@@ -1,7 +1,15 @@
-<%= form_tag admin_county_ufs_path, method: :get  do |f| %>
-    <div class="alert-message block-message success">
-          <%= select_tag :county_id, options_for_select(@counties), :class => "text" %>
-              <%= select_tag :property_type_id, options_for_select(@property_types), :class => "text" %>
-                  <%= submit_tag t('menu.county_uf.search'), :class => "btn success" %>
-                    </div>
-              <% end %>
+<%= form_tag admin_county_ufs_path, method: :get do |f| %>
+
+  <div class="form-row col-md-12">
+    <div class="form-group col-md-6">
+      <%= select_tag :county_id, options_for_select(@counties), :class => "form-control" %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= select_tag :property_type_id, options_for_select(@property_types), :class => "form-control" %>
+    </div>
+    <div class="form-group col-md-1">
+      <%= submit_tag t('menu.county_uf.search'), :class => "btn btn-primary" %>
+    </div>
+  </div>
+
+<% end %>

@@ -1,32 +1,47 @@
 <p id="notice"><%= notice %></p>
 
+<div class="card shadow">
+  <div class="card-body pb-1">
+    <div class="form-row">
+      <div class="col-md-4">
+        <h2>UF Por Comuna</h2>
+      </div>
+      <div class="col-md-4 text-center">
+        <%= render :partial => "filters" %>
+      </div>
+      <div class="col-md-4 text-right">
+        <%= link_to 'Nuevo', new_admin_county_uf_path, :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>
 
-<h1>Admin County Ufs</h1>
-<%= render :partial => "filters" %>
-<table>
-  <thead>
-    <tr>
-      <th>County</th>
-      <th>Property type</th>
-      <th>Uf min</th>
-      <th>Uf max</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @county_ufs.each do |admin_county_uf| %>
-      <tr>
-        <td><%= admin_county_uf.county.name %></td>
-        <td><%= admin_county_uf.property_type.name %></td>
-        <td><%= admin_county_uf.uf_min %></td>
-        <td><%= admin_county_uf.uf_max %></td>
-        <td><%= link_to 'Show', admin_county_uf_path(admin_county_uf) %></td>
-        <td><%= link_to 'Edit', edit_admin_county_uf_path(admin_county_uf) %></td>
-        <td><%= link_to 'Destroy', admin_county_uf_path(admin_county_uf), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<br>
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>Comuna</th>
+          <th>Tipo de Propiedad</th>
+          <th>UF Min</th>
+          <th>UF Max</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
 
+      <tbody>
+        <% @county_ufs.each do |admin_county_uf| %>
+          <tr>
+            <td><%= admin_county_uf.county.name %></td>
+            <td><%= admin_county_uf.property_type.name %></td>
+            <td><%= admin_county_uf.uf_min %></td>
+            <td><%= admin_county_uf.uf_max %></td>
+            <td class="text-center"><%= link_to edit_admin_county_uf_path(admin_county_uf) do %> <i class="fas fa-edit" title="Editar"></i> <% end %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+
+    </table>
+  </div>
+</div>

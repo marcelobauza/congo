@@ -1,16 +1,55 @@
+<div class="card shadow">
+  <div class="card-body">
 
-<%= simple_form_for([:admin, @admin_county_uf]) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+    <%= simple_form_for([:admin, @admin_county_uf]) do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-  <div class="form-inputs">
-    <%= f.association :county %>
-    <%= f.association :property_type %>
-    <%= f.input :uf_min %>
-    <%= f.input :uf_max %>
+      <div class="form-group row">
+        <div class="col-md-2 text-right">
+          <%= f.label :county, class: 'col-form-label' %>
+        </div>
+        <div class="col-md-3">
+          <%= f.association :county, label: false, input_html: {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-2 text-right">
+          <%= f.label :property_type, class: 'col-form-label' %>
+        </div>
+        <div class="col-md-3">
+          <%= f.association :property_type, label: false, input_html: {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-2 text-right">
+          <%= f.label :uf_min, class: 'col-form-label' %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :uf_min, label: false, input_html: {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-2 text-right">
+          <%= f.label :uf_max, class: 'col-form-label' %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :uf_max, label: false, input_html: {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-5 text-right">
+
+          <%= link_to 'Cancelar', admin_county_ufs_path, :class => 'btn btn-secondary' %>
+          <%= f.button :submit, class: 'btn btn-primary', value: "Guardar" %>
+        </div>
+      </div>
+
+    <% end %>
+
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
-<% end %>
+</div>
