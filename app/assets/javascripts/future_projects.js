@@ -161,31 +161,53 @@ future_projects_popup= function(id){
       datatype: 'json',
       data: data,
       success: function(result) {
+
         $('#popup_equip').empty();
-        $('#popup_equip').append('<table class="table table-striped table-hover table-bordered">');
-        $('#popup_equip').append('<tr>');
-        $('#popup_equip').append('<th>Metros </th>');
-        $('#popup_equip').append('<th>Nombre </th>');
-        $('#popup_equip').append('<th>Categoria </th>');
-        $('#popup_equip').append('</tr>');
+
+        $('#popup_equip').append(
+          $('<table>', {
+            'class': 'table table-striped table-hover table-bordered text-light'
+          }).append(
+            $('<thead>').append(
+              $('<tr>').append(
+                $('<th>', {
+                  'text': 'Tipo',
+                }),
+                $('<th>', {
+                  'text': 'Distancia',
+                }),
+                $('<th>', {
+                  'text': 'Nombre',
+                })
+              )
+            ),
+            $('<tbody>', {
+              'id': 'tbody-equip',
+            })
+          )
+        );
 
         $.each(result, function(key, rows){
           $.each(rows, function(i, value){
+            $('#tbody-equip').append(
+              $('<tr>').append(
+                $('<td>', {
+                  'text': value.sub_category_name,
+                }),
+                $('<td>', {
+                  'text': value.meters + ' m',
+                }),
+                $('<td>', {
+                  'text': value.name,
+                })
+              )
+            );
+          }); // Cierra each rows
+        }); // Cierra each result
 
-            $('#popup_equip').append('<tr>');
-            $('#popup_equip').append('<td>' + value.meters + '</td>');
-            $('#popup_equip').append('<td>' + value.name + '</td>');
-            $('#popup_equip').append('<td>' + value.sub_category_name + '</td>');
-            $('#popup_equip').append('</tr>');
-          })
-        })
-        $('#popup_equip').append('</table>');
-
-      }
-
-    })
-
-}
+      } // Cierra success
+    }) // Cierra ajax
+} // Cierra future_projects_popup
 
 Congo.future_projects.action_dashboards = function(){
 
