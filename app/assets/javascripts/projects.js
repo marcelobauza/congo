@@ -24,7 +24,7 @@ projects_popup = function(id){
   bimester = Congo.dashboards.config.bimester;
   year = Congo.dashboards.config.year;
 
-  data = {id: id, bimester: bimester, year: year}; 
+  data = {id: id, bimester: bimester, year: year};
   $.ajax({
     type: 'GET',
     url: '/projects/index.json',

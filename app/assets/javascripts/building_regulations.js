@@ -39,7 +39,7 @@ building_regulations_popup = function(id){
       $('#popup_info').append('<div>Altura Construcción: '+ data.aminciti +'</div>');
       $('#popup_info').append('<div>Superficie Predio: '+ data.area + ' </div>');
       $('#leaflet_modal').modal('show');
-    }  
+    }
   })
 }
 
@@ -114,7 +114,7 @@ function building_regulations_report_pdf() {
         var osinciti = reg['osinciti']
         var use_allow = reg['use_allow']
         var site = reg['site']
-        
+
         // Cambiamos a string los valores que llegan como integer
         am_cc = am_cc.toString()
         aminciti = aminciti.toString()
