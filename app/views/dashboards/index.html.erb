@@ -1,5 +1,6 @@
 <div id="alerts"></div>
 <div id="map"></div>
+
 <div class="report" style="width: 720px;">
   <div id="chart-report-1">
     <canvas id="report-canvas-1"></canvas>
@@ -32,24 +33,43 @@
     <canvas id="report-canvas-10"></canvas>
   </div>
 </div>
+
 <div id="leaflet_modal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"></h4>
-      </div>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content text-light">
+
       <div class="modal-body">
-        <div>
-          <button id="equip">Equipamiento</button>
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+        <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Información</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="verif-tab" data-toggle="tab" href="#verif" role="tab" aria-controls="verif" aria-selected="false">Verificación de Datos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="equip-tab" data-toggle="tab" href="#equip" role="tab" aria-controls="equip" aria-selected="false">Equipamiento y Servicios</a>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+            <div id="popup_info"></div>
+          </div>
+          <div class="tab-pane fade" id="verif" role="tabpanel" aria-labelledby="verif-tab">
+
+          </div>
+          <div class="tab-pane fade" id="equip" role="tabpanel" aria-labelledby="equip-tab">
+            <div id="popup_equip"></div>
+          </div>
         </div>
-        <div id="future_project_fields">
-          
-        </div>
+
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+
+    </div>
+  </div>
+</div>
