@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_29_233211) do
+ActiveRecord::Schema.define(version: 2019_08_05_202954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -528,6 +528,13 @@ ActiveRecord::Schema.define(version: 2019_07_29_233211) do
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
+  create_table "uf_conversions", force: :cascade do |t|
+    t.date "uf_date"
+    t.string "uf_value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "complete_name"
@@ -931,12 +938,6 @@ ActiveRecord::Schema.define(version: 2019_07_29_233211) do
       census
     WHERE (st_within(census.the_geom, voronoi.geom) AND (census.county_id = 50))
     GROUP BY voronoi.geom, census.homes_total, census.county_id;
-  SQL
-  create_view "counties_info", sql_definition: <<-SQL
-      SELECT counties.id,
-      counties.name,
-      counties.the_geom
-     FROM counties;
   SQL
   create_view "demography", sql_definition: <<-SQL
       SELECT st_voronoipolygons(st_collect(census.the_geom)) AS voronoi_geom,
@@ -1404,5 +1405,11 @@ ActiveRecord::Schema.define(version: 2019_07_29_233211) do
       transactions.year_sii,
       transactions.role_associated
      FROM transactions;
+  SQL
+  create_view "counties_info", sql_definition: <<-SQL
+      SELECT counties.id AS county_id,
+      counties.name,
+      counties.the_geom
+     FROM counties;
   SQL
 end
