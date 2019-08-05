@@ -442,7 +442,7 @@ Congo.building_regulations.action_dashboards = function(){
                   'text': label
                 }),
                 $("<div>", {
-                  'class': 'list-group border',
+                  'class': 'list-group list-overflow border',
                   'id': 'uso-list'
                 }),
                 $("<div>", {

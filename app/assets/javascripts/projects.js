@@ -1753,7 +1753,7 @@ Congo.projects.action_dashboards = function(){
             } else if (title == "Inmobiliarias") {
 
               $("<div>", {
-                  'class': 'list-group border'
+                  'class': 'list-group list-overflow border'
               }).appendTo('#body'+i)
 
               var info = reg['data'];
