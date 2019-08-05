@@ -1,3 +1,10 @@
+$(document).ready(function(){
+  $(".reports").on('click', function(){
+    Congo.dashboards.config.kind_reports = this.id;
+    Congo.reports();
+  })
+})
+
 Congo.namespace('dashboards.action_index');
 Congo.namespace('dashboards.action_graduated_points');
 
