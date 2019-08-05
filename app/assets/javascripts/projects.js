@@ -54,7 +54,9 @@ Congo.projects.action_graduated_points = function(){
 
   init=function(){
     var env1='';
-    county_id = Congo.dashboards.config.county_id;
+    $.each(Congo.dashboards.config.county_id, function(a,b){
+       county_id =b;
+    })
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
     radius = Congo.dashboards.config.radius;
@@ -881,7 +883,9 @@ Congo.projects.action_dashboards = function(){
 
   indicator_projects = function(){
 
-    county_id = Congo.dashboards.config.county_id;
+    $.each(Congo.dashboards.config.county_id, function(a,b){
+       county_id =b;
+    })
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
     radius = Congo.dashboards.config.radius;

@@ -320,7 +320,7 @@ class Transaction < ApplicationRecord
       trans_group = {:period => per[:period], :year => per[:year], :counties => []}
 
       if !filters[:county_id].nil?
-        conditions = "transactions.county_id = #{filters[:county_id]}#{Util.and}"
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
       elsif !filters[:wkt].nil?
         polygon = JSON.parse(filters[:wkt])
         conditions = "ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326), transactions.the_geom) #{Util.and}"
@@ -493,7 +493,7 @@ class Transaction < ApplicationRecord
       elsif !filters[:centerpt].nil?
         conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
         else
-          conditions += "transactions.county_id = #{filters[:county_id]}#{Util.and}"
+        conditions += WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
         end
 
       conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
@@ -543,7 +543,7 @@ class Transaction < ApplicationRecord
   def self.build_conditions(filters, widget=nil)
 
     if !filters[:county_id].nil?
-      conditions = "transactions.county_id = #{filters[:county_id]}" + Util.and
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
     elsif !filters[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
@@ -825,7 +825,7 @@ class Transaction < ApplicationRecord
     year = period_current.year
     
     if !params[:county_id].nil?
-      conditions = "county_id = #{params[:county_id]}"
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
     elsif !params[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(params[:wkt])
     else
@@ -888,7 +888,7 @@ class Transaction < ApplicationRecord
   end
 
       if !filters[:county_id].nil?
-        conditions = "transactions.county_id = #{filters[:county_id]}#{Util.and}"
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
       elsif !filters[:wkt].nil?
         conditions = "ST_Within(transactions.the_geom, ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}))#{Util.and}"  
       else

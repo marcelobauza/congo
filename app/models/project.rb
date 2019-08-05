@@ -390,8 +390,8 @@ class Project < ApplicationRecord
 
     query_condition = " year = #{filters[:to_year]}  " 
     query_condition += " and bimester = #{filters[:to_period]} "
-    query_condition += " and  county_id = #{filters[:county_id]} "  if filters.has_key? :county_id 
-    query_condition += "and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
+    query_condition += " and " +  WhereBuilder.build_in_condition("county_id",filters[:county_id])
+    query_condition += " and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
     query_condition += " and " + WhereBuilder.build_within_condition(filters[:wkt]) if filters.has_key? :wkt
 
     values = get_valid_min_max_limits(widget, filters)
@@ -728,7 +728,7 @@ class Project < ApplicationRecord
   def self.build_conditions_new(filters, self_not_filter=nil, useView = false, range=true)
     @conditions = ''
     if !filters[:county_id].nil?
-      @conditions += "county_id = #{filters[:county_id]}" + Util.and
+      @conditions += WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
     elsif !filters[:wkt].nil?
       @conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
@@ -1102,7 +1102,6 @@ end
       uf_m2_values = Project.projects_by_uf_m2(filters)
       uarea = Project.projects_by_usable_area(filters)
       garea = Project.projects_by_ground_area('ground_area', filters)
-
       sbim = Project.projects_count_by_period('sale_bimester', filters)
       cfloor = Project.projects_by_ranges('floors', filters)
       uf_ranges = Project.projects_by_ranges('uf_avg_percent', filters)
@@ -1466,7 +1465,7 @@ end
   def self.interval_graduated_points(params)
 @pp = params
     if !params[:county_id].nil?
-      conditions = "county_id = #{params[:county_id]}"
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
     elsif !params[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(params[:wkt])
     else

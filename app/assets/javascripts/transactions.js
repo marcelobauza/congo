@@ -56,7 +56,7 @@ function transactions_report_pdf(){
     datatype: 'json',
     data: data,
     success: function(data) {
-
+    console.log(data)
       data = data['data']
 
       // Creamos el doc
@@ -561,7 +561,9 @@ Congo.transactions.action_graduated_points = function(){
   init=function(){
     var env1='';
 
-    county_id = Congo.dashboards.config.county_id;
+    $.each(Congo.dashboards.config.county_id, function(a,b){
+       county_id =b;
+    })
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
     radius = Congo.dashboards.config.radius;
@@ -667,7 +669,9 @@ Congo.transactions.action_dashboards = function(){
 
   indicator_transactions = function(){
 
-    county_id = Congo.dashboards.config.county_id;
+    $.each(Congo.dashboards.config.county_id, function(a,b){
+       county_id =b;
+    })
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
     radius = Congo.dashboards.config.radius;
