@@ -24,6 +24,7 @@ Congo.dashboards.config = {
   boost: false,
   area: 0,
   draw_active: false,
+  slider_periods: [], 
   row_id: ''
 }
 

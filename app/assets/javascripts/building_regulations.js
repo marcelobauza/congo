@@ -53,8 +53,6 @@ function building_regulations_report_pdf() {
     data: data,
     success: function(data) {
 
-      data = data['data']
-
       // Creamos el doc
       var doc = new jsPDF();
 
@@ -103,26 +101,26 @@ function building_regulations_report_pdf() {
       doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
 
       // Separamos los datos
-      for (var i = 0; i < data.length; i++) {
-        var reg = data[i]
-
+      $.each(data, function(i,reg){
         var am_cc = reg['am_cc']
         var aminciti = reg['aminciti']
         var building_zone = reg['building_zone']
         var construct = reg['construct']
-        var density_type_id = reg['density_type_id']
+        var density_type = reg['density_type']
         var hectarea_inhabitants = reg['hectarea_inhabitants']
         var icinciti = reg['icinciti']
         var id = reg['id']
         var land_ocupation = reg['land_ocupation']
         var osinciti = reg['osinciti']
-
+        var use_allow = reg['use_allow']
+        var site = reg['site']
+        
         // Cambiamos a string los valores que llegan como integer
         am_cc = am_cc.toString()
         aminciti = aminciti.toString()
         building_zone = building_zone.toString()
         //construct = construct.toString()
-        density_type_id = density_type_id.toString()
+        //density_type = density_type.toString()
         hectarea_inhabitants = hectarea_inhabitants.toString()
         icinciti = icinciti.toString()
         //id = id.toString()
@@ -151,15 +149,15 @@ function building_regulations_report_pdf() {
 
           // Valores columna arriba
           doc.setFontStyle("normal");
-          doc.text(building_zone, 85, 20);
-          doc.text(aminciti, 85, 30);
+          doc.text('null', 85, 20);
+          //doc.text(aminciti, 85, 30);
           doc.text('null', 85, 40);
           doc.text('null', 85, 50);
           //doc.text(construct, 85, 60);
-          doc.text(osinciti, 85, 70);
+          //doc.text(osinciti, 85, 70);
           doc.text('null', 85, 80);
           doc.text('null', 85, 90);
-          doc.text(density_type_id, 85, 100);
+          //doc.text(density_type, 85, 100);
           doc.text('null', 85, 110);
           doc.text('null', 85, 120);
 
@@ -193,20 +191,19 @@ function building_regulations_report_pdf() {
 
           // Valores columna abajo
           doc.setFontStyle("normal");
-          doc.text(building_zone, 85, 160);
-          doc.text(aminciti, 85, 170);
+          doc.text('null', 85, 160);
+          //doc.text(aminciti, 85, 170);
           doc.text('null', 85, 180);
           doc.text('null', 85, 190);
           //doc.text(construct, 85, 200);
-          doc.text(osinciti, 85, 210);
+          //doc.text(osinciti, 85, 210);
           doc.text('null', 85, 220);
           doc.text('null', 85, 230);
-          doc.text(density_type_id, 85, 240);
+          //doc.text(density_type, 85, 240);
           doc.text('null', 85, 250);
           doc.text('null', 85, 260);
-
         } // Cierra else par/impar
-      } // Cierra for
+      }) // Cierra for
 
       // Descarga el archivo PDF
       doc.save("Reporte_Normativa.pdf");
