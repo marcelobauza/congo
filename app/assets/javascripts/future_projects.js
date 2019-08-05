@@ -151,8 +151,6 @@ future_projects_popup= function(id){
     }
   });
 
-  $("#equip").on('click', function(){
-
     row_id = Congo.dashboards.config.row_id;
     model = Congo.dashboards.config.layer_type;
 
@@ -187,7 +185,6 @@ future_projects_popup= function(id){
 
     })
 
-  })
 }
 
 Congo.future_projects.action_dashboards = function(){
