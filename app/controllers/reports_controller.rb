@@ -265,9 +265,6 @@ class ReportsController < ApplicationController
   def building_regulations_pdf
 
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
-    @pdf = BuildingRegulation.reports_pdf filters
-    
-    render json: {"data":@pdf}
-
+    @data = BuildingRegulation.reports_pdf filters
   end
 end

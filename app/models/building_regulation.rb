@@ -1,8 +1,8 @@
 class BuildingRegulation < ApplicationRecord
   belongs_to :density_type
   belongs_to :county
-
   has_many :building_regulation_land_use_types
+  has_many :land_use_types, through: :building_regulation_land_use_types
 
   validates_presence_of :county_id
   
@@ -193,10 +193,9 @@ class BuildingRegulation < ApplicationRecord
 	end
   
   def self.reports_pdf filters 
-    fields = [:building_zone, :construct, :land_ocupation, :density_type_id, :am_cc, :icinciti, :osinciti, :aminciti, :hectarea_inhabitants]
-             @pdf = BuildingRegulation.where(build_where_condition(filters)).group(fields).select(fields)
+    @pdf = BuildingRegulation.includes(:land_use_types).where(build_where_condition(filters))
   end
-
+  
   def self.info_popup id
     select = "building_zone, construct, osinciti, aminciti, hectarea_inhabitants, grouping, density_type_id, "
     select += "St_area(the_geom, false) as area"
