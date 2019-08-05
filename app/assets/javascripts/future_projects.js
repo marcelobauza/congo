@@ -113,11 +113,11 @@ function maxCard(i){
   $('#chart-container'+i).toggleClass('card-max fixed-top')
 }
 
-
 future_projects_popup= function(id){
 
   bimester = Congo.dashboards.config.bimester;
   year = Congo.dashboards.config.year;
+  Congo.dashboards.config.row_id = id;
 
   data = {id: id, bimester: bimester, year: year}; 
   $.ajax({
@@ -150,6 +150,44 @@ future_projects_popup= function(id){
       $('#leaflet_modal').modal('show');
     }
   });
+
+  $("#equip").on('click', function(){
+
+    row_id = Congo.dashboards.config.row_id;
+    model = Congo.dashboards.config.layer_type;
+
+    data = {id: row_id, model: model}; 
+    $.ajax({
+      type: 'GET',
+      url: '/pois/get_around_pois.json',
+      datatype: 'json',
+      data: data,
+      success: function(result) {
+        $('#future_project_fields').empty();
+        $('#future_project_fields').append('<table class="table table-striped">');
+        $('#future_project_fields').append('<tr>');
+        $('#future_project_fields').append('<th>Metros </th>');
+        $('#future_project_fields').append('<th>Nombre </th>');
+        $('#future_project_fields').append('<th>Categoria </th>');
+        $('#future_project_fields').append('</tr>');
+
+        $.each(result, function(key, rows){
+          $.each(rows, function(i, value){
+            
+            $('#future_project_fields').append('<tr>');
+            $('#future_project_fields').append('<td>' + value.meters + '</td>');
+            $('#future_project_fields').append('<td>' + value.name + '</td>');
+            $('#future_project_fields').append('<td>' + value.sub_category_name + '</td>');
+            $('#future_project_fields').append('</tr>');
+          })
+        })
+        $('#future_project_fields').append('</table>');
+
+      }
+
+    })
+
+  })
 }
 
 Congo.future_projects.action_dashboards = function(){

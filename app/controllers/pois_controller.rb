@@ -1,6 +1,15 @@
 class PoisController < ApplicationController
   before_action :set_poi, only: [:show, :edit, :update, :destroy]
 
+  def get_around_pois
+
+    id = params[:id]
+    model = params[:model]
+    data = Poi.get_around_pois(id, model)
+    render json: {data: data}
+
+  end
+
   # GET /pois
   # GET /pois.json
   def index
