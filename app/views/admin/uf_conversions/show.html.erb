@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Uf date:</strong>
+  <%= @uf_conversion.uf_date %>
+</p>
+
+<p>
+  <strong>Uf value:</strong>
+  <%= @uf_conversion.uf_value %>
+</p>
+
+<%= link_to 'Edit', edit_uf_conversion_path(@uf_conversion) %> |
+<%= link_to 'Back', uf_conversions_path %>

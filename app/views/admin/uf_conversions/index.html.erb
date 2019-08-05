@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Uf Conversions</h1>
+<%= will_paginate @uf_conversions %>
+<table>
+  <thead>
+    <tr>
+      <th>Uf date</th>
+      <th>Uf value</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @uf_conversions.each do |uf_conversion| %>
+      <tr>
+        <td><%= uf_conversion.uf_date %></td>
+        <td><%= uf_conversion.uf_value %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Uf Conversion', new_admin_uf_conversion_path %>

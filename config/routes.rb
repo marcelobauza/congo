@@ -71,8 +71,8 @@ Rails.application.routes.draw do
     resources :users 
     resources :counties
     resources :surveyors
+    resources :uf_conversions
     get 'dashboards/index'
-
   root 'dashboards#index'
   end
   resources :application_statuses
