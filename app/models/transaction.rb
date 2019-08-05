@@ -292,7 +292,6 @@ class Transaction < ApplicationRecord
                  (SUM(calculated_value) / COUNT(DISTINCT(year, bimester))) as avg_uf_volume').
                 joins(build_joins.join(" ") ).
     where(build_conditions(filters)).order("uf_min_value").first
-
     return result if global_transactions.nil?
 
     result[:uf_min_value] = global_transactions[:uf_min_value] unless global_transactions[:uf_min_value].nil?
@@ -878,13 +877,13 @@ class Transaction < ApplicationRecord
     
     case option
       when 'avg_surface_line_build'
-        select += "round(avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as value "
+        select += "round(avg(total_surface_building),1) as value "
       when 'avg_uf_m2_u'
-        select += " round(avg(transactions.calculated_value / (select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as value "
+        select += " round(avg(transactions.calculated_value) / sum(total_surface_building),1) as value "
       when 'avg_land'
-        select +=" round(avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as value"
+        select +=" round(avg(total_surface_terrain),1) as value"
       when 'avg_uf_m2_land'
-        select +=" round(avg(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) as value"
+        select +=" round(avg(transactions.calculated_value) / avg(total_surface_terrain),1) as value"
   end
 
       if !filters[:county_id].nil?
@@ -896,6 +895,8 @@ class Transaction < ApplicationRecord
       end
       
       conditions += "active = true #{Util.and}"
+      conditions += " total_surface_terrain <> 0 and "
+      conditions += " total_surface_building <> 0 and "
       conditions += build_ids_conditions(filters)
       periods.each do |per|
         conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.or}"
@@ -1119,40 +1120,42 @@ end
   def self.information_of_transactions filters
 
     cond_query = build_conditions(filters, nil)
-    
     select = "COUNT(transactions.id) AS transactions_count, "
-    select += "round(MIN(transactions.calculated_value),1) AS uf_min_value, "
-    select += "round(MAX(transactions.calculated_value),1) AS uf_max_value, "
-    select += "round(AVG(transactions.calculated_value),1) AS average, "
-    select += "round(STDDEV(transactions.calculated_value),1) AS deviation, "
-    select += "round((avg(transactions.calculated_value) + STDDEV(transactions.calculated_value)) ,1) as LS_Uf, "
-    select += "round((avg(transactions.calculated_value) - STDDEV(transactions.calculated_value)) ,1) as LI_Uf, "
-    select += "round(avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) as avg_lands, "
-    select += "  round(avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as avg_surface_line_build, "
-    select += "round(avg(transactions.calculated_value) / avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as avg_uf_m2_u, "
-    select += "round(avg(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) as avg_uf_m2_land, "
-    select += "round(STDDEV((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1)::numeric   AS deviation_lands, "
-    select += "round(STDDEV((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) AS deviation_surface_line_build, "
-    select += "round(STDDEV(transactions.calculated_value) / avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and m2_built <> 0 )),1) AS deviation_uf_m2_u, "
-    select += "round(STDDEV(transactions.calculated_value / (select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) AS deviation_uf_m2_land, "
-    select += "round(avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) + coalesce(round(STDDEV((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1),0)  AS LS_sup_land, "
-    select += "round(avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) + round(STDDEV((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as LS_surface_line_build, "
-    select += "round(avg(transactions.calculated_value) / avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1)  + round(STDDEV(transactions.calculated_value) / avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as LS_uf_m2_u, "
-    select += "round(avg(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) + coalesce (round(STDDEV(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1),0) AS LS_uf_m2_land, "
-    select +="round(avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) - coalesce(round(STDDEV((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1),0)  AS LI_sup_land, "
-    select += "round(avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) - round(STDDEV((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as LI_surface_line_build, "
-    select += "round(avg(transactions.calculated_value) / avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1)  - round(STDDEV(transactions.calculated_value) / avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as LI_uf_m2_u, "
-    select +="round(avg(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) - coalesce (round(STDDEV(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1),0) AS LI_uf_m2_land, "
-    select += "round(min((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) as min_lands, "
-    select += "round(min((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as min_surface_line_build, "
-    select += "round(min(transactions.calculated_value) / avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as min_uf_m2_u, "
-    select +="round(min(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) as min_uf_m2_land, "
-    select +="round(max((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) as max_lands, "
-    select +="round(max((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as max_surface_line_build, "
-    select +="round(max(transactions.calculated_value) / avg((select sum(m2_built) from tax_useful_surfaces where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ))),1) as max_uf_m2_u, "
-    select +="round(max(transactions.calculated_value) / avg((select land_m2 from tax_lands where rol_number = transactions.role and county_sii_id = (select code_sii from counties c where c.id = transactions.county_id ) and land_m2 <> 0)),1) as max_uf_m2_land "
+    select +=" round(MIN(transactions.calculated_value),1) AS uf_min_value,"
+    select +=" round(MAX(transactions.calculated_value),1) AS uf_max_value,"
+    select +=" round(AVG(transactions.calculated_value),1) AS average,"
+    select +=" round(STDDEV(transactions.calculated_value),1) AS deviation,"
+    select +=" round((avg(transactions.calculated_value) + STDDEV(transactions.calculated_value)) ,1) as LS_Uf,"
+    select +=" round((avg(transactions.calculated_value) - STDDEV(transactions.calculated_value)) ,1) as LI_Uf,"
+    select +=" avg(transactions.calculated_value),"
+    select +=" STDDEV(transactions.calculated_value),"
+    select +=" avg(total_surface_terrain) as avg_lands,"
+    select +=" avg(total_surface_building) avg_surface_line_build,"
+    select +=" round(avg(transactions.calculated_value) / avg(total_surface_building))as avg_uf_m2_u,"
+    select +=" round(avg(transactions.calculated_value) / avg(total_surface_terrain)) as avg_uf_m2_land,"
+    select +=" round(STDDEV(total_surface_terrain))  AS deviation_lands,"
+    select +=" round(STDDEV(total_surface_building)) AS deviation_surface_line_build,"
+    select +=" round(STDDEV(transactions.calculated_value) / avg(total_surface_building)) AS deviation_uf_m2_u,"
+    select +=" round(STDDEV(transactions.calculated_value) / avg(total_surface_terrain)) AS deviation_uf_m2_land,"
+    select +=" round(avg(total_surface_terrain) + coalesce(round(STDDEV(total_surface_terrain)))) AS LS_sup_land,"
+    select +=" round(avg(total_surface_building) + coalesce(round(STDDEV(total_surface_building)))) as LS_surface_line_build,"
+    select +=" round(avg(transactions.calculated_value) / avg(total_surface_building)) + round(STDDEV(transactions.calculated_value) / avg(total_surface_building)) as LS_uf_m2_u,"
+    select +=" round(avg(transactions.calculated_value) / avg(total_surface_terrain)) + coalesce (round(STDDEV(transactions.calculated_value) / avg(total_surface_terrain))) AS LS_uf_m2_land,"
+    select +=" round(avg(total_surface_terrain)) - coalesce(round(STDDEV(total_surface_terrain))) AS LI_sup_land,"
+    select +=" round(avg(total_surface_building)) - round(STDDEV(total_surface_building)) as LI_surface_line_build,"
+    select +=" round(avg(transactions.calculated_value) / avg(total_surface_building)) - round(STDDEV(transactions.calculated_value) / avg(total_surface_building)) as LI_uf_m2_u,"
+    select +=" round(avg(transactions.calculated_value) / avg(total_surface_terrain))  - coalesce (round(STDDEV(transactions.calculated_value) / avg(total_surface_terrain)))  AS LI_uf_m2_land,"
+    select +=" round(min(total_surface_terrain)) as min_lands,"
+    select +=" round(min(total_surface_building))  as min_surface_line_build,"
+    select +=" round(min(transactions.calculated_value) / avg(total_surface_building)) as min_uf_m2_u,"
+    select +=" round(min(transactions.calculated_value) / avg(total_surface_terrain)) as min_uf_m2_land,"
+    select +=" round(max(total_surface_terrain)) as max_lands, "
+    select +=" round(max(total_surface_building)) as max_surface_line_build, "
+    select +=" round(max(transactions.calculated_value) / avg(total_surface_building)) as max_uf_m2_u, "
+    select +=" round(max(transactions.calculated_value) / avg(total_surface_terrain)) as max_uf_m2_land "
 
-    data = Transaction.where(cond_query)
+
+    data = Transaction.where(cond_query).select(select)
     data
   end
 def self.download_csv filters
