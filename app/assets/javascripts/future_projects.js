@@ -119,7 +119,7 @@ future_projects_popup= function(id){
   year = Congo.dashboards.config.year;
   Congo.dashboards.config.row_id = id;
 
-  data = {id: id, bimester: bimester, year: year}; 
+  data = {id: id, bimester: bimester, year: year};
   $.ajax({
     type: 'GET',
     url: '/future_projects/index.json',
@@ -154,7 +154,7 @@ future_projects_popup= function(id){
     row_id = Congo.dashboards.config.row_id;
     model = Congo.dashboards.config.layer_type;
 
-    data = {id: row_id, model: model}; 
+    data = {id: row_id, model: model};
     $.ajax({
       type: 'GET',
       url: '/pois/get_around_pois.json',
