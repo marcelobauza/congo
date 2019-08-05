@@ -1753,6 +1753,7 @@ Congo.projects.action_dashboards = function(){
             } else if (title == "Inmobiliarias") {
 
               $("<div>", {
+                  'id': 'list-inmo',
                   'class': 'list-group list-overflow border'
               }).appendTo('#body'+i)
 
@@ -1769,7 +1770,7 @@ Congo.projects.action_dashboards = function(){
                     'onclick': 'addInmoFilter('+id+', "'+name+'")',
                     'class': 'list-group-item list-group-item-action',
                     'text': name
-                }).appendTo('.list-group')
+                }).appendTo('#list-inmo')
 
               }) // Cierra each
             } // Cierra if
