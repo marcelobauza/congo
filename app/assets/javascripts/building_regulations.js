@@ -29,15 +29,15 @@ building_regulations_popup = function(id){
         land_use_types.push(b.name);
       });
 
-      $('#future_project_fields').empty();
-      $('#future_project_fields').append('<div>Normativa de Edificacion: '+ data.building_zone +'</div>');
-      $('#future_project_fields').append('<div>Usos Permitidos:' + land_use_types +' </div>');
-      $('#future_project_fields').append('<div>Constructibilidad: '+ data.construct +'</div>');
-      $('#future_project_fields').append('<div>Ocupacion Suelo: '+ data.osinciti +'</div>');
-      $('#future_project_fields').append('<div>Densidad Maxima (Hab/ha): '+ data.hectarea_inhabitants +'</div>');
-      $('#future_project_fields').append('<div>Sistema Agrupamiento: '+ data.grouping +'</div>');
-      $('#future_project_fields').append('<div>Altura Construcción: '+ data.aminciti +'</div>');
-      $('#future_project_fields').append('<div>Superficie Predio: '+ data.area + ' </div>');
+      $('#popup_info').empty();
+      $('#popup_info').append('<div>Normativa de Edificacion: '+ data.building_zone +'</div>');
+      $('#popup_info').append('<div>Usos Permitidos:' + land_use_types +' </div>');
+      $('#popup_info').append('<div>Constructibilidad: '+ data.construct +'</div>');
+      $('#popup_info').append('<div>Ocupacion Suelo: '+ data.osinciti +'</div>');
+      $('#popup_info').append('<div>Densidad Maxima (Hab/ha): '+ data.hectarea_inhabitants +'</div>');
+      $('#popup_info').append('<div>Sistema Agrupamiento: '+ data.grouping +'</div>');
+      $('#popup_info').append('<div>Altura Construcción: '+ data.aminciti +'</div>');
+      $('#popup_info').append('<div>Superficie Predio: '+ data.area + ' </div>');
       $('#leaflet_modal').modal('show');
     }  
   })

@@ -26,23 +26,23 @@ transactions_popup = function(id){
     datatype: 'json',
     data: data,
     success: function(data) {
-      $('#future_project_fields').empty();
-      $('#future_project_fields').append('<div>Bimestre: '+ data.bimester +'</div>');
-      $('#future_project_fields').append('<div>Año: '+ data.year +'</div>');
-      $('#future_project_fields').append('<div>Direccion: '+ data.address +'</div>');
-      $('#future_project_fields').append('<div>Tipo de Propiedad: '+ data.property_types.name +'</div>');
-      $('#future_project_fields').append('<div>Tipo de Vendedor: '+ data.seller_types.name +'</div>');
-      $('#future_project_fields').append('<div>Vendedor: '+ data.seller_name +'</div>');
-      $('#future_project_fields').append('<div>Comprador: '+ data.buyer_name +'</div>');
-      $('#future_project_fields').append('<div>Foja: '+ data.sheet +'</div>');
-      $('#future_project_fields').append('<div>Numero: '+ data.number +'</div>');
-      $('#future_project_fields').append('<div>Fecha de Inscripcion: '+ data.inscription_date +'</div>');
-      $('#future_project_fields').append('<div>Departamento: '+ data.department +'</div>');
-      $('#future_project_fields').append('<div>Valor UF: '+ data.uf_value +'</div>');
-      $('#future_project_fields').append('<div>Plano: '+ data.blueprint +'</div>');
-      $('#future_project_fields').append('<div>Bodega: '+ data.cellar +'</div>');
-      $('#future_project_fields').append('<div>Estacionamiento: '+ data.parkingi +'</div>');
-      $('#future_project_fields').append('<div>Rol: '+ data.role +'</div>');
+      $('#popup_info').empty();
+      $('#popup_info').append('<div>Bimestre: '+ data.bimester +'</div>');
+      $('#popup_info').append('<div>Año: '+ data.year +'</div>');
+      $('#popup_info').append('<div>Direccion: '+ data.address +'</div>');
+      $('#popup_info').append('<div>Tipo de Propiedad: '+ data.property_types.name +'</div>');
+      $('#popup_info').append('<div>Tipo de Vendedor: '+ data.seller_types.name +'</div>');
+      $('#popup_info').append('<div>Vendedor: '+ data.seller_name +'</div>');
+      $('#popup_info').append('<div>Comprador: '+ data.buyer_name +'</div>');
+      $('#popup_info').append('<div>Foja: '+ data.sheet +'</div>');
+      $('#popup_info').append('<div>Numero: '+ data.number +'</div>');
+      $('#popup_info').append('<div>Fecha de Inscripcion: '+ data.inscription_date +'</div>');
+      $('#popup_info').append('<div>Departamento: '+ data.department +'</div>');
+      $('#popup_info').append('<div>Valor UF: '+ data.uf_value +'</div>');
+      $('#popup_info').append('<div>Plano: '+ data.blueprint +'</div>');
+      $('#popup_info').append('<div>Bodega: '+ data.cellar +'</div>');
+      $('#popup_info').append('<div>Estacionamiento: '+ data.parkingi +'</div>');
+      $('#popup_info').append('<div>Rol: '+ data.role +'</div>');
       $('#leaflet_modal').modal('show');
     }
   })

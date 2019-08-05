@@ -126,27 +126,27 @@ future_projects_popup= function(id){
     datatype: 'json',
     data: data,
     success: function(data) {
-      $('#future_project_fields').empty();
-      $('#future_project_fields').append('<div>Bimestre: '+ data.bimester +'</div>');
-      $('#future_project_fields').append('<div>Año: '+ data.year +'</div>');
-      $('#future_project_fields').append('<div>Direccion: '+ data.address +'</div>');
-      $('#future_project_fields').append('<div>Expediente: '+ data.future_project_type.name +'</div>');
-      $('#future_project_fields').append('<div>Destino: '+ data.project_type.name +'</div>');
-      $('#future_project_fields').append('<div>Nombre: '+ data.name +'</div>');
-      $('#future_project_fields').append('<div>Nro de Expediente: '+ data.file_number +'</div>');
-      $('#future_project_fields').append('<div>Fecha Expediente: '+ data.file_date +'</div>');
-      $('#future_project_fields').append('<div>Propietario: '+ data.owner +'</div>');
-      $('#future_project_fields').append('<div>Rep. Legal: '+ data.legal_agent +'</div>');
-      $('#future_project_fields').append('<div>Arquitecto: '+ data.architect +'</div>');
-      $('#future_project_fields').append('<div>Cantidad Pisos: '+ data.floors +'</div>');
-      $('#future_project_fields').append('<div>Total de Subterraneos: '+ data.undergrounds +'</div>');
-      $('#future_project_fields').append('<div>Total de Unidades: '+ data.total_units +'</div>');
-      $('#future_project_fields').append('<div>Total de Estacionamientos: '+ data.total_parkings  +'</div>');
-      $('#future_project_fields').append('<div>Total de Locales Comerciales: '+ data.total_commercials +'</div>');
-      $('#future_project_fields').append('<div>Superficie Aprobada (m2): '+ data.m2_approved +'</div>');
-      $('#future_project_fields').append('<div>Superficie Edificada (m2): '+ data.m2_built +'</div>');
-      $('#future_project_fields').append('<div>Superficie Terreno (m2): '+ data.m2_field +'</div>');
-      $('#future_project_fields').append('<div>Comentarios: '+ data.comments +'</div>');
+      $('#popup_info').empty();
+      $('#popup_info').append('<div>Bimestre: '+ data.bimester +'</div>');
+      $('#popup_info').append('<div>Año: '+ data.year +'</div>');
+      $('#popup_info').append('<div>Direccion: '+ data.address +'</div>');
+      $('#popup_info').append('<div>Expediente: '+ data.future_project_type.name +'</div>');
+      $('#popup_info').append('<div>Destino: '+ data.project_type.name +'</div>');
+      $('#popup_info').append('<div>Nombre: '+ data.name +'</div>');
+      $('#popup_info').append('<div>Nro de Expediente: '+ data.file_number +'</div>');
+      $('#popup_info').append('<div>Fecha Expediente: '+ data.file_date +'</div>');
+      $('#popup_info').append('<div>Propietario: '+ data.owner +'</div>');
+      $('#popup_info').append('<div>Rep. Legal: '+ data.legal_agent +'</div>');
+      $('#popup_info').append('<div>Arquitecto: '+ data.architect +'</div>');
+      $('#popup_info').append('<div>Cantidad Pisos: '+ data.floors +'</div>');
+      $('#popup_info').append('<div>Total de Subterraneos: '+ data.undergrounds +'</div>');
+      $('#popup_info').append('<div>Total de Unidades: '+ data.total_units +'</div>');
+      $('#popup_info').append('<div>Total de Estacionamientos: '+ data.total_parkings  +'</div>');
+      $('#popup_info').append('<div>Total de Locales Comerciales: '+ data.total_commercials +'</div>');
+      $('#popup_info').append('<div>Superficie Aprobada (m2): '+ data.m2_approved +'</div>');
+      $('#popup_info').append('<div>Superficie Edificada (m2): '+ data.m2_built +'</div>');
+      $('#popup_info').append('<div>Superficie Terreno (m2): '+ data.m2_field +'</div>');
+      $('#popup_info').append('<div>Comentarios: '+ data.comments +'</div>');
       $('#leaflet_modal').modal('show');
     }
   });
@@ -163,25 +163,25 @@ future_projects_popup= function(id){
       datatype: 'json',
       data: data,
       success: function(result) {
-        $('#future_project_fields').empty();
-        $('#future_project_fields').append('<table class="table table-striped">');
-        $('#future_project_fields').append('<tr>');
-        $('#future_project_fields').append('<th>Metros </th>');
-        $('#future_project_fields').append('<th>Nombre </th>');
-        $('#future_project_fields').append('<th>Categoria </th>');
-        $('#future_project_fields').append('</tr>');
+        $('#popup_equip').empty();
+        $('#popup_equip').append('<table class="table table-striped table-hover table-bordered">');
+        $('#popup_equip').append('<tr>');
+        $('#popup_equip').append('<th>Metros </th>');
+        $('#popup_equip').append('<th>Nombre </th>');
+        $('#popup_equip').append('<th>Categoria </th>');
+        $('#popup_equip').append('</tr>');
 
         $.each(result, function(key, rows){
           $.each(rows, function(i, value){
-            
-            $('#future_project_fields').append('<tr>');
-            $('#future_project_fields').append('<td>' + value.meters + '</td>');
-            $('#future_project_fields').append('<td>' + value.name + '</td>');
-            $('#future_project_fields').append('<td>' + value.sub_category_name + '</td>');
-            $('#future_project_fields').append('</tr>');
+
+            $('#popup_equip').append('<tr>');
+            $('#popup_equip').append('<td>' + value.meters + '</td>');
+            $('#popup_equip').append('<td>' + value.name + '</td>');
+            $('#popup_equip').append('<td>' + value.sub_category_name + '</td>');
+            $('#popup_equip').append('</tr>');
           })
         })
-        $('#future_project_fields').append('</table>');
+        $('#popup_equip').append('</table>');
 
       }
 
