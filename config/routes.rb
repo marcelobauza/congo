@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get 'downloads/index' => 'downloads#index'
   get 'downloads/transactions_csv' => 'downloads#transactions_csv'
   get 'downloads/projects_csv' => 'downloads#projects_csv'
+  get 'pois/get_around_pois' => 'pois#get_around_pois'
 
   
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
