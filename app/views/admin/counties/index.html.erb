@@ -1,28 +1,35 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Counties</h1>
+<div class="card shadow">
+  <div class="card-body">
+    <h2>Comunas</h2>
+  </div>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Code</th>
-      <th>Code sii</th>
-      <th>Enabled</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>Código Comuna</th>
+          <th>Nombre Comuna</th>
+          <th>Código Servicio Imp. Interno</th>
+          <th>Habilitada?</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @counties.each do |county| %>
-      <tr>
-        <td><%= county.name %></td>
-        <td><%= county.code %></td>
-        <td><%= county.code_sii %></td>
-        <td><%= county.enabled %></td>
-        <td><%= link_to 'Edit', edit_admin_county_path(county) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<br>
+      <tbody>
+        <% @counties.each do |county| %>
+          <tr>
+            <td><%= county.code %></td>
+            <td><%= county.name %></td>
+            <td><%= county.code_sii %></td>
+            <td><%= county.enabled %></td>
+            <td class="text-center"><%= link_to edit_admin_county_path(county) do %> <i class="fas fa-edit" title="Editar"></i> <% end %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

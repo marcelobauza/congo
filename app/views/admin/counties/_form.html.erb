@@ -1,41 +1,50 @@
-<%= simple_form_for([:admin, @county]) do |form| %>
-  <% if county.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(county.errors.count, "error") %> prohibited this county from being saved:</h2>
+<div class="card shadow">
+  <div class="card-body">
 
-      <ul>
-      <% county.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+    <%= simple_form_for([:admin, @county]) do |form| %>
+      <% if county.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(county.errors.count, "error") %> prohibited this county from being saved:</h2>
+          <ul><% county.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>
+        </div>
       <% end %>
-      </ul>
-    </div>
-  <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
+      <div class="form-group row">
+        <%= form.label :code, 'Código', class: 'col-md-2 text-right col-form-label' %>
+        <div class="col-md-3">
+        <%= form.text_field :code, class: "form-control" %>
+        </div>
+      </div>
 
-  <div class="field">
-    <%= form.label :code %>
-    <%= form.text_field :code %>
-  </div>
+      <div class="form-group row">
+        <%= form.label :name, 'Nombre', class: 'col-md-2 text-right col-form-label' %>
+        <div class="col-md-3">
+          <%= form.text_field :name, class: "form-control" %>
+        </div>
+      </div>
 
-  <div class="field">
-    <%= form.label :code_sii %>
-    <%= form.number_field :code_sii %>
-  </div>
+      <div class="form-group row">
+        <%= form.label :code_sii, 'Código Servicio Imp. Interno', class: 'col-md-2 text-right col-form-label' %>
+        <div class="col-md-3">
+        <%= form.number_field :code_sii, class: "form-control" %>
+        </div>
+      </div>
 
-  <div class="field">
-    <%= form.label :number_last_project_future %>
-    <%= form.number_field :number_last_project_future %>
-  </div>
+      <div class="form-group row">
+        <%= form.label :enabled, 'Habilitada?', class: 'col-md-2 text-right form-check-label' %>
+        <div class="col-md-3">
+        <%= form.check_box :enabled %>
+        </div>
+      </div>
 
-  <div class="field">
-    <%= form.label :enabled %>
-    <%= form.check_box :enabled %>
+      <div class="form-group row">
+        <div class="col-md-5 text-right">
+          <%= link_to 'Cancelar', admin_counties_path, :class => 'btn btn-secondary' %>
+          <%= form.submit class: 'btn btn-primary', value: "Guardar" %>
+        </div>
+      </div>
+
+    <% end %>
+
   </div>
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>
