@@ -454,13 +454,7 @@ function transactions_report_pdf(){
               display: false
             },
             legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                fontColor: '#444',
-                fontSize: 12,
-                usePointStyle: true,
-              }
+              display: false,
             },
             plugins: {
               datalabels: {
