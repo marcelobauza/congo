@@ -126,28 +126,78 @@ future_projects_popup= function(id){
     datatype: 'json',
     data: data,
     success: function(data) {
+
       $('#popup_info').empty();
-      $('#popup_info').append('<div>Bimestre: '+ data.bimester +'</div>');
-      $('#popup_info').append('<div>Año: '+ data.year +'</div>');
-      $('#popup_info').append('<div>Direccion: '+ data.address +'</div>');
-      $('#popup_info').append('<div>Expediente: '+ data.future_project_type.name +'</div>');
-      $('#popup_info').append('<div>Destino: '+ data.project_type.name +'</div>');
-      $('#popup_info').append('<div>Nombre: '+ data.name +'</div>');
-      $('#popup_info').append('<div>Nro de Expediente: '+ data.file_number +'</div>');
-      $('#popup_info').append('<div>Fecha Expediente: '+ data.file_date +'</div>');
-      $('#popup_info').append('<div>Propietario: '+ data.owner +'</div>');
-      $('#popup_info').append('<div>Rep. Legal: '+ data.legal_agent +'</div>');
-      $('#popup_info').append('<div>Arquitecto: '+ data.architect +'</div>');
-      $('#popup_info').append('<div>Cantidad Pisos: '+ data.floors +'</div>');
-      $('#popup_info').append('<div>Total de Subterraneos: '+ data.undergrounds +'</div>');
-      $('#popup_info').append('<div>Total de Unidades: '+ data.total_units +'</div>');
-      $('#popup_info').append('<div>Total de Estacionamientos: '+ data.total_parkings  +'</div>');
-      $('#popup_info').append('<div>Total de Locales Comerciales: '+ data.total_commercials +'</div>');
-      $('#popup_info').append('<div>Superficie Aprobada (m2): '+ data.m2_approved +'</div>');
-      $('#popup_info').append('<div>Superficie Edificada (m2): '+ data.m2_built +'</div>');
-      $('#popup_info').append('<div>Superficie Terreno (m2): '+ data.m2_field +'</div>');
-      $('#popup_info').append('<div>Comentarios: '+ data.comments +'</div>');
+
+      $('#popup_info').append(
+        $('<ul>', {
+          'class': 'list-unstyled p-4'
+        }).append(
+          $('<li>', {
+            'text': 'Bimestre: ' + data.bimester,
+          }),
+          $('<li>', {
+            'text': 'Año: ' + data.year,
+          }),
+          $('<li>', {
+            'text': 'Dirección: ' + data.address,
+          }),
+          $('<li>', {
+            'text': 'Expediente: ' + data.future_project_type.name,
+          }),
+          $('<li>', {
+            'text': 'Destino: ' + data.project_type.name,
+          }),
+          $('<li>', {
+            'text': 'Nombre: ' + data.name,
+          }),
+          $('<li>', {
+            'text': 'Número de Expediente: ' + data.file_number,
+          }),
+          $('<li>', {
+            'text': 'Fecha de Expediente: ' + data.file_date,
+          }),
+          $('<li>', {
+            'text': 'Propietario: ' + data.owner,
+          }),
+          $('<li>', {
+            'text': 'Represtentante Legal: ' + data.legal_agent,
+          }),
+          $('<li>', {
+            'text': 'Arquitecto: ' + data.architect,
+          }),
+          $('<li>', {
+            'text': 'Cantidad de Pisos: ' + data.floors,
+          }),
+          $('<li>', {
+            'text': 'Total de Subterráneos: ' + data.undergrounds,
+          }),
+          $('<li>', {
+            'text': 'Total de Unidades: ' + data.total_units,
+          }),
+          $('<li>', {
+            'text': 'Total de Estacionamientos: ' + data.total_parkings,
+          }),
+          $('<li>', {
+            'text': 'Total de Locales Comerciales: ' + data.total_commercials,
+          }),
+          $('<li>', {
+            'text': 'Superficie Aprobada (m²): ' + data.m2_approved,
+          }),
+          $('<li>', {
+            'text': 'Superficie Edificada (m²): ' + data.m2_built,
+          }),
+          $('<li>', {
+            'text': 'Superficie Terreno (m²): ' + data.m2_field,
+          }),
+          $('<li>', {
+            'text': 'Comentarios: ' + data.comments,
+          })
+        )
+      );
+
       $('#leaflet_modal').modal('show');
+
     }
   });
 
