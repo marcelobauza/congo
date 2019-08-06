@@ -198,9 +198,8 @@ class BuildingRegulation < ApplicationRecord
   
   def self.info_popup id
     select = "building_zone, construct, osinciti, aminciti, hectarea_inhabitants, grouping, density_type_id, "
-    select += "St_area(the_geom, false) as area"
-
-    data = BuildingRegulation.where(id: id).select(select).first
+    select += "St_area(the_geom, false) as area, county_id"
+    data = BuildingRegulation.includes(:county).where(id: id).select(select).first
     @b = BuildingRegulationLandUseType.joins(:land_use_type).where(building_regulation_id: id).select(:name)
     return [data, @b]
   end

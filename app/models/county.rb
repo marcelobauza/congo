@@ -6,7 +6,7 @@ class County < ApplicationRecord
   #has_many :future_projects, :dependent => :nullify
   #has_many :projects, :dependent => :nullify
   has_many :transactions, :dependent => :nullify
- # has_many :building_regulations, :dependent => :nullify
+  has_many :building_regulations
  # has_many :commercial_cellars, :dependent => :nullify
  # has_many :county_ufs
  # has_many :order_details

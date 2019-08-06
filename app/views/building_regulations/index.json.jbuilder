@@ -7,3 +7,5 @@ end
 json.land_use_types @data[1] do |lt|
   json.name lt.name
 end
+
+json.county_code @data[0].county.code

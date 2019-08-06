@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+
   resources :categories
   resources :regions
   get 'dashboards/index'
@@ -52,6 +53,7 @@ Rails.application.routes.draw do
   get 'downloads/transactions_csv' => 'downloads#transactions_csv'
   get 'downloads/projects_csv' => 'downloads#projects_csv'
   get 'pois/get_around_pois' => 'pois#get_around_pois'
+  get 'building_regulations/building_regulation_download' => 'building_regulations#building_regulation_download'
 
   
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do

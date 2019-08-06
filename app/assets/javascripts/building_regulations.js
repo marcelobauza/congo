@@ -38,11 +38,11 @@ building_regulations_popup = function(id){
       $('#popup_info').append('<div>Sistema Agrupamiento: '+ data.grouping +'</div>');
       $('#popup_info').append('<div>Altura Construcción: '+ data.aminciti +'</div>');
       $('#popup_info').append('<div>Superficie Predio: '+ data.area + ' </div>');
+      $('#popup_info').append('<a href= "building_regulations/building_regulation_download?county_id='+ data.county_code +'">descarga</a>');
       $('#leaflet_modal').modal('show');
     }
   })
 }
-
 
 function building_regulations_report_pdf() {
 
