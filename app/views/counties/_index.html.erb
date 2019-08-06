@@ -14,11 +14,12 @@
       <div class="modal-body">
         <div id="alert-success"></div>
         <p>Seleccione el nombre de la comuna:</p>
-        <%= f.input :name, collection: counties_for_select(), :include_blank => true, label: false, input_html: {class:"form-control col-md-6", multiple:true} %>
+        <%= f.input :name, collection: counties_for_select(), label: false, input_html: {class:"form-control col-md-10 offset-md-1", multiple:true} %>
       </div>
 
       <div class="modal-footer">
-        <%= f.submit class: 'btn btn-primary', value: "Enviar" %>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <%= f.submit class: 'btn btn-primary', value: "Aceptar" %>
       </div>
 
     <% end %>
