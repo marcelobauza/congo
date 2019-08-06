@@ -1,17 +1,34 @@
-<%= render :partial => 'filters' %>
+<p id="notice"><%= notice %></p>
+
+<div class="card shadow">
+  <div class="card-body pb-1">
+    <div class="form-row">
+      <div class="col-md-2">
+        <h2>Usuarios</h2>
+      </div>
+      <div class="col-md-8 text-center">
+        <%= render :partial => 'filters' %>
+      </div>
+      <div class="col-md-2 text-right">
+        <%= link_to 'Nuevo', new_admin_user_path, :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="card shadow">
   <div class="card-body">
+
     <table class="table table-striped table-hover table-bordered">
       <thead>
         <tr>
           <th><%= User.human_attribute_name :name %></th>
           <th><%= User.human_attribute_name :complete_name %></th>
-          <th><%= User.human_attribute_name :email %></th>
+          <th><%= User.human_attribute_name 'E-mail' %></th>
           <th><%= User.human_attribute_name :company %></th>
           <th><%= User.human_attribute_name :disabled %></th>
           <th><%= User.human_attribute_name :role %></th>
-          <th></th>
-          <th></th>
+          <th colspan="2" class="text-center">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -23,18 +40,15 @@
             <td><%=h user.company %></td>
             <td><%=h user.disabled  ? t(:YES) : t(:NO) %></td>
             <td><%=h user.role_id unless user.role_id.nil? %></td>
-            <td><%= link_to edit_admin_user_path(user) do %> <i class="fas fa-edit text-secondary"></i> <%end %></td>
-            <td>
-              <div class="ui-state-default ui-corner-all" title="<%= t 'actions.delete' %>">
-                <%= link_to "", admin_user_path(user), :confirm => t('questions.are_you_sure'), :method => :delete, :class => "ui-icon ui-icon-trash" %>
-              </div>
-            </td>
-          </tr>
+            <td class="text-center"><%= link_to edit_admin_user_path(user) do %> <i class="fas fa-edit"></i> <%end%></td>
+            <td class="text-center"><%= link_to admin_user_path(user), method: :delete, data: { confirm: '¿Está seguro?' } do %> <i class="fas fa-trash-alt " title="Eliminar"></i> <%end%></td>
         <% end %>
       </tbody>
     </table>
+
     <div class="pull-left">
       <%= will_paginate @users %>
     </div>
+
   </div>
 </div>
