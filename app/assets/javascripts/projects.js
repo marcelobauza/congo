@@ -883,6 +883,7 @@ Congo.projects.action_dashboards = function(){
 
   indicator_projects = function(){
 
+    county_id = [];
     $.each(Congo.dashboards.config.county_id, function(a,b){
        county_id =b;
     })
@@ -906,7 +907,7 @@ Congo.projects.action_dashboards = function(){
     style_layer = Congo.dashboards.config.style_layer;
 
     // Sino se realizó la selección muestra un mensaje de alerta
-    if (county_id == '' && centerPoint == '' && wkt.length == 0) {
+    if (county_id.length == 0 && centerPoint == '' && wkt.length == 0) {
 
       Congo.dashboards.action_index.empty_selection_alert();
 

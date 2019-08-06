@@ -28,6 +28,7 @@ Congo.future_projects.action_graduated_points = function(){
 
   init=function(){
     var env1='';
+    county_id = [];
     $.each(Congo.dashboards.config.county_id, function(a,b){
        county_id =b;
     })
@@ -268,7 +269,7 @@ Congo.future_projects.action_dashboards = function(){
   }
 
   indicator_future_projects = function(){
-
+    county_id = [];
     $.each(Congo.dashboards.config.county_id, function(a,b){
        county_id =b;
     })
@@ -287,7 +288,7 @@ Congo.future_projects.action_dashboards = function(){
     boost = Congo.dashboards.config.boost;
 
     // Sino se realizó la selección muestra un mensaje de alerta
-    if (county_id == '' && centerPoint == '' && wkt.length == 0) {
+    if (county_id.length == 0 && centerPoint == '' && wkt.length == 0) {
 
       Congo.dashboards.action_index.empty_selection_alert();
 

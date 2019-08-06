@@ -264,6 +264,7 @@ Congo.building_regulations.action_dashboards = function(){
 
   indicator_building_regulations = function(){
 
+    county_id = [];
     $.each(Congo.dashboards.config.county_id, function(a,b){
        county_id =b;
     })
@@ -283,7 +284,7 @@ Congo.building_regulations.action_dashboards = function(){
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
 
-    if (county_id == '' && centerPoint == '' && wkt.length == 0) {
+    if (county_id.length == 0 && centerPoint == '' && wkt.length == 0) {
 
       Congo.dashboards.action_index.empty_selection_alert();
 
