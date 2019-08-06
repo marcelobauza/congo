@@ -1,30 +1,42 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Admin Periods</h1>
+<div class="card shadow">
+  <div class="card-body">
+    <div class="form-row">
+      <div class="col-md-6">
+        <h2>Periodos</h2>
+      </div>
+      <div class="col-md-6 text-right">
+        <%= link_to 'Nuevo', new_admin_period_path, :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Bimester</th>
-      <th>Year</th>
-      <th>Active</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>Bimestre</th>
+          <th>Año</th>
+          <th>Activo</th>
+          <th class="text-center" colspan="2">Acciones</th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @periods.each do |admin_period| %>
-      <tr>
-        <td><%= admin_period.bimester %></td>
-        <td><%= admin_period.year %></td>
-        <td><%= admin_period.active %></td>
-        <td><%= link_to 'Edit', edit_admin_period_path(admin_period) %></td>
-        <td><%= link_to 'Delete', admin_period_path(admin_period), method: :delete, data: {confirm: 'Are you sure?'} %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @periods.each do |admin_period| %>
+          <tr>
+            <td><%= admin_period.bimester %></td>
+            <td><%= admin_period.year %></td>
+            <td><%= admin_period.active %></td>
+            <td class="text-center"><%= link_to edit_admin_period_path(admin_period) do %> <i class="fas fa-edit" title="Editar"></i> <% end %> </td>
+            <td class="text-center"><%= link_to admin_period_path(admin_period), method: :delete, data: { confirm: '¿Está seguro?' } do %> <i class="fas fa-trash-alt " title="Eliminar"></i> <%end%></td>
+          </tr>
+        <% end %>
+      </tbody>
 
-<br>
-
-<%= link_to 'New Admin Period', new_admin_period_path %>
+    </table>
+  </div>
+</div>

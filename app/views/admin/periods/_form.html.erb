@@ -1,12 +1,37 @@
-<%= simple_form_for([:admin, @period]) do |f| %>
+<div class="card shadow">
+  <div class="card-body">
 
-  <div class="form-inputs">
-    <%= f.input :bimester %>
-    <%= f.input :year %>
-    <%= f.check_box :active %>
-  </div>
+    <%= simple_form_for([:admin, @period]) do |f| %>
 
-  <div class="form-actions">
-    <%= f.submit :submit %>
+      <div class="form-group row">
+        <%= f.label :bimester, 'Bimestre', class: 'col-md-2 text-right col-form-label' %>
+        <div class="col-md-3">
+          <%= f.input :bimester, label: false, input_html: {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <%= f.label :year, 'Año', class: 'col-md-2 text-right col-form-label' %>
+        <div class="col-md-3">
+          <%= f.input :year, label: false, input_html: {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <%= f.label :active, 'Activo', class: "col-md-2 text-right form-check-label" %>
+        <div class="col-md-3">
+          <%= f.check_box :active %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-5 text-right">
+          <%= link_to 'Cancelar', admin_periods_path, :class => 'btn btn-secondary' %>
+          <%= f.submit :submit, class: 'btn btn-primary', value: "Guardar" %>
+        </div>
+      </div>
+
+    <% end %>
+
   </div>
-<% end %>
+</div>
