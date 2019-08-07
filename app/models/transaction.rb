@@ -824,7 +824,7 @@ class Transaction < ApplicationRecord
     year = period_current.year
     
     if !params[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
+      conditions = WhereBuilder.build_in_condition("county_id",params[:county_id]) 
     elsif !params[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(params[:wkt])
     else
