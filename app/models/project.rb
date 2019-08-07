@@ -1464,7 +1464,7 @@ end
   def self.interval_graduated_points(params)
 @pp = params
     if !params[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
+      conditions = WhereBuilder.build_in_condition("county_id",params[:county_id])
     elsif !params[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(params[:wkt])
     else
