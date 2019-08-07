@@ -387,10 +387,9 @@ class Project < ApplicationRecord
 
   def self.projects_by_ranges(widget, filters)
     @joins = Array.new
-
     query_condition = " year = #{filters[:to_year]}  " 
     query_condition += " and bimester = #{filters[:to_period]} "
-    query_condition += " and " +  WhereBuilder.build_in_condition("county_id",filters[:county_id])
+    query_condition += " and " +  WhereBuilder.build_in_condition("county_id",filters[:county_id]) if filters.has_key? :county_id
     query_condition += " and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
     query_condition += " and " + WhereBuilder.build_within_condition(filters[:wkt]) if filters.has_key? :wkt
 

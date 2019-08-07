@@ -5,7 +5,8 @@ class ApplicationStatusesController < ApplicationController
   # GET /application_statuses.json
 
   def load
-    @row = ApplicationStatus.where(id: params[:id]).take
+    @row = ApplicationStatus.where(id: params[:id]).take.as_json
+    @row = @row['filters']
     respond_to do |f|
         f.js
   end
