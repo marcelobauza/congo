@@ -144,7 +144,7 @@ class ReportsController < ApplicationController
       end
     end
       result=[]
-      pmixes = Project.projects_group_by_mix('mix', filters)
+      pmixes = Project.projects_group_by_mix('mix', filters, false)
 
     pmixes.each do |item|
       value_1 = item[:mix_type]
