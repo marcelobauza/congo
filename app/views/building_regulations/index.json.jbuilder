@@ -1,4 +1,4 @@
-json.extract! @data[0], :building_zone, :construct, :osinciti, :aminciti, :hectarea_inhabitants, :grouping, :area
+json.extract! @data[0], :building_zone, :construct, :osinciti, :aminciti, :hectarea_inhabitants, :grouping, :area, :parkings, :comments
 
 json.density_types do 
   json.name @data[0].density_type.name
