@@ -79,10 +79,6 @@ class ApplicationStatusesController < ApplicationController
   # DELETE /application_statuses/1.json
   def destroy
     @application_status.destroy
-    respond_to do |format|
-      format.html { redirect_to application_statuses_url, notice: 'Application status was successfully destroyed.' }
-      format.json { head :no_content }
-    end
   end
 
   private

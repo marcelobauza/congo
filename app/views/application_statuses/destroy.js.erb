@@ -1,0 +1,3 @@
+$('table tbody').bind('ajax:success', function() {
+  $("#row_<%= @application_status.id %>").remove();
+});
