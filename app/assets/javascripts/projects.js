@@ -23,6 +23,7 @@ projects_popup = function(id){
 
   bimester = Congo.dashboards.config.bimester;
   year = Congo.dashboards.config.year;
+  Congo.dashboards.config.row_id = id;
 
   data = {id: id, bimester: bimester, year: year};
   $.ajax({
@@ -48,6 +49,7 @@ projects_popup = function(id){
       $('#leaflet_modal').modal('show');
     }
   })
+    Congo.dashboards.pois();
 }
 
 Congo.projects.action_graduated_points = function(){

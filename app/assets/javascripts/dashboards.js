@@ -28,6 +28,68 @@ Congo.dashboards.config = {
   row_id: ''
 }
 
+Congo.dashboards.pois =function(){
+    row_id = Congo.dashboards.config.row_id;
+    model = Congo.dashboards.config.layer_type;
+    data = {id: row_id, model: model};
+    $.ajax({
+      type: 'GET',
+      url: '/pois/get_around_pois.json',
+      datatype: 'json',
+      data: data,
+      success: function(result) {
+
+        $('#popup_equip').empty();
+
+        $('#popup_equip').append(
+          $('<table>', {
+            'class': 'table table-striped table-hover table-bordered text-light'
+          }).append(
+            $('<thead>').append(
+              $('<tr>').append(
+                $('<th>', {
+                  'text': 'Tipo',
+                }),
+                $('<th>', {
+                  'text': 'Distancia',
+                }),
+                $('<th>', {
+                  'text': 'Nombre',
+                })
+              )
+            ),
+            $('<tbody>', {
+              'id': 'tbody-equip',
+            })
+          )
+        );
+
+        $.each(result, function(key, rows){
+          $.each(rows, function(i, value){
+            $('#tbody-equip').append(
+              $('<tr>').append(
+                $('<td>', {
+                  'text': value.sub_category_name,
+                }),
+                $('<td>', {
+                  'text': value.meters + ' m',
+                }),
+                $('<td>', {
+                  'text': value.name,
+                })
+              )
+            );
+          }); // Cierra each rows
+        }); // Cierra each result
+
+      } // Cierra success
+    }) // Cierra ajax
+
+
+}
+
+
+
 Congo.dashboards.action_index = function() {
 
   init = function() {

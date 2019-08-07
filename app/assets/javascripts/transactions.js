@@ -13,11 +13,11 @@ Congo.transactions.config= {
   to_calculated_value: []
 }
 
-
 transactions_popup = function(id){
 
   bimester = Congo.dashboards.config.bimester;
   year = Congo.dashboards.config.year;
+  Congo.dashboards.config.row_id = id;
 
   data = {id: id, bimester: bimester, year: year};
   $.ajax({
@@ -46,6 +46,7 @@ transactions_popup = function(id){
       $('#leaflet_modal').modal('show');
     }
   })
+    Congo.dashboards.pois();
 }
 
 function transactions_report_pdf(){
