@@ -90,4 +90,22 @@ def save_instance_data(data, mixes, t_units, st_units, sld_units, project_type)
      ProjectInstanceMix.associate_instance_mix_data(mixes, self, t_units)
      return self.save
    end
+
+  def self.find_offer_mix(instance_id)
+    joins = "INNER JOIN project_mixes on project_mixes.id = project_instance_mixes.mix_id"
+    ProjectInstance.joins(:project_instance_mixes, joins).
+      where(id: instance_id).
+      group(" project_mixes.mix_type").
+      pluck("sum(project_instance_mixes.total_units), project_mixes.mix_type")
+  end
+
+  def self.find_sale_mix(instance_id)
+    joins = "INNER JOIN project_mixes on project_mixes.id = project_instance_mixes.mix_id"
+    ProjectInstance.joins(:project_instance_mixes, joins).
+      where(id: instance_id).
+      group(" project_mixes.mix_type").
+      pluck("sum(project_instance_mixes.total_units - project_instance_mixes.stock_units), project_mixes.mix_type")
+  end
+
 end
+

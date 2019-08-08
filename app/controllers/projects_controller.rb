@@ -2,6 +2,9 @@ class ProjectsController < ApplicationController
 
   def index
     @data = ProjectInstanceMixView.data_popup(params[:id], params[:bimester], params[:year])
+    @offer_mix = ProjectInstance.find_offer_mix(@data.project_instance_id)
+    @sale_mix = ProjectInstance.find_sale_mix(@data.project_instance_id)
+
     respond_to do |f|
       f.json
     end
