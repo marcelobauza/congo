@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
 
 
+  resources :lots
   resources :categories
   resources :regions
   get 'dashboards/index'

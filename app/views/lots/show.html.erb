@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Surface:</strong>
+  <%= @lot.surface %>
+</p>
+
+<p>
+  <strong>County:</strong>
+  <%= @lot.county %>
+</p>
+
+<p>
+  <strong>The geom:</strong>
+  <%= @lot.the_geom %>
+</p>
+
+<p>
+  <strong>Identifier:</strong>
+  <%= @lot.identifier %>
+</p>
+
+<%= link_to 'Edit', edit_lot_path(@lot) %> |
+<%= link_to 'Back', lots_path %>
