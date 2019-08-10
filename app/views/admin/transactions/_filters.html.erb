@@ -1,23 +1,21 @@
 <%= form_tag admin_transactions_path, :method => 'get' do |f| %>
-  <div class="row">
 
-    <div class="span4">
-      <span class="label success"><%= t('activerecord.attributes.transaction.number')%></span>
-      <%= text_field_tag :number %>
+  <div class="form-row">
+    <div class="form-group col-md-3">
+      <%= text_field_tag :number, '', class: 'form-control', placeholder: 'N° Transacción' %>
     </div>
-    <div class="span4">
-      <span class="label success"><%= t('activerecord.attributes.transaction.role')%></span>
-      <%= text_field_tag :role %>
+    <div class="form-group col-md-2">
+      <%= text_field_tag :role, '', class: 'form-control', placeholder: 'Rol' %>
     </div>
-    <div class="span4">
-      <span class="label success"><%= t('activerecord.attributes.transaction.property_type')%></span>
-      <%= select_tag :property_type_id, options_for_select(property_type_for_select), :class => "text" %>
+    <div class="form-group col-md-3">
+      <%= select_tag :property_type_id, options_for_select(property_type_for_select), :include_blank => "Tipo de Propiedad", :class => 'form-control' %>
     </div>
-
-    <div class="span6">
-      <span class="label success"><%= t('activerecord.attributes.transaction.inscription_date')%></span>
-      <%= text_field_tag :inscription_date %>
-      <%= submit_tag t('menu.transaction.search'), :class => "btn success" %>
+    <div class="form-group col-md-3">
+      <%= text_field_tag :inscription_date, '', class: 'form-control', placeholder: 'Fecha de Inscripción' %>
+    </div>
+    <div class="form-group col-md-1">
+      <%= submit_tag t('menu.transaction.search'), :class => "btn btn-primary" %>
     </div>
   </div>
+
 <% end %>
