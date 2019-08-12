@@ -1,26 +1,40 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Uf Conversions</h1>
-<%= will_paginate @uf_conversions %>
-<table>
-  <thead>
-    <tr>
-      <th>Uf date</th>
-      <th>Uf value</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="card shadow">
+  <div class="card-body">
+    <div class="form-row">
+      <div class="col-md-6">
+        <h2>Listado CSV</h2>
+      </div>
+      <div class="col-md-6 text-right">
+        <%= link_to 'Nuevo', new_admin_uf_conversion_path, :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <tbody>
-    <% @uf_conversions.each do |uf_conversion| %>
-      <tr>
-        <td><%= uf_conversion.uf_date %></td>
-        <td><%= uf_conversion.uf_value %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="card shadow offset-md-4 col-md-4">
+  <div class="card-body">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Valor UF</th>
+        </tr>
+      </thead>
 
-<br>
+      <tbody>
+        <% @uf_conversions.each do |uf_conversion| %>
+          <tr>
+            <td><%= uf_conversion.uf_date %></td>
+            <td><%= uf_conversion.uf_value %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
-<%= link_to 'New Uf Conversion', new_admin_uf_conversion_path %>
+  <div class="pull-left">
+    <%= will_paginate @uf_conversions %>
+  </div>
+</div>
