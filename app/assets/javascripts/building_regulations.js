@@ -15,36 +15,76 @@ Congo.building_regulations.config= {
   to_inhabitants_hectare: '',
 }
 
-building_regulations_popup = function(id){
+building_regulations_popup = function(id) {
 
-    data = {id: id};
+  data = {id: id};
   $.ajax({
     type: 'GET',
     url: '/building_regulations/index.json',
     datatype: 'json',
     data: data,
     success: function(data) {
-    land_use_types = [];
-      $.each(data.land_use_types, function(a, b){
+      land_use_types = [];
+      $.each(data.land_use_types, function(a, b) {
         land_use_types.push(b.name);
       });
 
-      $('#popup_info').empty();
-      $('#popup_info').append('<div>Normativa de Edificacion: '+ data.building_zone +'</div>');
-      $('#popup_info').append('<div>Usos Permitidos:' + land_use_types +' </div>');
-      $('#popup_info').append('<div>Constructibilidad: '+ data.construct +'</div>');
-      $('#popup_info').append('<div>Ocupacion Suelo: '+ data.osinciti +'</div>');
-      $('#popup_info').append('<div>Densidad Maxima (Hab/ha): '+ data.hectarea_inhabitants +'</div>');
-      $('#popup_info').append('<div>Sistema Agrupamiento: '+ data.grouping +'</div>');
-      $('#popup_info').append('<div>Altura Construcción: '+ data.aminciti +'</div>');
-      $('#popup_info').append('<div>Superficie Predio: '+ data.area + ' </div>');
-      $('#popup_info').append('<div>Estacionamientos: '+ data.parkings + ' </div>');
-      $('#popup_info').append('<div>Comentarios: '+ data.comments + ' </div>');
-      $('#popup_info').append('<a href= "building_regulations/building_regulation_download?county_id='+ data.county_code +'">descarga</a>');
+      // Agregamos la información general
+      $('#popup_info').append(
+        $('<ul>', {
+          'class': 'list-unstyled p-4'
+        }).append(
+          $('<li>', {
+            'text': 'Normativa de Edificación: ' + data.building_zone,
+          }),
+          $('<li>', {
+            'text': 'Usos Permitidos: ' + land_use_types,
+          }),
+          $('<li>', {
+            'text': 'Coeficiente de Constructibilidad: ' + data.construct,
+          }),
+          $('<li>', {
+            'text': 'Ocupación de Suelo: ' + data.osinciti,
+          }),
+          $('<li>', {
+            'text': 'Densidad Máxima (hab/Ha): ' + data.hectarea_inhabitants,
+          }),
+          $('<li>', {
+            'text': 'Sistema de Agrupamiento: ' + data.grouping,
+          }),
+          $('<li>', {
+            'text': 'Altura de Construcción: ' + data.aminciti,
+          }),
+          $('<li>', {
+            'text': 'Superficie del Predio: ' + data.area,
+          }),
+          $('<li>', {
+            'text': 'Estacionamientos: ' + data.parkings,
+          }),
+          $('<li>', {
+            'text': 'Comentarios: ' + data.comments,
+          }),
+        )
+      )
+
+      // Agregamos la descarga de la normativa
+      $('#popup_info').append(
+        $('<div>', {
+          'class': 'text-center'
+        }).append(
+          $('<a>', {
+            'class': 'btn btn-primary text-center',
+            'href': 'building_regulations/building_regulation_download?county_id=' + data.county_code,
+            'role': 'button',
+            'text': 'Descargar Normativa',
+          }),
+        )
+      );
+
       $('#leaflet_modal').modal('show');
-    }
-  })
-}
+    } // Cierra success
+  }) // Cierra ajax
+} // Cierra building_regulations_popup
 
 function building_regulations_report_pdf() {
 
