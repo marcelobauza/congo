@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_05_202954) do
+ActiveRecord::Schema.define(version: 2019_08_08_172138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -293,6 +293,16 @@ ActiveRecord::Schema.define(version: 2019_08_05_202954) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "lots", force: :cascade do |t|
+    t.decimal "surface"
+    t.bigint "county_id"
+    t.geometry "the_geom", limit: {:srid=>0, :type=>"multi_polygon"}
+    t.string "identifier"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["county_id"], name: "index_lots_on_county_id"
   end
 
   create_table "periods", force: :cascade do |t|
@@ -581,6 +591,7 @@ ActiveRecord::Schema.define(version: 2019_08_05_202954) do
   add_foreign_key "future_projects", "future_project_types"
   add_foreign_key "future_projects", "project_types"
   add_foreign_key "import_processes", "users"
+  add_foreign_key "lots", "counties"
   add_foreign_key "pois", "poi_subcategories"
   add_foreign_key "project_instances", "project_statuses"
   add_foreign_key "users", "regions"

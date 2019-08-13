@@ -1,59 +1,73 @@
 <p id="notice"><%= notice %></p>
 
-<!-- Transactions -->
-
-    <%= render partial: 'filters' %>
-<div class="col-md-12">
-  <table class="table table-striped table-hover table-bordered">
-    <thead>
-      <tr>
-        <th><%= Transaction.human_attribute_name :id %></th>
-        <th><%= Transaction.human_attribute_name :inscription_date %></th>
-        <th><%= Transaction.human_attribute_name :tome %></th>
-        <th><%= Transaction.human_attribute_name :sheet %></th>
-        <th><%= Transaction.human_attribute_name :number %></th>
-        <th><%= Transaction.human_attribute_name :buyer_rut %></th>
-        <th><%= Transaction.human_attribute_name :buyer_name %></th>
-        <th><%= Transaction.human_attribute_name :seller_name %></th>
-        <th><%= Transaction.human_attribute_name :seller_type %></th>
-        <th><%= Transaction.human_attribute_name :property_type %></th>
-        <th><%= Transaction.human_attribute_name :address %></th>
-        <th><%= Transaction.human_attribute_name :quarter %></th>
-        <th><%= Transaction.human_attribute_name :year %></th>
-        <th><%= Transaction.human_attribute_name :county %></th>
-        <th><%= Transaction.human_attribute_name :uf_value %></th>
-        <th><%= Transaction.human_attribute_name :uf_m2 %></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @transactions.each do |transaction| %>
-        <tr>
-          <td><%= transaction.id %></td>
-          <td><%= transaction.inscription_date %></td>
-          <td><%= transaction.tome %></td>
-          <td><%= transaction.sheet %></td>
-          <td><%= transaction.number %></td>
-          <td><%= transaction.buyer_rut %></td>
-          <td><%= transaction.buyer_name %></td>
-          <td><%= transaction.seller_name %></td>
-          <td><%= transaction.seller_type_name %></td>
-          <td><%= transaction.property_type_name %></td>
-          <td><%= transaction.address %></td>
-          <td><%= transaction.quarter %></td>
-          <td><%= transaction.year %></td>
-          <td><%= transaction.county_name %></td>
-          <td><%= number_with_precision(transaction.calculated_value, precision: 1) %></td>
-          <td><%= number_with_precision(transaction.uf_m2, precision: 1) %></td>
-          <td><%= link_to "Edit", edit_admin_transaction_path(transaction) %> </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <div class="pull-left">
-    <%= will_paginate @transactions %>
+<div class="card shadow">
+  <div class="card-body pb-1">
+    <div class="form-row">
+      <div class="col-md-3">
+        <h2>Transacciones</h2>
+      </div>
+      <div class="col-md-6 text-center">
+        <%= render partial: 'filters' %>
+      </div>
+      <div class="col-md-3 text-right">
+        <%= link_to 'Nuevo', new_admin_transaction_path, :class => 'btn btn-primary' %>
+      </div>
+    </div>
   </div>
 </div>
 
-<%= link_to 'New Transaction', new_admin_transaction_path %>
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th><%= Transaction.human_attribute_name :id %></th>
+          <th><%= Transaction.human_attribute_name :inscription_date %></th>
+          <th><%= Transaction.human_attribute_name :tome %></th>
+          <th><%= Transaction.human_attribute_name :sheet %></th>
+          <th><%= Transaction.human_attribute_name :number %></th>
+          <th><%= Transaction.human_attribute_name :buyer_rut %></th>
+          <th><%= Transaction.human_attribute_name :buyer_name %></th>
+          <th><%= Transaction.human_attribute_name :seller_name %></th>
+          <th><%= Transaction.human_attribute_name :seller_type %></th>
+          <th><%= Transaction.human_attribute_name :property_type %></th>
+          <th><%= Transaction.human_attribute_name :address %></th>
+          <th><%= Transaction.human_attribute_name :quarter %></th>
+          <th><%= Transaction.human_attribute_name :year %></th>
+          <th><%= Transaction.human_attribute_name :county %></th>
+          <th><%= Transaction.human_attribute_name :uf_value %></th>
+          <th><%= Transaction.human_attribute_name :uf_m2 %></th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @transactions.each do |transaction| %>
+          <tr>
+            <td><%= transaction.id %></td>
+            <td><%= transaction.inscription_date %></td>
+            <td><%= transaction.tome %></td>
+            <td><%= transaction.sheet %></td>
+            <td><%= transaction.number %></td>
+            <td><%= transaction.buyer_rut %></td>
+            <td><%= transaction.buyer_name %></td>
+            <td><%= transaction.seller_name %></td>
+            <td><%= transaction.seller_type_name %></td>
+            <td><%= transaction.property_type_name %></td>
+            <td><%= transaction.address %></td>
+            <td><%= transaction.quarter %></td>
+            <td><%= transaction.year %></td>
+            <td><%= transaction.county_name %></td>
+            <td><%= number_with_precision(transaction.calculated_value, precision: 1) %></td>
+            <td><%= number_with_precision(transaction.uf_m2, precision: 1) %></td>
+            <td class="text-center"><%= link_to edit_admin_transaction_path(transaction) do %> <i class="fas fa-edit" title="Editar"></i> <% end %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="pull-left">
+      <%= will_paginate @transactions %>
+    </div>
+
+  </div>
+</div>
