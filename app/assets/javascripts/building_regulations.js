@@ -24,10 +24,14 @@ building_regulations_popup = function(id) {
     datatype: 'json',
     data: data,
     success: function(data) {
+
       land_use_types = [];
+      
       $.each(data.land_use_types, function(a, b) {
         land_use_types.push(b.name);
       });
+
+      $('#popup_info').empty();
 
       // Agregamos la información general
       $('#popup_info').append(
