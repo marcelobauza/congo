@@ -5,15 +5,15 @@
       <%= f.error_notification %>
       <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
       <% if @user.errors.any? %>
-        <div class="alert-message block-message error" xmlns="http://www.w3.org/1999/html">
-          <%= f.error_messages %>
-        </div>
+         <% @user.errors.full_messages.each do |msg| %>
+                 <li><%= msg %></li>
+                     <% end %>
       <% end %>
 
       <div class="form-group row">
         <%= f.label :password, class: "col-md-2 text-right col-form-label" %>
         <div class="col-md-3">
-          <%= f.password_field :password, class: "form-control", :value => "" %>
+          <%= f.password_field :password, class: "form-control" %>
         </div>
       </div>
 
@@ -80,7 +80,6 @@
           <%= label_tag t('activerecord.models.county.one') %>
         </div>
         <div class="col-md-3">
-          <%= select_tag 'user[county_ids][]', options_for_select(counties_for_select, @user_counties.map { |county| county.id }), :multiple => true, :size => 10, :class => 'form-control' %><br/>
           <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
         </div>
         <div class="col-md-3">
