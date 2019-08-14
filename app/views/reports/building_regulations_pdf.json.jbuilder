@@ -8,13 +8,12 @@ json.array! @data do |p|
   json.construct p.construct
   json.osinciti p.osinciti
   json.site p.site
-  json.density_types do 
-    json.name @data[0].density_type.name
-  end
+  json.density_type_name  p.density_type.name
   json.hectarea_inhabitants p.hectarea_inhabitants
   json.grouping p.grouping
   json.icinciti p.icinciti
   json.site p.site
+  json.comments p.comments
 
 end
 
