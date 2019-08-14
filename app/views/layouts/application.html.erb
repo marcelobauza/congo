@@ -4,6 +4,7 @@
     <%= render :partial => 'layouts/head' %>
   </head>
   <body data-controller="<%= params[:controller] %>" data-action="<%= safe_action_name params[:action] %>" class="nav-sm  dashboard" style="overflow: hidden;">
+    <%= render 'layouts/google_analytics' %>
            <%= render partial: 'layouts/header' %>
   </body>
 </html>
