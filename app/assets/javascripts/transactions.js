@@ -1293,7 +1293,11 @@ Congo.transactions.action_dashboards = function(){
                       // Almacena la variable global
                       var periods_years = x_tick.split("/");
                       Congo.transactions.config.periods.push(periods_years[0]);
-                      Congo.transactions.config.years.push(20+periods_years[1]);
+                      if (title =! 'Transacciones / Bimestre') {
+                        Congo.transactions.config.years.push(20+periods_years[1]);
+                      } else {
+                        Congo.transactions.config.years.push(periods_years[1]);
+                      }
 
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
