@@ -57,7 +57,7 @@ function transactions_report_pdf(){
     datatype: 'json',
     data: data,
     success: function(data) {
-    console.log(data)
+
       data = data['data']
 
       // Creamos el doc
@@ -550,7 +550,6 @@ function transactions_report_pdf(){
 
 } // Cierra transactions_report_pdf
 
-
 Congo.transactions.action_graduated_points = function(){
 
   init=function(){
@@ -925,28 +924,57 @@ Congo.transactions.action_dashboards = function(){
                     if (title == 'Tipo de Propiedad' || title == 'Tipo de Vendedor') {
                       switch (d['name']) {
                         case 'Propietario':
-                          colour = '#85C1E9'
-                          break;
-                        case 'Inmobiliaria':
-                          colour = '#5DADE2'
-                          break;
-                        case 'Empresa':
                           colour = '#3498DB'
                           break;
+                        case 'Inmobiliaria':
+                          colour = '#1ABC9C'
+                          break;
+                        case 'Empresa':
+                          colour = '#F5B041'
+                          break;
                         case 'Banco':
-                          colour = '#2E86C1'
+                          colour = '#8E44AD'
                           break;
                         case 'Cooperativa':
-                          colour = '#2874A6'
+                          colour = '#EC7063'
                           break;
                         case 'Municipalidad':
-                          colour = '#21618C'
+                          colour = '#27AE60'
                           break;
                         case 'Sin informacion':
-                          colour = '#1B4F72'
+                          colour = '#C0392B'
+                          break;
+                        case 'Departamento':
+                          colour = '#3498DB'
+                          break;
+                        case 'Casa':
+                          colour = '#1ABC9C'
+                          break;
+                        case 'Estacionamiento':
+                          colour = '#DC7633'
+                          break;
+                        case 'Bodega':
+                          colour = '#F5B041'
+                          break;
+                        case 'Local comercial':
+                          colour = '#8E44AD'
+                          break;
+                        case 'Oficina':
+                          colour = '#EC7063'
+                          break;
+                        case 'Sitio':
+                          colour = '#7F8C8D'
+                          break;
+                        case 'Industria':
+                          colour = '#ECF0F1'
+                          break;
+                        case 'Otro':
+                          colour = '#Otro'
+                          break;
+                        case 'Parcela':
+                          colour = '#C0392B'
                           break;
                       }
-
                       name_colour.push(colour)
                     }
 
