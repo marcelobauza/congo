@@ -67,12 +67,7 @@ body {
   border-top-right-radius: 0;
 }
 
-// Quita caret de dropdown del nav principal
-.nocaret::after {
-  display:none !important;
-}
-
-//Dropdown Navbar 1
+// Dropdown Dashboard Navbar
 div.dropdown-menu-navbar1.show {
   min-width: unset;
   width: 60px;
@@ -83,8 +78,11 @@ div.dropdown-menu-navbar1.show {
   height: 48px;
   padding: 0.6rem !important;
 }
-.dropdown-width { // espacio entre botones del navbar
+.dropdown-width { // Espacio entre botones del navbar
   width: 60px
+}
+.nocaret::after { // Quita caret de dropdown del nav principal
+  display:none !important;
 }
 
 //Charts
