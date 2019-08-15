@@ -22,7 +22,7 @@
         <i class="fas fa-map-pin" title="Selección"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-navbar1" aria-labelledby="navbarDropdown">
-        <%= link_to counties_index_path(), remote: true, 'class' => 'dropdown-item dropdown-item-navbar1', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class=" fas fa-clipboard-list chart-modal" title="Comunas" style="font-size: 26px"></i> <% end %>
+        <%= link_to counties_index_path(), remote: true, 'class' => 'dropdown-item custom-item', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class=" fas fa-clipboard-list chart-modal" title="Comunas" style="font-size: 26px"></i> <% end %>
       </div>
     </div>
 
@@ -32,11 +32,11 @@
         <i class="fas fa-layer-group" title="Capas"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-navbar1" aria-labelledby="navbarDropdown">
-        <%= link_to census_dashboards_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %><i class=" fas fa-male" title="Demografía y Gastos" style="font-size: 26px"></i><% end %>
-        <%= link_to building_regulations_dashboards_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %><i class=" fas fa-file-alt" title="Normativa" style="font-size: 26px"></i><% end %>
-        <%= link_to transactions_dashboards_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %><i class=" fas fa-handshake" title="Compraventas CBR" style="font-size: 26px"></i><% end %>
-        <%= link_to projects_dashboards_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %> <i class=" fas fa-home" title="Proyectos Residenciales" style="font-size: 26px"></i><% end %>
-        <%= link_to future_projects_dashboards_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %> <i class=" fas fa-landmark" title="Expedientes Municipales" style="font-size: 26px"></i><% end %>
+        <%= link_to census_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-male" title="Demografía y Gastos" style="font-size: 26px"></i><% end %>
+        <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-file-alt" title="Normativa" style="font-size: 26px"></i><% end %>
+        <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-handshake" title="Compraventas CBR" style="font-size: 26px"></i><% end %>
+        <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-home" title="Proyectos Residenciales" style="font-size: 26px"></i><% end %>
+        <%= link_to future_projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-landmark" title="Expedientes Municipales" style="font-size: 26px"></i><% end %>
       </div>
     </div>
 
@@ -47,9 +47,9 @@
         <i class="fas fa-map-marked-alt" title="Mapas"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-navbar1" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item dropdown-item-navbar1" href="#"><i class=" fas fa-circle" title="Puntos" style="font-size: 13px"></i></a>
-        <%= link_to dashboards_graduated_points_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %><i class=" fas fa-braille" title="Puntos Proporcionales" style="font-size: 22px"></i><% end %>
-        <%= link_to dashboards_heatmap_path(), class: "dropdown-item dropdown-item-navbar1", remote: true  do  %><i class=" fas fa-fire" title="Mapa de Calor" style="font-size: 26px"></i><% end %>
+        <a class="dropdown-item custom-item" href="#"><i class=" fas fa-circle" title="Puntos" style="font-size: 13px"></i></a>
+        <%= link_to dashboards_graduated_points_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-braille" title="Puntos Proporcionales" style="font-size: 22px"></i><% end %>
+        <%= link_to dashboards_heatmap_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-fire" title="Mapa de Calor" style="font-size: 26px"></i><% end %>
       </div>
     </div>
 
@@ -59,11 +59,11 @@
         <i class="fas fa-plus" title="Útiles"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-navbar1" aria-labelledby="navbarDropdown">
-        <%= link_to "#", class: "dropdown-item dropdown-item-navbar1 reports", data: {remote: true}, id:"pdf" do  %> <i class=" fas fa-file-pdf" title="Bases XLS" style="font-size: 26px"></i><% end %>
-        <%= link_to "#", id: "boost", class: "dropdown-item dropdown-item-navbar1", remote: true do %> <i class=" fas fa-database" title="Bases Históricas (Boost)" style="font-size: 26px"></i> <%end %>
-        <%= link_to "#", class: "dropdown-item dropdown-item-navbar1 reports", remote: true, id:"base"  do  %> <i class=" fas fa-file-excel" title="Bases XLS" style="font-size: 26px"></i><% end %>
-        <%= link_to "#", class: "dropdown-item dropdown-item-navbar1 reports", remote: true,  id:"graph"  do  %> <i class=" fas fa-chart-bar" title="Gráficos XLS" style="font-size: 26px"></i><% end %>
-        <%= link_to downloads_index_path(), class: "dropdown-item dropdown-item-navbar1", remote: true,  id:"csv"  do  %> <i class=" fas fa-file-csv" title="Descarga CSV" style="font-size: 26px"></i><% end %>
+        <%= link_to "#", class: "dropdown-item custom-item reports", data: {remote: true}, id:"pdf" do  %> <i class=" fas fa-file-pdf" title="Bases XLS" style="font-size: 26px"></i><% end %>
+        <%= link_to "#", id: "boost", class: "dropdown-item custom-item", remote: true do %> <i class=" fas fa-database" title="Bases Históricas (Boost)" style="font-size: 26px"></i> <%end %>
+        <%= link_to "#", class: "dropdown-item custom-item reports", remote: true, id:"base"  do  %> <i class=" fas fa-file-excel" title="Bases XLS" style="font-size: 26px"></i><% end %>
+        <%= link_to "#", class: "dropdown-item custom-item reports", remote: true,  id:"graph"  do  %> <i class=" fas fa-chart-bar" title="Gráficos XLS" style="font-size: 26px"></i><% end %>
+        <%= link_to downloads_index_path(), class: "dropdown-item custom-item", remote: true,  id:"csv"  do  %> <i class=" fas fa-file-csv" title="Descarga CSV" style="font-size: 26px"></i><% end %>
       </div>
     </div>
 
@@ -73,9 +73,9 @@
         <i class="fas fa-user" title="Usuario"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-navbar1" aria-labelledby="navbarDropdown">
-        <%= link_to users_account_path(), class: "dropdown-item dropdown-item-navbar1 reports", remote: true,  id:"user_data"  do  %> <i class=" fas fa-user" title="Mi Cuenta" style="font-size: 26px"></i><% end %>
-        <%= link_to application_statuses_path(), class: "dropdown-item dropdown-item-navbar1 reports", remote: true,  id:"sessions"  do  %> <i class=" fas fa-save" title="Guardar y Compartir" style="font-size: 26px"></i><% end %>
-        <%= link_to destroy_user_session_path, method: :delete, 'class' => 'dropdown-item dropdown-item-navbar1' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
+        <%= link_to users_account_path(), class: "dropdown-item custom-item reports", remote: true,  id:"user_data"  do  %> <i class=" fas fa-user" title="Mi Cuenta" style="font-size: 26px"></i><% end %>
+        <%= link_to application_statuses_path(), class: "dropdown-item custom-item reports", remote: true,  id:"sessions"  do  %> <i class=" fas fa-save" title="Guardar y Compartir" style="font-size: 26px"></i><% end %>
+        <%= link_to destroy_user_session_path, method: :delete, 'class' => 'dropdown-item custom-item' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
       </div>
     </div>
 
