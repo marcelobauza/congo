@@ -26,7 +26,7 @@ building_regulations_popup = function(id) {
     success: function(data) {
 
       land_use_types = [];
-      
+
       $.each(data.land_use_types, function(a, b) {
         land_use_types.push(b.name);
       });
@@ -148,30 +148,33 @@ function building_regulations_report_pdf() {
 
       // Separamos los datos
       $.each(data, function(i,reg){
-        var am_cc = reg['am_cc']
-        var aminciti = reg['aminciti']
+
+        var building_regulations = 'null'
+        var max_height = reg['aminciti']
         var building_zone = reg['building_zone']
+        var allowed_use = reg['use_allow']['name']
+        var land_occupation = reg['osinciti']
+        var web = reg['site']
+        var density = reg['hectarea_inhabitants']
+        var max_density = reg['density_type']
         var construct = reg['construct']
-        var density_type = reg['density_type']
-        var hectarea_inhabitants = reg['hectarea_inhabitants']
-        var icinciti = reg['icinciti']
-        var id = reg['id']
-        var land_ocupation = reg['land_ocupation']
-        var osinciti = reg['osinciti']
-        var use_allow = reg['use_allow']
-        var site = reg['site']
+        var last_update = reg['comments']
+        var min_prop_subdiv_m2 = 'null'
+
+        // Arreglamos los valores que llegan con null
+        if (max_density == null) {
+          max_density = ''
+        }
+        if (construct == null) {
+          construct = ''
+        }
 
         // Cambiamos a string los valores que llegan como integer
-        am_cc = am_cc.toString()
-        aminciti = aminciti.toString()
+        max_height = max_height.toString()
         building_zone = building_zone.toString()
-        //construct = construct.toString()
-        //density_type = density_type.toString()
-        hectarea_inhabitants = hectarea_inhabitants.toString()
-        icinciti = icinciti.toString()
-        //id = id.toString()
-        //land_ocupation = land_ocupation.toString()
-        osinciti = osinciti.toString()
+        allowed_use = allowed_use.toString()
+        land_occupation = land_occupation.toString()
+        density = density.toString()
 
         if (i % 2 == 1) { // impar
 
@@ -195,17 +198,17 @@ function building_regulations_report_pdf() {
 
           // Valores columna arriba
           doc.setFontStyle("normal");
-          doc.text('null', 85, 20);
-          //doc.text(aminciti, 85, 30);
-          doc.text('null', 85, 40);
-          doc.text('null', 85, 50);
-          //doc.text(construct, 85, 60);
-          //doc.text(osinciti, 85, 70);
-          doc.text('null', 85, 80);
-          doc.text('null', 85, 90);
-          //doc.text(density_type, 85, 100);
-          doc.text('null', 85, 110);
-          doc.text('null', 85, 120);
+          doc.text(building_regulations, 85, 20);
+          doc.text(max_height, 85, 30);
+          doc.text(building_zone, 85, 40);
+          doc.text(allowed_use, 85, 50);
+          doc.text(construct, 85, 60);
+          doc.text(land_occupation, 85, 70);
+          doc.text(web, 85, 80);
+          doc.text(density, 85, 90);
+          doc.text(max_density, 85, 100);
+          doc.text(last_update, 85, 110);
+          doc.text(min_prop_subdiv_m2, 85, 120);
 
           // Pie de página
           doc.setFontStyle("bold");
@@ -213,7 +216,6 @@ function building_regulations_report_pdf() {
           doc.text('Fuente:', 20, 290);
           doc.setFontStyle("normal");
           doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
-
 
         } else { // par
 
@@ -237,17 +239,17 @@ function building_regulations_report_pdf() {
 
           // Valores columna abajo
           doc.setFontStyle("normal");
-          doc.text('null', 85, 160);
-          //doc.text(aminciti, 85, 170);
-          doc.text('null', 85, 180);
-          doc.text('null', 85, 190);
-          //doc.text(construct, 85, 200);
-          //doc.text(osinciti, 85, 210);
-          doc.text('null', 85, 220);
-          doc.text('null', 85, 230);
-          //doc.text(density_type, 85, 240);
-          doc.text('null', 85, 250);
-          doc.text('null', 85, 260);
+          doc.text(building_regulations, 85, 160);
+          doc.text(max_height, 85, 170);
+          doc.text(building_zone, 85, 180);
+          doc.text(allowed_use, 85, 190);
+          doc.text(construct, 85, 200);
+          doc.text(land_occupation, 85, 210);
+          doc.text(web, 85, 220);
+          doc.text(density, 85, 230);
+          doc.text(max_density, 85, 240);
+          doc.text(last_update, 85, 250);
+          doc.text(min_prop_subdiv_m2, 85, 260);
         } // Cierra else par/impar
       }) // Cierra for
 
