@@ -60,6 +60,43 @@ function transactions_report_pdf(){
 
       data = data['data']
 
+      // Levantamos los datos
+      var info = data[0]['info'][0]
+      var transactions_count = info['transactions_count']
+      var avg_uf = info['average']
+      var avg_land = info['avg_lands']
+      var avg_build = info['avg_surface_line_build']
+      var avg_uf_m2_land = info['avg_uf_m2_land']
+      var avg_uf_m2_build = info['avg_uf_m2_u']
+      var deviation_uf = info['deviation']
+      var deviation_land = info['deviation_lands']
+      var deviation_build = info['deviation_surface_line_build']
+      var deviation_uf_m2_land = info['deviation_uf_m2_land']
+      var deviation_uf_m2_build = info['deviation_uf_m2_u']
+      var up_limit_uf = info['li_uf']
+      var up_limit_land = info['li_sup_land']
+      var up_limit_build = info['li_surface_line_build']
+      var up_limit_uf_m2_land = info['li_uf_m2_land']
+      var up_limit_uf_m2_build = info['li_uf_m2_u']
+      var low_limit_uf = info['ls_uf']
+      var low_limit_land = info['ls_sup_land']
+      var low_limit_build = info['ls_surface_line_build']
+      var low_limit_uf_m2_land = info['ls_uf_m2_land']
+      var low_limit_uf_m2_build = info['ls_uf_m2_u']
+      var max_val_uf = info['uf_max_value']
+      var max_val_land = info['max_lands']
+      var max_val_build = info['max_surface_line_build']
+      var max_val_uf_m2_land = info['max_uf_m2_land']
+      var max_val_uf_m2_build = info['max_uf_m2_u']
+      var min_val_uf = info['uf_min_value']
+      var min_val_land = info['min_lands']
+      var min_val_build = info['min_surface_line_build']
+      var min_val_uf_m2_land = info['min_uf_m2_land']
+      var min_val_uf_m2_build = info['min_uf_m2_u']
+
+      // Cambiamos a string los valores que llegan como integer
+      transactions_count = transactions_count.toString()
+
       // Creamos el doc
       var doc = new jsPDF();
 
@@ -107,7 +144,7 @@ function transactions_report_pdf(){
       doc.setFontStyle("bold");
       doc.text('Cantidad de Transacciones:', 10, 68);
       doc.setFontStyle("normal");
-      doc.text('11.201', 70, 68);
+      doc.text(transactions_count, 70, 68);
 
       // Líneas Tabla
       doc.line(10, 75, 200, 75);
@@ -128,53 +165,54 @@ function transactions_report_pdf(){
       doc.text('Desviación', 13, 102);
       doc.text('Límite Superior', 13, 112);
       doc.text('Límite Inferior', 13, 122);
-      doc.text('Valor Mínimo', 13, 132);
       doc.text('Valor Máximo', 13, 142);
+      doc.text('Valor Mínimo', 13, 132);
+
 
       // Columna Precio UF
       doc.text('Precio UF', 62, 82, null, null, 'center');
-      doc.text('number', 62, 92, null, null, 'center');
-      doc.text('number', 62, 102, null, null, 'center');
-      doc.text('number', 62, 112, null, null, 'center');
-      doc.text('number', 62, 122, null, null, 'center');
-      doc.text('number', 62, 132, null, null, 'center');
-      doc.text('number', 62, 142, null, null, 'center');
+      doc.text(avg_uf, 62, 92, null, null, 'center');
+      doc.text(deviation_uf, 62, 102, null, null, 'center');
+      doc.text(up_limit_uf, 62, 112, null, null, 'center');
+      doc.text(low_limit_uf, 62, 122, null, null, 'center');
+      doc.text(max_val_uf, 62, 142, null, null, 'center');
+      doc.text(min_val_uf, 62, 132, null, null, 'center');
 
       // Columna Terreno
       doc.text('Terreno', 91, 82, null, null, 'center');
-      doc.text('number', 91, 92, null, null, 'center');
-      doc.text('number', 91, 102, null, null, 'center');
-      doc.text('number', 91, 112, null, null, 'center');
-      doc.text('number', 91, 122, null, null, 'center');
-      doc.text('number', 91, 132, null, null, 'center');
-      doc.text('number', 91, 142, null, null, 'center');
+      doc.text(avg_land, 91, 92, null, null, 'center');
+      doc.text(deviation_land, 91, 102, null, null, 'center');
+      doc.text(up_limit_land, 91, 112, null, null, 'center');
+      doc.text(low_limit_land, 91, 122, null, null, 'center');
+      doc.text(max_val_land, 91, 142, null, null, 'center');
+      doc.text(min_val_land, 91, 132, null, null, 'center');
 
       // Columna Útil
       doc.text('Útil', 120, 82, null, null, 'center');
-      doc.text('number', 120, 92, null, null, 'center');
-      doc.text('number', 120, 102, null, null, 'center');
-      doc.text('number', 120, 112, null, null, 'center');
-      doc.text('number', 120, 122, null, null, 'center');
-      doc.text('number', 120, 132, null, null, 'center');
-      doc.text('number', 120, 142, null, null, 'center');
-
-      // Columna UF m² Útil
-      doc.text('UF m² Útil', 149, 82, null, null, 'center');
-      doc.text('number', 149, 92, null, null, 'center');
-      doc.text('number', 149, 102, null, null, 'center');
-      doc.text('number', 149, 112, null, null, 'center');
-      doc.text('number', 149, 122, null, null, 'center');
-      doc.text('number', 149, 132, null, null, 'center');
-      doc.text('number', 149, 142, null, null, 'center');
+      doc.text(avg_build, 120, 92, null, null, 'center');
+      doc.text(deviation_build, 120, 102, null, null, 'center');
+      doc.text(up_limit_build, 120, 112, null, null, 'center');
+      doc.text(low_limit_build, 120, 122, null, null, 'center');
+      doc.text(max_val_build, 120, 132, null, null, 'center');
+      doc.text(min_val_build, 120, 142, null, null, 'center');
 
       // Columna UF m² Terreno
-      doc.text('UF m² Terreno', 181, 82, null, null, 'center');
-      doc.text('number', 181, 92, null, null, 'center');
-      doc.text('number', 181, 102, null, null, 'center');
-      doc.text('number', 181, 112, null, null, 'center');
-      doc.text('number', 181, 122, null, null, 'center');
-      doc.text('number', 181, 132, null, null, 'center');
-      doc.text('number', 181, 142, null, null, 'center');
+      doc.text('UF m² Terreno', 149, 82, null, null, 'center');
+      doc.text(avg_uf_m2_land, 149, 92, null, null, 'center');
+      doc.text(deviation_uf_m2_land, 149, 102, null, null, 'center');
+      doc.text(up_limit_uf_m2_land, 149, 112, null, null, 'center');
+      doc.text(low_limit_uf_m2_land, 149, 122, null, null, 'center');
+      doc.text(max_val_uf_m2_land, 149, 132, null, null, 'center');
+      doc.text(min_val_uf_m2_land, 149, 142, null, null, 'center');
+
+      // Columna UF m² Útil
+      doc.text('UF m² Útil', 181, 82, null, null, 'center');
+      doc.text(avg_uf_m2_build, 181, 92, null, null, 'center');
+      doc.text(deviation_uf_m2_build, 181, 102, null, null, 'center');
+      doc.text(up_limit_uf_m2_build, 181, 112, null, null, 'center');
+      doc.text(low_limit_uf_m2_build, 181, 122, null, null, 'center');
+      doc.text(max_val_uf_m2_build, 181, 132, null, null, 'center');
+      doc.text(min_val_uf_m2_build, 181, 142, null, null, 'center');
 
       // Agregamos un página
       doc.addPage('a4', 'portrait')
