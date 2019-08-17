@@ -1,25 +1,37 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Import Processes</h1>
+<div class="card shadow">
+  <div class="card-body">
+    <div class="form-row">
+      <div class="col-md-6">
+        <h2>Importaciones</h2>
+      </div>
+      <div class="col-md-6 text-right">
+        <%= link_to 'Nueva', new_admin_import_process_path, :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>
 
-<table>
-  <tbody>
-    <% @import_processes.each do |process| %>
-      <tr class="status">
-        <td>
-          <%= link_to admin_import_process_path(process) do %>
-            <%= short_description process %><br/>
-            Fuente de datos: <%= process.data_source %><br/>
-            Archivo: <%= process.original_filename %><br/>
-            Usuario: <%= process.user_complete_name %>
-          <% end %>
-        </td>
-      </tr>
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table table-striped table-hover table-bordered">
 
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @import_processes.each do |process| %>
+          <tr class="status">
+            <td>
+              <%= link_to admin_import_process_path(process) do %>
+                <%= short_description process %><br/>
+                Fuente de datos: <%= process.data_source %><br/>
+                Archivo: <%= process.original_filename %><br/>
+                Usuario: <%= process.user_complete_name %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
 
-<br>
-
-<%= link_to 'New Import Process', new_admin_import_process_path %>
+    </table>
+  </div>
+</div>

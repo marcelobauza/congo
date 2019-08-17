@@ -1,24 +1,58 @@
-<%= simple_form_for([:admin, @import_process]) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
-  <div class="alert-message block-message info">
-    <p><strong>Importar un shape</strong> Se necesita un archivo zip con los archivos que componen un shape (.shp .shx .dbf)</p>
+<div class="card shadow">
+  <div class="card-body">
+
+    <%= simple_form_for([:admin, @import_process]) do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+      <div class="alert-message block-message info">
+        <p><strong>Para importar un shape</strong> se necesita un archivo .zip con los archivos que componen un shape (.shp .shx .dbf)</p>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-2 text-right">
+          <%= f.label 'Fuente de Datos', class: 'col-form-label' %>
+        </div>
+        <div class="col-md-3">
+          <%=  f.select 'data_source',
+          options_for_select([
+            ['Transacciones', 'Transactions'],
+            ['Normativa', 'Building Regulation'],
+            ['Proyecto', 'Project_Fulcrum'],
+            ['Casas', 'Homes'],
+            ['Departamentos', 'Departments'],
+            ['Proyecto Futuro', 'Future Projects'],
+            ['Oficinas', 'Offices'],
+            ['Bodegas', 'Cellars'],
+            ['Centros comerciales', 'Strip Centers'],
+            ['Parcelas', 'Lot'],
+            ['Puntos de interes', 'POI'],
+            ['Comunas', 'Counties'],
+            ['Servicio Impuesto Internos', 'SII']
+          ]), {:include_blank => ''} , { :class => 'form-control' }
+          %>
+
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="offset-md-1 col-sm-4">
+          <%= f.file_field :file,
+          class: 'filestyle',
+          'data-text' => 'Seleccionar archivo',
+          'data-btnClass' => 'btn-primary',
+          'data-size' => '',
+          'data-buttonBefore' => 'true' %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-5 text-right">
+          <%= link_to 'Cancelar', admin_import_processes_path, :class => 'btn btn-secondary' %>
+          <%= f.submit 'Guardar', class: 'btn btn-primary' %>
+        </div>
+      </div>
+
+    <% end %>
+
   </div>
-
-  <div class="clearfix">
-    <label for="xlInput">Fuente de datos</label>
-    <div class="input">
-      <%=  f.select 'data_source', options_for_select([['Transacciones', 'Transactions'], ['Normativa', 'Building Regulation'], ['Proyecto', 'Project_Fulcrum'], ['Casas', 'Homes'], ['Departamentos', 'Departments'],['Proyecto Futuro', 'Future Projects'], ['Oficinas', 'Offices'], ['Bodegas', 'Cellars'], ['Centros comerciales', 'Strip Centers'], ['Parcelas', 'Lot'], ['Puntos de interes', 'POI'], ['Comunas', 'Counties'], ['Servicio Impuesto Internos', 'SII'] ]) %>
-    </div>
-  </div>
-
-  <div class="clearfix">
-    <label for="xlInput">Seleccione el archivo</label>
-    <div class="form-group col-md-3">
-            <%= f.file_field(:file)  %>
-                </div>
-  </div>
-
-  <%= f.submit  "Cargar", :class => 'btn primary' %>
-
-<% end %>
+</div>

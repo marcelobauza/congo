@@ -1,52 +1,64 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Status:</strong>
-  <%= @import_process.status %>
-</p>
+<div class="card shadow">
+  <div class="card-body">
+    <h2>Importación</h2>
+  </div>
+</div>
 
-<p>
-  <strong>Processed:</strong>
-  <%= @import_process.processed %>
-</p>
+<div class="card shadow">
+  <div class="card-body">
 
-<p>
-  <strong>Inserted:</strong>
-  <%= @import_process.inserted %>
-</p>
+    <p>
+      <strong>Estado:</strong>
+      <%= @import_process.status %>
+    </p>
 
-<p>
-  <strong>Updated:</strong>
-  <%= @import_process.updated %>
-</p>
+    <p>
+      <strong>Procesados:</strong>
+      <%= @import_process.processed %>
+    </p>
 
-<p>
-  <strong>Failed:</strong>
-  <%= @import_process.failed %>
-</p>
+    <p>
+      <strong>Insertados:</strong>
+      <%= @import_process.inserted %>
+    </p>
 
-<p>
-  <strong>User:</strong>
-  <%= @import_process.user.complete_name %>
-</p>
+    <p>
+      <strong>Actualizados:</strong>
+      <%= @import_process.updated %>
+    </p>
 
-<p>
-  <strong>Data source:</strong>
-  <%= @import_process.data_source %>
-</p>
+    <p>
+      <strong>Fallidos:</strong>
+      <%= @import_process.failed %>
+    </p>
 
-<p>
-  <strong>Original filename:</strong>
-  <%= @import_process.original_filename %>
-</p>
+    <p>
+      <strong>Fuente de Datos:</strong>
+      <%= @import_process.data_source %>
+    </p>
 
-<ul class="unstyled">
-  <% @import_process.import_errors.each do |error| %>
-    <li>
-      <% if error.row_index.present? %>
-        <p class="label">Indice <%= error.row_index %></p>
+    <p>
+      <strong>Archivo:</strong>
+      <%= @import_process.original_filename %>
+    </p>
+
+    <p>
+      <strong>Usuario:</strong>
+      <%= @import_process.user.complete_name %>
+    </p>
+
+    <ul class="unstyled">
+      <% @import_process.import_errors.each do |error| %>
+        <li>
+          <% if error.row_index.present? %>
+            <p class="label">Indice <%= error.row_index %></p>
+          <% end %>
+          <pre><%= error.message %></pre>
+        </li>
       <% end %>
-      <pre><%= error.message %></pre>
-    </li>
-  <% end %>
-</ul>
+    </ul>
+
+  </div>
+</div>
