@@ -84,47 +84,33 @@ class ImportProcess < ApplicationRecord
   end
 
   def parse_building_regulations(shp_file, import_logger)
-  
-    RGeo::Shapefile::Reader.open(shp_file) do |shp|
-      field = []
-      shp.each do |shape|
-        if shape.index == 0 
-        shape.keys.each do |f|
-          field.push(f)
-        end
-        end
 
-      verify_attributes(field, "Building Regulation")
-  
-        import_logger.current_row_index = shape.index
-        import_logger.processed += 1
-  
-        if shape.geometry.nil?
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
-          next
-        end
-
-        # unless shape.geometry.is_a? MultiPolygon
-        #   import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
-        #   next
-        # end
-
-        geom = shape.geometry
-        data = shape.attributes
-
+    st1 = JSON.parse(File.read(shp_file))
+    json_data = RGeo::GeoJSON.decode(st1, :json_parser => :json)
+        json_data.each_with_index do |a, index|
+        import_logger.current_row_index =index
+        
+         if a.geometry.nil?
+           import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+           next
+         end
+         unless a.geometry.geometry_type.to_s == 'MultiPolygon'
+           import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+           next
+         end
+        geom = a.geometry.as_text
+        data = a.properties
         building = BuildingRegulation.find_or_initialize_by(identifier: data["id"])
         building.new_record? ? import_logger.inserted +=1 : import_logger.updated += 1
-
         building.save_building_regulation_data(geom, data)
+       
         if building.errors.any?
           building.errors.full_messages.each do |error_message|
             import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
           end
         end
       end
-    end
-    ActiveRecord::Base.connection().execute("UPDATE building_regulations SET the_geom = cleangeometry(the_geom) WHERE NOT ST_isValid(the_geom)")
-  end
+ end
 
   def self.parse_transactions(shp_file, import_logger)
     RGeo::Shapefile::Reader.open(shp_file) do |shp|
