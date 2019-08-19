@@ -51,6 +51,7 @@ class Transaction < ApplicationRecord
   SUM_CRITERIA = 0
   COUNT_CRITERIA = 1
   AVG_CRITERIA = 2
+  AVG_CRITERIA_UFM2 = 3
 
 
   def self.number_filter number
@@ -480,6 +481,8 @@ class Transaction < ApplicationRecord
       select = "bimester, year, sum(transactions.calculated_value) as value"
     elsif(criteria == AVG_CRITERIA)
       select = "bimester, year, avg(transactions.calculated_value) as value"
+    elsif(criteria == AVG_CRITERIA_UFM2)
+      select = "bimester, year, avg(transactions.uf_m2_u) as value"
     end
 
     periods.each do |per|
@@ -928,6 +931,7 @@ class Transaction < ApplicationRecord
       transactions_by_periods = Transaction.group_transaction_county_and_bimester(params)
       uf_periods = Transaction.group_transaction_criteria_by_period(params, Transaction::SUM_CRITERIA)
       average_uf_periods = Transaction.group_transaction_criteria_by_period(params, Transaction::AVG_CRITERIA)
+      average_uf_m2_util_periods = Transaction.group_transaction_criteria_by_period(params, Transaction::AVG_CRITERIA_UFM2)
       transactions_ufs = Transaction.group_transactions_by_uf(params)
 
       #GENERAL
@@ -992,6 +996,14 @@ class Transaction < ApplicationRecord
 
       result.push({"title":"Precio Promedio en UF / Bimestre", "series":[{"data": data}]})
 
+      ##AVERAGE UF_M2 PERIOD
+      data =[]
+      average_uf_m2_util_periods.each do |aup|
+        data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
+      end
+
+      result.push({"title":"Precio Promedio / UF M2 Util", "series":[{"data": data}]})
+      
       #TRANSACTION UF
 
       data =[]
@@ -1080,7 +1092,7 @@ end
       end
 
       result.push({"title":"Precio Promedio en UF / Bimestre", "series":[{"data": data}]})
-
+      
       #AVG SURFACE LINE BUILD
       data=[]
       avg_surface_line_build.each do |avg|
