@@ -46,7 +46,7 @@
         <i class="fas fa-map-marked-alt" title="Mapas"></i>
       </button>
       <div class="dropdown-menu custom-menu multi-level" aria-labelledby="navbarDropdown">
-        
+
         <a class="dropdown-item custom-item" href="#"><i class=" fas fa-circle" title="Puntos" style="font-size: 13px"></i></a>
 
         <div href="#" id="prop-prv" class="dropdown-submenu" style="display: none">
@@ -122,7 +122,7 @@
           <i class="fas fa-plus" title="Útiles"></i>
         </button>
         <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
-          <%= link_to "#", class: "dropdown-item custom-item reports", data: {remote: true}, id:"pdf" do  %> <i class=" fas fa-file-pdf" title="Bases XLS" style="font-size: 26px"></i><% end %>
+          <%= link_to "#", class: "dropdown-item custom-item reports", data: {remote: true}, id:"pdf" do  %> <i class=" fas fa-file-pdf" title="Informe PDF" style="font-size: 26px"></i><% end %>
           <%= link_to "#", id: "boost", class: "dropdown-item custom-item", remote: true do %> <i class=" fas fa-database" title="Bases Históricas (Boost)" style="font-size: 26px"></i> <%end %>
           <%= link_to "#", class: "dropdown-item custom-item reports", remote: true, id:"base"  do  %> <i class=" fas fa-file-excel" title="Bases XLS" style="font-size: 26px"></i><% end %>
           <%= link_to "#", class: "dropdown-item custom-item reports", remote: true,  id:"graph"  do  %> <i class=" fas fa-chart-bar" title="Gráficos XLS" style="font-size: 26px"></i><% end %>
