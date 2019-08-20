@@ -1004,6 +1004,7 @@ Congo.projects.action_dashboards = function(){
         datatype: 'json',
         data: data,
         beforeSend: function() {
+
           // Mostramos el spinner y deshabilitamos los botones
           $("#spinner").show();
           $('.btn').addClass('disabled')
@@ -1011,6 +1012,11 @@ Congo.projects.action_dashboards = function(){
 
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('Proyectos Residenciales');
+
+          // Mostramos el icono de Puntos Proporcionales correspondiente
+          $("#prop-prv").show();
+          $("#prop-cbr").hide();
+          $("#prop-em").hide();
 
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();
@@ -1020,6 +1026,7 @@ Congo.projects.action_dashboards = function(){
           $('.filter-transactions').hide();
           $('.filter-projects').show();
           $('.filter-future-projects').hide();
+          
         },
         success: function(data){
 

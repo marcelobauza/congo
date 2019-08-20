@@ -414,6 +414,7 @@ Congo.building_regulations.action_dashboards = function(){
         datatype: 'json',
         data: data,
         beforeSend: function() {
+
           // Mostramos el spinner y deshabilitamos los botones
           $("#spinner").show();
           $('.btn').addClass('disabled')
@@ -421,6 +422,11 @@ Congo.building_regulations.action_dashboards = function(){
 
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('Normativa');
+
+          // Mostramos el icono de Puntos Proporcionales correspondiente
+          $("#prop-prv").hide();
+          $("#prop-cbr").hide();
+          $("#prop-em").hide();
 
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();
@@ -433,6 +439,7 @@ Congo.building_regulations.action_dashboards = function(){
 
           // Eliminamos el time_slider
           $('#time_slider_item').remove()
+
         },
         success: function(data){
 

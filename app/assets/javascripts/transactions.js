@@ -804,6 +804,7 @@ Congo.transactions.action_dashboards = function(){
         datatype: 'json',
         data: data,
         beforeSend: function() {
+
           // Mostramos el spinner y deshabilitamos los botones
           $("#spinner").show();
           $('.btn').addClass('disabled')
@@ -811,6 +812,11 @@ Congo.transactions.action_dashboards = function(){
 
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('Compraventas CBR');
+
+          // Mostramos el icono de Puntos Proporcionales correspondiente
+          $("#prop-prv").hide();
+          $("#prop-cbr").show();
+          $("#prop-em").hide();
 
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();
@@ -820,6 +826,7 @@ Congo.transactions.action_dashboards = function(){
           $('.filter-transactions').show();
           $('.filter-projects').hide();
           $('.filter-future-projects').hide();
+
         },
         success: function(data){
 

@@ -311,6 +311,7 @@ Congo.future_projects.action_dashboards = function(){
         datatype: 'json',
         data: data,
         beforeSend: function() {
+
           // Mostramos el spinner y deshabilitamos los botones
           $("#spinner").show();
           $('.btn').addClass('disabled')
@@ -318,6 +319,11 @@ Congo.future_projects.action_dashboards = function(){
 
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('Expedientes Municipales');
+
+          // Mostramos el icono de Puntos Proporcionales correspondiente
+          $("#prop-prv").hide();
+          $("#prop-cbr").hide();
+          $("#prop-em").show();
 
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();
@@ -327,6 +333,7 @@ Congo.future_projects.action_dashboards = function(){
           $('.filter-transactions').hide();
           $('.filter-projects').hide();
           $('.filter-future-projects').show();
+
         },
         success: function(data) {
 
