@@ -1018,6 +1018,11 @@ Congo.projects.action_dashboards = function(){
           $("#prop-cbr").hide();
           $("#prop-em").hide();
 
+          // Mostramos el icono de Heatmap correspondiente
+          $("#heat-prv").show();
+          $("#heat-cbr").hide();
+          $("#heat-em-norm-dem").hide();
+
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();
 
@@ -1026,7 +1031,7 @@ Congo.projects.action_dashboards = function(){
           $('.filter-transactions').hide();
           $('.filter-projects').show();
           $('.filter-future-projects').hide();
-          
+
         },
         success: function(data){
 

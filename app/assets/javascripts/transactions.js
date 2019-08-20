@@ -818,6 +818,11 @@ Congo.transactions.action_dashboards = function(){
           $("#prop-cbr").show();
           $("#prop-em").hide();
 
+          // Mostramos el icono de Heatmap correspondiente
+          $("#heat-prv").hide();
+          $("#heat-cbr").show();
+          $("#heat-em-norm-dem").hide();
+
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();
 
