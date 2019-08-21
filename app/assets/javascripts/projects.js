@@ -191,7 +191,9 @@ function projects_report_pdf(){
 
           $.each(list_projet, function(a, b) {
 
+            var code = '' // TODO: Falta levantar el dato cuando llegue en el array
             var name = b['name']
+            var real_estate_agent = '' // TODO: Falta levantar el dato cuando llegue en el array
             var address = b['address']
             var sold_units = b['sold_units']
             var stock_units = b['stock_units']
@@ -223,7 +225,7 @@ function projects_report_pdf(){
             doc.setFontStyle("bold");
             doc.text('Cod:', 10, line_num);
             doc.setFontStyle("normal");
-            doc.text('', 22, line_num);
+            doc.text(code, 22, line_num);
 
             // Nombre
             doc.setFontStyle("bold");
@@ -237,7 +239,7 @@ function projects_report_pdf(){
             doc.setFontStyle("bold");
             doc.text('Inmobiliaria:', 10, line_num);
             doc.setFontStyle("normal");
-            doc.text('GRUPO MAGAL', 38, line_num);
+            doc.text(real_estate_agent, 38, line_num);
 
             line_num = line_num+8
 
