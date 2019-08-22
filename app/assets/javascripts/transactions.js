@@ -109,14 +109,6 @@ function transactions_report_pdf(){
       doc.setFontSize(16);
       doc.text('Información General', 105, 30, null, null, 'center');
 
-      // Pie de página
-      doc.setFontStyle("bold");
-      doc.setFontSize(12);
-      doc.text('Fuente:', 10, 284);
-      doc.setFontStyle("normal");
-      doc.text('Compraventas inscritas en los Conservadores de Bienes Raíces de la Región Metropolitana', 27, 284);
-      doc.text('(Santiago, San Miguel, Puente Alto y San Bernardo) y planchetas de predios municipales', 10, 290);
-
       // Periodo Tiempo
       doc.setFontSize(12);
       doc.setFontStyle("bold");
@@ -168,7 +160,6 @@ function transactions_report_pdf(){
       doc.text('Valor Máximo', 13, 142);
       doc.text('Valor Mínimo', 13, 132);
 
-
       // Columna Precio UF
       doc.text('Precio UF', 62, 82, null, null, 'center');
       doc.text(avg_uf, 62, 92, null, null, 'center');
@@ -213,6 +204,14 @@ function transactions_report_pdf(){
       doc.text(low_limit_uf_m2_build, 181, 122, null, null, 'center');
       doc.text(max_val_uf_m2_build, 181, 132, null, null, 'center');
       doc.text(min_val_uf_m2_build, 181, 142, null, null, 'center');
+
+      // Pie de página
+      doc.setFontStyle("bold");
+      doc.setFontSize(12);
+      doc.text('Fuente:', 10, 284);
+      doc.setFontStyle("normal");
+      doc.text('Compraventas inscritas en los Conservadores de Bienes Raíces de la Región Metropolitana', 27, 284);
+      doc.text('(Santiago, San Miguel, Puente Alto y San Bernardo) y planchetas de predios municipales', 10, 290);
 
       // Agregamos un página
       doc.addPage('a4', 'portrait')
