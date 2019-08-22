@@ -297,48 +297,30 @@ function projects_report_pdf(){
           // Levantamos los valores de departamento
           var info_department = data[i]['info_department'][0];
 
-          var min_selling_speed1 = info_department['min_selling_speed1']; //Venta Mensual Histórica Min
-          var max_selling_speed1 = info_department['max_selling_speed1']; //Venta Mensual Histórica Max
-          var avg_selling_speed1 = info_department['avg_selling_speed1']; //Venta Mensual Histórica Prom
-          var total_units1 = info_department['total_units1']; //Oferta
-          var total_sold = info_department['total_sold']; //Venta
-          var total_stock1 = info_department['total_stock1']; //Disponibilidad
-          var spend_stock_months1 = info_department['spend_stock_months1']; //Meses para agotar Stock
-          var min_uf_m21 = info_department['min_uf_m21']; //Valor UF/m2 Mínimo
-          var max_uf_m21 = info_department['max_uf_m21']; //Valor UF/m2 Máximo
-          var avg_uf_m2 = info_department['avg_uf_m2']; //Valor UF/m2 Promedio
+          var min_historical_monthly_sale = info_department['min_selling_speed1'];
+          var max_historical_monthly_sale = info_department['max_selling_speed1'];
+          var avg_historical_monthly_sale = info_department['avg_selling_speed1'];
+          var total_units = info_department['total_units1'];
+          var sold_units = info_department['total_sold'];
+          var stock_units = info_department['total_stock1']
+          var months_to_sell_out_stock = info_department['spend_stock_months1'];
+          var min_uf_m2_value = info_department['min_uf_m21'];
+          var max_uf_m2_value = info_department['max_uf_m21'];
+          var avg_uf_m2_value = info_department['avg_uf_m2'];
 
-          var min_usable_square_m21 = info_department['min_usable_square_m21']; //Sup. Útil Mínima (m2)
-          var max_usable_square_m21 = info_department['max_usable_square_m21']; //Sup. Útil Máxima (m2)
-          var avg_usable_square_m21 = info_department['avg_usable_square_m21']; //Sup. Útil Promedio (m2)
-          var min_terrace_square_m21 = info_department['min_terrace_square_m21']; //Sup. Terraza Min. (m2)
-          var max_terrace_square_m21 = info_department['max_terrace_square_m21']; //Sup. Terraza Max. (m2)
-          var avg_terrace_square_m21 = info_department['avg_terrace_square_m21']; //Sup. Terraza Prom. (m2)
-          var min_uf1 = info_department['min_uf1']; //Valor UF Mínimo
-          var max_uf1 = info_department['max_uf1']; //Valor UF Máximo
-          var avg_uf1 = info_department['avg_uf1']; //Valor UF Promedio
+          var min_usable_square_m2 = info_department['min_usable_square_m21'];
+          var max_usable_square_m2 = info_department['max_usable_square_m21'];
+          var avg_usable_square_m2 = info_department['avg_usable_square_m21'];
+          var min_terrace_square_m2 = info_department['min_terrace_square_m21'];
+          var max_terrace_square_m2 = info_department['max_terrace_square_m21'];
+          var avg_terrace_square_m2 = info_department['avg_terrace_square_m21'];
+          var min_uf_value = info_department['min_uf1'];
+          var max_uf_value = info_department['max_uf1'];
+          var avg_uf_value = info_department['avg_uf1'];
 
           // Cambiamos a string los valores que llegan como integer
-          min_selling_speed1 = min_selling_speed1.toString()
-          max_selling_speed1 = max_selling_speed1.toString()
-          avg_selling_speed1 = avg_selling_speed1.toString()
-          total_units1 = total_units1.toString()
-          total_sold = total_sold.toString()
-          total_stock1 = total_stock1.toString()
-          spend_stock_months1 = spend_stock_months1.toString()
-          min_uf_m21 = min_uf_m21.toString()
-          max_uf_m21 = max_uf_m21.toString()
-          avg_uf_m2 = avg_uf_m2.toString()
-
-          min_usable_square_m21 = min_usable_square_m21.toString()
-          max_usable_square_m21 = max_usable_square_m21.toString()
-          avg_usable_square_m21 = avg_usable_square_m21.toString()
-          min_terrace_square_m21 = min_terrace_square_m21.toString()
-          max_terrace_square_m21 = max_terrace_square_m21.toString()
-          avg_terrace_square_m21 = avg_terrace_square_m21.toString()
-          min_uf1 = min_uf1.toString()
-          max_uf1 = max_uf1.toString()
-          avg_uf1 = avg_uf1.toString()
+          min_historical_monthly_sale = min_historical_monthly_sale.toString()
+          max_historical_monthly_sale = max_historical_monthly_sale.toString()
 
           // Subtítulo
           doc.setFontStyle("bold");
@@ -347,53 +329,53 @@ function projects_report_pdf(){
 
           // Labels columna izquierda
           doc.setFontSize(12);
-          doc.text('Venta Mensual Histórica Min:', 74, 40, null, null, 'right');
-          doc.text('Venta Mensual Histórica Max:', 74, 50, null, null, 'right');
-          doc.text('Venta Mensual Histórica Prom:', 74, 60, null, null, 'right');
+          doc.text('Venta Mensual Histórica Mín.:', 74, 40, null, null, 'right');
+          doc.text('Venta Mensual Histórica Máx.:', 74, 50, null, null, 'right');
+          doc.text('Venta Mensual Histórica Prom.:', 74, 60, null, null, 'right');
           doc.text('Oferta:', 74, 70, null, null, 'right');
           doc.text('Venta:', 74, 80, null, null, 'right');
           doc.text('Disponibilidad:', 74, 90, null, null, 'right');
-          doc.text('Meses para agotar Stock:', 74, 100, null, null, 'right');
-          doc.text('Valor UF/m2 Mínimo:', 74, 110, null, null, 'right');
-          doc.text('Valor UF/m2 Máximo:', 74, 120, null, null, 'right');
-          doc.text('Valor UF/m2 Promedio:', 74, 130, null, null, 'right');
+          doc.text('Meses para agotar stock:', 74, 100, null, null, 'right');
+          doc.text('Valor UF/m² Mín.:', 74, 110, null, null, 'right');
+          doc.text('Valor UF/m² Máx.:', 74, 120, null, null, 'right');
+          doc.text('Valor UF/m² Prom.:', 74, 130, null, null, 'right');
 
           // Valores columna izquierda
           doc.setFontStyle("normal");
-          doc.text(min_selling_speed1, 76, 40);
-          doc.text(max_selling_speed1, 76, 50);
-          doc.text(avg_selling_speed1, 76, 60);
-          doc.text(total_units1, 76, 70);
-          doc.text(total_sold, 76, 80);
-          doc.text(total_stock1, 76, 90);
-          doc.text(spend_stock_months1, 76, 100);
-          doc.text(min_uf_m21, 76, 110);
-          doc.text(max_uf_m21, 76, 120);
-          doc.text(avg_uf_m2, 76, 130);
+          doc.text(min_historical_monthly_sale, 76, 40);
+          doc.text(max_historical_monthly_sale, 76, 50);
+          doc.text(avg_historical_monthly_sale, 76, 60);
+          doc.text(total_units, 76, 70);
+          doc.text(sold_units, 76, 80);
+          doc.text(stock_units, 76, 90);
+          doc.text(months_to_sell_out_stock, 76, 100);
+          doc.text(min_uf_m2_value, 76, 110);
+          doc.text(max_uf_m2_value, 76, 120);
+          doc.text(avg_uf_m2_value, 76, 130);
 
           // Labels columna derecha
           doc.setFontStyle("bold");
-          doc.text('Sup. Útil Mínima (m2):', 168, 40, null, null, 'right');
-          doc.text('Sup. Útil Máxima (m2):', 168, 50, null, null, 'right');
-          doc.text('Sup. Útil Promedio (m2):', 168, 60, null, null, 'right');
-          doc.text('Sup. Terraza Min. (m2):', 168, 70, null, null, 'right');
-          doc.text('Sup. Terraza Max. (m2):', 168, 80, null, null, 'right');
-          doc.text('Sup. Terraza Prom. (m2):', 168, 90, null, null, 'right');
-          doc.text('Valor UF Mínimo:', 168, 110, null, null, 'right');
-          doc.text('Valor UF Máximo:', 168, 120, null, null, 'right');
-          doc.text('Valor UF Promedio:', 168, 130, null, null, 'right');
+          doc.text('Superficie Útil Mín. (m²):', 168, 40, null, null, 'right');
+          doc.text('Superficie Útil Máx. (m²):', 168, 50, null, null, 'right');
+          doc.text('Superficie Útil Prom. (m²):', 168, 60, null, null, 'right');
+          doc.text('Superficie Terraza Mín. (m²):', 168, 70, null, null, 'right');
+          doc.text('Superficie Terraza Máx. (m²):', 168, 80, null, null, 'right');
+          doc.text('Superficie Terraza Prom. (m²):', 168, 90, null, null, 'right');
+          doc.text('Valor UF Mín.:', 168, 110, null, null, 'right');
+          doc.text('Valor UF Máx.:', 168, 120, null, null, 'right');
+          doc.text('Valor UF Prom.:', 168, 130, null, null, 'right');
 
           // Valores columna derecha
           doc.setFontStyle("normal");
-          doc.text(min_usable_square_m21, 170, 40);
-          doc.text(max_usable_square_m21, 170, 50);
-          doc.text(avg_usable_square_m21, 170, 60);
-          doc.text(min_terrace_square_m21, 170, 70);
-          doc.text(max_terrace_square_m21, 170, 80);
-          doc.text(avg_terrace_square_m21, 170, 90);
-          doc.text(min_uf1, 170, 110);
-          doc.text(max_uf1, 170, 120);
-          doc.text(avg_uf1, 170, 130);
+          doc.text(min_usable_square_m2, 170, 40);
+          doc.text(max_usable_square_m2, 170, 50);
+          doc.text(avg_usable_square_m2, 170, 60);
+          doc.text(min_terrace_square_m2, 170, 70);
+          doc.text(max_terrace_square_m2, 170, 80);
+          doc.text(avg_terrace_square_m2, 170, 90);
+          doc.text(min_uf_value, 170, 110);
+          doc.text(max_uf_value, 170, 120);
+          doc.text(avg_uf_value, 170, 130);
 
         } else if (i == 2) { // Información General Casas
 
