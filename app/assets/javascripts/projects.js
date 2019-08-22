@@ -390,9 +390,9 @@ function projects_report_pdf(){
             var min_historical_speed = info_house['min_selling_speed'];
             var max_historical_speed = info_house['max_selling_speed'];
             var avg_historical_speed = info_house['avg_selling_speed'];
-            var total_stock = info_house['total_stock'];
+            var total_stock = info_house['total_units'];
             var total_sale = info_house['total_sold'];
-            var total_availability = info_house['total_units'];
+            var total_availability = info_house['total_stock'];
             var months_to_sell_out_stock = info_house['spend_stock_months1'];
             var min_uf_m2_value = info_house['min_uf_m2'];
             var max_uf_m2_value = info_house['max_uf_m2'];
@@ -413,7 +413,7 @@ function projects_report_pdf(){
             max_historical_speed = max_historical_speed.toString()
             min_land_area_m2 = min_land_area_m2.toString()
             min_historical_speed = min_historical_speed.toString()
-            total_availability = total_availability.toString()
+            total_stock = total_stock.toString()
 
             // Subtítulo
             doc.setFontStyle("bold");
