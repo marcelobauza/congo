@@ -107,36 +107,39 @@ function transactions_report_pdf(){
 
       // Subtítulo
       doc.setFontSize(16);
-      doc.text('Información General', 105, 30, null, null, 'center');
+      doc.text('Información General', 105, 35, null, null, 'center');
 
-      // Periodo Tiempo
-      doc.setFontSize(12);
-      doc.setFontStyle("bold");
-      doc.text('Período de Tiempo Seleccionado:', 10, 44);
-      doc.setFontStyle("normal");
-      doc.text('', 80, 44);
+      // Validamos si hay algún filtro aplicado
+      if (periods == '') {
 
-      // Bimestre
-      doc.setFontStyle("bold");
-      doc.text('Desde el Bimestre:', 10, 52);
-      doc.setFontStyle("normal");
-      doc.text('1/2018', 52, 52);
-      doc.setFontStyle("bold");
-      doc.text('Hasta el Bimestre:', 115, 52);
-      doc.setFontStyle("normal");
-      doc.text('1/2019', 156, 52);
+        // Periodos Actuales
+        doc.setFontSize(12);
+        doc.setFontStyle("bold");
+        doc.text('Periodos de tiempo seleccionados:', 10, 49);
+        doc.setFontStyle("normal");
+        doc.text('Desde el '+to_bimester+'° bimestre del '+to_year+' al '+to_bimester+'° bimestre del '+to_year, 84, 49);
 
-      // Periodos Filtrados
-      doc.setFontStyle("bold");
-      doc.text('Períodos Filtrados:', 10, 60);
-      doc.setFontStyle("normal");
-      doc.text('', 80, 60);
+      } else {
+
+        // Periodos Filtrados
+        doc.setFontSize(12);
+        doc.setFontStyle("bold");
+        doc.text('Periodos de tiempo seleccionados:', 10, 49);
+        doc.setFontStyle("normal");
+        var tab = 84
+        for (var i = 0; i < periods.length; i++) {
+          doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
+          tab = tab + 16
+        }
+
+      }
 
       // Cantidad
+      doc.setFontSize(12);
       doc.setFontStyle("bold");
-      doc.text('Cantidad de Transacciones:', 10, 68);
+      doc.text('Cantidad de Transacciones:', 10, 57);
       doc.setFontStyle("normal");
-      doc.text(transactions_count, 70, 68);
+      doc.text(transactions_count, 70, 57);
 
       // Líneas Tabla
       doc.line(10, 75, 200, 75);
