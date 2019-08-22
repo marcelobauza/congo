@@ -237,7 +237,7 @@ function projects_report_pdf(){
 
             // Nombre
             doc.setFontStyle("bold");
-            doc.text('Nombre:', 60, line_num);
+            doc.text('Nombre:', 62, line_num);
             doc.setFontStyle("normal");
             doc.text(name, 80, line_num);
 
