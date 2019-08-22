@@ -152,9 +152,17 @@ function projects_report_pdf(){
       doc.setFontSize(22);
       doc.text('Proyectos Residenciales en Venta', 105, 20, null, null, 'center');
 
-      // Subtítulo
-      doc.setFontSize(16);
-      doc.text('Polígono Seleccionado', 105, 30, null, null, 'center');
+      // Periodo
+      doc.setFontSize(14);
+      doc.setFontStyle("bold");
+      doc.text('Periodo de tiempo seleccionado:', 105, 40, null, null, 'center');
+      doc.setFontStyle("normal");
+      doc.text(to_bimester+'° Bimestre '+to_year, 105, 48, null, null, 'center');
+
+      // Polígono
+      doc.setFontStyle("bold");
+      doc.setFontSize(14);
+      doc.text('Polígono seleccionado:', 105, 60, null, null, 'center');
 
       // Pie de página
       doc.setFontStyle("bold");
