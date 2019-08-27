@@ -8,8 +8,13 @@ module WhereBuilder
   end
   
 
-  def self.build_within_condition_radius(center_pt, radius)
-    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius}, false)"
+  def self.build_within_condition_radius(center_pt, radius, geography = false)
+    @geography = geography
+    if @geography == true 
+    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius})"
+    else
+    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius}, #{geography})"
+  end
   end
 
   def self.build_intersection_condition(wkt)
