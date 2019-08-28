@@ -1,50 +1,144 @@
-<%= simple_form_for([:admin, @future_project]) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+<div class="card shadow">
+  <div class="card-body">
 
-<div id="admin_map">
-  
+    <%= simple_form_for([:admin, @future_project]) do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <div class="form-group form-check">
+            <%= f.check_box :active, :class => 'form-check-input' %>
+            <%= f.label :active, :class => 'form-check-label' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :address %>
+            <%= f.input :address, label: false, input_html: {class: 'form-control'} %>
+            <div id="geocodingResult"></div>
+            <span class="help-inline"><%= t 'form.hint.transaction.address' %></span>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <%= f.label :county %>
+              <%= f.association :county, label: false, input_html: {class: 'form-control'} %>
+            </div>
+            <div class="form-group col-md-6">
+              <%= f.label :future_project_type %>
+              <%= f.association :future_project_type, label: false, input_html: {class: 'form-control'} %>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <div class="border rounded" id="admin_map"></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <%= f.label :code %>
+          <%= f.input :code, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :project_type %>
+          <%= f.association :project_type, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :m2_approved %>
+          <%= f.input :m2_approved, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :m2_built %>
+          <%= f.input :m2_built, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :m2_field %>
+          <%= f.input :m2_field, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :name %>
+          <%= f.input :name, label: false, input_html: {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <%= f.label :role_number %>
+          <%= f.input :role_number, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :file_number %>
+          <%= f.input :file_number, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :file_date %>
+          <div class="form-inline">
+            <%= f.input :file_date, label: false, input_html: {class: 'form-control col-md-4'} %>
+          </div>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :owner %>
+          <%= f.input :owner, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :legal_agent %>
+          <%= f.input :legal_agent, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :architect %>
+          <%= f.input :architect, label: false, input_html: {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <%= f.label :floors %>
+          <%= f.input :floors, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :undergrounds %>
+          <%= f.input :undergrounds, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :total_units %>
+          <%= f.input :total_units, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :total_parking %>
+          <%= f.input :total_parking, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :total_commercials %>
+          <%= f.input :total_commercials, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :t_ofi %>
+          <%= f.input :t_ofi, label: false, input_html: {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <%= f.label :cadastre %>
+          <%= f.input :cadastre, label: false, input_html: {class: 'form-control'} %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :cadastral_date %>
+          <div class="form-inline">
+            <%= f.input :cadastral_date, label: false, input_html: {class: 'form-control col-md-4'} %>
+          </div>
+        </div>
+        <div class="form-group col-md-8">
+          <%= f.label :comments %>
+          <%= f.text_area :comments, label: false, :class => 'form-control' %>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <%= link_to 'Cancelar', admin_future_projects_path, :class => 'btn btn-secondary' %>
+        <%= f.button :submit, class: 'btn btn-primary', value: "Guardar" %>
+      </div>
+
+    <% end %>
+
+  </div>
 </div>
-
-
-  <div class="form-inputs">
-    <%= f.association :county %>
-    <%= f.input :address %>
-    <%= f.association :future_project_type %>
-    <%= f.input :code %>
-    <%= f.association :project_type %>
-    <%= f.input :m2_approved %>
-    <%= f.input :m2_built %>
-    <%= f.input :m2_field %>
-    <%= f.input :name %>
-    <%= f.input :role_number %>
-    <%= f.input :file_number %>
-    <%= f.input :file_date %>
-    <%= f.input :owner %>
-    <%= f.input :legal_agent %>
-    <%= f.input :architect %>
-    <%= f.input :floors %>
-    <%= f.input :undergrounds %>
-    <%= f.input :total_units %>
-    <%= f.input :total_parking %>
-    <%= f.input :total_commercials %>
-    <%= f.input :t_ofi %>
-    <%= f.input :cadastral_date %>
-    <%= f.input :cadastre %>
-    <%= f.input :comments %>
-    <%= f.input :active %>
-    <%= f.input :bimester %>
-    <%= f.input :year %>
-
-
-
-
-
-
-
-  </div>
-
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
-<% end %>

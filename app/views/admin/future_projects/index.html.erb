@@ -1,47 +1,57 @@
 <p id="notice"><%= notice %></p>
 
-<!-- Future Projects -->
-    <%= render partial: 'filters' %>
-    <%= will_paginate @future_projects %>
-    <%= link_to 'New Future Project', new_admin_future_project_path %>
-<div class="col-md-12 overflow-auto">
-  <table class="table table-striped table-hover table-bordered">
-    <thead>
-      <tr>
-        <th>Tipo de Fuente</th>
-        <th>Código</th>
-        <th>Dirección</th>
-        <th>Comuna</th>
-        <th>Propietario</th>
-        <th>Tipo de proyecto</th>
-        <th>Bimestre</th>
-        <th>Año</th>
-        <th></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @future_projects.each do |future_project| %>
-        <tr>
-          <td><%= future_project.future_project_type.name %></td>
-          <td><%= future_project.code %></td>
-          <td><%= future_project.address %></td>
-          <td><%= future_project.county.name %></td>
-          <td><%= future_project.name %></td>
-          <td><%= future_project.project_type.name %></td>
-          <td><%= future_project.bimester %></td>
-          <td><%= future_project.year %></td>
-
-
-
-          <td><%= link_to edit_admin_future_project_path(future_project) do %> <i class="fas fa-edit text-secondary"></i> <%end %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="card shadow">
+  <div class="card-body pb-1">
+    <div class="form-row">
+      <div class="col-md-4">
+        <h2>Proyectos Futuros</h2>
+      </div>
+      <div class="col-md-5 text-center">
+        <%= render partial: 'filters' %>
+      </div>
+      <div class="col-md-3 text-right">
+        <%= link_to 'Nuevo', new_admin_future_project_path, :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>Tipo de Fuente</th>
+          <th>Código</th>
+          <th>Dirección</th>
+          <th>Comuna</th>
+          <th>Propietario</th>
+          <th>Tipo de proyecto</th>
+          <th>Bimestre</th>
+          <th>Año</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @future_projects.each do |future_project| %>
+          <tr>
+            <td><%= future_project.future_project_type.name %></td>
+            <td><%= future_project.code %></td>
+            <td><%= future_project.address %></td>
+            <td><%= future_project.county.name %></td>
+            <td><%= future_project.name %></td>
+            <td><%= future_project.project_type.name %></td>
+            <td><%= future_project.bimester %></td>
+            <td><%= future_project.year %></td>
+            <td class="text-center"><%= link_to edit_admin_future_project_path(future_project) do %> <i class="fas fa-edit" title="Editar"></i> <%end %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<br>
+    <div class="pull-left">
+      <%= will_paginate @future_projects %>
+    </div>
 
-
+  </div>
+</div>
