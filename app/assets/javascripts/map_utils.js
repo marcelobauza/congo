@@ -443,34 +443,9 @@ Congo.map_utils = function(){
     layerControl.addOverlay(sourceLots, "Predial");
 
     if(county_id != ''){
-      var owsrootUrl = 'http://localhost:8080/geoserver/ows';
-      var defaultParameters = {
-        service: 'WFS',
-        version: '1.0.0',
-        request: 'GetFeature',
-        typeName: 'inciti_v2:counties_info',
-        outputFormat: 'application/json',
-        CQL_FILTER: "county_id IN("+ county_id + ")"
-      }
-      var parameters = L.Util.extend(defaultParameters);
-      var URL = owsrootUrl + L.Util.getParamString(parameters);
-      $.ajax({
-        url: URL,
-        success: function (data) {
-          var geojson = new L.geoJson(data, {
-            style: {"color":"#2ECCFA","weight":2, "fillOpacity": 0},
-            zIndex:1
-          }
-          );
-
-          map.fitBounds(geojson.getBounds());
-          groupLayer.addLayer(geojson);
-
-          ;
-        }
-      });
-
+      search_county(county_id);
     }
+
     var options_layers = {
 
       layers: "inciti_v2:"+ layer_type,//nombre de la capa (ver get capabilities)
@@ -531,9 +506,68 @@ Congo.map_utils = function(){
     map.addControl(htmlLegend)
   }
 
+  function draw_geometry(type_geometry){
+    
+    switch(type_geometry) {
+      case 'circle':
+        centerpt = Congo.dashboards.config.centerpt;
+        radius = Congo.dashboards.config.radius ;
+        console.log(radius);
+        geometry = centerpt.split(' ');
+        circle = L.circle([geometry[1], geometry[0]], radius * 1 );
+        editableLayers.addLayer(circle).addTo(map);
+        map.fitBounds(editableLayers.getBounds());
+      break;
+      case 'polygon':
+        size_box = Congo.dashboards.config.size_box;
+        polygon = []
+        $.each(size_box[0], function(idx,arr){
+          point = []
+          $.each(arr, function(i, coord){
+          point.push([coord[1], coord[0]]);
+          })
+          polygon.push(point);
+        })
+        polygon = L.polygon(polygon, {color: '#2ECCFA'}).addTo(map);
+        editableLayers.addLayer(polygon).addTo(map);
+        map.fitBounds(editableLayers.getBounds());
+      break;
+  }
+  }
+
+  function search_county(county_id){
+
+      var owsrootUrl = 'http://localhost:8080/geoserver/ows';
+      var defaultParameters = {
+        service: 'WFS',
+        version: '1.0.0',
+        request: 'GetFeature',
+        typeName: 'inciti_v2:counties_info',
+        outputFormat: 'application/json',
+        CQL_FILTER: "county_id IN("+ county_id + ")"
+      }
+      var parameters = L.Util.extend(defaultParameters);
+      var URL = owsrootUrl + L.Util.getParamString(parameters);
+      $.ajax({
+        url: URL,
+        success: function (data) {
+          var geojson = new L.geoJson(data, {
+            style: {"color":"#2ECCFA","weight":2, "fillOpacity": 0},
+            zIndex:1
+          }
+          );
+          map.fitBounds(geojson.getBounds());
+          groupLayer.addLayer(geojson);
+
+          ;
+        }
+      });
+  }
+
   return{
     init:init,
     counties: counties,
-    legend_points: legend_points
+    legend_points: legend_points,
+    draw_geometry: draw_geometry
   }
 }();
