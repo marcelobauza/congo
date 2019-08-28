@@ -1088,6 +1088,23 @@ Congo.transactions.action_dashboards = function(){
                     })
                   }
 
+                  if (title == 'Precio Promedio / UF m² Útil') { // Line
+                    chart_type = 'line';
+                    datasets.push({
+                      label: label,
+                      data: count,
+                      fill: false,
+                      borderColor: '#58b9e2',
+                      borderWidth: 4,
+                      pointBackgroundColor: '#e8ebef',
+                      pointRadius: 3,
+                      lineTension: 0,
+                      pointHoverBackgroundColor: '#e8ebef',
+                      pointHoverBorderWidth: 3,
+                      pointHitRadius: 5,
+                    })
+                  }
+
                   if (title == 'Transacciones / UF') { // Bar
                     chart_type = 'bar';
                     datasets.push({
