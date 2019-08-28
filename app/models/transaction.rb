@@ -1002,7 +1002,7 @@ class Transaction < ApplicationRecord
         data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
       end
 
-      result.push({"title":"Precio Promedio / UF M2 Util", "series":[{"data": data}]})
+      result.push({"title":"Precio Promedio / UF m² Útil", "series":[{"data": data}]})
       
       #TRANSACTION UF
 
