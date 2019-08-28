@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_08_172138) do
+ActiveRecord::Schema.define(version: 2019_08_22_154236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -211,6 +211,15 @@ ActiveRecord::Schema.define(version: 2019_08_08_172138) do
     t.integer "identifier"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.jsonb "properties"
+    t.string "layer_type"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
   create_table "future_project_types", force: :cascade do |t|
