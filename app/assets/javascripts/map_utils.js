@@ -90,11 +90,11 @@ Congo.map_utils = function(){
         editableLayers.eachLayer(function (layer) {
           map.removeLayer(layer);
         });
+      editableLayers = new L.FeatureGroup();
       }
-
       layer = event.layer;
       if (typeGeometry == 'polygon'){ 
-        Congo.dashboards.config.county_id = '';
+        Congo.dashboards.config.county_id = [];
         Congo.dashboards.config.size_box = [];
         Congo.dashboards.config.centerpt = '';
         Congo.dashboards.config.radius = '';
@@ -114,7 +114,7 @@ Congo.map_utils = function(){
 
       if (typeGeometry == 'circle'){
 
-        Congo.dashboards.config.county_id = '';
+        Congo.dashboards.config.county_id = [];
         Congo.dashboards.config.size_box = [];
         var centerpt = layer.getLatLng();
         var radius = layer.getRadius();
@@ -150,11 +150,11 @@ Congo.map_utils = function(){
         })
       }
       editableLayers.addLayer(layer).addTo(map);
+      map.fitBounds(editableLayers.getBounds());
       counties();
     });
 
     map.on(L.Draw.Event.EDITED, function (event) { 
-
       layer = event.layers;
       if (typeGeometry == 'polygon'){
         size_box = [];
