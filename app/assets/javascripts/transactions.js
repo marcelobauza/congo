@@ -113,12 +113,23 @@ function transactions_report_pdf(){
       // Validamos si hay algún filtro aplicado
       if (periods == '') {
 
+        // Calculamos el bimestre de incio a partir del bimetre final
+        var bim = to_bimester
+        var year = to_year
+        for (var i = 0; i < 5; i++) {
+          bim = bim - 1
+          if (bim < 1) {
+            year = year - 1
+            bim = 6
+          }
+        }
+
         // Periodos Actuales
         doc.setFontSize(12);
         doc.setFontStyle("bold");
         doc.text('Periodos de tiempo seleccionados:', 10, 49);
         doc.setFontStyle("normal");
-        doc.text('Desde el '+to_bimester+'° bimestre del '+to_year+' al '+to_bimester+'° bimestre del '+to_year, 84, 49);
+        doc.text('Desde el '+bim+'° bimestre del '+year+' al '+to_bimester+'° bimestre del '+to_year, 84, 49);
 
       } else {
 
