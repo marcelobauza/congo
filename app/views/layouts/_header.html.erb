@@ -55,16 +55,16 @@
           </a>
           <div class="dropdown-menu">
             <div class="dropdown-item">
-              <%= link_to 'Disponibilidad', dashboards_graduated_points_path(), remote: true %>
+              <%= link_to 'Disponibilidad', dashboards_graduated_points_path(), remote: true, id: 'prop_prv_availability' %>
             </div>
             <div class="dropdown-item">
-              <%= link_to 'Venta', dashboards_graduated_points_path(), remote: true %>
+              <%= link_to 'Venta', dashboards_graduated_points_path(), remote: true, id: 'prop_prv_sale' %>
             </div>
             <div class="dropdown-item">
-              <%= link_to 'UF', dashboards_graduated_points_path(), remote: true %>
+              <%= link_to 'UF', dashboards_graduated_points_path(), remote: true, id: 'prop_prv_uf' %>
             </div>
             <div class="dropdown-item">
-              <%= link_to 'UF m² útil', dashboards_graduated_points_path(), remote: true %>
+              <%= link_to 'UF m² útil', dashboards_graduated_points_path(), remote: true, id: 'prop_prv_uf_m2_util' %>
             </div>
           </div>
         </div>
@@ -74,10 +74,10 @@
           </a>
           <div class="dropdown-menu">
             <div class="dropdown-item">
-              <%= link_to 'UF', dashboards_graduated_points_path(), remote: true %>
+              <%= link_to 'UF', dashboards_graduated_points_path(), remote: true, id: 'prop_cbr_uf' %>
             </div>
             <div class="dropdown-item">
-              <%= link_to 'UF m² útil', dashboards_graduated_points_path(), remote: true %>
+              <%= link_to 'UF m² útil', dashboards_graduated_points_path(), remote: true, id: 'prop_cbr_uf_m2_util' %>
             </div>
           </div>
         </div>
@@ -89,10 +89,10 @@
           </a>
           <div class="dropdown-menu">
             <div class="dropdown-item">
-              <%= link_to 'UF', dashboards_heatmap_path(), remote: true %>
+              <%= link_to 'UF', dashboards_heatmap_path(), remote: true, id: 'heat_prv_uf' %>
             </div>
             <div class="dropdown-item">
-              <%= link_to 'UF m² útil', dashboards_heatmap_path(), remote: true %>
+              <%= link_to 'UF m² útil', dashboards_heatmap_path(), remote: true, id: 'heat_prv_uf_m2_util' %>
             </div>
           </div>
         </div>
@@ -102,13 +102,13 @@
           </a>
           <div class="dropdown-menu">
             <div class="dropdown-item">
-              <%= link_to 'Cantidad', dashboards_heatmap_path(), remote: true %>
+              <%= link_to 'Cantidad', dashboards_heatmap_path(), remote: true, id: 'heat_cbr_amount' %>
             </div>
             <div class="dropdown-item">
-              <%= link_to 'UF', dashboards_heatmap_path(), remote: true %>
+              <%= link_to 'UF', dashboards_heatmap_path(), remote: true, id: 'heat_cbr_uf' %>
             </div>
             <div class="dropdown-item">
-              <%= link_to 'UF m² útil', dashboards_heatmap_path(), remote: true %>
+              <%= link_to 'UF m² útil', dashboards_heatmap_path(), remote: true, id: 'heat_cbr_uf_m2_util' %>
             </div>
           </div>
         </div>
