@@ -31,10 +31,10 @@ building_regulations_popup = function(id) {
         land_use_types.push(b.name);
       });
 
-      $('#popup_info').empty();
+      $('#popup_info_building_regulations').empty();
 
       // Agregamos la información general
-      $('#popup_info').append(
+      $('#popup_info_building_regulations').append(
         $('<ul>', {
           'class': 'list-unstyled p-4'
         }).append(
@@ -72,7 +72,7 @@ building_regulations_popup = function(id) {
       )
 
       // Agregamos la descarga de la normativa
-      $('#popup_info').append(
+      $('#popup_info_building_regulations').append(
         $('<div>', {
           'class': 'text-center'
         }).append(
@@ -85,7 +85,7 @@ building_regulations_popup = function(id) {
         )
       );
 
-      $('#leaflet_modal').modal('show');
+      $('#leaflet_modal_building_regulations').modal('show');
     } // Cierra success
   }) // Cierra ajax
 } // Cierra building_regulations_popup

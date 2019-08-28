@@ -32,21 +32,21 @@ projects_popup = function(id){
     datatype: 'json',
     data: data,
     success: function(data) {
-      $('#popup_info').empty();
-      $('#popup_info').append('<div>Bimestre: '+ data.bimester +'</div>');
-      $('#popup_info').append('<div>Año: '+ data.year +'</div>');
-      $('#popup_info').append('<div>Direccion: '+ data.address +'</div>');
-      $('#popup_info').append('<div>Nombre: '+ data.name +'</div>');
-      $('#popup_info').append('<div>Estado: '+ data.project_status.name  +'</div>');
-      $('#popup_info').append('<div>Total de Unidades: '+ data.total_units  +'</div>');
-      $('#popup_info').append('<div>Disponibilidad Total: '+ data.stock_units  +'</div>');
-      $('#popup_info').append('<div>Venta Total: '+ data.sold_units  +'</div>');
-      $('#popup_info').append('<div>Cantidad de Pisos: '+ data.floors  +'</div>');
-      $('#popup_info').append('<div>UF/m2: '+ data.uf_m2  +'</div>');
-      $('#popup_info').append('<div>Fecha Inicio Construcción: '+ data.build_date  +'</div>');
-      $('#popup_info').append('<div>Fecha Inicio Ventas:  '+ data.sale_date  +'</div>');
-      $('#popup_info').append('<div>Fecha Entrega '+ data.transfer_date  +'</div>');
-      $('#leaflet_modal').modal('show');
+      $('#popup_info_projects').empty();
+      $('#popup_info_projects').append('<div>Bimestre: '+ data.bimester +'</div>');
+      $('#popup_info_projects').append('<div>Año: '+ data.year +'</div>');
+      $('#popup_info_projects').append('<div>Direccion: '+ data.address +'</div>');
+      $('#popup_info_projects').append('<div>Nombre: '+ data.name +'</div>');
+      $('#popup_info_projects').append('<div>Estado: '+ data.project_status.name  +'</div>');
+      $('#popup_info_projects').append('<div>Total de Unidades: '+ data.total_units  +'</div>');
+      $('#popup_info_projects').append('<div>Disponibilidad Total: '+ data.stock_units  +'</div>');
+      $('#popup_info_projects').append('<div>Venta Total: '+ data.sold_units  +'</div>');
+      $('#popup_info_projects').append('<div>Cantidad de Pisos: '+ data.floors  +'</div>');
+      $('#popup_info_projects').append('<div>UF/m2: '+ data.uf_m2  +'</div>');
+      $('#popup_info_projects').append('<div>Fecha Inicio Construcción: '+ data.build_date  +'</div>');
+      $('#popup_info_projects').append('<div>Fecha Inicio Ventas:  '+ data.sale_date  +'</div>');
+      $('#popup_info_projects').append('<div>Fecha Entrega '+ data.transfer_date  +'</div>');
+      $('#leaflet_modal_projects').modal('show');
     }
   })
     Congo.dashboards.pois();

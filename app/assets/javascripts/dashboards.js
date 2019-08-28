@@ -39,9 +39,9 @@ Congo.dashboards.pois =function(){
       data: data,
       success: function(result) {
 
-        $('#popup_equip').empty();
+        $('#popup_equip_'+model).empty();
 
-        $('#popup_equip').append(
+        $('#popup_equip_'+model).append(
           $('<table>', {
             'class': 'table table-striped table-hover table-bordered text-light'
           }).append(

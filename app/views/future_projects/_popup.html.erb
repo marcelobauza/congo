@@ -1,0 +1,37 @@
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content text-light">
+
+      <div class="modal-header">
+        <div class="list-group list-group-horizontal col-md-10 offset-md-1" id="list-tab" role="tablist">
+          <a class="list-group-item list-group-item-action active" id="list-info-list" data-toggle="list" href="#list-info" role="tab" aria-controls="info">Información</a>
+          <a class="list-group-item list-group-item-action" id="list-verif-list" data-toggle="list" href="#list-verif" role="tab" aria-controls="verif">Verificación de Datos</a>
+          <a class="list-group-item list-group-item-action" id="list-equip-list" data-toggle="list" href="#list-equip" role="tab" aria-controls="equip">Equipamiento y Servicios</a>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body modal-overflow">
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="list-info" role="tabpanel" aria-labelledby="list-info-list">
+            <div id="popup_info_future_projects"></div>
+          </div>
+          <div class="tab-pane fade" id="list-verif" role="tabpanel" aria-labelledby="list-verif-list">
+            <%=simple_form_for :feedback, :url =>{:controller => :feedbacks, :action => :create}, remote: :true do |f|  %>
+              <%= render  "future_projects/feedback", a: f %>
+              <%= f.submit %>
+            <% end %>
+          </div>
+          <div class="tab-pane fade" id="list-equip" role="tabpanel" aria-labelledby="list-equip-list">
+            <div id="popup_equip_future_projects_info"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>

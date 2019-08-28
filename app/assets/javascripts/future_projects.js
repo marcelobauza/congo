@@ -127,10 +127,9 @@ future_projects_popup= function(id){
     datatype: 'json',
     data: data,
     success: function(data) {
+      $('#popup_info_future_projects').empty();
 
-      $('#popup_info').empty();
-
-      $('#popup_info').append(
+      $('#popup_info_future_projects').append(
         $('<ul>', {
           'class': 'list-unstyled p-4'
         }).append(
@@ -196,8 +195,7 @@ future_projects_popup= function(id){
           })
         )
       );
-
-      $('#leaflet_modal').modal('show');
+      $('#leaflet_modal_future_projects').modal();
 
     }
   });
