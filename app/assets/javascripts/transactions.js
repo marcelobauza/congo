@@ -39,7 +39,7 @@ transactions_popup = function(id, latlng){
       $('#popup_info_transactions').append('<div>Numero: '+ data.number +'</div>');
       $('#popup_info_transactions').append('<div>Fecha de Inscripcion: '+ data.inscription_date +'</div>');
       $('#popup_info_transactions').append('<div>Departamento: '+ data.department +'</div>');
-      $('#popup_info_transactions').append('<div>Valor UF: '+ data.uf_value +'</div>');
+      $('#popup_info_transactions').append('<div>Valor UF: '+ data.calculated_value +'</div>');
       $('#popup_info_transactions').append('<div>Plano: '+ data.blueprint +'</div>');
       $('#popup_info_transactions').append('<div>Bodega: '+ data.cellar +'</div>');
       $('#popup_info_transactions').append('<div>Estacionamiento: '+ data.parkingi +'</div>');
