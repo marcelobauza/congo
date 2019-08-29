@@ -1,5 +1,6 @@
 class ProjectType < ApplicationRecord
  has_many :projects
+ has_many :future_projects
 
   DEPARTMENTS = "Departamentos"
   HOUSES = "Casas"
