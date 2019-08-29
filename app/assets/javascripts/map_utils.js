@@ -537,7 +537,7 @@ Congo.map_utils = function(){
 
   function search_county(county_id){
 
-      var owsrootUrl = 'http://localhost:8080/geoserver/ows';
+      var owsrootUrl = "http://"+url+":8080/geoserver/ows";
       var defaultParameters = {
         service: 'WFS',
         version: '1.0.0',
