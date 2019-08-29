@@ -13,13 +13,14 @@ Congo.transactions.config= {
   to_calculated_value: []
 }
 
-transactions_popup = function(id){
+transactions_popup = function(id, latlng){
 
   bimester = Congo.dashboards.config.bimester;
   year = Congo.dashboards.config.year;
   Congo.dashboards.config.row_id = id;
-
-  data = {id: id, bimester: bimester, year: year};
+  lat = latlng['lat'];
+  lng = latlng['lng'];
+  data = {id: id, bimester: bimester, year: year, lat: lat, lng: lng};
   $.ajax({
     type: 'GET',
     url: '/transactions/index.json',

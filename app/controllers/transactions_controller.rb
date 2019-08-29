@@ -2,7 +2,7 @@ class TransactionsController < ApplicationController
   include NumberFormatter
 
   def index
-    @data = Transaction.where(bimester: params[:bimester], year: params[:year], id: params[:id]).first
+    @data = Transaction.where(bimester: params[:bimester], year: params[:year]).where("st_contains(ST_Buffer(ST_GeomFromText('POINT(#{params[:lng]} #{params[:lat]})')::geography,20)::geometry, the_geom) ").first
     respond_to do |f|
       f.json
     end
