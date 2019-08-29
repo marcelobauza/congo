@@ -1,13 +1,13 @@
 layer_type = Congo.dashboards.config.layer_type;
 
-console.log(layer_type);
-
 switch(layer_type){
   case 'future_projects_info':
     Congo.future_projects.action_graduated_points.init();
     break;
   case 'transactions_info':
     Congo.transactions.action_graduated_points.init();
+    break;
   case 'projects_feature_info':
     Congo.projects.action_graduated_points.init();
+    break;
 }
