@@ -56,6 +56,7 @@ Congo.map_utils = function(){
       minLength: 2
     }) );
 
+    L.control.scale({imperial: false}).addTo(map);
     baseMaps = {
       "Grayscale": grayscale,
       "Streets": streets,
