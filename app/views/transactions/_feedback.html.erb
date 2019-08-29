@@ -1,4 +1,5 @@
 <h2>CBR</h2>
 <%= a.input :layer_type, input_html: {value: "CBR"}, as: :hidden %>
-<%= a.input :uf_value %>
-<%= a.text_area :comments %>
+<%= a.input :uf_value, label: "Valor UF" %>
+
+<%= a.text_area :comments, label: "Comentarios" %>

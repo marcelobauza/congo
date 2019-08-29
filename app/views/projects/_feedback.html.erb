@@ -1,15 +1,15 @@
 <h2>Projects</h2>
 <%= a.input :layer_type, input_html: {value: "PRV"}, as: :hidden %>
-<%= a.input :address %>
-<%= a.input :name %>
-<%= a.input :status %>
-<%= a.input :total_units %>
-<%= a.input :stock %>
-<%= a.input :sold_units %>
-<%= a.input :floors %>
+<%= a.input :address, label: "Direccion " %>
+<%= a.input :name, label: "Nombre " %>
+<%= a.input :status, label: "Estado " %>
+<%= a.input :total_units, label: "Total de Unidades " %>
+<%= a.input :stock, label: "Stock " %>
+<%= a.input :sold_units, label: "Unidades Vendidas " %>
+<%= a.input :floors, label: "Pisos " %>
 <%= a.input :uf_m2 %>
-<%= a.input :date_building %>
-<%= a.input :date_sold %>
-<%= a.input :data_transfer%>
+<%= a.input :date_building, label: "Fecha de Construcción " %>
+<%= a.input :date_sold, label: "Fecha de Ventas " %>
+<%= a.input :data_transfer, label:"Fecha de Entrega " %>
 <%= a.input :comments%>
 

@@ -1,12 +1,11 @@
 <h2>Future Proejcts</h2>
 <%= a.input :layer_type, label: "Expediente Municipales", input_html: {value: "EM"}, as: :hidden %>
-<%= a.input :address %>
-<%= a.input :future_project_types %>
-<%= a.input :future_project_types %>
-<%= a.input :owner %>
-<%= a.input :arquitect %>
-<%= a.input :total_units %>
-<%= a.input :total_parking %>
-<%= a.input :total_office %>
+<%= a.input :address, label: "Direccion " %>
+<%= a.input :future_project_types, label: "Tipo de Expediente " %>
+<%= a.input :owner, label: "Particular " %>
+<%= a.input :arquitect, label: "Arquitecto " %>
+<%= a.input :total_units, label: "Total de Unidades " %>
+<%= a.input :total_parking, label: "Total Estacionamientos " %>
+<%= a.input :total_office, label:"Total de Locales Comerciales "  %>
 <%= a.text_area :comments %>
 
