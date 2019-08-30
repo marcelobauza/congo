@@ -86,15 +86,6 @@ class ReportsController < ApplicationController
     end
   end
   
-
-  def transactions_pdf
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
-    @transactions = Transaction.reports_pdf(filters)
-
-    render json: {"data":@transactions}
-
-  end
-
   def transactions_data
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @transaction = Transaction.reports(filters)
