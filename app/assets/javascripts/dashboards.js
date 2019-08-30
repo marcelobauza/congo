@@ -3,6 +3,18 @@ $(document).ready(function(){
     Congo.dashboards.config.kind_reports = this.id;
     Congo.reports();
   })
+  $('#prop_prv_availability').on('click', function(){
+    Congo.dashboards.config.widget = 'stock_units';
+  });
+  $('#prop_prv_sale').on('click', function(){
+    Congo.dashboards.config.widget = 'sold_units';
+  });
+  $('#prop_prv_uf').on('click', function(){
+    Congo.dashboards.config.widget = 'uf_avg_percent';
+  });
+  $('#prop_prv_uf_m2_util').on('click', function(){
+    Congo.dashboards.config.widget = 'uf_m2_u';
+  });
 })
 
 Congo.namespace('dashboards.action_index');
@@ -25,7 +37,8 @@ Congo.dashboards.config = {
   area: 0,
   draw_active: false,
   slider_periods: [],
-  row_id: ''
+  row_id: '',
+  widget: ''
 }
 
 Congo.dashboards.pois =function(){

@@ -110,7 +110,7 @@ Congo.projects.action_graduated_points = function(){
         layer_type: layer_type,
       };
     };
-
+      data['widget'] = Congo.dashboards.config.widget;
     $.ajax({
       type: 'GET',
       url: '/projects/graduated_points.json',
