@@ -24,7 +24,7 @@ Congo.dashboards.config = {
   boost: false,
   area: 0,
   draw_active: false,
-  slider_periods: [], 
+  slider_periods: [],
   row_id: ''
 }
 
@@ -94,11 +94,27 @@ Congo.dashboards.action_index = function() {
 
   init = function() {
 
+    // Aplica el boost si cumple con la condición
     $('#boost').on('click', function() {
       area = Congo.dashboards.config.area;
       radius = Congo.dashboards.config.radius;
       if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
         Congo.dashboards.config.boost = true;
+        $('#filter-body').append(
+          $('<div>', {
+            'class': 'text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
+            'id': 'item-boost',
+            'text': 'Boost Activo'
+          }).append(
+            $('<button>', {
+              'type': 'button',
+              'class': 'close',
+              'id': 'close-boost',
+              'text': '×',
+              'onclick': 'del_boost_filter()'
+            })
+          )
+        )
         Congo.map_utils.counties();
       } else {
         console.log("es muy grande");
@@ -136,6 +152,13 @@ Congo.dashboards.action_index = function() {
     });
 
   } // Cierra init
+
+  // Elimina el boost
+  del_boost_filter = function() {
+    Congo.dashboards.config.boost = false
+    $('#item-boost').remove();
+    Congo.map_utils.counties();
+  }
 
   // Creamos el overlay
   create_overlay_and_filter_card = function() {
@@ -264,6 +287,7 @@ Congo.dashboards.action_index = function() {
 
   return {
     init: init,
+    del_boost_filter: del_boost_filter,
     create_overlay_and_filter_card: create_overlay_and_filter_card,
     empty_selection_alert: empty_selection_alert,
     add_county_filter_item: add_county_filter_item,
