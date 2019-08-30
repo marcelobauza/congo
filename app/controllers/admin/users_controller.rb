@@ -29,10 +29,15 @@ class Admin::UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
+    if params[:user][:county_ids].lenght > 0 
+      params[:user][:county_ids].each do |county_id|
+        CountiesUser.create(county_id: county_id, user_id: @user.id)
+      end
+    end
+    
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.html { redirect_to admin_users_path(), notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -44,6 +49,14 @@ class Admin::UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+     @user_counties = @user.counties
+    if params[:user][:county_ids].length > 0
+      @counties_users = CountiesUser.where(user_id: @user.id)
+      @counties_users.destroy_all if  !@counties_users.nil?
+            params[:user][:county_ids].each do |county_id|
+        CountiesUser.create(county_id: county_id, user_id: @user.id)
+      end
+    end
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to admin_users_path, notice: 'User was successfully updated.' }
@@ -73,6 +86,6 @@ class Admin::UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:complete_name, :password, :password_confirmation, :name, :email, :company, :city, :disabled)
+      params.require(:user).permit(:complete_name, :password, :password_confirmation, :name, :email, :company, :city, :disabled, :role_id, :rut, :is_temporal,  counties_users_attributes: [:county_id, :user_id] )
     end
 end

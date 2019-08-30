@@ -10,10 +10,11 @@
                      <% end %>
       <% end %>
 
+
       <div class="form-group row">
-        <%= f.label :password, class: "col-md-2 text-right col-form-label" %>
+        <%= f.label :user_name, class: "col-md-2 text-right col-form-label" %>
         <div class="col-md-3">
-          <%= f.password_field :password, class: "form-control" %>
+          <%= f.text_field :name, class: "form-control" %>
         </div>
       </div>
 
@@ -51,7 +52,24 @@
           <%= f.text_field :city, class: "form-control" %>
         </div>
       </div>
-
+      <div class="form-group row">
+        <%= f.label :current_password, "Contraseña Actual", class: "col-md-2 text-right col-form-label" %>
+        <div class="col-md-3">
+                  <%= f.password_field :current_password, class: "form-control"%>
+                    </div>
+                    </div>
+      <div class="form-group row">
+        <%= f.label :password, class: "col-md-2 text-right col-form-label" %>
+        <div class="col-md-3">
+          <%= f.password_field :password, class: "form-control" %>
+        </div>
+      </div>
+      <div class="form-group row">
+        <%= f.label :password_confirmation, class: "col-md-2 text-right col-form-label" %>
+        <div class="col-md-3">
+        <%= f.password_field :password_confirmation , class: "form-control"%>
+        </div>
+      </div>
       <div class="form-group row">
         <%= f.label :is_temporal, class: "col-md-2 text-right form-check-label" %>
         <div class="col-md-3">
@@ -76,6 +94,13 @@
       </div>
 
       <div class="form-group row">
+            <div class="span8">
+                      <%= label_tag t('activerecord.models.county.one') %>
+                              <div class="input">
+                                          <%= select_tag 'user[county_ids][]', options_for_select(counties_for_select, @user_counties.map { |county| county.id }), :multiple => true, :size => 10 %><br/>
+                                                    <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
+                                                            </div>
+                                                                </div>
         <div class="col-md-2 text-right">
           <%= label_tag t('activerecord.models.county.one') %>
         </div>

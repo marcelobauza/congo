@@ -1,6 +1,7 @@
 class County < ApplicationRecord
 
-  has_and_belongs_to_many :users
+  has_many :counties_users
+  has_many :users, through: :counties_users
   has_and_belongs_to_many :roles
 
   #has_many :future_projects, :dependent => :nullify

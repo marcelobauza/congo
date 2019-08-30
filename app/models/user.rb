@@ -4,7 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
     :recoverable, :rememberable, :validatable
 
-  has_and_belongs_to_many :counties
+  has_many :counties_users
+  has_many :counties, through: :counties_users
   belongs_to :role
 
    def active_for_authentication?
@@ -72,4 +73,8 @@ class User < ApplicationRecord
     end
     conditions
   end
+protected
+def password_required?
+   !persisted? || !password.blank? || !password_confirmation.blank?
+end
 end
