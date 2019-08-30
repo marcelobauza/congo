@@ -360,7 +360,21 @@ Congo.map_utils = function(){
           filter_layer = filter_layer + "AND max_density between " + from_inh_hectare + " AND "+ to_inh_hectare ;
         }
 
+        $.ajax({
+          async: false,
+          type: 'GET',
+          url: '/density_types/legend_points.json',
+          datatype: 'json',
+          success: function(data){
+            legend = data;
+          },
+          error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
+
+        })
+
         remove_legend();
+        legend_points(legend);
+
         break;
     }
 
@@ -480,12 +494,14 @@ Congo.map_utils = function(){
   function legend_points(params){
     var options = [];
     $.each(params, function(a,value){
+      color = value['color']
+      color = color.replace('#','');
       options.push({
         name: value['name'],
         elements: [{
           html: '',
           style: {
-            'background-color': value['color'],
+            'background-color': '#'+color,
             'width': '10px',
             'height': '10px'
           }

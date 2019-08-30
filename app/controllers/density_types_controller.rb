@@ -1,6 +1,11 @@
 class DensityTypesController < ApplicationController
   before_action :set_density_type, only: [:show, :edit, :update, :destroy]
 
+  def legend_points
+
+    @legend = DensityType.where.not(identifier: 'null') 
+    render json: @legend
+  end
   # GET /density_types
   # GET /density_types.json
   def index
