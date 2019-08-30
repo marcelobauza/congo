@@ -1287,7 +1287,7 @@ end
     select += "(sum(project_instance_mixes.total_units) - sum(project_instance_mixes.stock_units)) as  sold_units, "
     select += "sum (CASE masud(project_instance_mixes.total_units, project_instance_mixes.stock_units, cadastre, projects.sale_date) "
     select += "WHEN 0 THEN 0::real "
-    select += "ELSE vhmu(project_instance_mixes.total_units, project_instance_mixes.stock_units, cadastre, projects.sale_date) "
+    select += "ELSE round(vhmu(project_instance_mixes.total_units, project_instance_mixes.stock_units, cadastre, projects.sale_date)::numeric,1) "
     select += "END) AS vhmud, "
     select += "project_types.name as project_types_name "
 
@@ -1301,8 +1301,8 @@ end
   def self.information_general_department filters
 
     select = "COUNT(DISTINCT(project_id)) as project_count, "
-    select += "Min(vhmud) as min_selling_speed1, "
-    select += "Max(vhmud) as max_selling_speed1, "
+    select += "round(Min(vhmud)::numeric, 1) as min_selling_speed1, "
+    select += "round(Max(vhmud)::numeric, 1) as max_selling_speed1, "
     select += "round(avg(vhmud)::numeric, 1) as avg_selling_speed1, "
     select += "round(SUM(total_units),1) as total_units1, "
     select += "round(SUM(project_instance_mix_views.stock_units),1) as total_stock1, "
@@ -1340,8 +1340,8 @@ end
   def self.information_general_house filters
 
     select = "round(COUNT(DISTINCT(project_id)),1) as project_count, "
-    select += "Min(vhmud) as min_selling_speed, "
-    select += "Max(vhmud) as max_selling_speed, "
+    select += "round(Min(vhmud)::numeric, 1) as min_selling_speed, "
+    select += "round(Max(vhmud)::numeric, 1) as max_selling_speed, "
     select += "round(avg(vhmud)::numeric,1) as avg_selling_speed, "
     select += "round(SUM(total_units),1) as total_units, "
     select += "round(SUM(project_instance_mix_views.stock_units),1) as total_stock, "
@@ -1360,9 +1360,9 @@ end
     select += "round(AVG(mix_usable_square_meters),1) as avg_usable_square_m2, "
     select += "CASE SUM(project_instance_mix_views.total_units) WHEN 0 THEN 0 "
     select += "ELSE SUM(project_instance_mix_views.mix_usable_square_meters * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units) END AS avg_m2_util, "
-    select += "MIN(project_instance_mix_views.uf_m2_home) as min_m2_field, "
-    select += "MAX(project_instance_mix_views.uf_m2_home) as max_m2_field, "
-    select += "SUM((project_instance_mix_views.t_min + project_instance_mix_views.t_max)/2 * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units) as avg_m2_field, "
+    select += "round(MIN(project_instance_mix_views.uf_m2_home)::numeric,1) as min_m2_field, "
+    select += "round(MAX(project_instance_mix_views.uf_m2_home)::numeric, 1) as max_m2_field, "
+    select += "round((SUM((project_instance_mix_views.t_min + project_instance_mix_views.t_max)/2 * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units))::numeric, 1) as avg_m2_field, "
     select += "round(MIN(total_m2),1) as min_m2_built, "
     select += "round(MAX(total_m2),1) as max_m2_built, "
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built"
