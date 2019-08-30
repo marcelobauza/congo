@@ -21,7 +21,7 @@ class TransactionsController < ApplicationController
   end
 
   def transactions_summary
-    session[:data] ||= params
+    session[:data] = params.clone
     @result = Transaction.summary(params)
    return @result
   end
