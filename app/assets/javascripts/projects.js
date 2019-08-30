@@ -995,6 +995,9 @@ Congo.projects.action_dashboards = function(){
           $("#spinner").show();
           $('.btn').addClass('disabled')
           $('.close').prop('disabled', true);
+          $("#time_slider").data("ionRangeSlider").update({
+            block: true
+          });
 
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('Proyectos Residenciales');
@@ -1025,6 +1028,9 @@ Congo.projects.action_dashboards = function(){
           $("#spinner").hide();
           $('.btn').removeClass('disabled')
           $('.close').prop('disabled', false);
+          $("#time_slider").data("ionRangeSlider").update({
+            block: false
+          });
 
           // Separamos la información
           for (var i = 0; i < data.length; i++) {

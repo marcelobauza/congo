@@ -259,6 +259,7 @@ Congo.dashboards.action_index = function() {
         grid: true,
         from: slider_periods.length-1,
         values: slider_periods,
+        block: false,
         onFinish: function(data) {
 
           var data = data.from_value.split("/")
