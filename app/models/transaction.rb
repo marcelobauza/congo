@@ -822,6 +822,7 @@ class Transaction < ApplicationRecord
   end
 
   def self.interval_graduated_points(params)
+    widget = params[:widget]
     period_current = Period.get_period_current
     bimester = period_current.bimester
     year = period_current.year
@@ -834,9 +835,9 @@ class Transaction < ApplicationRecord
       conditions = WhereBuilder.build_within_condition_radius(params[:centerpt], params[:radius] )
       end
 
-    values = Transaction.select("COUNT(*) as counter, ROUND(calculated_value / 10) as value").
-      where(bimester: bimester, year: year).where(conditions).where("calculated_value > ?", 1).
-      group("ROUND(calculated_value / 10)").
+    values = Transaction.select("COUNT(*) as counter, ROUND(#{widget}/ 10) as value").
+      where(bimester: bimester, year: year).where(conditions).where("#{widget} > ?", 1).
+      group("ROUND(#{widget} / 10)").
       order("counter desc").first
     result = Array.new
     ranges = get_valid_ranges_interval(values)

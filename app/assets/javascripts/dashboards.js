@@ -15,6 +15,12 @@ $(document).ready(function(){
   $('#prop_prv_uf_m2_util').on('click', function(){
     Congo.dashboards.config.widget = 'uf_m2_u';
   });
+  $('#prop_cbr_uf').on('click', function(){
+    Congo.dashboards.config.widget = 'calculated_value';
+  });
+  $('#prop_cbr_uf_m2_util').on('click', function(){
+    Congo.dashboards.config.widget = 'uf_m2_u';
+  });
 })
 
 Congo.namespace('dashboards.action_index');

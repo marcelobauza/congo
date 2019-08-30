@@ -679,7 +679,7 @@ Congo.transactions.action_graduated_points = function(){
 
       };
     }
-
+      data['widget'] = Congo.dashboards.config.widget;
     $.ajax({
       type: 'GET',
       url: '/transactions/graduated_points.json',
