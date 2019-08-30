@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get 'dashboards/filter_county_for_lon_lat'
   get 'dashboards/filter_period'
   get 'future_project_types/legend_points'
+  get 'density_types/legend_points'
   get 'counties/find' => 'counties#find'
   get 'counties/counties_users' => 'counties#counties_users'
   get 'users/account' => 'users#account'
