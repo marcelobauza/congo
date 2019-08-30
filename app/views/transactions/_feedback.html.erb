@@ -1,5 +1,14 @@
-<h2>CBR</h2>
 <%= a.input :layer_type, input_html: {value: "CBR"}, as: :hidden %>
-<%= a.input :uf_value, label: "Valor UF" %>
 
-<%= a.text_area :comments, label: "Comentarios" %>
+<div class="form-group row">
+  <%= a.label :uf_value, label: 'Valor UF:', class: 'col-md-4 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :uf_value, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :comments, label: 'Comentarios:', class: 'col-md-4 text-right' %>
+  <div class="col-md-6">
+    <%= a.text_area :comments, rows: '6', label: false, :class => 'form-control form-control-sm' %>
+  </div>
+</div>
