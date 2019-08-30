@@ -1,15 +1,73 @@
-<h2>Projects</h2>
 <%= a.input :layer_type, input_html: {value: "PRV"}, as: :hidden %>
-<%= a.input :address, label: "Direccion " %>
-<%= a.input :name, label: "Nombre " %>
-<%= a.input :status, label: "Estado " %>
-<%= a.input :total_units, label: "Total de Unidades " %>
-<%= a.input :stock, label: "Stock " %>
-<%= a.input :sold_units, label: "Unidades Vendidas " %>
-<%= a.input :floors, label: "Pisos " %>
-<%= a.input :uf_m2 %>
-<%= a.input :date_building, label: "Fecha de Construcción " %>
-<%= a.input :date_sold, label: "Fecha de Ventas " %>
-<%= a.input :data_transfer, label:"Fecha de Entrega " %>
-<%= a.input :comments%>
-
+<div class="form-group row">
+  <%= a.label :address, label: 'Dirección:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :address, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :name, label: 'Nombre:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :name, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :status, label: 'Estado:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :status, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :total_units, label: 'Total de Unidades:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :total_units, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :stock, label: 'Stock:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :stock, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :sold_units, label: 'Unidades Vendidas:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :sold_units, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :floors, label: 'Pisos:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :floors, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :uf_m2, label: 'UF m²:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :uf_m2, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :date_building, label: 'Fecha de Construcción:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :date_building, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :date_sold, label: 'Fecha de Venta:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :date_sold, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :data_transfer, label: 'Fecha de Entrega:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :data_transfer, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :comments, label: 'Comentarios:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.text_area :comments, rows: '3', label: false, :class => 'form-control form-control-sm' %>
+  </div>
+</div>
