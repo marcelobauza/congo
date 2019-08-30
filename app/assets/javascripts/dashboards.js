@@ -250,17 +250,14 @@ Congo.dashboards.action_index = function() {
         )
       )
 
-      // Levantamos los datos de los periodos y del periodo actual
+      // Levantamos los datos de los periodos
       var slider_periods = Congo.dashboards.config.slider_periods
-      var actual_slider_period = to_bimester + '/' + to_year
 
       // Implementamos ionRangeSlider
       $("#time_slider").ionRangeSlider({
         skin: "flat",
         grid: true,
-        min: slider_periods[0],
-        max: slider_periods[slider_periods.length - 1],
-        from: actual_slider_period,
+        from: slider_periods.length-1,
         values: slider_periods,
         onFinish: function(data) {
 
