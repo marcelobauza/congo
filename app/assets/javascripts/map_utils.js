@@ -58,10 +58,10 @@ Congo.map_utils = function(){
 
     L.control.scale({imperial: false}).addTo(map);
     baseMaps = {
-      "Grayscale": grayscale,
-      "Streets": streets,
+      "Calles": streets,
       "Satelital": satellite,
-      "Night": dark
+      "Claro": grayscale,
+      "Oscuro": dark
     };
     var overlays =  {
     };
