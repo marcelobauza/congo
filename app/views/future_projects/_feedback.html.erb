@@ -1,11 +1,49 @@
-<h2>Future Proejcts</h2>
-<%= a.input :layer_type, label: "Expediente Municipales", input_html: {value: "EM"}, as: :hidden %>
-<%= a.input :address, label: "Direccion " %>
-<%= a.input :future_project_types, label: "Tipo de Expediente " %>
-<%= a.input :owner, label: "Particular " %>
-<%= a.input :arquitect, label: "Arquitecto " %>
-<%= a.input :total_units, label: "Total de Unidades " %>
-<%= a.input :total_parking, label: "Total Estacionamientos " %>
-<%= a.input :total_office, label:"Total de Locales Comerciales "  %>
-<%= a.text_area :comments %>
-
+<%= a.input :layer_type, input_html: {value: "EM"}, as: :hidden %>
+<div class="form-group row">
+  <%= a.label :address, label: 'Dirección:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :address, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :future_project_types, label: 'Tipo de Expediente:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :future_project_types, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :owner, label: 'Particular:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :owner, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :arquitect, label: 'Arquitecto:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :arquitect, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :total_units, label: 'Total de Unidades:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :total_units, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :total_parking, label: 'Total de Estacionamientos:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :total_parking, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :total_office, label: 'Total de Locales Comerciales:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :total_office, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :comments, label: 'Comentarios:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.text_area :comments, rows: '3', label: false, :class => 'form-control form-control-sm' %>
+  </div>
+</div>
