@@ -7,6 +7,8 @@ module CsvParser
   CBR_HEADER_SII = ["N°","FECHA","TOMO","FOJA","NUMERO","RUT_COMP","COMPRADOR","VENDEDOR","VENDE","CALLE","NUMERO","COMUNA","LOTE","MANZANA",
                     "VILLA","CASA","DPTO","ESTAC","CANT_EST","BODEGA","CANT_BOD","OFICINA","LOCAL","USO","SUPERFICIE","PLANO","PESOS","UF","ROL","ROL2", "ROL3","REQUIRIENTE",  "OBSERVACIONES","LEVANTADO","DIGITADO", "LON", "LAT", "TOTAL_SUP_CONSTRUIDO", "TOTAL_SUP_TERRENO", "UF_M2_U", "UF_M2_T","CODIGO_DEST", "CODIGO_MAT.", "ANO_SII"]
 
+  FUTURE_PROJECT = ["CODE", "ADDRESS","NAME", "ROLE_NUMBER", "FILE_NUMBER", "FILE_DATE", "OWNER", "LEGAL_AGENT", "ARCHITECH", "FLOORS", "UNDERGROUNDS", "TOTAL_UNITS", "TOTAL_PARKING", "TOTAL_COMMERCIALS", "M2_APPROVED", "M2_BUILT", "M2_FIELD", "CADASTRAL_DATE", "COMMENTS", "BIMESTER", "YEAR", "CADASTRE", "PROJECT_TYPE_ID", "FUTURE_PROJECT_TYPE_ID", "COUNTY"]
+  
   def self.get_transactions_csv_data(transactions)
     tempFile = Tempfile.new('transactions.csv')
 
@@ -50,4 +52,21 @@ module CsvParser
 
     return tempFile.path
   end
+
+    def self.get_future_projects_csv_data(future_projects)
+    tempFile = Tempfile.new('future_projects.csv')
+
+    CSV.open(tempFile.path, "w") do |writer|
+      writer << FUTURE_PROJECT
+
+      future_projects.each do |t|
+        values = [t.code, t.address, t.name, t.role_number, t.file_number, t.file_date, t.owner, t.legal_agent, t.architect, t.floors, t.undergrounds, t.total_units, t.total_parking, t.total_commercials, t.m2_approved, t.m2_built, t.m2_field, t.cadastral_date, t.comments, t.bimester, t.year, t.cadastre, t.project_type.name, t.future_project_type.name, t.county_name]
+
+        writer << values
+      end
+    end
+
+    return tempFile.path
+  end
+  
 end

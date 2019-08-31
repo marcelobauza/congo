@@ -1,7 +1,15 @@
 class Admin::FutureProjectsController < ApplicationController
   before_action :set_future_project, only: [:show, :edit, :update, :destroy]
   layout 'admin'
-  
+  def export_data
+    @counties = County.order(name: :asc)
+    @future_project = FutureProject.new
+  end
+  def generate_csv
+    file = FutureProject.get_csv_data(params)
+    send_file file, :type => 'text/csv', :disposition => "inline", :filename => "future_project.csv"
+  end
+
   # GET /future_projects
   # GET /future_projects.json
   def index

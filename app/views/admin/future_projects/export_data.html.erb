@@ -1,0 +1,32 @@
+<%= form_with  url: admin_future_projects_generate_csv_path, method: :get, local:true do |f| %>
+  <div class="alert-message block-message info">
+    <p><strong><%= t(:EXPORT_CSV_BETWEEN_DATES) %></strong></p>
+  </div>
+  <div class="clearfix">
+    <label for="xlInput"><strong><%= t(:INSCRIPTION_DATE_FROM) %></strong></label>
+    <div class="input">
+      <%= f.date_field :date_from %>
+    </div>
+    <br/>
+    <label for="xlInput"><strong><%= t(:INSCRIPTION_DATE_TO) %></strong></label>
+    <div class="input">
+      <%= f.date_field :date_to, class:'datepicker'%>
+    </div>
+  </div>
+
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.county')%></span>
+    <%= f.select 'county_id', options_for_select(County.all.collect{ |c| [c.name, c.id]}), {include_hidden: false}, {:multiple=>'true'}%>
+  </div>
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.property_type')%></span>
+    <%= f.select 'project_type_id', options_for_select(ProjectType.all.collect{ |p| [p.name, p.id]} ), {include_hidden: false}, {:multiple=>'true'}  %>
+  </div>
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.property_type')%></span>
+    <%= f.select'future_project_type_id', options_for_select(FutureProjectType.all.collect{ |p| [p.name, p.id]} ), {:include_blank => true}  %>
+  </div>
+  <%= submit_tag "Exportar", :class => 'btn primary' %>
+
+<% end %>
+

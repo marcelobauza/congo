@@ -59,7 +59,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <%= link_to "Exportar CSV", admin_transactions_export_data_path(), class:"dropdown-item" %>
           <%= link_to "Exportar CBR + SII", admin_transactions_export_data_sii_path(), class:"dropdown-item" %>
-          <a class="dropdown-item" href="#">Exportar EM</a>
+          <%= link_to "Exportar EM", admin_future_projects_export_data_path(), class:"dropdown-item" %>
           <a class="dropdown-item" href="#">Exportar PRV</a>
         </div>
       </li>
