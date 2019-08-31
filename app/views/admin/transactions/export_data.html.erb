@@ -1,23 +1,4 @@
 <%= form_with  url: admin_transactions_generate_csv_path, method: :get, local:true do |f| %>
-  <div class="alert-message block-message info">
-    <p><strong><%= t(:EXPORT_CSV_BETWEEN_IDS) %></strong></p>
-  </div>
-
-  <div class="clearfix">
-    <label for="xlInput"><strong><%= t(:ID_FROM) %></strong></label>
-    <div class="input">
-      <%= text_field_tag :fromID %>
-    </div>
-    <br/>
-    <label for="xlInput"><strong><%= t(:ID_TO) %></strong></label>
-    <div class="input">
-      <%= text_field_tag :toID %>
-    </div>
-  </div>
-
-  <div class="alert-message block-message info">
-    <p><strong><%= t(:EXPORT_CSV_BETWEEN_DATES) %></strong></p>
-  </div>
 
   <div class="clearfix">
     <label for="xlInput"><strong><%= t(:INSCRIPTION_DATE_FROM) %></strong></label>
