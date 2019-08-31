@@ -58,9 +58,14 @@ Rails.application.routes.draw do
   get 'pois/get_around_pois' => 'pois#get_around_pois'
   get 'building_regulations/building_regulation_download' => 'building_regulations#building_regulation_download'
 
+
   
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
+    get 'transactions/export_data' => 'transactions#export_data'
+    get 'transactions/generate_csv' => 'transactions#generate_csv'
+    get 'transactions/export_data_sii' => 'transactions#export_data_sii'
+    get 'transactions/generate_csv_sii' => 'transactions#generate_csv_sii'
     get 'periods/active_periods'
     resources :agencies
     resources :periods

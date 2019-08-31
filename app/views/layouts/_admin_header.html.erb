@@ -57,8 +57,8 @@
           Bapo
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Exportar CSV</a>
-          <a class="dropdown-item" href="#">Exportar CBR + SII</a>
+          <%= link_to "Exportar CSV", admin_transactions_export_data_path(), class:"dropdown-item" %>
+          <%= link_to "Exportar CBR + SII", admin_transactions_export_data_sii_path(), class:"dropdown-item" %>
           <a class="dropdown-item" href="#">Exportar EM</a>
           <a class="dropdown-item" href="#">Exportar PRV</a>
         </div>

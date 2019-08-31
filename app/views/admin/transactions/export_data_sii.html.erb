@@ -1,0 +1,52 @@
+<%= form_with  url: admin_transactions_generate_csv_sii_path, method: :get, local:true do |f| %>
+  <div class="alert-message block-message info">
+    <p><strong><%= t(:EXPORT_CSV_BETWEEN_IDS) %></strong></p>
+  </div>
+  <div class="clearfix">
+    <label for="xlInput"><strong><%= t(:ID_FROM) %></strong></label>
+    <div class="input">
+      <%= f.text_field :fromID %>
+    </div>
+    <br/>
+    <label for="xlInput"><strong><%= t(:ID_TO) %></strong></label>
+    <div class="input">
+      <%= f.text_field :toID %>
+    </div>
+  </div>
+
+  <div class="alert-message block-message info">
+    <p><strong><%= t(:EXPORT_CSV_BETWEEN_DATES) %></strong></p>
+  </div>
+
+  <div class="clearfix">
+    <label for="xlInput"><strong><%= t(:INSCRIPTION_DATE_FROM) %></strong></label>
+    <div class="input">
+      <%= f.text_field :date_from %>
+    </div>
+    <br/>
+    <label for="xlInput"><strong><%= t(:INSCRIPTION_DATE_TO) %></strong></label>
+    <div class="input">
+      <%=f.text_field :date_to %>
+    </div>
+  </div>
+
+  <%= f.submit "Exportar", :class => 'btn primary' %>
+  <% unless @transactions.errors.count.zero? %>
+    <div>
+      <p>Errores</p>
+      <table>
+        <tr>
+          <td>fila</td>
+          <td>errores</td>
+        </tr>
+        <% @errors.each_index do |i| %>
+          <tr>
+            <td><%= @erroneous_rows[i].to_s %></td>
+            <td><%= @errors[i].full_messages.to_s %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+<% end %>
+

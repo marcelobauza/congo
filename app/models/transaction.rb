@@ -17,6 +17,7 @@ class Transaction < ApplicationRecord
   include WhereBuilder
   include Util
   include Ranges
+  include CsvParser
 
   validates_presence_of :address,
     :county_id,
@@ -598,23 +599,25 @@ class Transaction < ApplicationRecord
       cond += "AND '#{Date.strptime(filters[:date_to], "%m/%d/%Y").to_s}'"
     end
 
-    transactions = Transaction.find(:all,
-                                    :include => [:seller_type, :surveyor, :user, :county, :property_type],     
-                                    :conditions => cond,
-                                    :order => "transactions.id")
+    transactions = Transaction.includes(:seller_type, :surveyor, :user, :county, :property_type).
+                                where(cond).
+                                order("transactions.id")
 
     return CsvParser.get_transactions_csv_data(transactions)
   end
 
-  def self.get_csv_data_sii()
+  def self.get_csv_data_sii(filters)
+    cond = "transactions.inscription_date BETWEEN '#{Date.strptime(filters[:date_from], "%m/%d/%Y").to_s}' "
+    cond += "AND '#{Date.strptime(filters[:date_to], "%m/%d/%Y").to_s}'"
 
-    transactions = Transaction.find(:all,
-                                    :include => [:seller_type, :surveyor, :user, :county, :property_type],    
-                                    :order => "transactions.id")
+    cond += " AND county_id in(#{filters[:county_id].join(",")})" if !filters[:county_id].blank?
+    cond += " AND property_type_id = #{filters[:property_type_id]}" if !filters[:property_type_id].blank?
+    transactions = Transaction.includes(:seller_type, :surveyor, :user, :county, :property_type).
+                                where(cond).
+                                order("transactions.inscription_date")
 
     return CsvParser.get_transactions_csv_data_sii(transactions)
   end
-
 
 
 
