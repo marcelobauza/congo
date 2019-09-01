@@ -1,0 +1,24 @@
+<%= form_with  url: admin_projects_generate_csv_path, method: :get, local:true do |f| %>
+
+<div class="row">
+
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.county')%></span>
+  	<%= f.select :county_id, options_for_select(County.all.map{ |c| [c.name, c.id]}), {include_hidden: false}, {:multiple=>'true'}%>
+  </div>
+	<div class="span4">
+		<span class="label success"><%= t('activerecord.attributes.kpi.property_type')%></span>
+		<%= f.select 'project_type_id', options_for_select({ "CASAS"=> "1", "DEPARTAMENTOS" => "2"}, :selected => params['project_type_id'] || ''  ), {:include_blank => true}  %>
+	</div>
+
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.bimester')%></span>
+  <%= f.select 'bimester', options_for_select([1,2,3,4,5,6], {:include_blank => true}), {:include_blank => true} %>
+  </div>
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.year_from')%></span>
+  <%= f.select 'year', options_for_select([2010,2011,2012,2013,2014,2015,2016,2017,2018,2019]), {:include_blank => true} %>
+  </div>
+</div>
+<%= submit_tag "Filtrar", :class=>'btn primary'%>
+<% end %>

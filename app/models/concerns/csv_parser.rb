@@ -8,6 +8,8 @@ module CsvParser
                     "VILLA","CASA","DPTO","ESTAC","CANT_EST","BODEGA","CANT_BOD","OFICINA","LOCAL","USO","SUPERFICIE","PLANO","PESOS","UF","ROL","ROL2", "ROL3","REQUIRIENTE",  "OBSERVACIONES","LEVANTADO","DIGITADO", "LON", "LAT", "TOTAL_SUP_CONSTRUIDO", "TOTAL_SUP_TERRENO", "UF_M2_U", "UF_M2_T","CODIGO_DEST", "CODIGO_MAT.", "ANO_SII"]
 
   FUTURE_PROJECT = ["CODE", "ADDRESS","NAME", "ROLE_NUMBER", "FILE_NUMBER", "FILE_DATE", "OWNER", "LEGAL_AGENT", "ARCHITECH", "FLOORS", "UNDERGROUNDS", "TOTAL_UNITS", "TOTAL_PARKING", "TOTAL_COMMERCIALS", "M2_APPROVED", "M2_BUILT", "M2_FIELD", "CADASTRAL_DATE", "COMMENTS", "BIMESTER", "YEAR", "CADASTRE", "PROJECT_TYPE_ID", "FUTURE_PROJECT_TYPE_ID", "COUNTY"]
+  PROJECT_HEADER = ["CODE","NAME", "ADDRESS", "FLOORS", "COUNTY", "PROJECT_TYPE", "BUILD_DATE", "SALE_DATE", "TRANSFER_DATE", "PILOT_DATE", "PROJECT_STATUS", "QUANTITY_DEPARTMENT", "ELEVATORS", "OBSERVATIONS", "PROJECT_STATUS_ID", "BIMESTER", "YEAR", "CADASTRE",  "STOCK_UNITS", "MIX_USABLE_M2", "MIX_TERRACE_M2", "LIVING", "SERVICE", "OFFICE", "UF_MIN", "UF_MAX", "UF_PARKING", "UF_CELLAR", "COMMON_EXPENSES", "TOTAL_UNITS", "T_MIN", "T_MAX", "HOME_TYPE", "MODEL", "LON", "LAT"] 
+
   
   def self.get_transactions_csv_data(transactions)
     tempFile = Tempfile.new('transactions.csv')
@@ -69,4 +71,17 @@ module CsvParser
     return tempFile.path
   end
   
+  def self.get_projects_csv_data(projects)
+
+    tempFile = Tempfile.new('projects.csv')
+    CSV.open(tempFile.path, "w") do |writer|
+      writer << PROJECT_HEADER
+      projects.each do |t|
+        values = [ t.code, t.name, t.address, t.floors, t.countyname, t.project_type_name, t.build_date, t.sale_date, t.transfer_date, t.pilot_opening_date, t.project_status_name, t.quantity_department_for_floor , t.elevators, t.general_observation, t.project_status_id, t.bimester, t.year, t.cadastre, t.stock_units, t.mix_usable_square_meters, t.mix_terrace_square_meters, t.living_room, t.service_room, t.h_office, t.uf_min, t.uf_max, t.uf_parking, t.uf_cellar, t.common_expenses, t.total_units, t.t_min, t.t_max, t.home_type, t.model, t.the_geom.x, t.the_geom.y   ]
+        writer << values 
+      end
+    end
+    return tempFile.path
+  end
+
 end

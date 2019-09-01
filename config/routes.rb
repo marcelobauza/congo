@@ -62,6 +62,8 @@ Rails.application.routes.draw do
   
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
+    get 'projects/export_data' => 'projects#export_data'
+    get 'projects/generate_csv' => 'projects#generate_csv'
     get 'future_projects/export_data' => 'future_projects#export_data'
     get 'future_projects/generate_csv' => 'future_projects#generate_csv'
     get 'transactions/export_data' => 'transactions#export_data'

@@ -1490,4 +1490,32 @@ end
     end
     return result
   end
+  def self.get_csv_data(filters)
+    
+    @joins = Array.new
+    @joins << " inner join project_instances pi on projects.id = pi.project_id "     
+    @joins << " inner join project_instance_mixes pim on pi.id = pim.project_instance_id "
+    @joins << " inner join project_statuses ps on ps.id = pi.project_status_id "
+    @joins << " inner join project_mixes pm on pim.mix_id = pm.id "
+    @joins << " inner join counties c on projects.county_id = c.id "
+    @joins << " inner join project_types pt on projects.project_type_id = pt.id "
+    cond = " 1 = 1 "
+    cond += " AND projects.county_id in ( #{filters[:county_id].join(',')})" if !filters[:county_id].blank?
+    cond += " AND project_type_id = #{filters[:project_type_id]} " if !filters[:project_type_id].blank?
+    cond += " AND pi.bimester = #{filters[:bimester]} " if !filters[:bimester].blank?
+    cond += " AND pi.year = #{filters[:year]} " if !filters[:year].blank?
+    select =  "projects.code, projects.name, projects.address, projects.floors, projects.project_type_id, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, projects.quantity_department_for_floor , projects.elevators, projects.general_observation, pi.project_status_id, "
+    select += " pi.bimester, pi.year, pi.cadastre, "
+    select += " pim.stock_units, pim.mix_usable_square_meters, pim.mix_terrace_square_meters, pim.living_room, pim.service_room, pim.h_office, pim.uf_min, pim.uf_max, pim.uf_parking, pim.uf_cellar, pim.common_expenses, pim.total_units, pim.t_min, pim.t_max, pim.home_type, pim.model, projects.the_geom, "   
+    select += " c.name as countyname, "
+    select += " pt.name as project_type_name, "
+    select += " ps.name as project_status_name"
+
+    projects = Project.select(select).
+            joins(@joins). 
+            where(cond).
+            order("projects.created_at")
+
+    return CsvParser.get_projects_csv_data(projects)
+  end
 end

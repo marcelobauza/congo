@@ -2,6 +2,16 @@ class Admin::ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   layout 'admin'
+
+  def export_data
+    @projects = Project.new
+  end
+  def generate_csv
+    file = Project.get_csv_data(params)
+    send_file file, :type => 'text/csv', :disposition => "inline", :filename => "projects.csv"
+  end
+
+
   # GET /projects
   # GET /projects.json
   def index
