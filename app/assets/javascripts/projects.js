@@ -32,6 +32,8 @@ projects_popup = function(id){
     datatype: 'json',
     data: data,
     success: function(data) {
+
+      // Detalle Proyecto
       $('#popup_info_projects').empty();
       $('#popup_info_projects').append('<div>Bimestre: '+ data.bimester +'</div>');
       $('#popup_info_projects').append('<div>Año: '+ data.year +'</div>');
@@ -47,10 +49,107 @@ projects_popup = function(id){
       $('#popup_info_projects').append('<div>Fecha Inicio Ventas:  '+ data.sale_date  +'</div>');
       $('#popup_info_projects').append('<div>Fecha Entrega '+ data.transfer_date  +'</div>');
       $('#leaflet_modal_projects').modal('show');
-    }
-  })
+
+      // Oferta vs. Demanda
+      var charts_data = data['charts']
+
+      // Separamos los datos de los gráficos
+      $.each(charts_data, function(i, reg) {
+
+        var name = [];
+        var count = [];
+        var datasets = [];
+
+        // Seteamos los títulos
+        if (i == 'offer_mix') {
+          title = 'Mix Oferta'
+        }
+
+        if (i == 'sale_mix') {
+          title = 'Mix Venta'
+        }
+
+        // Extraemos los datos de la serie
+        $.each(reg, function(a, b) {
+          name.push(b[1])
+          count.push(b[0])
+        })
+
+        // Guardamos "datasets"
+        datasets.push({
+          data: count,
+          backgroundColor: [
+            '#3498DB',
+            '#1ABC9C',
+            '#F5B041',
+            '#8E44AD',
+            '#EC7063'
+          ],
+        })
+
+        chart_data = {
+          labels: name,
+          datasets: datasets
+        }
+
+        // Guardamos "options"
+        var chart_options = {
+          animation: false,
+          responsive: true,
+          title: {
+            display: true,
+            text: title,
+            fontColor: '#e8ebef'
+          },
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+              fontColor: '#e8ebef',
+              fontSize: 12,
+              usePointStyle: true,
+            }
+          },
+          plugins: {
+            datalabels: {
+              formatter: (value, ctx) => {
+                // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                let sum = 0;
+                let dataArr = ctx.chart.data.datasets[0].data;
+                dataArr.map(data => {
+                  sum += data;
+                });
+                let percentage = (value * 100 / sum).toFixed(2);
+                if (percentage > 3) {
+                  return percentage + '%';
+                } else {
+                  return null;
+                }
+              },
+              align: 'center',
+              anchor: 'center',
+              color: 'white',
+              font: {
+                weight: 'bold'
+              },
+            }
+          },
+        };
+
+        var chart_settings = {
+          type: 'pie',
+          data: chart_data,
+          options: chart_options
+        }
+
+        var chart_canvas = document.getElementById(i + '_canvas').getContext('2d');
+        var final_chart = new Chart(chart_canvas, chart_settings);
+
+      }) // Cierra each charts_data
+    } // Cierra success
+  }) // Cierra ajax
     Congo.dashboards.pois();
-}
+} // Cierra projects_popup
 
 Congo.projects.action_graduated_points = function(){
 
