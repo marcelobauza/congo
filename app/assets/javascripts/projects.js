@@ -1170,8 +1170,8 @@ Congo.projects.action_dashboards = function(){
             $('#collapse'+i).append(card_body);
             $('#header'+i).append(card_handle, card_header_title, card_max_button, card_min_button);
 
-            // Información General
-            if (title == "Información General") {
+            // Resumen
+            if (title == "Resumen") {
 
               var info = reg['data'];
 
@@ -1185,7 +1185,7 @@ Congo.projects.action_dashboards = function(){
               })
 
             // Gráficos
-            } else if (title != "Inmobiliarias") {
+            } else if (title != "Proyectos por Inmobiliaria") {
 
               var datasets = [];
               var serie_colour;
@@ -1197,7 +1197,7 @@ Congo.projects.action_dashboards = function(){
                 var data = b['data']
 
                 // Setea los colores dependiendo de la serie
-                if (title == 'Total Distribución por Mix' || title == 'Oferta, Venta y Disponibilidad por Bimestre' || title == 'Valor UF por Bimestre' || title == 'UF/m2 por Bimestre' || title == 'Superficie Útil (m2) por Bimestre' || title == 'Superficie Terreno/Terraza (m2) por Bimestre') {
+                if (title == 'Venta & Disponibilidad por Programa' || title == 'Oferta, Venta & Disponibilidad' || title == 'Precio | UF' || title == 'Precio Promedio | UFm² Útil' || title == 'Superficie Útil | m²' || title == 'Superficie T | m²') {
 
                   switch (label) {
                     case 'Máximo':
@@ -1229,7 +1229,7 @@ Congo.projects.action_dashboards = function(){
                   id.push(d['id'])
 
                   // Setea los colores dependiendo del label
-                  if (title == 'Estado del Proyecto' || title == 'Tipo de Propiedad') {
+                  if (title == 'Estado Obra' || title == 'Uso') {
                     switch (d['name']) {
                       case 'No iniciado':
                         colour = '#3498DB'
@@ -1260,7 +1260,7 @@ Congo.projects.action_dashboards = function(){
                 })
 
                 // Guardamos "datasets" y "chart_type"
-                if (title == 'Estado del Proyecto') {
+                if (title == 'Estado Obra') {
                   chart_type = 'pie';
                   datasets.push({
                     label: label,
@@ -1270,7 +1270,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Tipo de Propiedad') {
+                if (title == 'Uso') {
                   chart_type = 'pie';
                   datasets.push({
                     label: label,
@@ -1280,7 +1280,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Total Distribución por Mix') {
+                if (title == 'Venta & Disponibilidad por Programa') {
                   chart_type = 'bar';
                   datasets.push({
                     label: label,
@@ -1290,7 +1290,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Oferta, Venta y Disponibilidad por Bimestre') {
+                if (title == 'Oferta, Venta & Disponibilidad') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -1306,7 +1306,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Valor UF por Bimestre') {
+                if (title == 'Precio | UF') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -1322,7 +1322,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'UF/m2 por Bimestre') {
+                if (title == 'Precio Promedio | UFm² Útil') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -1338,7 +1338,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Superficie Útil (m2) por Bimestre') {
+                if (title == 'Superficie Útil | m²') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -1354,7 +1354,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Superficie Terreno/Terraza (m2) por Bimestre') {
+                if (title == 'Superficie T | m²') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -1370,7 +1370,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Cantidad de Proyectos por Bimestre') {
+                if (title == 'Proyectos en Venta') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -1387,7 +1387,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Cantidad de Pisos') {
+                if (title == 'Proyectos por Altura') {
                   chart_type = 'bar';
                   datasets.push({
                     label: label,
@@ -1415,8 +1415,8 @@ Congo.projects.action_dashboards = function(){
               // Guardamos "options"
               if (chart_type == 'bar') { // Bar
 
-                // Armamos las opciones de Total Distribución por Mix por separado
-                if (title == 'Total Distribución por Mix') {
+                // Armamos las opciones de Venta & Disponibilidad por Programa por separado
+                if (title == 'Venta & Disponibilidad por Programa') {
 
                   var chart_options = {
                     onClick: function(c, i) {
@@ -1528,7 +1528,7 @@ Congo.projects.action_dashboards = function(){
 
                         // Almacena la variable global dependiendo del chart
                         var filter_item_id_split = filter_item_id.split("-");
-                        if (title == 'Cantidad de Pisos') {
+                        if (title == 'Proyectos por Altura') {
                           Congo.projects.config.from_floor.push(filter_item_id_split[0]);
                           Congo.projects.config.to_floor.push(filter_item_id_split[1]);
                         } else {
@@ -1544,7 +1544,7 @@ Congo.projects.action_dashboards = function(){
 
                       // Elimina item del filtro
                       $('#close-'+filter_item_id).click(function() {
-                        if (title == 'Cantidad de Pisos') {
+                        if (title == 'Proyectos por Altura') {
                           var active_item_from = Congo.projects.config.from_floor;
                           var active_item_to = Congo.projects.config.to_floor;
                         } else {
@@ -1565,7 +1565,7 @@ Congo.projects.action_dashboards = function(){
                         var active_item_to_updated = $.grep(active_item_to, function(n, i) {
                           return n != to_floor_id;
                         });
-                        if (title == 'Cantidad de Pisos') {
+                        if (title == 'Proyectos por Altura') {
                           Congo.projects.config.from_floor = active_item_from_updated;
                           Congo.projects.config.to_floor = active_item_to_updated;
                         } else {
@@ -1640,7 +1640,7 @@ Congo.projects.action_dashboards = function(){
                     if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
 
                       // Almacena la variable global dependiendo del chart
-                      if (title == 'Estado del Proyecto') {
+                      if (title == 'Estado Obra') {
                         Congo.projects.config.project_status_ids.push(x_tick_id);
                       } else {
                         Congo.projects.config.project_type_ids.push(x_tick_id);
@@ -1655,7 +1655,7 @@ Congo.projects.action_dashboards = function(){
                     // Elimina item del filtro
                     $('#close-'+filter_item_id).click(function() {
 
-                      if (title == 'Estado del Proyecto') {
+                      if (title == 'Estado Obra') {
                         var active_items = Congo.projects.config.project_status_ids;
                       } else {
                         var active_items = Congo.projects.config.project_type_ids;
@@ -1669,7 +1669,7 @@ Congo.projects.action_dashboards = function(){
                         return n != item_id;
                       });
 
-                      if (title == 'Estado del Proyecto') {
+                      if (title == 'Estado Obra') {
                         Congo.projects.config.project_status_ids = active_items_updated;
                       } else {
                         Congo.projects.config.project_type_ids = active_items_updated;
@@ -1855,8 +1855,8 @@ Congo.projects.action_dashboards = function(){
               var chart_canvas = document.getElementById('canvas'+i).getContext('2d');
               var final_chart = new Chart(chart_canvas, chart_settings);
 
-            // Inmobiliarias
-            } else if (title == "Inmobiliarias") {
+            // Proyectos por Inmobiliaria
+            } else if (title == "Proyectos por Inmobiliaria") {
 
               $("<div>", {
                   'id': 'list-inmo',

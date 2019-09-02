@@ -1120,22 +1120,22 @@ end
         data.push("name": item[:label], "count": ("%.1f" % item[:value]).to_f) if !item[:value].nil?
       end
 
-    result.push({"title":"Información General", "data": data})
+    result.push({"title":"Resumen", "data": data})
       ##ESTADO PROYECTO
 
       data =[]
       pstatus.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end
-      result.push({"title":"Estado del Proyecto", "series":[{"data": data}]})
       
+      result.push({"title":"Estado Obra", "series":[{"data": data}]})
       ##TIPO PROYECTO
       data =[]
 
       ptypes.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end
-      result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
+      result.push({"title":"Uso", "series":[{"data": data}]})
 
       ##MIX
       data =[]
@@ -1149,7 +1149,7 @@ end
       end
       categories.push({"label":"Venta Total", "data": sold_units});
       categories.push({"label":"Disponibilidad", "data": stock_units});
-      result.push({"title":"Total Distribución por Mix", "series":categories})
+      result.push({"title":"Venta & Disponibilidad por Programa", "series":categories})
 
       ##OFERTA, VENTA
       total_units=[]
@@ -1164,7 +1164,7 @@ end
       categories.push({"label":"Oferta", "data": total_units});
       categories.push({"label":"Venta", "data": sold_units});
       categories.push({"label":"Disponibilidad", "data": stock_units});
-      result.push({"title":"Oferta, Venta y Disponibilidad por Bimestre", "series":categories})
+      result.push({"title":"Oferta, Venta & Disponibilidad", "series":categories})
 
       ##VALOR UF BIMESTRE
       #result[:data] << [""]
@@ -1182,7 +1182,7 @@ end
       categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
 
-      result.push({"title":"Valor UF por Bimestre", "series":categories})
+      result.push({"title":"Precio | UF", "series":categories})
       ##VALOR UF/M2 BIMESTRE
       min =[]
       max =[]
@@ -1197,7 +1197,7 @@ end
       categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
 
-      result.push({"title":"UF/m2 por Bimestre", "series":categories})
+      result.push({"title":"Precio Promedio | UFm² Útil", "series":categories})
 
       ##SUP UTIL BIMESTRE
       min =[]
@@ -1213,7 +1213,7 @@ end
       categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
 
-      result.push({"title":"Superficie Útil (m2) por Bimestre", "series":categories})
+      result.push({"title":"Superficie Útil | m²", "series":categories})
 
       ##SUP TERR BIMESTRE
       min =[]
@@ -1233,7 +1233,7 @@ end
       categories.push({"label":"Máximo", "data": max});
       categories.push({"label":"Promedio", "data": avg});
 
-      result.push({"title":"Superficie Terreno/Terraza (m2) por Bimestre", "series":categories})
+      result.push({"title":"Superficie T | m²", "series":categories})
 
       ##CANT PROYECTOS BIMESTER
       data =[]
@@ -1241,7 +1241,7 @@ end
       sbim.each do |item|
         data.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:value].to_i)
       end
-      result.push({"title":"Cantidad de Proyectos por Bimestre", "series":[{"data": data}]})
+      result.push({"title":"Proyectos en Venta", "series":[{"data": data}]})
 
       ##CANT PISOS
       data =[]
@@ -1249,7 +1249,7 @@ end
       cfloor.each do |item|
         data.push("name": (item.min_value.to_i.to_s + " - " + item.max_value.to_i.to_s), "count": item.value.to_i)
       end
-      result.push({"title":"Cantidad de Pisos", "series":[{"data": data}]})
+      result.push({"title":"Proyectos por Altura", "series":[{"data": data}]})
 
       ##UNIDADES POR RANGO UF
       data =[]
@@ -1263,7 +1263,7 @@ end
       agencies.each do |agency|
         data.push("name": agency.agency_name, "id":agency.agency_id)
       end
-    result.push({"title": "Inmobiliarias", "data":data})
+    result.push({"title": "Proyectos por Inmobiliaria", "data":data})
 
     rescue
       #result[:data] = ["Sin datos"]

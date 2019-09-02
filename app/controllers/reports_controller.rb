@@ -116,19 +116,19 @@ class ReportsController < ApplicationController
 
     @summary.each do |data|
 
-      if (data[:title] == 'Información General') 
+      if (data[:title] == 'Resumen')
         data[:data].each do |v|
           @info.push([v[:name], v[:count]])
         end
       end
     
-      if (data[:title]== 'Estado del Proyecto')
+      if (data[:title]== 'Estado Obra')
         data[:series][0][:data].each do |v|
           @pstatus.push([v[:name], v[:count]])
         end
       end
 
-      if (data[:title]== 'Tipo de Propiedad')
+      if (data[:title]== 'Uso')
         data[:series][0][:data].each do |v|
           @ptypes.push([v[:name], v[:count]])
         end
