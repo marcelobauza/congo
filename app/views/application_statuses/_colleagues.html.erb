@@ -9,21 +9,20 @@
         </button>
       </div>
 
-      <div class="modal-body modal-overflow">
+      <%= simple_form_for( :share_users, url: application_statuses_share_users_path(), method: "Get", html: { remote: true}) do |f| %>
 
-        <%= simple_form_for( :share_users, url: application_statuses_share_users_path(), method: "Get", html: { remote: true}) do |f| %>
+        <div class="modal-body modal-overflow">
           <%= f.input :row_to_share, as: :hidden, input_html: {value:@row_to_share} %>
-
           <p class="offset-md-3">Seleccione uno o más usuarios:</p>
-          <%= f.input :ids, collection: @colleagues, label: false, input_html: {class:"form-control col-md-6 offset-md-3", multiple: true} %>
-          <br>
-          <div class="text-center">
-            <%= f.submit class: 'btn btn-primary', value: "Compartir" %>
-          </div>
+          <%= f.input :ids, collection: @colleagues, label: false, input_html: {class:"form-control col-md-6 offset-md-3", multiple: true, size: 20} %>
+          <p class="offset-md-3">Presione <kbd>ctrl</kbd> + <kbd>click</kbd> para seleccionar varios usuarios.</p>
+        </div>
 
-        <% end %>
-      </div>
+        <div class="modal-footer">
+          <%= f.submit class: 'btn btn-primary', value: "Compartir" %>
+        </div>
 
+      <% end %>
     </div>
   </div>
 </div>
