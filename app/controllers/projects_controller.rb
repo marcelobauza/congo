@@ -4,10 +4,7 @@ class ProjectsController < ApplicationController
     @data = ProjectInstanceMixView.data_popup(params[:id], params[:bimester], params[:year])
     @offer_mix = ProjectInstance.find_offer_mix(@data.project_instance_id)
     @sale_mix = ProjectInstance.find_sale_mix(@data.project_instance_id)
-
-    respond_to do |f|
-      f.json
-    end
+      render json: {data: @data, charts:{'offer_mix': @offer_mix, 'sale_mix': @sale_mix }}
   end
 
   def graduated_points
