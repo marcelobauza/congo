@@ -830,7 +830,7 @@ Congo.transactions.action_dashboards = function(){
           });
 
           // Establece el nombre de la capa en el navbar
-          $('#layer-name').text('Compraventas CBR');
+          $('#layer-name').text('Compraventas');
 
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();

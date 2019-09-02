@@ -1099,7 +1099,7 @@ Congo.projects.action_dashboards = function(){
           });
 
           // Establece el nombre de la capa en el navbar
-          $('#layer-name').text('Proyectos Residenciales');
+          $('#layer-name').text('PRV');
 
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").show();

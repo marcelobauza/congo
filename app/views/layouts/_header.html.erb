@@ -34,8 +34,8 @@
       <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
         <%= link_to census_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-male" title="Demografía y Gastos" style="font-size: 26px"></i><% end %>
         <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-file-alt" title="Normativa" style="font-size: 26px"></i><% end %>
-        <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-handshake" title="Compraventas CBR" style="font-size: 26px"></i><% end %>
-        <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-home" title="Proyectos Residenciales" style="font-size: 26px"></i><% end %>
+        <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-handshake" title="Compraventas" style="font-size: 26px"></i><% end %>
+        <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-home" title="PRV" style="font-size: 26px"></i><% end %>
         <%= link_to future_projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-landmark" title="Expedientes Municipales" style="font-size: 26px"></i><% end %>
       </div>
     </div>
@@ -51,7 +51,7 @@
 
         <div href="#" id="prop-prv" class="dropdown-submenu" style="display: none">
           <a class="dropdown-item custom-item item-submenu" href="#">
-            <i class="fas fa-braille" title="Puntos Proporcionales" style="font-size: 22px"></i>
+            <i class="fas fa-braille" title="Proporcionales" style="font-size: 22px"></i>
           </a>
           <div class="dropdown-menu">
             <div class="dropdown-item">
@@ -70,7 +70,7 @@
         </div>
         <div href="#" id="prop-cbr" class="dropdown-submenu" style="display: none">
           <a class="dropdown-item custom-item item-submenu" href="#">
-            <i class="fas fa-braille" title="Puntos Proporcionales" style="font-size: 22px"></i>
+            <i class="fas fa-braille" title="Proporcionales" style="font-size: 22px"></i>
           </a>
           <div class="dropdown-menu">
             <div class="dropdown-item">
@@ -81,11 +81,11 @@
             </div>
           </div>
         </div>
-        <%= link_to dashboards_graduated_points_path(), class: "dropdown-item custom-item", id: 'prop-em', style: 'display: none', remote: true  do  %><i class=" fas fa-braille" title="Puntos Proporcionales" style="font-size: 22px"></i><% end %>
+        <%= link_to dashboards_graduated_points_path(), class: "dropdown-item custom-item", id: 'prop-em', style: 'display: none', remote: true  do  %><i class=" fas fa-braille" title="Proporcionales" style="font-size: 22px"></i><% end %>
 
         <div href="#" id="heat-prv" class="dropdown-submenu" style="display: none">
           <a class="dropdown-item custom-item item-submenu" href="#">
-            <i class="fas fa-fire" title="Mapa de Calor" style="font-size: 22px"></i>
+            <i class="fas fa-fire" title="Heatmap" style="font-size: 22px"></i>
           </a>
           <div class="dropdown-menu">
             <div class="dropdown-item">
@@ -98,7 +98,7 @@
         </div>
         <div href="#" id="heat-cbr" class="dropdown-submenu" style="display: none">
           <a class="dropdown-item custom-item item-submenu" href="#">
-            <i class="fas fa-fire" title="Mapa de Calor" style="font-size: 22px"></i>
+            <i class="fas fa-fire" title="Heatmap" style="font-size: 22px"></i>
           </a>
           <div class="dropdown-menu">
             <div class="dropdown-item">
@@ -112,7 +112,7 @@
             </div>
           </div>
         </div>
-        <%= link_to dashboards_heatmap_path(), class: "dropdown-item custom-item", id: 'heat-em-norm-dem', style: 'display: none', remote: true  do  %><i class=" fas fa-fire" title="Mapa de Calor" style="font-size: 26px"></i><% end %>
+        <%= link_to dashboards_heatmap_path(), class: "dropdown-item custom-item", id: 'heat-em-norm-dem', style: 'display: none', remote: true  do  %><i class=" fas fa-fire" title="Heatmap" style="font-size: 26px"></i><% end %>
       </div>
     </div>
 
