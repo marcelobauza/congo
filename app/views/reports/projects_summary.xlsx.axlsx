@@ -23,7 +23,7 @@ end
   sheet.add_row ["Venta & Disponibilidad por Programa"], :style=> title
   sheet.add_row ["Mix", "Disponible", "Venta Total"], :style=> title
 @pm.each do |p|
-  sheet.add_row [p[:mix_type], p[:stock_units], p[:sold_units]]  
+  sheet.add_row [p[:mix_type], p[:stock_units], p[:sold_units]]
 end
 
   sheet.add_row([])
@@ -76,7 +76,7 @@ end
 @floor.each do |f|
   sheet.add_row [f[:name],f[:value]]
 end
-  
+
   sheet.add_row([])
   sheet.add_row ["Unidades de proyecto por rango UF"], :style=> title
   sheet.add_row ["Rango", "Cantidad Proyectos"], :style=> title

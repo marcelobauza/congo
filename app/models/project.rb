@@ -68,7 +68,7 @@ class Project < ApplicationRecord
     return parcel
   end
 
-  def self.parcels 
+  def self.parcels
     parcels = Util.execute("select distinct(p.gid) as gid, st_astext(p.the_geom), p.area_name from parcels p, report_emis r  where st_contains(p.the_geom, r.the_geom)  ")
     parcels
   end
@@ -78,28 +78,28 @@ class Project < ApplicationRecord
     joins = " inner join agency_rols on project_instance_mix_views.project_id = agency_rols.project_id "
     joins += " inner join agencies on agency_rols.agency_id = agencies.id "
 
-    selects = " distinct on (project_instance_mix_views.the_geom) project_instance_mix_views.the_geom, " 
-    selects += " project_instance_mix_views.name as name,  " 
-    selects += " agencies.name as agency_name, " 
-    selects += "total_available(project_instance_mix_views.project_instance_id)as stock_units," 
+    selects = " distinct on (project_instance_mix_views.the_geom) project_instance_mix_views.the_geom, "
+    selects += " project_instance_mix_views.name as name,  "
+    selects += " agencies.name as agency_name, "
+    selects += "total_available(project_instance_mix_views.project_instance_id)as stock_units,"
     selects += " project_instance_mix_views.project_id as row_number, "
-    selects += " vhmd(project_instance_mix_views.project_instance_id)::numeric as vhmu, " 
+    selects += " vhmd(project_instance_mix_views.project_instance_id)::numeric as vhmu, "
     selects += " round(pp_uf_m2 (project_instance_mix_views.project_instance_id)::numeric,1)  as uf_m2, "
     selects += "(select round(sum((mix_usable_square_meters * total_units) * (uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / mix_usable_square_meters ) / sum(mix_usable_square_meters * total_units),1)  from project_instance_mixes where project_instance_id = project_instance_mix_views.project_instance_id ) as uf_m2_u,  "
     selects += "pp_uf(project_instance_mix_views.project_instance_id) as uf_value"
 
     conditions =  "ST_Contains(ST_Transform(ST_GeomFromText('#{wkt}',4326),4326), project_instance_mix_views.the_geom)" if !wkt.nil?
-    conditions +=  " and project_instance_mix_views.project_type_id = '#{project_type_id}' " 
+    conditions +=  " and project_instance_mix_views.project_type_id = '#{project_type_id}' "
     conditions += " and  project_instance_mix_views.project_id not in (#{not_project}) "  unless not_project.nil? || not_project.empty?
     conditions += " and bimester = #{bimester }"
     conditions += " and year = #{year }"
-    projects = ProjectInstanceMixView.find(:all, 
+    projects = ProjectInstanceMixView.find(:all,
                                            :select => selects,
                                            :joins => joins,
                                            :conditions =>  conditions,
                                            :order => "project_instance_mix_views.the_geom"
-                                          ) 
-    return projects; 
+                                          )
+    return projects;
   end
 
   def self.generate_map_images(wkt, result_id, layer_type, directory, name, parcel_id = nil )
@@ -133,13 +133,13 @@ class Project < ApplicationRecord
 
   def self.kpi(county_id, year_from, year_to, bimester, project_type_id, polygon_id )
 
-    if  ((county_id.empty? || polygon_id.empty?) && year_from.empty? && year_to.empty? && bimester.empty? && project_type_id.empty?) 
+    if  ((county_id.empty? || polygon_id.empty?) && year_from.empty? && year_to.empty? && bimester.empty? && project_type_id.empty?)
 
       return;
     end
 
 
-    if !county_id.empty?    
+    if !county_id.empty?
       sql_county_code = ("select code from counties where id = #{county_id}")
       county_code_exec = Util.execute(sql_county_code)
       county_code  = county_code_exec[0]['code'].to_i
@@ -150,7 +150,7 @@ class Project < ApplicationRecord
       bim_from, bim_to = bimester, bimester
     end
 
-    if !county_id.empty?    
+    if !county_id.empty?
 
       result = ("select inciti_kpi_generate_primary_data(#{county_code}, #{year_from}, #{year_to}, #{bim_from}, #{bim_to}, #{project_type_id})")
 
@@ -197,7 +197,7 @@ class Project < ApplicationRecord
   def self.find_index(project_type, bimester, county, year, search)
 
     @joins = Array.new
-    @joins << " inner join project_instances pi on projects.id = pi.project_id "     
+    @joins << " inner join project_instances pi on projects.id = pi.project_id "
     @joins << " inner join project_instance_mixes pim on pi.id = pim.project_instance_id "
     @joins << " inner join project_statuses ps on ps.id = pi.project_status_id "
     @joins << " inner join project_mixes pm on pim.mix_id = pm.id "
@@ -215,16 +215,16 @@ class Project < ApplicationRecord
       letter =  search.at(6)
       letter = letter.delete('"')
       if letter == 'C'
-        project_type = '1' 
-      else 
-        project_type = '2' 
+        project_type = '1'
+      else
+        project_type = '2'
       end
     end
 
     if ( project_type == '1')
 
       select += " min((t_min + t_max) /2)   as ps_terreno_min, "
-      select += " max((t_min + t_max)/2 ) as ps_terreno_max, " 
+      select += " max((t_min + t_max)/2 ) as ps_terreno_max, "
       select += " min(round((pim.uf_min * (1::numeric - pim.percentage / 100::numeric) + pim.uf_max * (1::numeric - pim.percentage / 100::numeric)) / 2::numeric / (pim.mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) AS uf_m2_ut_min, "
       select += " max(round((pim.uf_min * (1::numeric - pim.percentage / 100::numeric) + pim.uf_max * (1::numeric - pim.percentage / 100::numeric)) / 2::numeric / (pim.mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) AS uf_m2_ut_max, "
       select += " round(sum((mix_usable_square_meters * pim.total_units) * round((pim.uf_min * (1::numeric - pim.percentage / 100::numeric) + pim.uf_max * (1::numeric - pim.percentage / 100::numeric)) / 2::numeric / (pim.mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) / sum(mix_usable_square_meters * pim.total_units), 1) as pp_UFm2ut,"
@@ -258,7 +258,7 @@ class Project < ApplicationRecord
     select += " ps.name as status"
 
 
-    conditions = " 1 = 1" 
+    conditions = " 1 = 1"
     conditions += " and projects.project_type_id = #{project_type}" if !project_type.nil?
     conditions += " and bimester = #{bimester } " if !bimester.nil?
     conditions += " and county_id = #{county} " if !county.nil?
@@ -277,7 +277,7 @@ class Project < ApplicationRecord
 
 
   def self.find_globals(filters, range)
-   
+
     select =  "COUNT(DISTINCT(project_instance_mix_views.project_id)) AS project_count, SUM(project_instance_mix_views.total_units) AS total_units, "
     select += "SUM(project_instance_mix_views.total_units - project_instance_mix_views.stock_units) AS total_sold, "
     select += "SUM(project_instance_mix_views.stock_units) AS total_stock, "
@@ -342,7 +342,7 @@ class Project < ApplicationRecord
       select = "#{widget}.id, #{widget}.name"
       select += ", #{widget}.color" if has_color
       count = "#{widget}.name"
-    end 
+    end
     #select = "#{widget}.id, #{widget}.name"
     #select += ", #{widget}.color" if has_color
 
@@ -392,14 +392,14 @@ class Project < ApplicationRecord
 
   def self.projects_by_ranges(widget, filters)
     @joins = Array.new
-    query_condition = " year = #{filters[:to_year]}  " 
+    query_condition = " year = #{filters[:to_year]}  "
     query_condition += " and bimester = #{filters[:to_period]} "
     query_condition += " and " +  WhereBuilder.build_in_condition("county_id",filters[:county_id]) if filters.has_key? :county_id
     query_condition += " and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
     query_condition += " and " + WhereBuilder.build_within_condition(filters[:wkt]) if filters.has_key? :wkt
 
     values = get_valid_min_max_limits(widget, filters)
-    ranges = get_valid_ranges(values, widget) 
+    ranges = get_valid_ranges(values, widget)
 
     total_ranges = ranges.count - 1
 
@@ -460,7 +460,7 @@ class Project < ApplicationRecord
     sub_range_4 = {"min" => 13, "max" => 20}
     sub_range_5 = {"min" => 21, "max" => 50}
 
-    ranges_result << sub_range_1 << sub_range_2 << sub_range_3 << sub_range_4 << sub_range_5 
+    ranges_result << sub_range_1 << sub_range_2 << sub_range_3 << sub_range_4 << sub_range_5
   end
 
   #TODO: Cambiar! traer de la base de datos!
@@ -546,11 +546,11 @@ class Project < ApplicationRecord
     select += "project_mixes.mix_type, project_mixes.id"
 
     if filters.has_key? :mix_ids
-      query = " mix_id = #{filters[:mix_ids].join(',')} and " 
-      query += build_conditions_new(filters, widget, false, range) 
+      query = " mix_id = #{filters[:mix_ids].join(',')} and "
+      query += build_conditions_new(filters, widget, false, range)
     else
-      query = build_conditions_new(filters, widget, false, range) 
-    end 
+      query = build_conditions_new(filters, widget, false, range)
+    end
 
 
     ProjectInstanceMixView.select(select).
@@ -595,10 +595,10 @@ class Project < ApplicationRecord
     self.project_type_id = type.id
     #self.agency_id = agency.id
     self.the_geom = geom
-    self.build_date = data['build_date'].strftime("%d/%m/%y") 
-    self.sale_date = data['sale_date'].strftime("%d/%m/%y") 
-    self.transfer_date= data['transfer_d'].strftime("%d/%m/%y") 
-    self.pilot_opening_date = data['pilot_open'].strftime("%d/%m/%y") 
+    self.build_date = data['build_date'].strftime("%d/%m/%y")
+    self.sale_date = data['sale_date'].strftime("%d/%m/%y")
+    self.transfer_date= data['transfer_d'].strftime("%d/%m/%y")
+    self.pilot_opening_date = data['pilot_open'].strftime("%d/%m/%y")
     self.elevators = data['ascensores']
     self.quantity_department_for_floor = data["dpto_piso"]
     self.general_observation = data['gral_ob']
@@ -739,7 +739,7 @@ class Project < ApplicationRecord
       @conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
     if filters.has_key? :to_period and range == true
-      @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView)     
+      @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView)
     else
       @conditions += "bimester = #{filters[:to_period]} AND year = #{filters[:to_year]}" + Util.and
 
@@ -855,7 +855,7 @@ class Project < ApplicationRecord
     #PROJECT TYPES
     if filters.has_key? :project_type_ids and self_not_filter != 'project_types'
 
-      if useView 
+      if useView
         conditions += WhereBuilder.build_in_condition("project_instance_mix_views.project_type_id", filters[:project_type_ids])
       else
         conditions += WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids])
@@ -884,7 +884,7 @@ class Project < ApplicationRecord
     conditions = ""
     #PROJECT STATUSES
     if filters.has_key? :project_status_ids and self_not_filter != 'project_statuses'
-      query_field = "project_instance_mix_views.project_status_id" 
+      query_field = "project_instance_mix_views.project_status_id"
       conditions += WhereBuilder.build_in_condition(query_field, filters[:project_status_ids])
       conditions += Util.and
     end
@@ -896,7 +896,7 @@ class Project < ApplicationRecord
     end
 
 
-    #MIXES funciona 
+    #MIXES funciona
     if filters.has_key? :mix_ids and self_not_filter != 'mix'
       conditions += "project_instance_mix_views.project_instance_id  IN(SELECT project_instance_id "
       conditions += "FROM project_instance_mixes WHERE mix_id IN(#{filters[:mix_ids].join(",")}))"
@@ -1005,7 +1005,7 @@ class Project < ApplicationRecord
   def self.download_csv filters
     data = Project.joins(:project_instances).select("st_x(the_geom) as longitude, st_y(the_geom) as latitude",:name).
       method_selection(filters).
-      periods(filters[:to_period], filters[:to_year]) 
+      periods(filters[:to_period], filters[:to_year])
     data
   end
 
@@ -1036,7 +1036,7 @@ class Project < ApplicationRecord
   end
 
   def generate_code
-    return unless self.code.nil? 
+    return unless self.code.nil?
 
     select = "select code from projects where county_id = #{self.county.id} order by id desc limit 2;"
     result = Util.execute(select)
@@ -1068,11 +1068,11 @@ class Project < ApplicationRecord
     end
   end
   def self.house_general(global_information)
-        general_data =  {label: I18n.t(:AVG_M2_FIELD), value: global_information[:ps_terreno]} 
+        general_data =  {label: I18n.t(:AVG_M2_FIELD), value: global_information[:ps_terreno]}
 end
   def  self.department_general(global_information)
 
-        general_data = {label: I18n.t(:AVG_TERRACE_AREA), value: global_information[:pp_terrace]} 
+        general_data = {label: I18n.t(:AVG_TERRACE_AREA), value: global_information[:pp_terrace]}
 end
 
   def self.summary f
@@ -1127,8 +1127,8 @@ end
       pstatus.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end
-      
       result.push({"title":"Estado Obra", "series":[{"data": data}]})
+
       ##TIPO PROYECTO
       data =[]
 
@@ -1295,7 +1295,7 @@ end
       where(county_id: filters[:county_id], project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).
                      select(select).
                      group(:code, :name, :address, :project_types_name )
-    data 
+    data
   end
 
   def self.information_general_department filters
@@ -1332,7 +1332,7 @@ end
     data = ProjectInstanceMixView.
                     where(county_id: filters[:county_id], year: filters[:to_year], bimester: filters[:to_period], project_type_id: 2).
                      select(select)
-    data 
+    data
 
   end
 
@@ -1366,12 +1366,12 @@ end
     select += "round(MIN(total_m2),1) as min_m2_built, "
     select += "round(MAX(total_m2),1) as max_m2_built, "
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built"
-     
+
 
     data = ProjectInstanceMixView.
                     where(county_id: filters[:county_id], year: filters[:to_year], bimester: filters[:to_period], project_type_id: 1).
                      select(select)
-    data 
+    data
   end
 
   def self.reports_pdf filters
@@ -1387,10 +1387,10 @@ end
       info_house = Project.information_general_house filters
 
       result.push({"list_projet":list_project})
-      
+
       result.push({"info_department": info_department})
       result.push({"info_house": info_house})
-      
+
       data =[]
       stock_units =[]
       sold_units =[]
@@ -1471,7 +1471,7 @@ end
     else
       conditions = WhereBuilder.build_within_condition_radius(params[:centerpt], params[:radius] )
       end
-    
+
     period_current = Period.get_period_current
     bimester = period_current.bimester
     year = period_current.year
@@ -1491,9 +1491,9 @@ end
     return result
   end
   def self.get_csv_data(filters)
-    
+
     @joins = Array.new
-    @joins << " inner join project_instances pi on projects.id = pi.project_id "     
+    @joins << " inner join project_instances pi on projects.id = pi.project_id "
     @joins << " inner join project_instance_mixes pim on pi.id = pim.project_instance_id "
     @joins << " inner join project_statuses ps on ps.id = pi.project_status_id "
     @joins << " inner join project_mixes pm on pim.mix_id = pm.id "
@@ -1506,13 +1506,13 @@ end
     cond += " AND pi.year = #{filters[:year]} " if !filters[:year].blank?
     select =  "projects.code, projects.name, projects.address, projects.floors, projects.project_type_id, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, projects.quantity_department_for_floor , projects.elevators, projects.general_observation, pi.project_status_id, "
     select += " pi.bimester, pi.year, pi.cadastre, "
-    select += " pim.stock_units, pim.mix_usable_square_meters, pim.mix_terrace_square_meters, pim.living_room, pim.service_room, pim.h_office, pim.uf_min, pim.uf_max, pim.uf_parking, pim.uf_cellar, pim.common_expenses, pim.total_units, pim.t_min, pim.t_max, pim.home_type, pim.model, projects.the_geom, "   
+    select += " pim.stock_units, pim.mix_usable_square_meters, pim.mix_terrace_square_meters, pim.living_room, pim.service_room, pim.h_office, pim.uf_min, pim.uf_max, pim.uf_parking, pim.uf_cellar, pim.common_expenses, pim.total_units, pim.t_min, pim.t_max, pim.home_type, pim.model, projects.the_geom, "
     select += " c.name as countyname, "
     select += " pt.name as project_type_name, "
     select += " ps.name as project_status_name"
 
     projects = Project.select(select).
-            joins(@joins). 
+            joins(@joins).
             where(cond).
             order("projects.created_at")
 

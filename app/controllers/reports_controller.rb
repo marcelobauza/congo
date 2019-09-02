@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @xl = FutureProject.reports(filters)
     respond_to do |format|
-      format.xlsx 
+      format.xlsx
     end
   end
 
@@ -22,7 +22,7 @@ class ReportsController < ApplicationController
     @title = []
 
     @xl2.each do |data|
-      if (data[:title] == 'Información General') 
+      if (data[:title] == 'Información General')
         @info=[]
         data[:data].each do |v|
           @vv = v
@@ -50,7 +50,7 @@ class ReportsController < ApplicationController
       end
     end
     result =[]
-    @ubimester = FutureProject.future_projects_by_period("COUNT", "unit_bimester",filters) 
+    @ubimester = FutureProject.future_projects_by_period("COUNT", "unit_bimester",filters)
 
     result.push(["Bimestre", "Anteproyecto", "Permiso edificacion", "Recepcion Municipal"])
 
@@ -82,15 +82,15 @@ class ReportsController < ApplicationController
     end
     @rates = result
     respond_to do |format|
-      format.xlsx 
+      format.xlsx
     end
   end
-  
+
   def transactions_data
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @transaction = Transaction.reports(filters)
     respond_to do |format|
-      format.xlsx 
+      format.xlsx
     end
 
   end
@@ -102,7 +102,7 @@ class ReportsController < ApplicationController
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @project_homes, @project_departments = Project.reports(filters)
     respond_to do |format|
-      format.xlsx 
+      format.xlsx
     end
 
   end
@@ -121,7 +121,7 @@ class ReportsController < ApplicationController
           @info.push([v[:name], v[:count]])
         end
       end
-    
+
       if (data[:title]== 'Estado Obra')
         data[:series][0][:data].each do |v|
           @pstatus.push([v[:name], v[:count]])
@@ -152,7 +152,7 @@ class ReportsController < ApplicationController
       sold_units = av[:sold_units].to_i rescue 0
       stock_units = av[:stock_units].to_i rescue 0
       bimester = av[:bimester].to_s + "/" + av[:year].to_s[2,3]
-      
+
       result.push({"bimester":bimester, "total_units":total_units, "sold_units":sold_units, "stock_units":stock_units})
 
       end
@@ -206,7 +206,7 @@ class ReportsController < ApplicationController
       result.push({"bimester":bimester,"max":max, "min":min,"avg":avg})
    end
 @ground_area=result
-    
+
       result =[]
       sbim = Project.projects_count_by_period('sale_bimester', filters)
     sbim.each do |sb|
@@ -215,7 +215,7 @@ class ReportsController < ApplicationController
       result.push("bimester":bimester, "total_units":total_units)
     end
 @total_projects_bimester = result
-      
+
     result =[]
     cfloor = Project.projects_by_ranges('floors', filters)
     cfloor.each do |cf|
@@ -236,11 +236,11 @@ class ReportsController < ApplicationController
     @range = result
 
   end
-  
+
   def projects_pdf
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @pdf = Project.reports_pdf filters
-    
+
     render json: {"data":@pdf}
 
   end
@@ -248,7 +248,7 @@ class ReportsController < ApplicationController
   def transactions_pdf
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @pdf = Transaction.reports_pdf filters
-    
+
     render json: {"data":@pdf}
 
   end
