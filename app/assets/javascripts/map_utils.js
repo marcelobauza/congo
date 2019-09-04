@@ -71,7 +71,7 @@ Congo.map_utils = function(){
     editableLayers = new L.FeatureGroup();
     var drawControl = new L.Control.Draw({
       draw:{
-        polyline: false, 
+        polyline: false,
         rectangle: false,
         circlemarker: false,
       },
@@ -94,7 +94,7 @@ Congo.map_utils = function(){
       editableLayers = new L.FeatureGroup();
       }
       layer = event.layer;
-      if (typeGeometry == 'polygon'){ 
+      if (typeGeometry == 'polygon'){
         Congo.dashboards.config.county_id = [];
         Congo.dashboards.config.size_box = [];
         Congo.dashboards.config.centerpt = '';
@@ -155,7 +155,7 @@ Congo.map_utils = function(){
       counties();
     });
 
-    map.on(L.Draw.Event.EDITED, function (event) { 
+    map.on(L.Draw.Event.EDITED, function (event) {
       layer = event.layers;
       if (typeGeometry == 'polygon'){
         size_box = [];
@@ -281,7 +281,7 @@ Congo.map_utils = function(){
         boost = Congo.dashboards.config.boost;
         if (boost == false){
           filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
-        }        
+        }
         if (filter_future_project_type_ids.length > 0) {
           filter_layer = filter_layer + " AND future_project_type_id IN (" + filter_future_project_type_ids +")";
         }
@@ -311,13 +311,13 @@ Congo.map_utils = function(){
         bimester = Congo.dashboards.config.bimester;
         Congo.projects.action_dashboards.indicator_projects();
 
-        project_status_ids = Congo.projects.config.project_status_ids; 
+        project_status_ids = Congo.projects.config.project_status_ids;
         project_type_ids = Congo.projects.config.project_type_ids;
         agency_ids = Congo.projects.config.project_agency_ids;
         filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
         if (project_status_ids.length > 0){
           filter_layer = filter_layer + " AND project_status_id IN (" + project_status_ids + ")";
-        } 
+        }
 
         if (project_type_ids.length > 0){
           filter_layer = filter_layer + " AND project_type_id IN (" + project_type_ids + ")";
@@ -524,7 +524,7 @@ Congo.map_utils = function(){
   }
 
   function draw_geometry(type_geometry){
-    
+
     switch(type_geometry) {
       case 'circle':
         centerpt = Congo.dashboards.config.centerpt;
