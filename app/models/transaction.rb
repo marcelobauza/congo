@@ -1087,7 +1087,7 @@ end
       uf_periods.each do |ufp|
         data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
       end
-      result.push({"title":"Volumen Venta Total UF por Bimestre", "series":[{"data": data}]})
+      result.push({"title":"PxQ | UF", "series":[{"data": data}]})
 
       ##AVERAGE UF PERIOD
       data =[]
@@ -1103,7 +1103,7 @@ end
         data.push("name": avg[0], "count": avg[1].to_f )
       end
 
-      result.push({"title":"Superficie Linea Construcción (útil m2) por Bimestre", "series":[{"data": data}]})
+      result.push({"title":"Superficie Línea Construcción (útil m²) por Bimestre", "series":[{"data": data}]})
 
       #AVG UF M2 U
       data=[]
@@ -1111,7 +1111,7 @@ end
         data.push("name": avg[0], "count": avg[1].to_f )
       end
 
-      result.push({"title":"Precio UFm2 en base Util por Bimestre", "series":[{"data": data}]})
+      result.push({"title":"Precio UFm² en Base Útil por Bimestre", "series":[{"data": data}]})
 
       #AVG LAND
       data=[]
@@ -1119,7 +1119,7 @@ end
         data.push("name": avg[0], "count": avg[1].to_f )
       end
 
-      result.push({"title":"Superficie Terreno (m2) por Bimestre", "series":[{"data": data}]})
+      result.push({"title":"Superficie Terreno (m²) por Bimestre", "series":[{"data": data}]})
 
       #AVG UF M2 LAND
       data=[]
@@ -1127,7 +1127,7 @@ end
         data.push("name": avg[0], "count": avg[1].to_f )
       end
 
-      result.push({"title":"Precio UFm2 en base Terreno por Bimestre", "series":[{"data": data}]})
+      result.push({"title":"Precio UFm² en Base Terreno por Bimestre", "series":[{"data": data}]})
 
       result
 

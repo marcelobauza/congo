@@ -351,7 +351,7 @@ function transactions_report_pdf(){
               })
             }
 
-            if (title == 'Volumen Venta Total UF por Bimestre') { // Line
+            if (title == 'PxQ | UF') { // Line
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -385,7 +385,7 @@ function transactions_report_pdf(){
               })
             }
 
-            if (title == 'Superficie Linea Construcción (útil m2) por Bimestre') { // Line
+            if (title == 'Superficie Línea Construcción (útil m²) por Bimestre') { // Line
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -402,7 +402,7 @@ function transactions_report_pdf(){
               })
             }
 
-            if (title == 'Precio UFm2 en base Util por Bimestre') { // Line
+            if (title == 'Precio UFm² en Base Útil por Bimestre') { // Line
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -419,7 +419,7 @@ function transactions_report_pdf(){
               })
             }
 
-            if (title == 'Superficie Terreno (m2) por Bimestre') { // Line
+            if (title == 'Superficie Terreno (m²) por Bimestre') { // Line
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -436,7 +436,7 @@ function transactions_report_pdf(){
               })
             }
 
-            if (title == 'Precio UFm2 en base Terreno por Bimestre') { // Line
+            if (title == 'Precio UFm² en Base Terreno por Bimestre') { // Line
               chart_type = 'line';
               datasets.push({
                 label: label,
