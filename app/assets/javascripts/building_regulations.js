@@ -45,7 +45,7 @@ building_regulations_popup = function(id) {
             'text': 'Usos Permitidos: ' + land_use_types,
           }),
           $('<li>', {
-            'text': 'Coeficiente de Constructibilidad: ' + data.construct,
+            'text': 'Constructibilidad: ' + data.construct,
           }),
           $('<li>', {
             'text': 'Ocupación de Suelo: ' + data.osinciti,
@@ -80,7 +80,7 @@ building_regulations_popup = function(id) {
             'class': 'btn btn-primary text-center',
             'href': 'building_regulations/building_regulation_download?county_id=' + data.county_code,
             'role': 'button',
-            'text': 'Descargar Normativa',
+            'text': 'Descargar Ordenanza',
           }),
         )
       );
@@ -142,7 +142,7 @@ function building_regulations_report_pdf() {
 
       // Párrafo 4
       doc.text('Para obtener mayor detalle respecto a condiciones normativas de cada zona, se recomienda hacer', 10, 92);
-      doc.text('clic en “Descargar Normativa” para obtener la ordenanza local y modificaciones vigentes si', 10, 100);
+      doc.text('clic en “Descargar Ordenanza” para obtener la ordenanza local y modificaciones vigentes si', 10, 100);
       doc.text('corresponde.', 10, 108);
 
       // Pie de página
@@ -193,7 +193,7 @@ function building_regulations_report_pdf() {
           doc.text('Normativa de Edificación:', 83, 20, null, null, 'right');
           doc.text('Altura Máxima:', 83, 30, null, null, 'right');
           doc.text('Zona:', 83, 40, null, null, 'right');
-          doc.text('Uso Permitido:', 83, 50, null, null, 'right');
+          doc.text('Uso:', 83, 50, null, null, 'right');
           doc.text('Constructibilidad:', 83, 60, null, null, 'right');
           doc.text('Ocupación de suelo:', 83, 70, null, null, 'right');
           doc.text('Web:', 83, 80, null, null, 'right');
@@ -234,7 +234,7 @@ function building_regulations_report_pdf() {
           doc.text('Normativa de Edificación', 83, 160, null, null, 'right');
           doc.text('Altura Máxima:', 83, 170, null, null, 'right');
           doc.text('Zona:', 83, 180, null, null, 'right');
-          doc.text('Uso Permitido:', 83, 190, null, null, 'right');
+          doc.text('Uso:', 83, 190, null, null, 'right');
           doc.text('Constructibilidad:', 83, 200, null, null, 'right');
           doc.text('Ocupación de suelo:', 83, 210, null, null, 'right');
           doc.text('Web:', 83, 220, null, null, 'right');
@@ -276,7 +276,7 @@ function addUsoFilter(id, name) {
       $('<div>', {
           'class': 'filter-building-regulations text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
           'id': 'item-uso-'+id,
-          'text': 'Uso Permitido: '+name
+          'text': 'Uso: '+name
       }).append(
         $('<button>', {
             'type': 'button',
@@ -498,7 +498,7 @@ Congo.building_regulations.action_dashboards = function(){
             var reg = data[i];
             var label = reg['label'];
 
-            if (label == "Uso Permitido") {
+            if (label == "Uso") {
 
               var info = reg['data'];
 
@@ -533,9 +533,9 @@ Congo.building_regulations.action_dashboards = function(){
                 )
 
               }) // Cierra each
-            } // Cierra if Uso Permitido
+            } // Cierra if Uso
 
-            if (label == "Coeficiente de Constructibilidad") {
+            if (label == "Constructibilidad") {
 
               var min = reg['min'];
               var max = reg['max'];
@@ -586,13 +586,13 @@ Congo.building_regulations.action_dashboards = function(){
                       $("<div>", {
                           'class': 'filter-building-regulations text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
                           'id': 'item-construct',
-                          'text': 'Coeficiente de Constructibilidad >= '+data.from+' <= '+data.to
+                          'text': 'Constructibilidad >= '+data.from+' <= '+data.to
                       })
                     );
 
                   // Si existe el filtro, solo modifica el texto
                   } else {
-                    $('#item-construct').text('Coeficiente de Constructibilidad >= '+data.from+' <= '+data.to);
+                    $('#item-construct').text('Constructibilidad >= '+data.from+' <= '+data.to);
                   };
 
                   // Agrega el close button
@@ -617,7 +617,7 @@ Congo.building_regulations.action_dashboards = function(){
                 Congo.map_utils.counties();
               });
 
-            } // Cierra if Coeficiente de Constructibilidad
+            } // Cierra if Constructibilidad
 
             if (label == "Ocupación de Suelo") {
 

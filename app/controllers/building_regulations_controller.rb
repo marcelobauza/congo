@@ -22,9 +22,9 @@ class BuildingRegulationsController < ApplicationController
   def building_regulations_filters
     result = []
     @a = allowed_use_list
-    result.push({"label":"Uso Permitido", "data":@a})
+    result.push({"label":"Uso", "data":@a})
     @c = constructivity
-    result.push({"label":"Coeficiente de Constructibilidad", "min": @c[:min], "max": @c[:max]})
+    result.push({"label":"Constructibilidad", "min": @c[:min], "max": @c[:max]})
     @l = land_ocupation
     result.push({"label":"Ocupación de Suelo", "min": @l[:min], "max": @l[:max]})
     @mh = maximum_height
