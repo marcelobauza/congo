@@ -138,7 +138,7 @@
       </button>
       <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
         <%= link_to users_account_path(), class: "dropdown-item custom-item reports", remote: true,  id:"user_data"  do  %> <i class=" fas fa-user" title="Mi Cuenta" style="font-size: 26px"></i><% end %>
-        <%= link_to application_statuses_path(), class: "dropdown-item custom-item reports", remote: true,  id:"sessions"  do  %> <i class=" fas fa-save" title="Guardar y Compartir" style="font-size: 26px"></i><% end %>
+        <%= link_to application_statuses_path(), class: "dropdown-item custom-item reports", remote: true,  id:"sessions"  do  %> <i class=" fas fa-save" title="Administrador Sesiones" style="font-size: 26px"></i><% end %>
         <%= link_to destroy_user_session_path, method: :delete, 'class' => 'dropdown-item custom-item' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
       </div>
     </div>
