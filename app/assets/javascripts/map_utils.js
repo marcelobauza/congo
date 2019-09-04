@@ -439,7 +439,7 @@ Congo.map_utils = function(){
     };
     sourcePois = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_info);
 
-    layerControl.addOverlay(sourcePois, "Equipamientos y Servicios");
+    layerControl.addOverlay(sourcePois, "Puntos de Interés");
 
     //Lots
     var options_lots = {
@@ -455,7 +455,7 @@ Congo.map_utils = function(){
       CQL_FILTER: cql_filter_pois
     };
     sourceLots = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_lots);
-    layerControl.addOverlay(sourceLots, "Predial");
+    layerControl.addOverlay(sourceLots, "Plancheta Predial");
 
     if(county_id != ''){
       search_county(county_id);
