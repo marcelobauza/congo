@@ -138,12 +138,9 @@ function building_regulations_report_pdf() {
       doc.text('aislado.', 10, 60);
 
       // Párrafo 3
-      doc.text('Se recomienda consultar la nomenclatura de usos (RES, IND, AV, etc.) en el botón “Usos de Suelo”.', 10, 76);
-
-      // Párrafo 4
-      doc.text('Para obtener mayor detalle respecto a condiciones normativas de cada zona, se recomienda hacer', 10, 92);
-      doc.text('clic en “Descargar Ordenanza” para obtener la ordenanza local y modificaciones vigentes si', 10, 100);
-      doc.text('corresponde.', 10, 108);
+      doc.text('Para obtener mayor detalle respecto a condiciones normativas de cada zona, se recomienda hacer', 10, 76);
+      doc.text('clic en “Descargar Ordenanza” para obtener la ordenanza local y modificaciones vigentes si', 10, 84);
+      doc.text('corresponde.', 10, 92);
 
       // Pie de página
       doc.setFontStyle("bold");
