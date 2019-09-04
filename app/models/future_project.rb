@@ -521,7 +521,7 @@ class FutureProject < ApplicationRecord
       general_data.each do |item|
         data.push("name": item[:label], "count":("%.1f" % item[:value]).to_f)
       end
-      result.push({"title":"Información General", "data": data})
+      result.push({"title":"Resumen", "data": data})
 
       #TIPO DE EXPEDIENTE
       data =[]
@@ -531,13 +531,13 @@ class FutureProject < ApplicationRecord
       end
       result.push({"title":"Tipo de Expendiente", "series":[{"data": data}]})
 
-      #TIPO DE DESTINO PIE
+      #DESTINO DE OBRA
       data =[]
       desttypes.each do |item|
         data.push("name": item["project_type_name"], "count": item["value"].to_i, "id":item["project_id"])
       end
-      result.push({"title":"Tipo de Destino",  "series": [{"data": data}]})
-      ##TIPO DE DESTINO BAR
+      result.push({"title":"Destino Obra",  "series": [{"data": data}]})
+      ##TIPO DE EXPEDIENTE / DESTINO
       categories = []
       series = []
       count = 0

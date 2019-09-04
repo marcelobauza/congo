@@ -395,8 +395,8 @@ Congo.future_projects.action_dashboards = function(){
             $('#collapse'+i).append(card_body);
             $('#header'+i).append(card_handle, card_header_title, card_max_button, card_min_button);
 
-            // Información General
-            if (title == "Información General") {
+            // Resumen
+            if (title == "Resumen") {
 
               var info = reg['data'];
 
@@ -504,7 +504,7 @@ Congo.future_projects.action_dashboards = function(){
                   id.push(d['id'])
 
                   // Setea los colores dependiendo del label
-                  if (title == 'Tipo de Expendiente' || title == 'Tipo de Destino') {
+                  if (title == 'Tipo de Expendiente' || title == 'Destino Obra') {
                     switch (d['name']) {
                       case 'Departamento y Local Comercial':
                         colour = '#E74C3C'
@@ -587,7 +587,7 @@ Congo.future_projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Tipo de Destino') {
+                if (title == 'Destino Obra') {
                   chart_type = 'pie';
                   datasets.push({
                     label: label,

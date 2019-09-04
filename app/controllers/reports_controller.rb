@@ -22,7 +22,7 @@ class ReportsController < ApplicationController
     @title = []
 
     @xl2.each do |data|
-      if (data[:title] == 'Información General')
+      if (data[:title] == 'Resumen')
         @info=[]
         data[:data].each do |v|
           @vv = v
@@ -34,12 +34,12 @@ class ReportsController < ApplicationController
           @tipo_expediente.push([tp[:name], tp[:count]])
         end
       end
-      if (data[:title] == 'Tipo de Destino Pie' )
+      if (data[:title] == 'Destino Obra' )
         data[:series][0][:data].each do |td|
           @tipo_destino.push([td[:name], td[:count]])
         end
       end
-      if (data[:title] == 'Tipo de Destino Bar' )
+      if (data[:title] == 'Tipo de Expediente / Destino' )
         data[:series].each do |td|
           @data_destino_bar=[]
           td[:data].each do |tdb|

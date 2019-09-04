@@ -1,24 +1,24 @@
 wb = xlsx_package.workbook
 title = wb.styles.add_style(:bg_color => "FFFF0000", :fg_color=>"#FF000000", :sz=>14,  :border=> {:style => :thin, :color => "FFFF0000"})
 wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
-  sheet.add_row ["Informacion General"], :style=> title
+  sheet.add_row ["Resumen"], :style=> title
   @info.each do |r|
   sheet.add_row [r[0], r[1]]
         end
   sheet.add_row([])
-  sheet.add_row ["Tipo de Expedientes"]
+  sheet.add_row ["Tipo de Expediente"], :style=> title
 @tipo_expediente.each do |tp|
   sheet.add_row [tp[0], tp[1]]
         end
 
   sheet.add_row([])
-  sheet.add_row ["Tipo de Destino"]
+  sheet.add_row ["Destino Obra"], :style=> title
 @tipo_destino.each do |td|
   sheet.add_row [td[0], td[1]]
         end
 
   sheet.add_row([])
-  sheet.add_row ["Tipo de Destino"]
+  sheet.add_row ["Tipo de Expediente / Destino"], :style=> title
   @tipo_destino_bar.each do |td|
     @td = td
     @td.each do |s|
@@ -31,13 +31,13 @@ wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
   end        
 
   sheet.add_row([])
-  sheet.add_row ["Cantidad de unidades nuevas / bimestre"]
+  sheet.add_row ["Cantidad de Unidades / Bimestre"], :style=> title
   @ub.each do |ub|
   sheet.add_row [ub[0], ub[1], ub[2], ub[3]]
   end
 
   sheet.add_row([])
-  sheet.add_row ["Superficie edificada por expediente"]
+  sheet.add_row ["Superficie Edificada Por Expediente"], :style=> title
   @bb.each do |bb|
   sheet.add_row [bb[0], bb[1], bb[2], bb[3]]
   end
