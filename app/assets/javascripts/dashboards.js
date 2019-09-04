@@ -201,7 +201,7 @@ Congo.dashboards.action_index = function() {
                 'class': 'fas fa-arrows-alt handle border border-dark'
               }),
               $('<b>', { // título
-                'text': 'Filtros'
+                'text': 'Filtros Activos'
               }),
               $('<button>', { // boton cerrar
                 'class': 'close',
@@ -256,7 +256,7 @@ Congo.dashboards.action_index = function() {
 
     if ($('#time_slider').length == 0) {
 
-      // Agregamos el slider al card de "Filtros"
+      // Agregamos el slider al card de "Filtros Activos"
       $('#filter-body').prepend(
         $('<div>', {
           'id': 'time_slider_item'
