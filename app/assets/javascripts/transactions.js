@@ -31,8 +31,8 @@ transactions_popup = function(id, latlng){
       $('#popup_info_transactions').append('<div>Bimestre: '+ data.bimester +'</div>');
       $('#popup_info_transactions').append('<div>Año: '+ data.year +'</div>');
       $('#popup_info_transactions').append('<div>Direccion: '+ data.address +'</div>');
-      $('#popup_info_transactions').append('<div>Tipo de Propiedad: '+ data.property_types.name +'</div>');
-      $('#popup_info_transactions').append('<div>Tipo de Vendedor: '+ data.seller_types.name +'</div>');
+      $('#popup_info_transactions').append('<div>Uso: '+ data.property_types.name +'</div>');
+      $('#popup_info_transactions').append('<div>Vendedor: '+ data.seller_types.name +'</div>');
       $('#popup_info_transactions').append('<div>Vendedor: '+ data.seller_name +'</div>');
       $('#popup_info_transactions').append('<div>Comprador: '+ data.buyer_name +'</div>');
       $('#popup_info_transactions').append('<div>Foja: '+ data.sheet +'</div>');
@@ -250,7 +250,7 @@ function transactions_report_pdf(){
         // Extraemos las series
         $.each(series, function(a, b){
 
-          if (title == 'Transacciones / Bimestre') {
+          if (title == 'Compraventas') {
 
             var data = b['data']
 
@@ -278,7 +278,7 @@ function transactions_report_pdf(){
 
               } // Cierra for bimestre
 
-              if (title == 'Transacciones / Bimestre') { // Line
+              if (title == 'Compraventas') { // Line
                 chart_type = 'line';
                 datasets.push({
                   label: label,
@@ -316,7 +316,7 @@ function transactions_report_pdf(){
             })
 
             // Guardamos "datasets" y "chart_type"
-            if (title == 'Tipo de Propiedad') { // Pie
+            if (title == 'Uso') { // Pie
               chart_type = 'pie';
               datasets.push({
                 label: label,
@@ -325,7 +325,7 @@ function transactions_report_pdf(){
               })
             }
 
-            if (title == 'Tipo de Vendedor') { // Pie
+            if (title == 'Vendedor') { // Pie
               chart_type = 'pie';
               datasets.push({
                 label: label,
@@ -334,7 +334,7 @@ function transactions_report_pdf(){
               })
             }
 
-            if (title == 'Transacciones / Bimestre') { // Line
+            if (title == 'Compraventas') { // Line
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -368,7 +368,7 @@ function transactions_report_pdf(){
               })
             }
 
-            if (title == 'Precio Promedio en UF / Bimestre') { // Line
+            if (title == 'Precio Promedio | UF') { // Line
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -929,7 +929,7 @@ Congo.transactions.action_dashboards = function(){
               // Extraemos las series
               $.each(series, function(a, b){
 
-                if (title == 'Transacciones / Bimestre') {
+                if (title == 'Compraventas') {
 
                   var data = b['data']
 
@@ -957,7 +957,7 @@ Congo.transactions.action_dashboards = function(){
 
                     } // Cierra for bimestre
 
-                    if (title == 'Transacciones / Bimestre') { // Line
+                    if (title == 'Compraventas') { // Line
                       chart_type = 'line';
                       datasets.push({
                         label: label,
@@ -999,7 +999,7 @@ Congo.transactions.action_dashboards = function(){
                     id.push(d['id'])
 
                     // Setea los colores dependiendo del label
-                    if (title == 'Tipo de Propiedad' || title == 'Tipo de Vendedor') {
+                    if (title == 'Uso' || title == 'Vendedor') {
                       switch (d['name']) {
                         case 'Propietario':
                           colour = '#3498DB'
@@ -1059,7 +1059,7 @@ Congo.transactions.action_dashboards = function(){
                   })
 
                   // Guardamos "datasets" y "chart_type"
-                  if (title == 'Tipo de Propiedad') { // Pie
+                  if (title == 'Uso') { // Pie
                     chart_type = 'pie';
                     datasets.push({
                       label: label,
@@ -1069,7 +1069,7 @@ Congo.transactions.action_dashboards = function(){
                     })
                   }
 
-                  if (title == 'Tipo de Vendedor') { // Pie
+                  if (title == 'Vendedor') { // Pie
                     chart_type = 'pie';
                     datasets.push({
                       label: label,
@@ -1079,7 +1079,7 @@ Congo.transactions.action_dashboards = function(){
                     })
                   }
 
-                  if (title == 'UF / Bimestre') { // Line
+                  if (title == 'PxQ | UF') { // Line
                     chart_type = 'line';
                     datasets.push({
                       label: label,
@@ -1096,7 +1096,7 @@ Congo.transactions.action_dashboards = function(){
                     })
                   }
 
-                  if (title == 'Precio Promedio en UF / Bimestre') { // Line
+                  if (title == 'Precio Promedio | UF') { // Line
                     chart_type = 'line';
                     datasets.push({
                       label: label,
@@ -1113,7 +1113,7 @@ Congo.transactions.action_dashboards = function(){
                     })
                   }
 
-                  if (title == 'Precio Promedio / UF m² Útil') { // Line
+                  if (title == 'Precio Promedio | UFm² Útil') { // Line
                     chart_type = 'line';
                     datasets.push({
                       label: label,
@@ -1130,7 +1130,7 @@ Congo.transactions.action_dashboards = function(){
                     })
                   }
 
-                  if (title == 'Transacciones / UF') { // Bar
+                  if (title == 'Compraventas por Rango Precio') { // Bar
                     chart_type = 'bar';
                     datasets.push({
                       label: label,
@@ -1268,7 +1268,7 @@ Congo.transactions.action_dashboards = function(){
                     if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
 
                       // Almacena la variable global dependiendo del chart
-                      if (title == 'Tipo de Propiedad') {
+                      if (title == 'Uso') {
                         Congo.transactions.config.property_type_ids.push(x_tick_id);
                       } else {
                         Congo.transactions.config.seller_type_ids.push(x_tick_id);
@@ -1283,7 +1283,7 @@ Congo.transactions.action_dashboards = function(){
                     // Elimina item del filtro
                     $('#close-'+filter_item_id).click(function() {
 
-                      if (title == 'Tipo de Propiedad') {
+                      if (title == 'Uso') {
                         var active_items = Congo.transactions.config.property_type_ids;
                       } else {
                         var active_items = Congo.transactions.config.seller_type_ids;
@@ -1297,7 +1297,7 @@ Congo.transactions.action_dashboards = function(){
                         return n != item_id;
                       });
 
-                      if (title == 'Tipo de Propiedad') {
+                      if (title == 'Uso') {
                         Congo.transactions.config.property_type_ids = active_items_updated;
                       } else {
                         Congo.transactions.config.seller_type_ids = active_items_updated;
@@ -1388,7 +1388,7 @@ Congo.transactions.action_dashboards = function(){
                       // Almacena la variable global
                       var periods_years = x_tick.split("/");
                       Congo.transactions.config.periods.push(periods_years[0]);
-                      if (title =! 'Transacciones / Bimestre') {
+                      if (title =! 'Compraventas') {
                         Congo.transactions.config.years.push(20+periods_years[1]);
                       } else {
                         Congo.transactions.config.years.push(periods_years[1]);

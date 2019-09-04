@@ -946,22 +946,22 @@ class Transaction < ApplicationRecord
       end
       result.push({"title":"Información General", "data": data})
 
-      #TIPO DE PROPIEDAD
+      #USO
       data =[]
 
       ptypes.each do |prop|
         data.push("name": prop.name.capitalize, "count": prop.value.to_i, "id":prop.id)
       end
-      result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
+      result.push({"title":"Uso", "series":[{"data": data}]})
 
-    #TIPO DE VENDEDOR
+    #Vendedor
 
       data =[]
       stypes.each do |seller|
         data.push({"name": seller.name.capitalize, "count":seller.value.to_i, "id":seller.id})
       end
 
-      result.push({"title":"Tipo de Vendedor", "series":[{"data": data}]})
+      result.push({"title":"Vendedor", "series":[{"data": data}]})
 
       #TRANSACCIONES POR BIMESTRE
       data =[]
@@ -981,14 +981,14 @@ class Transaction < ApplicationRecord
       end
   end
   
-      result.push({"title":"Transacciones / Bimestre", "series":[{"data": data}]})
       
+      result.push({"title":"Compraventas", "series":[{"data": data}]})
       #UF PERIOD
       data =[]
       uf_periods.each do |ufp|
         data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
       end
-      result.push({"title":"UF / Bimestre", "series":[{"data": data}]})
+      result.push({"title":"PxQ | UF", "series":[{"data": data}]})
 
 
       ##AVERAGE UF PERIOD
@@ -998,7 +998,7 @@ class Transaction < ApplicationRecord
         data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
       end
 
-      result.push({"title":"Precio Promedio en UF / Bimestre", "series":[{"data": data}]})
+      result.push({"title":"Precio Promedio | UF", "series":[{"data": data}]})
 
       ##AVERAGE UF_M2 PERIOD
       data =[]
@@ -1006,8 +1006,8 @@ class Transaction < ApplicationRecord
         data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
       end
 
-      result.push({"title":"Precio Promedio / UF m² Útil", "series":[{"data": data}]})
       
+      result.push({"title":"Precio Promedio | UFm² Útil", "series":[{"data": data}]})
       #TRANSACTION UF
 
       data =[]
@@ -1016,7 +1016,7 @@ class Transaction < ApplicationRecord
         data.push({"name": NumberFormatter.format(aup[:from], false).to_s + " - " + NumberFormatter.format(aup[:to], false).to_s, "count": aup[:value].to_i})
       end
 
-      result.push({"title":"Transacciones / UF", "series":[{"data": data}]})
+      result.push({"title":"Compraventas por Rango Precio", "series":[{"data": data}]})
 
     rescue
       #result = {data: ""}
@@ -1047,20 +1047,20 @@ end
       avg_land = group_avg_by_chart_pdf(filters, 'avg_land')
       avg_uf_m2_land = group_avg_by_chart_pdf(filters, 'avg_uf_m2_land')
 
-      #TIPO DE PROPIEDAD
+      #USO
       data =[]
       ptypes.each do |prop|
         data.push("name": prop.name.capitalize, "count": prop.value.to_i, "id":prop.id)
       end
-      result.push({"title":"Tipo de Propiedad", "series":[{"data": data}]})
+      result.push({"title":"Uso", "series":[{"data": data}]})
 
-    #TIPO DE VENDEDOR
+    #Vendedor
       data =[]
       stypes.each do |seller|
         data.push({"name": seller.name.capitalize, "count":seller.value.to_i, "id":seller.id})
       end
 
-      result.push({"title":"Tipo de Vendedor", "series":[{"data": data}]})
+      result.push({"title":"Vendedor", "series":[{"data": data}]})
 
       #TRANSACCIONES POR BIMESTRE
       data =[]
@@ -1080,7 +1080,7 @@ end
       end
   end
   
-      result.push({"title":"Transacciones / Bimestre", "series":[{"data": data}]})
+      result.push({"title":"Compraventas", "series":[{"data": data}]})
 
       #UF PERIOD
       data =[]
@@ -1095,8 +1095,8 @@ end
         data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
       end
 
-      result.push({"title":"Precio Promedio en UF / Bimestre", "series":[{"data": data}]})
       
+      result.push({"title":"Precio Promedio | UF", "series":[{"data": data}]})
       #AVG SURFACE LINE BUILD
       data=[]
       avg_surface_line_build.each do |avg|
