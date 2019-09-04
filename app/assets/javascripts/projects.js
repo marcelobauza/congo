@@ -33,21 +33,31 @@ projects_popup = function(id){
     data: data,
     success: function(data) {
 
-      // Detalle Proyecto
+      // Levantamos los datos para el tab "Detalle Proyecto"
+      var detail = data['detail']
+
       $('#popup_info_projects').empty();
-      $('#popup_info_projects').append('<div>Bimestre: '+ data.bimester +'</div>');
-      $('#popup_info_projects').append('<div>Año: '+ data.year +'</div>');
-      $('#popup_info_projects').append('<div>Direccion: '+ data.address +'</div>');
-      $('#popup_info_projects').append('<div>Nombre: '+ data.name +'</div>');
-      $('#popup_info_projects').append('<div>Estado: '+ data.project_status.name  +'</div>');
-      $('#popup_info_projects').append('<div>Total de Unidades: '+ data.total_units  +'</div>');
-      $('#popup_info_projects').append('<div>Disponibilidad Total: '+ data.stock_units  +'</div>');
-      $('#popup_info_projects').append('<div>Venta Total: '+ data.sold_units  +'</div>');
-      $('#popup_info_projects').append('<div>Cantidad de Pisos: '+ data.floors  +'</div>');
-      $('#popup_info_projects').append('<div>UF/m2: '+ data.uf_m2  +'</div>');
-      $('#popup_info_projects').append('<div>Fecha Inicio Construcción: '+ data.build_date  +'</div>');
-      $('#popup_info_projects').append('<div>Fecha Inicio Ventas:  '+ data.sale_date  +'</div>');
-      $('#popup_info_projects').append('<div>Fecha Entrega '+ data.transfer_date  +'</div>');
+
+      $('#popup_info_projects').append('<div>Bimestre: '+ detail.bimester +'</div>');
+      $('#popup_info_projects').append('<div>Año: '+ detail.year +'</div>');
+      $('#popup_info_projects').append('<div>Direccion: '+ detail.address +'</div>');
+      $('#popup_info_projects').append('<div>Nombre: '+ detail.name +'</div>');
+      $('#popup_info_projects').append('<div>Inmobiliaria: '+ detail.agency_name +'</div>');
+      $('#popup_info_projects').append('<div>Estado: '+ 'null'  +'</div>');
+      $('#popup_info_projects').append('<div>Total de Unidades: '+ detail.total_units  +'</div>');
+      $('#popup_info_projects').append('<div>Disponibilidad Total: '+ detail.stock_units  +'</div>');
+      $('#popup_info_projects').append('<div>Venta Total: '+ detail.sold_units  +'</div>');
+      $('#popup_info_projects').append('<div>Cantidad de Pisos: '+ detail.floors  +'</div>');
+      $('#popup_info_projects').append('<div>UF/m2: '+ detail.uf_m2  +'</div>');
+      $('#popup_info_projects').append('<div>Valor UF: '+ 'null'  +'</div>');
+      $('#popup_info_projects').append('<div>Velocidad de Venta: '+ detail.vhmu  +'</div>');
+      $('#popup_info_projects').append('<div>Porcentage Vendido: '+ 'null'  +'</div>');
+      $('#popup_info_projects').append('<div>Superficie Útil: '+ 'null'  +'</div>');
+      $('#popup_info_projects').append('<div>Terraza: '+ 'null'  +'</div>');
+      $('#popup_info_projects').append('<div>Fecha Inicio Construcción: '+ detail.build_date  +'</div>');
+      $('#popup_info_projects').append('<div>Fecha Inicio Ventas:  '+ detail.sale_date  +'</div>');
+      $('#popup_info_projects').append('<div>Fecha Entrega '+ detail.transfer_date  +'</div>');
+
       $('#leaflet_modal_projects').modal('show');
 
       // Vuelve a activar el primer tab cuando se cierra el modal del popup
@@ -55,7 +65,7 @@ projects_popup = function(id){
         $('#list-tab a:first-child').tab('show')
       })
 
-      // Oferta vs. Demanda
+      // Levantamos los datos para los gráficos del tab "Oferta vs. Demanda"
       var charts_data = data['charts']
 
       // Separamos los datos de los gráficos
@@ -247,6 +257,8 @@ function projects_report_pdf(){
     success: function(data){
 
       data = data['data']
+
+      console.log(data);
 
       // Creamos el doc
       var doc = new jsPDF();
