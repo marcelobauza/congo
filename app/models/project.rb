@@ -1401,7 +1401,7 @@ end
       end
       categories.push({"label":"Vendidas", "data": sold_units});
       categories.push({"label":"Disponibles", "data": stock_units});
-      result.push({"title":"Mix de Unidades", "series":categories})
+      result.push({"title":"Venta & Disponibilidad por Programa", "series":categories})
 
       ##OFERTA, VENTA
       total_units=[]
@@ -1416,7 +1416,7 @@ end
       categories.push({"label":"Oferta Total", "data": total_units});
       categories.push({"label":"Ventas Total", "data": sold_units});
       categories.push({"label":"Disponibilidad Total", "data": stock_units});
-      result.push({"title":"Evolución Stock Total, Venta y Disponibilidad", "series":categories})
+      result.push({"title":"Oferta, Venta & Disponibilidad", "series":categories})
 
       ##VALOR UF BIMESTRE
       #result[:data] << [""]
@@ -1434,7 +1434,7 @@ end
       categories.push({"label":"UF Máximo", "data": max});
       categories.push({"label":"UF Promedio", "data": avg});
 
-      result.push({"title":"Evolución Precio en UF", "series":categories})
+      result.push({"title":"Precio | UF", "series":categories})
 
       min =[]
       max =[]
@@ -1449,7 +1449,7 @@ end
       categories.push({"label":"UF Máximo", "data": max});
       categories.push({"label":"UF Promedio", "data": avg});
 
-      result.push({"title":"Evolución Precio en UF/m2", "series":categories})
+      result.push({"title":"Precio Promedio | UFm² Útil", "series":categories})
 
       ##ESTADO PROYECTO
 
@@ -1457,7 +1457,7 @@ end
       pstatus.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end
-      result.push({"title":"Estado de los Proyectos", "series":[{"data": data}]})
+      result.push({"title":"Estado Obra", "series":[{"data": data}]})
 
     result
   end

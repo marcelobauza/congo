@@ -641,7 +641,7 @@ function projects_report_pdf(){
             })
 
             // Guardamos "datasets" y "chart_type"
-            if (title == 'Mix de Unidades') {
+            if (title == 'Venta & Disponibilidad por Programa') {
               chart_type = 'bar';
               datasets.push({
                 label: label,
@@ -652,7 +652,7 @@ function projects_report_pdf(){
               })
             }
 
-            if (title == 'Evolución Stock Total, Venta y Disponibilidad') {
+            if (title == 'Oferta, Venta & Disponibilidad') {
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -666,7 +666,7 @@ function projects_report_pdf(){
               })
             }
 
-            if (title == 'Evolución Precio en UF') {
+            if (title == 'Precio | UF') {
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -680,7 +680,7 @@ function projects_report_pdf(){
               })
             }
 
-            if (title == 'Evolución Precio en UF/m2') {
+            if (title == 'Precio Promedio | UFm² Útil') {
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -694,7 +694,7 @@ function projects_report_pdf(){
               })
             }
 
-            if (title == 'Estado de los Proyectos') {
+            if (title == 'Estado Obra') {
               chart_type = 'pie';
               datasets.push({
                 label: label,
