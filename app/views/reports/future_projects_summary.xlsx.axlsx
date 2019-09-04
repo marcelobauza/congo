@@ -42,10 +42,4 @@ wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
   sheet.add_row [bb[0], bb[1], bb[2], bb[3]]
   end
 
-
-  sheet.add_row([])
-  sheet.add_row ["Tasas"]
-  @rates.each do |rate|
-  sheet.add_row [rate[0], rate[1], rate[2], rate[3]]
-  end
 end
