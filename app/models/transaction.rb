@@ -10,7 +10,7 @@ class Transaction < ApplicationRecord
   attr_accessor :latitude, :longitude
 
   before_validation :build_geom
-  before_save :update_calculated_value, :titleize_attributes 
+  before_save :update_calculated_value, :titleize_attributes
   before_save :pm2
 
 
@@ -84,8 +84,8 @@ class Transaction < ApplicationRecord
     @joins += " INNER JOIN seller_types ON seller_types.id = transactions.seller_type_id "
 
     select = "transactions.*,"
-    wkt = ApplicationStatus.find(:first, 
-                                 :select => :wkt, 
+    wkt = ApplicationStatus.find(:first,
+                                 :select => :wkt,
                                  :conditions => "id = #{params[:polygon_id]}" )
 
     conditions =  "ST_Contains(ST_Transform(ST_GeomFromText('#{wkt.wkt}',4326),4326), transactions.the_geom) "
@@ -201,18 +201,18 @@ class Transaction < ApplicationRecord
     self.surveyor_id = Surveyor.find_by_name(data["ENCUESTADOR"].to_s.downcase.titleize).id unless data["ENCUESTADOR"].nil?
     self.user_id = user_id
 
-    self.code_sii = data["code_sii"] 
+    self.code_sii = data["code_sii"]
 
-    self.total_surface_building = 0 
+    self.total_surface_building = 0
 
     conditions = "rol_number = '#{self.role}'  #{Util.and} "
-    conditions += "county_sii_id = #{data['code_sii']}" 
-    self.total_surface_terrain = TaxLand.sum('land_m2', :conditions => conditions) 
-    self.total_surface_building = TaxUsefulSurface.sum('m2_built', :conditions => conditions) 
+    conditions += "county_sii_id = #{data['code_sii']}"
+    self.total_surface_terrain = TaxLand.sum('land_m2', :conditions => conditions)
+    self.total_surface_building = TaxUsefulSurface.sum('m2_built', :conditions => conditions)
     self.uf_m2_u = self.calculated_value / self.total_surface_building unless self.total_surface_building == 0 or self.total_surface_building.nil?
     self.uf_m2_t = self.calculated_value / self.total_surface_terrain unless self.total_surface_terrain == 0 or self.total_surface_terrain.nil?
 
-    #building_regulation = BuildingRegulation.find(:first,  :conditions =>"county_id = #{self.county_id} #{Util.and} ST_Contains(the_geom, ST_Transform(ST_GeomFromText('POINT(#{data["X"]} #{data["Y"]})',4326),4326)) " ) 
+    #building_regulation = BuildingRegulation.find(:first,  :conditions =>"county_id = #{self.county_id} #{Util.and} ST_Contains(the_geom, ST_Transform(ST_GeomFromText('POINT(#{data["X"]} #{data["Y"]})',4326),4326)) " )
 
     #self.building_regulation = building_regulation.name_ze.to_s unless building_regulation.nil?
 
@@ -226,7 +226,7 @@ class Transaction < ApplicationRecord
   def pm2
 
     conditions = "rol_number = '#{self.role}'  #{Util.and} "
-    conditions += "county_sii_id = #{self.code_sii}" 
+    conditions += "county_sii_id = #{self.code_sii}"
     self.total_surface_terrain = TaxLand.where(conditions).sum('land_m2')
     self.total_surface_building = TaxUsefulSurface.where(conditions).sum('m2_built')
     self.uf_m2_u = self.calculated_value / self.total_surface_building unless self.total_surface_building == 0 or self.total_surface_building.nil?
@@ -273,7 +273,7 @@ class Transaction < ApplicationRecord
   def self.get_query_for_results(filters, result_id, map_columns)
     sub_query = "SELECT #{result_id} as result_id, transactions.id as transaction_id, transactions.the_geom, "
     sub_query += "#{map_columns.join(',')}, #{MapUtil::HEATMAP_VALUE} as heatmap_value, "
-    sub_query += "'#{Util::NORMAL_MARKER_COLOR}' as marker_color " 
+    sub_query += "'#{Util::NORMAL_MARKER_COLOR}' as marker_color "
     sub_query += "FROM transactions " + build_joins.join(" ") + " "
     sub_query += "WHERE #{build_conditions(filters)}"
     sub_query
@@ -281,7 +281,7 @@ class Transaction < ApplicationRecord
 
   def self.find_globals(filters)
 
-    result = {:uf_min_value => 0.0, 
+    result = {:uf_min_value => 0.0,
               :uf_max_value => 0.0,
               :average => 0.0, :deviation => 0.0,
               :avg_trans_count => 0, :avg_uf_volume => 0.0}
@@ -367,14 +367,14 @@ class Transaction < ApplicationRecord
         values_sum += item["y#{index}_value".to_sym].to_i
 
       end
-      
+
      # if q[:counties].exists?
       #  item["y1_value".to_sym] = "null"
      # else
      #   item["y1_label".to_sym] = I18n.t(:ALL_COUNTIES_LABEL)
      #   values_sum == 0 ? item["y1_value".to_sym] = 0 : item["y1_value".to_sym] = values_sum
      # end
-      
+
       values << item
     end
     return values.reverse
@@ -492,7 +492,7 @@ class Transaction < ApplicationRecord
       conditions = "active = true #{Util.and}"
 
       if !filters[:wkt].nil?
-        conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and  
+        conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
       elsif !filters[:centerpt].nil?
         conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
         else
@@ -507,7 +507,7 @@ class Transaction < ApplicationRecord
 
       t = Transaction.select(select).
         joins(build_joins.join(" ")).
-        where(conditions). 
+        where(conditions).
         group('bimester, year').
         order('year, bimester').first
       trans_group[:value] = t.value.to_f.round(2) unless t.nil?
@@ -519,8 +519,8 @@ class Transaction < ApplicationRecord
   def self.get_uf_m2_range_values(filters)
     conditions = build_conditions(filters)
 
-    limits = Transaction.find(:all, 
-                              :select => "ROUND(AVG(uf_m2)) as avg, ROUND(STDDEV(uf_m2)) as stdev", 
+    limits = Transaction.find(:all,
+                              :select => "ROUND(AVG(uf_m2)) as avg, ROUND(STDDEV(uf_m2)) as stdev",
                               :joins => build_joins.join(" "),
                               :conditions => "#{conditions} AND uf_m2 IS NOT NULL")
 
@@ -529,7 +529,7 @@ class Transaction < ApplicationRecord
     max = 0
 
     ranges.each do |r|
-      value = Transaction.find(:all, :select => "COUNT(transactions.id) as value", 
+      value = Transaction.find(:all, :select => "COUNT(transactions.id) as value",
                                :joins => build_joins.join(" "),
                                :conditions => "#{conditions} AND uf_m2 IS NOT NULL AND (uf_m2 > #{r[:from]} AND uf_m2 <= #{r[:to]})" )
 
@@ -593,9 +593,9 @@ class Transaction < ApplicationRecord
 
   def self.get_csv_data(filters)
     if filters[:fromID] != ""
-      cond = "transactions.id BETWEEN #{filters[:fromID]} AND #{filters[:toID]}" 
+      cond = "transactions.id BETWEEN #{filters[:fromID]} AND #{filters[:toID]}"
     else
-      cond = "transactions.inscription_date BETWEEN '#{Date.strptime(filters[:date_from], "%m/%d/%Y").to_s}' " 
+      cond = "transactions.inscription_date BETWEEN '#{Date.strptime(filters[:date_from], "%m/%d/%Y").to_s}' "
       cond += "AND '#{Date.strptime(filters[:date_to], "%m/%d/%Y").to_s}'"
     end
 
@@ -625,8 +625,8 @@ class Transaction < ApplicationRecord
     conditions = "result_id = #{result_id}"
     conditions += " AND seller_type_id IN(#{seller_type_ids.join(",")})" unless seller_type_ids.nil?
 
-    Transaction.find(:all, 
-                     :joins => :transaction_results, 
+    Transaction.find(:all,
+                     :joins => :transaction_results,
                      :conditions => conditions,
                      :include => [:property_type, :seller_type],
                      :order => "inscription_date")
@@ -640,16 +640,16 @@ class Transaction < ApplicationRecord
     not_in_condition = " AND transactions.id NOT IN(#{tran_ids.join(",")})" unless tran_ids.nil?
 
     avg = {:avg => 0, :avg_selected => 0}
-    avg[:avg] = Transaction.find(:all, 
+    avg[:avg] = Transaction.find(:all,
                                  :select => "ROUND(AVG(transactions.calculated_value)) as avg",
-                                 :joins => :transaction_results, 
+                                 :joins => :transaction_results,
                                  :conditions => conditions + not_in_condition)[0]["avg"]
 
     unless tran_ids.nil?
-      in_condition = " AND transactions.id IN(#{tran_ids.join(",")})" 
-      avg[:avg_selected] = Transaction.find(:all, 
+      in_condition = " AND transactions.id IN(#{tran_ids.join(",")})"
+      avg[:avg_selected] = Transaction.find(:all,
                                             :select => "ROUND(AVG(transactions.calculated_value)) as avg",
-                                            :joins => :transaction_results, 
+                                            :joins => :transaction_results,
                                             :conditions => conditions + in_condition)[0]["avg"]
     end
 
@@ -657,9 +657,9 @@ class Transaction < ApplicationRecord
   end
 
   def self.get_benchlist(result_id)
-    Transaction.find(:all, 
-                     :joins => :transaction_results, 
-                     :conditions => "result_id=#{result_id}", 
+    Transaction.find(:all,
+                     :joins => :transaction_results,
+                     :conditions => "result_id=#{result_id}",
                      :include => [:property_type, :seller_type],
                      :order => :address)
   end
@@ -677,11 +677,11 @@ class Transaction < ApplicationRecord
     joins = "INNER JOIN rut_ranges ON cast(substr(transactions.buyer_rut, 0, position('-' in transactions.buyer_rut)) as int) BETWEEN from_value AND to_value "
     joins += "INNER JOIN transaction_results ON transaction_results.transaction_id = transactions.id"
 
-    tran_by_rut = Transaction.find(:all, 
+    tran_by_rut = Transaction.find(:all,
                                    :select => select,
-                                   :joins => joins, 
+                                   :joins => joins,
                                    :conditions => conditions,
-                                   :group => "rut_ranges.id, rut_ranges.name, from_value, to_value, last_range", 
+                                   :group => "rut_ranges.id, rut_ranges.name, from_value, to_value, last_range",
                                    :order => "rut_ranges.id")
   end
 
@@ -808,7 +808,7 @@ class Transaction < ApplicationRecord
         group("year, bimester").
         order("year, bimester").first
 
-      last = Transaction.select("bimester, year"). 
+      last = Transaction.select("bimester, year").
         where("active = true").
         group("year, bimester").
         order("year desc, bimester desc").first
@@ -829,9 +829,9 @@ class Transaction < ApplicationRecord
     period_current = Period.get_period_current
     bimester = period_current.bimester
     year = period_current.year
-    
+
     if !params[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",params[:county_id]) 
+      conditions = WhereBuilder.build_in_condition("county_id",params[:county_id])
     elsif !params[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(params[:wkt])
     else
@@ -881,7 +881,7 @@ class Transaction < ApplicationRecord
 
     periods = get_bimesters(filters)
     select = "transactions.bimester::text || '/' || transactions.year::text as name ,  "
-    
+
     case option
       when 'avg_surface_line_build'
         select += "round(avg(total_surface_building),1) as value "
@@ -896,11 +896,11 @@ class Transaction < ApplicationRecord
       if !filters[:county_id].nil?
       conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
       elsif !filters[:wkt].nil?
-        conditions = "ST_Within(transactions.the_geom, ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}))#{Util.and}"  
+        conditions = "ST_Within(transactions.the_geom, ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}))#{Util.and}"
       else
         conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}) and "
       end
-      
+
       conditions += "active = true #{Util.and}"
       conditions += " total_surface_terrain <> 0 and "
       conditions += " total_surface_building <> 0 and "
@@ -980,9 +980,9 @@ class Transaction < ApplicationRecord
         end
       end
   end
-  
-      
+
       result.push({"title":"Compraventas", "series":[{"data": data}]})
+
       #UF PERIOD
       data =[]
       uf_periods.each do |ufp|
@@ -1006,8 +1006,8 @@ class Transaction < ApplicationRecord
         data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
       end
 
-      
       result.push({"title":"Precio Promedio | UFm² Útil", "series":[{"data": data}]})
+
       #TRANSACTION UF
 
       data =[]
@@ -1079,7 +1079,7 @@ end
         end
       end
   end
-  
+
       result.push({"title":"Compraventas", "series":[{"data": data}]})
 
       #UF PERIOD
@@ -1095,8 +1095,8 @@ end
         data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
       end
 
-      
       result.push({"title":"Precio Promedio | UF", "series":[{"data": data}]})
+
       #AVG SURFACE LINE BUILD
       data=[]
       avg_surface_line_build.each do |avg|
@@ -1128,7 +1128,7 @@ end
       end
 
       result.push({"title":"Precio UFm2 en base Terreno por Bimestre", "series":[{"data": data}]})
-      
+
       result
 
   end
