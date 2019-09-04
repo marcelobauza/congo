@@ -46,6 +46,12 @@ transactions_popup = function(id, latlng){
       $('#popup_info_transactions').append('<div>Rol: '+ data.role +'</div>');
 
       $('#leaflet_modal_transactions').modal('show');
+
+      // Vuelve a activar el primer tab cuando se cierra el modal del popup
+      $('#leaflet_modal_transactions').on('hidden.bs.modal', function (e) {
+        $('#list-tab a:first-child').tab('show')
+      })
+
     }
   })
     Congo.dashboards.pois();

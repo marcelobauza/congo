@@ -197,6 +197,11 @@ future_projects_popup= function(id){
       );
       $('#leaflet_modal_future_projects').modal();
 
+      // Vuelve a activar el primer tab cuando se cierra el modal del popup
+      $('#leaflet_modal_future_projects').on('hidden.bs.modal', function (e) {
+        $('#list-tab a:first-child').tab('show')
+      })
+
     }
   });
 

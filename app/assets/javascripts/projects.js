@@ -50,6 +50,11 @@ projects_popup = function(id){
       $('#popup_info_projects').append('<div>Fecha Entrega '+ data.transfer_date  +'</div>');
       $('#leaflet_modal_projects').modal('show');
 
+      // Vuelve a activar el primer tab cuando se cierra el modal del popup
+      $('#leaflet_modal_projects').on('hidden.bs.modal', function (e) {
+        $('#list-tab a:first-child').tab('show')
+      })
+
       // Oferta vs. Demanda
       var charts_data = data['charts']
 

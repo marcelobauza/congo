@@ -86,6 +86,12 @@ building_regulations_popup = function(id) {
       );
 
       $('#leaflet_modal_building_regulations').modal('show');
+
+      // Vuelve a activar el primer tab cuando se cierra el modal del popup
+      $('#leaflet_modal_building_regulations').on('hidden.bs.modal', function (e) {
+        $('#list-tab a:first-child').tab('show')
+      })
+
     } // Cierra success
   }) // Cierra ajax
 } // Cierra building_regulations_popup
