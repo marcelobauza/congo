@@ -2,10 +2,10 @@ class BuildingRegulationsController < ApplicationController
   before_action :set_building_regulation, only: [:show, :edit, :update, :destroy]
 
   def building_regulation_download
-    county_file = params[:county_id] 
+    county_file = params[:county_id]
     zip_file = "#{Rails.root}/db/data/pdf/#{county_file}.zip"
     if Dir.entries("#{Rails.root}/db/data/pdf/").detect {|f| f.match county_file}.nil? or county_file == ''
-      send_file("#{Rails.root}/db/data/pdf/normativa_inexistente.zip", :type => 'application/zip', 
+      send_file("#{Rails.root}/db/data/pdf/normativa_inexistente.zip", :type => 'application/zip',
                 :disposition => 'inline', :filename => "normativa_inexistente.zip", :layout => false)
     else
       send_file(zip_file, :type => 'application/zip', :disposition => 'inline', :filename => county_file, :layout => false)
