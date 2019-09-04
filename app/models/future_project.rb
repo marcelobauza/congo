@@ -48,7 +48,7 @@ class FutureProject < ApplicationRecord
 
   def self.future_project_type_filter future_project_type_id
     return all unless !future_project_type_id.empty?
-    where(future_project_type_id: future_project_type_id) 
+    where(future_project_type_id: future_project_type_id)
 
   end
 
@@ -124,8 +124,8 @@ class FutureProject < ApplicationRecord
   end
 
   def self.condition_period_current(filters)
-      
-    query = "(bimester= #{filters[:to_period]} #{Util.and} year = #{filters[:to_year]} " 
+
+    query = "(bimester= #{filters[:to_period]} #{Util.and} year = #{filters[:to_year]} "
     if   filters.has_key? :periods
       query += Util.or
     0.upto(filters[:periods].count - 1   ) do |i|
@@ -133,7 +133,7 @@ class FutureProject < ApplicationRecord
     end
       query.chomp!(Util.or)
   end
-    query += ")" + Util.and 
+    query += ")" + Util.and
   end
 
 
@@ -158,7 +158,7 @@ class FutureProject < ApplicationRecord
   end
 
   def self.group_by_project_type(widget, filters)
-    
+
     cond_query =''
     unless filters.has_key? :boost
       cond_query += condition_period_current(filters)  if !filters[:to_period].nil?
@@ -341,7 +341,7 @@ class FutureProject < ApplicationRecord
       conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
     conditions += "active = true #{Util.and}"
-   
+
     unless filters.has_key? :boost or self_not_filter == true
       conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
     end
@@ -356,7 +356,7 @@ class FutureProject < ApplicationRecord
 
   def self.bimester_condition(filters, self_not_filter)
     conditions = ""
-    if filters.has_key? :periods 
+    if filters.has_key? :periods
 
       conditions += WhereBuilder.build_bimesters_condition(filters[:periods], filters[:years])
     end
@@ -438,7 +438,7 @@ class FutureProject < ApplicationRecord
 
     if filters[:to_period].nil?
       first = FutureProject.select("bimester, year").
-                            where("active = true"). 
+                            where("active = true").
                             group("year, bimester").
                             order("year, bimester").first
 
@@ -465,7 +465,7 @@ class FutureProject < ApplicationRecord
     else
       conditions = WhereBuilder.build_within_condition_radius(params[:centerpt], params[:radius] )
       end
-    
+
     period_current = Period.get_period_current
     bimester = period_current.bimester
     year = period_current.year
@@ -588,7 +588,7 @@ class FutureProject < ApplicationRecord
       p = []
       r = []
       m2bimester.last.each_with_index do |item, i |
-       
+
            a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
           p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
           r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
@@ -680,12 +680,12 @@ class FutureProject < ApplicationRecord
 
     def self.get_csv_data(filters)
       @ff = filters
-      cond = "future_projects.file_date BETWEEN '#{filters[:date_from]}' " 
+      cond = "future_projects.file_date BETWEEN '#{filters[:date_from]}' "
       cond += "AND '#{filters[:date_to]}'"
   cond += " AND county_id in ( #{filters[:county_id].join(',')})" if !filters[:county_id].blank?
   cond += " AND project_type_id in( #{filters[:project_type_id].join(',')})" if !filters[:project_type_id].blank?
   cond += " AND future_project_type_id = #{filters[:future_project_type_id]}" if !filters[:future_project_type_id].blank?
-    future_projects = FutureProject.includes(:county, :project_type, :future_project_type).     
+    future_projects = FutureProject.includes(:county, :project_type, :future_project_type).
           where(cond).
           order("future_projects.file_date")
 

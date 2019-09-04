@@ -27,8 +27,8 @@ wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
       @count.each do |c|
         sheet.add_row [c[0], c[1]]
       end
-    end        
-  end        
+    end
+  end
 
   sheet.add_row([])
   sheet.add_row ["Cantidad de Unidades / Bimestre"], :style=> title
@@ -48,4 +48,4 @@ wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
   @rates.each do |rate|
   sheet.add_row [rate[0], rate[1], rate[2], rate[3]]
   end
-end        
+end
