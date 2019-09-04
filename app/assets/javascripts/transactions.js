@@ -308,11 +308,72 @@ function transactions_report_pdf(){
             var data = b['data']
             var name = [];
             var count = [];
+            var name_colour = [];
+            var colour;
 
             // Extraemos los datos de las series
             $.each(data, function(c, d){
               name.push(d['name'])
               count.push(d['count'])
+
+              // Setea los colores dependiendo del label
+              if (title == 'Uso' || title == 'Vendedor') {
+                switch (d['name']) {
+                  case 'Propietario':
+                    colour = '#3498DB'
+                    break;
+                  case 'Inmobiliaria':
+                    colour = '#1ABC9C'
+                    break;
+                  case 'Empresa':
+                    colour = '#F5B041'
+                    break;
+                  case 'Banco':
+                    colour = '#8E44AD'
+                    break;
+                  case 'Cooperativa':
+                    colour = '#EC7063'
+                    break;
+                  case 'Municipalidad':
+                    colour = '#27AE60'
+                    break;
+                  case 'Sin informacion':
+                    colour = '#C0392B'
+                    break;
+                  case 'Departamento':
+                    colour = '#3498DB'
+                    break;
+                  case 'Casa':
+                    colour = '#1ABC9C'
+                    break;
+                  case 'Estacionamiento':
+                    colour = '#DC7633'
+                    break;
+                  case 'Bodega':
+                    colour = '#F5B041'
+                    break;
+                  case 'Local comercial':
+                    colour = '#8E44AD'
+                    break;
+                  case 'Oficina':
+                    colour = '#EC7063'
+                    break;
+                  case 'Sitio':
+                    colour = '#7F8C8D'
+                    break;
+                  case 'Industria':
+                    colour = '#ECF0F1'
+                    break;
+                  case 'Otro':
+                    colour = '#Otro'
+                    break;
+                  case 'Parcela':
+                    colour = '#C0392B'
+                    break;
+                }
+                name_colour.push(colour)
+              }
+
             })
 
             // Guardamos "datasets" y "chart_type"
@@ -321,7 +382,7 @@ function transactions_report_pdf(){
               datasets.push({
                 label: label,
                 data: count,
-                backgroundColor: ['#E74C3C', '#9B59B6', '#3498DB', '#1ABC9C', '#2ECC71', '#F1C40F', '#E67E22'],
+                backgroundColor: name_colour,
               })
             }
 
@@ -330,7 +391,7 @@ function transactions_report_pdf(){
               datasets.push({
                 label: label,
                 data: count,
-                backgroundColor: ['#E74C3C', '#3498DB', '#1ABC9C', '#F39C12'],
+                backgroundColor: name_colour,
               })
             }
 
