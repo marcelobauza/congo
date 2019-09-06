@@ -216,7 +216,7 @@ Congo.map_utils = function(){
 
     var bimester, year, filter_for_layer;
     var filter_layer = "AND 1 = 1 ";
-
+    var env = Congo.dashboards.config.env;
     $.ajax({
       async: false,
       type: 'GET',
@@ -397,7 +397,15 @@ Congo.map_utils = function(){
           })
         });
 
-        cql_filter ="WITHIN(the_geom,  Polygon(("+coord_geoserver+"))) "+ filter_layer;
+        if (layer_type == 'building_regulations_info'){
+          cql_filter = "1=1";
+          Congo.dashboards.config.style_layer = 'building_regulations_clip';
+          env = "polygon: Polygon(("+coord_geoserver+"))"; 
+        }else{
+
+
+          cql_filter ="WITHIN(the_geom,  Polygon(("+coord_geoserver+"))) "+ filter_layer;
+        }
         cql_filter_pois ="WITHIN(the_geom, Polygon(("+coord_geoserver+"))) ";
         break;
       case 'marker':
@@ -423,7 +431,6 @@ Congo.map_utils = function(){
     groupLayer = L.layerGroup();
 
     style_layer = Congo.dashboards.config.style_layer;
-    env = Congo.dashboards.config.env;
     //POIS
     var options_info = {
       layers: "inciti_v2:pois_infos",//nombre de la capa (ver get capabilities)
