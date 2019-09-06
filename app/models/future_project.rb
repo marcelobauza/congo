@@ -176,15 +176,15 @@ class FutureProject < ApplicationRecord
       select = "SUM(future_projects.m2_built) as y_value"
     end
 
-    future_projects_group_by_period(select, widget, filters)
+    future_projects_group_by_period(select, widget, filters, true)
   end
 
-  def self.future_projects_group_by_period(y_value, widget, filters)
+  def self.future_projects_group_by_period(y_value, widget, filters, filter_range)
     bimesters = get_bimesters(filters)
     result = []
 
     select = "#{y_value}, future_project_types.name as y_label, future_project_types.color as y_color"
-    cond = conditions(filters, widget)
+    cond = conditions(filters, widget, filter_range)
 
     fut_types = FutureProject.select("DISTINCT future_project_types.name").
       joins(build_joins.join(" ")).
@@ -329,8 +329,7 @@ class FutureProject < ApplicationRecord
 
   #   result.reverse
   # end
-
-  def self.conditions(filters, self_not_filter=nil)
+  def self.conditions(filters, self_not_filter=nil, filter_range=false)
 
     conditions = ""
     if !filters[:county_id].nil?
@@ -339,12 +338,17 @@ class FutureProject < ApplicationRecord
       conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
     else
       conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
-      end
+    end
     conditions += "active = true #{Util.and}"
 
-    unless filters.has_key? :boost or self_not_filter == true
-      conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
+    unless filters.has_key? :boost
+      if  filter_range == true
+        conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
+      else
+        conditions += " bimester = #{filters[:to_period]} and year = #{filters[:to_year]} " + Util.and  if filters.has_key? :to_period
+      end
     end
+
     if filters.has_key? :project_type_ids or filters.has_key? :future_project_type_ids
     conditions +=  ids_conditions(filters, self_not_filter)
     end
@@ -508,12 +512,12 @@ class FutureProject < ApplicationRecord
   def self.summary f
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
     begin
-      general_data = FutureProject.general_info(filters)
-      types = FutureProject.group_by_project_type('future_project_types', filters)
-      desttypes = FutureProject.projects_by_destination_project_type(filters, 'project_types')
-      dtypes = FutureProject.units_by_project_type(filters)
-      ubimester = FutureProject.unit_bimester(filters)
-      m2bimester = FutureProject.m2_built_bimester(filters)
+      general_data = general_info(filters)
+      types = group_by_project_type('future_project_types', filters)
+      desttypes = projects_by_destination_project_type(filters, 'project_types')
+      dtypes = units_by_project_type(filters)
+      ubimester = future_projects_by_period("COUNT", "unit_bimester", filters)
+      m2bimester =  future_projects_by_period("SUM", "m2_built_bimester", filters)
 
       #GENERAL
       data =[]
@@ -560,12 +564,12 @@ class FutureProject < ApplicationRecord
       r = []
       ubimester.last.each_with_index do |item, i|
 
-           a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
-          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
-          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
-          item[:values].each do |itm|
-            if itm["y_label"] == 'ANTEPROYECTO'
-              a[i][:count] = itm["y_value"]
+        a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+        p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+        r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+        item[:values].each do |itm|
+          if itm["y_label"] == 'ANTEPROYECTO'
+            a[i][:count] = itm["y_value"]
           end
           if itm["y_label"] == 'PERMISO DE EDIFICACION'
             p[i][:count] = itm["y_value"]
@@ -589,15 +593,15 @@ class FutureProject < ApplicationRecord
       r = []
       m2bimester.last.each_with_index do |item, i |
 
-           a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
-          p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
-          r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+        a.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+        p.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
+        r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
 
         item[:values].each do |itm|
 
 
           if itm["y_label"] == 'ANTEPROYECTO'
-              a[i][:count] = itm["y_value"]
+            a[i][:count] = itm["y_value"]
           end
           if itm["y_label"] == 'PERMISO DE EDIFICACION'
             p[i][:count] = itm["y_value"]
