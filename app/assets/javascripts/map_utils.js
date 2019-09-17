@@ -247,8 +247,11 @@ Congo.map_utils = function(){
     layerControl = L.control.layers(baseMaps, overlays, {position: 'topleft'}).addTo(map);
     layer_type = Congo.dashboards.config.layer_type;
     switch(layer_type) {
-      case 'census_voronoi':
+      case 'demography_voronoi':
         filter_layer = filter_layer +  "AND 1=1";
+
+        Congo.demography.action_dashboards.indicator_demography();
+        remove_legend();
         break;
       case 'transactions_info':
         year = Congo.dashboards.config.year;

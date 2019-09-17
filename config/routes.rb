@@ -42,6 +42,8 @@ Rails.application.routes.draw do
   get 'census/dashboards' => 'census#dashboards'
   get 'projects/graduated_points' => 'projects#graduated_points'
   get 'building_regulations/dashboards' => 'building_regulations#dashboards'
+  get 'demography/dashboards' => 'demography#dashboards'
+  get 'demography/general' => 'demography#general'
   get 'reports/index' => 'reports#index'
   get 'reports/future_projects_data' => 'reports#future_projects_data'
   get 'reports/future_projects_summary' => 'reports#future_projects_summary'
