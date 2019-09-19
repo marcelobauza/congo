@@ -1,33 +1,57 @@
 Congo.namespace("reports");
-
 Congo.reports = function(){
 
   layer_type = Congo.dashboards.config.layer_type;
   kind_reports = Congo.dashboards.config.kind_reports; 
   let url;
+  area = Congo.dashboards.config.area;
+  radius = Congo.dashboards.config.radius;
+
   switch (layer_type) {
     case 'future_projects_info':
       switch(kind_reports){
         case 'graph':
-          url = '/reports/future_projects_summary.xlsx';
-          window.open(url, '_blank');
+          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+            url = '/reports/future_projects_summary.xlsx';
+            window.open(url, '_blank');
+          }else{
+            var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
+            $('#alerts').append(alert);
+          }
           break;
         case 'base':
-          url = '/reports/future_projects_data.xlsx';
-          window.open(url, '_blank');
+          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+            url = '/reports/future_projects_data.xlsx';
+            window.open(url, '_blank');
+          }else{
+            var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
+            $('#alerts').append(alert);
+          }
+
           break;
       }
       break;
     case 'transactions_info':
       switch(kind_reports){
         case 'graph':
-          url = '/reports/transactions_summary.xlsx';
-          window.open(url, '_blank');
+          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+            url = '/reports/transactions_summary.xlsx';
+            window.open(url, '_blank');
+          }else{
+            var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
+            $('#alerts').append(alert);
+          }
+
           break;
         case 'base':
-          url = '/reports/transactions_data.xlsx';
+          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+            url = '/reports/transactions_data.xlsx';
+            window.open(url, '_blank');
+          }else{
+            var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
+            $('#alerts').append(alert);
+          }
 
-          window.open(url, '_blank');
           break;
         case 'pdf':
           url = transactions_report_pdf();
@@ -38,13 +62,24 @@ Congo.reports = function(){
       switch(kind_reports){
         case 'graph':
 
-          url = '/reports/projects_summary.xlsx';
-          window.open(url, '_blank');
+          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+            url = '/reports/projects_summary.xlsx';
+            window.open(url, '_blank');
+          }else{
+            var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
+            $('#alerts').append(alert);
+          }
+
           break;
         case 'base':
-          
-          url = '/reports/projects_data.xlsx';
-          window.open(url, '_blank');
+
+          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+            url = '/reports/projects_data.xlsx';
+            window.open(url, '_blank');
+          }else{
+            var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
+            $('#alerts').append(alert);
+          }
           break;
         case 'pdf':
           url = projects_report_pdf();
@@ -56,9 +91,9 @@ Congo.reports = function(){
         case 'pdf':
           url = building_regulations_report_pdf();
       }
-
+      break;
     default:
 
   }
-//  window.open(url, '_blank');
+  //  window.open(url, '_blank');
 }
