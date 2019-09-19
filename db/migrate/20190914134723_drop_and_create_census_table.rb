@@ -1,0 +1,61 @@
+class DropAndCreateCensusTable < ActiveRecord::Migration[5.2]
+  def change
+    drop_table :census
+    create_table(:census) do |t|
+      t.integer :geocode
+      t.integer :age_0_9 
+      t.integer :Age_10_19
+      t.integer :Age_20_29
+      t.integer :Age_30_39
+      t.integer :Age_40_49
+      t.integer :Age_50_59
+      t.integer :Age_60_69
+      t.integer :Age_70_79
+      t.integer :age_80_more
+      t.integer :age_tot
+      t.integer :home_1p
+      t.integer :home_2p
+      t.integer :home_3p
+      t.integer :home_4p
+      t.integer :home_5p
+      t.integer :home_6_more
+      t.integer :home_tot
+      t.integer :male
+      t.integer :female
+      t.integer :basica
+      t.integer :media
+      t.integer :media_tec
+      t.integer :tecnica
+      t.integer :profesional
+      t.integer :magister
+      t.integer :doctor
+      t.integer :owner
+      t.integer :leased
+      t.integer :transferred
+      t.integer :free
+      t.integer :possesion
+      t.integer :married
+      t.integer :coexist
+      t.integer :single
+      t.integer :canceled
+      t.integer :separated
+      t.integer :widowed
+      t.integer :salaried
+      t.integer :domestic_service
+      t.integer :independent
+      t.integer :employee_employer
+      t.integer :unpaid_familiar
+      t.integer :ismt_zn
+      t.integer :gse_zn
+      t.integer :n_hog
+      t.integer :n_abc1
+      t.integer :n_c2
+      t.integer :n_c3
+      t.integer :n_d
+      t.integer :n_e
+      t.references :county
+      t.references :census_source
+      t.multi_polygon :the_geom
+    end
+  end
+end
