@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_22_154236) do
+ActiveRecord::Schema.define(version: 2019_09_14_134723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -87,7 +87,8 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "census", force: :cascade do |t|
+  create_table "censo_2012_csv", id: :integer, default: -> { "nextval('cens0_2012_csv_id_seq'::regclass)" }, force: :cascade do |t|
+    t.string "geocode"
     t.integer "age_0_9"
     t.integer "age_10_19"
     t.integer "age_20_29"
@@ -97,60 +98,242 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.integer "age_60_69"
     t.integer "age_70_79"
     t.integer "age_80_more"
+    t.integer "age_tot"
     t.integer "home_1p"
     t.integer "home_2p"
     t.integer "home_3p"
     t.integer "home_4p"
     t.integer "home_5p"
+    t.integer "home_6_more"
+    t.integer "home_tot"
+    t.integer "male"
+    t.integer "female"
+    t.integer "basica"
+    t.integer "media"
+    t.integer "media_tec"
+    t.integer "tecnica"
+    t.integer "profesional"
+    t.integer "magister"
+    t.integer "doctor"
     t.integer "owner"
     t.integer "leased"
     t.integer "transferred"
     t.integer "free"
-    t.integer "possession"
-    t.integer "male"
-    t.integer "female"
+    t.integer "possesion"
     t.integer "married"
     t.integer "coexist"
     t.integer "single"
     t.integer "canceled"
     t.integer "separated"
     t.integer "widowed"
-    t.integer "m_status_total"
-    t.integer "not_attended"
-    t.integer "basic"
-    t.integer "high_school"
-    t.integer "cft"
-    t.integer "ip"
-    t.integer "university"
-    t.integer "education_level_total"
     t.integer "salaried"
     t.integer "domestic_service"
-    t.integer "independient"
+    t.integer "independent"
     t.integer "employee_employer"
     t.integer "unpaid_familiar"
-    t.integer "labor_total"
-    t.integer "abc1"
-    t.integer "c2"
-    t.integer "c3"
-    t.integer "d"
-    t.integer "e"
-    t.integer "socio_economic_total"
-    t.integer "homes_abc1"
-    t.integer "homes_c2"
-    t.integer "homes_c3"
-    t.integer "homes_d"
-    t.integer "homes_e"
-    t.integer "predominant"
+    t.string "ISMT_zn"
+    t.string "GSE_zn"
+    t.string "N_hog"
+    t.string "N_ABC1"
+    t.string "N_C2"
+    t.string "N_C3"
+    t.string "N_D"
+    t.string "N_E"
+  end
+
+  create_table "censo_data", id: :serial, force: :cascade do |t|
+    t.string "geocode"
+    t.integer "age_0_9"
+    t.integer "age_10_19"
+    t.integer "age_20_29"
+    t.integer "age_30_39"
+    t.integer "age_40_49"
+    t.integer "age_50_59"
+    t.integer "age_60_69"
+    t.integer "age_70_79"
+    t.integer "age_80_more"
+    t.integer "age_tot"
+    t.integer "home_1p"
+    t.integer "home_2p"
+    t.integer "home_3p"
+    t.integer "home_4p"
+    t.integer "home_5p"
+    t.integer "home_6_more"
+    t.integer "home_tot"
+    t.integer "male"
+    t.integer "female"
+    t.integer "basica"
+    t.integer "media"
+    t.integer "media_tec"
+    t.integer "tecnica"
+    t.integer "profesional"
+    t.integer "magister"
+    t.integer "doctor"
+    t.integer "owner"
+    t.integer "leased"
+    t.integer "transferred"
+    t.integer "free"
+    t.integer "possesion"
+    t.integer "married"
+    t.integer "coexist"
+    t.integer "single"
+    t.integer "canceled"
+    t.integer "separated"
+    t.integer "widowed"
+    t.integer "salaried"
+    t.integer "domestic_service"
+    t.integer "independent"
+    t.integer "employee_employer"
+    t.integer "unpaid_familiar"
+    t.string "ISMT_zn"
+    t.string "GSE_zn"
+    t.string "N_hog"
+    t.string "N_ABC1"
+    t.string "N_C2"
+    t.string "N_C3"
+    t.string "N_D"
+    t.string "N_E"
+  end
+
+  create_table "censo_data_2012", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.bigint "cut"
+    t.string "area_c", limit: 6
+    t.float "manzent"
+    t.integer "distrito"
+    t.integer "zona"
+    t.integer "manzana"
+    t.string "codine11_t", limit: 254
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "censo_data_2017", id: :serial, force: :cascade do |t|
+    t.string "geocode"
+    t.integer "age_0_9"
+    t.integer "age_10_19"
+    t.integer "age_20_29"
+    t.integer "age_30_39"
+    t.integer "age_40_49"
+    t.integer "age_50_59"
+    t.integer "age_60_69"
+    t.integer "age_70_79"
+    t.integer "age_80_more"
+    t.integer "age_tot"
+    t.integer "home_1p"
+    t.integer "home_2p"
+    t.integer "home_3p"
+    t.integer "home_4p"
+    t.integer "home_5p"
+    t.integer "home_6_more"
+    t.integer "home_tot"
+    t.integer "male"
+    t.integer "female"
+    t.integer "basica"
+    t.integer "media"
+    t.integer "media_tec"
+    t.integer "tecnica"
+    t.integer "profesional"
+    t.integer "magister"
+    t.integer "doctor"
+    t.integer "owner"
+    t.integer "leased"
+    t.integer "transferred"
+    t.integer "free"
+    t.integer "possesion"
+    t.integer "married"
+    t.integer "coexist"
+    t.integer "single"
+    t.integer "canceled"
+    t.integer "separated"
+    t.integer "widowed"
+    t.integer "salaried"
+    t.integer "domestic_service"
+    t.integer "independent"
+    t.integer "employee_employer"
+    t.integer "unpaid_familiar"
+    t.string "ISMT_zn"
+    t.string "GSE_zn"
+    t.integer "N_hog"
+    t.string "N_ABC1"
+    t.string "N_C2"
+    t.string "N_C3"
+    t.string "N_D"
+    t.string "N_E"
+  end
+
+  create_table "censo_loc", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4326, :type=>"multi_polygon"}
+    t.string "region", limit: 2
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 3
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 5
+    t.string "nom_comuna", limit: 60
+    t.integer "distrito"
+    t.integer "loc_zon"
+    t.string "nom_locali", limit: 70
+    t.string "geocodigo", limit: 11
+    t.float "shape_leng"
+    t.float "shape_area"
+    t.bigint "geocode"
+  end
+
+  create_table "census", id: :bigint, default: nil, force: :cascade do |t|
+    t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
+    t.string "geocode", limit: 254
+    t.bigint "age_0_9"
+    t.bigint "age_10_19"
+    t.bigint "age_20_29"
+    t.bigint "age_30_39"
+    t.bigint "age_40_49"
+    t.bigint "age_50_59"
+    t.bigint "age_60_69"
+    t.bigint "age_70_79"
+    t.bigint "age_80_more"
+    t.bigint "age_tot"
+    t.bigint "home_1p"
+    t.bigint "home_2p"
+    t.bigint "home_3p"
+    t.bigint "home_4p"
+    t.bigint "home_5p"
+    t.bigint "home_6_more"
+    t.bigint "home_tot"
+    t.bigint "male"
+    t.bigint "female"
+    t.bigint "basica"
+    t.bigint "media"
+    t.bigint "media_tec"
+    t.bigint "tecnica"
+    t.bigint "profesional"
+    t.bigint "magister"
+    t.bigint "doctor"
+    t.bigint "owner"
+    t.bigint "leased"
+    t.bigint "transferred"
+    t.bigint "free"
+    t.bigint "possesion"
+    t.bigint "married"
+    t.bigint "coexist"
+    t.bigint "single"
+    t.bigint "canceled"
+    t.bigint "separated"
+    t.bigint "widowed"
+    t.bigint "salaried"
+    t.bigint "domestic_service"
+    t.bigint "independent"
+    t.bigint "employee_employer"
+    t.bigint "unpaid_familiar"
+    t.string "ismt_zn", limit: 254
+    t.string "gse_zn", limit: 254
+    t.bigint "n_hog"
+    t.string "n_abc1", limit: 254
+    t.string "n_c2", limit: 254
+    t.string "n_c3", limit: 254
+    t.string "n_d", limit: 254
+    t.string "n_e", limit: 254
+    t.integer "county_id"
     t.bigint "census_source_id"
-    t.bigint "county_id"
-    t.decimal "block"
-    t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
-    t.integer "homes_total"
-    t.integer "population_total"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["census_source_id"], name: "index_census_on_census_source_id"
-    t.index ["county_id"], name: "index_census_on_county_id"
   end
 
   create_table "census_sources", force: :cascade do |t|
@@ -211,6 +394,26 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.integer "identifier"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "entidad_ind", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 2
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 3
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 5
+    t.string "nom_comuna", limit: 60
+    t.integer "distrito"
+    t.integer "loc_zon"
+    t.integer "ent_man"
+    t.integer "categoria"
+    t.string "nom_catego", limit: 25
+    t.string "manzent_i", limit: 14
+    t.integer "total_pers"
+    t.integer "total_vivi"
+    t.float "shape_leng"
+    t.float "shape_area"
   end
 
   create_table "feedbacks", force: :cascade do |t|
@@ -312,6 +515,18 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["county_id"], name: "index_lots_on_county_id"
+  end
+
+  create_table "parcels", force: :cascade do |t|
+    t.string "region"
+    t.string "province"
+    t.string "commune"
+    t.decimal "shape_area"
+    t.integer "code"
+    t.string "area_name"
+    t.geometry "the_geom", limit: {:srid=>0, :type=>"multi_polygon"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "periods", force: :cascade do |t|
@@ -471,8 +686,8 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.integer "county_sii_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "land_m2"
-    t.index ["rol_number"], name: "tax_lands_rol_number_idx"
+    t.decimal "land_m2", precision: 12, scale: 2
+    t.index ["rol_number"], name: "tax_land_roles", order: "NULLS FIRST"
   end
 
   create_table "tax_useful_surfaces", force: :cascade do |t|
@@ -486,12 +701,10 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["county_sii_id"], name: "idx_county_sii_id", order: "NULLS FIRST"
-    t.index ["county_sii_id"], name: "tax_useful_surfaces_county_sii_id_idx"
     t.index ["rol_number"], name: "role_id_tax"
-    t.index ["rol_number"], name: "tax_useful_surfaces_rol_number_idx"
   end
 
-  create_table "transactions", id: :bigint, default: nil, force: :cascade do |t|
+  create_table "transactions", force: :cascade do |t|
     t.bigint "property_type_id"
     t.string "address"
     t.integer "sheet"
@@ -504,6 +717,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.decimal "uf_value"
     t.decimal "real_value"
     t.decimal "calculated_value"
+    t.integer "quarter"
     t.date "quarter_date"
     t.integer "year"
     t.decimal "sample_factor", precision: 12, scale: 2
@@ -540,7 +754,6 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.string "role_associated"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "quarter"
     t.index ["county_id"], name: "index_transactions_on_county_id"
     t.index ["property_type_id"], name: "index_transactions_on_property_type_id"
     t.index ["seller_type_id"], name: "index_transactions_on_seller_type_id"
@@ -552,6 +765,16 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.string "uf_value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "user_polygons", force: :cascade do |t|
+    t.bigint "user_id"
+    t.text "wkt"
+    t.string "layertype"
+    t.string "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_polygons_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -587,11 +810,266 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "zona_c17", primary_key: "gid", id: :serial, force: :cascade do |t|
+    t.serial "id", null: false
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_10", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_11", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_12", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_13", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_14", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_15", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_2", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_3", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_4", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_5", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_6", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_7", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_8", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_9", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 3
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 4
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 6
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 254
+    t.bigint "distrito"
+    t.bigint "zona"
+    t.float "geocodigo"
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
+  create_table "zona_c17_old", id: :integer, default: -> { "nextval('zona_c17_id_seq'::regclass)" }, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
+    t.string "region", limit: 2
+    t.string "nom_region", limit: 60
+    t.string "provincia", limit: 3
+    t.string "nom_provin", limit: 60
+    t.string "comuna", limit: 5
+    t.string "nom_comuna", limit: 60
+    t.string "urbano", limit: 30
+    t.integer "distrito"
+    t.integer "loc_zon"
+    t.string "geocodigo", limit: 11
+    t.float "shape_leng"
+    t.float "shape_area"
+  end
+
   add_foreign_key "agency_rols", "agencies"
   add_foreign_key "building_regulations", "counties"
   add_foreign_key "building_regulations", "density_types"
-  add_foreign_key "census", "census_sources"
-  add_foreign_key "census", "counties"
   add_foreign_key "counties_users", "counties"
   add_foreign_key "counties_users", "users"
   add_foreign_key "county_ufs", "counties"
@@ -603,6 +1081,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
   add_foreign_key "lots", "counties"
   add_foreign_key "pois", "poi_subcategories"
   add_foreign_key "project_instances", "project_statuses"
+  add_foreign_key "user_polygons", "users"
   add_foreign_key "users", "regions"
 
   create_function :cleangeometry, sql_definition: <<-SQL
@@ -939,36 +1418,36 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
       building_regulations.parkings,
       building_regulations.updated_at,
       building_regulations.county_id,
-      density_types.color
-     FROM (building_regulations
+      density_types.color,
+      brl.land_use_type_id
+     FROM ((building_regulations
        JOIN density_types ON ((building_regulations.density_type_id = density_types.id)))
+       JOIN building_regulation_land_use_types brl ON ((brl.building_regulation_id = building_regulations.id)))
     ORDER BY building_regulations.updated_at DESC;
   SQL
-  create_view "census_voronoi", sql_definition: <<-SQL
-      SELECT st_intersection(voronoi.geom, ( SELECT counties.the_geom
-             FROM counties
-            WHERE (counties.id = 50))) AS inters,
-      census.homes_total,
-      census.county_id
-     FROM ( SELECT (st_dump(st_voronoipolygons(st_collect(census_1.the_geom), (0)::double precision, ( SELECT counties.the_geom
-                     FROM counties
-                    WHERE (counties.id = 50))))).geom AS geom
-             FROM census census_1
-            WHERE (census_1.county_id = 50)) voronoi,
-      census
-    WHERE (st_within(census.the_geom, voronoi.geom) AND (census.county_id = 50))
-    GROUP BY voronoi.geom, census.homes_total, census.county_id;
+  create_view "counties_info", sql_definition: <<-SQL
+      SELECT counties.id AS county_id,
+      counties.name,
+      counties.the_geom
+     FROM counties;
   SQL
   create_view "demography", sql_definition: <<-SQL
       SELECT st_voronoipolygons(st_collect(census.the_geom)) AS voronoi_geom,
-      census.abc1,
-      census.c2,
-      census.c3,
-      census.d,
-      census.e,
-      census.census_source_id
+      census.n_abc1,
+      census.n_c2,
+      census.n_c3,
+      census.n_d,
+      census.n_e
      FROM census
-    GROUP BY census.abc1, census.c2, census.c3, census.d, census.e, census.census_source_id;
+    WHERE (census.county_id = 50)
+    GROUP BY census.n_abc1, census.n_c2, census.n_c3, census.n_d, census.n_e;
+  SQL
+  create_view "demography_voronoi", sql_definition: <<-SQL
+      SELECT census.home_tot,
+      census.county_id,
+      census.the_geom
+     FROM census
+    WHERE (census.county_id = 50);
   SQL
   create_view "future_projects_info", sql_definition: <<-SQL
       SELECT future_projects.id,
@@ -1260,10 +1739,24 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
       p.name,
       pp_utiles(pi.id) AS pp_utiles,
       p.floors,
-      p.agency_id
-     FROM ((project_instance_mixes pim
+      p.address,
+      p.build_date,
+      p.sale_date,
+      p.transfer_date,
+      a.name AS agency_name,
+      a.id AS agency_id
+     FROM ((((project_instance_mixes pim
        JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
-       JOIN projects p ON ((pi.project_id = p.id)));
+       JOIN projects p ON ((pi.project_id = p.id)))
+       JOIN ( SELECT agency_rols.id,
+              agency_rols.rol,
+              agency_rols.project_id,
+              agency_rols.agency_id,
+              agency_rols.created_at,
+              agency_rols.updated_at
+             FROM agency_rols
+            WHERE ((agency_rols.rol)::text ~~* 'inmobiliaria'::text)) ar ON ((p.id = ar.project_id)))
+       JOIN agencies a ON ((a.id = ar.agency_id)));
   SQL
   create_view "project_instance_mix_views_anterior", sql_definition: <<-SQL
       SELECT pim.project_instance_id,
@@ -1302,51 +1795,6 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
        JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
        JOIN projects p ON ((pi.project_id = p.id)));
   SQL
-  create_view "project_instance_views", sql_definition: <<-SQL
-      SELECT pi.id,
-      pi.project_id,
-      pi.project_status_id,
-      pi.bimester,
-      pi.year,
-      pi.active,
-      pi.comments,
-      pi.cadastre,
-      ( SELECT sum(project_instance_mix_views.stock_units) AS sum
-             FROM project_instance_mix_views_anterior project_instance_mix_views
-            WHERE (project_instance_mix_views.project_instance_id = pi.id)) AS stock_units,
-      ( SELECT
-                  CASE sum(project_instance_mix_views.vhmu)
-                      WHEN 0 THEN (0)::numeric
-                      ELSE (sum((project_instance_mix_views.uf_avg_percent * project_instance_mix_views.vhmu)) / sum(project_instance_mix_views.vhmu))
-                  END AS sum
-             FROM project_instance_mix_views_anterior project_instance_mix_views
-            WHERE (project_instance_mix_views.project_instance_id = pi.id)) AS uf_value,
-      ( SELECT
-                  CASE
-                      WHEN (sum(project_instance_mix_views.uf_m2) IS NULL) THEN round((sum((project_instance_mix_views.total_m2 * (project_instance_mix_views.uf_m2_home)::numeric)) / sum(project_instance_mix_views.total_m2)), 1)
-                      ELSE round((sum((project_instance_mix_views.total_m2 * project_instance_mix_views.uf_m2)) / sum(project_instance_mix_views.total_m2)), 1)
-                  END AS sum
-             FROM project_instance_mix_views
-            WHERE (project_instance_mix_views.project_instance_id = pi.id)) AS uf_m2,
-      ( SELECT sum(project_instance_mix_views.vhmu) AS sum
-             FROM project_instance_mix_views_anterior project_instance_mix_views
-            WHERE (project_instance_mix_views.project_instance_id = pi.id)) AS selling_speed,
-      ( SELECT
-                  CASE sum(project_instance_mix_views.vhmu)
-                      WHEN 0 THEN (0)::numeric
-                      ELSE (sum((project_instance_mix_views.mix_usable_square_meters * project_instance_mix_views.vhmu)) / sum(project_instance_mix_views.vhmu))
-                  END AS "case"
-             FROM project_instance_mix_views_anterior project_instance_mix_views
-            WHERE (project_instance_mix_views.project_instance_id = pi.id)) AS usable_square_meters,
-      ( SELECT
-                  CASE sum(project_instance_mix_views.vhmu)
-                      WHEN 0 THEN (0)::numeric
-                      ELSE (sum((project_instance_mix_views.mix_terrace_square_meters * project_instance_mix_views.vhmu)) / sum(project_instance_mix_views.vhmu))
-                  END AS "case"
-             FROM project_instance_mix_views_anterior project_instance_mix_views
-            WHERE (project_instance_mix_views.project_instance_id = pi.id)) AS terrace_square_meters
-     FROM project_instances pi;
-  SQL
   create_view "projects_feature_info", sql_definition: <<-SQL
       SELECT projects.id,
       projects.address,
@@ -1369,12 +1817,14 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
       project_instances.comments,
       projects.county_id,
       projects.project_type_id,
-      project_instances.project_status_id
-     FROM (((project_instances
+      project_instances.project_status_id,
+      ar.agency_id
+     FROM ((((project_instances
        JOIN project_instance_mixes ON ((project_instances.id = project_instance_mixes.project_instance_id)))
        JOIN projects ON ((projects.id = project_instances.project_id)))
        JOIN project_statuses ON ((project_instances.project_status_id = project_statuses.id)))
-    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors, projects.project_type_id, project_instances.project_status_id;
+       JOIN agency_rols ar ON ((projects.id = ar.project_id)))
+    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors, projects.project_type_id, project_instances.project_status_id, ar.agency_id;
   SQL
   create_view "transactions_info", sql_definition: <<-SQL
       SELECT transactions.id,
@@ -1426,10 +1876,61 @@ ActiveRecord::Schema.define(version: 2019_08_22_154236) do
       transactions.role_associated
      FROM transactions;
   SQL
-  create_view "counties_info", sql_definition: <<-SQL
-      SELECT counties.id AS county_id,
-      counties.name,
-      counties.the_geom
-     FROM counties;
+  create_view "view_zona_c17", sql_definition: <<-SQL
+      SELECT z.geom,
+      cd.id,
+      cd.geocode,
+      cd.age_0_9,
+      cd.age_10_19,
+      cd.age_20_29,
+      cd.age_30_39,
+      cd.age_40_49,
+      cd.age_50_59,
+      cd.age_60_69,
+      cd.age_70_79,
+      cd.age_80_more,
+      cd.age_tot,
+      cd.home_1p,
+      cd.home_2p,
+      cd.home_3p,
+      cd.home_4p,
+      cd.home_5p,
+      cd.home_6_more,
+      cd.home_tot,
+      cd.male,
+      cd.female,
+      cd.basica,
+      cd.media,
+      cd.media_tec,
+      cd.tecnica,
+      cd.profesional,
+      cd.magister,
+      cd.doctor,
+      cd.owner,
+      cd.leased,
+      cd.transferred,
+      cd.free,
+      cd.possesion,
+      cd.married,
+      cd.coexist,
+      cd.single,
+      cd.canceled,
+      cd.separated,
+      cd.widowed,
+      cd.salaried,
+      cd.domestic_service,
+      cd.independent,
+      cd.employee_employer,
+      cd.unpaid_familiar,
+      cd."ISMT_zn",
+      cd."GSE_zn",
+      cd."N_hog",
+      cd."N_ABC1",
+      cd."N_C2",
+      cd."N_C3",
+      cd."N_D",
+      cd."N_E"
+     FROM (zona_c17 z
+       JOIN censo_data_2017 cd ON ((z.geocodigo = ((cd.geocode)::numeric)::double precision)));
   SQL
 end
