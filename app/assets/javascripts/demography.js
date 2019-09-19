@@ -121,7 +121,7 @@ Congo.demography.action_dashboards = function(){
           $('#header'+i).append(card_handle, card_header_title, card_max_button, card_min_button);
 
           // Resumen
-          if (title == "Información general") {
+          if (title == "Resumen") {
 
             var info = reg['data'];
 
@@ -136,7 +136,7 @@ Congo.demography.action_dashboards = function(){
 
           }
 
-          if (title == "Fuente de datos") {
+          if (title == "Variable") {
 
 
 

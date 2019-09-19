@@ -21,7 +21,7 @@ class DemographyController < ApplicationController
       {:name => t(:HOMES_AVG), :count => NumberFormatter.format(homes_avg, true)},
       {:name => t(:PEOPLE_AVG), :count => NumberFormatter.format(people_avg, true)},
     ]
-    result.push({"title":"Información general","data": data} )
+    result.push({"title":"Resumen","data": data})
 
 
     data =[]
@@ -29,7 +29,7 @@ class DemographyController < ApplicationController
     data.push("census_sources": @census_sources)
     @categories = Category.all.order(:position)
     data.push("categories": @categories)
-    result.push({"title":"Fuente de datos", "data":data}) 
+    result.push({"title":"Variable", "data":data})
 
     render json: result
   end
