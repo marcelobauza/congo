@@ -6,7 +6,7 @@ Congo.demography.action_dashboards = function(){
   }
 
   indicator_demography = function(){
-  
+
     county_id = [];
     $.each(Congo.dashboards.config.county_id, function(a,b){
        county_id =b;
@@ -18,6 +18,9 @@ Congo.demography.action_dashboards = function(){
     type_geometry = Congo.dashboards.config.typeGeometry;
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
+
+    // Creamos el overlay
+    Congo.dashboards.action_index.create_overlay_and_filter_card();
 
       if (county_id != '') {
 
@@ -43,17 +46,14 @@ Congo.demography.action_dashboards = function(){
           $("#spinner").show();
           $('.btn').addClass('disabled')
           $('.close').prop('disabled', true);
-          $("#time_slider").data("ionRangeSlider").update({
-            block: true
-          });
 
           // Establece el nombre de la capa en el navbar
-          $('#layer-name').text('Expedientes Municipales');
+          $('#layer-name').text('Demografía & Gasto');
 
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();
           $("#prop-cbr").hide();
-          $("#prop-em").show();
+          $("#prop-em").hide();
 
           // Mostramos el icono de Heatmap correspondiente
           $("#heat-prv").hide();
@@ -67,7 +67,10 @@ Congo.demography.action_dashboards = function(){
           $('.filter-building-regulations').hide();
           $('.filter-transactions').hide();
           $('.filter-projects').hide();
-          $('.filter-future-projects').show();
+          $('.filter-future-projects').hide();
+
+          // Eliminamos el time_slider
+          $('#time_slider_item').remove()
 
         },
         success: function(data) {
