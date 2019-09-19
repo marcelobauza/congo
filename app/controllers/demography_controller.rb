@@ -16,10 +16,10 @@ class DemographyController < ApplicationController
     people_avg = (people_by_home.nil? or people_by_home[:people_avg].nil?)? 0.0 : people_by_home[:people_avg]
 
     data = [
-      {:label => t(:HOMES_TOTAL), :value => NumberFormatter.format(homes_total, false)},
-      {:label => t(:PEOPLE_TOTAL), :value => NumberFormatter.format(people_total, false)},
-      {:label => t(:HOMES_AVG), :value => NumberFormatter.format(homes_avg, true)},
-      {:label => t(:PEOPLE_AVG), :value => NumberFormatter.format(people_avg, true)},
+      {:name => t(:HOMES_TOTAL), :count => NumberFormatter.format(homes_total, false)},
+      {:name => t(:PEOPLE_TOTAL), :count => NumberFormatter.format(people_total, false)},
+      {:name => t(:HOMES_AVG), :count => NumberFormatter.format(homes_avg, true)},
+      {:name => t(:PEOPLE_AVG), :count => NumberFormatter.format(people_avg, true)},
     ]
     result.push({"title":"Información general","data": data} )
 

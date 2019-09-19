@@ -74,11 +74,73 @@ Congo.demography.action_dashboards = function(){
 
         },
         success: function(data) {
-              console.log(data);
+
+
+          // Ocultamos el spinner y habilitamos los botones
+          $("#spinner").hide();
+          $('.btn').removeClass('disabled')
+          $('.close').prop('disabled', false);
+
+          // Separamos la información
+          for (var i = 0; i < data.length; i++) {
+
+            var reg = data[i];
+            console.log(reg);
+            var title = reg['title'];
+
+            // Creamos el div contenedor
+            var chart_container = document.createElement('div');
+            chart_container.className = 'chart-container card text-light bg-primary';
+            chart_container.id = 'chart-container'+i;
+
+            // Creamos el card-header
+            var card_header = document.createElement('div');
+            card_header.className = 'card-header pl-3';
+            card_header.id = 'header'+i;
+
+            // Creamos el collapse
+            var collapse = document.createElement('div');
+            collapse.className = 'collapse show';
+            collapse.id = 'collapse'+i;
+
+            // Creamos el card-body
+            var card_body = document.createElement('div');
+            card_body.className = 'card-body';
+            card_body.id = 'body'+i;
+
+            // Creamos handle, título y botones
+            var card_handle = '<span class="fas fa-arrows-alt handle border border-dark">'
+            var card_header_title = '<b>'+title+'</b>'
+            var card_min_button = '<button class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize" style="width: 24px; height: 12px"></i></button>'
+            var card_max_button = '<button class="close" id="card-max-'+i+'" onclick="maxCard('+i+')"><i class="fas fa-window-maximize" style="width: 24px; height: 12px"></i></button>'
+
+            // Adjuntamos los elementos
+            $('.overlay').append(chart_container);
+            $('#chart-container'+i).append(card_header, collapse);
+            $('#collapse'+i).append(card_body);
+            $('#header'+i).append(card_handle, card_header_title, card_max_button, card_min_button);
+
+            // Resumen
+            if (title == "Información general") {
+
+              var info = reg['data'];
+              console.log(info);
+
+              // Extraemos y adjuntamos los datos al card-body
+              $.each(info, function(y, z){
+                name = z['name'];
+                count = z['count']
+                count = count.toLocaleString('es-ES')
+                item = name+': '+count+'<br>';
+                $('#body'+i).append(item);
+              })
+
+            }
+
+          }
+
         }
       });
-
-
 
   }
   return {
