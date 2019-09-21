@@ -1,8 +1,8 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Edificios") do |sheet|
-sheet.add_row ['Código','Nombre','Dirección','Inmobiliaria','Tipo','Estado Obra','Pisos','M2-Útil','M2-Terraza','Disponible','Oferta Inicial','Venta','Venta Mensual Regimen','Dormitorios','Baños','Porcentaje Vendido','Inicio Construccion','Inicio Ventas','Entrega','Bimestre','Año','Comuna','PP Utiles','PP Terraza','Estar','Tipo Servicio','Hoffice','% Desc','UF Min %D','UF Max %D','UF Prom %D','PP UF','UF Estacionamiento','UF Bodega','UF/m2 util + t','PP UF/m² ut','UF/m2 util','PP UF/m2 u','Venta Mensual Disponible','PxQ R','PxQ D','Catastro','Rango UF','Rango Util']
+sheet.add_row ['Código','Nombre','Comuna','Dirección','Inmobiliaria','Tipo','Estado Obra','Pisos','M2-Útil','M2-Terraza','Disponible','Oferta Inicial','Venta','Venta Mensual Regimen','Dormitorios','Baños','Porcentaje Vendido','Inicio Construccion','Inicio Ventas','Entrega','Bimestre','Año','Comuna','PP Utiles','PP Terraza','Estar','Tipo Servicio','Hoffice','% Desc','UF Min %D','UF Max %D','UF Prom %D','PP UF','UF Estacionamiento','UF Bodega','UF/m2 util + t','PP UF/m² ut','UF/m2 util','PP UF/m2 u','Venta Mensual Disponible','PxQ R','PxQ D','Catastro','Rango UF','Rango Util']
 @project_departments.each do |row|
-        sheet.add_row [ row[:code], row[:project_name], row[:address], row[:agency_name], row[:project_type_name], row[:status], row[:floors],
+        sheet.add_row [ row[:code], row[:project_name], row[:county_name], row[:address], row[:agency_name], row[:project_type_name], row[:status], row[:floors],
         row[:mix_usable_square_meters], row[:mix_terrace_square_meters], row[:stock_units], row[:total_units], row[:sold_units], row[:vhmu], row[:bedroom],
         row[:bathroom], row[:percentage_sold], row[:build_date], row[:sale_date], row[:transfer_date], row[:bimester], row[:year], row[:county_name],
         row[:pp_utiles], row[:pp_terrazas], row[:living_room], row[:service_room], row[:h_office], row[:discount], row[:uf_min_percent], row[:uf_max_percent], 
@@ -12,9 +12,9 @@ end
 end
 
 wb.add_worksheet(name: "Casas") do |sheet|
-sheet.add_row ['Código','Nombre','Dirección','Inmobiliaria','Tipo','Modelo','Subt.Adosa','Estado Obra','Pisos','Min. Terreno','Max. Terreno','Disponible','Oferta Inicial','Venta','Venta Mensual Régimen','Venta Mensual Disponible','Total Dorm.','Total Baños','% Vendido','Inicio de Construccion','Ventas','Entrega','Bimestre','Año','Comuna','PP Utiles','PP Terreno','Estar','Tipo Servicio','% Desc','UF Min %D','UF Max %D','UF Prom %D','PP UF','UF/m2 util + t','PP UF/m² ut','UF/m2 util','PP UF/m2 u','PxQ R','PxQ D','Catastro','Rango UF','Rango Util','Meses en venta','Utiles']
+sheet.add_row ['Código','Nombre','Comuna', 'Dirección','Inmobiliaria','Tipo','Modelo','Subt.Adosa','Estado Obra','Pisos','Min. Terreno','Max. Terreno','Disponible','Oferta Inicial','Venta','Venta Mensual Régimen','Venta Mensual Disponible','Total Dorm.','Total Baños','% Vendido','Inicio de Construccion','Ventas','Entrega','Bimestre','Año','Comuna','PP Utiles','PP Terreno','Estar','Tipo Servicio','% Desc','UF Min %D','UF Max %D','UF Prom %D','PP UF','UF/m2 util + t','PP UF/m² ut','UF/m2 util','PP UF/m2 u','PxQ R','PxQ D','Catastro','Rango UF','Rango Util','Meses en venta','Utiles']
 @project_homes.each do |row|
-sheet.add_row [row[:code], row[:project_name], row[:address], row[:agency_name], row[:project_type_name], row[:model], row[:sub], row[:home_type], row[:status],
+sheet.add_row [row[:code], row[:project_name], row[:county_name], row[:address], row[:agency_name], row[:project_type_name], row[:model], row[:sub], row[:home_type], row[:status],
               row[:floors], row[:t_min], row[:t_max], row[:stock_units], row[:total_units], row[:sold_units], row[:vhmu], row[:vhmud], row[:bedroom], row[:bathroom],
               row[:percentage_sold], row[:build_date], row[:sale_date], row[:transfer_date], row[:bimester], row[:year], row[:county_name], row[:pp_utiles],
               row[:pp_terreno], row[:living_room], row[:service_room], row[:discount], row[:uf_min_percent], row[:uf_max_percent], row[:uf_avg_percent],
