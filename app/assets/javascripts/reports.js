@@ -30,12 +30,7 @@ Congo.reports = function(){
 
           break;
         case 'pdf':
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
             url = future_projects_report_pdf();
-          }else{
-            var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
-            $('#alerts').append(alert);
-          }
           break;
       }
       break;
