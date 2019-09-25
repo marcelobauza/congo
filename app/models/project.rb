@@ -397,6 +397,7 @@ class Project < ApplicationRecord
     query_condition += " and " +  WhereBuilder.build_in_condition("county_id",filters[:county_id]) if filters.has_key? :county_id
     query_condition += " and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
     query_condition += " and " + WhereBuilder.build_within_condition(filters[:wkt]) if filters.has_key? :wkt
+    query_condition += " and " + WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) if filters.has_key? :radius
 
     values = get_valid_min_max_limits(widget, filters)
     ranges = get_valid_ranges(values, widget)
@@ -747,8 +748,9 @@ class Project < ApplicationRecord
 
     if range == true
       @conditions += bimesters_condition(filters, self_not_filter, useView)
-      @conditions += between_condition_new(filters, self_not_filter)
+
     end
+    @conditions += between_condition_new(filters, self_not_filter)
     @conditions += ids_conditions_new(filters, self_not_filter, useView)
 
     @conditions += "county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
@@ -1272,8 +1274,15 @@ end
   end
 
   def self.reports filters
-  @project_departments = ProjectDepartmentReport.where(county_id: filters[:county_id], year: filters[:to_year], bimester: filters[:to_period])
-  @project_homes = ProjectHomeReport.where(county_id: filters[:county_id], year: filters[:to_year], bimester: filters[:to_period])
+    if !filters[:county_id].nil?
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
+    elsif !filters[:wkt].nil?
+      conditions = WhereBuilder.build_within_condition(filters[:wkt])
+    else
+      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
+      end
+    @project_departments = ProjectDepartmentReport.where(conditions).where( year: filters[:to_year], bimester: filters[:to_period])
+    @project_homes = ProjectHomeReport.where(conditions).where( year: filters[:to_year], bimester: filters[:to_period])
     return @project_homes, @project_departments
   end
 
@@ -1291,8 +1300,15 @@ end
     select += "END) AS vhmud, "
     select += "project_types.name as project_types_name "
 
+    if !params[:county_id].nil?
+      conditions = WhereBuilder.build_in_condition("county_id",params[:county_id])
+    elsif !params[:wkt].nil?
+      conditions = WhereBuilder.build_within_condition(params[:wkt])
+    else
+      conditions = WhereBuilder.build_within_condition_radius(params[:centerpt], params[:radius] )
+      end
     data = Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
-      where(county_id: filters[:county_id], project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).
+      where(conditions).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).
                      select(select).
                      group(:code, :name, :address, :project_types_name )
     data
@@ -1329,8 +1345,16 @@ end
     select += "round(MAX(total_m2),1) as max_m2_built1, "
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built1 "
 
+    if !filters[:county_id].nil?
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
+    elsif !params[:wkt].nil?
+      conditions = WhereBuilder.build_within_condition(filters[:wkt])
+    else
+      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
+      end
+    
     data = ProjectInstanceMixView.
-                    where(county_id: filters[:county_id], year: filters[:to_year], bimester: filters[:to_period], project_type_id: 2).
+      where(conditions).where(year: filters[:to_year], bimester: filters[:to_period], project_type_id: 2).
                      select(select)
     data
 
@@ -1367,9 +1391,16 @@ end
     select += "round(MAX(total_m2),1) as max_m2_built, "
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built"
 
+    if !filters[:county_id].nil?
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
+    elsif !params[:wkt].nil?
+      conditions = WhereBuilder.build_within_condition(filters[:wkt])
+    else
+      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
+      end
 
     data = ProjectInstanceMixView.
-                    where(county_id: filters[:county_id], year: filters[:to_year], bimester: filters[:to_period], project_type_id: 1).
+      where(conditions).where(year: filters[:to_year], bimester: filters[:to_period], project_type_id: 1).
                      select(select)
     data
   end
