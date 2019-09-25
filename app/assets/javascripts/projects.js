@@ -34,26 +34,25 @@ projects_popup = function(id){
     success: function(data) {
 
       // Levantamos los datos para el tab "Detalle Proyecto"
-      var detail = data['detail']
+      var detail = data
 
       $('#popup_info_projects').empty();
-
       $('#popup_info_projects').append('<div>Bimestre: '+ detail.bimester +'</div>');
       $('#popup_info_projects').append('<div>Año: '+ detail.year +'</div>');
       $('#popup_info_projects').append('<div>Direccion: '+ detail.address +'</div>');
       $('#popup_info_projects').append('<div>Nombre: '+ detail.name +'</div>');
       $('#popup_info_projects').append('<div>Inmobiliaria: '+ detail.agency_name +'</div>');
-      $('#popup_info_projects').append('<div>Estado: '+ 'null'  +'</div>');
+      $('#popup_info_projects').append('<div>Estado: '+ data.project_status.name  +'</div>');
       $('#popup_info_projects').append('<div>Total de Unidades: '+ detail.total_units  +'</div>');
       $('#popup_info_projects').append('<div>Disponibilidad Total: '+ detail.stock_units  +'</div>');
       $('#popup_info_projects').append('<div>Venta Total: '+ detail.sold_units  +'</div>');
       $('#popup_info_projects').append('<div>Cantidad de Pisos: '+ detail.floors  +'</div>');
-      $('#popup_info_projects').append('<div>UF/m2: '+ detail.uf_m2  +'</div>');
-      $('#popup_info_projects').append('<div>Valor UF: '+ 'null'  +'</div>');
+      $('#popup_info_projects').append('<div>UF/m2: '+ detail.pp_uf_m2  +'</div>');
+      $('#popup_info_projects').append('<div>Valor UF: '+ detail.pp_uf  +'</div>');
       $('#popup_info_projects').append('<div>Velocidad de Venta: '+ detail.vhmu  +'</div>');
-      $('#popup_info_projects').append('<div>Porcentage Vendido: '+ 'null'  +'</div>');
-      $('#popup_info_projects').append('<div>Superficie Útil: '+ 'null'  +'</div>');
-      $('#popup_info_projects').append('<div>Terraza: '+ 'null'  +'</div>');
+      $('#popup_info_projects').append('<div>Porcentage Vendido: '+ detail.percentage_sold  +'</div>');
+      $('#popup_info_projects').append('<div>Superficie Útil: '+ detail.mix_usable_square_meters  +'</div>');
+      $('#popup_info_projects').append('<div>Terraza: '+ detail.mix_terrace_square_meters  +'</div>');
       $('#popup_info_projects').append('<div>Fecha Inicio Construcción: '+ detail.build_date  +'</div>');
       $('#popup_info_projects').append('<div>Fecha Inicio Ventas:  '+ detail.sale_date  +'</div>');
       $('#popup_info_projects').append('<div>Fecha Entrega '+ detail.transfer_date  +'</div>');
