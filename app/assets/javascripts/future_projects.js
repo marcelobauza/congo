@@ -12,6 +12,111 @@ Congo.future_projects.config = {
   years: []
 }
 
+future_projects_report_pdf = function(){
+
+    county_id = [];
+    $.each(Congo.dashboards.config.county_id, function(a,b){
+       county_id =b;
+    })
+    to_year = Congo.dashboards.config.year;
+    to_bimester = Congo.dashboards.config.bimester;
+    radius = Congo.dashboards.config.radius;
+    centerPoint = Congo.dashboards.config.centerpt;
+    wkt = Congo.dashboards.config.size_box;
+    future_project_type_ids = Congo.future_projects.config.future_project_type_ids;
+    project_type_ids = Congo.future_projects.config.project_type_ids;
+    periods = Congo.future_projects.config.periods;
+    years = Congo.future_projects.config.years;
+    type_geometry = Congo.dashboards.config.typeGeometry;
+    layer_type = Congo.dashboards.config.layer_type;
+    style_layer = Congo.dashboards.config.style_layer;
+    boost = Congo.dashboards.config.boost;
+
+    // Sino se realizó la selección muestra un mensaje de alerta
+    if (county_id.length == 0 && centerPoint == '' && wkt.length == 0) {
+
+      Congo.dashboards.action_index.empty_selection_alert();
+
+    // Si se realizó la selección, añade los elementos al dashboard
+    } else {
+
+      // Creamos el overlay y el time_slider
+      Congo.dashboards.action_index.create_overlay_and_filter_card();
+      Congo.dashboards.action_index.add_time_slider();
+
+      if (county_id != '') {
+
+        // Agregamos filtro Comuna
+        Congo.dashboards.action_index.add_county_filter_item()
+
+        data = {
+          to_year: to_year,
+          to_period: to_bimester,
+          future_project_type_ids: future_project_type_ids,
+          project_type_ids: project_type_ids,
+          periods: periods,
+          years: years,
+          county_id: county_id,
+          type_geometry:type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+        };
+
+      } else if (centerPoint != '') {
+
+        // Eliminamos filtro comuna
+        $('#item-comuna').remove();
+
+        data = {
+          to_year: to_year,
+          to_period: to_bimester,
+          future_project_type_ids: future_project_type_ids,
+          project_type_ids: project_type_ids,
+          periods: periods,
+          years: years,
+          centerpt: centerPoint,
+          radius: radius,
+          type_geometry:type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+        };
+
+      } else {
+
+        // Eliminamos filtro comuna
+        $('#item-comuna').remove();
+
+        data = {
+          to_year: to_year,
+          to_period: to_bimester,
+          future_project_type_ids: future_project_type_ids,
+          project_type_ids: project_type_ids,
+          periods: periods,
+          years: years,
+          wkt: JSON.stringify(wkt),
+          type_geometry:type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+        };
+
+      };
+
+          if (boost == true){
+            data['boost'] =  boost;
+          }
+
+      $.ajax({
+        type: 'GET',
+        url: '/future_projects/future_projects_summary.json',
+        datatype: 'json',
+        data: data,
+        success: function(data) {
+        }
+
+      })
+    }
+}
+
 Congo.future_projects.action_heatmap = function(){
 
   init=function(){
