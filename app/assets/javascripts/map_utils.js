@@ -380,8 +380,16 @@ Congo.map_utils = function(){
         filter_future_project_type_ids = Congo.future_projects.config.future_project_type_ids;
         filter_project_type_ids = Congo.future_projects.config.project_type_ids;
         boost = Congo.dashboards.config.boost;
+        periods = Congo.future_projects.config.periods;
+        years = Congo.future_projects.config.years;
         if (boost == false){
-          filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+          filter_layer = filter_layer + "AND ((bimester='"+ bimester +"' AND year='"+ year+"')";
+        if (periods.length > 0 ){
+          $.each(periods, function(i,v){
+            filter_layer = filter_layer + "OR (bimester='"+ v +"' AND year='"+ years[i]+"')";
+          })
+        }
+            filter_layer = filter_layer +")";
         }
         if (filter_future_project_type_ids.length > 0) {
           filter_layer = filter_layer + " AND future_project_type_id IN (" + filter_future_project_type_ids +")";
