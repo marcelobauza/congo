@@ -407,15 +407,14 @@ class Project < ApplicationRecord
     result = Array.new
 
     0.upto(total_ranges) do |i|
-      if (filters[:widget] == 'floors')
+      if (widget == 'floors')
         select = "count(distinct(project_id)) as value, #{ranges[i]["min"].to_i} as min_value, #{ranges[i]["max"].to_i} as max_value"
       else
         select = "sum(total_units) as value, #{ranges[i]["min"].to_i} as min_value, #{ranges[i]["max"].to_i} as max_value"
       end
       cond = "#{query_condition} AND " + WhereBuilder.build_between_condition("ROUND(#{widget})", ranges[i]["min"].to_i, ranges[i]["max"].to_i)
       proj = ProjectInstanceMixView.select(select).
-        where(cond).first
-
+      where(cond).first
       result << proj
     end
     result
