@@ -1299,12 +1299,12 @@ end
     select += "END) AS vhmud, "
     select += "project_types.name as project_types_name "
 
-    if !params[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",params[:county_id])
-    elsif !params[:wkt].nil?
-      conditions = WhereBuilder.build_within_condition(params[:wkt])
+    if !filters[:county_id].nil?
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
+    elsif !filters[:wkt].nil?
+      conditions = WhereBuilder.build_within_condition(filters[:wkt])
     else
-      conditions = WhereBuilder.build_within_condition_radius(params[:centerpt], params[:radius] )
+      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
       end
     data = Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
       where(conditions).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).
@@ -1346,7 +1346,7 @@ end
 
     if !filters[:county_id].nil?
       conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
-    elsif !params[:wkt].nil?
+    elsif !filters[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(filters[:wkt])
     else
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
@@ -1392,7 +1392,7 @@ end
 
     if !filters[:county_id].nil?
       conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
-    elsif !params[:wkt].nil?
+    elsif !filters[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(filters[:wkt])
     else
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
