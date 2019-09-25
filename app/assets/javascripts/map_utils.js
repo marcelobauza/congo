@@ -419,11 +419,17 @@ Congo.map_utils = function(){
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.projects.action_dashboards.indicator_projects();
-
+        from_floors = Congo.projects.config.from_floor;
+        to_floors = Congo.projects.config.to_floor;
         project_status_ids = Congo.projects.config.project_status_ids;
         project_type_ids = Congo.projects.config.project_type_ids;
         agency_ids = Congo.projects.config.project_agency_ids;
         filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+        
+        if(from_floors.length >0 && to_floors.length > 0 ){
+          filter_layer = filter_layer + " AND floors >= " + from_floors + " and floors <= " + to_floors ;
+        }
+
         if (project_status_ids.length > 0){
           filter_layer = filter_layer + " AND project_status_id IN (" + project_status_ids + ")";
         }
