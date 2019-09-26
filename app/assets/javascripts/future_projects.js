@@ -90,6 +90,20 @@ future_projects_report_pdf = function() {
       // Creamos el doc
       var doc = new jsPDF();
 
+      doc.page = 1;
+
+      // Pie de página
+      function footer() {
+        doc.setFontStyle("bold");
+        doc.setFontSize(12);
+        doc.text('Fuente:', 20, 290);
+        doc.setFontStyle("normal");
+        doc.text('Fuente: Levantamiento Bimestral Direcciones de Obras Municipales', 37, 290);
+        doc.setFontSize(10);
+        doc.text('p. ' + doc.page, 194, 290);
+        doc.page++;
+      };
+
       // Título
       doc.setFontStyle("bold");
       doc.setFontSize(22);
@@ -124,8 +138,14 @@ future_projects_report_pdf = function() {
 
       }
 
+      // Pie de página
+      footer()
+
       // Agregamos un página
       doc.addPage('a4', 'portrait')
+
+      // Pie de página
+      footer()
 
       // Separamos la información
       for (var i = 1; i < data.length; i++) {
@@ -549,6 +569,9 @@ future_projects_report_pdf = function() {
 
           // Agrega nueva página
           doc.addPage('a4', 'portrait')
+
+          // Pie de página
+          footer()
 
         } // Cierra else impar
       } // Cierra for
