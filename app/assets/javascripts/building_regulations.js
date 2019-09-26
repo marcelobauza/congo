@@ -434,7 +434,7 @@ Congo.building_regulations.action_dashboards = function(){
           // Mostramos el icono de Heatmap correspondiente
           $("#heat-prv").hide();
           $("#heat-cbr").hide();
-          $("#heat-em-norm-dem").show();
+          $("#heat-em-dem").hide();
 
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();

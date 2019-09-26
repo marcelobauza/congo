@@ -1125,7 +1125,7 @@ Congo.projects.action_dashboards = function(){
           // Mostramos el icono de Heatmap correspondiente
           $("#heat-prv").show();
           $("#heat-cbr").hide();
-          $("#heat-em-norm-dem").hide();
+          $("#heat-em-dem").hide();
 
           // Eliminamos los chart-containter de la capa anterior
           $(".chart-container").remove();
