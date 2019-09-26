@@ -168,7 +168,6 @@ function building_regulations_report_pdf() {
         var max_density = reg['density_type']
         var construct = reg['construct']
         var last_update = reg['comments']
-        var min_prop_subdiv_m2 = 'null'
 
         // Arreglamos los valores que llegan con null
         if (max_density == null) {
@@ -206,7 +205,6 @@ function building_regulations_report_pdf() {
           doc.text('Densidad:', 83, 90, null, null, 'right');
           doc.text('Densidad Máxima:', 83, 100, null, null, 'right');
           doc.text('Última actualización:', 83, 110, null, null, 'right');
-          doc.text('Subdivisión predial mínima m2:', 83, 120, null, null, 'right');
 
           // Valores columna arriba
           doc.setFontStyle("normal");
@@ -220,7 +218,6 @@ function building_regulations_report_pdf() {
           doc.text(density, 85, 90);
           doc.text(max_density, 85, 100);
           doc.text(last_update, 85, 110);
-          doc.text(min_prop_subdiv_m2, 85, 120);
 
         } else { // par
 
@@ -240,7 +237,6 @@ function building_regulations_report_pdf() {
           doc.text('Densidad:', 83, 230, null, null, 'right');
           doc.text('Densidad Máxima:', 83, 240, null, null, 'right');
           doc.text('Última actualización:', 83, 250, null, null, 'right');
-          doc.text('Subdivisión predial mínima m2:', 83, 260, null, null, 'right');
 
           // Valores columna abajo
           doc.setFontStyle("normal");
@@ -254,7 +250,6 @@ function building_regulations_report_pdf() {
           doc.text(density, 85, 230);
           doc.text(max_density, 85, 240);
           doc.text(last_update, 85, 250);
-          doc.text(min_prop_subdiv_m2, 85, 260);
         } // Cierra else par/impar
       }) // Cierra for
 
