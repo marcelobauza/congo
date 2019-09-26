@@ -941,7 +941,7 @@ function projects_report_pdf(){
       } // Cierra for
 
       // Descarga el archivo PDF
-      doc.save("Informe_PRV.pdf");
+      doc.save("Informe_ProyectosResidencialesVenta.pdf");
 
     } // Cierra success
   }) // Cierra ajax
@@ -1132,7 +1132,7 @@ Congo.projects.action_dashboards = function(){
           });
 
           // Establece el nombre de la capa en el navbar
-          $('#layer-name').text('PRV');
+          $('#layer-name').text('Proyectos Residenciales en Venta');
 
           // Mostramos los iconos de Útiles correspondientes
           $("#boost").hide();
