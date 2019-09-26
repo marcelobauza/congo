@@ -30,9 +30,11 @@ class Admin::UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-    if params[:user][:county_ids].lenght > 0 
+    if params[:user].has_key? :county_ids
+      if params[:user][:county_ids] > 0 
       params[:user][:county_ids].each do |county_id|
         CountiesUser.create(county_id: county_id, user_id: @user.id)
+      end
       end
     end
     
