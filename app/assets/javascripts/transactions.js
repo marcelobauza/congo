@@ -108,6 +108,21 @@ function transactions_report_pdf(){
       // Creamos el doc
       var doc = new jsPDF();
 
+      doc.page = 1;
+
+      // Pie de página
+      function footer() {
+        doc.setFontStyle("bold");
+        doc.setFontSize(12);
+        doc.text('Fuente:', 10, 284);
+        doc.setFontStyle("normal");
+        doc.text('Compraventas inscritas en los Conservadores de Bienes Raíces de la Región Metropolitana', 27, 284);
+        doc.text('(Santiago, San Miguel, Puente Alto y San Bernardo) y planchetas de predios municipales', 10, 290);
+        doc.setFontSize(10);
+        doc.text('p. ' + doc.page, 194, 290);
+        doc.page++;
+      };
+
       // Título
       doc.setFontStyle("bold");
       doc.setFontSize(22);
@@ -191,7 +206,6 @@ function transactions_report_pdf(){
       doc.text(max_val_uf, 62, 122, null, null, 'center');
       doc.text(min_val_uf, 62, 132, null, null, 'center');
 
-
       // Columna Terreno
       doc.text('Terreno', 91, 72, null, null, 'center');
       doc.text(avg_land, 91, 82, null, null, 'center');
@@ -229,15 +243,13 @@ function transactions_report_pdf(){
       doc.text(min_val_uf_m2_build, 181, 132, null, null, 'center');
 
       // Pie de página
-      doc.setFontStyle("bold");
-      doc.setFontSize(12);
-      doc.text('Fuente:', 10, 284);
-      doc.setFontStyle("normal");
-      doc.text('Compraventas inscritas en los Conservadores de Bienes Raíces de la Región Metropolitana', 27, 284);
-      doc.text('(Santiago, San Miguel, Puente Alto y San Bernardo) y planchetas de predios municipales', 10, 290);
+      footer()
 
       // Agregamos un página
       doc.addPage('a4', 'portrait')
+
+      // Pie de página
+      footer()
 
       // Separamos la información
       for (var i = 1; i < data.length; i++) {
@@ -639,14 +651,6 @@ function transactions_report_pdf(){
           // Gráfico
           doc.addImage(chart, 'JPEG', 9, 30);
 
-          // Pie de página
-          doc.setFontStyle("bold");
-          doc.setFontSize(12);
-          doc.text('Fuente:', 10, 284);
-          doc.setFontStyle("normal");
-          doc.text('Compraventas inscritas en los Conservadores de Bienes Raíces de la Región Metropolitana', 27, 284);
-          doc.text('(Santiago, San Miguel, Puente Alto y San Bernardo) y planchetas de predios municipales', 10, 290);
-
         } else {
 
           // Título del gráfico
@@ -658,6 +662,9 @@ function transactions_report_pdf(){
 
           // Agrega nueva página
           doc.addPage('a4', 'portrait')
+
+          // Pie de página
+          footer()
 
         } // Cierra else impar
       } // Cierra for
