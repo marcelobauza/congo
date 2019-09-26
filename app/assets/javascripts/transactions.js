@@ -548,7 +548,7 @@ function transactions_report_pdf(){
               display: true,
               position: 'bottom',
               labels: {
-                fontColor: '#444',
+                fontColor: '#3d4046',
                 fontSize: 12,
                 usePointStyle: true,
               }
@@ -563,18 +563,22 @@ function transactions_report_pdf(){
                       sum += data;
                   });
                   let percentage = (value*100 / sum).toFixed(2);
-                  if (percentage > 3) {
+                  if (percentage > 4) {
                     return percentage+'%';
                   } else {
                     return null;
                   }
                 },
-                align: 'center',
+                align: 'end',
                 anchor: 'center',
                 color: 'white',
                 font: {
                   weight: 'bold'
                 },
+                textStrokeColor: '#3d4046',
+                textStrokeWidth: 1,
+                textShadowColor: '#000000',
+                textShadowBlur: 3,
               }
             },
           };

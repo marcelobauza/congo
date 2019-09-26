@@ -451,7 +451,7 @@ future_projects_report_pdf = function() {
               display: true,
               position: 'bottom',
               labels: {
-                fontColor: '#444',
+                fontColor: '#3d4046',
                 fontSize: 12,
                 usePointStyle: true,
               }
@@ -466,7 +466,7 @@ future_projects_report_pdf = function() {
                       sum += data;
                   });
                   let percentage = (value*100 / sum).toFixed(2);
-                  if (percentage > 3) {
+                  if (percentage > 4) {
                     return percentage+'%';
                   } else {
                     return null;
@@ -474,13 +474,13 @@ future_projects_report_pdf = function() {
                 },
                 align: 'end',
                 anchor: 'center',
-                color: 'white',
+                color: '#FFFFFF',
                 font: {
                   weight: 'bold'
                 },
-                textStrokeColor: '#444',
+                textStrokeColor: '#3d4046',
                 textStrokeWidth: 1,
-                textShadowColor: '#000',
+                textShadowColor: '#000000',
                 textShadowBlur: 3,
               }
             },
