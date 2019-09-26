@@ -129,7 +129,7 @@ function building_regulations_report_pdf() {
 
       // Subtítulo
       doc.setFontSize(16);
-      doc.text('Polígono Seleccionado', 105, 30, null, null, 'center');
+      doc.text('Información General', 105, 35, null, null, 'center');
 
       // Pie de página
       footer()

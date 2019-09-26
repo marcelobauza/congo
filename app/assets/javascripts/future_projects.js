@@ -98,7 +98,7 @@ future_projects_report_pdf = function() {
         doc.setFontSize(12);
         doc.text('Fuente:', 20, 290);
         doc.setFontStyle("normal");
-        doc.text('Fuente: Levantamiento Bimestral Direcciones de Obras Municipales', 37, 290);
+        doc.text('Levantamiento Bimestral en Direcciones de Obras Municipales', 37, 290);
         doc.setFontSize(10);
         doc.text('p. ' + doc.page, 194, 290);
         doc.page++;

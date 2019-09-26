@@ -270,7 +270,7 @@ function projects_report_pdf(){
         doc.setFontSize(12);
         doc.text('Fuente:', 20, 290);
         doc.setFontStyle("normal");
-        doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+        doc.text('Levantamiento Bimestral en Salas de Ventas por Equipo de Catastro Inciti', 37, 290);
         doc.setFontSize(10);
         doc.text('p. ' + doc.page, 194, 290);
         doc.page++;
@@ -279,19 +279,36 @@ function projects_report_pdf(){
       // Título
       doc.setFontStyle("bold");
       doc.setFontSize(22);
-      doc.text('Proyectos Residenciales en Venta', 105, 20, null, null, 'center');
+      doc.text('Informe de Proyectos Residenciales en Venta', 105, 20, null, null, 'center');
 
-      // Periodo
-      doc.setFontSize(14);
-      doc.setFontStyle("bold");
-      doc.text('Periodo de tiempo seleccionado:', 105, 40, null, null, 'center');
-      doc.setFontStyle("normal");
-      doc.text(to_bimester+'° Bimestre '+to_year, 105, 48, null, null, 'center');
+      // Subtítulo
+      doc.setFontSize(16);
+      doc.text('Información General', 105, 35, null, null, 'center');
 
-      // Polígono
-      doc.setFontStyle("bold");
-      doc.setFontSize(14);
-      doc.text('Polígono seleccionado:', 105, 60, null, null, 'center');
+      // Validamos si hay algún filtro aplicado
+      if (periods == '') {
+
+        // Periodo Actual
+        doc.setFontSize(12);
+        doc.setFontStyle("bold");
+        doc.text('Periodo de tiempo seleccionado:', 10, 49);
+        doc.setFontStyle("normal");
+        doc.text(to_bimester+'° bimestre del '+to_year, 78, 49);
+
+      } else {
+
+        // Periodos Filtrados
+        doc.setFontSize(12);
+        doc.setFontStyle("bold");
+        doc.text('Periodos de tiempo seleccionados:', 10, 49);
+        doc.setFontStyle("normal");
+        var tab = 83
+        for (var i = 0; i < periods.length; i++) {
+          doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
+          tab = tab + 16
+        }
+
+      }
 
       // Pie de página
       footer()
