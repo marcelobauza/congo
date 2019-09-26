@@ -108,6 +108,20 @@ function building_regulations_report_pdf() {
       // Creamos el doc
       var doc = new jsPDF();
 
+      doc.page = 1;
+
+      // Pie de página
+      function footer() {
+        doc.setFontStyle("bold");
+        doc.setFontSize(12);
+        doc.text('Fuente:', 20, 290);
+        doc.setFontStyle("normal");
+        doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
+        doc.setFontSize(10);
+        doc.text('p. ' + doc.page, 194, 290);
+        doc.page++;
+      };
+
       // Título
       doc.setFontStyle("bold");
       doc.setFontSize(22);
@@ -118,14 +132,13 @@ function building_regulations_report_pdf() {
       doc.text('Polígono Seleccionado', 105, 30, null, null, 'center');
 
       // Pie de página
-      doc.setFontStyle("bold");
-      doc.setFontSize(12);
-      doc.text('Fuente:', 20, 290);
-      doc.setFontStyle("normal");
-      doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
+      footer()
 
       // Agregamos una página
       doc.addPage('a4', 'portrait')
+
+      // Pie de página
+      footer()
 
       // Párrafo 1
       doc.setFontSize(12);
@@ -141,13 +154,6 @@ function building_regulations_report_pdf() {
       doc.text('Para obtener mayor detalle respecto a condiciones normativas de cada zona, se recomienda hacer', 10, 76);
       doc.text('clic en “Descargar Ordenanza” para obtener la ordenanza local y modificaciones vigentes si', 10, 84);
       doc.text('corresponde.', 10, 92);
-
-      // Pie de página
-      doc.setFontStyle("bold");
-      doc.setFontSize(12);
-      doc.text('Fuente:', 20, 290);
-      doc.setFontStyle("normal");
-      doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
 
       // Separamos los datos
       $.each(data, function(i,reg){
@@ -184,6 +190,9 @@ function building_regulations_report_pdf() {
           // Agregamos una página
           doc.addPage('a4', 'portrait')
 
+          // Pie de página
+          footer()
+
           // Labels columna arriba
           doc.setFontStyle("bold");
           doc.setFontSize(12);
@@ -212,13 +221,6 @@ function building_regulations_report_pdf() {
           doc.text(max_density, 85, 100);
           doc.text(last_update, 85, 110);
           doc.text(min_prop_subdiv_m2, 85, 120);
-
-          // Pie de página
-          doc.setFontStyle("bold");
-          doc.setFontSize(12);
-          doc.text('Fuente:', 20, 290);
-          doc.setFontStyle("normal");
-          doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
 
         } else { // par
 
