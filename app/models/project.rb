@@ -1306,8 +1306,8 @@ end
     else
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
       end
-    data = Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
-      where(conditions).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).
+    data = Project.joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
+      where(conditions).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).where("agency_rols.rol = 'INMOBILIARIA'").
                      select(select).
                      group(:code, :name, :address, :project_types_name )
     data
