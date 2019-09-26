@@ -262,6 +262,20 @@ function projects_report_pdf(){
       // Creamos el doc
       var doc = new jsPDF();
 
+      doc.page = 1;
+
+      // Pie de página
+      function footer() {
+        doc.setFontStyle("bold");
+        doc.setFontSize(12);
+        doc.text('Fuente:', 20, 290);
+        doc.setFontStyle("normal");
+        doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+        doc.setFontSize(10);
+        doc.text('p. ' + doc.page, 194, 290);
+        doc.page++;
+      };
+
       // Título
       doc.setFontStyle("bold");
       doc.setFontSize(22);
@@ -280,11 +294,7 @@ function projects_report_pdf(){
       doc.text('Polígono seleccionado:', 105, 60, null, null, 'center');
 
       // Pie de página
-      doc.setFontStyle("bold");
-      doc.setFontSize(12);
-      doc.text('Fuente:', 20, 290);
-      doc.setFontStyle("normal");
-      doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
+      footer()
 
       // Separamos la información
       for (var i = 0; i < data.length; i++) {
@@ -294,17 +304,13 @@ function projects_report_pdf(){
           // Agregamos una página
           doc.addPage('a4', 'portrait')
 
+          // Pie de página
+          footer()
+
           // Subtítulo
           doc.setFontStyle("bold");
           doc.setFontSize(16);
           doc.text('Listado de Proyectos', 105, 20, null, null, 'center');
-
-          // Pie de página
-          doc.setFontStyle("bold");
-          doc.setFontSize(12);
-          doc.text('Fuente:', 20, 290);
-          doc.setFontStyle("normal");
-          doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
 
           doc.line(10, 25, 200, 25);
 
@@ -330,17 +336,16 @@ function projects_report_pdf(){
             vhmud = vhmud.toString()
 
             if (line_num > 260) {
+
               doc.addPage('a4', 'portrait')
+
+              // Pie de página
+              footer()
+
               line_num = 25
 
               doc.line(10, 20, 200, 20);
 
-              // Pie de página
-              doc.setFontStyle("bold");
-              doc.setFontSize(12);
-              doc.text('Fuente:', 20, 290);
-              doc.setFontStyle("normal");
-              doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
             }
 
             // Cod
@@ -408,6 +413,9 @@ function projects_report_pdf(){
         } else if (i == 1) { // Información General Departamentos
 
           doc.addPage('a4', 'portrait')
+
+          // Pie de página
+          footer()
 
           // Levantamos los valores de departamento
           var info_department = data[i]['info_department'][0];
@@ -585,16 +593,12 @@ function projects_report_pdf(){
             doc.text(max_uf_value, 170, 260);
             doc.text(avg_uf_value, 170, 270);
 
-            // Pie de página
-            doc.setFontStyle("bold");
-            doc.setFontSize(12);
-            doc.text('Fuente:', 20, 290);
-            doc.setFontStyle("normal");
-            doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
-
           }
 
           doc.addPage('a4', 'portrait')
+
+          // Pie de página
+          footer()
 
         } else { // Gráficos
 
@@ -898,13 +902,6 @@ function projects_report_pdf(){
             // Gráfico
             doc.addImage(chart, 'JPEG', 9, 30);
 
-            // Pie de página
-            doc.setFontStyle("bold");
-            doc.setFontSize(12);
-            doc.text('Fuente:', 20, 290);
-            doc.setFontStyle("normal");
-            doc.text('Levantamiento bimestral en salas de ventas por Equipo de Catastro Inciti', 37, 290);
-
           } else {
 
             // Título del gráfico
@@ -916,6 +913,9 @@ function projects_report_pdf(){
 
             // Agrega nueva página
             doc.addPage('a4', 'portrait')
+
+            // Pie de página
+            footer()
 
           } // Cierra if impar
 
