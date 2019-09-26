@@ -1287,8 +1287,8 @@ end
 
   def self.list_projects filters
 
-    select = "projects.code, "
-    select = "projects.name, "
+    select = "code as code, "
+    select += "projects.name, "
     select += "projects.address, "
     select += "sum (project_instance_mixes.total_units) as total_units, "
     select += "sum(project_instance_mixes.stock_units) as stock_units, "
@@ -1297,7 +1297,8 @@ end
     select += "WHEN 0 THEN 0::real "
     select += "ELSE round(vhmu(project_instance_mixes.total_units, project_instance_mixes.stock_units, cadastre, projects.sale_date)::numeric,1) "
     select += "END) AS vhmud, "
-    select += "project_types.name as project_types_name "
+    select += "project_types.name as project_types_name, "
+    select += "agencies.name as agencyname"
 
     if !filters[:county_id].nil?
       conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
@@ -1309,7 +1310,7 @@ end
     data = Project.joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
       where(conditions).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).where("agency_rols.rol = 'INMOBILIARIA'").
                      select(select).
-                     group(:code, :name, :address, :project_types_name )
+                     group(:code, :name, :address, :project_types_name, 'agencies.name' ).uniq
     data
   end
 
