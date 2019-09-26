@@ -650,6 +650,7 @@ function transactions_report_pdf(){
 
           // Título del gráfico
           doc.setFontSize(16);
+          doc.setFontStyle("bold");
           doc.text(title, 105, 20, null, null, 'center');
 
           // Gráfico
@@ -659,6 +660,7 @@ function transactions_report_pdf(){
 
           // Título del gráfico
           doc.setFontSize(16);
+          doc.setFontStyle("bold");
           doc.text(title, 105, 160, null, null, 'center');
 
           // Gráfico
