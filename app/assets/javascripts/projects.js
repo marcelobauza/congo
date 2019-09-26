@@ -841,10 +841,9 @@ function projects_report_pdf(){
                   textStrokeWidth: 1,
                   textShadowColor: '#000000',
                   textShadowBlur: 3,
-                  },
-                }
-              },
-            };
+                  }
+                },
+              };
 
           } else { // Line
 
