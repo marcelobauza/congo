@@ -87,6 +87,475 @@ future_projects_report_pdf = function() {
     data: data,
     success: function(data) {
 
+      // Creamos el doc
+      var doc = new jsPDF();
+
+      // Título
+      doc.setFontStyle("bold");
+      doc.setFontSize(22);
+      doc.text('Informe de Expedientes Municipales', 105, 20, null, null, 'center');
+
+      // Subtítulo
+      doc.setFontSize(16);
+      doc.text('Información General', 105, 35, null, null, 'center');
+
+      // Validamos si hay algún filtro aplicado
+      if (periods == '') {
+
+        // Periodo Actual
+        doc.setFontSize(12);
+        doc.setFontStyle("bold");
+        doc.text('Periodo de tiempo seleccionado:', 10, 49);
+        doc.setFontStyle("normal");
+        doc.text(to_bimester+'° bimestre del '+to_year, 78, 49);
+
+      } else {
+
+        // Periodos Filtrados
+        doc.setFontSize(12);
+        doc.setFontStyle("bold");
+        doc.text('Periodos de tiempo seleccionados:', 10, 49);
+        doc.setFontStyle("normal");
+        var tab = 83
+        for (var i = 0; i < periods.length; i++) {
+          doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
+          tab = tab + 16
+        }
+
+      }
+
+      // Agregamos un página
+      doc.addPage('a4', 'portrait')
+
+      // Separamos la información
+      for (var i = 1; i < data.length; i++) {
+
+        var reg = data[i];
+        var title = reg['title'];
+        var series = reg['series'];
+        var datasets = [];
+        var serie_colour;
+
+        // Extraemos las series
+        $.each(series, function(a, b){
+
+          var label = b['label']
+          var data = b['data']
+
+          // Setea los colores dependiendo de la serie
+          if (title == 'Tipo de Expediente / Destino' || title == 'Cantidad de Unidades / Bimestre' || title == 'Superficie Edificada Por Expediente') {
+
+            switch (label) {
+              case 'Departamento y Local Comercial':
+                serie_colour = '#E74C3C'
+                break;
+              case 'Equipamiento':
+                serie_colour = '#BB8FCE'
+                break;
+              case 'Departamentos':
+                serie_colour = '#85C1E9'
+                break;
+              case 'Local Comercial':
+                serie_colour = '#16A085'
+                break;
+              case 'Oficinas':
+                serie_colour = '#F39C12'
+                break;
+              case 'Oficina y Local Comercial':
+                serie_colour = '#F1C40F'
+                break;
+              case 'Departamento, Oficina y Local Comercial':
+                serie_colour = '#D35400'
+                break;
+              case 'Casas':
+                serie_colour = '#BDC3C7'
+                break;
+              case 'Bodega, Oficina, Comercio':
+                serie_colour = '#34495E'
+                break;
+              case 'Departamento y Oficinas':
+                serie_colour = '#27AE60'
+                break;
+              case 'Industria':
+                serie_colour = '#C0392B'
+                break;
+              case 'Bodega-Oficina':
+                serie_colour = '#9B59B6'
+                break;
+              case 'Bodega':
+                serie_colour = '#2980B9'
+                break;
+              case 'Vivienda-Oficina':
+                serie_colour = '#1ABC9C'
+                break;
+              case 'Vivienda-Comercio':
+                serie_colour = '#F0B27A'
+                break;
+              case 'Hotel & Restaurante':
+                serie_colour = '#ECF0F1'
+                break;
+              case 'Bodega, Comercio':
+                serie_colour = '#7F8C8D'
+                break;
+              case 'Hotel, Oficina':
+                serie_colour = '#82E0AA'
+                break;
+              case 'Anteproyecto':
+                serie_colour = '#42d964'
+                break;
+              case 'Permiso de Edificación':
+                serie_colour = '#58b9e2'
+                break;
+              case 'Recepción Municipal':
+                serie_colour = '#f99c00'
+                break;
+            }
+          }
+
+          var name = [];
+          var count = [];
+          var id = [];
+          var name_colour = [];
+          var colour;
+
+          // Extraemos los datos de las series
+          $.each(data, function(c, d){
+            name.push(d['name'])
+            count.push(d['count'])
+            id.push(d['id'])
+
+            // Setea los colores dependiendo del label
+            if (title == 'Tipo de Expendiente' || title == 'Destino Obra') {
+              switch (d['name']) {
+                case 'Departamento y Local Comercial':
+                  colour = '#E74C3C'
+                  break;
+                case 'Equipamiento':
+                  colour = '#BB8FCE'
+                  break;
+                case 'Departamentos':
+                  colour = '#85C1E9'
+                  break;
+                case 'Local Comercial':
+                  colour = '#16A085'
+                  break;
+                case 'Oficinas':
+                  colour = '#F39C12'
+                  break;
+                case 'Oficina y Local Comercial':
+                  colour = '#F1C40F'
+                  break;
+                case 'Departamento, Oficina y Local Comercial':
+                  colour = '#D35400'
+                  break;
+                case 'Casas':
+                  colour = '#BDC3C7'
+                  break;
+                case 'Bodega, Oficina, Comercio':
+                  colour = '#34495E'
+                  break;
+                case 'Departamento y Oficinas':
+                  colour = '#27AE60'
+                  break;
+                case 'Industria':
+                  colour = '#C0392B'
+                  break;
+                case 'Bodega-Oficina':
+                  colour = '#9B59B6'
+                  break;
+                case 'Bodega':
+                  colour = '#2980B9'
+                  break;
+                case 'Vivienda-Oficina':
+                  colour = '#1ABC9C'
+                  break;
+                case 'Vivienda-Comercio':
+                  colour = '#F0B27A'
+                  break;
+                case 'Hotel & Restaurante':
+                  colour = '#ECF0F1'
+                  break;
+                case 'Bodega, Comercio':
+                  colour = '#7F8C8D'
+                  break;
+                case 'Hotel, Oficina':
+                  colour = '#82E0AA'
+                  break;
+                case 'Anteproyecto':
+                  colour = '#42d964'
+                  break;
+                case 'Permiso de edificacion':
+                  colour = '#58b9e2'
+                  break;
+                case 'Recepcion municipal':
+                  colour = '#f99c00'
+                  break;
+              }
+
+              name_colour.push(colour)
+            }
+
+          })
+
+          // Guardamos "datasets" y "chart_type"
+          if (title == 'Tipo de Expendiente') {
+            chart_type = 'pie';
+            datasets.push({
+              label: label,
+              data: count,
+              id: id,
+              backgroundColor: name_colour,
+            })
+          }
+
+          if (title == 'Destino Obra') {
+            chart_type = 'pie';
+            datasets.push({
+              label: label,
+              data: count,
+              id: id,
+              backgroundColor: name_colour,
+            })
+          }
+
+          if (title == 'Tipo de Expediente / Destino') {
+            chart_type = 'bar';
+            datasets.push({
+              label: label,
+              data: count,
+              backgroundColor: serie_colour,
+            })
+            // Renombramos los name para evitar superposición en el chart
+            name = ["Anteproyecto", "Permiso Edif.", "Recep. Munic."];
+          }
+
+          if (title == 'Cantidad de Unidades / Bimestre') {
+            chart_type = 'line';
+            datasets.push({
+              label: label,
+              data: count,
+              fill: false,
+              borderColor: serie_colour,
+              borderWidth: 4,
+              pointRadius: 1,
+              lineTension: 0,
+              pointHoverBackgroundColor: '#e8ebef',
+              pointHoverBorderWidth: 3,
+              pointHitRadius: 5,
+            })
+          }
+
+          if (title == 'Superficie Edificada Por Expediente') {
+            chart_type = 'line';
+            datasets.push({
+              label: label,
+              data: count,
+              fill: false,
+              borderColor: serie_colour,
+              borderWidth: 4,
+              pointRadius: 1,
+              lineTension: 0,
+              pointHoverBackgroundColor: '#e8ebef',
+              pointHoverBorderWidth: 3,
+              pointHitRadius: 5,
+            })
+          }
+
+          chart_data = {
+            labels: name,
+            datasets: datasets
+          }
+
+        })
+
+        // Guardamos "options"
+        if (chart_type == 'bar') { // Bar
+
+          var chart_options = {
+            animation: false,
+            responsive: true,
+            title: {
+              display: false,
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                fontColor: '#444',
+                fontSize: 12,
+                filter: function(legendItem, chartData) {
+                  // Solo muestra el legend si algunos de sus valores es diferente a 0
+                  if (chartData.datasets[legendItem.datasetIndex].data[0] != 0
+                    || chartData.datasets[legendItem.datasetIndex].data[1] != 0
+                    || chartData.datasets[legendItem.datasetIndex].data[2] != 0) {
+                    return legendItem.text
+                  }
+                }
+              }
+            },
+            plugins: {
+              datalabels: {
+                display: false,
+              },
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+                ticks: {
+                  display: true,
+                  fontSize: 12,
+                  fontColor: '#444'
+                }
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  display: true,
+                  fontSize: 10,
+                  fontColor: '#444'
+                }
+              }],
+            }
+          };
+
+        } else if (chart_type == 'pie') { // Pie
+
+          var chart_options = {
+            animation: false,
+            responsive: true,
+            title: {
+              display: false
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                fontColor: '#444',
+                fontSize: 12,
+                usePointStyle: true,
+              }
+            },
+            plugins: {
+              datalabels: {
+                formatter: (value, ctx) => {
+                  // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                  let sum = 0;
+                  let dataArr = ctx.chart.data.datasets[0].data;
+                  dataArr.map(data => {
+                      sum += data;
+                  });
+                  let percentage = (value*100 / sum).toFixed(2);
+                  if (percentage > 3) {
+                    return percentage+'%';
+                  } else {
+                    return null;
+                  }
+                },
+                align: 'end',
+                anchor: 'center',
+                color: 'white',
+                font: {
+                  weight: 'bold'
+                },
+                textStrokeColor: '#444',
+                textStrokeWidth: 1,
+                textShadowColor: '#000',
+                textShadowBlur: 3,
+              }
+            },
+          };
+
+        } else { // Line
+
+          var chart_options = {
+            animation: false,
+            responsive: true,
+            title: {
+              display: false
+            },
+            legend: {
+              display: false,
+            },
+            plugins: {
+              datalabels: {
+                align: 'start',
+                anchor: 'start',
+                color: '#444',
+                display: function(context) {
+                  return context.dataset.data[context.dataIndex] > 0;
+                },
+                font: {
+                  size: 10
+                },
+                formatter: Math.round
+              }
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+                ticks: {
+                  display: true,
+                  fontSize: 12,
+                  fontColor: '#444'
+                }
+              }],
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                  display: true,
+                  fontSize: 12,
+                  fontColor: '#444'
+                },
+              }],
+            }
+          };
+
+        } // Cierra else ("options")
+
+        var chart_settings = {
+          type: chart_type,
+          data: chart_data,
+          options: chart_options
+        }
+
+        // Creamos y adjuntamos el canvas
+        var canvas = document.createElement('canvas');
+        canvas.id = 'report-canvas-'+i;
+        $('#chart-report'+i).append(canvas);
+
+        var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
+        var final_chart = new Chart(chart_canvas, chart_settings);
+
+        var chart = final_chart.toBase64Image();
+
+        if (i % 2 == 1) {
+
+          // Título del gráfico
+          doc.setFontSize(16);
+          doc.text(title, 105, 20, null, null, 'center');
+
+          // Gráfico
+          doc.addImage(chart, 'JPEG', 9, 30);
+
+        } else {
+
+          // Título del gráfico
+          doc.setFontSize(16);
+          doc.text(title, 105, 160, null, null, 'center');
+
+          // Gráfico
+          doc.addImage(chart, 'JPEG', 9, 170);
+
+          // Agrega nueva página
+          doc.addPage('a4', 'portrait')
+
+        } // Cierra else impar
+      } // Cierra for
+
+      // Descarga el archivo PDF
+      doc.save("Reporte_Expedientes_Municipales.pdf");
+
     } // Cierra success
   }) // Cierra ajax
 } // Cierra future_projects_report_pdf
