@@ -426,6 +426,12 @@ Congo.building_regulations.action_dashboards = function(){
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('Normativa');
 
+          // Mostramos los iconos de Útiles correspondientes
+          $("#boost").hide();
+          $("#base").hide();
+          $("#graph").hide();
+          $("#csv").hide();
+
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();
           $("#prop-cbr").hide();

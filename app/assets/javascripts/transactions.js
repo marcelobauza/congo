@@ -899,6 +899,12 @@ Congo.transactions.action_dashboards = function(){
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('Compraventas');
 
+          // Mostramos los iconos de Útiles correspondientes
+          $("#boost").show();
+          $("#base").show();
+          $("#graph").show();
+          $("#csv").show();
+
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();
           $("#prop-cbr").show();

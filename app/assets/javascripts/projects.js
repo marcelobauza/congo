@@ -1117,6 +1117,12 @@ Congo.projects.action_dashboards = function(){
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('PRV');
 
+          // Mostramos los iconos de Útiles correspondientes
+          $("#boost").hide();
+          $("#base").show();
+          $("#graph").show();
+          $("#csv").show();
+
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").show();
           $("#prop-cbr").hide();
