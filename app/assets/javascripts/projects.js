@@ -924,7 +924,7 @@ function projects_report_pdf(){
       } // Cierra for
 
       // Descarga el archivo PDF
-      doc.save("ProjectosResidenciales.pdf");
+      doc.save("Informe_PRV.pdf");
 
     } // Cierra success
   }) // Cierra ajax

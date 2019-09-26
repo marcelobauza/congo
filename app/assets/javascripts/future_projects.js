@@ -577,7 +577,7 @@ future_projects_report_pdf = function() {
       } // Cierra for
 
       // Descarga el archivo PDF
-      doc.save("Reporte_Expedientes_Municipales.pdf");
+      doc.save("Informe_ExpedientesMunicipales.pdf");
 
     } // Cierra success
   }) // Cierra ajax

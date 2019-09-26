@@ -670,7 +670,7 @@ function transactions_report_pdf(){
       } // Cierra for
 
       // Descarga el archivo PDF
-      doc.save("Reporte_Transacciones.pdf");
+      doc.save("Informe_Compraventas.pdf");
 
     } // Cierra success
 

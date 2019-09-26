@@ -259,7 +259,7 @@ function building_regulations_report_pdf() {
       }) // Cierra for
 
       // Descarga el archivo PDF
-      doc.save("Reporte_Normativa.pdf");
+      doc.save("Informe_Normativa.pdf");
 
     } // Cierra success
   }) // Cierra ajax
