@@ -310,6 +310,44 @@ class Transaction < ApplicationRecord
     return group_by_uf(filters, criteria, get_bimesters(filters))
   end
 
+  def self.group_transaction_bimester(filters)
+    result = []
+    periods = get_bimesters(filters)
+    select = "bimester||'/'||year as periods,  ROUND(SUM(1 / sample_factor)) as value"
+
+    periods.each do |per|
+      trans_group = {:period => per[:period], :year => per[:year], :counties => []}
+
+      if !filters[:county_id].nil?
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
+      elsif !filters[:wkt].nil?
+        polygon = JSON.parse(filters[:wkt])
+        conditions = "ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326), transactions.the_geom) #{Util.and}"
+      else
+        conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}, false) and "
+      end
+
+      conditions += "active = true #{Util.and}"
+      conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
+      conditions += build_ids_conditions(filters)
+      conditions += build_calculated_value_condition(filters)
+      conditions += "transactions.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
+      conditions = conditions.chomp!(Util.and)
+
+      joins = build_joins
+      joins << "INNER JOIN counties ON counties.id = transactions.county_id"
+
+      @trans = Transaction.where(conditions).select(select).
+        joins(joins.join(" ")).
+      group(' year, bimester').
+      order('year, bimester')
+      result << @trans
+    end
+  result
+  end
+
+
+
   def self.group_transaction_county_and_bimester(filters)
     result = []
     counties = []
@@ -347,7 +385,6 @@ class Transaction < ApplicationRecord
         trans_group[:counties] = trans
         trans.each {|t| counties << t["county"]}
       end
-
       result << trans_group
     end
 

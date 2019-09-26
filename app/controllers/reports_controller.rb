@@ -96,6 +96,62 @@ class ReportsController < ApplicationController
   end
 
   def transactions_summary
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @transaction = Transaction.summary(filters)
+    @info=[]
+    @ptypes=[]
+    @seller=[]
+    @uf_periods=[]
+    @average_uf_periods=[]
+    @transactions_ufs=[]
+    @transaction_bimester=[]
+
+    @transactions_by_periods = Transaction.group_transaction_bimester(filters)
+   
+    @transactions_by_periods.each do |tt|
+      @transaction_bimester.push([tt[0][:periods],tt[0][:value]])
+    end
+
+    @transaction.each do |data|
+      @ddy = data[:title]
+      @dd = data
+      if data[:title] == "Información General"
+        data[:data].each do |d|
+            @info.push([d[:name], d[:count]])
+        end
+      end
+
+      if data[:title] == "Uso"
+        data[:series][0][:data].each do |pt|
+            @ptypes.push([pt[:name], pt[:count]])
+        end
+      end
+      if data[:title] == "Vendedor"
+        data[:series][0][:data].each do |s|
+            @seller.push([s[:name], s[:count]])
+        end
+      end
+
+      if data[:title] == "PxQ | UF"
+        data[:series][0][:data].each do |s|
+            @uf_periods.push([s[:name], s[:count]])
+        end
+      end
+      if data[:title] == "Precio Promedio | UF"
+        data[:series][0][:data].each do |s|
+            @average_uf_periods.push([s[:name], s[:count]])
+        end
+      end
+      if data[:title] == "Compraventas por Rango Precio"
+        data[:series][0][:data].each do |s|
+            @transactions_ufs.push([s[:name], s[:count]])
+        end
+      end
+
+    end
+    respond_to do |format|
+      format.xlsx
+    end
   end
 
   def projects_data
