@@ -749,7 +749,7 @@ function projects_report_pdf(){
                 display: true,
                 position: 'bottom',
                 labels: {
-                  fontColor: '#444',
+                  fontColor: '#3d4046',
                   fontSize: 12,
                 }
               },
@@ -757,7 +757,7 @@ function projects_report_pdf(){
                 datalabels: {
                   align: 'center',
                   anchor: 'center',
-                  color: '#444',
+                  color: '#3d4046',
                   font: {
                     size: 10
                   },
@@ -769,7 +769,7 @@ function projects_report_pdf(){
                         sum += data;
                     });
                     let percentage = (value*100 / sum).toFixed(2);
-                    if (percentage > 3) {
+                    if (percentage > 4) {
                       return value;
                     } else {
                       return null;
@@ -783,7 +783,7 @@ function projects_report_pdf(){
                   ticks: {
                     display: true,
                     fontSize: 10,
-                    fontColor: '#444'
+                    fontColor: '#3d4046'
                   }
                 }],
                 yAxes: [{
@@ -792,7 +792,7 @@ function projects_report_pdf(){
                     beginAtZero: true,
                     display: true,
                     fontSize: 10,
-                    fontColor: '#444'
+                    fontColor: '#3d4046'
                   },
                 }],
               }
@@ -857,7 +857,7 @@ function projects_report_pdf(){
                 display: true,
                 position: 'bottom',
                 labels: {
-                  fontColor: '#444',
+                  fontColor: '#3d4046',
                   fontSize: 12,
                   usePointStyle: true,
                 }
@@ -866,7 +866,7 @@ function projects_report_pdf(){
                 datalabels: {
                   align: 'start',
                   anchor: 'start',
-                  color: '#444',
+                  color: '#3d4046',
                   display: function(context) {
                     return context.dataset.data[context.dataIndex] > 0;
                   },
@@ -882,7 +882,7 @@ function projects_report_pdf(){
                   ticks: {
                     display: true,
                     fontSize: 10,
-                    fontColor: '#444'
+                    fontColor: '#3d4046'
                   }
                 }],
                 yAxes: [{
@@ -890,7 +890,7 @@ function projects_report_pdf(){
                     beginAtZero: true,
                     display: true,
                     fontSize: 10,
-                    fontColor: '#444'
+                    fontColor: '#3d4046'
                   },
                 }],
               }

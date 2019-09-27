@@ -401,7 +401,7 @@ future_projects_report_pdf = function() {
               display: true,
               position: 'bottom',
               labels: {
-                fontColor: '#444',
+                fontColor: '#3d4046',
                 fontSize: 12,
                 filter: function(legendItem, chartData) {
                   // Solo muestra el legend si algunos de sus valores es diferente a 0
@@ -415,7 +415,26 @@ future_projects_report_pdf = function() {
             },
             plugins: {
               datalabels: {
-                display: false,
+                align: 'center',
+                anchor: 'center',
+                color: '#3d4046',
+                font: {
+                  size: 10
+                },
+                formatter: (value, ctx) => {
+                  // Mustra sólo los valores que estén por encima del 3%
+                  let sum = 0;
+                  let dataArr = ctx.chart.data.datasets[0].data;
+                  dataArr.map(data => {
+                      sum += data;
+                  });
+                  let percentage = (value*100 / sum).toFixed(2);
+                  if (percentage > 4) {
+                    return value;
+                  } else {
+                    return null;
+                  }
+                },
               },
             },
             scales: {
@@ -424,7 +443,7 @@ future_projects_report_pdf = function() {
                 ticks: {
                   display: true,
                   fontSize: 12,
-                  fontColor: '#444'
+                  fontColor: '#3d4046'
                 }
               }],
               yAxes: [{
@@ -433,7 +452,7 @@ future_projects_report_pdf = function() {
                   beginAtZero: true,
                   display: true,
                   fontSize: 10,
-                  fontColor: '#444'
+                  fontColor: '#3d4046'
                 }
               }],
             }
@@ -501,7 +520,7 @@ future_projects_report_pdf = function() {
               datalabels: {
                 align: 'start',
                 anchor: 'start',
-                color: '#444',
+                color: '#3d4046',
                 display: function(context) {
                   return context.dataset.data[context.dataIndex] > 0;
                 },
@@ -517,7 +536,7 @@ future_projects_report_pdf = function() {
                 ticks: {
                   display: true,
                   fontSize: 12,
-                  fontColor: '#444'
+                  fontColor: '#3d4046'
                 }
               }],
               yAxes: [{
@@ -525,7 +544,7 @@ future_projects_report_pdf = function() {
                   beginAtZero: true,
                   display: true,
                   fontSize: 12,
-                  fontColor: '#444'
+                  fontColor: '#3d4046'
                 },
               }],
             }
