@@ -1,10 +1,50 @@
-<h2>Normativa</h2>
 <%= a.input :layer_type, input_html: {value: "Normativa"}, as: :hidden %>
-<%= a.input :allow_uses, label: "Usos Permitidos" %>
-<%= a.input :construct, label: "Constructibilidad" %>
-<%= a.input :osinciti, label: "Ocupación Suelo" %>
-<%= a.input :density, label: "Densidad" %>
-<%= a.input :grouping, label: "Agrupación" %>
-<%= a.input :aminciti, label: "Altura Máxima" %>
-<%= a.input :parkings, label: "Estacionamientos" %>
-<%= a.text_area :comments, label: "Comentarios" %>
+<div class="form-group row">
+  <%= a.label :allow_uses, label: "Usos Permitidos", class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :allow_uses, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :construct, label: "Constructibilidad", class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :construct, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+
+<div class="form-group row">
+  <%= a.label :osinciti, label: "Ocupación de Suelo", class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :osinciti, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :density, label: "Densidad", class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :density, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :grouping, label: "Agrupación", class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :grouping, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :aminciti, label: "Altura Máxima", class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :aminciti, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :parkings, label: "Estacionamientos", class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :parkings, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :comments, label: 'Comentarios:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.text_area :comments, rows: '3', label: false, :class => 'form-control form-control-sm' %>
+  </div>
+</div>
