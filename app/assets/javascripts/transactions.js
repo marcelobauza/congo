@@ -598,7 +598,7 @@ function transactions_report_pdf(){
               datalabels: {
                 align: 'start',
                 anchor: 'start',
-                color: '#444',
+                color: '#3d4046',
                 display: function(context) {
                   return context.dataset.data[context.dataIndex] > 0;
                 },
@@ -614,7 +614,7 @@ function transactions_report_pdf(){
                 ticks: {
                   display: true,
                   fontSize: 10,
-                  fontColor: '#444'
+                  fontColor: '#3d4046'
                 }
               }],
               yAxes: [{
@@ -622,7 +622,7 @@ function transactions_report_pdf(){
                   beginAtZero: true,
                   display: true,
                   fontSize: 10,
-                  fontColor: '#444'
+                  fontColor: '#3d4046'
                 },
               }],
             }
