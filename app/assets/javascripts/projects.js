@@ -635,19 +635,19 @@ function projects_report_pdf(){
               case 'UF Máximo':
               case 'Oferta Total':
               case 'Disponibles':
-                rgba_color = 'rgba(165, 188, 78, 0.5)'
-                rgb_colour = 'rgb(165, 188, 78)'
+                rgba_color = 'rgba(66, 217, 100, 0.5)'
+                rgb_colour = 'rgb(66, 217, 100)'
                 break;
               case 'UF Mínimo':
               case 'Disponibilidad Total':
               case 'Vendidas':
-                rgba_color = 'rgba(228, 135, 1, 0.5)'
-                rgb_colour = 'rgb(228, 135, 1)'
+                rgba_color = 'rgba(249, 156, 0, 0.5)'
+                rgb_colour = 'rgb(249, 156, 0)'
                 break;
               case 'UF Promedio':
               case 'Ventas Total':
-                rgba_color = 'rgba(27, 149, 217, 0.5)'
-                rgb_colour = 'rgb(27, 149, 217)'
+                rgba_color = 'rgba(88, 185, 226, 0.5)'
+                rgb_colour = 'rgb(88, 185, 226)'
                 break;
             }
 
