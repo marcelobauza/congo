@@ -337,9 +337,9 @@ function projects_report_pdf(){
 
           $.each(list_projet, function(a, b) {
 
-            var code = '' // TODO: Falta levantar el dato cuando llegue en el array
+            var code = b['code']
             var name = b['name']
-            var real_estate_agent = '' // TODO: Falta levantar el dato cuando llegue en el array
+            var real_estate_agent = b['agencyname']
             var address = b['address']
             var sold_units = b['sold_units']
             var stock_units = b['stock_units']
