@@ -242,7 +242,6 @@ future_projects_report_pdf = function() {
           $.each(data, function(c, d){
             name.push(d['name'])
             count.push(d['count'])
-            id.push(d['id'])
 
             // Setea los colores dependiendo del label
             if (title == 'Tipo de Expendiente' || title == 'Destino Obra') {
@@ -323,7 +322,6 @@ future_projects_report_pdf = function() {
             datasets.push({
               label: label,
               data: count,
-              id: id,
               backgroundColor: name_colour,
             })
           }
@@ -346,7 +344,7 @@ future_projects_report_pdf = function() {
               backgroundColor: serie_colour,
             })
             // Renombramos los name para evitar superposición en el chart
-            name = ["Anteproyecto", "Permiso Edif.", "Recep. Munic."];
+            name = ["Anteproyecto", "Permiso de Edificación", "Recepción Municipal"];
           }
 
           if (title == 'Cantidad de Unidades / Bimestre') {
@@ -356,12 +354,10 @@ future_projects_report_pdf = function() {
               data: count,
               fill: false,
               borderColor: serie_colour,
-              borderWidth: 4,
-              pointRadius: 1,
+              borderWidth: 3,
+              pointRadius: 0,
+              pointStyle: 'line',
               lineTension: 0,
-              pointHoverBackgroundColor: '#e8ebef',
-              pointHoverBorderWidth: 3,
-              pointHitRadius: 5,
             })
           }
 
@@ -372,12 +368,10 @@ future_projects_report_pdf = function() {
               data: count,
               fill: false,
               borderColor: serie_colour,
-              borderWidth: 4,
-              pointRadius: 1,
+              borderWidth: 3,
+              pointRadius: 0,
+              pointStyle: 'line',
               lineTension: 0,
-              pointHoverBackgroundColor: '#e8ebef',
-              pointHoverBorderWidth: 3,
-              pointHitRadius: 5,
             })
           }
 
@@ -514,7 +508,13 @@ future_projects_report_pdf = function() {
               display: false
             },
             legend: {
-              display: false,
+              display: true,
+              position: 'bottom',
+              labels: {
+                fontColor: '#3d4046',
+                fontSize: 12,
+                usePointStyle: true,
+              }
             },
             plugins: {
               datalabels: {
@@ -535,7 +535,7 @@ future_projects_report_pdf = function() {
                 stacked: true,
                 ticks: {
                   display: true,
-                  fontSize: 12,
+                  fontSize: 10,
                   fontColor: '#3d4046'
                 }
               }],
@@ -543,7 +543,7 @@ future_projects_report_pdf = function() {
                 ticks: {
                   beginAtZero: true,
                   display: true,
-                  fontSize: 12,
+                  fontSize: 10,
                   fontColor: '#3d4046'
                 },
               }],
