@@ -297,13 +297,10 @@ function transactions_report_pdf(){
                   data: count,
                   fill: false,
                   borderColor: '#58b9e2',
-                  borderWidth: 4,
-                  pointBackgroundColor: '#e8ebef',
-                  pointRadius: 3,
+                  borderWidth: 3,
+                  pointRadius: 0,
+                  pointStyle: 'line',
                   lineTension: 0,
-                  pointHoverBackgroundColor: '#e8ebef',
-                  pointHoverBorderWidth: 3,
-                  pointHitRadius: 5,
                 })
               }
 
@@ -415,12 +412,9 @@ function transactions_report_pdf(){
                 fill: false,
                 borderColor: '#58b9e2',
                 borderWidth: 4,
-                pointBackgroundColor: '#e8ebef',
-                pointRadius: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
                 lineTension: 0,
-                pointHoverBackgroundColor: '#e8ebef',
-                pointHoverBorderWidth: 3,
-                pointHitRadius: 5,
               })
             }
 
@@ -432,12 +426,9 @@ function transactions_report_pdf(){
                 fill: false,
                 borderColor: '#58b9e2',
                 borderWidth: 4,
-                pointBackgroundColor: '#e8ebef',
-                pointRadius: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
                 lineTension: 0,
-                pointHoverBackgroundColor: '#e8ebef',
-                pointHoverBorderWidth: 3,
-                pointHitRadius: 5,
               })
             }
 
@@ -449,12 +440,9 @@ function transactions_report_pdf(){
                 fill: false,
                 borderColor: '#58b9e2',
                 borderWidth: 4,
-                pointBackgroundColor: '#e8ebef',
-                pointRadius: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
                 lineTension: 0,
-                pointHoverBackgroundColor: '#e8ebef',
-                pointHoverBorderWidth: 3,
-                pointHitRadius: 5,
               })
             }
 
@@ -466,12 +454,9 @@ function transactions_report_pdf(){
                 fill: false,
                 borderColor: '#58b9e2',
                 borderWidth: 4,
-                pointBackgroundColor: '#e8ebef',
-                pointRadius: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
                 lineTension: 0,
-                pointHoverBackgroundColor: '#e8ebef',
-                pointHoverBorderWidth: 3,
-                pointHitRadius: 5,
               })
             }
 
@@ -483,12 +468,9 @@ function transactions_report_pdf(){
                 fill: false,
                 borderColor: '#58b9e2',
                 borderWidth: 4,
-                pointBackgroundColor: '#e8ebef',
-                pointRadius: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
                 lineTension: 0,
-                pointHoverBackgroundColor: '#e8ebef',
-                pointHoverBorderWidth: 3,
-                pointHitRadius: 5,
               })
             }
 
@@ -500,12 +482,9 @@ function transactions_report_pdf(){
                 fill: false,
                 borderColor: '#58b9e2',
                 borderWidth: 4,
-                pointBackgroundColor: '#e8ebef',
-                pointRadius: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
                 lineTension: 0,
-                pointHoverBackgroundColor: '#e8ebef',
-                pointHoverBorderWidth: 3,
-                pointHitRadius: 5,
               })
             }
 
@@ -517,12 +496,9 @@ function transactions_report_pdf(){
                 fill: false,
                 borderColor: '#58b9e2',
                 borderWidth: 4,
-                pointBackgroundColor: '#e8ebef',
-                pointRadius: 3,
+                pointRadius: 0,
+                pointStyle: 'line',
                 lineTension: 0,
-                pointHoverBackgroundColor: '#e8ebef',
-                pointHoverBorderWidth: 3,
-                pointHitRadius: 5,
               })
             }
 
