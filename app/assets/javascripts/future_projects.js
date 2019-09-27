@@ -922,7 +922,6 @@ Congo.future_projects.action_dashboards = function(){
           $("#boost").show();
           $("#base").show();
           $("#graph").show();
-          $("#csv").hide();
 
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();

@@ -892,7 +892,6 @@ Congo.transactions.action_dashboards = function(){
           $("#boost").show();
           $("#base").show();
           $("#graph").show();
-          $("#csv").show();
 
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();
