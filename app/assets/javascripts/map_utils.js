@@ -500,9 +500,23 @@ Congo.map_utils = function(){
       case 'circle':
         centerpt = Congo.dashboards.config.centerpt;
         radius = Congo.dashboards.config.radius ;
-
         cql_filter ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)"+ filter_layer;
         cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)";
+        if (layer_type == 'building_regulations_info'){
+          Congo.dashboards.config.style_layer = 'building_regulations_clip';
+          geometry = centerpt.split(' ');
+          var center = [geometry[0],geometry[1]];
+          var radius = radius;
+          var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
+          var circle = turf.circle(center, radius, options);
+          var pol = circle['geometry']['coordinates'];
+          $.each(pol, function(a, b){
+            $.each(b, function(c,d){
+              coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
+            })
+          });
+          env = "polygon: Polygon(("+coord_geoserver+"))";
+        }
         break;
       case 'polygon':
         polygon_size = Congo.dashboards.config.size_box;
