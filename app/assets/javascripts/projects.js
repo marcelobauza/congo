@@ -337,9 +337,9 @@ function projects_report_pdf(){
 
           $.each(list_projet, function(a, b) {
 
-            var code = '' // TODO: Falta levantar el dato cuando llegue en el array
+            var code = b['code']
             var name = b['name']
-            var real_estate_agent = '' // TODO: Falta levantar el dato cuando llegue en el array
+            var real_estate_agent = b['agencyname']
             var address = b['address']
             var sold_units = b['sold_units']
             var stock_units = b['stock_units']
@@ -679,7 +679,7 @@ function projects_report_pdf(){
                 data: count,
                 fill: false,
                 borderColor: rgb_colour,
-                borderWidth: 3,
+                borderWidth: 4,
                 pointRadius: 0,
                 pointStyle: 'line',
                 lineTension: 0,
@@ -693,7 +693,7 @@ function projects_report_pdf(){
                 data: count,
                 fill: false,
                 borderColor: rgb_colour,
-                borderWidth: 3,
+                borderWidth: 4,
                 pointRadius: 0,
                 pointStyle: 'line',
                 lineTension: 0,
@@ -707,7 +707,7 @@ function projects_report_pdf(){
                 data: count,
                 fill: false,
                 borderColor: rgb_colour,
-                borderWidth: 3,
+                borderWidth: 4,
                 pointRadius: 0,
                 pointStyle: 'line',
                 lineTension: 0,
@@ -1144,7 +1144,6 @@ Congo.projects.action_dashboards = function(){
           $("#boost").hide();
           $("#base").show();
           $("#graph").show();
-          $("#csv").show();
 
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").show();

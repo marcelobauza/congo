@@ -54,7 +54,6 @@ Congo.demography.action_dashboards = function(){
         $("#boost").hide();
         $("#base").hide();
         $("#graph").hide();
-        $("#csv").hide();
 
         // Mostramos el icono de Puntos Proporcionales correspondiente
         $("#prop-prv").hide();

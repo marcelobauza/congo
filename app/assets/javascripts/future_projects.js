@@ -354,7 +354,7 @@ future_projects_report_pdf = function() {
               data: count,
               fill: false,
               borderColor: serie_colour,
-              borderWidth: 3,
+              borderWidth: 4,
               pointRadius: 0,
               pointStyle: 'line',
               lineTension: 0,
@@ -368,7 +368,7 @@ future_projects_report_pdf = function() {
               data: count,
               fill: false,
               borderColor: serie_colour,
-              borderWidth: 3,
+              borderWidth: 4,
               pointRadius: 0,
               pointStyle: 'line',
               lineTension: 0,
@@ -922,7 +922,6 @@ Congo.future_projects.action_dashboards = function(){
           $("#boost").show();
           $("#base").show();
           $("#graph").show();
-          $("#csv").hide();
 
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();
