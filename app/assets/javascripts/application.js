@@ -13,6 +13,7 @@
 //= require leaflet/leaflet-search
 //= require leaflet/spin
 //= require leaflet/leaflet-spin
+//= require leaflet/leaflet-image
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets

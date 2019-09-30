@@ -281,6 +281,21 @@ Congo.map_utils = function(){
       counties();
 
     })
+    build_image_map();
+  }
+
+  var build_image_map = function(){
+    leafletImage(map, function(err, canvas) {
+      //      now you have canvas
+      // example thing to do with that canvas:
+      var img = document.createElement('img');
+      var dimensions = map.getSize();
+      img.width = dimensions.x;
+      img.height = dimensions.y;
+      img.src = canvas.toDataURL();
+      console.log(img);
+    });
+
   }
 
   var LatLngToCoords = function (LatLng, reverse) { // (LatLng, Boolean) -> Array
