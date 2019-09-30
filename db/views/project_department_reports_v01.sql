@@ -76,8 +76,11 @@ end as Range_util,
   case masud(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date) 
     when 0 then 0 
     else 
-      vhmu(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date)
-    end as vhmud
+      round(vhmu(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date)::numeric,1)
+    end as vhmud,
+    the_geom,
+    st_x(the_geom) as x,
+    st_y(the_geom) as y
   FROM projects 
     INNER JOIN project_instances ON project_instances.project_id = projects.id
     INNER JOIN project_instance_mixes pim ON project_instances.id = pim.project_instance_id

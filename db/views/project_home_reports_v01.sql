@@ -73,7 +73,10 @@ case when (pim.uf_min * (1::numeric - pim.percentage / 100::numeric) + pim.uf_ma
                                     pim.mix_m2_built,
                                     round((round((pim.total_units - pim.stock_units),2) / pim.total_units),2 ) as percentage_sold,
                                     projects.pilot_opening_date,
-                                    round(masd(project_instances.id)::numeric,1) as vhmud
+                                    round(masd(project_instances.id)::numeric,1) as vhmud,
+                                    the_geom,
+                                    st_x(the_geom) as x,
+                                    st_y(the_geom) as y
 
                                     FROM projects 
                                     INNER JOIN project_instances ON project_instances.project_id = projects.id
