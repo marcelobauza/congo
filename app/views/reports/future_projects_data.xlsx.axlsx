@@ -1,7 +1,19 @@
+if current_user.role.name == 'IPRO'
+
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
+sheet.add_row ['Código', 'Dirección', 'Comuna', 'Tipo Expediente','Numero Expediente', 'Fecha Expediente', 'Rol', 'Destino', 'Propietario', 'Representante Legal', 'Arquitecto', 'Altura Pisos', 'Viviendas', 'Estacionamientos', 'Oficinas', 'Locales', 'Total m2', 'Util m2', 'Terreno m2', 'Fecha Catastro', 'Bimestre', 'Año']
+  @xl.each do |row|
+sheet.add_row [row.code, row.address, row.county_name, row.future_project_type.name, row.file_number, row.file_date, row.role_number, row.name, row.owner, row.legal_agent, row.architect, row.floors, row.total_units, row.total_parking, row.t_ofi, row.total_commercials, row.m2_approved, row.m2_built, row.m2_field, row.cadastral_date, row.bimester, row.year  ]
+        end
+        end
+        end
+if current_user.role.name == 'IPRO+'
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
 sheet.add_row ['X','Y','Código', 'Dirección', 'Comuna', 'Tipo Expediente','Numero Expediente', 'Fecha Expediente', 'Rol', 'Destino', 'Propietario', 'Representante Legal', 'Arquitecto', 'Altura Pisos', 'Viviendas', 'Estacionamientos', 'Oficinas', 'Locales', 'Total m2', 'Util m2', 'Terreno m2', 'Fecha Catastro', 'Bimestre', 'Año']
   @xl.each do |row|
-sheet.add_row [row.id, row.id, row.code, row.address, row.county_name, row.future_project_type.name, row.file_number, row.file_date, row.role_number, row.name, row.owner, row.legal_agent, row.architect, row.floors, row.total_units, row.total_parking, row.t_ofi, row.total_commercials, row.m2_approved, row.m2_built, row.m2_field, row.cadastral_date, row.bimester, row.year  ]
+sheet.add_row [row.the_geom.x, row.the_geom.y, row.code, row.address, row.county_name, row.future_project_type.name, row.file_number, row.file_date, row.role_number, row.name, row.owner, row.legal_agent, row.architect, row.floors, row.total_units, row.total_parking, row.t_ofi, row.total_commercials, row.m2_approved, row.m2_built, row.m2_field, row.cadastral_date, row.bimester, row.year  ]
         end
         end
+end
