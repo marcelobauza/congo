@@ -25,22 +25,22 @@ class Censu < ApplicationRecord
   end
 
   def self.education_levels(filters)
-        select = "SUM(basica) AS basica, SUM(media) AS media,  SUM(media_tec) AS media_tec, SUM(tecnica) AS tecnica, SUM(profesional) AS profesional, SUM(magister) AS magister"
+        select = "SUM(basica) AS basica, SUM(media) AS media,  SUM(media_tec) AS media_tec, SUM(tecnica) AS tecnica, SUM(profesional) AS profesional, SUM(magister) AS magister, sum(doctor) as doctor"
     @data = Censu.where(filter_area_conditions(filters)).select(select).take
     end
 
 
   def self.civil_status(filters)
-        select = "SUM(separated) AS separated, SUM(widowed) AS widowed,  SUM(single) AS single, SUM(married) AS married"
+        select = "SUM(separated) AS separated, SUM(widowed) AS widowed,  SUM(single) AS single, SUM(married) AS married, SUM(coexist) as coexist, sum(canceled) as canceled"
     @data = Censu.where(filter_area_conditions(filters)).select(select).take
 
   end
 
-  # def self.gse(filters)
-  #       select = "SUM(n_abc1::numeric) AS abc, SUM(n_c2::numeric) AS c2,  SUM(n_c3::numeric) AS c3, SUM(n_d::numeric) AS d, SUM(n_e::numeric) as e"
-  #       @data = Censu.where(filter_area_conditions(filters)).select(select).take
+  def self.gse(filters)
+        select = "SUM(n_abc1) AS abc1, SUM(n_c2) AS c2,  SUM(n_c3) AS c3, SUM(n_d) AS d, SUM(n_e) as e"
+        @data = Censu.where(filter_area_conditions(filters)).select(select).take
 
-  # end
+  end
   
   def self.age(filters)
         select = "SUM(age_0_9) AS age_0_9, SUM(age_10_19) AS age_10_19,  SUM(age_20_29) AS age_20_29, SUM(age_30_39) AS age_30_39, SUM(age_40_49) as age_40_49, "
@@ -53,9 +53,17 @@ class Censu < ApplicationRecord
         select = "SUM(home_1p) AS home_1p, SUM(home_2p) AS home_2p,  SUM(home_3p) AS home_3p, SUM(home_4p) AS home_4p, "
         select += " SUM(home_5p) as home_5p, SUM(home_6_more) as  "
     @data = Censu.where(filter_area_conditions(filters)).select(select).take
-
   end
 
+  def self.professions(filters)
+    select = "SUM(salaried) as salaried, SUM(domestic_service) as domestic_service, SUM(independent) as independent, SUM(employee_employer) as employee_employer, SUM(unpaid_familiar) as unpaid_familiar" 
+    @data = Censu.where(filter_area_conditions(filters)).select(select).take
+  end
+
+  def self.property_tenure(filters)
+    select = "SUM(owner) as owner, SUM(leased) as leased , SUM(transferred) as transferred , SUM(free) as free , SUM(possesion) as possesion "
+    @data = Censu.where(filter_area_conditions(filters)).select(select).take
+  end
 
   def self.summary(params)
 
@@ -88,7 +96,8 @@ class Censu < ApplicationRecord
       {name: "Media Tecnica", count: @education_levels.media_tec},
       {name: "Tecnica", count: @education_levels.tecnica},
       {name: "Profesional", count: @education_levels.profesional},
-      {name: "Magister", count: @education_levels.magister}
+      {name: "Magister", count: @education_levels.magister},
+      {name: "Doctor", count: @education_levels.doctor}
     ]
 
     result.push({"title":"Nivel Educacional","data": data})
@@ -100,20 +109,22 @@ class Censu < ApplicationRecord
       {name: "married", count: @civil_status.married},
       {name: "separated", count: @civil_status.separated},
       {name: "widowed", count: @civil_status.widowed},
+      {name: "coexist", count: @civil_status.coexist},
+      {name: "canceled", count: @civil_status.canceled}
     ]
 
     result.push({"title":"Estado Civil","data": data})
 
-  # @gse = gse(params)
-  #   data =[
-  #     {name: "abc", count: @gse.abc},
-  #     {name: "c2", count: @gse.c2},
-  #     {name: "c3", count: @gse.c3},
-  #     {name: "n", count: @gse.n},
-  #     {name: "e", count: @gse.e},
-  #   ]
+  @gse = gse(params)
+    data =[
+      {name: "abc", count: @gse.abc1},
+      {name: "c2", count: @gse.c2},
+      {name: "c3", count: @gse.c3},
+      {name: "d", count: @gse.d},
+      {name: "e", count: @gse.e}
+    ]
 
-  #   result.push({"title":"gse","data": data})
+    result.push({"title":"gse","data": data})
   
     @age = age(params)
     data =[
@@ -125,7 +136,7 @@ class Censu < ApplicationRecord
       {name: "age_50_59", count: @age.age_50_59},
       {name: "age_60_69", count: @age.age_60_69},
       {name: "age_70_79", count: @age.age_70_79},
-      {name: "age_80_more", count: @age.age_80_more},
+      {name: "age_80_more", count: @age.age_80_more}
     ]
 
     result.push({"title":"age","data": data})
@@ -137,13 +148,31 @@ class Censu < ApplicationRecord
       {name: "home_3p", count: @homes.age_20_29},
       {name: "home_4p", count: @homes.age_30_39},
       {name: "home_5p", count: @homes.age_40_49},
-      {name: "home_6_more", count: @homes.age_50_59},
+      {name: "home_6_more", count: @homes.age_50_59}
     ]
 
     result.push({"title":"homes","data": data})
 
+    @professions = professions(params)
 
+    data = [
+      {name: "salaried", count: @professions.salaried },
+      {name: "domestic_service", count: @professions.domestic_service },
+      {name: "independent", count: @professions.independent },
+      {name: "employee_employer", count: @professions.employee_employer },
+      {name: "unpaid_familiar", count: @professions.unpaid_familiar }
+    ]
+    result.push({"title":"professions","data": data})
 
+    @property_tenure = property_tenure(params)
+    data = [
+      {name: "owner", count: @property_tenure.owner },
+      {name: "leased", count: @property_tenure.leased },
+      {name: "transferred", count: @property_tenure.transferred },
+      {name: "free", count: @property_tenure.free },
+      {name: "possesion", count: @property_tenure.possesion }
+    ]
+    result.push({"title":"property_house","data": data})
 
 result
   end 
