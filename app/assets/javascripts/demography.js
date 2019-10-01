@@ -80,7 +80,6 @@ Congo.demography.action_dashboards = function(){
       },
       success: function(data) {
 
-
         // Ocultamos el spinner y habilitamos los botones
         $("#spinner").hide();
         $('.btn').removeClass('disabled')
@@ -90,7 +89,6 @@ Congo.demography.action_dashboards = function(){
         for (var i = 0; i < data.length; i++) {
 
           var reg = data[i];
-          console.log(reg);
           var title = reg['title'];
 
           // Creamos el div contenedor
@@ -126,7 +124,7 @@ Congo.demography.action_dashboards = function(){
           $('#header'+i).append(card_handle, card_header_title, card_max_button, card_min_button);
 
           // Resumen
-          if (title == "Resumen") {
+          if (title == 'Resumen') {
 
             var info = reg['data'];
 
@@ -139,14 +137,122 @@ Congo.demography.action_dashboards = function(){
               $('#body' + i).append(item);
             })
 
-          }
+          // Variable
+          } else if (title == 'Variable') {
 
-          if (title == "Variable") {
+            var select = ' <select class="form-control form-control-sm" id="exampleFormControlSelect1"> <option value="1">Censo 2017</option> <option value="2" disabled>Censo 2012</option> </select>'
 
+            $('#body' + i).append(select);
 
+          // Gráficos
+          } else {
 
-          }
+            var info = reg['data']
+            var datasets = [];
+            var name = [];
+            var count = [];
 
+            // Extraemos los datos de las series
+            $.each(info, function(c, d){
+              name.push(d['name'])
+              count.push(d['count'])
+            })
+
+            // Guardamos "datasets" y "chart_type"
+            chart_type = 'pie';
+            datasets.push({
+              data: count,
+              backgroundColor: [
+                'rgb(39,174,96)',
+                'rgb(231,76,60)',
+                'rgb(211,84,0)',
+                'rgb(41,128,185)',
+                'rgb(241,196,15)',
+                '#8E44AD',
+                '#EC7063'
+              ],
+            })
+
+            chart_data = {
+              labels: name,
+              datasets: datasets
+            }
+
+            // Guardamos "options"
+            var chart_options = {
+              responsive: true,
+              title: {
+                display: false,
+                text: title
+              },
+              legend: {
+                display: false,
+              },
+              tooltips: {
+                callbacks: {
+                  title: function(tooltipItem, data) {
+                    return data.labels[tooltipItem[0].index];
+                  },
+                  label: function(tooltipItem, data) {
+                    // Obtenemos los datos
+                    var dataset = data.datasets[tooltipItem.datasetIndex];
+                    // Calcula el total
+                    var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                      return previousValue + currentValue;
+                    });
+                    // Obtenemos el valor de los elementos actuales
+                    var currentValue = dataset.data[tooltipItem.index];
+                    // Calculamos el porcentaje
+                    var precentage = ((currentValue/total) * 100).toFixed(2)
+                    return precentage + "%";
+                  }
+                }
+              },
+              plugins: {
+                datalabels: {
+                  formatter: (value, ctx) => {
+                    // Mustra sólo los labels cuyo valor sea mayor al 4%
+                    let sum = 0;
+                    var label = ctx.chart.data.labels[ctx.dataIndex]
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value*100 / sum).toFixed(2);
+                    if (percentage > 4) {
+                      return label;
+                    } else {
+                      return null;
+                    }
+                  },
+                  font: {
+                    size: 11,
+                  },
+                  textStrokeColor: '#616A6B',
+                  color: '#e8ebef',
+                  textStrokeWidth: 1,
+                  textShadowColor: '#000000',
+                  textShadowBlur: 2,
+                  align: 'end',
+                }
+              },
+            };
+
+            var chart_settings = {
+              type: chart_type,
+              data: chart_data,
+              options: chart_options
+            }
+
+            // Creamos y adjuntamos el canvas
+            var canvas = document.createElement('canvas');
+            canvas.id = 'canvas'+i;
+            $('#body'+i).append(canvas);
+
+            var chart_canvas = document.getElementById('canvas'+i).getContext('2d');
+            var final_chart = new Chart(chart_canvas, chart_settings);
+
+          } // Cierra else
         } // Cierra for
       } // Cierra success
     }) // Cierra ajax
