@@ -279,9 +279,7 @@ Congo.map_utils = function(){
         center = centerpt.lng +" " + centerpt.lat;
       }
       counties();
-
     })
-    build_image_map();
   }
 
   var build_image_map = function(){
@@ -439,7 +437,7 @@ Congo.map_utils = function(){
         project_type_ids = Congo.projects.config.project_type_ids;
         agency_ids = Congo.projects.config.project_agency_ids;
         filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
-        
+
         if(from_floors.length >0 && to_floors.length > 0 ){
           filter_layer = filter_layer + " AND floors >= " + from_floors + " and floors <= " + to_floors ;
         }
