@@ -327,13 +327,13 @@ ActiveRecord::Schema.define(version: 2019_09_14_134723) do
     t.string "ismt_zn", limit: 254
     t.string "gse_zn", limit: 254
     t.bigint "n_hog"
-    t.string "n_abc1", limit: 254
-    t.string "n_c2", limit: 254
-    t.string "n_c3", limit: 254
-    t.string "n_d", limit: 254
-    t.string "n_e", limit: 254
     t.integer "county_id"
     t.bigint "census_source_id"
+    t.bigint "n_abc1"
+    t.bigint "n_c2"
+    t.bigint "n_c3"
+    t.bigint "n_d"
+    t.bigint "n_e"
   end
 
   create_table "census_sources", force: :cascade do |t|
@@ -1395,6 +1395,27 @@ ActiveRecord::Schema.define(version: 2019_09_14_134723) do
         END;
       $function$
   SQL
+  create_function :pp_uf_m2, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_uf_m2(proj_instance_id bigint)
+       RETURNS bigint
+       LANGUAGE plpgsql
+      AS $function$
+      declare t_m2 bigint;
+      BEGIN
+      	t_m2 = (select sum(total_m2) from project_instance_mix_views
+      		where project_instance_id = proj_instance_id);
+
+      	if (t_m2 = 0) then
+      	  return 0;
+      	else
+      	  RETURN (select sum(total_m2 * uf_m2)/t_m2
+      		as pp_uf_m2
+      		from project_instance_mix_views
+      		where project_instance_id = proj_instance_id);
+      	end if;
+      END;
+      $function$
+  SQL
 
   create_trigger :layer_integrity_checks, sql_definition: <<-SQL
       CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE PROCEDURE topology.layertrigger()
@@ -1430,17 +1451,6 @@ ActiveRecord::Schema.define(version: 2019_09_14_134723) do
       counties.name,
       counties.the_geom
      FROM counties;
-  SQL
-  create_view "demography", sql_definition: <<-SQL
-      SELECT st_voronoipolygons(st_collect(census.the_geom)) AS voronoi_geom,
-      census.n_abc1,
-      census.n_c2,
-      census.n_c3,
-      census.n_d,
-      census.n_e
-     FROM census
-    WHERE (census.county_id = 50)
-    GROUP BY census.n_abc1, census.n_c2, census.n_c3, census.n_d, census.n_e;
   SQL
   create_view "demography_voronoi", sql_definition: <<-SQL
       SELECT census.home_tot,
