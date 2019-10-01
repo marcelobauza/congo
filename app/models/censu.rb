@@ -85,18 +85,18 @@ class Censu < ApplicationRecord
 
 
     @census_sources = CensusSource.all
-    result.push("census_sources": @census_sources)
   
+    result.push("title":"Variable","data": @census_sources)
     data =[]
     @education_levels = education_levels(params)
  
     data = [
-      {name: "Basica", count: @education_levels.basica},
+      {name: "Básica", count: @education_levels.basica},
       {name: "Media", count: @education_levels.media},
-      {name: "Media Tecnica", count: @education_levels.media_tec},
-      {name: "Tecnica", count: @education_levels.tecnica},
+      {name: "Media Técnica", count: @education_levels.media_tec},
+      {name: "Técnica", count: @education_levels.tecnica},
       {name: "Profesional", count: @education_levels.profesional},
-      {name: "Magister", count: @education_levels.magister},
+      {name: "Magíster", count: @education_levels.magister},
       {name: "Doctor", count: @education_levels.doctor}
     ]
 
@@ -105,12 +105,12 @@ class Censu < ApplicationRecord
   @civil_status = civil_status(params)
 
     data =[
-      {name: "single", count: @civil_status.single},
-      {name: "married", count: @civil_status.married},
-      {name: "separated", count: @civil_status.separated},
-      {name: "widowed", count: @civil_status.widowed},
-      {name: "coexist", count: @civil_status.coexist},
-      {name: "canceled", count: @civil_status.canceled}
+      {name: "Solteros/as", count: @civil_status.single},
+      {name: "Casados/as", count: @civil_status.married},
+      {name: "Separados/as", count: @civil_status.separated},
+      {name: "Viudos/as", count: @civil_status.widowed},
+      {name: "Conviven", count: @civil_status.coexist},
+      {name: "Anulados/as", count: @civil_status.canceled}
     ]
 
     result.push({"title":"Estado Civil","data": data})
@@ -124,55 +124,55 @@ class Censu < ApplicationRecord
       {name: "e", count: @gse.e}
     ]
 
-    result.push({"title":"gse","data": data})
   
+    result.push({"title":"Segmentación Socioeconómica","data": data})
     @age = age(params)
     data =[
-      {name: "age_0_9", count: @age.age_0_9},
-      {name: "age_10_19", count: @age.age_10_19},
-      {name: "age_20_29", count: @age.age_20_29},
-      {name: "age_30_39", count: @age.age_30_39},
-      {name: "age_40_49", count: @age.age_40_49},
-      {name: "age_50_59", count: @age.age_50_59},
-      {name: "age_60_69", count: @age.age_60_69},
-      {name: "age_70_79", count: @age.age_70_79},
-      {name: "age_80_more", count: @age.age_80_more}
+      {name: "0-9", count: @age.age_0_9},
+      {name: "10-19", count: @age.age_10_19},
+      {name: "20-29", count: @age.age_20_29},
+      {name: "30-39", count: @age.age_30_39},
+      {name: "40-49", count: @age.age_40_49},
+      {name: "50-59", count: @age.age_50_59},
+      {name: "60-69", count: @age.age_60_69},
+      {name: "70-79", count: @age.age_70_79},
+      {name: "+80", count: @age.age_80_more}
     ]
 
-    result.push({"title":"age","data": data})
     
+    result.push({"title":"Rangos Etáreos","data": data})
     @homes= age(params)
     data =[
-      {name: "home_1p", count: @homes.age_0_9},
-      {name: "home_2p", count: @homes.age_10_19},
-      {name: "home_3p", count: @homes.age_20_29},
-      {name: "home_4p", count: @homes.age_30_39},
-      {name: "home_5p", count: @homes.age_40_49},
-      {name: "home_6_more", count: @homes.age_50_59}
+      {name: "1 pers.", count: @homes.age_0_9},
+      {name: "2 pers.", count: @homes.age_10_19},
+      {name: "3 pers.", count: @homes.age_20_29},
+      {name: "4 pers.", count: @homes.age_30_39},
+      {name: "5 pers.", count: @homes.age_40_49},
+      {name: "+6 pers.", count: @homes.age_50_59}
     ]
 
-    result.push({"title":"homes","data": data})
+    result.push({"title":"Hogares Según Tamaño","data": data})
 
     @professions = professions(params)
 
     data = [
-      {name: "salaried", count: @professions.salaried },
-      {name: "domestic_service", count: @professions.domestic_service },
-      {name: "independent", count: @professions.independent },
-      {name: "employee_employer", count: @professions.employee_employer },
-      {name: "unpaid_familiar", count: @professions.unpaid_familiar }
+      {name: "Asalariado", count: @professions.salaried },
+      {name: "Servicio Doméstico", count: @professions.domestic_service },
+      {name: "Independiente", count: @professions.independent },
+      {name: "Empleado o Empleador", count: @professions.employee_employer },
+      {name: "Familiar No Remunerado", count: @professions.unpaid_familiar }
     ]
-    result.push({"title":"professions","data": data})
+    result.push({"title":"Situación Laboral","data": data})
 
     @property_tenure = property_tenure(params)
     data = [
-      {name: "owner", count: @property_tenure.owner },
-      {name: "leased", count: @property_tenure.leased },
-      {name: "transferred", count: @property_tenure.transferred },
-      {name: "free", count: @property_tenure.free },
-      {name: "possesion", count: @property_tenure.possesion }
+      {name: "Propietario", count: @property_tenure.owner },
+      {name: "Arrendatario", count: @property_tenure.leased },
+      {name: "Transferida", count: @property_tenure.transferred },
+      {name: "Gratuita", count: @property_tenure.free },
+      {name: "Cedida", count: @property_tenure.possesion }
     ]
-    result.push({"title":"property_house","data": data})
+    result.push({"title":"Propiedad y Tenencia", "data": data})
 
 result
   end 
