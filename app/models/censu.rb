@@ -41,14 +41,14 @@ class Censu < ApplicationRecord
         @data = Censu.where(filter_area_conditions(filters)).select(select).take
 
   end
-  
+
   def self.age(filters)
         select = "SUM(age_0_9) AS age_0_9, SUM(age_10_19) AS age_10_19,  SUM(age_20_29) AS age_20_29, SUM(age_30_39) AS age_30_39, SUM(age_40_49) as age_40_49, "
         select += " SUM(age_50_59) AS age_50_59, SUM(age_60_69) AS age_60_69,  SUM(age_70_79) AS age_70_79, SUM(age_80_more) AS age_80_more"
     @data = Censu.where(filter_area_conditions(filters)).select(select).take
 
   end
-  
+
   def self.homes(filters)
         select = "SUM(home_1p) AS home_1p, SUM(home_2p) AS home_2p,  SUM(home_3p) AS home_3p, SUM(home_4p) AS home_4p, "
         select += " SUM(home_5p) as home_5p, SUM(home_6_more) as  "
@@ -56,7 +56,7 @@ class Censu < ApplicationRecord
   end
 
   def self.professions(filters)
-    select = "SUM(salaried) as salaried, SUM(domestic_service) as domestic_service, SUM(independent) as independent, SUM(employee_employer) as employee_employer, SUM(unpaid_familiar) as unpaid_familiar" 
+    select = "SUM(salaried) as salaried, SUM(domestic_service) as domestic_service, SUM(independent) as independent, SUM(employee_employer) as employee_employer, SUM(unpaid_familiar) as unpaid_familiar"
     @data = Censu.where(filter_area_conditions(filters)).select(select).take
   end
 
@@ -85,11 +85,11 @@ class Censu < ApplicationRecord
 
 
     @census_sources = CensusSource.all
-  
     result.push("title":"Variable","data": @census_sources)
+
     data =[]
     @education_levels = education_levels(params)
- 
+
     data = [
       {name: "Básica", count: @education_levels.basica},
       {name: "Media", count: @education_levels.media},
@@ -124,8 +124,8 @@ class Censu < ApplicationRecord
       {name: "e", count: @gse.e}
     ]
 
-  
     result.push({"title":"Segmentación Socioeconómica","data": data})
+
     @age = age(params)
     data =[
       {name: "0-9", count: @age.age_0_9},
@@ -139,8 +139,8 @@ class Censu < ApplicationRecord
       {name: "+80", count: @age.age_80_more}
     ]
 
-    
     result.push({"title":"Rangos Etáreos","data": data})
+
     @homes= age(params)
     data =[
       {name: "1 pers.", count: @homes.age_0_9},
@@ -175,7 +175,7 @@ class Censu < ApplicationRecord
     result.push({"title":"Propiedad y Tenencia", "data": data})
 
 result
-  end 
+  end
 
 
 end
