@@ -31,7 +31,7 @@ class Admin::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if params[:user].has_key? :county_ids
-      if params[:user][:county_ids] > 0 
+    if params[:user][:county_ids].length > 0
       params[:user][:county_ids].each do |county_id|
         CountiesUser.create(county_id: county_id, user_id: @user.id)
       end
@@ -53,12 +53,14 @@ class Admin::UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
      @user_counties = @user.counties
+    if params[:user].has_key? :county_ids
     if params[:user][:county_ids].length > 0
       @counties_users = CountiesUser.where(user_id: @user.id)
       @counties_users.destroy_all if  !@counties_users.nil?
             params[:user][:county_ids].each do |county_id|
         CountiesUser.create(county_id: county_id, user_id: @user.id)
       end
+    end
     end
     respond_to do |format|
       if @user.update(user_params)
