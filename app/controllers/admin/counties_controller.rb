@@ -3,6 +3,12 @@ class Admin::CountiesController < ApplicationController
 
   layout 'admin'
 
+  def search
+      if !params[:id].nil?
+        @county = County.where(id: params[:id]).first
+      end
+      render json:  @county
+  end
   # GET /counties
   # GET /counties.json
   def index
