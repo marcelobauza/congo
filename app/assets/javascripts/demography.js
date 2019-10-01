@@ -137,13 +137,6 @@ Congo.demography.action_dashboards = function(){
               $('#body' + i).append(item);
             })
 
-          // Variable
-          } else if (title == 'Variable') {
-
-            var select = ' <select class="form-control form-control-sm" id="exampleFormControlSelect1"> <option value="1">Censo 2017</option> <option value="2" disabled>Censo 2012</option> </select>'
-
-            $('#body' + i).append(select);
-
           // Gráficos
           } else {
 
