@@ -447,8 +447,9 @@ Congo.building_regulations.action_dashboards = function(){
           $('.filter-projects').hide();
           $('.filter-future-projects').hide();
 
-          // Eliminamos el time_slider
+          // Eliminamos el time_slider y el census_selector
           $('#time_slider_item').remove()
+          $('#census_selector').remove()
 
         },
         success: function(data){

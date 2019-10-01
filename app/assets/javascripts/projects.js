@@ -1164,6 +1164,9 @@ Congo.projects.action_dashboards = function(){
           $('.filter-projects').show();
           $('.filter-future-projects').hide();
 
+          // Eliminamos el census_selector
+          $('#census_selector').remove()
+
         },
         success: function(data){
 
