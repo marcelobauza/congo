@@ -19,9 +19,6 @@ Congo.demography.action_dashboards = function(){
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
 
-    // Creamos el overlay y el census_selector
-    Congo.dashboards.action_index.create_overlay_and_filter_card();
-    Congo.dashboards.action_index.add_census_selector();
     if (county_id != '') {
 
       data = {
@@ -75,9 +72,10 @@ Congo.demography.action_dashboards = function(){
           layer_type = Congo.dashboards.config.layer_type;
           style_layer = Congo.dashboards.config.style_layer;
 
-           //Creamos el overlay
-           Congo.dashboards.action_index.create_overlay_and_filter_card();
-      
+          // Creamos el overlay y el census_selector
+          Congo.dashboards.action_index.create_overlay_and_filter_card();
+          Congo.dashboards.action_index.add_census_selector();
+
       if (county_id != '') {
 
         data = {
