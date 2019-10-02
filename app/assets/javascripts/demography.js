@@ -21,12 +21,7 @@ Congo.demography.action_dashboards = function(){
 
     // Creamos el overlay y el census_selector
     Congo.dashboards.action_index.create_overlay_and_filter_card();
-<<<<<<< HEAD
-    
-=======
     Congo.dashboards.action_index.add_census_selector();
-
->>>>>>> 685f0531602cbec1c063fdc1ea397e7c31eafbd0
     if (county_id != '') {
 
       data = {
@@ -68,6 +63,50 @@ Congo.demography.action_dashboards = function(){
     })
   }
 
+    indicator_demography = function(){
+          county_id = [];
+          $.each(Congo.dashboards.config.county_id, function(a,b){
+                   county_id =b;
+                })
+          radius = Congo.dashboards.config.radius;
+          centerPoint = Congo.dashboards.config.centerpt;
+          wkt = Congo.dashboards.config.size_box;
+          type_geometry = Congo.dashboards.config.typeGeometry;
+          layer_type = Congo.dashboards.config.layer_type;
+          style_layer = Congo.dashboards.config.style_layer;
+
+           //Creamos el overlay
+           Congo.dashboards.action_index.create_overlay_and_filter_card();
+      
+      if (county_id != '') {
+
+        data = {
+          county_id: county_id,
+          type_geometry: type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+        };
+
+      } else if (centerPoint != '') {
+
+        data = {
+          centerpt: centerPoint,
+          radius: radius,
+          type_geometry: type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+        };
+
+      } else {
+
+        data = {
+          wkt: JSON.stringify(wkt),
+          type_geometry: type_geometry,
+          layer_type: layer_type,
+          style_layer: style_layer
+        };
+
+      };
 
     $.ajax({
       type: 'GET',
