@@ -529,6 +529,21 @@ Congo.map_utils = function(){
           });
           env = "polygon: Polygon(("+coord_geoserver+"))";
         }
+        if (layer_type == 'demography_info'){
+          Congo.dashboards.config.style_layer = 'census_voronoi_clip';
+          geometry = centerpt.split(' ');
+          var center = [geometry[0],geometry[1]];
+          var radius = radius;
+          var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
+          var circle = turf.circle(center, radius, options);
+          var pol = circle['geometry']['coordinates'];
+          $.each(pol, function(a, b){
+            $.each(b, function(c,d){
+              coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
+            })
+          });
+          env = "polygon: Polygon(("+coord_geoserver+"))";
+        }
         break;
       case 'polygon':
         polygon_size = Congo.dashboards.config.size_box;
@@ -543,10 +558,13 @@ Congo.map_utils = function(){
           Congo.dashboards.config.style_layer = 'building_regulations_clip';
           env = "polygon: Polygon(("+coord_geoserver+"))";
         }else{
-
-
+        if (layer_type == 'demography_info'){
+          cql_filter = "1=1";
+          Congo.dashboards.config.style_layer = 'census_voronoi_clip';
+          env = "polygon: Polygon(("+coord_geoserver+"))";
+        }else{
           cql_filter ="WITHIN(the_geom,  Polygon(("+coord_geoserver+"))) "+ filter_layer;
-        }
+        }}
         cql_filter_pois ="WITHIN(the_geom, Polygon(("+coord_geoserver+"))) ";
         break;
       case 'marker':
