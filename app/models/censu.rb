@@ -83,10 +83,6 @@ class Censu < ApplicationRecord
     ]
     result.push({"title":"Resumen","data": data})
 
-
-    @census_sources = CensusSource.all
-    result.push("title":"Variable","data": @census_sources)
-
     data =[]
     @education_levels = education_levels(params)
 

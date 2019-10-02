@@ -19,9 +19,14 @@ Congo.demography.action_dashboards = function(){
     layer_type = Congo.dashboards.config.layer_type;
     style_layer = Congo.dashboards.config.style_layer;
 
-    // Creamos el overlay
+    // Creamos el overlay y el census_selector
     Congo.dashboards.action_index.create_overlay_and_filter_card();
+<<<<<<< HEAD
     
+=======
+    Congo.dashboards.action_index.add_census_selector();
+
+>>>>>>> 685f0531602cbec1c063fdc1ea397e7c31eafbd0
     if (county_id != '') {
 
       data = {
@@ -165,13 +170,6 @@ Congo.demography.action_dashboards = function(){
               item = name + ': ' + count + '<br>';
               $('#body' + i).append(item);
             })
-
-          // Variable
-          } else if (title == 'Variable') {
-
-            var select = ' <select class="form-control form-control-sm" id="exampleFormControlSelect1"> <option value="1">Censo 2017</option> <option value="2" disabled>Censo 2012</option> </select>'
-
-            $('#body' + i).append(select);
 
           // Gráficos
           } else {
