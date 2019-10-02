@@ -13,6 +13,21 @@ Congo.transactions.config= {
   to_calculated_value: []
 }
 
+
+Congo.transactions.action_heatmap = function(){
+
+  init=function(){
+
+        Congo.dashboards.config.style_layer= 'heatmap_test_future_projects';
+        Congo.map_utils.counties();
+  }
+  return {
+    init: init,
+  }
+}();
+
+
+
 transactions_popup = function(id, latlng){
 
   bimester = Congo.dashboards.config.bimester;
