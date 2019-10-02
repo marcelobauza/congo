@@ -5,11 +5,11 @@ Congo.demography.action_dashboards = function(){
     Congo.map_utils.init();
   }
 
-  indicator_demography = function(){
+  demography_report_pdf = function(){
 
     county_id = [];
     $.each(Congo.dashboards.config.county_id, function(a,b){
-       county_id =b;
+      county_id =b;
     })
 
     radius = Congo.dashboards.config.radius;
@@ -21,19 +21,48 @@ Congo.demography.action_dashboards = function(){
 
     // Creamos el overlay
     Congo.dashboards.action_index.create_overlay_and_filter_card();
-
+    
     if (county_id != '') {
-
-      // Agregamos filtro Comuna
-      Congo.dashboards.action_index.add_county_filter_item()
 
       data = {
         county_id: county_id,
-        type_geometry:type_geometry,
+        type_geometry: type_geometry,
         layer_type: layer_type,
         style_layer: style_layer
       };
-    }
+
+    } else if (centerPoint != '') {
+
+      data = {
+        centerpt: centerPoint,
+        radius: radius,
+        type_geometry: type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+      };
+
+    } else {
+
+      data = {
+        wkt: JSON.stringify(wkt),
+        type_geometry: type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer
+      };
+
+    };
+
+    $.ajax({
+      type: 'GET',
+      url: '/demography/general.json',
+      datatype: 'json',
+      data: data,
+      success: function(data) {
+        console.log(data)
+      }
+    })
+  }
+
 
     $.ajax({
       type: 'GET',

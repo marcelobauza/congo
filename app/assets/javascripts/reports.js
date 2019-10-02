@@ -93,8 +93,15 @@ Congo.reports = function(){
       switch(kind_reports){
         case 'pdf':
           url = building_regulations_report_pdf();
+          break;
       }
       break;
+    case 'demography_info':
+      switch(kind_reports){
+        case 'pdf':
+        url = demography_report_pdf();
+        break;
+        }
     default:
 
   }
