@@ -1,3 +1,7 @@
 var errors = '<%= raw @user.errors.messages %>';
 
 console.log(errors);
+
+// Elimina el modal
+$("#modal-account").remove();
+$('.modal-backdrop').remove();
