@@ -13,6 +13,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
      if @user.update(user_params)
+      bypass_sign_in(@user)
       format.js 
       else
       format.js
