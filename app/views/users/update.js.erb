@@ -1,7 +1,22 @@
-var errors = '<%= raw @user.errors.messages %>';
+// Levanta los posibles errores
+var errors = '<%= raw @errorMessage %>';
 
-console.log(errors);
+// Sino hay errores actualiza y elimina el modal
+if (errors == '{}') {
 
-// Elimina el modal
-$("#modal-account").remove();
-$('.modal-backdrop').remove();
+  // Elimina el modal
+  $("#modal-account").remove();
+  $('.modal-backdrop').remove();
+
+// Si hay errores advierte al usuario
+} else {
+
+  $("#error_item").remove()
+  $("#users_error").append(
+    $('<p>', {
+      'id': 'error_item',
+      'text': errors
+    })
+  )
+
+}
