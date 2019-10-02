@@ -196,7 +196,7 @@ div.custom-menu.show {
   height: 70vh;
 }
 
-// Slider
+// Slider flat
 .irs--flat .irs-from, .irs--flat .irs-to, .irs--flat .irs-single { // label
     color: e8ebef !important;
     background-color: #58b9e2 !important;
@@ -220,8 +220,33 @@ div.custom-menu.show {
 .irs--flat .irs-handle>i:first-child { // límite
     background-color: #44a5ce !important;
 }
-.irs--flat .irs-from:before, .irs--flat .irs-to:before, .irs--flat .irs-single:before { // label triánulo
+.irs--flat .irs-from:before, .irs--flat .irs-to:before, .irs--flat .irs-single:before { // label triángulo
     border-top-color: #58b9e2 !important;
+}
+
+// Slider sharp
+.irs--sharp .irs-from, .irs--sharp .irs-to, .irs--sharp .irs-single { // label selector
+    background-color: #58b9e2 !important;
+    color: white;
+}
+.irs--sharp .irs-from:before, .irs--sharp .irs-to:before, .irs--sharp .irs-single:before { // triángulo label selector
+  border-top-color: #58b9e2 !important;
+}
+.irs--sharp .irs-handle { // selector
+  background-color: #58b9e2 !important;
+}
+.irs--sharp .irs-handle>i:first-child { // triángulo selector
+    border-top-color: #58b9e2 !important;
+}
+.irs--sharp .irs-line { // barra completa
+    background-color: #2c2e34 !important;
+}
+.irs--sharp .irs-bar { // barra seleccionada
+    background-color: #2c2e34 !important;
+}
+.irs--sharp .irs-min, .irs--sharp .irs-max {
+    color: white;
+    background-color: #798088 !important;
 }
 
 // Text selection
