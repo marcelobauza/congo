@@ -21,6 +21,15 @@ $(document).ready(function(){
   $('#prop_cbr_uf_m2_util').on('click', function(){
     Congo.dashboards.config.widget = 'uf_m2_u';
   });
+  $('#heat_cbr_amount').on('click', function(){
+    Congo.dashboards.config.widget = 'heat_cbr_amount';
+  });
+  $('#heat_cbr_uf').on('click', function(){
+    Congo.dashboards.config.widget = 'heat_calculated_value';
+  });
+  $('#heat_cbr_uf_m2_util').on('click', function(){
+    Congo.dashboards.config.widget = 'heat_uf_m2_u';
+  });
 })
 
 Congo.namespace('dashboards.action_index');

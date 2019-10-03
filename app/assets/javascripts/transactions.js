@@ -17,9 +17,23 @@ Congo.transactions.config= {
 Congo.transactions.action_heatmap = function(){
 
   init=function(){
+    widget =  Congo.dashboards.config.widget;
+    console.log(widget);
+    switch (widget) {
+      case 'heat_calculated_value':
+        Congo.dashboards.config.style_layer= 'heatmap_transactions_calculated_value';
+        break;
+      case 'heat_uf_m2_u':
+        Congo.dashboards.config.style_layer= 'heatmap_transactions_uf_m2_u';
+        break;
+      case 'heat_cbr_amount':
+        Congo.dashboards.config.style_layer= 'heatmap_transactions_amount';
 
-        Congo.dashboards.config.style_layer= 'heatmap_test_future_projects';
-        Congo.map_utils.counties();
+        break;
+    }
+
+
+    Congo.map_utils.counties();
   }
   return {
     init: init,
