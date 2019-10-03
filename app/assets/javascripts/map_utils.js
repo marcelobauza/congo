@@ -33,30 +33,18 @@ Congo.map_utils = function(){
       maxZoom: 19
     });
 
+    // Crea el mapa
     map = L.map('map',{
-      fadeAnimation: false,
+      fadeAnimation: true,
       markerZoomAnimation: false,
       zoom: 11,
       center: [-33.4372, -70.6506],
-      zoomControl: true,
-      zoomAnimation: false,
-      layers: [streets],
-      loadingControl: true,
-    }) ;
+      zoomControl: false,
+      zoomAnimation: true,
+      layers: [streets]
+    });
 
-    map.addControl( new L.Control.Search({
-      url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=cl',
-      jsonpParam: 'json_callback',
-      propertyName: 'display_name',
-      markerLocation: true,
-      propertyLoc: ['lat','lon'],
-      marker: L.circleMarker([0,0],{radius:30}),
-      autoCollapse: true,
-      autoType: false,
-      minLength: 2
-    }) );
-
-    L.control.scale({imperial: false}).addTo(map);
+    // Agrega el ícono de capas al mapa
     baseMaps = {
       "Calles": streets,
       "Satelital": satellite,
@@ -65,10 +53,14 @@ Congo.map_utils = function(){
     };
     var overlays =  {
     };
-    layerControl = L.control.layers(baseMaps, overlays, {position: 'topleft'}).addTo(map);
-
+    layerControl = L.control.layers(baseMaps, overlays, {
+      position: 'topleft',
+      collapsed: false
+    }).addTo(map);
 
     editableLayers = new L.FeatureGroup();
+
+    // Agrega el toolbar de selección al mapa
     var drawControl = new L.Control.Draw({
       draw:{
         polyline: false,
@@ -82,7 +74,7 @@ Congo.map_utils = function(){
         marker: false
       }
     });
-
+    // Establece los nombres de las leyendas del toolbar
     L.drawLocal = {
       draw: {
         toolbar: {
@@ -179,8 +171,44 @@ Congo.map_utils = function(){
         }
       }
     };
-
     map.addControl(drawControl);
+
+    // Agrega el ícono de búsqueda al mapa
+    map.addControl(new L.Control.Search({
+      url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}&countrycodes=cl',
+      jsonpParam: 'json_callback',
+      propertyName: 'display_name',
+      markerLocation: true,
+      propertyLoc: ['lat', 'lon'],
+      marker: L.circleMarker([0, 0], {
+        radius: 30
+      }),
+      autoCollapse: true,
+      autoType: false,
+      minLength: 2
+    }));
+
+    // Agrega la escala al mapa
+    L.control.scale({
+      imperial: false,
+      position: 'bottomleft',
+    }).addTo(map);
+
+    // Agrega el ícono de zoom al mapa
+    var zoomControl = L.control.zoom({
+      zoomInTitle: 'Acercar',
+      zoomOutTitle: 'Alejar',
+      position: 'topleft'
+    });
+    map.addControl(zoomControl);
+
+    // Agregamos el spinner de carga
+    var loadingControl = L.Control.loading({
+      position: 'topleft',
+      zoomControl: zoomControl
+    });
+    map.addControl(loadingControl);
+
     map.on(L.Draw.Event.CREATED, function (event) {
       var typeGeometry = event.layerType;
       size_box = [];
@@ -658,13 +686,12 @@ Congo.map_utils = function(){
     groupLayer.addTo(map);
     return;
     }
-  //}
+
   function remove_legend(){
     if(typeof(htmlLegend)!=='undefined'){
       map.removeControl(htmlLegend);
     }
   }
-
 
   function legend_points(params){
     var options = [];
