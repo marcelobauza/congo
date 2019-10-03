@@ -18,7 +18,6 @@ Congo.transactions.action_heatmap = function(){
 
   init=function(){
     widget =  Congo.dashboards.config.widget;
-    console.log(widget);
     switch (widget) {
       case 'heat_calculated_value':
         Congo.dashboards.config.style_layer= 'heatmap_transactions_calculated_value';
