@@ -19,6 +19,25 @@ Congo.projects.config= {
   project_agency_ids: []
 }
 
+Congo.projects.action_heatmap = function(){
+
+  init=function(){
+    widget =  Congo.dashboards.config.widget;
+    switch (widget) {
+      case 'heat_prv_uf':
+        Congo.dashboards.config.style_layer= 'heatmap_prv_uf';
+        break;
+      case 'heat_prv_uf_m2_u':
+        Congo.dashboards.config.style_layer= 'heatmap_prv_uf_m2_u';
+        break;
+    }
+    Congo.map_utils.counties();
+  }
+  return {
+    init: init,
+  }
+}();
+
 projects_popup = function(id){
 
   bimester = Congo.dashboards.config.bimester;

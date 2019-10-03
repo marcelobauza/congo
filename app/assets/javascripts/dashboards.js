@@ -30,6 +30,13 @@ $(document).ready(function(){
   $('#heat_cbr_uf_m2_util').on('click', function(){
     Congo.dashboards.config.widget = 'heat_uf_m2_u';
   });
+  $('#heat_prv_uf').on('click', function(){
+    Congo.dashboards.config.widget = 'heat_prv_uf';
+  });
+  $('#heat_prv_uf_m2_util').on('click', function(){
+    Congo.dashboards.config.widget = 'heat_prv_uf_m2_u';
+  });
+
 })
 
 Congo.namespace('dashboards.action_index');
