@@ -244,16 +244,15 @@ function building_regulations_report_pdf() {
       // Separamos los datos
       $.each(data, function(i,reg){
 
-        var building_regulations = 'null'
         var max_height = reg['aminciti']
-        var building_zone = reg['building_zone']
+        var building_regulations = reg['building_zone']
         var allowed_use = reg['use_allow']['name']
         var land_occupation = reg['osinciti']
         var web = reg['site']
         var density = reg['hectarea_inhabitants']
         var max_density = reg['density_type']
         var construct = reg['construct']
-        var last_update = reg['comments']
+        var comments = reg['comments']
 
         // Arreglamos los valores que llegan con null
         if (max_density == null) {
@@ -265,7 +264,7 @@ function building_regulations_report_pdf() {
 
         // Cambiamos a string los valores que llegan como integer
         max_height = max_height.toString()
-        building_zone = building_zone.toString()
+        building_regulations = building_regulations.toString()
         allowed_use = allowed_use.toString()
         land_occupation = land_occupation.toString()
         density = density.toString()
@@ -282,28 +281,27 @@ function building_regulations_report_pdf() {
           doc.setFontStyle("bold");
           doc.setFontSize(12);
           doc.text('Normativa de Edificación:', 83, 20, null, null, 'right');
-          doc.text('Altura Máxima:', 83, 30, null, null, 'right');
-          doc.text('Zona:', 83, 40, null, null, 'right');
-          doc.text('Uso:', 83, 50, null, null, 'right');
-          doc.text('Constructibilidad:', 83, 60, null, null, 'right');
-          doc.text('Ocupación de suelo:', 83, 70, null, null, 'right');
-          doc.text('Web:', 83, 80, null, null, 'right');
-          doc.text('Densidad:', 83, 90, null, null, 'right');
-          doc.text('Densidad Máxima:', 83, 100, null, null, 'right');
-          doc.text('Última actualización:', 83, 110, null, null, 'right');
+          doc.text('Uso:', 83, 30, null, null, 'right');
+          doc.text('Constructibilidad:', 83, 40, null, null, 'right');
+          doc.text('Ocupación de suelo:', 83, 50, null, null, 'right');
+          doc.text('Altura Máxima:', 83, 60, null, null, 'right');
+          doc.text('Densidad:', 83, 70, null, null, 'right');
+          doc.text('Densidad Máxima:', 83, 80, null, null, 'right');
+          doc.text('Web:', 83, 90, null, null, 'right');
+          doc.text('Comentarios:', 83, 100, null, null, 'right');
 
           // Valores columna arriba
           doc.setFontStyle("normal");
           doc.text(building_regulations, 85, 20);
-          doc.text(max_height, 85, 30);
-          doc.text(building_zone, 85, 40);
-          doc.text(allowed_use, 85, 50);
-          doc.text(construct, 85, 60);
-          doc.text(land_occupation, 85, 70);
-          doc.text(web, 85, 80);
-          doc.text(density, 85, 90);
-          doc.text(max_density, 85, 100);
-          doc.text(last_update, 85, 110);
+          doc.text(allowed_use, 85, 30);
+          doc.text(construct, 85, 40);
+          doc.text(land_occupation, 85, 50);
+          doc.text(max_height, 85, 60);
+          doc.text(density, 85, 70);
+          doc.text(max_density, 85, 80);
+          doc.text(web, 85, 90);
+          var textLines = doc.splitTextToSize(comments, 120);
+          doc.text(textLines, 85, 100);
 
         } else { // par
 
@@ -313,29 +311,28 @@ function building_regulations_report_pdf() {
           // Labels columna abajo
           doc.setFontStyle("bold");
           doc.setFontSize(12);
-          doc.text('Normativa de Edificación', 83, 160, null, null, 'right');
-          doc.text('Altura Máxima:', 83, 170, null, null, 'right');
-          doc.text('Zona:', 83, 180, null, null, 'right');
-          doc.text('Uso:', 83, 190, null, null, 'right');
-          doc.text('Constructibilidad:', 83, 200, null, null, 'right');
-          doc.text('Ocupación de suelo:', 83, 210, null, null, 'right');
-          doc.text('Web:', 83, 220, null, null, 'right');
-          doc.text('Densidad:', 83, 230, null, null, 'right');
-          doc.text('Densidad Máxima:', 83, 240, null, null, 'right');
-          doc.text('Última actualización:', 83, 250, null, null, 'right');
+          doc.text('Normativa de Edificación:', 83, 160, null, null, 'right');
+          doc.text('Uso:', 83, 170, null, null, 'right');
+          doc.text('Constructibilidad:', 83, 180, null, null, 'right');
+          doc.text('Ocupación de suelo:', 83, 190, null, null, 'right');
+          doc.text('Altura Máxima:', 83, 200, null, null, 'right');
+          doc.text('Densidad:', 83, 210, null, null, 'right');
+          doc.text('Densidad Máxima:', 83, 220, null, null, 'right');
+          doc.text('Web:', 83, 230, null, null, 'right');
+          doc.text('Comentarios:', 83, 240, null, null, 'right');
 
           // Valores columna abajo
           doc.setFontStyle("normal");
           doc.text(building_regulations, 85, 160);
-          doc.text(max_height, 85, 170);
-          doc.text(building_zone, 85, 180);
-          doc.text(allowed_use, 85, 190);
-          doc.text(construct, 85, 200);
-          doc.text(land_occupation, 85, 210);
-          doc.text(web, 85, 220);
-          doc.text(density, 85, 230);
-          doc.text(max_density, 85, 240);
-          doc.text(last_update, 85, 250);
+          doc.text(allowed_use, 85, 170);
+          doc.text(construct, 85, 180);
+          doc.text(land_occupation, 85, 190);
+          doc.text(max_height, 85, 200);
+          doc.text(density, 85, 210);
+          doc.text(max_density, 85, 220);
+          doc.text(web, 85, 230);
+          var textLines = doc.splitTextToSize(comments, 120);
+          doc.text(textLines, 85, 240);
         } // Cierra else par/impar
       }) // Cierra for
 
