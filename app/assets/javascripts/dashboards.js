@@ -4,22 +4,22 @@ $(document).ready(function(){
     Congo.reports();
   })
   $('#prop_prv_availability').on('click', function(){
-    Congo.dashboards.config.widget = 'stock_units';
+    Congo.dashboards.config.widget = 'prv_stock_units';
   });
   $('#prop_prv_sale').on('click', function(){
-    Congo.dashboards.config.widget = 'sold_units';
+    Congo.dashboards.config.widget = 'prv_sold_units';
   });
   $('#prop_prv_uf').on('click', function(){
-    Congo.dashboards.config.widget = 'uf_avg_percent';
+    Congo.dashboards.config.widget = 'prv_uf_avg_percent';
   });
   $('#prop_prv_uf_m2_util').on('click', function(){
-    Congo.dashboards.config.widget = 'uf_m2_u';
+    Congo.dashboards.config.widget = 'prv_uf_m2_u';
   });
   $('#prop_cbr_uf').on('click', function(){
-    Congo.dashboards.config.widget = 'calculated_value';
+    Congo.dashboards.config.widget = 'cbr_calculated_value';
   });
   $('#prop_cbr_uf_m2_util').on('click', function(){
-    Congo.dashboards.config.widget = 'uf_m2_u';
+    Congo.dashboards.config.widget = 'cbr_uf_m2_u';
   });
   $('#heat_cbr_amount').on('click', function(){
     Congo.dashboards.config.widget = 'heat_cbr_amount';

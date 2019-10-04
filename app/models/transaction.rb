@@ -232,7 +232,7 @@ class Transaction < ApplicationRecord
     self.uf_m2_u = self.calculated_value / self.total_surface_building unless self.total_surface_building == 0 or self.total_surface_building.nil?
     self.uf_m2_t = self.calculated_value / self.total_surface_terrain unless self.total_surface_terrain == 0 or self.total_surface_terrain.nil?
     building_regulation = BuildingRegulation.where("county_id = #{self.county_id} #{Util.and} ST_Contains(the_geom, ST_Transform(ST_GeomFromText('POINT(#{self.longitude} #{self.latitude})',4326),4326)) " ).first
-    self.building_regulation = building_regulation.name_ze.to_s unless building_regulation.nil?
+    #self.building_regulation = building_regulation.name_ze.to_s unless building_regulation.nil?
   end
 
   def self.get_last_period
@@ -859,36 +859,6 @@ class Transaction < ApplicationRecord
 
   def self.build_county_condition user_id, counties
     condition = "(counties_users.user_id = #{user_id} AND counties_users.county_id IN(#{counties.join(",")}))#{Util.and}"
-  end
-
-  def self.interval_graduated_points(params)
-    widget = params[:widget]
-    period_current = Period.get_period_current
-    bimester = period_current.bimester
-    year = period_current.year
-
-    if !params[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",params[:county_id])
-    elsif !params[:wkt].nil?
-      conditions = WhereBuilder.build_within_condition(params[:wkt])
-    else
-      conditions = WhereBuilder.build_within_condition_radius(params[:centerpt], params[:radius] )
-      end
-
-    values = Transaction.select("COUNT(*) as counter, ROUND(#{widget}/ 10) as value").
-      where(bimester: bimester, year: year).where(conditions).where("#{widget} > ?", 1).
-      group("ROUND(#{widget} / 10)").
-      order("counter desc").first
-    result = Array.new
-    ranges = get_valid_ranges_interval(values)
-
-    0.upto(ranges.count - 1) do |i|
-      result << ranges[i]["min"].to_i
-    end
-
-    result << ranges[ranges.count - 1]["max"].to_i
-    @rr = result
-    return result
   end
 
   def self.get_valid_ranges_interval(values)

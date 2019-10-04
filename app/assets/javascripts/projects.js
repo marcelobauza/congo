@@ -187,77 +187,22 @@ projects_popup = function(id){
 Congo.projects.action_graduated_points = function(){
 
   init=function(){
-    var env1='';
-    $.each(Congo.dashboards.config.county_id, function(a,b){
-       county_id =b;
-    })
-    to_year = Congo.dashboards.config.year;
-    to_bimester = Congo.dashboards.config.bimester;
-    radius = Congo.dashboards.config.radius;
-    centerPoint = Congo.dashboards.config.centerpt;
-    wkt = Congo.dashboards.config.size_box;
-    future_project_type_ids = Congo.future_projects.config.future_project_type_ids;
-    project_type_ids = Congo.future_projects.config.project_type_ids;
-    periods = Congo.future_projects.config.periods;
-    years = Congo.future_projects.config.years;
-    type_geometry = Congo.dashboards.config.typeGeometry;
-    layer_type = Congo.dashboards.config.layer_type;
-    //style_layer = Congo.dashboards.config.style_layer;
-
-    if (county_id != '') {
-      data = {
-        to_year: to_year,
-        to_period: to_bimester,
-        future_project_type_ids: future_project_type_ids,
-        project_type_ids: project_type_ids,
-        periods: periods,
-        years: years,
-        county_id: county_id,
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-      };
-    } else if (centerPoint != '') {
-      data = {
-        to_year: to_year,
-        to_period: to_bimester,
-        future_project_type_ids: future_project_type_ids,
-        project_type_ids: project_type_ids,
-        periods: periods,
-        years: years,
-        centerpt: centerPoint,
-        radius: radius,
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-      };
-    } else {
-      data = {
-        to_year: to_year,
-        to_period: to_bimester,
-        future_project_type_ids: future_project_type_ids,
-        project_type_ids: project_type_ids,
-        periods: periods,
-        years: years,
-        wkt: JSON.stringify(wkt),
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-      };
-    };
-      data['widget'] = Congo.dashboards.config.widget;
-    $.ajax({
-      type: 'GET',
-      url: '/projects/graduated_points.json',
-      datatype: 'json',
-      data: data ,
-      success: function(data){
-        $.each(data['data'], function(index, value){
-          str = 'interval'+index+':'+value+';';
-          env1 = env1.concat(str);
-        })
-        Congo.dashboards.config.style_layer= 'stock_units_graduated_points';
-        Congo.dashboards.config.env= env1;
-        Congo.map_utils.counties();
-      }
-    })
+    widget =  Congo.dashboards.config.widget;
+    switch (widget) {
+      case 'prv_stock_units':
+        Congo.dashboards.config.style_layer= 'prv_point_graduated_stock_units';
+        break;
+      case 'prv_sold_units':
+        Congo.dashboards.config.style_layer= 'prv_point_graduated_sold_units';
+        break;
+      case 'prv_uf_avg_percent':
+        Congo.dashboards.config.style_layer= 'prv_point_graduated_uf';
+        break;
+      case 'prv_uf_m2_u':
+        Congo.dashboards.config.style_layer= 'prv_point_graduated_uf_m2_u';
+        break;
+    }
+    Congo.map_utils.counties();
   }
   return {
     init: init,

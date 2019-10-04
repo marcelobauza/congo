@@ -695,96 +695,16 @@ function transactions_report_pdf(){
 Congo.transactions.action_graduated_points = function(){
 
   init=function(){
-    var env1='';
-
-    $.each(Congo.dashboards.config.county_id, function(a,b){
-       county_id =b;
-    })
-    to_year = Congo.dashboards.config.year;
-    to_bimester = Congo.dashboards.config.bimester;
-    radius = Congo.dashboards.config.radius;
-    centerPoint = Congo.dashboards.config.centerpt;
-    wkt = Congo.dashboards.config.size_box;
-    property_type_ids = Congo.transactions.config.property_type_ids;
-    seller_type_ids = Congo.transactions.config.seller_type_ids;
-    periods = Congo.transactions.config.periods;
-    years = Congo.transactions.config.years;
-    from_calculated_value = Congo.transactions.config.from_calculated_value;
-    to_calculated_value = Congo.transactions.config.to_calculated_value;
-    type_geometry = Congo.dashboards.config.typeGeometry;
-    layer_type = Congo.dashboards.config.layer_type;
-    style_layer = Congo.dashboards.config.style_layer;
-
-
-    if (county_id != '') {
-      data = {
-        to_year: to_year,
-        to_period: to_bimester,
-        property_type_ids: property_type_ids,
-        seller_type_ids: seller_type_ids,
-        periods: periods,
-        years: years,
-        from_calculated_value: from_calculated_value,
-        to_calculated_value: to_calculated_value,
-        county_id: county_id,
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-        style_layer: style_layer
-      };
-    } else if (centerPoint != '') {
-
-      data = {
-        to_year: to_year,
-        to_period: to_bimester,
-        property_type_ids: property_type_ids,
-        seller_type_ids: seller_type_ids,
-        periods: periods,
-        years: years,
-        from_calculated_value: from_calculated_value,
-        to_calculated_value: to_calculated_value,
-        centerpt: centerPoint,
-        radius: radius,
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-        style_layer: style_layer
-
-      };
-    } else {
-
-      data = {
-        to_year: to_year,
-        to_period: to_bimester,
-        property_type_ids: property_type_ids,
-        seller_type_ids: seller_type_ids,
-        periods: periods,
-        years: years,
-        from_calculated_value: from_calculated_value,
-        to_calculated_value: to_calculated_value,
-        wkt: JSON.stringify(wkt),
-        type_geometry:type_geometry,
-        layer_type: layer_type,
-        style_layer: style_layer
-
-      };
+    widget =  Congo.dashboards.config.widget;
+    switch (widget) {
+      case 'cbr_calculated_value':
+        Congo.dashboards.config.style_layer= 'transactions_point_graduated_uf';
+        break;
+      case 'cbr_uf_m2_u':
+        Congo.dashboards.config.style_layer= 'transactions_point_graduated_uf_m2_util';
+        break;
     }
-      data['widget'] = Congo.dashboards.config.widget;
-    $.ajax({
-      type: 'GET',
-      url: '/transactions/graduated_points.json',
-      datatype: 'json',
-      data: data,
-      success: function(data){
-        $.each(data['data'], function(index, value){
-          str = 'interval'+index+':'+value+';';
-          env1 = env1.concat(str);
-        })
-        env1 = env1.concat(';color0:ffff00;color1:62d642;color2:3db868;color3:216e9e;color4:090c5e;color5:121CD1;color6:656CED;color7:9196F2;color8:9546F4');
-        Congo.dashboards.config.style_layer= 'transaction_calculated_value_graduated_points';
-        Congo.dashboards.config.env= env1;
-
-        Congo.map_utils.counties();
-      }
-    })
+    Congo.map_utils.counties();
   }
   return {
     init: init,
