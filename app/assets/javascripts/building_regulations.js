@@ -35,44 +35,128 @@ building_regulations_popup = function(id) {
 
       // Agregamos la información general
       $('#popup_info_building_regulations').append(
-        $('<ul>', {
-          'class': 'list-unstyled p-4'
-        }).append(
-          $('<li>', {
-            'text': 'Normativa de Edificación: ' + data.building_zone,
-          }),
-          $('<li>', {
-            'text': 'Usos Permitidos: ' + land_use_types,
-          }),
-          $('<li>', {
-            'text': 'Constructibilidad: ' + data.construct,
-          }),
-          $('<li>', {
-            'text': 'Ocupación de Suelo: ' + data.osinciti,
-          }),
-          $('<li>', {
-            'text': 'Densidad Máxima (hab/Ha): ' + data.hectarea_inhabitants,
-          }),
-          $('<li>', {
-            'text': 'Sistema de Agrupamiento: ' + data.grouping,
-          }),
-          $('<li>', {
-            'text': 'Altura de Construcción: ' + data.aminciti,
-          }),
-          $('<li>', {
-            'text': 'Superficie del Predio: ' + data.area,
-          }),
-          $('<li>', {
-            'text': 'Estacionamientos: ' + data.parkings,
-          }),
-          $('<li>', {
-            'text': 'Comentarios: ' + data.comments,
-          }),
-        )
-      )
-
-      // Agregamos la descarga de la normativa
-      $('#popup_info_building_regulations').append(
+        $('<p>').append(
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Normativa de Edificación:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.building_zone
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Uso:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': land_use_types
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Constructibilidad:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.construct
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Ocupación de Suelo:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.osinciti
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Altura Máxima:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.aminciti
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Habitantes por Hectárea:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.hectarea_inhabitants
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Sistema de Agrupamiento:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.grouping
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Superficie del Predio:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.area
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Estacionamientos:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.parkings
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Comentarios:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.comments
+            }),
+          ),
+        ),
         $('<div>', {
           'class': 'text-center'
         }).append(
@@ -83,7 +167,7 @@ building_regulations_popup = function(id) {
             'text': 'Descargar Ordenanza',
           }),
         )
-      );
+      )
 
       $('#leaflet_modal_building_regulations').modal('show');
 
@@ -104,6 +188,8 @@ function building_regulations_report_pdf() {
     datatype: 'json',
     data: data,
     success: function(data) {
+
+      console.log(data);
 
       // Creamos el doc
       var doc = new jsPDF();
