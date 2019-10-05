@@ -28,13 +28,13 @@
 }
 
 .leaflet-html-legend {
-    background: #FFF;
+    background: rgba(0, 0, 0, 0.5);
     border: 0px solid #FFF;
-    padding: 6px;
+    padding: 4px;
     max-height: 250px;
     overflow-y: auto;
-    line-height: 1.2;
-    width: 250px;
+    line-height: 1;
+    width: 180px;
     margin-bottom: 0px;
 
 }
@@ -74,7 +74,7 @@
     display: inline-block;
     vertical-align: middle;
     word-wrap: break-word;
-    color: #555;
+    color: #FFF;
     font-size: 11px;
     font-weight: 400;
 }
