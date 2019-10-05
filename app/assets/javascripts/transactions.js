@@ -10,7 +10,8 @@ Congo.transactions.config= {
   periods: [],
   years: [],
   from_calculated_value: [],
-  to_calculated_value: []
+  to_calculated_value: [],
+  legends: []
 }
 
 
@@ -18,8 +19,10 @@ Congo.transactions.action_heatmap = function(){
 
   init=function(){
     widget =  Congo.dashboards.config.widget;
+    Congo.transactions.config.legends =[]
     switch (widget) {
       case 'heat_calculated_value':
+
         Congo.dashboards.config.style_layer= 'heatmap_transactions_calculated_value';
         break;
       case 'heat_uf_m2_u':
@@ -31,6 +34,11 @@ Congo.transactions.action_heatmap = function(){
         break;
     }
 
+        Congo.transactions.config.legends.push({'name':'Alto', 'color':'9d2608'});
+        Congo.transactions.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
+        Congo.transactions.config.legends.push({'name':'Medio', 'color':'fa7c16'});
+        Congo.transactions.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
+        Congo.transactions.config.legends.push({'name':'Bajo', 'color':'fcd930'});
 
     Congo.map_utils.counties();
   }
@@ -696,12 +704,25 @@ Congo.transactions.action_graduated_points = function(){
 
   init=function(){
     widget =  Congo.dashboards.config.widget;
+    Congo.transactions.config.legends =[]
     switch (widget) {
       case 'cbr_calculated_value':
         Congo.dashboards.config.style_layer= 'transactions_point_graduated_uf';
+        Congo.transactions.config.legends.push({'name':'Menor a 2.499', 'color':'d9d2b0'});
+        Congo.transactions.config.legends.push({'name':'2.500 a 3.999', 'color':'fcd930'});
+        Congo.transactions.config.legends.push({'name':'4.000 a 6.499', 'color':'fda821'});
+        Congo.transactions.config.legends.push({'name':'6.500 a 10.499', 'color':'fa7c16'});
+        Congo.transactions.config.legends.push({'name':'10.500 a 14.999', 'color':'f94710'});
+        Congo.transactions.config.legends.push({'name':'Mayor a 15.000', 'color':'9d2608'});
         break;
       case 'cbr_uf_m2_u':
         Congo.dashboards.config.style_layer= 'transactions_point_graduated_uf_m2_util';
+        Congo.transactions.config.legends.push({'name':'Menor a 26', 'color':'d9d2b0'});
+        Congo.transactions.config.legends.push({'name':'27 a 52', 'color':'fcd930'});
+        Congo.transactions.config.legends.push({'name':'53 a 63', 'color':'fda821'});
+        Congo.transactions.config.legends.push({'name':'64 a 82', 'color':'fa7c16'});
+        Congo.transactions.config.legends.push({'name':'83 a 101', 'color':'f94710'});
+        Congo.transactions.config.legends.push({'name':'Mayor a 102', 'color':'9d2608'});
         break;
     }
     Congo.map_utils.counties();

@@ -9,7 +9,8 @@ Congo.future_projects.config = {
   future_project_type_ids: [],
   project_type_ids: [],
   periods: [],
-  years: []
+  years: [],
+  legends: []
 }
 
 future_projects_report_pdf = function() {
@@ -608,7 +609,13 @@ Congo.future_projects.action_heatmap = function(){
 
   init=function(){
 
+        Congo.future_projects.config.legends = [];
         Congo.dashboards.config.style_layer= 'heatmap_test_future_projects';
+        Congo.future_projects.config.legends.push({'name':'Alto', 'color':'9d2608'});
+        Congo.future_projects.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
+        Congo.future_projects.config.legends.push({'name':'Medio', 'color':'fa7c16'});
+        Congo.future_projects.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
+        Congo.future_projects.config.legends.push({'name':'Bajo', 'color':'fcd930'});
         Congo.map_utils.counties();
   }
   return {
@@ -620,8 +627,16 @@ Congo.future_projects.action_graduated_points = function(){
 
   init=function(){
         Congo.dashboards.config.style_layer= 'future_projects_point_graduated_m2_built';
+        Congo.future_projects.config.legends =[];
+        Congo.future_projects.config.legends.push({'name':'Menor a 2.499', 'color':'d9d2b0'});
+        Congo.future_projects.config.legends.push({'name':'2.500 a 6.499', 'color':'fcd930'});
+        Congo.future_projects.config.legends.push({'name':'6.500 a 10.999', 'color':'fda821'});
+        Congo.future_projects.config.legends.push({'name':'11.000 a 19.999', 'color':'fa7c16'});
+        Congo.future_projects.config.legends.push({'name':'20.000 a 39.999', 'color':'f94710'});
+        Congo.future_projects.config.legends.push({'name':'Mayor a 40.000', 'color':'9d2608'});
         Congo.map_utils.counties();
       }
+
   return {
     init: init,
   }
@@ -825,6 +840,8 @@ Congo.future_projects.action_dashboards = function(){
             data['boost'] =  boost;
           }
 
+
+  
       $.ajax({
         type: 'GET',
         url: '/future_projects/future_projects_summary.json',

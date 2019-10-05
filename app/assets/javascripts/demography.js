@@ -1,5 +1,12 @@
 Congo.namespace('demography.action_dashboards');
 
+
+Congo.demography.config={
+  legends: []
+
+
+}
+
 Congo.demography.action_dashboards = function(){
   init=function(){
     Congo.map_utils.init();
@@ -105,6 +112,12 @@ Congo.demography.action_dashboards = function(){
         };
 
       };
+  //Legends
+        Congo.demography.config.legends.push({'name':'ABC1', 'color':'004b99'});
+        Congo.demography.config.legends.push({'name':'C2', 'color':'3b8ea5'});
+        Congo.demography.config.legends.push({'name':'C3', 'color':'f5ee9e'});
+        Congo.demography.config.legends.push({'name':'D', 'color':'f49e4c'});
+        Congo.demography.config.legends.push({'name':'E', 'color':'ab3428'});
 
     $.ajax({
       type: 'GET',

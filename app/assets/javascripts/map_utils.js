@@ -389,7 +389,10 @@ Congo.map_utils = function(){
       case 'demography_info':
         filter_layer = filter_layer +  "AND 1=1";
         Congo.demography.action_dashboards.indicator_demography();
+         
+        legends = Congo.demography.config.legends;
         remove_legend();
+        legend_points(legends);
         break;
       case 'transactions_info':
       case 'transactions_heatmap_amount':
@@ -400,13 +403,11 @@ Congo.map_utils = function(){
         seller_type_ids = Congo.transactions.config.seller_type_ids
         boost = Congo.dashboards.config.boost;
         widget =  Congo.dashboards.config.widget;
+        legends = Congo.transactions.config.legends;
 
         if (widget == 'heat_cbr_amout'){
           layer_type = 'transactions_heatmap_amount';
         }
-
-
-
 
         if (boost == false){
           filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
@@ -420,6 +421,7 @@ Congo.map_utils = function(){
         }
 
         remove_legend();
+        legend_points(legends);
 
         break;
       case 'future_projects_info':
@@ -446,22 +448,25 @@ Congo.map_utils = function(){
         if(filter_project_type_ids.length > 0){
           filter_layer = filter_layer + " AND project_type_id IN (" + filter_project_type_ids +")";
         }
+        style_graduated = Congo.dashboards.config.style_layer;
+        if (style_graduated == 'future_projects_normal_point'){
+          $.ajax({
+            async: false,
+            type: 'GET',
+            url: '/future_project_types/legend_points.json',
+            datatype: 'json',
+            data: {future_project_type_ids: future_project_type_ids },
+            success: function(data){
+              Congo.future_projects.config.legends = [];
+              Congo.future_projects.config.legends = data;
+            },
+            error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
 
-        $.ajax({
-          async: false,
-          type: 'GET',
-          url: '/future_project_types/legend_points.json',
-          datatype: 'json',
-          data: {future_project_type_ids: filter_future_project_type_ids },
-          success: function(data){
-            legend = data;
-          },
-          error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
-
-        })
-
+          });
+        }
+        legends = Congo.future_projects.config.legends;
         remove_legend();
-        legend_points(legend);
+        legend_points(legends);
 
         break;
       case 'projects_feature_info':
@@ -473,6 +478,7 @@ Congo.map_utils = function(){
         project_status_ids = Congo.projects.config.project_status_ids;
         project_type_ids = Congo.projects.config.project_type_ids;
         agency_ids = Congo.projects.config.project_agency_ids;
+        legends = Congo.projects.config.legends;
         filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
 
         if(from_floors.length >0 && to_floors.length > 0 ){
@@ -490,6 +496,7 @@ Congo.map_utils = function(){
           filter_layer = filter_layer + " AND agency_id IN (" + agency_ids + ")";
         }
         remove_legend();
+        legend_points(legends);
         break;
       case 'building_regulations_info':
         Congo.building_regulations.action_dashboards.indicator_building_regulations();
