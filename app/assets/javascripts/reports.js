@@ -37,7 +37,7 @@ Congo.reports = function(){
     case 'transactions_info':
       switch(kind_reports){
         case 'graph':
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          if ((area > 0 && area < 785398) || (radius > 0 && radius < 500)) {
             url = '/reports/transactions_summary.xlsx';
             window.open(url, '_blank');
           }else{
@@ -47,7 +47,8 @@ Congo.reports = function(){
 
           break;
         case 'base':
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          console.log(area);
+          if ((area > 0 && area < 785398) || (radius > 0 && radius < 500)) {
             url = '/reports/transactions_data.xlsx';
             window.open(url, '_blank');
           }else{

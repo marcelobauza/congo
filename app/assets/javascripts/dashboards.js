@@ -133,7 +133,7 @@ Congo.dashboards.action_index = function() {
     $('#boost').on('click', function() {
       area = Congo.dashboards.config.area;
       radius = Congo.dashboards.config.radius;
-      if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+      if ((area > 0 && area < 785398) || (radius > 0 && radius < 500)) {
         Congo.dashboards.config.boost = true;
         $('#filter-body').append(
           $('<div>', {
