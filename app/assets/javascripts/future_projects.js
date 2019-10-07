@@ -884,8 +884,8 @@ Congo.future_projects.action_dashboards = function(){
           $('.filter-projects').hide();
           $('.filter-future-projects').show();
 
-          // Eliminamos el census_selector
-          $('#census_selector').remove()
+          // Eliminamos el census_filter
+          $('#census_filter').remove()
 
         },
         success: function(data) {

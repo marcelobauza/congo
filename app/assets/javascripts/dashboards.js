@@ -268,34 +268,6 @@ Congo.dashboards.action_index = function() {
     )
   }
 
-  add_census_selector = function() {
-    if ($('#census_selector').length == 0) {
-      // Agregamos el select al card de "Filtros Activos"
-      $('#filter-body').prepend(
-        $("<div>", {
-          'id': 'census_selector',
-        }).append(
-          $('<select>', {
-            'class': 'form-control form-control-sm',
-          }).append(
-            $("<option>", {
-              'value': '1',
-              'text': 'Censo 2017'
-            }),
-            $("<option>", {
-              'value': '2',
-              'text': 'Censo 2012',
-              'disabled': 'disabled'
-            }),
-          ),
-          $("<div>", {
-            'class': 'dropdown-divider',
-          })
-        )
-      )
-    } // Cierra if length
-  } // Cierra add_census_selector
-
   add_time_slider = function() {
 
     if ($('#time_slider').length == 0) {
@@ -354,7 +326,6 @@ Congo.dashboards.action_index = function() {
     empty_selection_alert: empty_selection_alert,
     add_county_filter_item: add_county_filter_item,
     add_time_slider: add_time_slider,
-    add_census_selector: add_census_selector,
   }
 }();
 

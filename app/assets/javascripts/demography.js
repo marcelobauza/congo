@@ -1,10 +1,14 @@
 Congo.namespace('demography.action_dashboards');
 
+Congo.demography.config = {
+  legends: [],
+  census_source: '',
+}
 
-Congo.demography.config={
-  legends: []
-
-
+function changeCensusSource() {
+  var census_selector = document.getElementById("census_selector");
+  var selectedValue = census_selector.options[census_selector.selectedIndex].value;
+  Congo.demography.config.census_source = selectedValue
 }
 
 Congo.demography.action_dashboards = function(){
@@ -79,9 +83,8 @@ Congo.demography.action_dashboards = function(){
           layer_type = Congo.dashboards.config.layer_type;
           style_layer = Congo.dashboards.config.style_layer;
 
-          // Creamos el overlay y el census_selector
+          // Creamos el overlay
           Congo.dashboards.action_index.create_overlay_and_filter_card();
-          Congo.dashboards.action_index.add_census_selector();
 
       if (county_id != '') {
 
@@ -175,161 +178,198 @@ Congo.demography.action_dashboards = function(){
           var reg = data[i];
           var title = reg['title'];
 
-          // Creamos el div contenedor
-          var chart_container = document.createElement('div');
-          chart_container.className = 'chart-container card text-light bg-primary';
-          chart_container.id = 'chart-container'+i;
+          if (title == 'Variable') {
 
-          // Creamos el card-header
-          var card_header = document.createElement('div');
-          card_header.className = 'card-header pl-3';
-          card_header.id = 'header'+i;
+            // TODO: por el momento el select no tiene opcion seleccionada dependiendo
+            // del valor de la variable global por lo que se inicializa siempre en uno
+            Congo.demography.config.census_source = 1
 
-          // Creamos el collapse
-          var collapse = document.createElement('div');
-          collapse.className = 'collapse show';
-          collapse.id = 'collapse'+i;
+            if ($('#census_filter').length == 0) {
+              // Agregamos el select al card de "Filtros Activos"
+              $('#filter-body').prepend(
+                $("<div>", {
+                  'id': 'census_filter',
+                }).append(
+                  $('<select>', {
+                    'id': 'census_selector',
+                    'class': 'form-control form-control-sm',
+                    'onchange': 'changeCensusSource();',
+                  }).append(
+                    $("<option>", {
+                      'value': '1',
+                      'text': 'Censo 2017'
+                    }),
+                    $("<option>", {
+                      'value': '2',
+                      'text': 'Censo 2012',
+                    }),
+                  ),
+                  $("<div>", {
+                    'class': 'dropdown-divider',
+                  })
+                )
+              )
 
-          // Creamos el card-body
-          var card_body = document.createElement('div');
-          card_body.className = 'card-body';
-          card_body.id = 'body'+i;
+            } // Cierra if length
 
-          // Creamos handle, título y botones
-          var card_handle = '<span class="fas fa-arrows-alt handle border border-dark">'
-          var card_header_title = '<b>'+title+'</b>'
-          var card_min_button = '<button class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize" style="width: 24px; height: 12px"></i></button>'
-          var card_max_button = '<button class="close" id="card-max-'+i+'" onclick="maxCard('+i+')"><i class="fas fa-window-maximize" style="width: 24px; height: 12px"></i></button>'
-
-          // Adjuntamos los elementos
-          $('.overlay').append(chart_container);
-          $('#chart-container'+i).append(card_header, collapse);
-          $('#collapse'+i).append(card_body);
-          $('#header'+i).append(card_handle, card_header_title, card_max_button, card_min_button);
-
-          // Resumen
-          if (title == 'Resumen') {
-
-            var info = reg['data'];
-
-            // Extraemos y adjuntamos los datos al card-body
-            $.each(info, function(y, z) {
-              name = z['name'];
-              count = z['count']
-              count = count.toLocaleString('es-ES')
-              item = name + ': ' + count + '<br>';
-              $('#body' + i).append(item);
-            })
-
-          // Gráficos
           } else {
 
-            var info = reg['data']
-            var datasets = [];
-            var name = [];
-            var count = [];
+            // Creamos el div contenedor
+            var chart_container = document.createElement('div');
+            chart_container.className = 'chart-container card text-light bg-primary';
+            chart_container.id = 'chart-container'+i;
 
-            // Extraemos los datos de las series
-            $.each(info, function(c, d){
-              name.push(d['name'])
-              count.push(d['count'])
-            })
+            // Creamos el card-header
+            var card_header = document.createElement('div');
+            card_header.className = 'card-header pl-3';
+            card_header.id = 'header'+i;
 
-            // Guardamos "datasets" y "chart_type"
-            chart_type = 'pie';
-            datasets.push({
-              data: count,
-              backgroundColor: [
-                'rgb(39,174,96)',
-                'rgb(231,76,60)',
-                'rgb(211,84,0)',
-                'rgb(41,128,185)',
-                'rgb(241,196,15)',
-                '#8E44AD',
-                '#EC7063'
-              ],
-            })
+            // Creamos el collapse
+            var collapse = document.createElement('div');
+            collapse.className = 'collapse show';
+            collapse.id = 'collapse'+i;
 
-            chart_data = {
-              labels: name,
-              datasets: datasets
-            }
+            // Creamos el card-body
+            var card_body = document.createElement('div');
+            card_body.className = 'card-body';
+            card_body.id = 'body'+i;
 
-            // Guardamos "options"
-            var chart_options = {
-              responsive: true,
-              title: {
-                display: false,
-                text: title
-              },
-              legend: {
-                display: false,
-              },
-              tooltips: {
-                callbacks: {
-                  title: function(tooltipItem, data) {
-                    return data.labels[tooltipItem[0].index];
-                  },
-                  label: function(tooltipItem, data) {
-                    // Obtenemos los datos
-                    var dataset = data.datasets[tooltipItem.datasetIndex];
-                    // Calcula el total
-                    var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
-                      return previousValue + currentValue;
-                    });
-                    // Obtenemos el valor de los elementos actuales
-                    var currentValue = dataset.data[tooltipItem.index];
-                    // Calculamos el porcentaje
-                    var precentage = ((currentValue/total) * 100).toFixed(2)
-                    return precentage + "%";
-                  }
-                }
-              },
-              plugins: {
-                datalabels: {
-                  formatter: (value, ctx) => {
-                    // Mustra sólo los labels cuyo valor sea mayor al 4%
-                    let sum = 0;
-                    var label = ctx.chart.data.labels[ctx.dataIndex]
-                    let dataArr = ctx.chart.data.datasets[0].data;
-                    dataArr.map(data => {
-                        sum += data;
-                    });
-                    let percentage = (value*100 / sum).toFixed(2);
-                    if (percentage > 4) {
-                      return label;
-                    } else {
-                      return null;
+            // Creamos handle, título y botones
+            var card_handle = '<span class="fas fa-arrows-alt handle border border-dark">'
+            var card_header_title = '<b>'+title+'</b>'
+            var card_min_button = '<button class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize" style="width: 24px; height: 12px"></i></button>'
+            var card_max_button = '<button class="close" id="card-max-'+i+'" onclick="maxCard('+i+')"><i class="fas fa-window-maximize" style="width: 24px; height: 12px"></i></button>'
+
+            // Adjuntamos los elementos
+            $('.overlay').append(chart_container);
+            $('#chart-container'+i).append(card_header, collapse);
+            $('#collapse'+i).append(card_body);
+            $('#header'+i).append(card_handle, card_header_title, card_max_button, card_min_button);
+
+            // Resumen
+            if (title == 'Resumen') {
+
+              var info = reg['data'];
+
+              // Extraemos y adjuntamos los datos al card-body
+              $.each(info, function(y, z) {
+                name = z['name'];
+                count = z['count']
+                count = count.toLocaleString('es-ES')
+                item = name + ': ' + count + '<br>';
+                $('#body' + i).append(item);
+              })
+
+            // Gráficos
+            } else {
+
+              var info = reg['data']
+              var datasets = [];
+              var name = [];
+              var count = [];
+
+              // Extraemos los datos de las series
+              $.each(info, function(c, d){
+                name.push(d['name'])
+                count.push(d['count'])
+              })
+
+              // Guardamos "datasets" y "chart_type"
+              chart_type = 'pie';
+              datasets.push({
+                data: count,
+                backgroundColor: [
+                  'rgb(39,174,96)',
+                  'rgb(231,76,60)',
+                  'rgb(211,84,0)',
+                  'rgb(41,128,185)',
+                  'rgb(241,196,15)',
+                  '#8E44AD',
+                  '#EC7063'
+                ],
+              })
+
+              chart_data = {
+                labels: name,
+                datasets: datasets
+              }
+
+              // Guardamos "options"
+              var chart_options = {
+                responsive: true,
+                title: {
+                  display: false,
+                  text: title
+                },
+                legend: {
+                  display: false,
+                },
+                tooltips: {
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data.labels[tooltipItem[0].index];
+                    },
+                    label: function(tooltipItem, data) {
+                      // Obtenemos los datos
+                      var dataset = data.datasets[tooltipItem.datasetIndex];
+                      // Calcula el total
+                      var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                        return previousValue + currentValue;
+                      });
+                      // Obtenemos el valor de los elementos actuales
+                      var currentValue = dataset.data[tooltipItem.index];
+                      // Calculamos el porcentaje
+                      var precentage = ((currentValue/total) * 100).toFixed(2)
+                      return precentage + "%";
                     }
-                  },
-                  font: {
-                    size: 11,
-                  },
-                  textStrokeColor: '#616A6B',
-                  color: '#e8ebef',
-                  textStrokeWidth: 1,
-                  textShadowColor: '#000000',
-                  textShadowBlur: 2,
-                  align: 'end',
-                }
-              },
-            };
+                  }
+                },
+                plugins: {
+                  datalabels: {
+                    formatter: (value, ctx) => {
+                      // Mustra sólo los labels cuyo valor sea mayor al 4%
+                      let sum = 0;
+                      var label = ctx.chart.data.labels[ctx.dataIndex]
+                      let dataArr = ctx.chart.data.datasets[0].data;
+                      dataArr.map(data => {
+                          sum += data;
+                      });
+                      let percentage = (value*100 / sum).toFixed(2);
+                      if (percentage > 4) {
+                        return label;
+                      } else {
+                        return null;
+                      }
+                    },
+                    font: {
+                      size: 11,
+                    },
+                    textStrokeColor: '#616A6B',
+                    color: '#e8ebef',
+                    textStrokeWidth: 1,
+                    textShadowColor: '#000000',
+                    textShadowBlur: 2,
+                    align: 'end',
+                  }
+                },
+              };
 
-            var chart_settings = {
-              type: chart_type,
-              data: chart_data,
-              options: chart_options
-            }
+              var chart_settings = {
+                type: chart_type,
+                data: chart_data,
+                options: chart_options
+              }
 
-            // Creamos y adjuntamos el canvas
-            var canvas = document.createElement('canvas');
-            canvas.id = 'canvas'+i;
-            $('#body'+i).append(canvas);
+              // Creamos y adjuntamos el canvas
+              var canvas = document.createElement('canvas');
+              canvas.id = 'canvas'+i;
+              $('#body'+i).append(canvas);
 
-            var chart_canvas = document.getElementById('canvas'+i).getContext('2d');
-            var final_chart = new Chart(chart_canvas, chart_settings);
+              var chart_canvas = document.getElementById('canvas'+i).getContext('2d');
+              var final_chart = new Chart(chart_canvas, chart_settings);
 
-          } // Cierra else
+            } // Cierra else gráficos
+          } // Cierra if Variable
         } // Cierra for
       } // Cierra success
     }) // Cierra ajax
