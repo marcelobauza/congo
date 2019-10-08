@@ -9,6 +9,7 @@ function changeCensusSource() {
   var census_selector = document.getElementById("census_selector");
   var selectedValue = census_selector.options[census_selector.selectedIndex].value;
   Congo.demography.config.census_source = selectedValue
+  indicator_demography()
 }
 
 Congo.demography.action_dashboards = function(){
@@ -179,10 +180,6 @@ Congo.demography.action_dashboards = function(){
           var title = reg['title'];
 
           if (title == 'Variable') {
-
-            // TODO: por el momento el select no tiene opcion seleccionada dependiendo
-            // del valor de la variable global por lo que se inicializa siempre en uno
-            Congo.demography.config.census_source = 1
 
             if ($('#census_filter').length == 0) {
               // Agregamos el select al card de "Filtros Activos"
