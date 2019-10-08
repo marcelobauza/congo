@@ -63,27 +63,254 @@ transactions_popup = function(id, latlng){
     datatype: 'json',
     data: data,
     success: function(data) {
+
       $('#popup_info_transactions').empty();
-      $('#popup_info_transactions').append('<div>Bimestre: '+ data.bimester +'</div>');
-      $('#popup_info_transactions').append('<div>Año: '+ data.year +'</div>');
-      $('#popup_info_transactions').append('<div>Direccion: '+ data.address +'</div>');
-      $('#popup_info_transactions').append('<div>Uso: '+ data.property_types.name +'</div>');
-      $('#popup_info_transactions').append('<div>Vendedor: '+ data.seller_types.name +'</div>');
-      $('#popup_info_transactions').append('<div>Vendedor: '+ data.seller_name +'</div>');
-      $('#popup_info_transactions').append('<div>Comprador: '+ data.buyer_name +'</div>');
-      $('#popup_info_transactions').append('<div>Foja: '+ data.sheet +'</div>');
-      $('#popup_info_transactions').append('<div>Numero: '+ data.number +'</div>');
-      $('#popup_info_transactions').append('<div>Fecha de Inscripcion: '+ data.inscription_date +'</div>');
-      $('#popup_info_transactions').append('<div>Departamento: '+ data.department +'</div>');
-      $('#popup_info_transactions').append('<div>Valor UF: '+ data.calculated_value +'</div>');
-      $('#popup_info_transactions').append('<div>Valor UF M2 Util: '+ data.uf_m2_u +'</div>');
-      $('#popup_info_transactions').append('<div>Valor UF M2 Terreno: '+ data.uf_m2_t +'</div>');
-      $('#popup_info_transactions').append('<div>Superficie Util: '+ data.total_surface_building +'</div>');
-      $('#popup_info_transactions').append('<div>Superficie Terreno: '+ data.total_surface_terrain +'</div>');
-      $('#popup_info_transactions').append('<div>Plano: '+ data.blueprint +'</div>');
-      $('#popup_info_transactions').append('<div>Bodega: '+ data.cellar +'</div>');
-      $('#popup_info_transactions').append('<div>Estacionamiento: '+ data.parkingi +'</div>');
-      $('#popup_info_transactions').append('<div>Rol: '+ data.role +'</div>');
+
+      // Agregamos la información general
+      $('#popup_info_transactions').append(
+        $('<p>').append(
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Bimestre:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.bimester
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Año:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.year
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Dirección:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.address
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Uso:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.property_types.name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Vendedor:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.seller_types.name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Vendedor:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.seller_name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Comprador:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.buyer_name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Foja:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.sheet
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Número:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.number
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Fecha de Inscripció:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.inscription_date
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Departamento:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.department
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Valor UF:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.calculated_value
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Valor UF m2 Útil:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.uf_m2_u
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Valor UF m2 Terreno:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.uf_m2_t
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Superficie Útil:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.total_surface_building
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Superficie Terreno:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.total_surface_terrain
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Plano:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.blueprint
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Bodegas:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.cellar
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Estacionamientos:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.parkingi
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Rol:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.role
+            }),
+          ),
+        )
+      )
 
       $('#leaflet_modal_transactions').modal('show');
 
