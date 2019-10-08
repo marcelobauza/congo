@@ -63,25 +63,240 @@ projects_popup = function(id){
       var detail = data
 
       $('#popup_info_projects').empty();
-      $('#popup_info_projects').append('<div>Bimestre: '+ detail.bimester +'</div>');
-      $('#popup_info_projects').append('<div>Año: '+ detail.year +'</div>');
-      $('#popup_info_projects').append('<div>Direccion: '+ detail.address +'</div>');
-      $('#popup_info_projects').append('<div>Nombre: '+ detail.name +'</div>');
-      $('#popup_info_projects').append('<div>Inmobiliaria: '+ detail.agency_name +'</div>');
-      $('#popup_info_projects').append('<div>Estado: '+ data.project_status.name  +'</div>');
-      $('#popup_info_projects').append('<div>Total de Unidades: '+ detail.total_units  +'</div>');
-      $('#popup_info_projects').append('<div>Disponibilidad Total: '+ detail.stock_units  +'</div>');
-      $('#popup_info_projects').append('<div>Venta Total: '+ detail.sold_units  +'</div>');
-      $('#popup_info_projects').append('<div>Cantidad de Pisos: '+ detail.floors  +'</div>');
-      $('#popup_info_projects').append('<div>UF/m2: '+ detail.pp_uf_m2  +'</div>');
-      $('#popup_info_projects').append('<div>Valor UF: '+ detail.pp_uf  +'</div>');
-      $('#popup_info_projects').append('<div>Velocidad de Venta: '+ detail.vhmu  +'</div>');
-      $('#popup_info_projects').append('<div>Porcentage Vendido: '+ detail.percentage_sold  +'</div>');
-      $('#popup_info_projects').append('<div>Superficie Útil: '+ detail.mix_usable_square_meters  +'</div>');
-      $('#popup_info_projects').append('<div>Terraza: '+ detail.mix_terrace_square_meters  +'</div>');
-      $('#popup_info_projects').append('<div>Fecha Inicio Construcción: '+ detail.build_date  +'</div>');
-      $('#popup_info_projects').append('<div>Fecha Inicio Ventas:  '+ detail.sale_date  +'</div>');
-      $('#popup_info_projects').append('<div>Fecha Entrega '+ detail.transfer_date  +'</div>');
+
+      // Agregamos la información general
+      $('#popup_info_projects').append(
+        $('<p>').append(
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Bimestre:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.bimester
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Año:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.year
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Dirección:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.address
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Nombre:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Inmobiliaria:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.agency_name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Estado:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.project_status.name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Total de Unidades:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.total_units
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Disponibilidad Total:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.stock_units
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Venta Total:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.sold_units
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Cantidad de Pisos:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.floors
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'UF/m2:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.pp_uf_m2
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Valor UF:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.pp_uf
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Velocidad de Venta:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.vhmu
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Porcentage Vendido:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.percentage_sold
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Superficie Útil:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.mix_usable_square_meters
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Terraza:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.mix_terrace_square_meters
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Fecha Inicio Construcción:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.build_date
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Fecha Inicio Ventas:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.sale_date
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Fecha Entrega:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.transfer_date
+            }),
+          ),
+        ),
+      )
 
       $('#leaflet_modal_projects').modal('show');
 
