@@ -661,72 +661,252 @@ future_projects_popup= function(id){
     success: function(data) {
       $('#popup_info_future_projects').empty();
 
+      // Agregamos la información general
       $('#popup_info_future_projects').append(
-        $('<ul>', {
-          'class': 'list-unstyled p-4'
-        }).append(
-          $('<li>', {
-            'text': 'Bimestre: ' + data.bimester,
-          }),
-          $('<li>', {
-            'text': 'Año: ' + data.year,
-          }),
-          $('<li>', {
-            'text': 'Dirección: ' + data.address,
-          }),
-          $('<li>', {
-            'text': 'Expediente: ' + data.future_project_type.name,
-          }),
-          $('<li>', {
-            'text': 'Destino: ' + data.project_type.name,
-          }),
-          $('<li>', {
-            'text': 'Nombre: ' + data.name,
-          }),
-          $('<li>', {
-            'text': 'Número de Expediente: ' + data.file_number,
-          }),
-          $('<li>', {
-            'text': 'Fecha de Expediente: ' + data.file_date,
-          }),
-          $('<li>', {
-            'text': 'Propietario: ' + data.owner,
-          }),
-          $('<li>', {
-            'text': 'Represtentante Legal: ' + data.legal_agent,
-          }),
-          $('<li>', {
-            'text': 'Arquitecto: ' + data.architect,
-          }),
-          $('<li>', {
-            'text': 'Cantidad de Pisos: ' + data.floors,
-          }),
-          $('<li>', {
-            'text': 'Total de Subterráneos: ' + data.undergrounds,
-          }),
-          $('<li>', {
-            'text': 'Total de Unidades: ' + data.total_units,
-          }),
-          $('<li>', {
-            'text': 'Total de Estacionamientos: ' + data.total_parkings,
-          }),
-          $('<li>', {
-            'text': 'Total de Locales Comerciales: ' + data.total_commercials,
-          }),
-          $('<li>', {
-            'text': 'Superficie Aprobada (m²): ' + data.m2_approved,
-          }),
-          $('<li>', {
-            'text': 'Superficie Edificada (m²): ' + data.m2_built,
-          }),
-          $('<li>', {
-            'text': 'Superficie Terreno (m²): ' + data.m2_field,
-          }),
-          $('<li>', {
-            'text': 'Comentarios: ' + data.comments,
-          })
-        )
-      );
+        $('<p>').append(
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Bimestre:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.bimester
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Año:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.year
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Dirección:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.address
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Expediente:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.future_project_type.name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Destino:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.project_type.name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Nombre:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.name
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Número de Expediente:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.file_number
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Fecha de Expediente:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.file_date
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Propietario:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.owner
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Represtentante Legal:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.legal_agent
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Arquitecto:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.architect
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Cantidad de Pisos:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.floors
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Total de Subterráneos:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.undergrounds
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Total de Unidades:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.total_units
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Total de Estacionamientos:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.total_parkings
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Total de Locales Comerciales:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.total_commercials
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Superficie Aprobada (m²):'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.m2_approved
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Superficie Edificada (m²):'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.m2_built
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Superficie Terreno (m²):'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.m2_field
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Comentarios:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.comments
+            }),
+          ),
+        ),
+      )
+
       $('#leaflet_modal_future_projects').modal();
 
       // Vuelve a activar el primer tab cuando se cierra el modal del popup
@@ -841,7 +1021,7 @@ Congo.future_projects.action_dashboards = function(){
           }
 
 
-  
+
       $.ajax({
         type: 'GET',
         url: '/future_projects/future_projects_summary.json',
