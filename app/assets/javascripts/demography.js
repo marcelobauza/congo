@@ -2,7 +2,7 @@ Congo.namespace('demography.action_dashboards');
 
 Congo.demography.config = {
   legends: [],
-  census_source: '',
+  census_source: 1,
 }
 
 function changeCensusSource() {
@@ -83,6 +83,7 @@ Congo.demography.action_dashboards = function(){
           type_geometry = Congo.dashboards.config.typeGeometry;
           layer_type = Congo.dashboards.config.layer_type;
           style_layer = Congo.dashboards.config.style_layer;
+      census_source_id = Congo.demography.config.census_source;
 
           // Creamos el overlay
           Congo.dashboards.action_index.create_overlay_and_filter_card();
@@ -93,7 +94,8 @@ Congo.demography.action_dashboards = function(){
           county_id: county_id,
           type_geometry: type_geometry,
           layer_type: layer_type,
-          style_layer: style_layer
+          style_layer: style_layer,
+          census_source_id: census_source_id
         };
 
       } else if (centerPoint != '') {
@@ -103,7 +105,8 @@ Congo.demography.action_dashboards = function(){
           radius: radius,
           type_geometry: type_geometry,
           layer_type: layer_type,
-          style_layer: style_layer
+          style_layer: style_layer,
+          census_source_id: census_source_id
         };
 
       } else {
@@ -112,11 +115,14 @@ Congo.demography.action_dashboards = function(){
           wkt: JSON.stringify(wkt),
           type_geometry: type_geometry,
           layer_type: layer_type,
-          style_layer: style_layer
+          style_layer: style_layer,
+          census_source_id: census_source_id
         };
 
       };
   //Legends
+      Congo.demography.config.legends = [];
+
         Congo.demography.config.legends.push({'name':'ABC1', 'color':'004b99'});
         Congo.demography.config.legends.push({'name':'C2', 'color':'3b8ea5'});
         Congo.demography.config.legends.push({'name':'C3', 'color':'f5ee9e'});

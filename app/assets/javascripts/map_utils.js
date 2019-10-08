@@ -387,9 +387,10 @@ Congo.map_utils = function(){
     layer_type = Congo.dashboards.config.layer_type;
     switch(layer_type) {
       case 'demography_info':
-        filter_layer = filter_layer +  "AND 1=1";
+        
+        census_source_id = Congo.demography.config.census_source;
+        filter_layer = filter_layer +  "AND census_source_id =" + census_source_id;
         Congo.demography.action_dashboards.indicator_demography();
-         
         legends = Congo.demography.config.legends;
         remove_legend();
         legend_points(legends);

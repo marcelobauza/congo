@@ -4,8 +4,7 @@ class Censu < ApplicationRecord
 
 
   def self.average_people_by_home(filters)
-
-    conditions = "census.census_source_id = 1"
+    conditions = "census.census_source_id = #{filters[:census_source_id]}"
     #    conditions += "#{Util.and}census.county_id IN(#{User.current.county_ids.join(",")})" if User.current.county_ids.length > 0
     select = "SUM(home_tot) as homes_total, SUM(age_tot) as people_total,
                                           (SUM(age_tot) / cast(SUM(home_tot) as float)) as people_avg"
