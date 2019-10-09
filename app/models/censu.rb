@@ -4,7 +4,10 @@ class Censu < ApplicationRecord
 
 
   def self.average_people_by_home(filters)
+
+
     conditions = "census.census_source_id = #{filters[:census_source_id]}"
+    #conditions = "census.census_source_id =1"
     #    conditions += "#{Util.and}census.county_id IN(#{User.current.county_ids.join(",")})" if User.current.county_ids.length > 0
     select = "SUM(home_tot) as homes_total, SUM(age_tot) as people_total,
                                           (SUM(age_tot) / cast(SUM(home_tot) as float)) as people_avg"
@@ -24,44 +27,51 @@ class Censu < ApplicationRecord
   end
 
   def self.education_levels(filters)
+        conditions = "census.census_source_id = #{filters[:census_source_id]}"
         select = "SUM(basica) AS basica, SUM(media) AS media,  SUM(media_tec) AS media_tec, SUM(tecnica) AS tecnica, SUM(profesional) AS profesional, SUM(magister) AS magister, sum(doctor) as doctor"
-    @data = Censu.where(filter_area_conditions(filters)).select(select).take
+        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
     end
 
 
   def self.civil_status(filters)
+        conditions = "census.census_source_id = #{filters[:census_source_id]}"
         select = "SUM(separated) AS separated, SUM(widowed) AS widowed,  SUM(single) AS single, SUM(married) AS married, SUM(coexist) as coexist, sum(canceled) as canceled"
-    @data = Censu.where(filter_area_conditions(filters)).select(select).take
+        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
 
   end
 
   def self.gse(filters)
+        conditions = "census.census_source_id = #{filters[:census_source_id]}"
         select = "SUM(n_abc1) AS abc1, SUM(n_c2) AS c2,  SUM(n_c3) AS c3, SUM(n_d) AS d, SUM(n_e) as e"
-        @data = Censu.where(filter_area_conditions(filters)).select(select).take
+        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
 
   end
 
   def self.age(filters)
+        conditions = "census.census_source_id = #{filters[:census_source_id]}"
         select = "SUM(age_0_9) AS age_0_9, SUM(age_10_19) AS age_10_19,  SUM(age_20_29) AS age_20_29, SUM(age_30_39) AS age_30_39, SUM(age_40_49) as age_40_49, "
         select += " SUM(age_50_59) AS age_50_59, SUM(age_60_69) AS age_60_69,  SUM(age_70_79) AS age_70_79, SUM(age_80_more) AS age_80_more"
-    @data = Censu.where(filter_area_conditions(filters)).select(select).take
+        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
 
   end
 
   def self.homes(filters)
+        conditions = "census.census_source_id = #{filters[:census_source_id]}"
         select = "SUM(home_1p) AS home_1p, SUM(home_2p) AS home_2p,  SUM(home_3p) AS home_3p, SUM(home_4p) AS home_4p, "
         select += " SUM(home_5p) as home_5p, SUM(home_6_more) as  "
-    @data = Censu.where(filter_area_conditions(filters)).select(select).take
+        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
   end
 
   def self.professions(filters)
+    conditions = "census.census_source_id = #{filters[:census_source_id]}"
     select = "SUM(salaried) as salaried, SUM(domestic_service) as domestic_service, SUM(independent) as independent, SUM(employee_employer) as employee_employer, SUM(unpaid_familiar) as unpaid_familiar"
-    @data = Censu.where(filter_area_conditions(filters)).select(select).take
+    @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
   end
 
   def self.property_tenure(filters)
+    conditions = "census.census_source_id = #{filters[:census_source_id]}"
     select = "SUM(owner) as owner, SUM(leased) as leased , SUM(transferred) as transferred , SUM(free) as free , SUM(possesion) as possesion "
-    @data = Censu.where(filter_area_conditions(filters)).select(select).take
+    @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
   end
 
   def self.summary(params)

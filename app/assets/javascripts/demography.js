@@ -9,7 +9,7 @@ function changeCensusSource() {
   var census_selector = document.getElementById("census_selector");
   var selectedValue = census_selector.options[census_selector.selectedIndex].value;
   Congo.demography.config.census_source = selectedValue
-  indicator_demography()
+  Congo.map_utils.counties();
 }
 
 Congo.demography.action_dashboards = function(){
