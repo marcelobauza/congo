@@ -291,7 +291,7 @@ Congo.dashboards.action_index = function() {
 
       // Implementamos ionRangeSlider
       $("#time_slider").ionRangeSlider({
-        skin: "sharp",
+        skin: "flat",
         grid: true,
         from: slider_periods.length-1,
         values: slider_periods,
