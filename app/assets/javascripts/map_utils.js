@@ -496,6 +496,17 @@ Congo.map_utils = function(){
         if (agency_ids.length > 0){
           filter_layer = filter_layer + " AND agency_id IN (" + agency_ids + ")";
         }
+
+
+        widget =  Congo.dashboards.config.widget;
+        switch (widget) {
+          case 'prv_sold_units':
+          case 'prv_uf_avg_percent':
+          case 'prv_uf_m2_u':
+            layer_type = 'project_instance_mix_views'
+            break;
+        }
+
         remove_legend();
         legend_points(legends);
         break;
