@@ -70,7 +70,7 @@ class Censu < ApplicationRecord
 
   def self.property_tenure(filters)
     conditions = "census.census_source_id = #{filters[:census_source_id]}"
-    select = "SUM(owner) as owner, SUM(leased) as leased , SUM(transferred) as transferred , SUM(free) as free , SUM(possesion) as possesion "
+    select = "SUM(owner + transferred) as owner, SUM(leased) as leased , SUM(free) as free"
     @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
   end
 
@@ -87,7 +87,7 @@ class Censu < ApplicationRecord
     data = [
       {:name => I18n.t(:HOMES_TOTAL), :count => NumberFormatter.format(homes_total, false)},
       {:name => I18n.t(:PEOPLE_TOTAL), :count => NumberFormatter.format(people_total, false)},
-      {:name => I18n.t(:HOMES_AVG), :count => NumberFormatter.format(homes_avg, true)},
+      #{:name => I18n.t(:HOMES_AVG), :count => NumberFormatter.format(homes_avg, true)},
       {:name => I18n.t(:PEOPLE_AVG), :count => NumberFormatter.format(people_avg, true)},
     ]
     result.push({"title":"Resumen","data": data})
@@ -177,9 +177,7 @@ class Censu < ApplicationRecord
     data = [
       {name: "Propietario", count: @property_tenure.owner },
       {name: "Arrendatario", count: @property_tenure.leased },
-      {name: "Transferida", count: @property_tenure.transferred },
       {name: "Gratuita", count: @property_tenure.free },
-      {name: "Cedida", count: @property_tenure.possesion }
     ]
     result.push({"title":"Propiedad y Tenencia", "data": data})
 
