@@ -640,6 +640,17 @@ Congo.map_utils = function(){
         break;
       case 'marker':
         county_id = Congo.dashboards.config.county_id;
+
+        if (layer_type == 'demography_info'){
+          filter_layer  = " AND 1=1";
+          if (census_source_id == '1'){
+            layer_type = 'demography_info_census_2017'
+          }else{
+
+            layer_type = 'demography_info_census_2012'
+          }
+          Congo.dashboards.config.style_layer = 'census_voronoi_gse_zn';
+        }
         cql_filter = "county_id='"+ county_id + "'"+   filter_layer;
         cql_filter_pois = "county_id='"+ county_id + "'";
         break;
@@ -653,13 +664,21 @@ Congo.map_utils = function(){
         Congo.dashboards.config.radius = 0;
         Congo.dashboards.config.size_box = [];
         county_id = Congo.dashboards.config.county_id;
-        console.log(county_id);
+        if (layer_type == 'demography_info'){
+          filter_layer  = " AND 1=1";
+          if (census_source_id == '1'){
+            layer_type = 'demography_info_census_2017'
+          }else{
+
+            layer_type = 'demography_info_census_2012'
+          }
+          Congo.dashboards.config.style_layer = 'census_voronoi_gse_zn';
+        }
         cql_filter = "county_id IN ("+ county_id +") "+ filter_layer;
         cql_filter_pois = "county_id IN ("+ county_id + ")";
         break;
     }
     groupLayer = L.layerGroup();
-
     style_layer = Congo.dashboards.config.style_layer;
     //POIS
     var options_info = {
