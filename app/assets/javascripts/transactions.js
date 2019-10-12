@@ -210,7 +210,7 @@ transactions_popup = function(id, latlng){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.calculated_value
+              'text': Math.round(data.calculated_value).toLocaleString()
             }),
           ),
           $('<div>', {
@@ -222,7 +222,7 @@ transactions_popup = function(id, latlng){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.uf_m2_u
+              'text': parseFloat(data.uf_m2_u).toFixed(1)
             }),
           ),
           $('<div>', {
@@ -234,7 +234,7 @@ transactions_popup = function(id, latlng){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.uf_m2_t
+              'text': parseFloat((data.uf_m2_t).toFixed(1)
             }),
           ),
           $('<div>', {
@@ -246,7 +246,7 @@ transactions_popup = function(id, latlng){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.total_surface_building
+              'text': Math.round(data.total_surface_building)
             }),
           ),
           $('<div>', {
@@ -258,7 +258,7 @@ transactions_popup = function(id, latlng){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.total_surface_terrain
+              'text': Math.round(data.total_surface_terrain)
             }),
           ),
           $('<div>', {
