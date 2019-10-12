@@ -63,7 +63,6 @@ transactions_popup = function(id, latlng){
     datatype: 'json',
     data: data,
     success: function(data) {
-
       $('#popup_info_transactions').empty();
 
       // Agregamos la información general
@@ -222,7 +221,7 @@ transactions_popup = function(id, latlng){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': parseFloat(data.uf_m2_u).toFixed(1)
+              'text': !isNaN(parseFloat(data.uf_m2_u)) ? parseFloat(data.uf_m2_u).toFixed(1) : "-"
             }),
           ),
           $('<div>', {
@@ -234,7 +233,7 @@ transactions_popup = function(id, latlng){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': parseFloat((data.uf_m2_t).toFixed(1)
+              'text': !isNaN(parseFloat(data.uf_m2_t)) ? parseFloat(data.uf_m2_t).toFixed(1) : "-"
             }),
           ),
           $('<div>', {
