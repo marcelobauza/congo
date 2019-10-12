@@ -36,13 +36,20 @@
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :floors, label: 'Pisos:', class: 'col-md-5 text-right' %>
+  <%= a.label :floors, label: 'Altura Edificio:', class: 'col-md-5 text-right' %>
   <div class="col-md-6">
     <%= a.input :floors, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
+
 <div class="form-group row">
-  <%= a.label :uf_m2, label: 'UF m²:', class: 'col-md-5 text-right' %>
+  <%= a.label :uf_m2, label: 'Precio UF:', class: 'col-md-5 text-right' %>
+  <div class="col-md-6">
+    <%= a.input :uf, label: false, input_html: {class: 'form-control form-control-sm'} %>
+  </div>
+</div>
+<div class="form-group row">
+  <%= a.label :uf_m2, label: 'Precio UF m²:', class: 'col-md-5 text-right' %>
   <div class="col-md-6">
     <%= a.input :uf_m2, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
