@@ -55,8 +55,9 @@ Congo.map_utils = function(){
     };
     layerControl = L.control.layers(baseMaps, overlays, {
       position: 'topleft',
-      collapsed: false
+      collapsed: true
     }).addTo(map);
+
 
     editableLayers = new L.FeatureGroup();
 
@@ -375,21 +376,23 @@ Congo.map_utils = function(){
 
     if (groupLayer !=undefined){
       groupLayer.eachLayer(function(layer) {
+        layerControl.removeLayer(groupLayer);
+        layerControl.removeLayer(sourcePois); 
+        layerControl.removeLayer(sourceLots);
         groupLayer.removeLayer(layer);
+
       });
     }
 
     if (sourcePois !=undefined){
       map.removeLayer(sourcePois);
     }
-    map.removeControl(layerControl);
-    layerControl = L.control.layers(baseMaps, overlays, {position: 'topleft'}).addTo(map);
     layer_type = Congo.dashboards.config.layer_type;
     switch(layer_type) {
       case 'demography_info':
         
         census_source_id = Congo.demography.config.census_source;
-        filter_layer = filter_layer +  "AND census_source_id =" + census_source_id;
+        filter_layer =  "census_source_id =" + census_source_id;
         Congo.demography.action_dashboards.indicator_demography();
         legends = Congo.demography.config.legends;
         remove_legend();
