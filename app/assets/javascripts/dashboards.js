@@ -36,8 +36,24 @@ $(document).ready(function(){
   $('#heat_prv_uf_m2_util').on('click', function(){
     Congo.dashboards.config.widget = 'heat_prv_uf_m2_u';
   });
+  $('#type_point').on('click', function(){
 
-})
+    layer_type = Congo.dashboards.config.layer_type;
+    switch(layer_type){
+      case 'future_projects_info':
+        Congo.dashboards.config.style_layer= 'future_projects_normal_point';
+        break;
+      case 'transactions_info':
+        Congo.dashboards.config.style_layer= 'poi_new';
+        break;
+
+      case 'projects_feature_info':
+        Congo.dashboards.config.style_layer= 'poi_new';
+        break;
+    }
+    Congo.map_utils.counties();
+  });
+});
 
 Congo.namespace('dashboards.action_index');
 Congo.namespace('dashboards.action_graduated_points');
@@ -119,8 +135,6 @@ Congo.dashboards.pois =function(){
 
       } // Cierra success
     }) // Cierra ajax
-
-
 }
 
 
@@ -128,7 +142,6 @@ Congo.dashboards.pois =function(){
 Congo.dashboards.action_index = function() {
 
   init = function() {
-
     // Aplica el boost si cumple con la condición
     $('#boost').on('click', function() {
       area = Congo.dashboards.config.area;
@@ -167,7 +180,6 @@ Congo.dashboards.action_index = function() {
         Congo.dashboards.config.bimester = data['bimester'];
       }
     });
-
     Congo.map_utils.init();
 
     $.ajax({
