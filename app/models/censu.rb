@@ -126,11 +126,11 @@ class Censu < ApplicationRecord
 
   @gse = gse(params)
     data =[
-      {name: "abc", count: @gse.abc1},
-      {name: "c2", count: @gse.c2},
-      {name: "c3", count: @gse.c3},
-      {name: "d", count: @gse.d},
-      {name: "e", count: @gse.e}
+      {name: "abc", count: @gse.abc1.to_i},
+      {name: "c2", count: @gse.c2.to_i},
+      {name: "c3", count: @gse.c3.to_i},
+      {name: "d", count: @gse.d.to_i},
+      {name: "e", count: @gse.e.to_i}
     ]
 
     result.push({"title":"Segmentación Socioeconómica","data": data})
