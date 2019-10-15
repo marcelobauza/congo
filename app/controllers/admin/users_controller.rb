@@ -91,6 +91,6 @@ class Admin::UsersController < Admin::DashboardsController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:complete_name, :password, :password_confirmation, :name, :email, :company, :city, :disabled, :role_id, :rut, :is_temporal,  counties_users_attributes: [:county_id, :user_id] )
+      params.require(:user).permit(:complete_name, :password, :password_confirmation, :name, :email, :company, :city, :disabled, :role_id, :rut, :is_temporal, layer_types: [], counties_users_attributes: [:county_id, :user_id] )
     end
 end
