@@ -1,6 +1,6 @@
-class LayerTypesController < ApplicationController
+class Admin::LayerTypesController < Admin::DashboardsController
   before_action :set_layer_type, only: [:show, :edit, :update, :destroy]
-
+  layout 'admin'
   # GET /layer_types
   # GET /layer_types.json
   def index

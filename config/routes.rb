@@ -88,6 +88,7 @@ Rails.application.routes.draw do
     resources :counties
     resources :surveyors
     resources :uf_conversions
+    resources :layer_types
     get 'dashboards/index'
   root 'dashboards#index'
   end
@@ -102,7 +103,7 @@ Rails.application.routes.draw do
   resources :project_statuses
   
   resources :property_types
-  resources :layer_types
+
   resources :future_project_types
   resources :project_types
   resources :seller_types
