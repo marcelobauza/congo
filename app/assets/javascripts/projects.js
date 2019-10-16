@@ -196,7 +196,7 @@ projects_popup = function(id){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.pp_uf_m2
+              'text': !isNaN(parseFloat(data.pp_uf_m2)) ? parseFloat(data.pp_uf_m2).toFixed(1) : "-"
             }),
           ),
           $('<div>', {
@@ -208,7 +208,7 @@ projects_popup = function(id){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.pp_uf
+              'text': Math.round(data.pp_uf)
             }),
           ),
           $('<div>', {
