@@ -704,7 +704,7 @@ Congo.map_utils = function(){
 
     //Lots
     var options_lots = {
-      layers: "inciti_v2:lots",//nombre de la capa (ver get capabilities)
+      layers: "inciti_v2:view_lots",//nombre de la capa (ver get capabilities)
       format: 'image/png',
       transparent: 'true',
       opacity: 1,
