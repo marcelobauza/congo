@@ -581,42 +581,42 @@ Congo.building_regulations.action_dashboards = function(){
             var reg = data[i];
             var label = reg['label'];
 
-            if (label == "Uso") {
+            // if (label == "Uso") {
 
-              var info = reg['data'];
+            //   var info = reg['data'];
 
-              // Agrega el título y el list_group
-              $('#body').append(
-                $("<h6>", {
-                  'class': 'card-subtitle mb-2',
-                  'text': label
-                }),
-                $("<div>", {
-                  'class': 'list-group list-overflow border',
-                  'id': 'uso-list'
-                }),
-                $("<div>", {
-                  'class': 'dropdown-divider',
-                })
-              );
+            //   // Agrega el título y el list_group
+            //   $('#body').append(
+            //     $("<h6>", {
+            //       'class': 'card-subtitle mb-2',
+            //       'text': label
+            //     }),
+            //     $("<div>", {
+            //       'class': 'list-group list-overflow border',
+            //       'id': 'uso-list'
+            //     }),
+            //     $("<div>", {
+            //       'class': 'dropdown-divider',
+            //     })
+            //   );
 
-              // Extraemos los datos y los adjuntamos al list_group
-              $.each(info, function(y, z){
-                name = z['name'];
-                id = z['id']
+            //   // Extraemos los datos y los adjuntamos al list_group
+            //   $.each(info, function(y, z){
+            //     name = z['name'];
+            //     id = z['id']
 
-                $('#uso-list').append(
-                  $("<button>", {
-                      'type': 'button',
-                      'id': 'uso-'+id,
-                      'onclick': 'addUsoFilter('+id+', "'+name+'")',
-                      'class': 'list-group-item list-group-item-action',
-                      'text': name
-                  })
-                )
+            //     $('#uso-list').append(
+            //       $("<button>", {
+            //           'type': 'button',
+            //           'id': 'uso-'+id,
+            //           'onclick': 'addUsoFilter('+id+', "'+name+'")',
+            //           'class': 'list-group-item list-group-item-action',
+            //           'text': name
+            //       })
+            //     )
 
-              }) // Cierra each
-            } // Cierra if Uso
+            //   }) // Cierra each
+            // } // Cierra if Uso
 
             if (label == "Constructibilidad") {
 
