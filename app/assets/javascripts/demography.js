@@ -149,6 +149,11 @@ Congo.demography.action_dashboards = function(){
         $("#base").hide();
         $("#graph").hide();
 
+        // Mostramos el icono de Puntos/Poligonos correspondiente
+        $("#type_point").hide();
+        $("#poly_build").hide();
+        $("#vor_dem").show();
+
         // Mostramos el icono de Puntos Proporcionales correspondiente
         $("#prop-prv").hide();
         $("#prop-cbr").hide();

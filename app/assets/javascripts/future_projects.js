@@ -1045,6 +1045,11 @@ Congo.future_projects.action_dashboards = function(){
           $("#base").show();
           $("#graph").show();
 
+          // Mostramos el icono de Puntos/Poligonos correspondiente
+          $("#type_point").show();
+          $("#poly_build").hide();
+          $("#vor_dem").hide();
+
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();
           $("#prop-cbr").hide();

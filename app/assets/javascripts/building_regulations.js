@@ -511,6 +511,11 @@ Congo.building_regulations.action_dashboards = function(){
           $("#base").hide();
           $("#graph").hide();
 
+          // Mostramos el icono de Puntos/Poligonos correspondiente
+          $("#type_point").hide();
+          $("#poly_build").show();
+          $("#vor_dem").hide();
+
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();
           $("#prop-cbr").hide();
