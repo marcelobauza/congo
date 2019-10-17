@@ -1,3 +1,33 @@
 Congo.dashboards.config.layer_type = 'building_regulations_info';
-Congo.dashboards.config.style_layer = 'building_regulations_info';
+widget =  Congo.dashboards.config.widget;
+switch (widget) {
+  case 'building_regulations_max_density':
+    Congo.building_regulations.config.legends = []
+    Congo.dashboards.config.style_layer= 'building_regulations_max_density';
+    Congo.building_regulations.config.legends.push({'name':'Menor a 400', 'color':'d9d2b0'});
+    Congo.building_regulations.config.legends.push({'name':'400 - 599 ', 'color':'fcd930'});
+    Congo.building_regulations.config.legends.push({'name':'600 - 799', 'color':'fda821'});
+    Congo.building_regulations.config.legends.push({'name':'800 - 1199', 'color':'fa7c16'});
+    Congo.building_regulations.config.legends.push({'name':'Mayor 1200', 'color':'9d2608'});
+
+    break;
+  case 'building_regulations_floors':
+    Congo.building_regulations.config.legends = []
+    Congo.dashboards.config.style_layer = 'building_regulations_floors';
+    Congo.building_regulations.config.legends.push({'name':'Menor a 3 Pisos', 'color':'d9d2b0'});
+    Congo.building_regulations.config.legends.push({'name':'4 Pisos', 'color':'fcd930'});
+    Congo.building_regulations.config.legends.push({'name':'5 - 8 Pisos', 'color':'fda821'});
+    Congo.building_regulations.config.legends.push({'name':'9 - 15 Pisos', 'color':'fa7c16'});
+    Congo.building_regulations.config.legends.push({'name':'Mayor 15', 'color':'9d2608'});
+    break;
+  default:
+    Congo.building_regulations.config.legends = []
+    Congo.dashboards.config.style_layer= 'building_regulations_max_density';
+    Congo.building_regulations.config.legends.push({'name':'Menor a 400', 'color':'d9d2b0'});
+    Congo.building_regulations.config.legends.push({'name':'400 - 599 ', 'color':'fcd930'});
+    Congo.building_regulations.config.legends.push({'name':'600 - 799', 'color':'fda821'});
+    Congo.building_regulations.config.legends.push({'name':'800 - 1199', 'color':'fa7c16'});
+    Congo.building_regulations.config.legends.push({'name':'Mayor 1200', 'color':'9d2608'});
+    break;
+}
 Congo.map_utils.counties();

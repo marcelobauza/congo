@@ -53,6 +53,13 @@ $(document).ready(function(){
     }
     Congo.map_utils.counties();
   });
+
+  $('#building_regulations_max_density').on('click', function(){
+    Congo.dashboards.config.widget = 'building_regulations_max_density';
+  });
+  $('#building_regulations_floors').on('click', function(){
+    Congo.dashboards.config.widget = 'building_regulations_floors';
+  });
 });
 
 Congo.namespace('dashboards.action_index');

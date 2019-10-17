@@ -524,13 +524,12 @@ Congo.map_utils = function(){
         from_inh_hectare = Congo.building_regulations.config.from_inhabitants_hectare;
         to_inh_hectare = Congo.building_regulations.config.to_inhabitants_hectare;
         allowed_use_ids = Congo.building_regulations.config.allowed_use_ids;
-
+        legends = Congo.building_regulations.config.legends;
         filter_layer = '';
         if (allowed_use_ids.length > 0 ){
           filter_layer = filter_layer + " AND land_use_type_id IN ("+ allowed_use_ids + ")";
         }
-
-
+        
         if (from_construct != '' && to_construct != '' ){
           filter_layer = filter_layer + "AND construct between " + from_construct + " AND "+ to_construct ;
         }
@@ -546,20 +545,8 @@ Congo.map_utils = function(){
           filter_layer = filter_layer + "AND max_density between " + from_inh_hectare + " AND "+ to_inh_hectare ;
         }
 
-        $.ajax({
-          async: false,
-          type: 'GET',
-          url: '/density_types/legend_points.json',
-          datatype: 'json',
-          success: function(data){
-            legend = data;
-          },
-          error: function (jqXHR, textStatus, errorThrown) { console.log("algo malo paso"); }
-
-        })
-
         remove_legend();
-        legend_points(legend);
+        legend_points(legends);
 
         break;
     }
@@ -596,7 +583,19 @@ Congo.map_utils = function(){
         }else{
 
           if (layer_type == 'building_regulations_info'){
-            Congo.dashboards.config.style_layer = 'building_regulations_clip';
+
+          widget =  Congo.dashboards.config.widget;
+          switch (widget) {
+            case 'building_regulations_max_density':
+                Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
+            break;
+            case 'building_regulations_floors':
+              Congo.dashboards.config.style_layer = 'building_regulations_floors_clip';
+            break;
+            default:
+                Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
+            break;
+            }
             geometry = centerpt.split(' ');
             var center = [geometry[0],geometry[1]];
             var radius = radius;
@@ -629,7 +628,20 @@ Congo.map_utils = function(){
         if (layer_type == 'building_regulations_info'){
           cql_filter = "1=1";
           filter_layer = ''
-          Congo.dashboards.config.style_layer = 'building_regulations_clip';
+          
+          widget =  Congo.dashboards.config.widget;
+          switch (widget) {
+            case 'building_regulations_max_density':
+                Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
+            break;
+            case 'building_regulations_floors':
+              Congo.dashboards.config.style_layer = 'building_regulations_floors_clip';
+            break;
+            default:
+                Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
+            break;
+
+            }
           env = "polygon: Polygon(("+coord_geoserver+"))";
         }else{
           if (layer_type == 'demography_info'){
