@@ -1,0 +1,34 @@
+<div class="row">
+
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.polygon')%></span>
+    <%= select "", 'kpi_type', options_for_select({ "POLIGONO"=> "1", "COMUNA" => "2"} ), {:include_blank => true} %>
+  </div>
+  <div class="span4" id="polygons">
+    <span class="label success"><%= t('activerecord.attributes.kpi.polygon')%></span>
+    <%= select "", :polygon_id, options_for_select(ApplicationStatus.where(user_id: current_user.id).collect{ |c| [c.name, c.id]} ), {:include_blank => true} %>
+  </div>
+
+  <div class="span4" id="counties">
+    <span class="label success"><%= t('activerecord.attributes.kpi.county')%></span>
+  <%= select "",  'county_id', options_for_select(County.where(enabled:true).collect { |c| [c.name, c.id]}), {:include_blank => true}%>
+  </div>
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.property_type')%></span>
+    <%= select "", 'project_type_id', options_for_select({ "CASAS"=> "1", "DEPARTAMENTOS" => "2"} ), {:include_blank => true}  %>
+  </div>
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.bimester')%></span>
+  <%= select "",  'bimester_id', options_for_select([0,1,2,3,4,5,6], {:include_blank => true}), {:include_blank => true} %>
+  </div>
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.year_from')%></span>
+  <%= select "",  'year_from', options_for_select([2010,2011,2012,2013,2014,2015,2016,2017,2018,2019]), {:include_blank => true} %>
+  </div>
+  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.year_to')%></span>
+  <%= select "",  'year_to', options_for_select([2010,2011,2012,2013,2014,2015,2016,2017,2018,2019]), {:include_blank => true} %>
+  </div>
+
+</div>
+

@@ -3,6 +3,26 @@ class Admin::ProjectsController < ApplicationController
 
   layout 'admin'
 
+
+  def kpi
+
+    if !params['county_id'].nil? || !params['polygon_id'].nil?
+      @kpi = Project.kpi(params['county_id'], params['year_from'], params['year_to'], params['bimester_id'],  params['project_type_id'], params[:polygon_id])
+
+      if  !@kpi.nil?
+
+        if !params['county_id'].empty?
+          @kpi_primary_data = Project.getPrimaryEvolution()
+          @county_name = County.where(id: params[:county_id]).select(:name)
+        end   
+        @kpi_evolution = Project.getCountyEvolution
+
+      end         
+    end
+  end
+
+
+
   def export_data
     @projects = Project.new
   end

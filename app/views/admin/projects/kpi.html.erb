@@ -1,0 +1,129 @@
+<%= form_tag admin_projects_kpi_path, :method => :get do %>
+  <%= render :partial => "filter" %>
+
+  <%= submit_tag "Filtrar", :class=>'btn primary' %>
+
+<% if !@kpi_primary_data.nil? %>
+  <% if !params[:county_id].empty? %>
+  <h3> Comuna:  <%= @county_name.name %></h3>
+<%end  %>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+        </div>
+        <div class="panel-body">
+          <table class="table table-stripped table-hover">
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Año</th>
+                <th>Bim.</th>
+                <th>Edificios</th>
+                <th>Oferta</th>
+                <th>Disponib.</th>
+                <th>VMR</th>
+                <th>VMD</th>
+                <th>VVM</th>
+                <th>MAS</th>
+                <th>Sup. Util</th>
+                <th>Terreno</th>
+                <th>UF M2</th>
+                <th>UF</th>
+                <th>UF M2 U</th>
+                <th>PxQ R</th>
+                <th>PxQ D</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @kpi_primary_data.each do |d| %>
+                <tr>
+                  <td><%= d['area_name']%></td>
+                  <td><%= d['year']%></td>
+                  <td class="col-md-2"><%= d['bimester']%></td>
+                  <td><%= d['proj_qty'] if d['proj_qty']%></td>
+                  <td><%= d['offer'] if d['offer']%></td>
+                  <td><%= d['availability'] if d['availability']%></td>
+                  <td><%= "%.1f" % d['vmr'] if d['vmr']%></td>
+                  <td><%= "%.1f" % d['vmd'] if d['vmd']%></td>
+                  <td><%= "%.1f" % d['vvm'] if d['vvm']%></td>
+                  <td><%= "%.1f" % d['mas'] if d['mas']%></td>
+                  <td><%= "%.1f" % d['usable_m2'] if d['usable_m2']%></td>
+                  <td><%= "%.1f" % d['terrace'] if d['terrace']%></td>
+                  <td><%= "%.1f" %d['uf_m2'] if d['uf_m2']%></td>
+                  <td><%= d['uf'] if d['uf']%></td>
+                  <td><%= "%.1f" % d['uf_m2_u'] if d['uf_m2_u']%></td>
+                  <td><%= "%.1f" % d['pxqr'] if d['pxqr']%></td>
+                  <td><%= "%.1f" % d['pxqd'] if d['pxqd']%></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if !@kpi_evolution.nil? %>
+
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+        </div>
+        <div class="panel-body">
+          <table class="table table-stripped table-hover">
+            <thead>
+              <tr>
+                <th>Año</th>
+                <th>Bim.</th>
+                <th>Edificios</th>
+                <th>Oferta</th>
+                <th>Disponib.</th>
+                <th>VMR</th>
+                <th>VMD</th>
+                <th>VVM</th>
+                <th>MAS</th>
+                <th>Sup. Util</th>
+                  <th>Terreno</th>
+                <th>UF M2</th>
+                <th>UF</th>
+                <th>UF M2 U</th>
+                <th>PxQ R</th>
+                <th>PxQ D</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @kpi_evolution.each do |d| %>
+                <tr>
+                  <td><%= d['year']%></td>
+                  <td class="col-md-2"><%= d['bimester']%></td>
+                  <td><%= d['total_qty']%></td>
+                  <td><%= d['total_offer']%></td>
+                  <td><%= d['total_avail']%></td>
+                  <td><%= "%.1f" % d['total_vmr'] if d['total_vmr']%></td>
+                  <td><%= "%.1f" % d['total_vmd'] if d['total_vmd']%></td>
+                  <td><%= "%.1f" % d['total_vvm'] if d['total_vvm']%></td>
+                  <td><%= "%.1f" % d['total_mas'] if d['total_mas']%></td>
+                  <td><%= "%.1f" % d['total_usable_m2'] if d['total_usable_m2']%></td>
+                  <td><%= "%.1f" % d['total_terrace'] if d['total_terrace']%></td>
+                  <td><%= "%.1f" % d['total_uf_m2'] if d['total_uf_m2']%></td>
+                  <td><%= "%.1f" % d['total_uf'] if d['total_uf']%></td>
+                  <td><%= "%.1f" % d['total_uf_m2_u'] if d['total_uf_m2_u']%></td>
+                  <td><%= "%.1f" % d['total_pxqr'] if d['total_pxqr']%></td>
+                  <td><%= "%.1f" % d['total_pxqd'] if d['total_pxqd']%></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+
+<% end %>

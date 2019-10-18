@@ -134,15 +134,13 @@ class Project < ApplicationRecord
   def self.kpi(county_id, year_from, year_to, bimester, project_type_id, polygon_id )
 
     if  ((county_id.empty? || polygon_id.empty?) && year_from.empty? && year_to.empty? && bimester.empty? && project_type_id.empty?)
-
       return;
     end
 
-
     if !county_id.empty?
-      sql_county_code = ("select code from counties where id = #{county_id}")
-      county_code_exec = Util.execute(sql_county_code)
-      county_code  = county_code_exec[0]['code'].to_i
+      @county = county_id
+      county = County.where(id: county_id).first
+      county_code  = county.code.to_i
     end
     bim_from, bim_to = 1, 6
 
@@ -151,19 +149,23 @@ class Project < ApplicationRecord
     end
 
     if !county_id.empty?
-
       result = ("select inciti_kpi_generate_primary_data(#{county_code}, #{year_from}, #{year_to}, #{bim_from}, #{bim_to}, #{project_type_id})")
-
     else
-
-      result = ("select kpi__polygon_generate_primary_data(#{polygon_id}, #{year_from}, #{year_to}, #{bim_from}, #{bim_to}, #{project_type_id})")
-
+      @polygon = ApplicationStatus.find(polygon_id)
+      if @polygon.filters['type_geometry'] == 'circle'
+        result = ("select kpi__circle_generate_primary_data(#{polygon_id}, #{year_from}, #{year_to}, #{bim_from}, #{bim_to}, #{project_type_id})")
+      end
+      if @polygon.filters['type_geometry'] == 'polygon'
+        result = ("select kpi__polygon_generate_primary_data(#{polygon_id}, #{year_from}, #{year_to}, #{bim_from}, #{bim_to}, #{project_type_id})")
+      end
     end
     kpi = Util.execute(result)
 
   end
 
-  def self.getPrimaryEvolution ()
+  def self.getPrimaryEvolution
+    Util.execute("select p.area_name, ppd.* from project_primary_data ppd
+                       inner join parcels p on p.id = ppd.parcel_id order by year, bimester")
   end
 
   def self.getCountyEvolution ()

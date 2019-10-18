@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   namespace :admin do
     get 'projects/export_data' => 'projects#export_data'
     get 'projects/generate_csv' => 'projects#generate_csv'
+    get 'projects/kpi' => 'projects#kpi'
     get 'future_projects/export_data' => 'future_projects#export_data'
     get 'future_projects/generate_csv' => 'future_projects#generate_csv'
     get 'transactions/export_data' => 'transactions#export_data'
