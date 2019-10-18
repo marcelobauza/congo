@@ -629,13 +629,12 @@ class Transaction < ApplicationRecord
   end
 
   def self.get_csv_data(filters)
-    if filters[:fromID] != ""
+    if !filters[:fromID].nil? 
       cond = "transactions.id BETWEEN #{filters[:fromID]} AND #{filters[:toID]}"
     else
-      cond = "transactions.inscription_date BETWEEN '#{Date.strptime(filters[:date_from], "%m/%d/%Y").to_s}' "
-      cond += "AND '#{Date.strptime(filters[:date_to], "%m/%d/%Y").to_s}'"
+      cond = "transactions.inscription_date BETWEEN '#{filters[:date_from]}'"
+      cond += "AND '#{filters[:date_to]}'"
     end
-
     transactions = Transaction.includes(:seller_type, :surveyor, :user, :county, :property_type).
                                 where(cond).
                                 order("transactions.id")
@@ -644,8 +643,8 @@ class Transaction < ApplicationRecord
   end
 
   def self.get_csv_data_sii(filters)
-    cond = "transactions.inscription_date BETWEEN '#{Date.strptime(filters[:date_from], "%m/%d/%Y").to_s}' "
-    cond += "AND '#{Date.strptime(filters[:date_to], "%m/%d/%Y").to_s}'"
+    cond = "transactions.inscription_date BETWEEN '#{filters[:date_from]}' "
+    cond += "AND '#{filters[:date_to]}'"
 
     cond += " AND county_id in(#{filters[:county_id].join(",")})" if !filters[:county_id].blank?
     cond += " AND property_type_id = #{filters[:property_type_id]}" if !filters[:property_type_id].blank?

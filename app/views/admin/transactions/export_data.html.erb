@@ -3,12 +3,12 @@
   <div class="clearfix">
     <label for="xlInput"><strong><%= t(:INSCRIPTION_DATE_FROM) %></strong></label>
     <div class="input">
-      <%= text_field_tag :date_from %>
+      <%= f.date_field :date_from, class: 'datepicker' %>
     </div>
     <br/>
     <label for="xlInput"><strong><%= t(:INSCRIPTION_DATE_TO) %></strong></label>
     <div class="input">
-      <%= text_field_tag :date_to %>
+      <%= f.date_field :date_to, class: 'datepicker' %>
     </div>
   </div>
 
