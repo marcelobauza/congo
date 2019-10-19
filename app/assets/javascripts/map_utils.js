@@ -797,11 +797,16 @@ Congo.map_utils = function(){
 
   function draw_geometry(type_geometry){
 
+      if(typeof(editableLayers)!=='undefined'){
+        editableLayers.eachLayer(function (layer) {
+          map.removeLayer(layer);
+        });
+      editableLayers = new L.FeatureGroup();
+      }
     switch(type_geometry) {
       case 'circle':
         centerpt = Congo.dashboards.config.centerpt;
         radius = Congo.dashboards.config.radius ;
-        console.log(radius);
         geometry = centerpt.split(' ');
         circle = L.circle([geometry[1], geometry[0]], radius * 1 );
         editableLayers.addLayer(circle).addTo(map);

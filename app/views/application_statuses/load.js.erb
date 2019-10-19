@@ -1,13 +1,23 @@
-let layer_type = "<%= @row['layer_type'] %>";
-let to_period = "<%= @row['to_period'] %>";
-let to_year = "<%= @row['to_year'] %>";
-let radius = "<%= @row['radius'] %>";
-let center_point = "<%= @row['centerpt'] %>";
-let type_geometry = "<%= @row['type_geometry'] %>";
-let county_id = [];
-let wkt = [];
-let style_layer = "<%= @row['style_layer'] %>";
-let project_type_ids = [];
+Congo.dashboards.config.layer_type ='' ;
+Congo.dashboards.config.radius = 0;
+Congo.dashboards.config.centerpt = '';
+Congo.dashboards.config.bimester = '';
+Congo.dashboards.config.year = '';
+Congo.dashboards.config.typeGeometry = '';
+Congo.dashboards.config.style_layer = '';
+Congo.dashboards.config.county_id = '';
+Congo.dashboards.config.size_box  = []; 
+
+layer_type = "<%= @row['layer_type'] %>";
+to_period = "<%= @row['to_period'] %>";
+to_year = "<%= @row['to_year'] %>";
+radius = "<%= @row['radius'] %>";
+center_point = "<%= @row['centerpt'] %>";
+type_geometry = "<%= @row['type_geometry'] %>";
+county_id = [];
+wkt = [];
+style_layer = "<%= @row['style_layer'] %>";
+project_type_ids = [];
 
 <% if  !@row['county_id'].nil? %>
     Congo.dashboards.config.county_id.push(<%= raw @row['county_id'];%>);
