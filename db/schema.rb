@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_15_123711) do
+ActiveRecord::Schema.define(version: 2019_10_17_192700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -139,6 +139,65 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
     t.string "N_C3"
     t.string "N_D"
     t.string "N_E"
+  end
+
+  create_table "censo_2012_para_census", id: :integer, default: nil, force: :cascade do |t|
+    t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
+    t.bigint "geocode"
+    t.integer "age_0_9"
+    t.integer "age_10_19"
+    t.integer "age_20_29"
+    t.integer "age_30_39"
+    t.integer "age_40_49"
+    t.integer "age_50_59"
+    t.integer "age_60_69"
+    t.integer "age_70_79"
+    t.integer "age_80_more"
+    t.integer "age_tot"
+    t.integer "home_1p"
+    t.integer "home_2p"
+    t.integer "home_3p"
+    t.integer "home_4p"
+    t.integer "home_5p"
+    t.integer "home_6_more"
+    t.integer "home_tot"
+    t.integer "male"
+    t.integer "female"
+    t.integer "basica"
+    t.integer "media"
+    t.integer "media_tec"
+    t.integer "tecnica"
+    t.integer "profesional"
+    t.integer "magister"
+    t.integer "doctor"
+    t.integer "owner"
+    t.integer "leased"
+    t.integer "transferred"
+    t.integer "free"
+    t.integer "possesion"
+    t.integer "married"
+    t.integer "coexist"
+    t.integer "single"
+    t.integer "canceled"
+    t.integer "separated"
+    t.integer "widowed"
+    t.integer "salaried"
+    t.integer "domestic_service"
+    t.integer "independent"
+    t.integer "employee_employer"
+    t.integer "unpaid_familiar"
+    t.string "ismt_zn"
+    t.string "gse_zn"
+    t.geometry "the_geom_point", limit: {:srid=>4326, :type=>"st_point"}
+    t.integer "county_id"
+    t.bigint "census_source_id"
+    t.bigint "n_abc1"
+    t.bigint "n_c2"
+    t.bigint "n_c3"
+    t.bigint "n_d"
+    t.bigint "n_e"
+    t.bigint "n_hog"
+    t.index ["the_geom"], name: "sidx_censo_2012_para_census_geom", using: :gist
   end
 
   create_table "censo_data", id: :serial, force: :cascade do |t|
@@ -327,6 +386,7 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
     t.string "ismt_zn", limit: 254
     t.string "gse_zn", limit: 254
     t.bigint "n_hog"
+    t.geometry "the_geom_point", limit: {:srid=>4326, :type=>"st_point"}
     t.integer "county_id"
     t.bigint "census_source_id"
     t.bigint "n_abc1"
@@ -334,6 +394,9 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
     t.bigint "n_c3"
     t.bigint "n_d"
     t.bigint "n_e"
+    t.index ["census_source_id"], name: "census_source_idx", order: "NULLS FIRST"
+    t.index ["id"], name: "census_idx"
+    t.index ["the_geom_point"], name: "sidx_census_the_geom_point", using: :gist
   end
 
   create_table "census_sources", force: :cascade do |t|
@@ -460,10 +523,11 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
     t.bigint "project_type_id"
     t.bigint "future_project_type_id"
     t.bigint "county_id"
-    t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
+    t.geometry "the_geom", limit: {:srid=>4326, :type=>"st_point"}
     t.integer "t_ofi"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.geometry "the_geom_3857", limit: {:srid=>3857, :type=>"st_point"}
     t.index ["county_id"], name: "index_future_projects_on_county_id"
     t.index ["future_project_type_id"], name: "index_future_projects_on_future_project_type_id"
     t.index ["project_type_id"], name: "index_future_projects_on_project_type_id"
@@ -610,6 +674,28 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "project_primary_data", force: :cascade do |t|
+    t.integer "parcel_id"
+    t.integer "year"
+    t.integer "bimester"
+    t.integer "proj_qty"
+    t.integer "offer"
+    t.integer "availability"
+    t.integer "vmr"
+    t.decimal "vmd"
+    t.decimal "vvm"
+    t.decimal "mas"
+    t.decimal "usable_m2"
+    t.decimal "terrace"
+    t.decimal "uf_m2"
+    t.integer "uf"
+    t.decimal "uf_m2_u"
+    t.decimal "pxqr"
+    t.decimal "pxqd"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "project_statuses", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -642,6 +728,7 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
     t.text "general_observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.geometry "the_geom_3", limit: {:srid=>3857, :type=>"st_point"}
     t.index ["agency_id"], name: "index_projects_on_agency_id"
     t.index ["county_id"], name: "index_projects_on_county_id"
     t.index ["project_type_id"], name: "index_projects_on_project_type_id"
@@ -1294,6 +1381,27 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
                                       END;
                                       $function$
   SQL
+  create_function :pp_uf_m2, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_uf_m2(proj_instance_id bigint)
+       RETURNS bigint
+       LANGUAGE plpgsql
+      AS $function$
+      declare t_m2 bigint;
+      BEGIN
+      	t_m2 = (select sum(total_m2) from project_instance_mix_views
+      		where project_instance_id = proj_instance_id);
+
+      	if (t_m2 = 0) then
+      	  return 0;
+      	else
+      	  RETURN (select sum(total_m2 * uf_m2)/t_m2
+      		as pp_uf_m2
+      		from project_instance_mix_views
+      		where project_instance_id = proj_instance_id);
+      	end if;
+      END;
+      $function$
+  SQL
   create_function :pp_utiles, sql_definition: <<-SQL
       CREATE OR REPLACE FUNCTION public.pp_utiles(proj_instance_id bigint)
        RETURNS real
@@ -1396,27 +1504,6 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
         END;
       $function$
   SQL
-  create_function :pp_uf_m2, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.pp_uf_m2(proj_instance_id bigint)
-       RETURNS bigint
-       LANGUAGE plpgsql
-      AS $function$
-      declare t_m2 bigint;
-      BEGIN
-      	t_m2 = (select sum(total_m2) from project_instance_mix_views
-      		where project_instance_id = proj_instance_id);
-
-      	if (t_m2 = 0) then
-      	  return 0;
-      	else
-      	  RETURN (select sum(total_m2 * uf_m2)/t_m2
-      		as pp_uf_m2
-      		from project_instance_mix_views
-      		where project_instance_id = proj_instance_id);
-      	end if;
-      END;
-      $function$
-  SQL
 
   create_trigger :layer_integrity_checks, sql_definition: <<-SQL
       CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE PROCEDURE topology.layertrigger()
@@ -1441,10 +1528,9 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
       building_regulations.updated_at,
       building_regulations.county_id,
       density_types.color,
-      brl.land_use_type_id
-     FROM ((building_regulations
+      building_regulations.identifier
+     FROM (building_regulations
        JOIN density_types ON ((building_regulations.density_type_id = density_types.id)))
-       JOIN building_regulation_land_use_types brl ON ((brl.building_regulation_id = building_regulations.id)))
     ORDER BY building_regulations.updated_at DESC;
   SQL
   create_view "counties_info", sql_definition: <<-SQL
@@ -1453,12 +1539,27 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
       counties.the_geom
      FROM counties;
   SQL
-  create_view "demography_voronoi", sql_definition: <<-SQL
-      SELECT census.home_tot,
-      census.county_id,
-      census.the_geom
-     FROM census
-    WHERE (census.county_id = 50);
+  create_view "demography_info_census_2012", sql_definition: <<-SQL
+      SELECT c1.county_id,
+      c1.gse_zn,
+      (c3.the_geom)::geometry(Polygon,4326) AS the_geom,
+      c1.census_source_id
+     FROM (( SELECT (st_dump(st_voronoipolygons(st_collect(census.the_geom_point)))).geom AS the_geom
+             FROM census
+            WHERE (census.census_source_id = 2)) c3
+       JOIN census c1 ON (st_contains(c3.the_geom, c1.the_geom_point)))
+    WHERE (c1.census_source_id = 2);
+  SQL
+  create_view "demography_info_census_2017", sql_definition: <<-SQL
+      SELECT c1.county_id,
+      c1.gse_zn,
+      (c3.the_geom)::geometry(Polygon,4326) AS the_geom,
+      c1.census_source_id
+     FROM (( SELECT (st_dump(st_voronoipolygons(st_collect(census.the_geom_point)))).geom AS the_geom
+             FROM census
+            WHERE (census.census_source_id = 1)) c3
+       JOIN census c1 ON (st_contains(c3.the_geom, c1.the_geom_point)))
+    WHERE (c1.census_source_id = 1);
   SQL
   create_view "future_projects_info", sql_definition: <<-SQL
       SELECT future_projects.id,
@@ -1495,22 +1596,6 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
       future_project_types.color AS marker_color
      FROM (future_projects
        JOIN future_project_types ON ((future_projects.future_project_type_id = future_project_types.id)));
-  SQL
-  create_view "future_projects_voronoi", sql_definition: <<-SQL
-      SELECT st_intersection(voronoi.geom, ( SELECT counties.the_geom
-             FROM counties
-            WHERE (counties.id = 50))) AS inters,
-      future_projects.bimester,
-      future_projects.county_id,
-      future_projects.year
-     FROM ( SELECT (st_dump(st_voronoipolygons(st_collect(future_projects_1.the_geom), (0)::double precision, ( SELECT counties.the_geom
-                     FROM counties
-                    WHERE (counties.id = 50))))).geom AS geom
-             FROM future_projects future_projects_1
-            WHERE (future_projects_1.county_id = 50)) voronoi,
-      future_projects
-    WHERE (st_within(future_projects.the_geom, voronoi.geom) AND (future_projects.county_id = 50) AND (future_projects.bimester = ANY (ARRAY[2, 3, 6])) AND (future_projects.year = 2018))
-    GROUP BY voronoi.geom, future_projects.bimester, future_projects.year, future_projects.county_id;
   SQL
   create_view "pois_infos", sql_definition: <<-SQL
       SELECT p.name,
@@ -1608,8 +1693,12 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
           END AS range_util,
           CASE masud(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date)
               WHEN 0 THEN (0)::real
-              ELSE vhmu(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date)
-          END AS vhmud
+              ELSE (round((vhmu(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date))::numeric, 1))::real
+          END AS vhmud,
+      projects.the_geom,
+      st_x(projects.the_geom) AS x,
+      st_y(projects.the_geom) AS y,
+      county_name((projects.county_id)::integer) AS county_name
      FROM (((((projects
        JOIN project_instances ON ((project_instances.project_id = projects.id)))
        JOIN project_instance_mixes pim ON ((project_instances.id = pim.project_instance_id)))
@@ -1704,7 +1793,10 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
       pim.mix_m2_built,
       round((round(((pim.total_units - pim.stock_units))::numeric, 2) / (pim.total_units)::numeric), 2) AS percentage_sold,
       projects.pilot_opening_date,
-      round((masd(project_instances.id))::numeric, 1) AS vhmud
+      round((masd(project_instances.id))::numeric, 1) AS vhmud,
+      projects.the_geom,
+      st_x(projects.the_geom) AS x,
+      st_y(projects.the_geom) AS y
      FROM (((((projects
        JOIN project_instances ON ((project_instances.project_id = projects.id)))
        JOIN project_instance_mixes pim ON ((project_instances.id = pim.project_instance_id)))
@@ -1715,9 +1807,9 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
   SQL
   create_view "project_instance_mix_views", sql_definition: <<-SQL
       SELECT pim.project_instance_id,
-      (pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_min_percent,
-      (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_max_percent,
-      (((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) AS uf_avg_percent,
+      round((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric)))) AS uf_min_percent,
+      round((pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) AS uf_max_percent,
+      round((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric)) AS uf_avg_percent,
       (pim.mix_usable_square_meters * (pim.total_units)::numeric) AS total_m2,
       (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5)) AS u_half_terrace,
       ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5))) AS uf_m2,
@@ -1731,7 +1823,8 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
               ELSE vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
           END AS vhmud,
       (pim.total_units - pim.stock_units) AS sold_units,
-      pim.id,
+      pim.id AS project_instance_mix_id,
+      p.id,
       (((pim.t_min + pim.t_max))::double precision / (2)::double precision) AS ps_terreno,
       pim.stock_units,
       pim.total_units,
@@ -1755,7 +1848,8 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
       p.sale_date,
       p.transfer_date,
       a.name AS agency_name,
-      a.id AS agency_id
+      a.id AS agency_id,
+      p.code
      FROM ((((project_instance_mixes pim
        JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
        JOIN projects p ON ((pi.project_id = p.id)))
@@ -1829,13 +1923,24 @@ ActiveRecord::Schema.define(version: 2019_10_15_123711) do
       projects.county_id,
       projects.project_type_id,
       project_instances.project_status_id,
-      ar.agency_id
+      ar.agency_id,
+      project_instance_mixes.project_instance_id,
+      (sum((project_instance_mixes.uf_min + project_instance_mixes.uf_max)) / (2)::numeric) AS uf_avg_percent
      FROM ((((project_instances
        JOIN project_instance_mixes ON ((project_instances.id = project_instance_mixes.project_instance_id)))
        JOIN projects ON ((projects.id = project_instances.project_id)))
        JOIN project_statuses ON ((project_instances.project_status_id = project_statuses.id)))
        JOIN agency_rols ar ON ((projects.id = ar.project_id)))
-    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors, projects.project_type_id, project_instances.project_status_id, ar.agency_id;
+    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors, projects.project_type_id, project_instances.project_status_id, ar.agency_id, project_instance_mixes.project_instance_id;
+  SQL
+  create_view "transactions_heatmap_amount", sql_definition: <<-SQL
+      SELECT count(transactions.id) AS amount,
+      transactions.the_geom,
+      transactions.year,
+      transactions.bimester,
+      transactions.county_id
+     FROM transactions
+    GROUP BY transactions.the_geom, transactions.year, transactions.bimester, transactions.county_id;
   SQL
   create_view "transactions_info", sql_definition: <<-SQL
       SELECT transactions.id,
