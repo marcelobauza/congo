@@ -1,8 +1,8 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content text-light">
 
-      <div class="modal-header">
-        <div class="list-group list-group-horizontal col-md-10 offset-md-1" id="list-tab" role="tablist">
+      <div class="modal-header" id="header_popup_cbr">
+        <div class="list-group list-group-horizontal col-md-10 offset-md-1" id="cbr_tab_list" role="tablist">
           <a class="list-group-item list-group-item-action active" id="list-info-list" data-toggle="list" href="#list-info-transactions" role="tab" aria-controls="info">Detalle Compraventa</a>
           <a class="list-group-item list-group-item-action" id="list-verif-list" data-toggle="list" href="#list-verif-transactions" role="tab" aria-controls="verif">Verificación Información</a>
           <a class="list-group-item list-group-item-action" id="list-equip-list" data-toggle="list" href="#list-equip-transactions" role="tab" aria-controls="equip">Puntos de Interés</a>
@@ -12,8 +12,9 @@
         </button>
       </div>
 
-      <div class="modal-body modal-overflow">
-        <div class="tab-content" id="nav-tabContent">
+      <div class="modal-body modal-overflow" id="cbr_popup_body">
+
+        <div class="tab-content" id="cbr_tab_content">
           <div class="tab-pane fade show active" id="list-info-transactions" role="tabpanel" aria-labelledby="list-info-list">
             <div id="popup_info_transactions"></div>
           </div>

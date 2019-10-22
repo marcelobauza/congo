@@ -63,265 +63,375 @@ transactions_popup = function(id, latlng){
     datatype: 'json',
     data: data,
     success: function(data) {
-      $('#popup_info_transactions').empty();
 
-      // Agregamos la información general
-      $('#popup_info_transactions').append(
-        $('<p>').append(
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Bimestre:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.bimester
-            }),
+      data = '[{"bimester":2,"year":2019,"address":"831 Bombal","seller_name":"Denco S.A.","buyer_name":"MetalYisus Company","sheet":8465,"number":616,"inscription_date":"2019-03-07","department":"LC1","calculated_value":"28646.0","blueprint":"533","cellar":0,"parkingi":0,"role":"138-313","uf_m2_u":"82.32","uf_m2_t":null,"total_surface_building":"348.0","total_surface_terrain":"0.0","property_types":{"name":"CASA"},"seller_types":{"name":"DUEÑO"}},{"bimester":2,"year":2019,"address":"1440 Alborada","seller_name":"Denco S.A.","buyer_name":"Luisita Comunica","sheet":17430,"number":25081,"inscription_date":"2019-03-07","department":"LC1","calculated_value":"28646.0","blueprint":"654","cellar":0,"parkingi":0,"role":"138-313","uf_m2_u":"82.32","uf_m2_t":null,"total_surface_building":"348.0","total_surface_terrain":"0.0","property_types":{"name":"CASA"},"seller_types":{"name":"DUEÑO"}},{"bimester":2,"year":2019,"address":"176 Joaquín V González","seller_name":"Denco S.A.","buyer_name":"EL de la inmobiliaria","sheet":17430,"number":25081,"inscription_date":"2019-03-07","department":"LC1","calculated_value":"28646.0","blueprint":"777","cellar":0,"parkingi":0,"role":"138-313","uf_m2_u":"82.32","uf_m2_t":null,"total_surface_building":"348.0","total_surface_terrain":"0.0","property_types":{"name":"DEPARTAMENTO"},"seller_types":{"name":"INMOBILIARIA"}}]'
+
+      data = JSON.parse(data)
+
+      // Creamos la tabla con las cabeceras
+      $('#cbr_popup_body').append(
+        $('<table>', {
+          'id': 'cbr_popup_properties',
+          'class': 'table table-striped table-hover table-bordered text-light'
+        }).append(
+          $('<thead>').append(
+            $('<tr>').append(
+              $('<th>', {
+                'text': 'Dirección',
+              }),
+              $('<th>', {
+                'text': 'Tipo de Propiedad',
+              }),
+              $('<th>', {
+                'text': 'Tipo de Vendedor',
+              })
+            )
           ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Año:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.year
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Dirección:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.address
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Uso:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.property_types.name
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Vendedor:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.seller_types.name
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Vendedor:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.seller_name
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Comprador:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.buyer_name
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Foja:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.sheet
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Número:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.number
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Fecha de Inscripció:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.inscription_date
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Departamento:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.department
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Valor UF:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': Math.round(data.calculated_value).toLocaleString()
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Valor UF m2 Útil:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': !isNaN(parseFloat(data.uf_m2_u)) ? parseFloat(data.uf_m2_u).toFixed(1) : "-"
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Valor UF m2 Terreno:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': !isNaN(parseFloat(data.uf_m2_t)) ? parseFloat(data.uf_m2_t).toFixed(1) : "-"
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Superficie Útil:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': Math.round(data.total_surface_building)
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Superficie Terreno:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': Math.round(data.total_surface_terrain)
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Plano:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.blueprint
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Bodegas:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.cellar
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Estacionamientos:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.parkingi
-            }),
-          ),
-          $('<div>', {
-            'class': 'row'
-          }).append(
-            $('<div>', {
-              'class': 'col-md-6 text-right',
-              'text': 'Rol:'
-            }),
-            $('<div>', {
-              'class': 'col-md-6',
-              'text': data.role
-            }),
-          ),
+          $('<tbody>', {
+            'id': 'cbr_popup_property_items',
+          })
         )
-      )
+      );
+
+      // Agregamos las filas a la tabla
+      $.each(data, function(index, info) {
+
+        $('#cbr_popup_property_items').append(
+          $('<tr>', {
+            'id': info.blueprint,
+          }).append(
+            $('<td>', {
+              'text': info.address,
+            }),
+            $('<td>', {
+              'text': info.property_types.name,
+            }),
+            $('<td>', {
+              'text': info.seller_types.name,
+            })
+          )
+        );
+
+        // Agregamos la función itemClick
+        $('#cbr_popup_property_items')[0].onclick = function(e) {
+          itemClick(e, info);
+        }
+
+        // Ocultamos las pestañas y el contenido
+        $('#cbr_tab_list').hide()
+        $('#cbr_tab_content').hide()
+
+      })
 
       $('#leaflet_modal_transactions').modal('show');
 
-      // Vuelve a activar el primer tab cuando se cierra el modal del popup
-      $('#leaflet_modal_transactions').on('hidden.bs.modal', function (e) {
-        $('#list-tab a:first-child').tab('show')
-      })
+      // Acciones cuando se cierra el modal del popup
+      $('#leaflet_modal_transactions').on('hidden.bs.modal', function(e) {
 
-    }
-  })
-    Congo.dashboards.pois();
-}
+        // Vuelve a activar el primer tab
+        $('#cbr_tab_list a:first-child').tab('show')
+
+        // Elimina la tabla de propiedades y la flecha para volver
+        $('#cbr_popup_properties').remove()
+        $('#back_to_properties').remove()
+
+      }) // Cierra on hidden
+    } // Cierra success
+  })// Cierra ajax
+  Congo.dashboards.pois();
+} // Cierra transactions_popup
+
+function itemClick(e, info) {
+
+  $('#cbr_popup_body').prepend(
+    $('<div>', {
+      'id': 'back_to_properties',
+      'class': 'text-center p-1'
+    }).append(
+      $('<a>', {
+        'href': '#'
+      }).append(
+        $('<i>', {
+          'class': 'fas fa-chevron-up'
+        })
+      )
+    )
+  )
+
+  if (!e) var e = window.event; // Get the window event
+  e.cancelBubble = true; // IE Stop propagation
+  if (e.stopPropagation) e.stopPropagation(); // Other Broswers
+
+  $('#cbr_tab_list').show()
+  $('#cbr_tab_content').show()
+
+  $('#cbr_popup_properties').hide()
+
+  $('#popup_info_transactions').empty();
+
+  // Agregamos la información general
+  $('#popup_info_transactions').append(
+    $('<p>').append(
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Bimestre:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.bimester
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Año:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.year
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Dirección:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.address
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Uso:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.property_types.name
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Vendedor:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.seller_types.name
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Vendedor:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.seller_name
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Comprador:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.buyer_name
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Foja:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.sheet
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Número:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.number
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Fecha de Inscripció:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.inscription_date
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Departamento:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.department
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Valor UF:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': Math.round(info.calculated_value).toLocaleString()
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Valor UF m2 Útil:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': !isNaN(parseFloat(info.uf_m2_u)) ? parseFloat(info.uf_m2_u).toFixed(1) : "-"
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Valor UF m2 Terreno:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': !isNaN(parseFloat(info.uf_m2_t)) ? parseFloat(info.uf_m2_t).toFixed(1) : "-"
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Superficie Útil:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': Math.round(info.total_surface_building)
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Superficie Terreno:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': Math.round(info.total_surface_terrain)
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Plano:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.blueprint
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Bodegas:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.cellar
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Estacionamientos:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.parkingi
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Rol:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.role
+        }),
+      ),
+    )
+  )
+
+  $('#back_to_properties')[0].onclick = function(e){
+
+    // Vuelve a activar el primer tab
+    $('#cbr_tab_list a:first-child').tab('show')
+
+    $('#popup_info_transactions').empty();
+    $('#cbr_tab_list').hide()
+
+    // Ocultamos las pestañas y el contenido
+    $('#cbr_tab_content').hide()
+    $('#cbr_popup_properties').show()
+
+    // Eliminamos el botón volver
+    $(this).remove()
+
+  } // Cierra back_to_properties
+}; // Cierra itemClick
 
 function transactions_report_pdf(){
 
