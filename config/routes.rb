@@ -80,9 +80,14 @@ Rails.application.routes.draw do
     resources :county_ufs
     resources :future_projects
     resources :transactions
+
+
+    resources :projects do
+    resources :project_instances do
+
     resources :project_instance_mixes
-    resources :project_instances
-    resources :projects
+    end
+    end
     resources :project_mixes
     resources :roles
     resources :users 
