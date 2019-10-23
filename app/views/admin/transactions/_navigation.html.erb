@@ -1,0 +1,8 @@
+<% content_for :navigation do %>
+     <li class="<%= "active" if current_page?(admin_transactions_path)%>"><%= link_to t('menu.transaction.index'), admin_transactions_path %></li>
+     <li class="<%= "active" if current_page?(new_admin_transaction_path)%>"><%= link_to t('menu.transaction.new'), new_admin_transaction_path %></li>
+     <li class="<%= "active" if current_page?(export_data_admin_transactions_path)%>"><%= link_to t('menu.transaction.export'), export_data_admin_transactions_path %></li>
+     <li class="<%= "active" if current_page?(admin_closed_quarters_path)%>"><%= link_to t('menu.closed_quarter.index'), admin_closed_quarters_path %></li>
+     <li class="<%= "active" if current_page?(admin_surveyors_path)%>"><%= link_to t('menu.surveyor.index'), admin_surveyors_path %></li>
+   <% end %>
+

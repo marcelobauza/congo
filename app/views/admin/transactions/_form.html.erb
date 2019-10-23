@@ -1,3 +1,9 @@
+<script charset="utf-8">
+  <%if !@transaction.the_geom.nil?  %>
+     Congo.admin_transactions.config.latitude.push(<%= @transaction.the_geom.y %>);
+     Congo.admin_transactions.config.longitude.push(<%= @transaction.the_geom.x %>);
+  <% end %> 
+</script>
 <div class="card shadow">
   <div class="card-body">
 
@@ -75,9 +81,9 @@
           </div>
         </div>
         <div class="form-group col-md-6">
-          <div class="border rounded" id="admin_map"></div>
-          <%= f.hidden_field :longitude %>
-          <%= f.hidden_field :latitude %>
+          <div  id="admin_map" class="admin_map_transactions border rounded"></div>
+          <%= f.text_field :longitude %>
+          <%= f.text_field :latitude %>
         </div>
       </div>
 
@@ -156,6 +162,8 @@
           <%= f.select :surveyor_id, surveyors_for_select, { :prompt => t(:select_item_from_list) }, :class => 'form-control' %>
         </div>
       </div>
+      <%= f.hidden_field :latitude, class: 'latitude'  %>
+      <%= f.hidden_field :longitude, class: 'longitude'  %>
       <div class="text-center">
         <%= link_to 'Cancelar', admin_transactions_path, :class => 'btn btn-secondary' %>
         <%= f.button :submit, class: 'btn btn-primary', value: "Guardar" %>
