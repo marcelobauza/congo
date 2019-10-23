@@ -2,7 +2,9 @@ class TransactionsController < ApplicationController
   include NumberFormatter
 
   def index
-    @data = Transaction.where(bimester: params[:bimester], year: params[:year]).where(id: params[:id]).first
+    @row = Transaction.where(bimester: params[:bimester], year: params[:year]).where(id: params[:id]).first
+    @data = Transaction.where(bimester: params[:bimester], year: params[:year]).where("st_Dwithin(st_geomfromtext('#{@row.the_geom}',4326), the_geom, 15, false)")
+
     respond_to do |f|
       f.json
     end

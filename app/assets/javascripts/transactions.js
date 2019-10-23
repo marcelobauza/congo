@@ -63,11 +63,6 @@ transactions_popup = function(id, latlng){
     datatype: 'json',
     data: data,
     success: function(data) {
-
-      data = '[{"bimester":2,"year":2019,"address":"831 Bombal","seller_name":"Denco S.A.","buyer_name":"MetalYisus Company","sheet":8465,"number":616,"inscription_date":"2019-03-07","department":"LC1","calculated_value":"28646.0","blueprint":"533","cellar":0,"parkingi":0,"role":"138-313","uf_m2_u":"82.32","uf_m2_t":null,"total_surface_building":"348.0","total_surface_terrain":"0.0","property_types":{"name":"CASA"},"seller_types":{"name":"DUEÑO"}},{"bimester":2,"year":2019,"address":"1440 Alborada","seller_name":"Denco S.A.","buyer_name":"Luisita Comunica","sheet":17430,"number":25081,"inscription_date":"2019-03-07","department":"LC1","calculated_value":"28646.0","blueprint":"654","cellar":0,"parkingi":0,"role":"138-313","uf_m2_u":"82.32","uf_m2_t":null,"total_surface_building":"348.0","total_surface_terrain":"0.0","property_types":{"name":"CASA"},"seller_types":{"name":"DUEÑO"}},{"bimester":2,"year":2019,"address":"176 Joaquín V González","seller_name":"Denco S.A.","buyer_name":"EL de la inmobiliaria","sheet":17430,"number":25081,"inscription_date":"2019-03-07","department":"LC1","calculated_value":"28646.0","blueprint":"777","cellar":0,"parkingi":0,"role":"138-313","uf_m2_u":"82.32","uf_m2_t":null,"total_surface_building":"348.0","total_surface_terrain":"0.0","property_types":{"name":"DEPARTAMENTO"},"seller_types":{"name":"INMOBILIARIA"}}]'
-
-      data = JSON.parse(data)
-
       // Creamos la tabla con las cabeceras
       $('#cbr_popup_body').append(
         $('<table>', {
