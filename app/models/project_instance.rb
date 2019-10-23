@@ -107,5 +107,84 @@ def save_instance_data(data, mixes, t_units, st_units, sld_units, project_type)
       pluck("sum(project_instance_mixes.total_units - project_instance_mixes.stock_units), project_mixes.mix_type")
   end
 
+def get_total_units
+    @total = ProjectInstanceMix.where(project_instance_id: self.id).sum(:total_units)
+end
+def get_total_available
+    @total = ProjectInstanceMix.where(project_instance_id: self.id).sum(:stock_units)
 end
 
+def get_pp_uf
+  select = "select pp_uf(#{self.id}) as pp_uf"
+  result = Util.execute(select)
+  result[0]['pp_uf'].to_f
+end
+
+def get_pp_uf_m2
+  select = "select pp_uf_m2(#{id.to_i}) as pp_uf_m2"
+  result = Util.execute(select)
+  result[0]['pp_uf_m2'].to_f
+end
+
+def get_percent_venta
+  select = "select percent_venta(#{self.id.to_i}) as percent_venta"
+  result = Util.execute(select)
+  result[0]['percent_venta'].to_f
+end
+
+def get_pp_utiles
+  select = "select pp_utiles(#{self.id}) as pp_utiles"
+  result = Util.execute(select)
+  result[0]['pp_utiles'].to_f
+end
+def get_pp_utiles_terrace
+  select = "select pp_utiles_terrace(#{self.id.to_i}) as pp_utiles_terrace"
+      result = Util.execute(select)
+        result[0]['pp_utiles_terrace'].to_f
+end
+def get_pp_terreno
+    select = "select pp_terreno(#{id.to_i}) as pp_terreno"
+      result = Util.execute(select)
+        result[0]['pp_terreno'].to_i
+end
+
+def get_sale_months
+    select = "select months(#{id.to_i}) as sale_months"
+      result = Util.execute(select)
+        result[0]['sale_months'].to_i
+end
+def get_vhmo
+    select = "select vhmo(#{id.to_i}) as vhmo"
+      result = Util.execute(select)
+        result[0]['vhmo'].to_f
+end
+
+def get_pp_uf_dis
+    select = "select pp_uf_dis(#{id.to_i}) as pp_uf_dis"
+      result = Util.execute(select)
+        result[0]['pp_uf_dis'].to_f
+end
+def get_vhmd
+    select = "select vhmd(#{id.to_i}) as vhmd"
+      result = Util.execute(select)
+        result[0]['vhmd'].to_f
+end
+def get_masd
+    select = "select masd(#{id.to_i}) as masd"
+      result = Util.execute(select)
+        result[0]['masd'].to_f
+end
+
+def get_pxq
+    select = "select pxq(#{id.to_i}) as pxq"
+      result = Util.execute(select)
+        result[0]['pxq'].to_f
+end
+
+def get_pxq_d
+    select = "select pxq_d(#{id.to_i}) as pxq_d"
+      result = Util.execute(select)
+        result[0]['pxq_d'].to_f
+end
+
+end

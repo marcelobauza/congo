@@ -2,80 +2,39 @@
 
 <h1>Project Instance Mixes</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
-      <th>Project instance</th>
-      <th>Mix</th>
-      <th>Percentage</th>
-      <th>Default</th>
-      <th>0</th>
-      <th>Stock units</th>
-      <th>Mix m2 field</th>
-      <th>Mix m2 built</th>
-      <th>Mix usable square meters</th>
-      <th>Mix terrace square meters</th>
-      <th>Mix uf m2</th>
-      <th>Mix selling speed</th>
-      <th>Mix uf value</th>
-      <th>Living room</th>
-      <th>Service room</th>
-      <th>H office</th>
-      <th>Discount</th>
-      <th>Uf min</th>
-      <th>Uf max</th>
-      <th>Uf parking</th>
-      <th>Uf cellar</th>
-      <th>Common expenses</th>
-      <th>Withdrawal percent</th>
-      <th>Total units</th>
-      <th>T min</th>
-      <th>T max</th>
-      <th>Home type</th>
-      <th>Model</th>
-      <th colspan="3"></th>
+      <th><%= ProjectMix.human_attribute_name :mix_type %></th>
+      <th><%= ProjectInstanceMix.human_attribute_name :total_units %></th>
+      <th><%= ProjectInstanceMix.human_attribute_name :stock_units %></th>
+      <th><%= ProjectInstanceMix.human_attribute_name :mix_usable_square_meters %></th>
+      <th><%= ProjectInstanceMix.human_attribute_name :mix_terrace_square_meters %></th>
+      <th><%= ProjectInstanceMix.human_attribute_name :mix_uf_value %></th>
+      <th><%= ProjectInstanceMix.human_attribute_name :mix_uf_m2 %></th>
+      <th><%= ProjectInstanceMix.human_attribute_name :mix_selling_speed %></th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @project_instance_mixes.each do |project_instance_mix| %>
+    <% @project_instance_mixes.each do |mix| %>
       <tr>
-        <td><%= project_instance_mix.project_instance %></td>
-        <td><%= project_instance_mix.mix_id %></td>
-        <td><%= project_instance_mix.percentage %></td>
-        <td><%= project_instance_mix.DEFAULT %></td>
-        <td><%= project_instance_mix.0 %></td>
-        <td><%= project_instance_mix.stock_units %></td>
-        <td><%= project_instance_mix.mix_m2_field %></td>
-        <td><%= project_instance_mix.mix_m2_built %></td>
-        <td><%= project_instance_mix.mix_usable_square_meters %></td>
-        <td><%= project_instance_mix.mix_terrace_square_meters %></td>
-        <td><%= project_instance_mix.mix_uf_m2 %></td>
-        <td><%= project_instance_mix.mix_selling_speed %></td>
-        <td><%= project_instance_mix.mix_uf_value %></td>
-        <td><%= project_instance_mix.living_room %></td>
-        <td><%= project_instance_mix.service_room %></td>
-        <td><%= project_instance_mix.h_office %></td>
-        <td><%= project_instance_mix.discount %></td>
-        <td><%= project_instance_mix.uf_min %></td>
-        <td><%= project_instance_mix.uf_max %></td>
-        <td><%= project_instance_mix.uf_parking %></td>
-        <td><%= project_instance_mix.uf_cellar %></td>
-        <td><%= project_instance_mix.common_expenses %></td>
-        <td><%= project_instance_mix.withdrawal_percent %></td>
-        <td><%= project_instance_mix.total_units %></td>
-        <td><%= project_instance_mix.t_min %></td>
-        <td><%= project_instance_mix.t_max %></td>
-        <td><%= project_instance_mix.home_type %></td>
-        <td><%= project_instance_mix.model %></td>
-        <td><%= link_to 'Show', project_instance_mix %></td>
-        <td><%= link_to 'Edit', edit_project_instance_mix_path(project_instance_mix) %></td>
-        <td><%= link_to 'Destroy', project_instance_mix, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= mix.project_mix_type %></td>
+        <td><%= mix.total_units %></td>
+        <td><%= number_with_precision(mix.stock_units, :precision => 0) %></td>
+        <td><%= number_with_precision(mix.mix_usable_square_meters, :precision => 1) %></td>
+        <td><%= number_with_precision(mix.mix_terrace_square_meters, :precision => 1) %></td>
+        <td><%= number_with_precision(mix.uf_avg_percent, :precision => 0) %></td>
+        <td><%= number_with_precision(mix.uf_m2, :precision => 1) %></td>
+        <td><%= number_with_precision(mix.vhmu, :precision => 1) %></td>
+        <td><%= link_to "Editar", edit_admin_project_project_instance_project_instance_mix_path(mix.project_instance.project, 
+                                                                                     mix.project_instance, mix), :class => "ui-state-default ui-corner-all", :title => t('actions.edit') %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
 <br>
 
-<%= link_to 'New Project Instance Mix', new_project_instance_mix_path %>
+<%= link_to 'New Project Instance Mix', new_admin_project_project_instance_project_instance_mix_path(@project, @project_instance) %>

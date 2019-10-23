@@ -1,6 +1,14 @@
-<h1>Editing Project Instance</h1>
+<h1>Editar Relevamiento</h1>
+<ul class="tabs">
+  <li><%= link_to t('menu.project.project'), edit_admin_project_path(@project_instance.project) %></li>
+  <li class="active"><a href="#"><%= t('menu.project.instances') %></a></li>
+  <li><%= link_to t('menu.project_instance.mixes'), admin_project_project_instance_project_instance_mixes_path(@project_instance.project, @project_instance) %></li>
+</ul>
 
 <%= render 'form', project_instance: @project_instance %>
-
-<%= link_to 'Show', @project_instance %> |
-<%= link_to 'Back', project_instances_path %>
+<div class="panel panel-default">
+  <div class="panel-heading"><h4>Datos Calculados</h4></div>
+  <div class="panel-body">
+    <%= render :partial => 'form_datos_calculados' %>
+  </div>
+</div>

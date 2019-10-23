@@ -1046,10 +1046,11 @@ class Project < ApplicationRecord
 
     select = "select code from projects where county_id = #{self.county.id} order by id desc limit 2;"
     result = Util.execute(select)
+    code = Project.where(county_id: self.county.id).order(id: :desc).first
     code = result[0]['code'].split('-')[1]
     code_number = code.gsub(/[^1-9]/, '').to_i + 1
     type = self.project_type.name[0, 1]
-    self.code = self.county.code + "-" + type + "%04d" % code_number.to_s
+    self.code = self.county.code.to_s + "-" + type + "%04d" % code_number.to_i
   end
 
   def date_format

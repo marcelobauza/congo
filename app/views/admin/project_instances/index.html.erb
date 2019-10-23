@@ -1,22 +1,17 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Project Instances</h1>
+<h1>Relevamientos de Proyectos</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
-      <th>Project</th>
-      <th>Project status</th>
       <th>Bimester</th>
-      <th>Year</th>
-      <th>Active</th>
-      <th>Default</th>
-      <th>True</th>
-      <th>Comments</th>
-      <th>Cadastre</th>
-      <th>Validated</th>
-      <th>Default</th>
-      <th>False</th>
+      <th>Oferta</th>
+      <th>Disponibilidad</th>
+      <th>PP_UF</th>
+      <th>PP UF/m2</th>
+      <th>% Vendido</th>
+      <th>Estado</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -24,21 +19,15 @@
   <tbody>
     <% @project_instances.each do |project_instance| %>
       <tr>
-        <td><%= project_instance.project %></td>
-        <td><%= project_instance.project_status %></td>
-        <td><%= project_instance.bimester %></td>
-        <td><%= project_instance.year %></td>
-        <td><%= project_instance.active %></td>
-        <td><%= project_instance.DEFAULT %></td>
-        <td><%= project_instance.true %></td>
-        <td><%= project_instance.comments %></td>
-        <td><%= project_instance.cadastre %></td>
-        <td><%= project_instance.validated %></td>
-        <td><%= project_instance.DEFAULT %></td>
-        <td><%= project_instance.false %></td>
-        <td><%= link_to 'Show', project_instance %></td>
-        <td><%= link_to 'Edit', edit_project_instance_path(project_instance) %></td>
-        <td><%= link_to 'Destroy', project_instance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= project_instance.bimester %>B-<%= project_instance.year %></td>
+        <td><%= project_instance.get_total_units %></td>
+        <td><%= project_instance.get_total_available %></td>
+        <td><%= project_instance.get_pp_uf %></td>
+        <td><%= project_instance.get_pp_uf_m2 %></td>
+        <td><%= project_instance.get_percent_venta %></td>
+        <td><%= project_instance.project_status.name %></td>
+        <td><%= link_to 'Edit', edit_admin_project_project_instance_path(@project, project_instance) %></td>
+        <td><%= link_to 'Destroy', admin_project_project_instance_path(@project, project_instance), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -46,4 +35,4 @@
 
 <br>
 
-<%= link_to 'New Project Instance', new_project_instance_path %>
+<%= link_to 'New Project Instance', new_admin_project_project_instance_path(@project) %>

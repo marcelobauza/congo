@@ -1,10 +1,13 @@
 class Admin::ProjectInstanceMixesController < ApplicationController
+  before_action :set_project_project_instances
   before_action :set_project_instance_mix, only: [:show, :edit, :update, :destroy]
 
+  layout 'admin'
   # GET /project_instance_mixes
   # GET /project_instance_mixes.json
   def index
-    @project_instance_mixes = ProjectInstanceMix.all
+
+    @project_instance_mixes = @project_instance.project_instance_mixes.all
   end
 
   # GET /project_instance_mixes/1
@@ -14,7 +17,7 @@ class Admin::ProjectInstanceMixesController < ApplicationController
 
   # GET /project_instance_mixes/new
   def new
-    @project_instance_mix = ProjectInstanceMix.new
+    @project_instance_mix = @project_instance.project_instance_mixes.new
   end
 
   # GET /project_instance_mixes/1/edit
@@ -24,7 +27,7 @@ class Admin::ProjectInstanceMixesController < ApplicationController
   # POST /project_instance_mixes
   # POST /project_instance_mixes.json
   def create
-    @project_instance_mix = ProjectInstanceMix.new(project_instance_mix_params)
+    @project_instance_mix = @project_instance.project_instance_mixes.new(project_instance_mix_params)
 
     respond_to do |format|
       if @project_instance_mix.save
@@ -62,13 +65,17 @@ class Admin::ProjectInstanceMixesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project_instance_mix
-      @project_instance_mix = ProjectInstanceMix.find(params[:id])
-    end
+  def set_project_project_instances
+    @project = Project.find(params[:project_id])
+    @project_instance = @project.project_instances.find(params[:project_instance_id])
+  end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_project_instance_mix
+    @project_instance_mix = ProjectInstanceMix.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def project_instance_mix_params
-      params.require(:project_instance_mix).permit(:project_instance_id, :mix_id, :percentage, :stock_units, :mix_m2_field, :mix_m2_built, :mix_usable_square_meters, :mix_terrace_square_meters, :mix_uf_m2, :mix_selling_speed, :mix_uf_value, :living_room, :service_room, :h_office, :discount, :uf_min, :uf_max, :uf_parking, :uf_cellar, :common_expenses, :withdrawal_percent, :total_units, :t_min, :t_max, :home_type, :model)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def project_instance_mix_params
+    params.require(:project_instance_mix).permit(:project_instance_id, :mix_id, :percentage, :stock_units, :mix_m2_field, :mix_m2_built, :mix_usable_square_meters, :mix_terrace_square_meters, :mix_uf_m2, :mix_selling_speed, :mix_uf_value, :living_room, :service_room, :h_office, :discount, :uf_min, :uf_max, :uf_parking, :uf_cellar, :common_expenses, :withdrawal_percent, :total_units, :t_min, :t_max, :home_type, :modelz, :get_bedroom, :get_bathroom)
+  end
 end

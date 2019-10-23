@@ -1,37 +1,77 @@
-
-<%= simple_form_for(@project_instance_mix) do |f| %>
+<%= simple_form_for([:admin, @project, @project_instance, @project_instance_mix]) do |f| %>
   <%= f.error_notification %>
   <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-  <div class="form-inputs">
-    <%= f.association :project_instance %>
-    <%= f.input :mix_id %>
-    <%= f.input :percentage %>
-    <%= f.input :DEFAULT %>
-    <%= f.input :0 %>
-    <%= f.input :stock_units %>
-    <%= f.input :mix_m2_field %>
-    <%= f.input :mix_m2_built %>
-    <%= f.input :mix_usable_square_meters %>
-    <%= f.input :mix_terrace_square_meters %>
-    <%= f.input :mix_uf_m2 %>
-    <%= f.input :mix_selling_speed %>
-    <%= f.input :mix_uf_value %>
-    <%= f.input :living_room %>
-    <%= f.input :service_room %>
-    <%= f.input :h_office %>
-    <%= f.input :discount %>
-    <%= f.input :uf_min %>
-    <%= f.input :uf_max %>
-    <%= f.input :uf_parking %>
-    <%= f.input :uf_cellar %>
-    <%= f.input :common_expenses %>
-    <%= f.input :withdrawal_percent %>
-    <%= f.input :total_units %>
-    <%= f.input :t_min %>
-    <%= f.input :t_max %>
-    <%= f.input :home_type %>
-    <%= f.input :model %>
+        <div class="alert-message block-message error">
+          <ul class="panel-body"><% @project_instance_mix.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %></ul>
+        </div>
+  <div class="form-row">
+    <div class="form-group col-md-3">
+      <%= f.input :model, input_html: {class:'form-control'}  %>
+    </div>
+    <% if @project.project_type.name == 'Casas'%>
+      <div class="form-group col-md-3">
+        <%= f.input :home_type, input_html: {class:'form-control'} %>
+      </div>
+    <% end %>
+    <div class="form-group col-md-3">
+      <%= f.input :total_units, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :stock_units, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :mix_usable_square_meters, input_html: {class:'form-control'}  %>
+    </div>
+    <% unless @project.project_type.name == 'Casas'%>
+      <div class="form-group col-md-3">
+        <%= f.input :mix_terrace_square_meters, input_html: {class:'form-control'}  %>
+      </div>
+    <% end %>
+    <div class="form-group col-md-3">
+      <%= f.input :get_bedroom, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :get_bathroom, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :living_room, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :service_room, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :h_office, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :percentage, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :uf_min, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :uf_max, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :uf_parking, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :uf_cellar, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :common_expenses, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :withdrawal_percent, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :t_min, input_html: {class:'form-control'}  %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.input :t_max, input_html: {class:'form-control'}  %>
+    </div>
+  </div>
+
   </div>
 
   <div class="form-actions">

@@ -5,6 +5,8 @@ class ProjectInstanceMix < ApplicationRecord
 
   has_many :trends
 
+  attr_accessor :get_bedroom, :get_bathroom
+
   def self.associate_instance_mix_data(mixes, project_instance, units_total)
     #ProjectInstanceMix.delete_all(:project_instance_id => project_instance)
 

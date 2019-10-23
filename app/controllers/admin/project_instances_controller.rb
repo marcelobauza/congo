@@ -1,10 +1,14 @@
 class Admin::ProjectInstancesController < ApplicationController
+  before_action :set_project
   before_action :set_project_instance, only: [:show, :edit, :update, :destroy]
 
+
+  layout 'admin'
   # GET /project_instances
   # GET /project_instances.json
   def index
-    @project_instances = ProjectInstance.all
+
+    @project_instances = @project.project_instances.all
   end
 
   # GET /project_instances/1
@@ -14,7 +18,7 @@ class Admin::ProjectInstancesController < ApplicationController
 
   # GET /project_instances/new
   def new
-    @project_instance = ProjectInstance.new
+    @project_instance = @project.project_instances.new
   end
 
   # GET /project_instances/1/edit
@@ -24,11 +28,11 @@ class Admin::ProjectInstancesController < ApplicationController
   # POST /project_instances
   # POST /project_instances.json
   def create
-    @project_instance = ProjectInstance.new(project_instance_params)
+    @project_instance = @project.project_instances.new(project_instance_params)
 
     respond_to do |format|
       if @project_instance.save
-        format.html { redirect_to @project_instance, notice: 'Project instance was successfully created.' }
+        format.html { redirect_to edit_admin_project_project_instance_path(@project, @project_instance), notice: 'Project instance was successfully created.' }
         format.json { render :show, status: :created, location: @project_instance }
       else
         format.html { render :new }
@@ -62,9 +66,13 @@ class Admin::ProjectInstancesController < ApplicationController
   end
 
   private
+  def set_project
+    @project = Project.find(params[:project_id])
+  end
     # Use callbacks to share common setup or constraints between actions.
     def set_project_instance
-      @project_instance = ProjectInstance.find(params[:id])
+      @project = Project.find(params[:project_id])
+      @project_instance = @project.project_instances.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

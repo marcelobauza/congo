@@ -1,25 +1,148 @@
-<%= simple_form_for([:admin, @project]) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+<script charset="utf-8">
+  <%if !@project.the_geom.nil?  %>
+     Congo.admin_projects.config.latitude.push(<%= @project.the_geom.y %>);
+     Congo.admin_projects.config.longitude.push(<%= @project.the_geom.x %>);
+  <% end %> 
+</script>
+<nav class="nav">
+  <a href="#" class="nav-active"><%= t('menu.project.project') %></a>
+  <% unless @project.new_record? %>
+    <%= link_to t('menu.project.instances'), admin_project_project_instances_path(@project), input_html: {class:"nav-link"} %>
+  <% end %>
+</nav>
+<div class="card shadow">
+  <div class="card-body">
+    <%= simple_form_for([:admin, @project]) do |f| %>
+      <% if @project.errors.any? %>
+        <div class="alert-message block-message error">
+          <ul class="panel-body"><% @project.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %></ul>
+        </div>
+      <% end %>
 
-  <div class="form-inputs">
-    <%= f.input :code %>
-    <%= f.input :name %>
-    <%= f.input :address %>
-    <%= f.input :floors %>
-    <%= f.input :county_id %>
-    <%= f.input :agency_id %>
-    <%= f.input :project_type_id %>
-    <%= f.input :build_date %>
-    <%= f.input :sale_date %>
-    <%= f.input :transfer_date %>
-    <%= f.input :pilot_opening_date %>
-    <%= f.input :quantity_department_for_floor %>
-    <%= f.input :elevators %>
-    <%= f.input :general_observation %>
-  </div>
+      <div class="form-row">
+          <div class="col-md-4">
+            <div id="admin_map" class="admin_map_projects"></div>
+          </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
+          <div class="col-md-6">
+            <div class="form-group col-md-6">
+              <%= f.label :longitude %>
+              <div class="form-inline">
+                <%= f.text_field :longitude, :class => 'form-control', id: 'projects_longitude' %>
+              </div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <%= f.label :latitude %>
+              <div class="form-inline">
+                <%= f.text_field :latitude, :class => 'form-control', id: 'projects_latitude' %>
+              </div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <%= f.label :county %>
+              <div class="form-inline">
+                <%= f.select :county_id, counties_for_select, { :prompt => t(:select_item_from_list) }, :class => 'form-control' %>
+              </div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <%= f.label :address %>
+              <%= f.text_field :address, :class => 'form-control' %>
+              <div id="geocodingResult"></div>
+              <span class="help-inline"><%= t 'form.hint.project.address' %></span>
+              <%= link_to "Buscar", '#', id: 'search_address' %>
+            </div>
+          </div>
+      </div>
+
+      <div class="form-row">
+          <% if !@project.new_record? %>
+            <div class="form-group col-md-3">
+              <%= f.label :code %>
+                <%= f.text_field :code, :class => 'form-control' %>
+            </div>
+          <% end %>
+
+          <div class="form-group col-md-3">
+            <%= f.label :name %>
+            <%= f.text_field :name, :class => 'form-control' %>
+          </div>
+
+          <div class="form-group col-md-3">
+            <%= f.label :floors %>
+              <%= f.text_field :floors, :class => 'form-control' %>
+          </div>
+
+          <div class="form-group col-md-3">
+            <%= f.label :quantity_department_for_floor %>
+              <%= f.text_field :quantity_department_for_floor, :class => 'form-control' %>
+          </div>
+        </div>
+
+      <div class="form-row">
+          <div class="form-group col-md-3">
+            <%= f.label :elevators %>
+              <%= f.text_field :elevators, :class => 'form-control' %>
+          </div>
+
+          <div class="form-group col-md-3">
+            <%= f.label :get_agency_name %>
+              <%= f.text_field :get_agency_name, :class => 'form-control' %>
+          </div>
+
+          <div class="form-group col-md-3">
+            <%= f.label :get_constructor_name %>
+              <%= f.text_field :get_constructor_name, :class => 'form-control' %>
+          </div>
+
+          <div class="form-group col-md-3">
+            <%= f.label :get_seller_name %>
+              <%= f.text_field :get_seller_name, :class => 'form-control' %>
+          </div>
+        </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <%= f.label :project_type %>
+            <%= f.select :project_type_id, project_types_for_select, { :prompt => t(:select_item_from_list) }, :class => 'form-control' %>
+        </div>
+
+        <div class="form-group col-md-3">
+          <%= f.label :build_date %>
+            <%= f.text_field :build_date, :class => "jquery-ui-date form-control" %>
+        </div>
+
+        <div class="form-group col-md-3">
+          <%= f.label :sale_date %>
+            <%= f.text_field :sale_date, :class => "jquery-ui-date form-control" %>
+        </div>
+
+        <div class="form-group col-md-3">
+          <%= f.label :transfer_date %>
+            <%= f.text_field :transfer_date, :class => "jquery-ui-date form-control" %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <%= f.label :pilot_opening_date %>
+            <%= f.text_field :pilot_opening_date, :class => "jquery-ui-date form-control" %>
+        </div>
+
+        <div class="form-group col-md-3">
+          <%= f.label :general_observation %>
+            <%= f.text_area :general_observation, :cols=> 31, :rows=> 5  %>
+        </div>
+      </div>
+
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+
+      <div class="form-actions">
+        <%= f.button :submit %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
