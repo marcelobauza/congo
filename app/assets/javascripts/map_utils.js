@@ -648,6 +648,12 @@ Congo.map_utils = function(){
             cql_filter = "1=1";
             filter_layer = ''
             Congo.dashboards.config.style_layer = 'census_voronoi_clip';
+          if (census_source_id == '1'){
+            layer_type = 'demography_info_census_2017'
+          }else{
+            layer_type = 'demography_info_census_2012'
+          }
+
             env = "polygon: Polygon(("+coord_geoserver+"))";
           }else{
             cql_filter ="WITHIN(the_geom,  Polygon(("+coord_geoserver+"))) "+ filter_layer;
