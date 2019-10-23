@@ -198,20 +198,15 @@ class Project < ApplicationRecord
 
   def self.find_index(project_type, bimester, county, year, search)
 
-    @joins = Array.new
-    @joins << " inner join project_instances pi on projects.id = pi.project_id "
-    @joins << " inner join project_instance_mixes pim on pi.id = pim.project_instance_id "
-    @joins << " inner join project_statuses ps on ps.id = pi.project_status_id "
-    @joins << " inner join project_mixes pm on pim.mix_id = pm.id "
 
-    select = " pi.project_id ,"
+    select = " project_instances.project_id ,"
     select += " projects.project_type_id,"
-    select += " pi.bimester,"
-    select += " pi.year,"
-    select += " projects.code,"
+    select += " bimester,"
+    select += " year,"
+    select += " code,"
     select += " projects.name,"
     select += " (select name from agencies a inner join agency_rols ar on a.id  = ar.agency_id where ar.project_id = projects.id and rol ilike 'INMOBILIARIA' limit 1) as agency,"
-    select += " county_name(projects.county_id) as countyname, "
+    select += " county_id, "
 
     if !search.nil?
       letter =  search.at(6)
@@ -227,37 +222,37 @@ class Project < ApplicationRecord
 
       select += " min((t_min + t_max) /2)   as ps_terreno_min, "
       select += " max((t_min + t_max)/2 ) as ps_terreno_max, "
-      select += " min(round((pim.uf_min * (1::numeric - pim.percentage / 100::numeric) + pim.uf_max * (1::numeric - pim.percentage / 100::numeric)) / 2::numeric / (pim.mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) AS uf_m2_ut_min, "
-      select += " max(round((pim.uf_min * (1::numeric - pim.percentage / 100::numeric) + pim.uf_max * (1::numeric - pim.percentage / 100::numeric)) / 2::numeric / (pim.mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) AS uf_m2_ut_max, "
-      select += " round(sum((mix_usable_square_meters * pim.total_units) * round((pim.uf_min * (1::numeric - pim.percentage / 100::numeric) + pim.uf_max * (1::numeric - pim.percentage / 100::numeric)) / 2::numeric / (pim.mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) / sum(mix_usable_square_meters * pim.total_units), 1) as pp_UFm2ut,"
+      select += " min(round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) AS uf_m2_ut_min, "
+      select += " max(round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) AS uf_m2_ut_max, "
+      select += " round(sum((mix_usable_square_meters * total_units) * round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) / sum(mix_usable_square_meters * total_units), 1) as pp_UFm2ut,"
     else
       select += " projects.floors,"
-      select += " min(pim.mix_terrace_square_meters) as min_terrazas,"
-      select += " max(pim.mix_terrace_square_meters) as max_terrazas,"
+      select += " min(mix_terrace_square_meters) as min_terrazas,"
+      select += " max(mix_terrace_square_meters) as max_terrazas,"
       select += " min(round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + mix_terrace_square_meters * 0.5),1)) AS uf_m2_min,"
       select += " max(round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + mix_terrace_square_meters * 0.5),1)) AS uf_m2_max,"
-      select += " round(sum((mix_usable_square_meters * pim.total_units) * round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + mix_terrace_square_meters * 0.5),1)) / sum(mix_usable_square_meters * pim.total_units), 1)  as pp_UFm2ut,"
+      select += " round(sum((mix_usable_square_meters * total_units) * round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + mix_terrace_square_meters * 0.5),1)) / sum(mix_usable_square_meters * total_units), 1)  as pp_UFm2ut,"
 
-      select += " round((sum(pim.mix_usable_square_meters * pim.total_units) / sum(pim.total_units))::numeric, 1)  as pp_utiles,"
-      select += " round(sum(pim.mix_terrace_square_meters * pim.total_units) / sum(pim.total_units), 1)  as pp_terrazas,"
+      select += " round((sum(mix_usable_square_meters * total_units) / sum(total_units))::numeric, 1)  as pp_utiles,"
+      select += " round(sum(mix_terrace_square_meters * total_units) / sum(total_units), 1)  as pp_terrazas,"
     end
 
-    select += " min(pim.mix_usable_square_meters) as Min_utiles,"
-    select += " max(pim.mix_usable_square_meters) as Max_utiles,"
-    select += " count(pm.bedroom) as bedroom,"
-    select += " sum(pim.discount) as discount,"
-    select += " (select min(uf_min) from project_instance_mixes where project_instance_id = pi.id) as uf_min_percent,"
-    select += " (select max(uf_min) from project_instance_mixes where project_instance_id = pi.id) as uf_max_percent,"
-    select += " round(pp_uf(pi.id)::numeric,0) AS pp_uf,"
-    select += " sum(pim.total_units) as total_units,"
-    select += " sum(pim.stock_units)  as stock_units,"
-    select += " sum(pim.total_units - pim.stock_units) AS sold_units,"
-    select += " sum(round((vhmu(pim.total_units, pim.stock_units, pi.cadastre, projects.sale_date)::numeric),1)) AS vhmu,"
-    select += " round(sum(pim.total_units - pim.stock_units) / sum(pim.total_units::numeric) * 100,1)  as percentage_sold,"
-    select += " sum(round(masd(pi.id)::numeric,1)) as vhmud,"
-    select += " round(pxq(pi.id)::numeric, 1) AS pxq,"
-    select += " round((vhmd(pi.id) * pp_uf_dis(pi.id) / 1000::double precision)::numeric,1) AS pxq_d,"
-    select += " ps.name as status"
+    select += " min(mix_usable_square_meters) as Min_utiles,"
+    select += " max(mix_usable_square_meters) as Max_utiles,"
+    #select += " count(project_mixes.bedroom) as bedroom,"
+    select += " sum(discount) as discount,"
+    select += " (select min(uf_min) from project_instance_mixes where project_instance_id = project_instances.id) as uf_min_percent,"
+    select += " (select max(uf_min) from project_instance_mixes where project_instance_id = project_instances.id) as uf_max_percent,"
+    select += " round(pp_uf(project_instances.id)::numeric,0) AS pp_uf,"
+    select += " sum(total_units) as total_units,"
+    select += " sum(stock_units)  as stock_units,"
+    select += " sum(total_units - stock_units) AS sold_units,"
+    select += " sum(round((vhmu(total_units, stock_units,cadastre, projects.sale_date)::numeric),1)) AS vhmu,"
+    select += " round(sum(total_units - stock_units) / sum(total_units::numeric) * 100,1)  as percentage_sold,"
+    select += " sum(round(masd(project_instances.id)::numeric,1)) as vhmud,"
+    select += " round(pxq(project_instances.id)::numeric, 1) AS pxq,"
+    select += " round((vhmd(project_instances.id) * pp_uf_dis(project_instances.id) / 1000::double precision)::numeric,1) AS pxq_d,"
+    select += " project_statuses.name as status"
 
 
     conditions = " 1 = 1"
@@ -266,14 +261,13 @@ class Project < ApplicationRecord
     conditions += " and county_id = #{county} " if !county.nil?
     conditions += " and year = #{year} " if !year.nil?
     conditions += " and code = '#{search}'"  if !search.nil?
-    groups = "project_id, bimester, year, code, projects.name, agency, floors,  uf_min_percent, uf_max_percent, pp_uf, uf_m2, pxq, status, pxq_d, agency,  countyname, project_type_id"
+    groups = "project_instances.project_id, bimester, year, code, projects.name, agency, floors,  uf_min_percent, uf_max_percent, pp_uf,  pxq, status, pxq_d, agency, project_type_id, projects.county_id"
 
-    Project.find(:all,
-                 :select => select,
-                 :joins => @joins.uniq.join(" "),
-                 :conditions => conditions,
-                 :group => groups,
-                 :order => ('year, bimester'))
+    Project.joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
+      where(conditions).
+      select(select).
+      group(groups).
+      order(:year, :bimester)
 
   end
 
