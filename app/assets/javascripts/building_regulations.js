@@ -13,6 +13,7 @@ Congo.building_regulations.config= {
   to_max_height: '',
   from_inhabitants_hectare: '',
   to_inhabitants_hectare: '',
+  legends: []
 }
 
 building_regulations_popup = function(id) {
