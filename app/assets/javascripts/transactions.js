@@ -1093,7 +1093,7 @@ add_time_slider_cbr = function() {
       skin: 'flat',
       type: 'double',
       grid: false,
-      from: slider_periods.length - 7,
+      from: slider_periods.length - 6,
       to: slider_periods.length - 1,
       values: slider_periods,
       drag_interval: true,
@@ -1102,7 +1102,7 @@ add_time_slider_cbr = function() {
       block: false,
       onFinish: function(data) {
 
-        var data = data.from_value.split("/")
+        var data = data.to_value.split("/")
         var updated_bimester = data[0]
         var updated_year = data[1]
 
