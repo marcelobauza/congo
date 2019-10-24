@@ -1069,7 +1069,8 @@ Congo.future_projects.action_dashboards = function(){
           $('.filter-projects').hide();
           $('.filter-future-projects').show();
 
-          // Eliminamos el census_filter
+          // Eliminamos el time_slider de cbr y el census_filter
+          $('#time_slider_cbr_item').remove()
           $('#census_filter').remove()
 
         },

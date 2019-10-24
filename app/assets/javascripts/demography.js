@@ -173,7 +173,8 @@ Congo.demography.action_dashboards = function(){
         $('.filter-projects').hide();
         $('.filter-future-projects').hide();
 
-        // Eliminamos el time_slider
+        // Eliminamos los time_slider
+        $('#time_slider_cbr_item').remove()
         $('#time_slider_item').remove()
 
       },

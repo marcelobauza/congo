@@ -1067,6 +1067,57 @@ function maxCard(i){
   $('#chart-container'+i).toggleClass('card-max fixed-top')
 }
 
+add_time_slider_cbr = function() {
+
+  if ($('#time_slider_cbr').length == 0) {
+
+    // Agregamos el slider al card de "Filtros Activos"
+    $('#filter-body').prepend(
+      $('<div>', {
+        'id': 'time_slider_cbr_item'
+      }).append(
+        $("<input>", {
+          'id': 'time_slider_cbr'
+        }),
+        $("<div>", {
+          'class': 'dropdown-divider',
+        })
+      )
+    )
+
+    // Levantamos los datos de los periodos
+    var slider_periods = Congo.dashboards.config.slider_periods
+
+    // Implementamos ionRangeSlider
+    $("#time_slider_cbr").ionRangeSlider({
+      skin: 'flat',
+      type: 'double',
+      grid: false,
+      from: slider_periods.length - 7,
+      to: slider_periods.length - 1,
+      values: slider_periods,
+      drag_interval: true,
+      min_interval: 6,
+      max_interval: 6,
+      block: false,
+      onFinish: function(data) {
+
+        var data = data.from_value.split("/")
+        var updated_bimester = data[0]
+        var updated_year = data[1]
+
+        // Actualizamos el periodo actual
+        Congo.dashboards.config.bimester = updated_bimester
+        Congo.dashboards.config.year = updated_year
+
+        // Recargamos la capa
+        Congo.map_utils.counties();
+
+      }, // Cierra onFinish
+    }); // Cierra ionRangeSlider
+  } // Cierra if length
+} // Cierra add_time_slider_cbr
+
 Congo.transactions.action_dashboards = function(){
 
   init=function(){
@@ -1106,7 +1157,7 @@ Congo.transactions.action_dashboards = function(){
 
       // Creamos el overlay y el time_slider
       Congo.dashboards.action_index.create_overlay_and_filter_card();
-      Congo.dashboards.action_index.add_time_slider();
+      add_time_slider_cbr();
 
       if (county_id != '') {
 
@@ -1185,7 +1236,7 @@ Congo.transactions.action_dashboards = function(){
           $("#spinner").show();
           $('.btn').addClass('disabled')
           $('.close').prop('disabled', true);
-          $("#time_slider").data("ionRangeSlider").update({
+          $("#time_slider_cbr").data("ionRangeSlider").update({
             block: true
           });
 
@@ -1221,7 +1272,8 @@ Congo.transactions.action_dashboards = function(){
           $('.filter-projects').hide();
           $('.filter-future-projects').hide();
 
-          // Eliminamos el census_filter
+          // Eliminamos el census_filter y el time_slider de las otras capas
+          $('#time_slider_item').remove()
           $('#census_filter').remove()
 
         },
@@ -1231,7 +1283,7 @@ Congo.transactions.action_dashboards = function(){
           $("#spinner").hide();
           $('.btn').removeClass('disabled')
           $('.close').prop('disabled', false);
-          $("#time_slider").data("ionRangeSlider").update({
+          $("#time_slider_cbr").data("ionRangeSlider").update({
             block: false
           });
 
