@@ -1386,6 +1386,15 @@ Congo.future_projects.action_dashboards = function(){
                   legend: {
                     display: false,
                   },
+                  tooltips: {
+                    callbacks: {
+                      label: function(tooltipItem, data) {
+                        var dataset = data.datasets[tooltipItem.datasetIndex];
+                        var currentValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return currentValue.toLocaleString('es-ES');
+                      }
+                    }
+                  },
                   plugins: {
                     datalabels: {
                       display: false,
@@ -1406,6 +1415,10 @@ Congo.future_projects.action_dashboards = function(){
                     yAxes: [{
                       stacked: true,
                       ticks: {
+                        callback: function(label, index, labels) {
+                          label = label.toLocaleString('es-ES')
+                          return label;
+                        },
                         beginAtZero: true,
                         fontColor: '#e8ebef'
                       },
@@ -1612,6 +1625,13 @@ Congo.future_projects.action_dashboards = function(){
                     },
                   },
                   tooltips: {
+                    callbacks: {
+                      label: function(tooltipItem, data) {
+                        var dataset = data.datasets[tooltipItem.datasetIndex];
+                        var currentValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return currentValue.toLocaleString('es-ES');
+                      }
+                    },
                     mode: 'point',
                   },
                   hover: {
@@ -1628,6 +1648,10 @@ Congo.future_projects.action_dashboards = function(){
                     }],
                     yAxes: [{
                       ticks: {
+                        callback: function(label, index, labels) {
+                          label = label.toLocaleString('es-ES')
+                          return label;
+                        },
                         beginAtZero: true,
                         fontColor: '#e8ebef'
                       },
