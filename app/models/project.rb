@@ -1087,7 +1087,7 @@ end
         {label: I18n.t(:SELLS), value: global_information[:total_sold]},
         {label: I18n.t(:AVAILABLE_STOCK), value: global_information[:total_stock]},
         {label: I18n.t(:PP_UTILES), value: global_information[:pp_utiles]},
-        {label: I18n.t(:PP_UF), value: global_information[:pp_uf]},
+        {label: I18n.t(:PP_UF), value: global_information[:pp_uf].to_i},
         {label: I18n.t(:PP_UF_M2), value: global_information[:pp_uf_dis_dpto]},
         {label: I18n.t(:PP_UF_M2_C), value: global_information[:pp_uf_dis_home]},
         {label: I18n.t(:VHMO), value: global_information[:vhmo]},
