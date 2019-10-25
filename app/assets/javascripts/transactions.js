@@ -1279,6 +1279,8 @@ Congo.transactions.action_dashboards = function(){
         },
         success: function(data){
 
+          console.log(data);
+
           // Ocultamos el spinner y habilitamos los botones
           $("#spinner").hide();
           $('.btn').removeClass('disabled')
@@ -1654,7 +1656,11 @@ Congo.transactions.action_dashboards = function(){
                     }],
                     yAxes: [{
                       stacked: true,
-                      ticks: {
+                        ticks: {
+                          callback: function(label, index, labels) {
+                            label = label.toLocaleString('es-ES')
+                            return label;
+                          },
                         beginAtZero: true,
                         fontColor: '#e8ebef'
                       },
@@ -1880,6 +1886,10 @@ Congo.transactions.action_dashboards = function(){
                     }],
                     yAxes: [{
                       ticks: {
+                        callback: function(label, index, labels) {
+                          label = label.toLocaleString('es-ES')
+                          return label;
+                        },
                         beginAtZero: true,
                         fontColor: '#e8ebef'
                       },
