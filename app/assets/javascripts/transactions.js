@@ -943,16 +943,19 @@ function transactions_report_pdf(){
             },
             plugins: {
               datalabels: {
+                formatter: function(value, context) {
+                  if (value > 0) {
+                    return value.toLocaleString('es-ES')
+                  } else {
+                    return null
+                  }
+                },
                 align: 'start',
                 anchor: 'start',
                 color: '#3d4046',
-                display: function(context) {
-                  return context.dataset.data[context.dataIndex] > 0;
-                },
                 font: {
                   size: 10
                 },
-                formatter: Math.round
               }
             },
             scales: {
@@ -966,6 +969,10 @@ function transactions_report_pdf(){
               }],
               yAxes: [{
                 ticks: {
+                  callback: function(label, index, labels) {
+                    label = label.toLocaleString('es-ES')
+                    return label;
+                  },
                   beginAtZero: true,
                   display: true,
                   fontSize: 10,
@@ -1635,6 +1642,15 @@ Congo.transactions.action_dashboards = function(){
                   legend: {
                     display: false,
                   },
+                  tooltips: {
+                    callbacks: {
+                      label: function(tooltipItem, data) {
+                        var dataset = data.datasets[tooltipItem.datasetIndex];
+                        var currentValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return currentValue.toLocaleString('es-ES');
+                      }
+                    }
+                  },
                   plugins: {
                     datalabels: {
                       display: false,
@@ -1654,7 +1670,11 @@ Congo.transactions.action_dashboards = function(){
                     }],
                     yAxes: [{
                       stacked: true,
-                      ticks: {
+                        ticks: {
+                          callback: function(label, index, labels) {
+                            label = label.toLocaleString('es-ES')
+                            return label;
+                          },
                         beginAtZero: true,
                         fontColor: '#e8ebef'
                       },
@@ -1864,6 +1884,13 @@ Congo.transactions.action_dashboards = function(){
                     },
                   },
                   tooltips: {
+                    callbacks: {
+                      label: function(tooltipItem, data) {
+                        var dataset = data.datasets[tooltipItem.datasetIndex];
+                        var currentValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return currentValue.toLocaleString('es-ES');
+                      }
+                    },
                     mode: 'point',
                   },
                   hover: {
@@ -1880,6 +1907,10 @@ Congo.transactions.action_dashboards = function(){
                     }],
                     yAxes: [{
                       ticks: {
+                        callback: function(label, index, labels) {
+                          label = label.toLocaleString('es-ES')
+                          return label;
+                        },
                         beginAtZero: true,
                         fontColor: '#e8ebef'
                       },
