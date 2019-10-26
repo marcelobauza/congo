@@ -737,54 +737,18 @@ class Project < ApplicationRecord
     conditions
   end
 
-  def self.ids_conditions(filters, self_not_filter, useView = false)
-    conditions = ""
-    #PROJECT STATUSES
-    if filters.has_key? :project_status_ids and self_not_filter != 'project_statuses'
-      query_field = useView ? "project_instance_mix_views.project_status_id" : "project_instance_views.project_status_id"
-      conditions += WhereBuilder.build_in_condition(query_field, filters[:project_status_ids])
-      conditions += Util.and
-    end
-
-    #PROJECT TYPES
-    if filters.has_key? :project_type_ids and self_not_filter != 'project_types'
-
-      if useView
-        conditions += WhereBuilder.build_in_condition("project_instance_mix_views.project_type_id", filters[:project_type_ids])
-      else
-        conditions += WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids])
-
-        conditions += Util.and
-      end
-    end
-
-    #MIXES funciona
-    if filters.has_key? :mix_ids and self_not_filter != 'mix'
-      conditions += "project_instance_views.id  IN(SELECT project_instance_id "
-      conditions += "FROM project_instance_mixes WHERE mix_id IN(#{filters[:mix_ids].join(",")}))"
-      conditions += Util.and
-    end
-
-    if filters.has_key? :project_agency_ids and self_not_filter != 'agencies'
-      conditions += " projects.agency_id IN (#{filters[:project_agency_ids].join(",")}) "
-      conditions += Util.and
-    end
-
-    conditions
-  end
-
-
   def self.ids_conditions_new(filters, self_not_filter, useView = false)
     conditions = ""
     #PROJECT STATUSES
     if filters.has_key? :project_status_ids and self_not_filter != 'project_statuses'
-      query_field = useView ? "project_status_id" : "project_instances.project_status_id"
+      query_field = useView ? "project_status_id" : "project_status_id"
       conditions += WhereBuilder.build_in_condition(query_field, filters[:project_status_ids])
       conditions += Util.and
     end
 
     #PROJECT TYPES
     if filters.has_key? :project_type_ids and self_not_filter != 'project_types'
+      query_field = useView ? "project_type_id" : "project_type_id"
       conditions += WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids])
       conditions += Util.and
     end
