@@ -54,13 +54,9 @@ class Project < ApplicationRecord
   attr_accessor :latitude, :longitude
 
   before_validation :build_geom
-
   before_create  :generate_code
 
-  #include GeoRuby::Shp4r
-
   BIMESTER_QUANTITY = 6
-
 
   def self.parcel_project(project)
 
@@ -110,7 +106,6 @@ class Project < ApplicationRecord
     end
 
     if !county_id.empty?
-      @county = county_id
       county = County.where(id: county_id).first
       county_code  = county.code.to_i
     end
@@ -144,7 +139,6 @@ class Project < ApplicationRecord
     Util.execute("select * from evolution_view order by year, bimester")
   end
 
-
   def latitude
     @latitude ||= self.the_geom.y if self.the_geom
     return @latitude ? @latitude : ""
@@ -167,9 +161,7 @@ class Project < ApplicationRecord
     get_agency_by_rol(Agency::ROL[:seller])
   end
 
-
   def self.find_index(project_type, bimester, county, year, search)
-
 
     select = " project_instances.project_id ,"
     select += " projects.project_type_id,"
@@ -240,9 +232,7 @@ class Project < ApplicationRecord
       select(select).
       group(groups).
       order(:year, :bimester)
-
   end
-
 
   def self.find_globals(filters, range)
 
@@ -272,10 +262,11 @@ class Project < ApplicationRecord
     select += "MIN(uf_min_percent) as min_uf, "
     select += "MAX(uf_max_percent) as max_uf, "
     select += "AVG(uf_avg_percent) as avg_uf"
-@a =     ProjectInstanceMixView.select(select).
-      where(build_conditions_new(filters, nil, true, range)).first
-  end
 
+    @a = ProjectInstanceMixView.method_selection(filters).
+      where(build_conditions_new(filters, nil, true, range)).
+      select(select).first
+  end
 
   #FIND PROJECTS BY WIDGETS. COUNT
   def self.projects_group_by_count(widget, filters, has_color, range)
@@ -304,6 +295,7 @@ class Project < ApplicationRecord
     Project.select( "#{select}, COUNT(#{count}) as value").
       joins(@joins.uniq.join(" ")).
       where(build_conditions_new(filters, widget, false, range)).
+      method_selection(filters).
       group(select).
       order("#{count}")
   end
@@ -328,9 +320,8 @@ class Project < ApplicationRecord
     select = "MIN(uf_avg_percent) as min, "
     select += "MAX(uf_avg_percent) as max, "
     select += "CASE sum(total_m2) WHEN 0 THEN 0 ELSE sum(total_m2 * uf_avg_percent)/sum(total_m2) END AS avg,"
-
     select += "project_instance_mix_views.year, project_instance_mix_views.bimester"
-
+    
     values_by_period3("uf", select, filters, load_min_avg_max_values)
 
   end
@@ -349,14 +340,10 @@ class Project < ApplicationRecord
     @joins = Array.new
     query_condition = " year = #{filters[:to_year]}  "
     query_condition += " and bimester = #{filters[:to_period]} "
-    query_condition += " and " +  WhereBuilder.build_in_condition("county_id",filters[:county_id]) if filters.has_key? :county_id
     query_condition += " and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
-    query_condition += " and " + WhereBuilder.build_within_condition(filters[:wkt]) if filters.has_key? :wkt
-    query_condition += " and " + WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) if filters.has_key? :radius
 
     values = get_valid_min_max_limits(widget, filters)
     ranges = get_valid_ranges(values, widget)
-
     total_ranges = ranges.count - 1
 
     result = Array.new
@@ -368,8 +355,10 @@ class Project < ApplicationRecord
         select = "count(distinct(project_id)) as value, #{ranges[i]["min"].to_i} as min_value, #{ranges[i]["max"].to_i} as max_value"
       end
       cond = "#{query_condition} AND " + WhereBuilder.build_between_condition("ROUND(#{widget})", ranges[i]["min"].to_i, ranges[i]["max"].to_i)
-      proj = ProjectInstanceMixView.select(select).
+
+      proj = ProjectInstanceMixView.select(select).method_selection(filters).
       where(cond).first
+
       result << proj
     end
     result
@@ -378,11 +367,11 @@ class Project < ApplicationRecord
   def self.get_valid_ranges(values, action)
 
     if (action == 'floors')
-
       ranges = get_range_floors
     else
       ranges = get_ranges
     end
+    
     min_value = values[0]["min"].to_i
     max_value = values[0]["max"].to_i
     index_min = -1
@@ -390,7 +379,6 @@ class Project < ApplicationRecord
     ranges.each_with_index do |r, index|
 
       index_min = index if min_value >= r["min"].to_i && min_value <= r["max"].to_i
-
       index_max = index if max_value <= r["max"].to_i && max_value >= r["min"].to_i
       index_max = index if max_value > r["max"].to_i
     end
@@ -413,9 +401,6 @@ class Project < ApplicationRecord
 
   #TODO: Cambiar! traer de la base de datos!
   def self.get_ranges
-
-    #emula lo que vendria de la db.
-
     ranges_result = []
 
     sub_range_1 = {"min" => 0, "max" => 440}
@@ -456,12 +441,12 @@ class Project < ApplicationRecord
 
       project = ProjectInstanceMixView.select(select).
         where(cond_query).
+        method_selection(filters).
         group('year, bimester').
         order('year, bimester').first
 
       proc.call result, project, bimester
     end
-
 
     result.reverse
   end
@@ -500,10 +485,10 @@ class Project < ApplicationRecord
       query = build_conditions_new(filters, widget, false, range)
     end
 
-
     ProjectInstanceMixView.select(select).
       joins(@joins.uniq.join(" ")).
       where( query).
+      method_selection(filters).
       group("project_mixes.mix_type, project_mixes.id").
       order("project_mixes.mix_type")
   end
@@ -551,7 +536,6 @@ class Project < ApplicationRecord
     self.quantity_department_for_floor = data["dpto_piso"]
     self.general_observation = data['gral_ob']
 
-
     result = self.save
     County.update(county.id, :sales_project_data => true) unless county.nil? if result
     result
@@ -577,34 +561,6 @@ class Project < ApplicationRecord
       obj[:avg] = project[:avg].to_f.round(1) unless project.nil? or project[:avg].nil?
       obj[:max] = project[:max].to_f.round(1) unless project.nil? or project[:max].nil?
       result << obj
-    end
-  end
-
-  def self.get_first_bimester_with_projects
-    period = ProjectInstance.find(:first,
-                                  :select => "project_instances.year, project_instances.bimester",
-                                  :conditions => "project_instances.active = true AND (projects.bank_project = false OR projects.bank_project IS NULL)",
-                                  :joins => :project,
-                                  :group => "year, bimester",
-                                  :order => "year, bimester"
-                                 )
-
-    return nil if period.nil?
-    return {:period => period.bimester, :year => period.year}
-  end
-
-  def self.get_last_period
-    period = Period.find(:first,
-                         :select => "year,bimester",
-                         :conditions => "active = true ",
-                         :group => "year, bimester",
-                         :order => "year desc, bimester desc")
-
-    if period.nil?
-      Period.get_periods(1, 2010, BIMESTER_QUANTITY, 1)
-    else
-      Period.get_periods(period.bimester, period.year, BIMESTER_QUANTITY, 1)
-
     end
   end
 
@@ -655,14 +611,9 @@ class Project < ApplicationRecord
   end
 
   def self.build_conditions_new(filters, self_not_filter=nil, useView = false, range=true)
+    
     @conditions = ''
-    if !filters[:county_id].nil?
-      @conditions += WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
-    elsif !filters[:wkt].nil?
-      @conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
-      else
-        @conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
-      end
+    
     if filters.has_key? :to_period and range == true
       @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView)
     else
@@ -723,7 +674,6 @@ class Project < ApplicationRecord
 
     #FILTERS THE PROJECTS BY A RANGE OF UF VALUES
     if filters.has_key? :from_uf_value
-      p "paso por el filtro"
       conditions += "( "
       0.upto(filters[:from_uf_value].length - 1) do |i|
         conditions += WhereBuilder.build_between_condition('project_instance_mix_views.uf_avg_percent', filters[:from_uf_value][i], filters[:to_uf_value][i])
@@ -752,7 +702,6 @@ class Project < ApplicationRecord
       conditions += WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids])
       conditions += Util.and
     end
-
 
     #MIXES funciona
     if filters.has_key? :mix_ids and self_not_filter != 'mix'
@@ -794,10 +743,11 @@ class Project < ApplicationRecord
   end
 
   def self.get_valid_min_max_limits(column, filters)
-    query = "SELECT ROUND(MIN(#{column})) as MIN, ROUND(MAX(#{column})) AS MAX FROM project_instance_mix_views "
-    query += @joins.uniq.join(" ")
-    query += " WHERE #{build_conditions_new(filters, column)} AND #{column} > 1"
-    ActiveRecord::Base.connection().execute(query)
+  
+    ProjectInstanceMixView.method_selection(filters).
+      where(build_conditions_new(filters, column)).
+      where("#{column} > 1" ).
+      select("ROUND(MIN(#{column})) as MIN, ROUND(MAX(#{column})) AS MAX") 
   end
 
   def self.get_bimesters filters
@@ -820,13 +770,12 @@ class Project < ApplicationRecord
   end
 
   def self.method_selection filters
-
     if !filters[:county_id].nil?
       where(county_id: filters[:county_id])
     elsif !filters[:wkt].nil?
       where(WhereBuilder.build_within_condition(filters[:wkt]))
     else
-      where(WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ))
+    where(WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ))
     end
   end
 
@@ -996,7 +945,6 @@ end
       result.push({"title":"Oferta, Venta & Disponibilidad", "series":categories})
 
       ##VALOR UF BIMESTRE
-      #result[:data] << [""]
       min =[]
       max =[]
       avg =[]
@@ -1049,9 +997,6 @@ end
       max =[]
       avg =[]
       categories=[]
-      #result[:data] << [""]
-      #result[:data] << ["Superficie Terreno/Terraza(m2) por Bimestre"]
-      #result[:data] << ["Bimestre", "Mínimo", "Máximo", "Promedio"]
 
       garea.each do |item|
         min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
@@ -1136,7 +1081,7 @@ end
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
       end
     data = Project.joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
-      where(conditions).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).where("agency_rols.rol = 'INMOBILIARIA'").
+      method_selection(filters).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).where("agency_rols.rol = 'INMOBILIARIA'").
                      select(select).
                      group(:code, :name, :address, :project_types_name, 'agencies.name' ).uniq
     data
@@ -1172,22 +1117,12 @@ end
     select += "round(MIN(total_m2),1) as min_m2_built1, "
     select += "round(MAX(total_m2),1) as max_m2_built1, "
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built1 "
-
-    if !filters[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
-    elsif !filters[:wkt].nil?
-      conditions = WhereBuilder.build_within_condition(filters[:wkt])
-    else
-      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
-      end
     
-    data = ProjectInstanceMixView.
-      where(conditions).where(year: filters[:to_year], bimester: filters[:to_period], project_type_id: 2).
+    data = ProjectInstanceMixView.method_selection(filters).
+      where(year: filters[:to_year], bimester: filters[:to_period], project_type_id: 2).
                      select(select)
     data
-
   end
-
 
   def self.information_general_house filters
 
@@ -1219,16 +1154,8 @@ end
     select += "round(MAX(total_m2),1) as max_m2_built, "
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built"
 
-    if !filters[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
-    elsif !filters[:wkt].nil?
-      conditions = WhereBuilder.build_within_condition(filters[:wkt])
-    else
-      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
-      end
-
-    data = ProjectInstanceMixView.
-      where(conditions).where(year: filters[:to_year], bimester: filters[:to_period], project_type_id: 1).
+    data = ProjectInstanceMixView.method_selection(filters).
+        where(year: filters[:to_year], bimester: filters[:to_period], project_type_id: 1).
                      select(select)
     data
   end
@@ -1278,7 +1205,6 @@ end
       result.push({"title":"Oferta, Venta & Disponibilidad", "series":categories})
 
       ##VALOR UF BIMESTRE
-      #result[:data] << [""]
       min =[]
       max =[]
       avg =[]

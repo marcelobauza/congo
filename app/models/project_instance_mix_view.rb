@@ -15,6 +15,15 @@ class ProjectInstanceMixView < ApplicationRecord
     @data = ProjectInstanceMixView.where(project_id: project_id, bimester: bimester, year: year).group(group).select(select).first
   end
 
+  def self.method_selection filters
+    if !filters[:county_id].nil?
+      where(county_id: filters[:county_id])
+    elsif !filters[:wkt].nil?
+      where(WhereBuilder.build_within_condition(filters[:wkt]))
+    else
+    where(WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ))
+    end
+  end
 
 
 end

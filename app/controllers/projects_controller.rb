@@ -137,14 +137,14 @@ class ProjectsController < ApplicationController
   # end
 
   def period
-    @period = Project.get_last_period
-    @first_period = Project.get_first_bimester_with_projects
+    #@period = Project.get_last_period
+    #@first_period = Project.get_first_bimester_with_projects
 
-    unless Project.is_periods_distance_allowed?(@first_period, @period.first, @period.size)
-      @first_period[:year] = @period.last[:year] unless @period.nil?
-      @first_period[:bimester] = @period.last[:bimester] unless @period.nil?
-    end
-    render json: {data: @period}
+   # unless Project.is_periods_distance_allowed?(@first_period, @period.first, @period.size)
+    #  @first_period[:year] = @period.last[:year] unless @period.nil?
+     # @first_period[:bimester] = @period.last[:bimester] unless @period.nil?
+   # end
+   ## render json: {data: @period}
   end
 
   def suggest
