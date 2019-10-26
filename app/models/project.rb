@@ -102,34 +102,6 @@ class Project < ApplicationRecord
     return projects;
   end
 
-  def self.generate_map_images(wkt, result_id, layer_type, directory, name, parcel_id = nil )
-
-    uf_m2 = false
-    #Buffer
-    buffer_token = Buffer.create_buffer(wkt)
-    bottom_left, top_right = Buffer.get_buffer_bounding_box(buffer_token)
-
-    #MAP IMAGES
-    map = MapUtil.new
-
-    layer_name ="EMI_LAYER_TYPE"
-    geoserver = GeoServerUtil.new(layer_name)
-
-    geoserver.layer_type[:value_column].each_with_index do |column, i|
-      #GEOSERVER ATTRIBUTES
-      map.attributes[:bottom_left] = bottom_left
-      map.attributes[:top_right] = top_right
-      map.attributes[:directory] = directory
-
-      map.attributes[:wms_config] = geoserver.build_geoserver_wms_emi_configuration(buffer_token, result_id, i, uf_m2, parcel_id)
-
-      #CREATE WMS IMAGES FOR REPORTS
-      #			base = map.build_report_base_wms_image
-      #			mask = map.build_report_mask_wms_images
-      map.build_report_emi_points_wms_images(name)
-
-    end
-  end
 
   def self.kpi(county_id, year_from, year_to, bimester, project_type_id, polygon_id )
 
@@ -300,24 +272,10 @@ class Project < ApplicationRecord
     select += "MIN(uf_min_percent) as min_uf, "
     select += "MAX(uf_max_percent) as max_uf, "
     select += "AVG(uf_avg_percent) as avg_uf"
-
-
-    ProjectInstanceMixView.select(select).
-      where(build_conditions_new(filters, nil, false, range)).first
+@a =     ProjectInstanceMixView.select(select).
+      where(build_conditions_new(filters, nil, true, range)).first
   end
 
-  def self.get_query_for_results(filters, result_id, map_columns)
-    @joins = Array.new
-    @joins << "INNER JOIN project_instance_views ON project_instance_views.project_id = projects.id "
-    joins_by_filter(filters)
-
-    query = "SELECT #{result_id} as result_id, project_instance_views.id as project_instance_id, projects.the_geom, "
-    query += "#{map_columns.join(',')}, #{MapUtil::HEATMAP_VALUE} as heatmap_value, "
-    query += "'#{Util::NORMAL_MARKER_COLOR}' as marker_color FROM projects "
-    query += @joins.uniq.join(" ")
-    query += "WHERE #{build_conditions(filters, nil, false)}"
-    query
-  end
 
   #FIND PROJECTS BY WIDGETS. COUNT
   def self.projects_group_by_count(widget, filters, has_color, range)
@@ -342,8 +300,6 @@ class Project < ApplicationRecord
       select += ", #{widget}.color" if has_color
       count = "#{widget}.name"
     end
-    #select = "#{widget}.id, #{widget}.name"
-    #select += ", #{widget}.color" if has_color
 
     Project.select( "#{select}, COUNT(#{count}) as value").
       joins(@joins.uniq.join(" ")).
@@ -427,15 +383,10 @@ class Project < ApplicationRecord
     else
       ranges = get_ranges
     end
-
-
     min_value = values[0]["min"].to_i
     max_value = values[0]["max"].to_i
-
-
     index_min = -1
     index_max = -1
-
     ranges.each_with_index do |r, index|
 
       index_min = index if min_value >= r["min"].to_i && min_value <= r["max"].to_i
@@ -443,8 +394,6 @@ class Project < ApplicationRecord
       index_max = index if max_value <= r["max"].to_i && max_value >= r["min"].to_i
       index_max = index if max_value > r["max"].to_i
     end
-
-
     ranges[index_min..index_max]
 
   end
@@ -646,11 +595,8 @@ class Project < ApplicationRecord
 
   def self.get_last_period
     period = Period.find(:first,
-                         #:select => "project_instances.year, project_instances.bimester",
                          :select => "year,bimester",
-                         #:conditions => "project_instances.active = true AND (projects.bank_project = false OR projects.bank_project IS NULL)",
                          :conditions => "active = true ",
-                         # :joins => :project,
                          :group => "year, bimester",
                          :order => "year desc, bimester desc")
 
@@ -708,45 +654,22 @@ class Project < ApplicationRecord
     self.the_geom = "POINT(#{self.longitude.to_f}  #{self.latitude.to_f})" if self.latitude and self.longitude
   end
 
-  def self.build_value_column(map_by)
-    map_type = MappableField.find(map_by) unless map_by.nil?
-
-    if map_type.nil?
-      value_column = "1 as isoline_value"
-    else
-      case map_type.name
-      when 'STOCK_MAPPABLE_FIELD'
-        value_column = "project_instances.stock_units as isoline_value"
-      when 'UF_TOTAL_MAPPABLE_FIELD'
-        value_column = "project_instances.uf_value as isoline_value"
-      when 'UF_M2_MAPPABLE_FIELD'
-        value_column = "project_instances.uf_m2 as isoline_value"
-      when 'SELLING_SPEED_MAPPABLE_FIELD'
-        value_column = "project_instances.selling_speed as isoline_value"
-      end
-    end
-    value_column
-  end
-
   def self.build_conditions_new(filters, self_not_filter=nil, useView = false, range=true)
     @conditions = ''
     if !filters[:county_id].nil?
       @conditions += WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
     elsif !filters[:wkt].nil?
       @conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
-    else
-      @conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
+      else
+        @conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
     if filters.has_key? :to_period and range == true
       @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView)
     else
       @conditions += "bimester = #{filters[:to_period]} AND year = #{filters[:to_year]}" + Util.and
-
     end
-
     if range == true
       @conditions += bimesters_condition(filters, self_not_filter, useView)
-
     end
     @conditions += between_condition_new(filters, self_not_filter)
     @conditions += ids_conditions_new(filters, self_not_filter, useView)
@@ -755,7 +678,6 @@ class Project < ApplicationRecord
     @conditions.chomp!(Util.and)
     @conditions
   end
-
   def self.bimesters_condition(filters, self_not_filter, useView = false)
     conditions = ""
 
@@ -784,34 +706,6 @@ class Project < ApplicationRecord
     return conditions
   end
 
-
-
-  def self.get_periods_query_for_view(period, year)
-    conditions = "("
-    conditions += WhereBuilder.build_equal_condition('project_instance_views.bimester', period)
-    conditions += Util.and
-      conditions += WhereBuilder.build_equal_condition('project_instance_views.year', year)
-    conditions += ")"
-    return conditions
-  end
-
-  def self.between_condition(filters, self_not_filter)
-    conditions = ""
-
-    #FILTERS THE PROJECTS BY A RANGE OF FLOORS
-    if filters.has_key? :from_floor
-      conditions += "( "
-      0.upto(filters[:from_floor].length - 1) do |i|
-        conditions += WhereBuilder.build_between_condition('floors', filters[:from_floor][i], filters[:to_floor][i])
-        conditions += Util.and
-      end
-
-      conditions.chomp!(Util.and)
-      conditions += " )" + Util.and
-    end
-
-    conditions
-  end
   def self.between_condition_new(filters, self_not_filter)
     conditions = ""
 
@@ -910,36 +804,6 @@ class Project < ApplicationRecord
     end
     conditions
 
-  end
-
-
-
-  def self.joins_by_filter(filters)
-    @joins << "INNER JOIN user_expirations ON user_expirations.county_id = projects.county_id " if User.current and User.current.is_count_down?
-
-    if filters.has_key? :project_instance_id
-      @joins << "INNER JOIN project_instances ON project_instances.project_id = projects.id "
-    end
-
-    if filters.has_key? :agency_ids
-      @joins << "INNER JOIN agencies ON agencies.id = projects.agency_id "
-    end
-
-    if filters.has_key? :project_type_ids
-      @joins << "INNER JOIN project_types ON project_types.id = projects.project_type_id "
-    end
-
-    if filters.has_key? :project_status_ids
-      @joins << "INNER JOIN project_statuses ON project_statuses.id = project_instance_views.project_status_id "
-    end
-
-    if filters.has_key? :from_floor or filters.has_key? :from_instance_date
-      #@joins << "INNER JOIN project_instances ON project_instances.project_id = projects.id "
-    end
-
-    if filters.has_key? :periods
-      #@joins << "INNER JOIN project_instances ON project_instances.project_id = projects.id "
-    end
   end
 
   def self.joins_by_widget(widget)
@@ -1081,6 +945,7 @@ end
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
     begin
       global_information = Project.find_globals(filters, false)
+
       general_data = [
         {label: I18n.t(:TOTAL_PROJECTS_COUNT), value: global_information[:project_count]},
         {label: I18n.t(:TOTAL_STOCK), value: global_information[:total_units]},
