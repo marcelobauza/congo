@@ -884,14 +884,14 @@ class Project < ApplicationRecord
     conditions = ""
     #PROJECT STATUSES
     if filters.has_key? :project_status_ids and self_not_filter != 'project_statuses'
-      query_field = "project_instance_mix_views.project_status_id"
+      query_field = useView ? "project_status_id" : "project_instances.project_status_id"
       conditions += WhereBuilder.build_in_condition(query_field, filters[:project_status_ids])
       conditions += Util.and
     end
 
     #PROJECT TYPES
     if filters.has_key? :project_type_ids and self_not_filter != 'project_types'
-      conditions += WhereBuilder.build_in_condition("project_instance_mix_views.project_type_id", filters[:project_type_ids])
+      conditions += WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids])
       conditions += Util.and
     end
 
@@ -1110,7 +1110,6 @@ end
       sbim = Project.projects_count_by_period('sale_bimester', filters)
       cfloor = Project.projects_by_ranges('floors', filters)
       uf_ranges = Project.projects_by_ranges('uf_avg_percent', filters)
-
       agencies = Project.projects_group_by_count('agencies', filters, false, false)
 
       result =[]
