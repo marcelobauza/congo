@@ -270,30 +270,26 @@ class Project < ApplicationRecord
 
   #FIND PROJECTS BY WIDGETS. COUNT
   def self.projects_group_by_count(widget, filters, has_color, range)
-    @joins = Array.new
 
-      @joins << "INNER JOIN project_instances ON projects.id = project_instances.project_id "
     case widget
     when 'agencies'
-      @joins << "INNER JOIN agency_rols ON projects.id = agency_rols.agency_id "
-      @joins << "INNER JOIN agencies ON agencies.id = .agency_id "
+      joins = [:project_instances, [agency_rols: :agency]]
       select = "agency_name, agency_id"
       count = "agency_name"
     when 'project_types'
-      @joins << "INNER JOIN project_types ON project_types.id = projects.project_type_id "
+      joins =  [:project_type, :project_instances]
       select = "#{widget}.id, #{widget}.name"
       select += ", #{widget}.color" if has_color
       count = "#{widget}.name"
     when 'project_statuses'
-      @joins << "INNER JOIN project_instances ON projects.id = project_instances.project_id "
-      @joins << "INNER JOIN project_statuses ON project_statuses.id = project_instances.project_status_id "
+      joins = [project_instances: :project_status]
       select = "#{widget}.id, #{widget}.name"
       select += ", #{widget}.color" if has_color
       count = "#{widget}.name"
     end
 
     Project.select( "#{select}, COUNT(#{count}) as value").
-      joins(@joins.uniq.join(" ")).
+      joins(joins).
       where(build_conditions_new(filters, widget, false, range)).
       method_selection(filters).
       group(select).
