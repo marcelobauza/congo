@@ -427,14 +427,12 @@ class Project < ApplicationRecord
   def self.values_by_period3(widget, select, filters, proc)
 
     result = []
-    @joins = Array.new
 
-    condition = Util.and + build_conditions_new(filters, widget)
+    condition = Util.and + build_conditions_new(filters, widget, true)
     bimesters = get_bimesters filters
 
     bimesters.each do |bimester|
       cond_query = get_periods_query_new(bimester[:period], bimester[:year]) + condition
-
       project = ProjectInstanceMixView.select(select).
         where(cond_query).
         method_selection(filters).
@@ -607,11 +605,9 @@ class Project < ApplicationRecord
   end
 
   def self.build_conditions_new(filters, self_not_filter=nil, useView = false, range=true)
-    
     @conditions = ''
-    
     if filters.has_key? :to_period and range == true
-      @conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView)
+      @conditions += WhereBuilder.build_range_periods_by_bimester_projects(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView)
     else
       @conditions += "bimester = #{filters[:to_period]} AND year = #{filters[:to_year]}" + Util.and
     end
@@ -701,7 +697,8 @@ class Project < ApplicationRecord
 
     #MIXES funciona
     if filters.has_key? :mix_ids and self_not_filter != 'mix'
-      conditions += "project_instance_mix_views.project_instance_id  IN(SELECT project_instance_id "
+      query_field = useView ? "project_instance_mix_views.project_instance_id":  "project_instances.id" 
+      conditions += "#{query_field}  IN (SELECT project_instance_id "
       conditions += "FROM project_instance_mixes WHERE mix_id IN(#{filters[:mix_ids].join(",")}))"
       conditions += Util.and
     end
@@ -725,7 +722,7 @@ class Project < ApplicationRecord
       @joins << "INNER JOIN project_types ON project_types.id = projects.project_type_id "
     when 'project_statuses'
       #@joins << "INNER JOIN project_instances ON project_instances.project_id = projects.id "
-      @joins << "INNER JOIN project_statuses ON project_statuses.id = project_instance_views.project_status_id "
+      @joins << "INNER JOIN project_statuses ON project_statuses.id = project_instance_mix_views.project_status_id "
     when 'mix'
       #@joins << "INNER JOIN project_instances ON project_instances.project_id = projects.id "
       #@joins << "INNER JOIN project_instance_mixes ON project_instances.id = project_instance_mixes.project_instance_id "
@@ -738,10 +735,10 @@ class Project < ApplicationRecord
     end
   end
 
-  def self.get_valid_min_max_limits(column, filters)
+  def self.get_valid_min_max_limits(column, filters, useView = true)
   
     ProjectInstanceMixView.method_selection(filters).
-      where(build_conditions_new(filters, column)).
+      where(build_conditions_new(filters, column, useView)).
       where("#{column} > 1" ).
       select("ROUND(MIN(#{column})) as MIN, ROUND(MAX(#{column})) AS MAX") 
   end
