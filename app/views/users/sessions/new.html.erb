@@ -4,7 +4,7 @@
 
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <div class="form-group">
-      <center> <%=image_tag "logoinciti.png", class: "mb-4", alt:"" %> </center>
+      <center> <%=image_tag "round_inciti.png", class: "mb-4", height:"120" %> </center>
       <%= f.text_field :name, autofocus: true, autocomplete: "email", class: 'form-control', placeholder: "Email address" %>
       <%= f.password_field :password, autocomplete: "current-password", class: 'form-control', placeholder: "Password" %>
     </div>
