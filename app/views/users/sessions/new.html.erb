@@ -1,5 +1,3 @@
-<!-- Log in -->
-
 <div class="form-signin">
 
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
@@ -13,16 +11,14 @@
       <div class="checkbox mb-3">
         <center>
           <%= f.check_box :remember_me %>
-          <%= f.label :remember_me %>
+          <%= f.label :remember_me, 'Recuérdame' %>
         </center>
       </div>
     <% end %>
 
     <div class="actions">
-      <%= f.submit class: 'btn btn-lg btn-primary btn-block', value: "Log in" %>
+      <%= f.submit class: 'btn btn-lg btn-primary btn-block', value: "Ingresar" %>
     </div>
   <% end %>
-
-  <!--<%= render "users/shared/links" %>-->
 
 </div>
