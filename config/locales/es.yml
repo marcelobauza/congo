@@ -179,9 +179,9 @@ es:
       prompt: "Por favor seleccione"
 
     submit:
-      create: 'Crear %{model}'
-      update: 'Actualizar %{model}'
-      submit: 'Guardar %{model}'
+      create: 'Cargando' #'Crear %{model}'
+      update: 'Cargando' #'Actualizar %{model}'
+      submit: 'Cargando' #'Guardar %{model}'
 
   errors:
     format: "%{attribute} %{message}"
@@ -1396,4 +1396,3 @@ es:
   get_pxq: PxQ
   get_pxq_d: PxQ Dis
   get_pp_terreno: PP Utiles Terreno
-
