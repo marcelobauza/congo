@@ -1,4 +1,4 @@
-if current_user.role.name == 'IPRO'
+if current_user.role.name == 'IPRO' 
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Compraventas") do |sheet|
 sheet.add_row ['Tipo','Dirección', 'Comuna', 'Depto','Plano','Foja','Numero','Fecha','Comprador','Rut Comprador','Vendedor','UF','Est.','Bod.','sup.t_te','Sup_l_cons','uf_m2_u','uf_m2_t','Valor Real','Bimestre','Año','Codigo Destino','Codigo Material','Año Construccion']
@@ -8,7 +8,8 @@ end
 end
 end
 
-if current_user.role.name == 'IPRO+'
+if current_user.role.name == 'IPRO+' || current_user.role.name == 'Admin'
+
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Compraventas") do |sheet|
 sheet.add_row ['X', 'Y','Tipo','Dirección', 'Comuna', 'Depto','Plano','Foja','Numero','Fecha','Comprador','Rut Comprador','Vendedor','UF','Est.','Bod.','sup.t_te','Sup_l_cons','uf_m2_u','uf_m2_t','Valor Real','Bimestre','Año','Codigo Destino','Codigo Material','Año Construccion']
