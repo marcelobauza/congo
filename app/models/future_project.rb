@@ -569,14 +569,14 @@ class FutureProject < ApplicationRecord
 
 
           if itm["y_label"] == 'ANTEPROYECTO'
-            a[i][:count] = itm["y_value"]
+            a[i][:count] = itm["y_value"].to_f
           end
           if itm["y_label"] == 'PERMISO DE EDIFICACION'
-            p[i][:count] = itm["y_value"]
+            p[i][:count] = itm["y_value"].to_f
           end
 
           if itm["y_label"] == 'RECEPCION MUNICIPAL'
-            r[i][:count] = itm["y_value"]
+            r[i][:count] = itm["y_value"].to_f
           end
         end
       end
