@@ -425,7 +425,7 @@ future_projects_report_pdf = function() {
                   });
                   let percentage = (value*100 / sum).toFixed(2);
                   if (percentage > 4) {
-                    return value;
+                    return value.toLocaleString('es-ES');
                   } else {
                     return null;
                   }
@@ -444,6 +444,10 @@ future_projects_report_pdf = function() {
               yAxes: [{
                 stacked: true,
                 ticks: {
+                  callback: function(label, index, labels) {
+                    label = label.toLocaleString('es-ES')
+                    return label;
+                  },
                   beginAtZero: true,
                   display: true,
                   fontSize: 10,
@@ -519,16 +523,19 @@ future_projects_report_pdf = function() {
             },
             plugins: {
               datalabels: {
+                formatter: function(value, context) {
+                  if (value > 0) {
+                    return value.toLocaleString('es-ES')
+                  } else {
+                    return null
+                  }
+                },
                 align: 'start',
                 anchor: 'start',
                 color: '#3d4046',
-                display: function(context) {
-                  return context.dataset.data[context.dataIndex] > 0;
-                },
                 font: {
                   size: 10
                 },
-                formatter: Math.round
               }
             },
             scales: {
@@ -542,6 +549,10 @@ future_projects_report_pdf = function() {
               }],
               yAxes: [{
                 ticks: {
+                  callback: function(label, index, labels) {
+                    label = label.toLocaleString('es-ES')
+                    return label;
+                  },
                   beginAtZero: true,
                   display: true,
                   fontSize: 10,

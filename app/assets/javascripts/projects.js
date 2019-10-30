@@ -981,7 +981,7 @@ function projects_report_pdf(){
                     });
                     let percentage = (value*100 / sum).toFixed(2);
                     if (percentage > 4) {
-                      return value;
+                      return value.toLocaleString('es-ES');
                     } else {
                       return null;
                     }
@@ -1000,6 +1000,10 @@ function projects_report_pdf(){
                 yAxes: [{
                   stacked: true,
                   ticks: {
+                    callback: function(label, index, labels) {
+                      label = label.toLocaleString('es-ES')
+                      return label;
+                    },
                     beginAtZero: true,
                     display: true,
                     fontSize: 10,
@@ -1075,16 +1079,19 @@ function projects_report_pdf(){
               },
               plugins: {
                 datalabels: {
+                  formatter: function(value, context) {
+                    if (value > 0) {
+                      return value.toLocaleString('es-ES')
+                    } else {
+                      return null
+                    }
+                  },
                   align: 'start',
                   anchor: 'start',
                   color: '#3d4046',
-                  display: function(context) {
-                    return context.dataset.data[context.dataIndex] > 0;
-                  },
                   font: {
                     size: 10
                   },
-                  formatter: Math.round
                 }
               },
               scales: {
@@ -1098,6 +1105,10 @@ function projects_report_pdf(){
                 }],
                 yAxes: [{
                   ticks: {
+                    callback: function(label, index, labels) {
+                      label = label.toLocaleString('es-ES')
+                      return label;
+                    },
                     beginAtZero: true,
                     display: true,
                     fontSize: 10,
@@ -1739,6 +1750,15 @@ Congo.projects.action_dashboards = function(){
                     legend: {
                       display: false,
                     },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var dataset = data.datasets[tooltipItem.datasetIndex];
+                          var currentValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                          return currentValue.toLocaleString('es-ES');
+                        }
+                      }
+                    },
                     plugins: {
                       datalabels: {
                         display: false,
@@ -1758,6 +1778,10 @@ Congo.projects.action_dashboards = function(){
                       yAxes: [{
                         stacked: true,
                         ticks: {
+                          callback: function(label, index, labels) {
+                            label = label.toLocaleString('es-ES')
+                            return label;
+                          },
                           beginAtZero: true,
                           fontColor: '#e8ebef'
                         },
@@ -1851,6 +1875,15 @@ Congo.projects.action_dashboards = function(){
                     legend: {
                       display: false,
                     },
+                    tooltips: {
+                      callbacks: {
+                        label: function(tooltipItem, data) {
+                          var dataset = data.datasets[tooltipItem.datasetIndex];
+                          var currentValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                          return currentValue.toLocaleString('es-ES');
+                        }
+                      }
+                    },
                     plugins: {
                       datalabels: {
                         display: false,
@@ -1871,6 +1904,10 @@ Congo.projects.action_dashboards = function(){
                       yAxes: [{
                         stacked: true,
                         ticks: {
+                          callback: function(label, index, labels) {
+                            label = label.toLocaleString('es-ES')
+                            return label;
+                          },
                           beginAtZero: true,
                           fontColor: '#e8ebef'
                         },
@@ -2077,6 +2114,13 @@ Congo.projects.action_dashboards = function(){
                     },
                   },
                   tooltips: {
+                    callbacks: {
+                      label: function(tooltipItem, data) {
+                        var dataset = data.datasets[tooltipItem.datasetIndex];
+                        var currentValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return currentValue.toLocaleString('es-ES');
+                      }
+                    },
                     mode: 'point',
                   },
                   hover: {
@@ -2093,6 +2137,10 @@ Congo.projects.action_dashboards = function(){
                     }],
                     yAxes: [{
                       ticks: {
+                        callback: function(label, index, labels) {
+                          label = label.toLocaleString('es-ES')
+                          return label;
+                        },
                         beginAtZero: true,
                         fontColor: '#e8ebef'
                       },
