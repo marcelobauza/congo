@@ -15,9 +15,8 @@
     </div>
   </div>
 </div>
-
-<% if !@projects.nil? %>
-  <% if params['project_type_id']  == '2' || @projects[0].project_type_id == 2 %>
+<% if !@projects.blank? %>
+  <% if params['project_type_id']  == '2' || @projects[0].project_type_id == 2  %>
     <%=render :partial => 'department'  %>
   <% else %>
     <%=render :partial => 'home'  %>

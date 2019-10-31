@@ -162,27 +162,24 @@ class Project < ApplicationRecord
   end
 
   def self.find_index(project_type, bimester, county, year, search)
-
+    
     select = " project_instances.project_id ,"
     select += " projects.project_type_id,"
     select += " bimester,"
     select += " year,"
     select += " code,"
     select += " projects.name,"
-    select += " (select name from agencies a inner join agency_rols ar on a.id  = ar.agency_id where ar.project_id = projects.id and rol ilike 'INMOBILIARIA' limit 1) as agency,"
     select += " county_id, "
-
-    if !search.nil?
+    if !search.blank?
       letter =  search.at(6)
       letter = letter.delete('"')
       if letter == 'C'
-        project_type = '1'
+        project_type = "1"
       else
-        project_type = '2'
+        project_type = "2"
       end
     end
-
-    if ( project_type == '1')
+    if ( project_type == "1")
 
       select += " min((t_min + t_max) /2)   as ps_terreno_min, "
       select += " max((t_min + t_max)/2 ) as ps_terreno_max, "
@@ -199,6 +196,7 @@ class Project < ApplicationRecord
 
       select += " round((sum(mix_usable_square_meters * total_units) / sum(total_units))::numeric, 1)  as pp_utiles,"
       select += " round(sum(mix_terrace_square_meters * total_units) / sum(total_units), 1)  as pp_terrazas,"
+
     end
 
     select += " min(mix_usable_square_meters) as Min_utiles,"
@@ -218,16 +216,15 @@ class Project < ApplicationRecord
     select += " round((vhmd(project_instances.id) * pp_uf_dis(project_instances.id) / 1000::double precision)::numeric,1) AS pxq_d,"
     select += " project_statuses.name as status"
 
-
     conditions = " 1 = 1"
-    conditions += " and projects.project_type_id = #{project_type}" if !project_type.nil?
-    conditions += " and bimester = #{bimester } " if !bimester.nil?
-    conditions += " and county_id = #{county} " if !county.nil?
-    conditions += " and year = #{year} " if !year.nil?
-    conditions += " and code = '#{search}'"  if !search.nil?
-    groups = "project_instances.project_id, bimester, year, code, projects.name, agency, floors,  uf_min_percent, uf_max_percent, pp_uf,  pxq, status, pxq_d, agency, project_type_id, projects.county_id"
+    conditions += " and projects.project_type_id = #{project_type}" if !project_type.empty?
+    conditions += " and bimester = #{bimester } " if !bimester.empty?
+    conditions += " and county_id = #{county} " if !county.empty?
+    conditions += " and year = #{year} " if !year.empty?
+    conditions += " and code = '#{search}'"  if !search.empty?
+    groups = "project_instances.project_id, bimester, year, code, projects.name,  floors,  uf_min_percent, uf_max_percent, pp_uf,  pxq, status, pxq_d, project_type_id, projects.county_id"
 
-    Project.joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
+      Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
       where(conditions).
       select(select).
       group(groups).
@@ -333,11 +330,10 @@ class Project < ApplicationRecord
   end
 
   def self.projects_by_ranges(widget, filters)
-    @joins = Array.new
+    
     query_condition = " year = #{filters[:to_year]}  "
     query_condition += " and bimester = #{filters[:to_period]} "
     query_condition += " and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
-
     values = get_valid_min_max_limits(widget, filters)
     ranges = get_valid_ranges(values, widget)
     total_ranges = ranges.count - 1
@@ -354,7 +350,6 @@ class Project < ApplicationRecord
 
       proj = ProjectInstanceMixView.select(select).method_selection(filters).
       where(cond).first
-
       result << proj
     end
     result
@@ -441,7 +436,6 @@ class Project < ApplicationRecord
 
       proc.call result, project, bimester
     end
-
     result.reverse
   end
 
@@ -869,18 +863,29 @@ end
       general_data << house_general(global_information) if !global_information[:ps_terreno].nil?
       general_data << department_general(global_information) if !global_information[:pp_terrace].nil?
 
-
+      p "status"
       pstatus = Project.projects_group_by_count('project_statuses', filters, false,false)
+      p "types"
       ptypes = Project.projects_group_by_count('project_types', filters, true, false)
+      p "mixes"
       pmixes = Project.projects_group_by_mix('mix', filters, false)
+      p "avai"
       avai = Project.projects_sum_by_stock(filters)
+      p "uf_values"
       uf_values = Project.projects_by_uf(filters)
+      p "uf_m2_valus"
       uf_m2_values = Project.projects_by_uf_m2(filters)
+      p "uarea"
       uarea = Project.projects_by_usable_area(filters)
+      p "garea"
       garea = Project.projects_by_ground_area('ground_area', filters)
+      p "sbim"
       sbim = Project.projects_count_by_period('sale_bimester', filters)
+      p "cfloor"
       cfloor = Project.projects_by_ranges('floors', filters)
+      p "ranges"
       uf_ranges = Project.projects_by_ranges('uf_avg_percent', filters)
+      p "agencies"
       agencies = Project.projects_group_by_count('agencies', filters, false, false)
 
       result =[]
@@ -902,7 +907,6 @@ end
 
       ##TIPO PROYECTO
       data =[]
-
       ptypes.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end

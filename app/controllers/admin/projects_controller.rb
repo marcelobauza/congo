@@ -35,11 +35,11 @@ class Admin::ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-   
-    if (!params[:project_type_id].nil? && !params[:bimester_id].nil?) || !params[:search].nil? 
-    @projects = Project.find_index(params[:project_type_id], params[:bimester_id], params[:county_id], params[:date_id] , params[:search])
-    @projects = @projects.paginate(page: params[:page])
-  end
+    @projects = ''
+    if ((!params[:project_type_id].nil? && !params[:bimester_id].nil?) || !params[:search].nil?)
+      @projects = Project.find_index(params[:project_type_id], params[:bimester_id], params[:county_id], params[:date_id], params[:search])
+      @projects = @projects.paginate(page: params[:page])
+    end
   end
 
   # GET /projects/1
