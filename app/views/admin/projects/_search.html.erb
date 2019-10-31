@@ -1,26 +1,22 @@
 <%= form_tag admin_projects_path, :method => :get do %>
   <div class="form-row">
-    <div class="form-group col-md-3">
-       <%=text_field_tag :search  %>
-</div>
-    <div class="form-group col-md-3">
-      <%= select_tag 'county_id', options_for_select(counties_for_select), {include_blank: true, class: 'form-control'}   %>
+    <div class="form-group col-md-2">
+      <%=text_field_tag :search, '', class: 'form-control', placeholder: '' %>
     </div>
-    <div class="form-row">
-      <div class="form-group col-md-3">
-        <%= select_tag 'project_type_id', options_for_select({ "CASAS"=> "1", "DEPARTAMENTOS" => "2"}), {include_blank: true, class: 'form-control'} %>
-      </div>
-      <div class="form-group col-md-3">
-        <%= select_tag 'bimester_id', options_for_select([1,2,3,4,5,6], {:include_blank => true}), {include_blank: true, class: 'form-control'}  %>
-      </div>
-      <div class="form-group col-md-3">
-        <%= select_tag 'date_id', options_for_select([2019,2018,2017,2016,2015,2014,2013,2012,2011,2010]), {include_blank: true, class: 'form-control'}  %> 
-      </div>
-
-      <div class="form-group col-md-3">
-        <%= submit_tag "Filtrar" , :class => "btn btn-primary" %>
-      </div>
+    <div class="form-group col-md-2">
+      <%= select_tag 'county_id', options_for_select(counties_for_select), {include_blank: 'Comuna', class: 'form-control'} %>
     </div>
-  <% end %>
-
-
+    <div class="form-group col-md-2">
+      <%= select_tag 'project_type_id', options_for_select({ "CASAS"=> "1", "DEPARTAMENTOS" => "2"}), {include_blank: 'Tipo', class: 'form-control'} %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= select_tag 'bimester_id', options_for_select([1,2,3,4,5,6]), {include_blank: 'Bimestre', class: 'form-control'} %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= select_tag 'date_id', options_for_select([2019,2018,2017,2016,2015,2014,2013,2012,2011,2010]), {include_blank: 'Año', class: 'form-control'} %>
+    </div>
+    <div class="form-group col-md-1">
+      <%= submit_tag "Filtrar" , :class => "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
