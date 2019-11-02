@@ -1768,7 +1768,8 @@ Congo.projects.action_dashboards = function(){
                       xAxes: [{
                         stacked: true,
                         ticks: {
-                          display: false,
+                          autoSkip: false,
+                          maxRotation: 22,
                           fontColor: '#e8ebef'
                         },
                         gridLines: {
