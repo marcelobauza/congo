@@ -1,75 +1,61 @@
 <div class="card shadow">
   <div class="card-body">
     <div class="form-row">
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_pp_utiles) %>
-        <%= text_field_tag :get_pp_utiles, number_with_precision(@project_instance.get_pp_utiles, :precision => 1 , label:"asda"), 
-          :class => "text", :disabled => true %>
+        <%= text_field_tag :get_pp_utiles, number_with_precision(@project_instance.get_pp_utiles, :precision => 1 , label:"asda"), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_pp_utiles_terrace) %>
-        <%= text_field_tag :get_pp_utiles_terrace, number_with_precision(@project_instance.get_pp_utiles_terrace, :precision => 1), 
-          :class => "text", :disabled => true %>
+        <%= text_field_tag :get_pp_utiles_terrace, number_with_precision(@project_instance.get_pp_utiles_terrace, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_pp_terreno) %>
-        <%= text_field_tag :get_pp_terreno, number_with_precision(@project_instance.get_pp_terreno, :precision => 1),
-          :class => "text", :disabled => true %>
+        <%= text_field_tag :get_pp_terreno, number_with_precision(@project_instance.get_pp_terreno, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_sale_months) %>
-        <%= text_field_tag :get_sale_months, number_with_precision(@project_instance.get_sale_months, :precision => 0),
-          :class => "text", :disabled => true %>
+        <%= text_field_tag :get_sale_months, number_with_precision(@project_instance.get_sale_months, :precision => 0), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_pp_uf_m2) %>
-        <%= text_field_tag :get_pp_uf_m2, number_with_precision(@project_instance.get_pp_uf_m2, :precision => 1),
-          :class => "text", :disabled => true %>
+        <%= text_field_tag :get_pp_uf_m2, number_with_precision(@project_instance.get_pp_uf_m2, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_pp_uf) %>
-        <%= text_field_tag :get_pp_uf, number_with_precision(@project_instance.get_pp_uf, :precision => 0), 
-          :class => "text", :disabled => true %>
+        <%= text_field_tag :get_pp_uf, number_with_precision(@project_instance.get_pp_uf, :precision => 0), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_vhmo) %>
-        <%= text_field_tag :get_vhmo, number_with_precision(@project_instance.get_vhmo, :precision => 1),
-          :class => "text", :disabled => true %>
+        <%= text_field_tag :get_vhmo, number_with_precision(@project_instance.get_vhmo, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_percent_venta) %>
-        <%= text_field_tag :get_percent_venta, number_to_percentage(@project_instance.get_percent_venta, :precision => 1),
-          :class => "text", :disabled => true %>
+        <%= text_field_tag :get_percent_venta, number_to_percentage(@project_instance.get_percent_venta, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_pp_uf_dis) %>
-        <%= text_field_tag :get_pp_uf_dis, number_with_precision(@project_instance.get_pp_uf_dis, :precision => 0),
-          :class => "text", :disabled => true %>
+        <%= text_field_tag :get_pp_uf_dis, number_with_precision(@project_instance.get_pp_uf_dis, :precision => 0), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_total_available) %>
-        <%= text_field_tag :get_total_available, number_with_precision(@project_instance.get_total_available, :precision => 1),
-          :class => "text",:disabled => true %>
+        <%= text_field_tag :get_total_available, number_with_precision(@project_instance.get_total_available, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_vhmd) %>
-        <%= text_field_tag :get_vhmd, number_with_precision(@project_instance.get_vhmd, :precision => 1), 
-          :class => "text",:disabled => true %>
+        <%= text_field_tag :get_vhmd, number_with_precision(@project_instance.get_vhmd, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_masd) %>
-        <%= text_field_tag :get_masd, number_with_precision(@project_instance.get_masd, :precision => 1),
-          :class => "text",:disabled => true %>
+        <%= text_field_tag :get_masd, number_with_precision(@project_instance.get_masd, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_pxq) %>
-        <%= text_field_tag :get_pxq, number_with_precision(@project_instance.get_pxq, :precision => 1),
-          :class => "text",:disabled => true %>
+        <%= text_field_tag :get_pxq, number_with_precision(@project_instance.get_pxq, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-2">
         <%= label_tag t(:get_pxq_d) %>
-        <%= text_field_tag :get_pxq_d, number_with_precision(@project_instance.get_pxq_d,  :precision => 1),
-          :class => "text",:disabled => true %>
+        <%= text_field_tag :get_pxq_d, number_with_precision(@project_instance.get_pxq_d, :precision => 1), :class => "form-control form-control-sm", :disabled => true %>
       </div>
     </div>
   </div>

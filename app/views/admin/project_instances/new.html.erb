@@ -1,3 +1,16 @@
-<h1>Nuevo Relevamiento</h1>
-<%= render 'form', project_instance: @project_instance %>
+<div class="card shadow">
+  <div class="card-body">
+    <h2>Nuevo Relevamiento</h2>
+  </div>
+</div>
 
+<ul class="nav nav-pills justify-content-center">
+  <li class="nav-item">
+    <%= link_to t('menu.project.project'), edit_admin_project_path(@project.id), class: 'nav-link' %>
+  </li>
+  <li class="active">
+    <a class="nav-link active" href="#"><%= t('menu.project.instances') %></a>
+  </li>
+</ul>
+
+<%= render 'form', project_instance: @project_instance %>

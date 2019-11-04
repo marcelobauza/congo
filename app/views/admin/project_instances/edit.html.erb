@@ -1,14 +1,27 @@
-<h1>Editar Relevamiento</h1>
-<ul class="tabs">
-  <li><%= link_to t('menu.project.project'), edit_admin_project_path(@project_instance.project) %></li>
-  <li class="active"><a href="#"><%= t('menu.project.instances') %></a></li>
-  <li><%= link_to t('menu.project_instance.mixes'), admin_project_project_instance_project_instance_mixes_path(@project_instance.project, @project_instance) %></li>
+<div class="card shadow">
+  <div class="card-body">
+    <h2>Editar Relevamiento</h2>
+  </div>
+</div>
+
+<ul class="nav nav-pills justify-content-center">
+  <li class="nav-item">
+    <%= link_to t('menu.project.project'), edit_admin_project_path(@project_instance.project), class: 'nav-link' %>
+  </li>
+  <li class="active">
+    <a class="nav-link active" href="#"><%= t('menu.project.instances') %></a>
+  </li>
+  <li class="nav-item">
+    <%= link_to t('menu.project_instance.mixes'), admin_project_project_instance_project_instance_mixes_path(@project_instance.project, @project_instance), class: 'nav-link' %>
+  </li>
 </ul>
 
 <%= render 'form', project_instance: @project_instance %>
-<div class="panel panel-default">
-  <div class="panel-heading"><h4>Datos Calculados</h4></div>
-  <div class="panel-body">
-    <%= render :partial => 'form_datos_calculados' %>
+
+<div class="card shadow">
+  <div class="card-body">
+    <h4>Datos Calculados</h4>
   </div>
 </div>
+
+<%= render :partial => 'form_datos_calculados' %>
