@@ -21,7 +21,7 @@
         <div class="form-group col-md-3">
           <%= f.label :inscription_date %>
           <div class="form-inline">
-            <%= date_select :inscription_date, {:start_year => 2008, :end_year => Date.today.year, :use_month_numbers => true }, {}, {:class => 'form-control mx-1'} %>
+            <%= f.date_field :inscription_date, {start_year: 2008, end_year: Date.today.year, use_month_numbers: true , class: 'form-control mx-1'} %>
           </div>
         </div>
         <div class="form-group col-md-3">

@@ -38,6 +38,21 @@ Congo.admin_transactions.action_edit = function(){
   init = function(){
 
     $('#calculate_uf').on('click', function(){
+      var idate = $('#transaction_inscription_date').val();
+        data = {
+          date: idate, 
+          real_value: $('#transaction_real_value').val()
+        };
+      $.ajax({
+        url: '/es/admin/uf_conversions/calculate_uf.json', 
+        type: 'GET',
+        data: data,
+        dataType: 'json', 
+        success: function(data){
+          $('#transaction_calculated_value').val(data.data);
+          $('#transaction_calculated_value').focus();
+        }
+      });
     });
 
     $("#transaction_county_id").on('change', function(){

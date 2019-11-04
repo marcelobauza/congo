@@ -74,6 +74,7 @@ Rails.application.routes.draw do
     get 'transactions/export_data_sii' => 'transactions#export_data_sii'
     get 'transactions/generate_csv_sii' => 'transactions#generate_csv_sii'
     get 'periods/active_periods'
+    get 'uf_conversions/calculate_uf' => 'uf_conversions#calculate_uf'
     resources :agencies
     resources :periods
     resources :import_processes

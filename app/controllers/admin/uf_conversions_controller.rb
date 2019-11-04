@@ -2,6 +2,15 @@ class Admin::UfConversionsController < ApplicationController
   before_action :set_uf_conversion, only: [:show, :edit, :update, :destroy]
   layout 'admin'
   
+  def calculate_uf
+
+    @uf = UfConversion.find_by(uf_date: params[:date]) unless params[:date].blank?
+    error = "Faltan datos para poder calcular"
+    real_value = params[:real_value].to_s.gsub(".", "").gsub(",", ".") rescue error
+    render json: {data: (NumberFormatter.format((real_value.to_f / @uf.uf_value.to_f).round(3), true) rescue error)}
+  end  
+
+
   # GET /uf_conversions
   # GET /uf_conversions.json
   def index
