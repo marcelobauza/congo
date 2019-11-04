@@ -1,78 +1,73 @@
-<div class="span">
-  <table class="bordered-table zebra-striped">
-    <thead>
-      <tr>
-        <th>Codigo</th>
-        <th>Bimestre</th>
-        <th>Año</th>
-        <th>Nombre</th>
-        <th>Comuna</th>
-        <th>Inmobiliaria</th>
-        <th>Pisos</th>
-        <th>Utiles Min.</th>
-        <th>Utiles Max.</th>
-        <th>Terraza Min.</th>
-        <th>Terraza Max.</th>
-        <th>PP Utiles</th>
-        <th>PP Terraza</th>
-        <th>% Desc.</th>
-        <th>Uf Min %D</th>
-        <th>Uf Max %D</th>
-        <th>PP UF</th>
-        <th>Uf m2</th>
-        <th>UF/m² util + t Min</th>
-        <th>UF/m² util + t Max</th>
-        <th>PP UF/m² ut</th>
-        <th>Oferta Inicial</th>
-        <th>Disponible</th>
-        <th>Venta</th>
-        <th>VMR</th>
-        <th>VMD</th>
-        <th>Pxqr</th>
-        <th>Pxqd</th>
-        <th>Estado</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @projects.each do |project| %>
-
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
         <tr>
-          <td><%= project.code %></td>
-          <td><%= project.bimester  %> </td>  
-          <td><%= project.year  %> </td>  
-          <td><%= link_to project.name, edit_admin_project_path(project.project_id) %> </td>  
-          <td><%= project.county.name %> </td>  
-          <td><%= project.agency  %> </td>  
-          <td><%= project.floors  %> </td>  
-          <td><%= project.min_utiles  %> </td>  
-          <td><%= project.max_utiles  %> </td>  
-          <td><%= project.min_terrazas  %> </td>  
-          <td><%= project.max_terrazas  %> </td>  
-          <td><%= project.pp_utiles  %> </td>  
-          <td><%= project.pp_terrazas  %> </td>  
-          <td><%= project.discount  %> </td>  
-          <td><%= project.uf_min_percent  %> </td>  
-          <td><%= project.uf_min_percent  %> </td>  
-          <td><%= project.pp_uf  %> </td>  
-          <td><%= project.uf_m2_min  %> </td>  
-          <td><%= project.uf_m2_max  %> </td>  
-          <td><%= project.pp_ufm2ut  %> </td>  
-          <td><%= project.total_units  %> </td>  
-          <td><%= project.stock_units  %> </td>  
-          <td><%= project.sold_units  %> </td>  
-          <td><%= project.vhmu  %> </td>  
-          <td><%= project.percentage_sold  %> </td>  
-          <td><%= project.vhmud  %> </td>  
-          <td><%= project.pxq  %> </td>  
-          <td><%= project.pxq_d  %> </td>  
-          <td><%= project.status  %> </td>  
-
+          <th>Codigo</th>
+          <th>Bimestre</th>
+          <th>Año</th>
+          <th>Nombre</th>
+          <th>Comuna</th>
+          <th>Pisos</th>
+          <th>Utiles Min.</th>
+          <th>Utiles Max.</th>
+          <th>Terraza Min.</th>
+          <th>Terraza Max.</th>
+          <th>PP Utiles</th>
+          <th>PP Terraza</th>
+          <th>% Desc.</th>
+          <th>Uf Min %D</th>
+          <th>Uf Max %D</th>
+          <th>PP UF</th>
+          <th>Uf m2</th>
+          <th>UF/m² util + t Min</th>
+          <th>UF/m² util + t Max</th>
+          <th>PP UF/m² ut</th>
+          <th>Oferta Inicial</th>
+          <th>Disponible</th>
+          <th>Venta</th>
+          <th>VMR</th>
+          <th>VMD</th>
+          <th>Pxqr</th>
+          <th>Pxqd</th>
+          <th>Estado</th>
+          <th></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <div class="pull-left">
-    <%= will_paginate %>
+      </thead>
+      <tbody>
+        <% @projects.each do |project| %>
+          <tr>
+            <td><%= project.code %></td>
+            <td><%= project.bimester %></td>
+            <td><%= project.year %></td>
+            <td><%= link_to project.name, edit_admin_project_path(project.project_id) %></td>
+            <td><%= project.county.name %></td>
+            <td><%= project.floors %></td>
+            <td><%= project.min_utiles %></td>
+            <td><%= project.max_utiles %></td>
+            <td><%= project.min_terrazas %></td>
+            <td><%= project.max_terrazas %></td>
+            <td><%= project.pp_utiles %></td>
+            <td><%= project.pp_terrazas %></td>
+            <td><%= project.discount %></td>
+            <td><%= project.uf_min_percent %></td>
+            <td><%= project.uf_min_percent %></td>
+            <td><%= project.pp_uf %></td>
+            <td><%= project.uf_m2_min %></td>
+            <td><%= project.uf_m2_max %></td>
+            <td><%= project.pp_ufm2ut %></td>
+            <td><%= project.total_units %></td>
+            <td><%= project.stock_units %></td>
+            <td><%= project.sold_units %></td>
+            <td><%= project.vhmu %></td>
+            <td><%= project.percentage_sold %></td>
+            <td><%= project.vhmud %></td>
+            <td><%= project.pxq %></td>
+            <td><%= project.pxq_d %></td>
+            <td><%= project.status %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
-
+</div>

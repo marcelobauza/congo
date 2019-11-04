@@ -1,15 +1,21 @@
 <script charset="utf-8">
   <%if !@project.the_geom.nil?  %>
-     Congo.admin_projects.config.latitude.push(<%= @project.the_geom.y %>);
-     Congo.admin_projects.config.longitude.push(<%= @project.the_geom.x %>);
-  <% end %> 
-</script>
-<nav class="nav">
-  <a href="#" class="nav-active"><%= t('menu.project.project') %></a>
-  <% unless @project.new_record? %>
-    <%= link_to t('menu.project.instances'), admin_project_project_instances_path(@project), input_html: {class:"nav-link"} %>
+    Congo.admin_projects.config.latitude.push(<%= @project.the_geom.y %>);
+    Congo.admin_projects.config.longitude.push(<%= @project.the_geom.x %>);
   <% end %>
-</nav>
+</script>
+
+<ul class="nav nav-pills justify-content-center">
+  <li class="nav-item">
+    <a class="nav-link active" href="#"><%= t('menu.project.project') %></a>
+  </li>
+  <% unless @project.new_record? %>
+    <li class="nav-item">
+      <%= link_to t('menu.project.instances'), admin_project_project_instances_path(@project), class: 'nav-link' %>
+    </li>
+  <% end %>
+</ul>
+
 <div class="card shadow">
   <div class="card-body">
     <%= simple_form_for([:admin, @project]) do |f| %>
@@ -19,129 +25,129 @@
         </div>
       <% end %>
 
+      <!-- Mapa -->
       <div class="form-row">
-          <div class="col-md-4">
-            <div id="admin_map" class="admin_map_projects"></div>
+        <div class="col-md-4">
+          <div id="admin_map" class="admin_map_projects"></div>
+        </div>
+
+        <div class="col-md-8">
+
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <%= f.label :longitude %>
+              <%= f.text_field :longitude, :class => 'form-control form-control-sm', id: 'projects_longitude' %>
+            </div>
+            <div class="form-group col-md-4">
+              <%= f.label :latitude %>
+              <%= f.text_field :latitude, :class => 'form-control form-control-sm', id: 'projects_latitude' %>
+            </div>
           </div>
 
-          <div class="col-md-6">
-            <div class="form-group col-md-6">
-              <%= f.label :longitude %>
-              <div class="form-inline">
-                <%= f.text_field :longitude, :class => 'form-control', id: 'projects_longitude' %>
-              </div>
-            </div>
-
-            <div class="form-group col-md-6">
-              <%= f.label :latitude %>
-              <div class="form-inline">
-                <%= f.text_field :latitude, :class => 'form-control', id: 'projects_latitude' %>
-              </div>
-            </div>
-
+          <div class="form-row">
             <div class="form-group col-md-6">
               <%= f.label :county %>
-              <div class="form-inline">
-                <%= f.select :county_id, counties_for_select, { :prompt => t(:select_item_from_list) }, :class => 'form-control' %>
-              </div>
+              <%= f.select :county_id, counties_for_select, { :prompt => t(:select_item_from_list) }, :class => 'form-control form-control-sm' %>
             </div>
-
             <div class="form-group col-md-6">
               <%= f.label :address %>
-              <%= f.text_field :address, :class => 'form-control' %>
+              <%= f.text_field :address, :class => 'form-control form-control-sm' %>
               <div id="geocodingResult"></div>
               <span class="help-inline"><%= t 'form.hint.project.address' %></span>
               <%= link_to "Buscar", '#', id: 'search_address' %>
             </div>
           </div>
-      </div>
 
-      <div class="form-row">
           <% if !@project.new_record? %>
-            <div class="form-group col-md-3">
-              <%= f.label :code %>
-                <%= f.text_field :code, :class => 'form-control' %>
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <%= f.label :code %>
+                <%= f.text_field :code, :class => 'form-control form-control-sm' %>
+              </div>
             </div>
           <% end %>
 
-          <div class="form-group col-md-3">
-            <%= f.label :name %>
-            <%= f.text_field :name, :class => 'form-control' %>
+          <!-- Proyecto Fila 1 -->
+          <div class="form-row">
+
+            <div class="form-group col-md-2">
+              <%= f.label :name %>
+              <%= f.text_field :name, :class => 'form-control form-control-sm' %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :floors %>
+              <%= f.text_field :floors, :class => 'form-control form-control-sm' %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :quantity_department_for_floor %>
+              <%= f.text_field :quantity_department_for_floor, :class => 'form-control form-control-sm' %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :elevators %>
+              <%= f.text_field :elevators, :class => 'form-control form-control-sm' %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :get_agency_name %>
+              <%= f.text_field :get_agency_name, :class => 'form-control form-control-sm' %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :get_constructor_name %>
+              <%= f.text_field :get_constructor_name, :class => 'form-control form-control-sm' %>
+            </div>
           </div>
 
-          <div class="form-group col-md-3">
-            <%= f.label :floors %>
-              <%= f.text_field :floors, :class => 'form-control' %>
+          <!-- Proyecto Fila 2 -->
+          <div class="form-row">
+
+            <div class="form-group col-md-2">
+              <%= f.label :get_seller_name %>
+              <%= f.text_field :get_seller_name, :class => 'form-control form-control-sm' %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :project_type %>
+              <%= f.select :project_type_id, project_types_for_select, { :prompt => t(:select_item_from_list) }, :class => 'form-control form-control-sm' %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :build_date %>
+              <%= f.text_field :build_date, :class => "jquery-ui-date form-control form-control-sm" %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :sale_date %>
+              <%= f.text_field :sale_date, :class => "jquery-ui-date form-control form-control-sm" %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :transfer_date %>
+              <%= f.text_field :transfer_date, :class => "jquery-ui-date form-control form-control-sm" %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :pilot_opening_date %>
+              <%= f.text_field :pilot_opening_date, :class => "jquery-ui-date form-control form-control-sm" %>
+            </div>
+
+            <div class="form-group col-md-2">
+              <%= f.label :general_observation %>
+              <%= f.text_area :general_observation, :cols=> 31, :rows=> 5 %>
+            </div>
           </div>
-
-          <div class="form-group col-md-3">
-            <%= f.label :quantity_department_for_floor %>
-              <%= f.text_field :quantity_department_for_floor, :class => 'form-control' %>
-          </div>
-        </div>
-
-      <div class="form-row">
-          <div class="form-group col-md-3">
-            <%= f.label :elevators %>
-              <%= f.text_field :elevators, :class => 'form-control' %>
-          </div>
-
-          <div class="form-group col-md-3">
-            <%= f.label :get_agency_name %>
-              <%= f.text_field :get_agency_name, :class => 'form-control' %>
-          </div>
-
-          <div class="form-group col-md-3">
-            <%= f.label :get_constructor_name %>
-              <%= f.text_field :get_constructor_name, :class => 'form-control' %>
-          </div>
-
-          <div class="form-group col-md-3">
-            <%= f.label :get_seller_name %>
-              <%= f.text_field :get_seller_name, :class => 'form-control' %>
-          </div>
-        </div>
-
-      <div class="form-row">
-        <div class="form-group col-md-3">
-          <%= f.label :project_type %>
-            <%= f.select :project_type_id, project_types_for_select, { :prompt => t(:select_item_from_list) }, :class => 'form-control' %>
-        </div>
-
-        <div class="form-group col-md-3">
-          <%= f.label :build_date %>
-            <%= f.text_field :build_date, :class => "jquery-ui-date form-control" %>
-        </div>
-
-        <div class="form-group col-md-3">
-          <%= f.label :sale_date %>
-            <%= f.text_field :sale_date, :class => "jquery-ui-date form-control" %>
-        </div>
-
-        <div class="form-group col-md-3">
-          <%= f.label :transfer_date %>
-            <%= f.text_field :transfer_date, :class => "jquery-ui-date form-control" %>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group col-md-3">
-          <%= f.label :pilot_opening_date %>
-            <%= f.text_field :pilot_opening_date, :class => "jquery-ui-date form-control" %>
-        </div>
-
-        <div class="form-group col-md-3">
-          <%= f.label :general_observation %>
-            <%= f.text_area :general_observation, :cols=> 31, :rows=> 5  %>
         </div>
       </div>
 
       <%= f.error_notification %>
       <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
-
-      <div class="form-actions">
-        <%= f.button :submit %>
+      <div class="text-center">
+        <%= link_to 'Cancelar', admin_projects_path, :class => 'btn btn-secondary' %>
+        <%= f.button :submit, class: 'btn btn-primary', value: "Guardar" %>
       </div>
     <% end %>
   </div>
