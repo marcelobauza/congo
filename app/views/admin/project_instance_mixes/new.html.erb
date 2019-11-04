@@ -1,4 +1,19 @@
-<h1>New Project Instance Mix</h1>
+<div class="card shadow">
+  <div class="card-body">
+    <h2>Nuevo Mix</h2>
+  </div>
+</div>
+
+<ul class="nav nav-pills justify-content-center">
+  <li class="nav-item">
+    <%= link_to t('menu.project.project'), edit_admin_project_path(@project_instance.project), class: 'nav-link' %>
+  </li>
+  <li class="active">
+    <%= link_to t('menu.project.instances'), edit_admin_project_project_instance_path(@project_instance.project, @project_instance), class: 'nav-link' %>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="#"><%= t('menu.project_instance.mixes') %></a>
+  </li>
+</ul>
 
 <%= render 'form', project_instance_mix: @project_instance_mix %>
-

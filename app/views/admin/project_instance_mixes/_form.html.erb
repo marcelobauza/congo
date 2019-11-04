@@ -1,80 +1,84 @@
-<%= simple_form_for([:admin, @project, @project_instance, @project_instance_mix]) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+<div class="card shadow">
+  <div class="card-body">
 
-        <div class="alert-message block-message error">
-          <ul class="panel-body"><% @project_instance_mix.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %></ul>
+    <%= simple_form_for([:admin, @project, @project_instance, @project_instance_mix]) do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+      <div class="alert-message block-message error">
+        <ul class="panel-body"><% @project_instance_mix.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %></ul>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <%= f.input :model, input_html: {class:'form-control form-control-sm'}  %>
         </div>
-  <div class="form-row">
-    <div class="form-group col-md-3">
-      <%= f.input :model, input_html: {class:'form-control'}  %>
-    </div>
-    <% if @project.project_type.name == 'Casas'%>
-      <div class="form-group col-md-3">
-        <%= f.input :home_type, input_html: {class:'form-control'} %>
+        <% if @project.project_type.name == 'Casas'%>
+          <div class="form-group col-md-2">
+            <%= f.input :home_type, input_html: {class:'form-control form-control-sm'} %>
+          </div>
+        <% end %>
+        <div class="form-group col-md-2">
+          <%= f.input :total_units, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :stock_units, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :mix_usable_square_meters, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <% unless @project.project_type.name == 'Casas'%>
+          <div class="form-group col-md-2">
+            <%= f.input :mix_terrace_square_meters, input_html: {class:'form-control form-control-sm'}  %>
+          </div>
+        <% end %>
+        <div class="form-group col-md-2">
+          <%= f.input :get_bedroom, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :get_bathroom, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :living_room, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :service_room, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :h_office, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :percentage, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :uf_min, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :uf_max, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :uf_parking, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :uf_cellar, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :common_expenses, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :withdrawal_percent, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :t_min, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :t_max, input_html: {class:'form-control form-control-sm'}  %>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <%= f.button :submit, class: 'btn btn-primary', value: "Guardar" %>
       </div>
     <% end %>
-    <div class="form-group col-md-3">
-      <%= f.input :total_units, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :stock_units, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :mix_usable_square_meters, input_html: {class:'form-control'}  %>
-    </div>
-    <% unless @project.project_type.name == 'Casas'%>
-      <div class="form-group col-md-3">
-        <%= f.input :mix_terrace_square_meters, input_html: {class:'form-control'}  %>
-      </div>
-    <% end %>
-    <div class="form-group col-md-3">
-      <%= f.input :get_bedroom, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :get_bathroom, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :living_room, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :service_room, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :h_office, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :percentage, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :uf_min, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :uf_max, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :uf_parking, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :uf_cellar, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :common_expenses, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :withdrawal_percent, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :t_min, input_html: {class:'form-control'}  %>
-    </div>
-    <div class="form-group col-md-3">
-      <%= f.input :t_max, input_html: {class:'form-control'}  %>
-    </div>
   </div>
-
-  </div>
-
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
-<% end %>
+</div>
