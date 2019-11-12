@@ -628,7 +628,7 @@ Congo.building_regulations.action_dashboards = function(){
             if (label == "Constructibilidad") {
 
               var min = reg['min'];
-              var max = reg['max'];
+              var max = 10;
               var to;
               var from;
 
@@ -712,7 +712,7 @@ Congo.building_regulations.action_dashboards = function(){
             if (label == "Ocupación de Suelo") {
 
               var min = reg['min'];
-              var max = reg['max'];
+              var max = 1;
               var to;
               var from;
 
@@ -796,7 +796,7 @@ Congo.building_regulations.action_dashboards = function(){
             if (label == "Altura Máxima") {
 
               var min = reg['min'];
-              var max = reg['max'];
+              var max = 99;
               var to;
               var from;
 
@@ -880,7 +880,7 @@ Congo.building_regulations.action_dashboards = function(){
             if (label == "Habitantes por Hectárea") {
 
               var min = reg['min'];
-              var max = reg['max'];
+              var max = 5000;
               var to;
               var from;
 
