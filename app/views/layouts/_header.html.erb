@@ -37,16 +37,16 @@
           <%= link_to demography_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-male" title="Demografía y Gastos" style="font-size: 26px"></i><% end %>
         <% end %>
         <%if current_user.layer_types.include? 4  %>
-        <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-file-alt" title="Normativa" style="font-size: 26px"></i><% end %>
+          <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-file-alt" title="Normativa" style="font-size: 26px"></i><% end %>
         <% end %>
         <%if current_user.layer_types.include? 3  %>
-        <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-handshake" title="Compraventas" style="font-size: 26px"></i><% end %>
+          <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-handshake" title="Compraventas" style="font-size: 26px"></i><% end %>
         <% end %>
         <%if current_user.layer_types.include? 2  %>
-        <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-home" title="Proyectos Residenciales en Venta" style="font-size: 26px"></i><% end %>
+          <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-home" title="Proyectos Residenciales en Venta" style="font-size: 26px"></i><% end %>
         <% end %>
         <%if current_user.layer_types.include? 1  %>
-        <%= link_to future_projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-landmark" title="Expedientes Municipales" style="font-size: 26px"></i><% end %>
+          <%= link_to future_projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-landmark" title="Expedientes Municipales" style="font-size: 26px"></i><% end %>
         <% end %>
       </div>
     </div>
@@ -153,12 +153,18 @@
           <i class="fas fa-plus" title="Útiles"></i>
         </button>
         <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
-          <%= link_to "#", id: "pdf", class: "dropdown-item custom-item reports", data: {remote: true} do  %> <i class=" fas fa-file-pdf" title="Informe PDF" style="font-size: 26px"></i><% end %>
-          <%= link_to "#", id: "boost", class: "dropdown-item custom-item", remote: true do %> <i class=" fas fa-database" title="Base Completa" style="font-size: 26px"></i> <%end %>
-          <%= link_to "#", id: "base", class: "dropdown-item custom-item reports", remote: true  do  %> <i class=" fas fa-file-excel" title="Descarga XLS" style="font-size: 26px"></i><% end %>
-          <%= link_to "#", id: "graph", class: "dropdown-item custom-item reports", remote: true  do  %> <i class="far fa-file-excel" title="Descarga Resumen XLS" style="font-size: 26px"></i><% end %>
+          <%= link_to "#", id: "boost", class: "dropdown-item custom-item", remote: true do %> <i class=" fas fa-database" title="Ver Base Completa" style="font-size: 26px"></i> <%end %>
+
+          <% if (current_user.role.name == 'IPRO+'|| (current_user.role.name == 'Admin')) %>
+            <div class="dropdown-divider"></div>
+            <%= link_to "#", id: "pdf", class: "dropdown-item custom-item reports", data: {remote: true} do  %> <i class=" fas fa-file-pdf" title="Informe PDF" style="font-size: 26px"></i><% end %>
+            <%= link_to "#", id: "base", class: "dropdown-item custom-item reports", remote: true  do  %> <i class=" fas fa-file-excel" title="Descarga XLS" style="font-size: 26px"></i><% end %>
+            <%= link_to "#", id: "graph", class: "dropdown-item custom-item reports", remote: true  do  %> <i class="far fa-file-excel" title="Descarga Resumen XLS" style="font-size: 26px"></i><% end %>
+          <% end %>
         </div>
+
       </div>
+
     <% end %>
 
     <!-- Cuenta Dropdown -->

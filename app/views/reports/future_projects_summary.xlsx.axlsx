@@ -1,3 +1,4 @@
+if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin')
 wb = xlsx_package.workbook
 title = wb.styles.add_style(:bg_color => "FFFF0000", :fg_color=>"#FF000000", :sz=>14,  :border=> {:style => :thin, :color => "FFFF0000"})
 wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
@@ -42,4 +43,5 @@ wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
   sheet.add_row [bb[0], bb[1], bb[2], bb[3]]
   end
 
+end
 end
