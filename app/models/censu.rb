@@ -111,18 +111,7 @@ class Censu < ApplicationRecord
 
     result.push({"title":"Nivel Educacional","data": data})
 
-  @civil_status = civil_status(params)
 
-    data =[
-      {name: "Solteros/as", count: @civil_status.single},
-      {name: "Casados/as", count: @civil_status.married},
-      {name: "Separados/as", count: @civil_status.separated},
-      {name: "Viudos/as", count: @civil_status.widowed},
-      {name: "Conviven", count: @civil_status.coexist},
-      {name: "Anulados/as", count: @civil_status.canceled}
-    ]
-
-    result.push({"title":"Estado Civil","data": data})
 
   @gse = gse(params)
     data =[
@@ -179,7 +168,20 @@ class Censu < ApplicationRecord
       {name: "Arrendatario", count: @property_tenure.leased },
       {name: "Gratuita", count: @property_tenure.free },
     ]
-    result.push({"title":"Propiedad y Tenencia", "data": data})
+    result.push({"title":"Tenencia de la Vivienda", "data": data})
+  
+    @civil_status = civil_status(params)
+
+    data =[
+      {name: "Solteros/as", count: @civil_status.single},
+      {name: "Casados/as", count: @civil_status.married},
+      {name: "Separados/as", count: @civil_status.separated},
+      {name: "Viudos/as", count: @civil_status.widowed},
+      {name: "Conviven", count: @civil_status.coexist},
+      {name: "Anulados/as", count: @civil_status.canceled}
+    ]
+
+    result.push({"title":"Estado Civil","data": data})
 
 result
   end
