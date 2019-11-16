@@ -27,18 +27,22 @@ Congo.projects.action_heatmap = function(){
     switch (widget) {
       case 'heat_prv_uf':
         Congo.dashboards.config.style_layer= 'heatmap_prv_uf';
-
+        Congo.map_utils.counties();
+        $('#layer-name').text('Proyectos Residenciales en Venta - UF');
         break;
       case 'heat_prv_uf_m2_u':
         Congo.dashboards.config.style_layer= 'heatmap_prv_uf_m2_u';
+        Congo.map_utils.counties();
+        $('#layer-name').text('Proyectos Residenciales en Venta - UF M² Útil');
         break;
     }
-        Congo.transactions.config.legends.push({'name':'Alto', 'color':'9d2608'});
-        Congo.transactions.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
-        Congo.transactions.config.legends.push({'name':'Medio', 'color':'fa7c16'});
-        Congo.transactions.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
-        Congo.transactions.config.legends.push({'name':'Bajo', 'color':'fcd930'});
-    Congo.map_utils.counties();
+        Congo.projects.config.legends.push({'name':'Alto', 'color':'9d2608'});
+        Congo.projects.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
+        Congo.projects.config.legends.push({'name':'Medio', 'color':'fa7c16'});
+        Congo.projects.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
+        Congo.projects.config.legends.push({'name':'Bajo', 'color':'fcd930'});
+
+
   }
   return {
     init: init,
@@ -414,42 +418,50 @@ Congo.projects.action_graduated_points = function(){
     switch (widget) {
       case 'prv_stock_units':
         Congo.dashboards.config.style_layer= 'prv_point_graduated_stock_units';
-        Congo.projects.config.legends.push({'name':'Menor a 2', 'color':'d9d2b0'});
+        Congo.projects.config.legends.push({'name':'Menor a 2', 'color':'b9fc30'});
         Congo.projects.config.legends.push({'name':'2 a 4', 'color':'fcd930'});
         Congo.projects.config.legends.push({'name':'5 a 14', 'color':'fda821'});
         Congo.projects.config.legends.push({'name':'15 a 44', 'color':'fa7c16'});
         Congo.projects.config.legends.push({'name':'45 a 99', 'color':'f94710'});
         Congo.projects.config.legends.push({'name':'Mayor a 100', 'color':'9d2608'});
+        Congo.map_utils.counties();
+        $('#layer-name').text('Proyectos Residenciales en Venta - Disponibilidad');
         break;
       case 'prv_sold_units':
         Congo.dashboards.config.style_layer= 'prv_point_graduated_sold_units';
-        Congo.projects.config.legends.push({'name':'Menor a 0.5', 'color':'d9d2b0'});
+        Congo.projects.config.legends.push({'name':'Menor a 0.5', 'color':'b9fc30'});
         Congo.projects.config.legends.push({'name':'0.5 a 0.9', 'color':'fcd930'});
         Congo.projects.config.legends.push({'name':'1.0 a 2.4', 'color':'fda821'});
         Congo.projects.config.legends.push({'name':'2.5 a 4.9', 'color':'fa7c16'});
         Congo.projects.config.legends.push({'name':'5.0 a 14.9', 'color':'f94710'});
         Congo.projects.config.legends.push({'name':'Mayor a 15.0', 'color':'9d2608'});
+        Congo.map_utils.counties();
+        $('#layer-name').text('Proyectos Residenciales en Venta - Venta Mensual');
         break;
       case 'prv_uf_avg_percent':
         Congo.dashboards.config.style_layer= 'prv_point_graduated_uf';
-        Congo.projects.config.legends.push({'name':'Menor a 2.499', 'color':'d9d2b0'});
+        Congo.projects.config.legends.push({'name':'Menor a 2.499', 'color':'b9fc30'});
         Congo.projects.config.legends.push({'name':'2.500 a 3.999', 'color':'fcd930'});
         Congo.projects.config.legends.push({'name':'4.000 a 6.499', 'color':'fda821'});
         Congo.projects.config.legends.push({'name':'6.500 a 10.499', 'color':'fa7c16'});
         Congo.projects.config.legends.push({'name':'10.500 a 14.999', 'color':'f94710'});
         Congo.projects.config.legends.push({'name':'Mayor a 15.000', 'color':'9d2608'});
+        Congo.map_utils.counties();
+        $('#layer-name').text('Proyectos Residenciales en Venta - UF');
         break;
       case 'prv_uf_m2_u':
         Congo.dashboards.config.style_layer= 'prv_point_graduated_uf_m2_u';
-        Congo.projects.config.legends.push({'name':'Menor a 26', 'color':'d9d2b0'});
+        Congo.projects.config.legends.push({'name':'Menor a 26', 'color':'b9fc30'});
         Congo.projects.config.legends.push({'name':'27 a 52', 'color':'fcd930'});
         Congo.projects.config.legends.push({'name':'53 a 63', 'color':'fda821'});
         Congo.projects.config.legends.push({'name':'64 a 82', 'color':'fa7c16'});
         Congo.projects.config.legends.push({'name':'83 a 101', 'color':'f94710'});
         Congo.projects.config.legends.push({'name':'Mayor a 102', 'color':'9d2608'});
+        Congo.map_utils.counties();
+        $('#layer-name').text('Proyectos Residenciales en Venta - UF M² Útil');
         break;
     }
-    Congo.map_utils.counties();
+
   }
   return {
     init: init,
