@@ -24,23 +24,38 @@ Congo.transactions.action_heatmap = function(){
       case 'heat_calculated_value':
 
         Congo.dashboards.config.style_layer= 'heatmap_transactions_calculated_value';
-        break;
-      case 'heat_uf_m2_u':
-        Congo.dashboards.config.style_layer= 'heatmap_transactions_uf_m2_u';
-        break;
-      case 'heat_cbr_amount':
-        Congo.dashboards.config.style_layer= 'heatmap_transactions_amount';
-
-        break;
-    }
-
         Congo.transactions.config.legends.push({'name':'Alto', 'color':'9d2608'});
         Congo.transactions.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
         Congo.transactions.config.legends.push({'name':'Medio', 'color':'fa7c16'});
         Congo.transactions.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
         Congo.transactions.config.legends.push({'name':'Bajo', 'color':'fcd930'});
+        Congo.map_utils.counties();
+        $('#layer-name').text('Compraventas - UF');
+        break;
+      case 'heat_uf_m2_u':
+        Congo.dashboards.config.style_layer= 'heatmap_transactions_uf_m2_u';
+        Congo.transactions.config.legends.push({'name':'Alto', 'color':'9d2608'});
+        Congo.transactions.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
+        Congo.transactions.config.legends.push({'name':'Medio', 'color':'fa7c16'});
+        Congo.transactions.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
+        Congo.transactions.config.legends.push({'name':'Bajo', 'color':'fcd930'});
+        Congo.map_utils.counties();
+        $('#layer-name').text('Compraventas - UF M² Útil');
+        break;
+      case 'heat_cbr_amount':
+        Congo.dashboards.config.style_layer= 'heatmap_transactions_amount';
+        Congo.transactions.config.legends.push({'name':'Alto', 'color':'9d2608'});
+        Congo.transactions.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
+        Congo.transactions.config.legends.push({'name':'Medio', 'color':'fa7c16'});
+        Congo.transactions.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
+        Congo.transactions.config.legends.push({'name':'Bajo', 'color':'fcd930'});
+        Congo.map_utils.counties();
+        $('#layer-name').text('Compraventas - Cantidad');
 
-    Congo.map_utils.counties();
+        break;
+    }
+
+
   }
   return {
     init: init,
@@ -1046,24 +1061,27 @@ Congo.transactions.action_graduated_points = function(){
     switch (widget) {
       case 'cbr_calculated_value':
         Congo.dashboards.config.style_layer= 'transactions_point_graduated_uf';
-        Congo.transactions.config.legends.push({'name':'Menor a 2.499', 'color':'d9d2b0'});
+        Congo.transactions.config.legends.push({'name':'Menor a 2.499', 'color':'b9fc30'});
         Congo.transactions.config.legends.push({'name':'2.500 a 3.999', 'color':'fcd930'});
         Congo.transactions.config.legends.push({'name':'4.000 a 6.499', 'color':'fda821'});
         Congo.transactions.config.legends.push({'name':'6.500 a 10.499', 'color':'fa7c16'});
         Congo.transactions.config.legends.push({'name':'10.500 a 14.999', 'color':'f94710'});
         Congo.transactions.config.legends.push({'name':'Mayor a 15.000', 'color':'9d2608'});
+        Congo.map_utils.counties();
+        $('#layer-name').text('Compraventas - UF');
         break;
       case 'cbr_uf_m2_u':
         Congo.dashboards.config.style_layer= 'transactions_point_graduated_uf_m2_util';
-        Congo.transactions.config.legends.push({'name':'Menor a 26', 'color':'d9d2b0'});
+        Congo.transactions.config.legends.push({'name':'Menor a 26', 'color':'b9fc30'});
         Congo.transactions.config.legends.push({'name':'27 a 52', 'color':'fcd930'});
         Congo.transactions.config.legends.push({'name':'53 a 63', 'color':'fda821'});
         Congo.transactions.config.legends.push({'name':'64 a 82', 'color':'fa7c16'});
         Congo.transactions.config.legends.push({'name':'83 a 101', 'color':'f94710'});
         Congo.transactions.config.legends.push({'name':'Mayor a 102', 'color':'9d2608'});
+        Congo.map_utils.counties();
+        $('#layer-name').text('Compraventas - UF M² Útil');
         break;
     }
-    Congo.map_utils.counties();
   }
   return {
     init: init,
