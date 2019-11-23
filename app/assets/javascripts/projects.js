@@ -692,9 +692,9 @@ function projects_report_pdf(){
 
           // Labels columna izquierda
           doc.setFontSize(12);
-          doc.text('Venta Mensual Histórica Mín.:', 74, 40, null, null, 'right');
-          doc.text('Venta Mensual Histórica Máx.:', 74, 50, null, null, 'right');
-          doc.text('Venta Mensual Histórica Prom.:', 74, 60, null, null, 'right');
+          doc.text('Venta Mensual en Regimen Mín.:', 74, 40, null, null, 'right');
+          doc.text('Venta Mensual en Regimen Máx.:', 74, 50, null, null, 'right');
+          doc.text('Venta Mensual en Regimen Prom.:', 74, 60, null, null, 'right');
           doc.text('Oferta:', 74, 70, null, null, 'right');
           doc.text('Venta:', 74, 80, null, null, 'right');
           doc.text('Disponibilidad:', 74, 90, null, null, 'right');
