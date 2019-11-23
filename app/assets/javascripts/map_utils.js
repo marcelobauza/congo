@@ -414,7 +414,20 @@ Congo.map_utils = function(){
         }
 
         if (boost == false){
-          filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
+          filter_layer = filter_layer +  " AND ( ";
+          for(i=6; i > 0; i--){
+              filter_layer = filter_layer + " (bimester='"+ bimester +"' AND year='"+ year+"')";
+              bimester = bimester - 1;
+              if (bimester == 0 ){
+                    bimester = 6;
+                    year = year - 1;
+                    }
+          if (i > 1){
+          filter_layer = filter_layer +  " OR ";
+          }
+
+          }
+          filter_layer = filter_layer +  " ) ";
         }
         if (property_type_ids.length > 0 ){
           filter_layer = filter_layer + " AND property_type_id IN ("+ property_type_ids + ")";
