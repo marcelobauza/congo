@@ -81,6 +81,7 @@ Rails.application.routes.draw do
     resources :county_ufs
     resources :future_projects
     resources :transactions
+    resources :feedbacks
 
 
     resources :projects do

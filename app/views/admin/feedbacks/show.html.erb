@@ -1,0 +1,17 @@
+<div class="card shadow">
+  <div class="card-body">
+
+<%= fields_for :properties, OpenStruct.new(@feedback.properties)  do |builder| %>
+  <% @feedback.properties.each do |field| %>
+    <div class="form-group row">
+      <label class= "col-md-2 text-right col-form-label"><%= field[0] %> </label>
+      <div class="col-md-3">
+        <%= builder.text_field field[0], class: "form-control" %>
+      </div>
+    </div>
+    <div>
+    <% end %>
+  <% end %>
+    </div>
+    </div>
+

@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_many :counties_users
   has_many :counties, through: :counties_users
+  has_many :feedbacks
   belongs_to :role
 
    def active_for_authentication?
