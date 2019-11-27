@@ -55,6 +55,13 @@ class Transaction < ApplicationRecord
   AVG_CRITERIA_UFM2 = 3
 
 
+  def  self.popup params
+
+    @row = Transaction.where(id: params[:id]).first
+    @data = Transaction.where("st_Dwithin(st_geomfromtext('#{@row.the_geom}',4326), the_geom, 15, false)").where(WhereBuilder.build_range_periods_by_bimester_transaction_popup(params[:bimester], params[:year], 6))
+  end
+
+
   def self.number_filter number
     return all unless !number.empty?
     where(number: number)
@@ -74,9 +81,6 @@ class Transaction < ApplicationRecord
     return all unless !inscription_date.empty?
     where(inscription_date: inscription_date)
   end
-
-
-
 
   def  self.pois params
 

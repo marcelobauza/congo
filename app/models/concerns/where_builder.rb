@@ -81,6 +81,17 @@ module WhereBuilder
 
     query = query.chomp(Util.or) + ")#{Util.and}"
   end 
+  
+  def self.build_range_periods_by_bimester_transaction_popup(to_period, to_year, quantity, useView = false)
+    query = "(" 
+    bimesters = Period.get_periods(to_period.to_i, to_year.to_i, quantity, 1)
+
+      bimesters.each do |b| 
+        query += "(bimester = #{b[:period]} and year = #{b[:year]})#{Util.or}"
+      end 
+
+    query = query.chomp(Util.or) + ")"
+  end 
 
 def self.build_range_periods_by_bimester(to_period, to_year, quantity, useView = false)
   query = "("
