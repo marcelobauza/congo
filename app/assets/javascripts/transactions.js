@@ -78,6 +78,7 @@ transactions_popup = function(id, latlng){
     datatype: 'json',
     data: data,
     success: function(data) {
+      
       // Creamos la tabla con las cabeceras
       $('#cbr_popup_body').append(
         $('<table>', {
@@ -108,7 +109,7 @@ transactions_popup = function(id, latlng){
 
         $('#cbr_popup_property_items').append(
           $('<tr>', {
-            'id': info.blueprint,
+            'id': 'tr_'+info.id,
           }).append(
             $('<td>', {
               'text': info.address,
@@ -123,7 +124,7 @@ transactions_popup = function(id, latlng){
         );
 
         // Agregamos la función itemClick
-        $('#cbr_popup_property_items')[0].onclick = function(e) {
+        $('#tr_'+info.id)[0].onclick = function(e) {
           itemClick(e, info);
         }
 
