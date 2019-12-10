@@ -1,5 +1,6 @@
 if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin')
   wb = xlsx_package.workbook
+forced_float_format = wb.styles.add_style :format_code => '0.0'  
   wb.add_worksheet(name: 'Edificios') do |sheet|
     sheet.add_row [
       'X',
@@ -97,7 +98,7 @@ if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin')
         row[:cadastre],
         row[:range_uf],
         row[:range_util]
-      ]
+      ], :style => [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,forced_float_format, forced_float_format, nil,nil, forced_float_format, nil, nil, nil, nil, forced_float_format] 
       end
     end
             
@@ -201,6 +202,7 @@ if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin')
         row[:range_uf],
         row[:range_util]
       ]
+
     end
   end
 end
