@@ -80,7 +80,7 @@ end
 
   sheet.add_row([])
   sheet.add_row ["Unidades de proyecto por rango UF"], :style=> title
-  sheet.add_row ["Rango", "Cantidad Proyectos"], :style=> title
+  sheet.add_row ["Rango", "Cantidad de Unidades"], :style=> title
 @range.each do |r|
   sheet.add_row [r[:name],r[:value]]
 end
