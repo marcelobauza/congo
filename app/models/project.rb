@@ -1113,6 +1113,9 @@ end
     select += "round((SUM(total_units * project_instance_mix_views.uf_m2) / SUM(total_units)),1) as avg_m2_field1, "
     select += "round(MIN(total_m2),1) as min_m2_built1, "
     select += "round(MAX(total_m2),1) as max_m2_built1, "
+    select += "round(sum(vhmu),1) as vhmo, "
+    select += "round(SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END),1) AS vhmdd, "
+    select += "sum(vhmud) as vhmd, "
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built1 "
     
     data = ProjectInstanceMixView.method_selection(filters).
@@ -1149,6 +1152,9 @@ end
     select += "round((SUM((project_instance_mix_views.t_min + project_instance_mix_views.t_max)/2 * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units))::numeric, 1) as avg_m2_field, "
     select += "round(MIN(total_m2),1) as min_m2_built, "
     select += "round(MAX(total_m2),1) as max_m2_built, "
+    select += "round(sum(vhmu),1) as vhmo, "
+    select += "round(SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END),1) AS vhmdd, "
+    select += "round(sum(vhmu),1) as vhmo, "
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built"
 
     data = ProjectInstanceMixView.method_selection(filters).

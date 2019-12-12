@@ -480,8 +480,6 @@ function projects_report_pdf(){
 
       data = data['data']
 
-      console.log(data);
-
       // Creamos el doc
       var doc = new jsPDF();
 
@@ -557,7 +555,7 @@ function projects_report_pdf(){
           var list_projet = data[i]['list_projet'];
 
           var line_num = 30
-
+          var vhmd = 0;
           $.each(list_projet, function(a, b) {
 
             var code = b['code']
@@ -567,8 +565,8 @@ function projects_report_pdf(){
             var sold_units = b['sold_units']
             var stock_units = b['stock_units']
             var total_units = b['total_units']
-            var vhmud = b['vhmud']
-
+            vhmud = b['vhmud']
+            vhmd = vhmd + b['vhmud']
             // Convertimos integer a varchar
             sold_units = sold_units.toString()
             stock_units = stock_units.toString()
@@ -660,9 +658,8 @@ function projects_report_pdf(){
           // Levantamos los valores de departamento
           var info_department = data[i]['info_department'][0];
 
-          var min_historical_monthly_sale = info_department['min_selling_speed1'];
-          var max_historical_monthly_sale = info_department['max_selling_speed1'];
-          var avg_historical_monthly_sale = info_department['avg_selling_speed1'];
+          var vhmo = info_department['vhmo'];
+          var vhmdd = info_department['vhmdd'];
           var total_units = info_department['total_units1'];
           var sold_units = info_department['total_sold'];
           var stock_units = info_department['total_stock1']
@@ -682,9 +679,8 @@ function projects_report_pdf(){
           var avg_uf_value = info_department['avg_uf1'];
 
           // Cambiamos a string los valores que llegan como integer
-          min_historical_monthly_sale = min_historical_monthly_sale.toString()
-          max_historical_monthly_sale = max_historical_monthly_sale.toString()
-
+          vhmo = vhmo.toString();
+          vhmdd = vhmdd.toString();
           // Subtítulo
           doc.setFontStyle("bold");
           doc.setFontSize(14);
@@ -692,9 +688,8 @@ function projects_report_pdf(){
 
           // Labels columna izquierda
           doc.setFontSize(12);
-          doc.text('Venta Mensual en Regimen Mín.:', 74, 40, null, null, 'right');
-          doc.text('Venta Mensual en Regimen Máx.:', 74, 50, null, null, 'right');
-          doc.text('Venta Mensual en Regimen Prom.:', 74, 60, null, null, 'right');
+          doc.text('Venta Mensual en Regimen:', 74, 40, null, null, 'right');
+          doc.text('Venta Mensual Disponible:', 74, 50, null, null, 'right');
           doc.text('Oferta:', 74, 70, null, null, 'right');
           doc.text('Venta:', 74, 80, null, null, 'right');
           doc.text('Disponibilidad:', 74, 90, null, null, 'right');
@@ -705,9 +700,8 @@ function projects_report_pdf(){
 
           // Valores columna izquierda
           doc.setFontStyle("normal");
-          doc.text(min_historical_monthly_sale, 76, 40);
-          doc.text(max_historical_monthly_sale, 76, 50);
-          doc.text(avg_historical_monthly_sale, 76, 60);
+          doc.text(vhmo, 76, 40);
+          doc.text(vhmdd, 76, 50);
           doc.text(total_units, 76, 70);
           doc.text(sold_units, 76, 80);
           doc.text(stock_units, 76, 90);
@@ -749,10 +743,10 @@ function projects_report_pdf(){
 
           // Validamos si existen proyectos de casas
           if (project_count > 0) {
+        
 
-            var min_historical_speed = info_house['min_selling_speed'];
-            var max_historical_speed = info_house['max_selling_speed'];
-            var avg_historical_speed = info_house['avg_selling_speed'];
+            var vhmo = info_house['vhmo'];
+            var vhmdd_h = info_house['vhmdd'];
             var total_stock = info_house['total_units'];
             var total_sale = info_house['total_sold'];
             var total_availability = info_house['total_stock'];
@@ -773,10 +767,10 @@ function projects_report_pdf(){
 
             // Cambiamos a string los valores que llegan como integer
             max_land_area_m2 = max_land_area_m2.toString()
-            max_historical_speed = max_historical_speed.toString()
             min_land_area_m2 = min_land_area_m2.toString()
-            min_historical_speed = min_historical_speed.toString()
             total_stock = total_stock.toString()
+            vhmo = vhmo.toString()
+            vhmdd_h = vhmdd_h.toString()
 
             // Subtítulo
             doc.setFontStyle("bold");
@@ -785,9 +779,8 @@ function projects_report_pdf(){
 
             // Labels columna izquierda
             doc.setFontSize(12);
-            doc.text('Velocidad Histórica Mín:', 74, 180, null, null, 'right');
-            doc.text('Velocidad Histórica Máx:', 74, 190, null, null, 'right');
-            doc.text('Velocidad Histórica Prom.:', 74, 200, null, null, 'right');
+            doc.text('Venta Mensual en Regimen:', 74, 180, null, null, 'right');
+            doc.text('Venta Mensual Disponible:', 74, 190, null, null, 'right');
             doc.text('Stock Total:', 74, 210, null, null, 'right');
             doc.text('Venta Total:', 74, 220, null, null, 'right');
             doc.text('Disponibilidad Total:', 74, 230, null, null, 'right');
@@ -798,9 +791,8 @@ function projects_report_pdf(){
 
             // Valores columna izquierda
             doc.setFontStyle("normal");
-            doc.text(min_historical_speed, 76, 180);
-            doc.text(max_historical_speed, 76, 190);
-            doc.text(avg_historical_speed, 76, 200);
+            doc.text(vhmo, 76, 180);
+            doc.text(vhmdd_h, 76, 190);
             doc.text(total_stock, 76, 210);
             doc.text(total_sale, 76, 220);
             doc.text(total_availability, 76, 230);
