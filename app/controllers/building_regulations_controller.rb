@@ -21,6 +21,10 @@ class BuildingRegulationsController < ApplicationController
 
   def building_regulations_filters
     result = []
+    
+    params[:user_id] = current_user.id
+    BuildingRegulation.save_filter_polygon params
+
     @a = allowed_use_list
     result.push({"label":"Uso", "data":@a})
     @c = constructivity

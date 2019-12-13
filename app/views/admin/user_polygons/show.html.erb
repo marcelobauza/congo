@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @user_polygon.user %>
+</p>
+
+<p>
+  <strong>Wkt:</strong>
+  <%= @user_polygon.wkt %>
+</p>
+
+<p>
+  <strong>Layertype:</strong>
+  <%= @user_polygon.layertype %>
+</p>
+
+<p>
+  <strong>Text:</strong>
+  <%= @user_polygon.text %>
+</p>
+
+<%= link_to 'Edit', edit_user_polygon_path(@user_polygon) %> |
+<%= link_to 'Back', user_polygons_path %>

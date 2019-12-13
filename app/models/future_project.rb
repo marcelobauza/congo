@@ -479,6 +479,9 @@ class FutureProject < ApplicationRecord
 
   def self.summary f
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
+    radius = (f[:radius].to_f / 1000)
+    UserPolygon.save_polygons_for_user f
+
     begin
       general_data = general_info(filters)
       types = group_by_project_type('future_project_types', filters)

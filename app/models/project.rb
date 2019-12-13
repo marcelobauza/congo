@@ -843,6 +843,7 @@ end
   def self.summary f
 
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
+    UserPolygon.save_polygons_for_user f
     begin
       global_information = Project.find_globals(filters, false)
 

@@ -6,6 +6,7 @@ class DemographyController < ApplicationController
   end
 
   def general
+    params[:user_id] = current_user.id
     @result = Censu.summary(params)
     render json: @result
   end

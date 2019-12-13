@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>User Polygons</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Wkt</th>
+      <th>Layertype</th>
+      <th>Text</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @user_polygons.each do |user_polygon| %>
+      <tr>
+        <td><%= user_polygon.user %></td>
+        <td><%= user_polygon.wkt %></td>
+        <td><%= user_polygon.layertype %></td>
+        <td><%= user_polygon.text %></td>
+        <td><%= link_to 'Show', user_polygon %></td>
+        <td><%= link_to 'Edit', edit_user_polygon_path(user_polygon) %></td>
+        <td><%= link_to 'Destroy', user_polygon, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User Polygon', new_user_polygon_path %>

@@ -76,6 +76,7 @@ class Censu < ApplicationRecord
 
   def self.summary(params)
 
+    UserPolygon.save_polygons_for_user params
     result=[]
     data =[]
     people_by_home = average_people_by_home(params)

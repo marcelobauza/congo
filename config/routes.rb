@@ -64,6 +64,8 @@ Rails.application.routes.draw do
   
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
+    get 'user_polygons/export_data' => 'user_polygons#export_data'
+    get 'user_polygons/generate_csv' => 'user_polygons#generate_csv'
     get 'projects/export_data' => 'projects#export_data'
     get 'projects/generate_csv' => 'projects#generate_csv'
     get 'projects/kpi' => 'projects#kpi'

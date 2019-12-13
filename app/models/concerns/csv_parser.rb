@@ -10,7 +10,8 @@ module CsvParser
   FUTURE_PROJECT = ["CODE", "ADDRESS","NAME", "ROLE_NUMBER", "FILE_NUMBER", "FILE_DATE", "OWNER", "LEGAL_AGENT", "ARCHITECH", "FLOORS", "UNDERGROUNDS", "TOTAL_UNITS", "TOTAL_PARKING", "TOTAL_COMMERCIALS", "M2_APPROVED", "M2_BUILT", "M2_FIELD", "CADASTRAL_DATE", "COMMENTS", "BIMESTER", "YEAR", "CADASTRE", "PROJECT_TYPE_ID", "FUTURE_PROJECT_TYPE_ID", "COUNTY"]
   PROJECT_HEADER = ["CODE","NAME", "ADDRESS", "FLOORS", "COUNTY", "PROJECT_TYPE", "BUILD_DATE", "SALE_DATE", "TRANSFER_DATE", "PILOT_DATE", "PROJECT_STATUS", "QUANTITY_DEPARTMENT", "ELEVATORS", "OBSERVATIONS", "PROJECT_STATUS_ID", "BIMESTER", "YEAR", "CADASTRE",  "STOCK_UNITS", "MIX_USABLE_M2", "MIX_TERRACE_M2", "LIVING", "SERVICE", "OFFICE", "UF_MIN", "UF_MAX", "UF_PARKING", "UF_CELLAR", "COMMON_EXPENSES", "TOTAL_UNITS", "T_MIN", "T_MAX", "HOME_TYPE", "MODEL", "LON", "LAT"] 
 
-  
+POLYGON_HEADER = ["USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
+
   def self.get_transactions_csv_data(transactions)
     tempFile = Tempfile.new('transactions.csv')
 
@@ -55,7 +56,7 @@ module CsvParser
     return tempFile.path
   end
 
-    def self.get_future_projects_csv_data(future_projects)
+  def self.get_future_projects_csv_data(future_projects)
     tempFile = Tempfile.new('future_projects.csv')
 
     CSV.open(tempFile.path, "w") do |writer|
@@ -70,7 +71,7 @@ module CsvParser
 
     return tempFile.path
   end
-  
+
   def self.get_projects_csv_data(projects)
 
     tempFile = Tempfile.new('projects.csv')
@@ -83,5 +84,23 @@ module CsvParser
     end
     return tempFile.path
   end
+
+
+  def self.get_user_polygons_csv_data(polygon)
+    tempFile = Tempfile.new('user_polygon.csv')
+
+    CSV.open(tempFile.path, "w") do |writer|
+      writer << POLYGON_HEADER
+
+      polygon.each do |t|
+        username = User.find_by_id(t.user_id)
+        values = [username.name, t.created_at.to_date.strftime("%d/%m/%Y"), t.layertype, t.wkt, username.company]
+        writer << values
+      end
+    end
+
+    return tempFile.path
+  end
+
 
 end

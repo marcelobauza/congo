@@ -1,0 +1,37 @@
+<% content_for :head do %>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#date_from").datepicker();
+      $("#date_to").datepicker();
+    }); 
+  </script>
+<% end %>
+
+<% content_for :header do %>
+  <h1><%= t('menu.transaction.export') %></h1>
+<% end %>
+
+
+
+<%= form_with  url: admin_user_polygons_generate_csv_path, method: :get, local:true do |f| %>
+  <div class="alert-message block-message info">
+    <p><strong><%= t(:EXPORT_CSV_BETWEEN_DATES) %></strong></p>
+  </div>
+
+  <div class="clearfix">
+    <label for="xlInput"><strong>Desde</strong></label>
+    <div>
+      <%= text_field_tag :date_from %>
+    </div>
+    <br/>
+    <label for="xlInput"><strong>Hasta</strong></label>
+    <div class="input">
+      <%= text_field_tag :date_to %>
+    </div>
+  </div>
+
+  <%= submit_tag "Exportar", :class => 'btn primary' %>
+
+
+<% end %>
+

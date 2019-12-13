@@ -930,6 +930,7 @@ class Transaction < ApplicationRecord
 
   def self.summary params
     result =[]
+    UserPolygon.save_polygons_for_user params
     begin
       global_transactions = Transaction.find_globals(params)
       general_data = [

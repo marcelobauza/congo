@@ -5,7 +5,11 @@ class BuildingRegulation < ApplicationRecord
   has_many :land_use_types, through: :building_regulation_land_use_types
 
   validates_presence_of :county_id
-  
+
+  def self.save_filter_polygon f
+    UserPolygon.save_polygons_for_user f
+  end
+
 	def self.get_density_types
 		BuildingRegulation.find(:all, :select => "density_i as density", :group => "density_i", :order => "density_i")
 	end

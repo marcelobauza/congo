@@ -16,6 +16,7 @@ class ProjectsController < ApplicationController
 
  def projects_summary
     session[:data] = params
+    params[:user_id] = current_user.id
     @result = Project.summary params
     return @result
   end
