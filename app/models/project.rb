@@ -264,6 +264,19 @@ class Project < ApplicationRecord
       where(build_conditions_new(filters, nil, true, range)).
       select(select).first
   end
+  
+  def self.house_general_information(filters, range)
+    select = "CASE SUM(project_instance_mix_views.total_units) WHEN 0 THEN 0 "
+    select += "ELSE SUM((project_instance_mix_views.t_min + project_instance_mix_views.t_max)/2 * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units)END AS ps_terreno, "
+    select += "CASE SUM(project_instance_mix_views.ps_terreno) WHEN 0 THEN 0 "
+    select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno))))  END AS pp_uf_dis_home "
+    
+    @a = ProjectInstanceMixView.method_selection(filters).
+      where(build_conditions_new(filters, nil, true, range)).
+      where(project_type_id: 1).
+      select(select).first
+  end
+
 
   #FIND PROJECTS BY WIDGETS. COUNT
   def self.projects_group_by_count(widget, filters, has_color, range)
@@ -846,6 +859,8 @@ end
     UserPolygon.save_polygons_for_user f
     begin
       global_information = Project.find_globals(filters, false)
+      house_information = Project.house_general_information(filters, false)
+      #department_information = department_general_information(filters, false)
 
       general_data = [
         {label: I18n.t(:TOTAL_PROJECTS_COUNT), value: global_information[:project_count]},
@@ -855,15 +870,13 @@ end
         {label: I18n.t(:PP_UTILES), value: global_information[:pp_utiles]},
         {label: I18n.t(:PP_UF), value: global_information[:pp_uf].to_i},
         {label: I18n.t(:PP_UF_M2), value: global_information[:pp_uf_dis_dpto]},
-        {label: I18n.t(:PP_UF_M2_C), value: global_information[:pp_uf_dis_home]},
+        {label: I18n.t(:PP_UF_M2_C), value: house_information[:pp_uf_dis_home]},
         {label: I18n.t(:VHMO), value: global_information[:vhmo]},
         {label: I18n.t(:VHMD), value: global_information[:vhmd]},
         {label: I18n.t(:MASD), value: global_information[:masd]}
       ]
-
-      general_data << house_general(global_information) if !global_information[:ps_terreno].nil?
+      general_data << house_general(house_information) if !house_information[:ps_terreno].nil?
       general_data << department_general(global_information) if !global_information[:pp_terrace].nil?
-
       p "status"
       pstatus = Project.projects_group_by_count('project_statuses', filters, false,false)
       p "types"
