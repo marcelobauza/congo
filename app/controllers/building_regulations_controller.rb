@@ -8,7 +8,7 @@ class BuildingRegulationsController < ApplicationController
       send_file("#{Rails.root}/db/data/pdf/normativa_inexistente.zip", :type => 'application/zip',
                 :disposition => 'inline', :filename => "normativa_inexistente.zip", :layout => false)
     else
-      send_file(zip_file, :type => 'application/zip', :disposition => 'inline', :filename => county_file, :layout => false)
+      send_file(zip_file, :type => 'application/zip', :disposition => 'inline', :filename => "#{county_file}.zip", :layout => false)
     end
   end
 
