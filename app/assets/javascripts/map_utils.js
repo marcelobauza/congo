@@ -551,7 +551,7 @@ Congo.map_utils = function(){
         }
 
         if (from_max_height !='' && to_max_height != ''){
-          filter_layer = filter_layer + "AND am_cc between " + from_max_height + " AND "+ to_max_height ;
+          filter_layer = filter_layer + "AND aminciti between " + from_max_height + " AND "+ to_max_height ;
         }
 
         if ((from_inh_hectare !='' || typeof(from_inh_hectare)=== 'undefined')  && (to_inh_hectare != '' || typeof(to_inh_hectarea)==='undefined') ){
