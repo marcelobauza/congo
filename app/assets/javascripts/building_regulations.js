@@ -262,7 +262,22 @@ function building_regulations_report_pdf() {
         if (construct == null) {
           construct = ''
         }
+  
+        if (max_height == null){
+            max_height == ''
+        }
 
+        if (building_regulations == null){
+          building_regulations == ''
+        }
+
+        if (allowed_use ==null){
+          allowed_use == ''
+        }
+
+        if (density == null){
+          density == ''
+        }
         // Cambiamos a string los valores que llegan como integer
         max_height = max_height.toString()
         building_regulations = building_regulations.toString()
