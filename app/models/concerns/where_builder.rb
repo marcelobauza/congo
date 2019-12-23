@@ -11,7 +11,7 @@ module WhereBuilder
   def self.build_within_condition_radius(center_pt, radius, geography = false)
     @geography = geography
     if @geography == true 
-    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius})"
+    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius}, #{@geography})"
     else
     "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius}, #{geography})"
   end
