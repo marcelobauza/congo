@@ -155,21 +155,23 @@ Congo.dashboards.action_index = function() {
       radius = Congo.dashboards.config.radius;
       if ((area > 0 && area < 785398) || (radius > 0 && radius < 500)) {
         Congo.dashboards.config.boost = true;
-        $('#filter-body').append(
-          $('<div>', {
-            'class': 'text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
-            'id': 'item-boost',
-            'text': 'Boost Activo'
-          }).append(
-            $('<button>', {
-              'type': 'button',
-              'class': 'close',
-              'id': 'close-boost',
-              'text': '×',
-              'onclick': 'del_boost_filter()'
-            })
+        if ($('#item-boost').length == 0) {
+          $('#filter-body').append(
+            $('<div>', {
+              'class': 'text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow',
+              'id': 'item-boost',
+              'text': 'Boost Activo'
+            }).append(
+              $('<button>', {
+                'type': 'button',
+                'class': 'close',
+                'id': 'close-boost',
+                'text': '×',
+                'onclick': 'del_boost_filter()'
+              })
+            )
           )
-        )
+        }
         Congo.map_utils.counties();
       } else {
         var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
