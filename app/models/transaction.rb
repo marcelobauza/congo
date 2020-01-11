@@ -13,32 +13,11 @@ class Transaction < ApplicationRecord
   before_save :update_calculated_value, :titleize_attributes
   before_save :pm2
 
-
-  include WhereBuilder
-  include Util
-  include Ranges
   include CsvParser
-
-  validates_presence_of :address,
-    :county_id,
-    :property_type_id,
-    :inscription_date,
-    :sheet,
-    :number,
-    :longitude,
-    :latitude,
-    :seller_type_id,
-    :sample_factor,
-    :tome,
-    :code_sii
-  # validates_numericality_of :uf_m2, :greater_than_or_equal_to => 0, :unless => 'uf_m2.blank?'
-  #validates_numericality_of :sample_factor, :greater_than => 0, :unless => 'sample_factor.blank?'
-  # validates_numericality_of :sample_factor, :less_than_or_equal_to => 1, :unless => 'sample_factor.blank?'
-
-  # validates_format_of :role, :with => /^(|\d{1,5}-(\d{1,5}))$/, :message => I18n.translate("activerecord.errors.models.transaction.invalid_role_format")
-  # validate :is_buyer_rut_verification_digit_valid, :unless => 'self.buyer_rut.blank?'
-  # validate :valid_date?
-
+  include Ranges
+  include Transactions::Validation
+  include Util
+  include WhereBuilder
 
   #named_scope :by_number, lambda { |t| {:conditions => {:number => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
   #named_scope :by_user, lambda { |t| {:conditions => {:user_id => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
@@ -55,12 +34,11 @@ class Transaction < ApplicationRecord
   AVG_CRITERIA_UFM2 = 3
 
 
-  def  self.popup params
+  def self.popup params
 
     @row = Transaction.where(id: params[:id]).first
     @data = Transaction.where("st_Dwithin(st_geomfromtext('#{@row.the_geom}',4326), the_geom, 15, false)").where(WhereBuilder.build_range_periods_by_bimester_transaction_popup(params[:bimester], params[:year], 6))
   end
-
 
   def self.number_filter number
     return all unless !number.empty?
@@ -296,7 +274,7 @@ class Transaction < ApplicationRecord
                  stddev(transactions.calculated_value) as deviation,
                  ROUND((ROUND(SUM(1 / sample_factor)) / COUNT(DISTINCT(year, bimester)))) as avg_trans_count,
                  (SUM(calculated_value) / COUNT(DISTINCT(year, bimester))) as avg_uf_volume').
-                joins(build_joins.join(" ") ).
+    joins(build_joins.join(" ") ).
     where(build_conditions(filters)).order("uf_min_value").first
     return result if global_transactions.nil?
 
@@ -323,13 +301,13 @@ class Transaction < ApplicationRecord
       trans_group = {:period => per[:period], :year => per[:year], :counties => []}
 
       if !filters[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
+        conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
       elsif !filters[:wkt].nil?
         polygon = JSON.parse(filters[:wkt])
         conditions = "ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326), transactions.the_geom) #{Util.and}"
-      else
-        conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}, false) and "
-      end
+        else
+          conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}, false) and "
+        end
 
       conditions += "active = true #{Util.and}"
       conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
@@ -343,11 +321,11 @@ class Transaction < ApplicationRecord
 
       @trans = Transaction.where(conditions).select(select).
         joins(joins.join(" ")).
-      group(' year, bimester').
-      order('year, bimester')
+        group(' year, bimester').
+        order('year, bimester')
       result << @trans
     end
-  result
+    result
   end
 
 
@@ -363,13 +341,13 @@ class Transaction < ApplicationRecord
       trans_group = {:period => per[:period], :year => per[:year], :counties => []}
 
       if !filters[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
+        conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
       elsif !filters[:wkt].nil?
         polygon = JSON.parse(filters[:wkt])
         conditions = "ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326), transactions.the_geom) #{Util.and}"
-      else
-        conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}, false) and "
-      end
+        else
+          conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}, false) and "
+        end
 
       conditions += "active = true #{Util.and}"
       conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
@@ -383,8 +361,8 @@ class Transaction < ApplicationRecord
 
       trans = Transaction.where(conditions).select(select).
         joins(joins.join(" ")).
-      group('counties.name, year, bimester').
-      order('year, bimester')
+        group('counties.name, year, bimester').
+        order('year, bimester')
       unless trans.nil?
         trans_group[:counties] = trans
         trans.each {|t| counties << t["county"]}
@@ -409,12 +387,12 @@ class Transaction < ApplicationRecord
 
       end
 
-     # if q[:counties].exists?
+      # if q[:counties].exists?
       #  item["y1_value".to_sym] = "null"
-     # else
-     #   item["y1_label".to_sym] = I18n.t(:ALL_COUNTIES_LABEL)
-     #   values_sum == 0 ? item["y1_value".to_sym] = 0 : item["y1_value".to_sym] = values_sum
-     # end
+      # else
+      #   item["y1_label".to_sym] = I18n.t(:ALL_COUNTIES_LABEL)
+      #   values_sum == 0 ? item["y1_value".to_sym] = 0 : item["y1_value".to_sym] = values_sum
+      # end
 
       values << item
     end
@@ -537,7 +515,7 @@ class Transaction < ApplicationRecord
       elsif !filters[:centerpt].nil?
         conditions += WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
         else
-        conditions += WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
+          conditions += WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
         end
 
       conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
@@ -590,18 +568,18 @@ class Transaction < ApplicationRecord
       conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
     elsif !filters[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
-    else
-      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
+      else
+        conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ) + Util.and
       end
     conditions += "active = true #{Util.and}"
 
-     unless filters.has_key? :boost
-       conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
-       conditions += WhereBuilder.build_bimesters_condition(filters[:periods], filters[:years]) if filters.has_key? :periods
-     end
+    unless filters.has_key? :boost
+      conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
+      conditions += WhereBuilder.build_bimesters_condition(filters[:periods], filters[:years]) if filters.has_key? :periods
+    end
 
-     conditions += build_ids_conditions(filters, widget)
-     conditions += build_calculated_value_condition(filters, widget)
+    conditions += build_ids_conditions(filters, widget)
+    conditions += build_calculated_value_condition(filters, widget)
     #FILTER DATA BY COUNTIES ASSOCIATED TO THE USER
     #ver que hace esto
     #   conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
@@ -640,8 +618,8 @@ class Transaction < ApplicationRecord
       cond += "AND '#{filters[:date_to]}'"
     end
     transactions = Transaction.includes(:seller_type, :surveyor, :user, :county, :property_type).
-                                where(cond).
-                                order("transactions.id")
+      where(cond).
+      order("transactions.id")
 
     return CsvParser.get_transactions_csv_data(transactions)
   end
@@ -653,8 +631,8 @@ class Transaction < ApplicationRecord
     cond += " AND county_id in(#{filters[:county_id].join(",")})" if !filters[:county_id].blank?
     cond += " AND property_type_id = #{filters[:property_type_id]}" if !filters[:property_type_id].blank?
     transactions = Transaction.includes(:seller_type, :surveyor, :user, :county, :property_type).
-                                where(cond).
-                                order("transactions.inscription_date")
+      where(cond).
+      order("transactions.inscription_date")
 
     return CsvParser.get_transactions_csv_data_sii(transactions)
   end
@@ -893,39 +871,39 @@ class Transaction < ApplicationRecord
     select = "transactions.bimester::text || '/' || transactions.year::text as name ,  "
 
     case option
-      when 'avg_surface_line_build'
-        select += "round(avg(total_surface_building),1) as value "
-      when 'avg_uf_m2_u'
-        select += " round(avg(transactions.calculated_value) / sum(total_surface_building),1) as value "
-      when 'avg_land'
-        select +=" round(avg(total_surface_terrain),1) as value"
-      when 'avg_uf_m2_land'
-        select +=" round(avg(transactions.calculated_value) / avg(total_surface_terrain),1) as value"
-  end
+    when 'avg_surface_line_build'
+      select += "round(avg(total_surface_building),1) as value "
+    when 'avg_uf_m2_u'
+      select += " round(avg(transactions.calculated_value) / sum(total_surface_building),1) as value "
+    when 'avg_land'
+      select +=" round(avg(total_surface_terrain),1) as value"
+    when 'avg_uf_m2_land'
+      select +=" round(avg(transactions.calculated_value) / avg(total_surface_terrain),1) as value"
+    end
 
-      if !filters[:county_id].nil?
+    if !filters[:county_id].nil?
       conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
-      elsif !filters[:wkt].nil?
-        conditions = "ST_Within(transactions.the_geom, ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}))#{Util.and}"
+    elsif !filters[:wkt].nil?
+      conditions = "ST_Within(transactions.the_geom, ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}))#{Util.and}"
       else
         conditions = "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}), #{filters[:radius]}) and "
       end
 
-      conditions += "active = true #{Util.and}"
-      conditions += " total_surface_terrain <> 0 and "
-      conditions += " total_surface_building <> 0 and "
-      conditions += build_ids_conditions(filters)
-      periods.each do |per|
-        conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.or}"
-      end
+    conditions += "active = true #{Util.and}"
+    conditions += " total_surface_terrain <> 0 and "
+    conditions += " total_surface_building <> 0 and "
+    conditions += build_ids_conditions(filters)
+    periods.each do |per|
+      conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.or}"
+    end
     conditions = conditions.chomp(Util.or)
-      conditions += "transactions.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
+    conditions += "transactions.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
 
-      trans = Transaction.
-        where(conditions).
-        group('year, bimester').
-        order('year, bimester').
-        pluck(select)
+    trans = Transaction.
+      where(conditions).
+      group('year, bimester').
+      order('year, bimester').
+      pluck(select)
   end
 
   def self.summary params
@@ -965,7 +943,7 @@ class Transaction < ApplicationRecord
       end
       result.push({"title":"Uso", "series":[{"data": data}]})
 
-    #Vendedor
+      #Vendedor
 
       data =[]
       stypes.each do |seller|
@@ -983,14 +961,14 @@ class Transaction < ApplicationRecord
 
       transactions_by_periods.each_with_index do |tb, i|
 
-         1.upto(counties_count ).each do |idx|
-        if tb["y#{idx}_value".to_sym].nil?
+        1.upto(counties_count ).each do |idx|
+          if tb["y#{idx}_value".to_sym].nil?
             data.push(tb["y#{idx}_value".to_sym], nil, tb[:period], tb[:year])
           else
             data[idx].push([tb["y#{idx}_value".to_sym], tb[:period], tb[:year]])
+          end
         end
       end
-  end
 
       result.push({"title":"Compraventas", "series":[{"data": data}]})
 
@@ -1032,10 +1010,10 @@ class Transaction < ApplicationRecord
     rescue
       #result = {data: ""}
     end
-end
+  end
 
   def self.reports(filters)
-  @bb = filters
+    @bb = filters
     cond_query = build_conditions(filters, nil)
     @transactions = Transaction.where(cond_query)
     @transactions
@@ -1043,104 +1021,104 @@ end
 
   def self.reports_pdf filters
 
-      result =[]
-      info = Transaction.information_of_transactions filters
-      result.push({"info": info})
+    result =[]
+    info = Transaction.information_of_transactions filters
+    result.push({"info": info})
 
 
-      ptypes = PropertyType.group_transactions_by_prop_types(filters)
-      stypes = SellerType.group_transactions_by_seller_type(filters)
-      transactions_by_periods = Transaction.group_transaction_county_and_bimester(filters)
-      uf_periods = Transaction.group_transaction_criteria_by_period(filters, Transaction::SUM_CRITERIA)
-      average_uf_periods = Transaction.group_transaction_criteria_by_period(filters, Transaction::AVG_CRITERIA)
-      avg_surface_line_build = group_avg_by_chart_pdf(filters, 'avg_surface_line_build')
-      avg_uf_m2_u = group_avg_by_chart_pdf(filters, 'avg_uf_m2_u')
-      avg_land = group_avg_by_chart_pdf(filters, 'avg_land')
-      avg_uf_m2_land = group_avg_by_chart_pdf(filters, 'avg_uf_m2_land')
+    ptypes = PropertyType.group_transactions_by_prop_types(filters)
+    stypes = SellerType.group_transactions_by_seller_type(filters)
+    transactions_by_periods = Transaction.group_transaction_county_and_bimester(filters)
+    uf_periods = Transaction.group_transaction_criteria_by_period(filters, Transaction::SUM_CRITERIA)
+    average_uf_periods = Transaction.group_transaction_criteria_by_period(filters, Transaction::AVG_CRITERIA)
+    avg_surface_line_build = group_avg_by_chart_pdf(filters, 'avg_surface_line_build')
+    avg_uf_m2_u = group_avg_by_chart_pdf(filters, 'avg_uf_m2_u')
+    avg_land = group_avg_by_chart_pdf(filters, 'avg_land')
+    avg_uf_m2_land = group_avg_by_chart_pdf(filters, 'avg_uf_m2_land')
 
-      #USO
-      data =[]
-      ptypes.each do |prop|
-        data.push("name": prop.name.capitalize, "count": prop.value.to_i, "id":prop.id)
-      end
-      result.push({"title":"Uso", "series":[{"data": data}]})
+    #USO
+    data =[]
+    ptypes.each do |prop|
+      data.push("name": prop.name.capitalize, "count": prop.value.to_i, "id":prop.id)
+    end
+    result.push({"title":"Uso", "series":[{"data": data}]})
 
     #Vendedor
-      data =[]
-      stypes.each do |seller|
-        data.push({"name": seller.name.capitalize, "count":seller.value.to_i, "id":seller.id})
-      end
+    data =[]
+    stypes.each do |seller|
+      data.push({"name": seller.name.capitalize, "count":seller.value.to_i, "id":seller.id})
+    end
 
-      result.push({"title":"Vendedor", "series":[{"data": data}]})
+    result.push({"title":"Vendedor", "series":[{"data": data}]})
 
-      #TRANSACCIONES POR BIMESTRE
-      data =[]
-      counties_count = (transactions_by_periods.first.size - 3) / 2
-      0.upto(counties_count).each do |idx|
-        data.push([transactions_by_periods.first["y#{idx}_label".to_sym]])
-      end
+    #TRANSACCIONES POR BIMESTRE
+    data =[]
+    counties_count = (transactions_by_periods.first.size - 3) / 2
+    0.upto(counties_count).each do |idx|
+      data.push([transactions_by_periods.first["y#{idx}_label".to_sym]])
+    end
 
-      transactions_by_periods.each_with_index do |tb, i|
+    transactions_by_periods.each_with_index do |tb, i|
 
-         1.upto(counties_count ).each do |idx|
+      1.upto(counties_count ).each do |idx|
         if tb["y#{idx}_value".to_sym].nil?
-            data.push(tb["y#{idx}_value".to_sym], nil, tb[:period], tb[:year])
-          else
-            data[idx].push([tb["y#{idx}_value".to_sym], tb[:period], tb[:year]])
+          data.push(tb["y#{idx}_value".to_sym], nil, tb[:period], tb[:year])
+        else
+          data[idx].push([tb["y#{idx}_value".to_sym], tb[:period], tb[:year]])
         end
       end
-  end
+    end
 
-      result.push({"title":"Compraventas", "series":[{"data": data}]})
+    result.push({"title":"Compraventas", "series":[{"data": data}]})
 
-      #UF PERIOD
-      data =[]
-      uf_periods.each do |ufp|
-        data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
-      end
-      result.push({"title":"PxQ | UF", "series":[{"data": data}]})
+    #UF PERIOD
+    data =[]
+    uf_periods.each do |ufp|
+      data.push({"name": (ufp[:period].to_s + "/" + ufp[:year].to_s[2,3]), "count":   ufp[:value].to_i })
+    end
+    result.push({"title":"PxQ | UF", "series":[{"data": data}]})
 
-      ##AVERAGE UF PERIOD
-      data =[]
-      average_uf_periods.each do |aup|
-        data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
-      end
+    ##AVERAGE UF PERIOD
+    data =[]
+    average_uf_periods.each do |aup|
+      data.push({"name": (aup[:period].to_s + "/" + aup[:year].to_s[2,3]), "count":   aup[:value].to_i })
+    end
 
-      result.push({"title":"Precio Promedio | UF", "series":[{"data": data}]})
+    result.push({"title":"Precio Promedio | UF", "series":[{"data": data}]})
 
-      #AVG SURFACE LINE BUILD
-      data=[]
-      avg_surface_line_build.each do |avg|
-        data.push("name": avg[0], "count": avg[1].to_f )
-      end
+    #AVG SURFACE LINE BUILD
+    data=[]
+    avg_surface_line_build.each do |avg|
+      data.push("name": avg[0], "count": avg[1].to_f )
+    end
 
-      result.push({"title":"Superficie Línea Construcción (útil m²) por Bimestre", "series":[{"data": data}]})
+    result.push({"title":"Superficie Línea Construcción (útil m²) por Bimestre", "series":[{"data": data}]})
 
-      #AVG UF M2 U
-      data=[]
-      avg_uf_m2_u.each do |avg|
-        data.push("name": avg[0], "count": avg[1].to_f )
-      end
+    #AVG UF M2 U
+    data=[]
+    avg_uf_m2_u.each do |avg|
+      data.push("name": avg[0], "count": avg[1].to_f )
+    end
 
-      result.push({"title":"Precio UFm² en Base Útil por Bimestre", "series":[{"data": data}]})
+    result.push({"title":"Precio UFm² en Base Útil por Bimestre", "series":[{"data": data}]})
 
-      #AVG LAND
-      data=[]
-      avg_land.each do |avg|
-        data.push("name": avg[0], "count": avg[1].to_f )
-      end
+    #AVG LAND
+    data=[]
+    avg_land.each do |avg|
+      data.push("name": avg[0], "count": avg[1].to_f )
+    end
 
-      result.push({"title":"Superficie Terreno (m²) por Bimestre", "series":[{"data": data}]})
+    result.push({"title":"Superficie Terreno (m²) por Bimestre", "series":[{"data": data}]})
 
-      #AVG UF M2 LAND
-      data=[]
-      avg_uf_m2_land.each do |avg|
-        data.push("name": avg[0], "count": avg[1].to_f )
-      end
+    #AVG UF M2 LAND
+    data=[]
+    avg_uf_m2_land.each do |avg|
+      data.push("name": avg[0], "count": avg[1].to_f )
+    end
 
-      result.push({"title":"Precio UFm² en Base Terreno por Bimestre", "series":[{"data": data}]})
+    result.push({"title":"Precio UFm² en Base Terreno por Bimestre", "series":[{"data": data}]})
 
-      result
+    result
 
   end
 
@@ -1185,16 +1163,16 @@ end
     data = Transaction.where(cond_query).select(select)
     data
   end
-def self.download_csv filters
+  def self.download_csv filters
 
     cond_query = build_conditions(filters, nil)
     data = Transaction.where(cond_query).
-            select("st_x(the_geom) as longitude, st_y(the_geom) as latitude", :calculated_value, :address )
-end
+      select("st_x(the_geom) as longitude, st_y(the_geom) as latitude", :calculated_value, :address )
+  end
 
   def self.to_csv(options = {})
-  desired_column = ['latitude', 'longitude', 'calculated_value', 'address']
-  header_names = ['Latitud', 'Longitud', 'Uf value', 'Direccion']
+    desired_column = ['latitude', 'longitude', 'calculated_value', 'address']
+    header_names = ['Latitud', 'Longitud', 'Uf value', 'Direccion']
     CSV.generate(options) do |csv|
       csv << header_names
       all.each do |product|
