@@ -17,11 +17,11 @@ Congo.demography.action_dashboards = function(){
     Congo.map_utils.init();
   }
 
-  demography_report_pdf = function(){
+  demography_report_pdf = function() {
 
     county_id = [];
-    $.each(Congo.dashboards.config.county_id, function(a,b){
-      county_id =b;
+    $.each(Congo.dashboards.config.county_id, function(a, b) {
+      county_id = b;
     })
 
     radius = Congo.dashboards.config.radius;
@@ -71,9 +71,184 @@ Congo.demography.action_dashboards = function(){
       data: data,
       success: function(data) {
         console.log(data)
-      }
-    })
-  }
+
+        // Creamos el doc
+        var doc = new jsPDF();
+
+        doc.page = 1;
+
+        // Pie de página
+        function footer() {
+          doc.setFontSize(10);
+          doc.setFontStyle("bold");
+
+          doc.text('Fuentes:', 10, 270);
+
+          doc.text('Variables Demográficas:', 10, 275);
+          doc.setFontStyle("normal");
+          doc.text('Censo de Población y Vivienda 2002 (INE)', 53, 275);
+
+          doc.setFontStyle("bold");
+          doc.text('Proyección 2010:', 10, 280);
+          doc.setFontStyle("normal");
+          doc.text('Proyección elaborada por PXQ en base a Compraventas nuevas del CBR', 40, 280);
+
+          doc.setFontStyle("bold");
+          doc.text('Seg. Socioeconómica:', 10, 285);
+          doc.setFontStyle("normal");
+          doc.text('Modelación de grupos socioeconómicos (GSE) elaborada por PxQ en base a Censo 2002', 49, 285);
+          doc.text('(Canasta de Bienes versus Años de Estudio Jefe de Hogar)', 10, 290);
+
+          doc.setFontSize(10);
+          doc.text('p. ' + doc.page, 194, 290);
+          doc.page++;
+        };
+
+        // Título
+        doc.setFontStyle("bold");
+        doc.setFontSize(22);
+        doc.text('Informe de Demografía y Gasto', 105, 20, null, null, 'center');
+
+        // Agregamos un página
+        doc.addPage('a4', 'portrait')
+
+        // Pie de página
+        footer()
+
+        // Separamos la información
+        for (var i = 2; i < data.length; i++) {
+
+          var reg = data[i];
+          var title = reg['title'];
+          var series = reg['data']
+          var datasets = [];
+          var name = [];
+          var count = [];
+
+          // Extraemos los datos de las series
+          $.each(series, function(c, d) {
+            name.push(d['name'])
+            count.push(d['count'])
+          })
+
+          // Guardamos "datasets" y "chart_type"
+          chart_type = 'pie';
+          datasets.push({
+            data: count,
+            backgroundColor: [
+              'rgb(39,174,96)',
+              'rgb(231,76,60)',
+              'rgb(211,84,0)',
+              'rgb(41,128,185)',
+              'rgb(241,196,15)',
+              'rgb(142,68,173)',
+              'rgb(192,57,43)',
+              'rgb(243,156,18)',
+            ],
+          })
+
+          chart_data = {
+            labels: name,
+            datasets: datasets
+          }
+
+          // Guardamos "options"
+          var chart_options = {
+            animation: false,
+            responsive: true,
+            title: {
+              display: false
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                fontColor: '#3d4046',
+                fontSize: 12,
+                usePointStyle: true,
+              }
+            },
+            plugins: {
+              datalabels: {
+                formatter: (value, ctx) => {
+                  // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                  let sum = 0;
+                  let dataArr = ctx.chart.data.datasets[0].data;
+                  dataArr.map(data => {
+                      sum += data;
+                  });
+                  let percentage = (value*100 / sum).toFixed(2);
+                  if (percentage > 4) {
+                    return percentage+'%';
+                  } else {
+                    return null;
+                  }
+                },
+                align: 'end',
+                anchor: 'center',
+                color: '#FFFFFF',
+                font: {
+                  weight: 'bold'
+                },
+                textStrokeColor: '#3d4046',
+                textStrokeWidth: 1,
+                textShadowColor: '#000000',
+                textShadowBlur: 3,
+              }
+            },
+          };
+
+          var chart_settings = {
+            type: chart_type,
+            data: chart_data,
+            options: chart_options
+          }
+
+          // Creamos y adjuntamos el canvas
+          var canvas = document.createElement('canvas');
+          canvas.id = 'report-canvas-'+i;
+          $('#chart-report'+i).append(canvas);
+
+          var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
+          var final_chart = new Chart(chart_canvas, chart_settings);
+
+          var chart = final_chart.toBase64Image();
+
+          if (i % 2 == 1) {
+
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.setFontStyle("bold");
+            doc.text(title, 105, 150, null, null, 'center');
+
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 160);
+
+            // Agrega nueva página
+            doc.addPage('a4', 'portrait')
+
+            // Pie de página
+            footer()
+
+          } else {
+
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.setFontStyle("bold");
+            doc.text(title, 105, 20, null, null, 'center');
+
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 30);
+
+          } // Cierra else impar
+        } // Cierra for
+
+        // Descarga el archivo PDF
+        doc.save("Informe_Demografía&Gastos.pdf");
+
+      } // Cierra success
+    }) // Cierra ajax
+  } // Cierra demography_report_pdf
 
     indicator_demography = function(){
           county_id = [];
