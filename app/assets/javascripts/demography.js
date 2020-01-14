@@ -471,8 +471,9 @@ Congo.demography.action_dashboards = function(){
                   'rgb(211,84,0)',
                   'rgb(41,128,185)',
                   'rgb(241,196,15)',
-                  '#8E44AD',
-                  '#EC7063'
+                  'rgb(142,68,173)',
+                  'rgb(192,57,43)',
+                  'rgb(243,156,18)',
                 ],
               })
 
