@@ -3,7 +3,7 @@ class UserPolygon < ApplicationRecord
 
   def self.save_polygons_for_user data
     @wkt =  convert_geometry_as_text data
-    return unless @wkt.nil?
+    return if @wkt.nil?
     @wkt.each do |wkt|
       up = UserPolygon.new()
       up.wkt = wkt['wkt']
