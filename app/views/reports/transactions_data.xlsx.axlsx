@@ -14,21 +14,21 @@ wb.add_worksheet(name: "Compraventas") do |sheet|
     'Numero',
     'Fecha',
     'Comprador',
-    'Rut Comprador',
     'Vendedor',
     'UF',
     'Est.',
     'Bod.',
+    'Rol',
     'sup.t_te',
     'Sup_l_cons',
     'uf_m2_u',
     'uf_m2_t',
-    'Valor Real',
     'Bimestre',
     'Año',
     'Codigo Destino',
     'Codigo Material',
-    'Año Construccion'
+    'Año Construccion',
+    'Observaciones'
   ]
   @transaction.each do |row|
     sheet.add_row [
@@ -43,21 +43,21 @@ wb.add_worksheet(name: "Compraventas") do |sheet|
       row.number,
       row.inscription_date,
       row.buyer_name,
-      row.buyer_rut,
       row.seller_type_name,
       row.calculated_value,
       row.parkingi,
       row.cellar,
+      row.role,
       row.total_surface_terrain,
       row.total_surface_building,
       row.uf_m2_u,
       row.uf_m2_t,
-      row.real_value,
       row.bimester,
       row.year,
       row.code_destination,
       row.code_material,
-      row.year_sii
+      row.year_sii,
+      row.comments
     ]
 end
 end
