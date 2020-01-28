@@ -1,0 +1,19 @@
+
+<%= simple_form_for(@expense) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.association :expense_type %>
+    <%= f.input :abc1 %>
+    <%= f.input :c2 %>
+    <%= f.input :c3 %>
+    <%= f.input :d %>
+    <%= f.input :e %>
+    <%= f.input :santiago_only %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

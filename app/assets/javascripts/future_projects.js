@@ -1055,6 +1055,7 @@ Congo.future_projects.action_dashboards = function(){
           $("#boost").show();
           $("#base").show();
           $("#graph").show();
+          $("#census").hide();
 
           // Mostramos el icono de Puntos/Poligonos correspondiente
           $("#type_point").show();

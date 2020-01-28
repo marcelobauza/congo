@@ -326,6 +326,7 @@ Congo.demography.action_dashboards = function(){
         $("#boost").hide();
         $("#base").hide();
         $("#graph").hide();
+        $("#census").show();
 
         // Mostramos el icono de Puntos/Poligonos correspondiente
         $("#type_point").hide();

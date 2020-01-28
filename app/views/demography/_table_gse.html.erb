@@ -1,0 +1,33 @@
+<div class="modal fade  bd-example-modal-lg" id="modal-counties" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content text-light">
+
+      <div class="modal-header">
+        <h5 class="modal-title"> GSE </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <table class="table">
+        <tr>
+          <th>Items</th>
+          <th>Abc1</th>
+          <th>C2</th>
+          <th>C3</th>
+          <th>D</th>
+          <th>E</th>
+        </tr>  
+        <% @b.each do |d| %>
+            <tr>
+              <td><%= d.expense_type.name %></td>
+              <td><%= d.abc1 %></td>
+              <td><%= d.c2 %></td>
+              <td><%= d.c3 %></td>
+              <td><%= d.d %></td>
+              <td><%= d.e %></td>
+            </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

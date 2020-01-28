@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
 
 
+  resources :expenses
+  resources :expense_types
   resources :feedbacks
   resources :lots
   resources :categories
@@ -40,6 +42,7 @@ Rails.application.routes.draw do
   get 'future_projects/graduated_points' => 'future_projects#graduated_points'
   get 'projects/dashboards' => 'projects#dashboards'
   get 'census/dashboards' => 'census#dashboards'
+  get 'demography/calculated_gse' => 'demography#calculated_gse'
   get 'projects/graduated_points' => 'projects#graduated_points'
   get 'building_regulations/dashboards' => 'building_regulations#dashboards'
   get 'demography/dashboards' => 'demography#dashboards'

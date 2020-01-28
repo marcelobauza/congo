@@ -1,11 +1,11 @@
 class Censu < ApplicationRecord
+
+  include Censu::Scopes
+
   belongs_to :census_source
   belongs_to :county
 
-
   def self.average_people_by_home(filters)
-
-
     conditions = "census.census_source_id = #{filters[:census_source_id]}"
     #conditions = "census.census_source_id =1"
     #    conditions += "#{Util.and}census.county_id IN(#{User.current.county_ids.join(",")})" if User.current.county_ids.length > 0
@@ -186,6 +186,17 @@ class Censu < ApplicationRecord
 
 result
   end
-
-
+  def self.calculated_gse filters
+    @a = Censu.where(filter_area_conditions(filters)).sum(:home_tot) 
+    one_millon = '1000000'
+    @c = Expense.joins(:expense_type).
+      where(verification_for_region(filters)).
+      select("( abc1 * #{@a.to_f} ) / #{one_millon} as abc1, 
+              ( c2 * #{@a.to_f} ) / #{one_millon} as c2,  
+              ( c3 * #{@a.to_f} ) / #{one_millon} as c3,  
+              ( d * #{@a.to_f} ) / #{one_millon} as d,  
+              ( e * #{@a.to_f} ) / #{one_millon} as e, 
+             expense_type_id")
+    @c
+  end
 end

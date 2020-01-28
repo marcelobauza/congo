@@ -526,6 +526,7 @@ Congo.building_regulations.action_dashboards = function(){
           $("#boost").hide();
           $("#base").hide();
           $("#graph").hide();
+          $("#census").hide();
 
           // Mostramos el icono de Puntos/Poligonos correspondiente
           $("#type_point").hide();

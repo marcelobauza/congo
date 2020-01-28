@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Expense type:</strong>
+  <%= @expense.expense_type %>
+</p>
+
+<p>
+  <strong>Abc1:</strong>
+  <%= @expense.abc1 %>
+</p>
+
+<p>
+  <strong>C2:</strong>
+  <%= @expense.c2 %>
+</p>
+
+<p>
+  <strong>C3:</strong>
+  <%= @expense.c3 %>
+</p>
+
+<p>
+  <strong>D:</strong>
+  <%= @expense.d %>
+</p>
+
+<p>
+  <strong>E:</strong>
+  <%= @expense.e %>
+</p>
+
+<p>
+  <strong>Santiago only:</strong>
+  <%= @expense.santiago_only %>
+</p>
+
+<%= link_to 'Edit', edit_expense_path(@expense) %> |
+<%= link_to 'Back', expenses_path %>
