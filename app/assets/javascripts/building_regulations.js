@@ -126,7 +126,7 @@ building_regulations_popup = function(id) {
           }).append(
             $('<div>', {
               'class': 'col-md-6 text-right',
-              'text': 'Superficie del Predio:'
+              'text': 'Tamaño Area:'
             }),
             $('<div>', {
               'class': 'col-md-6',
