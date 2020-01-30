@@ -1,5 +1,5 @@
 <%= a.input :layer_type, input_html: {value: "CBR"}, as: :hidden %>
-<%= a.input :row_id, as: :hidden,  input_html: {class: 'feedback_transaction_id'} %>
+<%= a.input :row_id,  input_html: {class: 'feedback_transaction_id'}, readonly: true %>
 <div class="form-group row">
   <%= a.label :uf_value, label: 'Valor UF:', class: 'col-md-4 text-right' %>
   <div class="col-md-6">
