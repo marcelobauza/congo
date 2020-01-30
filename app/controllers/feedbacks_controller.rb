@@ -8,7 +8,6 @@ class FeedbacksController < ApplicationController
   # POST /feedbacks
   # POST /feedbacks.json
   def create
-    
     @feedback = Feedback.new(feedback_params)
     @feedback.properties = params[:feedback].as_json
     @feedback.layer_type = params[:feedback]['layer_type']
@@ -31,6 +30,6 @@ class FeedbacksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def feedback_params
-      params.require(:feedback).permit(:properties, :layer_type).merge(user_id: current_user.id)
+      params.require(:feedback).permit(:properties, :layer_type, :row_id).merge(user_id: current_user.id)
     end
 end

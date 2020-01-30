@@ -78,7 +78,7 @@ transactions_popup = function(id, latlng){
     datatype: 'json',
     data: data,
     success: function(data) {
-      
+
       // Creamos la tabla con las cabeceras
       $('#cbr_popup_body').append(
         $('<table>', {
@@ -154,6 +154,8 @@ transactions_popup = function(id, latlng){
 
 function itemClick(e, info) {
 
+      $('.feedback_transaction_id').empty();
+      $('.feedback_transaction_id').val(info.id);
   $('#cbr_popup_body').prepend(
     $('<div>', {
       'id': 'back_to_properties',

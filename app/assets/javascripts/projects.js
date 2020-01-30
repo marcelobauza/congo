@@ -66,6 +66,8 @@ projects_popup = function(id){
       // Levantamos los datos para el tab "Detalle Proyecto"
       var detail = data
 
+      $('.feedback_project_id').empty();
+      $('.feedback_project_id').val(data.project_id);
       $('#popup_info_projects').empty();
 
       // Agregamos la información general
@@ -1402,7 +1404,6 @@ Congo.projects.action_dashboards = function(){
 
         },
         success: function(data){
-
           // Ocultamos el spinner y habilitamos los botones
           $("#spinner").hide();
           $('.btn').removeClass('disabled')

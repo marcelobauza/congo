@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_16_135204) do
+ActiveRecord::Schema.define(version: 2020_01_30_140650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -505,6 +505,7 @@ ActiveRecord::Schema.define(version: 2020_01_16_135204) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "row_id"
     t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 

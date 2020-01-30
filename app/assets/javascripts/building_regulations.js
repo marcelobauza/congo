@@ -25,7 +25,8 @@ building_regulations_popup = function(id) {
     datatype: 'json',
     data: data,
     success: function(data) {
-
+      $('.feedback_building_regulation_id').empty();
+      $('.feedback_building_regulation_id').val(data.id);
       land_use_types = [];
 
       $.each(data.land_use_types, function(a, b) {

@@ -670,6 +670,8 @@ future_projects_popup= function(id){
     datatype: 'json',
     data: data,
     success: function(data) {
+      $('#feedback_future_project_id').empty();
+      $('#feedback_future_projectid').val(data.id);
       $('#popup_info_future_projects').empty();
 
       // Agregamos la información general

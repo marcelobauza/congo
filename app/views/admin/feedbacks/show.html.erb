@@ -12,6 +12,17 @@
     <div>
     <% end %>
   <% end %>
+    <%if @feedback.layer_type == 'PRV'  %>
+    <%= link_to "Ver Registro Original", edit_admin_project_path(@feedback.row_id) %>
+  <% end %>
+    <%if @feedback.layer_type == 'EM'  %>
+    <%= link_to "Ver Registro Original", edit_admin_future_project_path(@feedback.row_id) %>
+  <% end %>
+    <%if @feedback.layer_type == 'CBR'  %>
+    <%= link_to "Ver Registro Original", edit_admin_transaction_path(@feedback.row_id) %>
+  <% end %>
+    <%if @feedback.layer_type == 'Normativa'  %>
+  <% end %>
     </div>
     </div>
 
