@@ -4,6 +4,7 @@ class ProjectsController < ApplicationController
     @data = ProjectInstanceMixView.data_popup(params[:id], params[:bimester], params[:year])
     @offer_mix = ProjectInstance.find_offer_mix(@data.project_instance_id)
     @sale_mix = ProjectInstance.find_sale_mix(@data.project_instance_id)
+    @project_id = params[:id]
   end
 
   def graduated_points
