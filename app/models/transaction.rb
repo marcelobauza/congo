@@ -874,7 +874,7 @@ class Transaction < ApplicationRecord
     when 'avg_surface_line_build'
       select += "round(avg(total_surface_building),1) as value "
     when 'avg_uf_m2_u'
-      select += " round(avg(transactions.calculated_value) / sum(total_surface_building),1) as value "
+      select += " round(avg(transactions.calculated_value) / avg(total_surface_building),1) as value "
     when 'avg_land'
       select +=" round(avg(total_surface_terrain),1) as value"
     when 'avg_uf_m2_land'
