@@ -375,25 +375,26 @@ class Transaction < ApplicationRecord
     result.each do |q|
       item = {:period => q[:period], :year => q[:year], :label => q[:period].to_s + "/" + q[:year].to_s[2,3]}
       values_sum = 0
+      values_sum_total = 0
 
       counties.each do |county|
 
         index = counties.index(county) + 1
         item["y#{index}_label".to_sym] = county
         item["y#{index}_value".to_sym] = "null"
+        item["y0_label".to_sym] = I18n.t(:ALL_COUNTIES_LABEL)
 
         q[:counties].each { |c| item["y#{index}_value".to_sym] = c.value if c["county"] == county }
         values_sum += item["y#{index}_value".to_sym].to_i
-
+        item["y0_value".to_sym] = values_sum
       end
 
       # if q[:counties].exists?
       #  item["y1_value".to_sym] = "null"
       # else
-      #   item["y1_label".to_sym] = I18n.t(:ALL_COUNTIES_LABEL)
-      #   values_sum == 0 ? item["y1_value".to_sym] = 0 : item["y1_value".to_sym] = values_sum
+      #   item["y9_label".to_sym] = I18n.t(:ALL_COUNTIES_LABEL)
+      #   values_sum_total == 0 ? item["y9_value".to_sym] = 0 : item["y9_value".to_sym] = values_sum
       # end
-
       values << item
     end
     return values.reverse
@@ -955,13 +956,13 @@ class Transaction < ApplicationRecord
       #TRANSACCIONES POR BIMESTRE
       data =[]
       counties_count = (transactions_by_periods.first.size - 3) / 2
-      0.upto(counties_count).each do |idx|
+
+      0.upto(counties_count - 1).each do |idx|
         data.push([transactions_by_periods.first["y#{idx}_label".to_sym]])
       end
-
       transactions_by_periods.each_with_index do |tb, i|
 
-        1.upto(counties_count ).each do |idx|
+        0.upto(counties_count -1 ).each do |idx|
           if tb["y#{idx}_value".to_sym].nil?
             data.push(tb["y#{idx}_value".to_sym], nil, tb[:period], tb[:year])
           else
@@ -971,7 +972,6 @@ class Transaction < ApplicationRecord
       end
 
       result.push({"title":"Compraventas", "series":[{"data": data}]})
-
       #UF PERIOD
       data =[]
       uf_periods.each do |ufp|

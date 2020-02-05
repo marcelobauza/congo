@@ -1380,14 +1380,11 @@ Congo.transactions.action_dashboards = function(){
                 if (title == 'Compraventas') {
 
                   var data = b['data']
-
                   // ACA SEPARAMOS TODAS LAS COMUNAS
-                  for (var i = 1; i < data.length; i++) {
+                  for (var i = 0; i < data.length; i++) {
 
                     var reg = data[i];
-
                     var label = reg[0]
-
                     var name = [];
                     var count = [];
 
