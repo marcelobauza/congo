@@ -13,6 +13,7 @@ class FeedbacksController < ApplicationController
     @feedback.layer_type = params[:feedback]['layer_type']
     respond_to do |format|
       if @feedback.save
+        FeedbackMailer.with(feedback: @feedback).new_feedback_email.deliver_later
         format.js
         format.html { redirect_to @feedback, notice: 'Feedback was successfully created.' }
         format.json { render :show, status: :created, location: @feedback }
