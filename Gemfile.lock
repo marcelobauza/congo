@@ -135,8 +135,6 @@ GEM
     erubi (1.8.0)
     execjs (2.7.0)
     ffi (1.10.0)
-    figaro (1.1.1)
-      thor (~> 0.14)
     fx (0.3.1)
       activerecord (>= 4.0.0)
       railties (>= 4.0.0)
@@ -383,7 +381,6 @@ DEPENDENCIES
   chromedriver-helper
   coffee-rails (~> 4.2)
   devise
-  figaro
   fx
   iconv
   jbuilder (~> 2.5)
