@@ -20,6 +20,7 @@ gem 'mini_racer', platforms: :ruby
 gem 'coffee-rails', '~> 4.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
+gem 'jquery-turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 gem 'devise'
@@ -41,7 +42,9 @@ gem 'iconv'
 gem 'acts_as_xlsx'
 gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
 gem 'axlsx_rails'
-# Use Redis adapter to run Action Cable in production
+gem 'jquery_file_download-rails'
+gem 'ruby_kml'
+ # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -73,6 +76,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-bundler'
   gem 'capistrano3-unicorn'
+  gem 'letter_opener'
 
 end
 
@@ -82,6 +86,7 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
+  gem 'rubocop-rails'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
