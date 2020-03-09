@@ -343,6 +343,9 @@ class FutureProject < ApplicationRecord
       if  filter_range == true
         conditions += WhereBuilder.build_range_periods_by_bimester(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY) if filters.has_key? :to_period
       else
+        conditions += " bimester = #{filters[:to_period]} " + Util.and
+        conditions += " year = #{filters[:to_year]} " + Util.and
+
       end
     end
 
@@ -353,7 +356,6 @@ class FutureProject < ApplicationRecord
     conditions += "future_projects.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
     conditions.chomp!(Util.and)
     conditions
-
   end
 
   def self.bimester_condition(filters, self_not_filter)
@@ -613,11 +615,6 @@ class FutureProject < ApplicationRecord
 
   end
 
-
-  #def self.destination_type params
-  #  @types = FutureProject.units_by_project_type(params)
-  #end
-
   def self.unit_bimester params
     @fut_types, @projects = FutureProject.future_projects_by_period("COUNT", "unit_bimester", params)
   end
@@ -667,26 +664,21 @@ class FutureProject < ApplicationRecord
     return CsvParser.get_future_projects_csv_data(future_projects)
   end
 
-  #Review
+    def self.kml_data filters
 
-  # def digitizer_name
-  #   return self.digitizer.complete_name unless self.digitizer.nil?
-  #   I18n.translate :unknown
-  # end
-
-  # def self.get_points_count_by_filters(filters, column)
-  #   FutureProject.count(:joins => build_joins.join(" "), :conditions => "#{conditions(filters)} AND #{column} >= 1")
-  # end
-
-  # def self.get_heat_map_points_count_by_filters(filters)
-  #   FutureProject.count(:joins => build_joins.join(" "), :conditions => conditions(filters))
-  # end
-
-  # def self.get_query_for_results(filters, result_id)
-  #   sub_query = "SELECT #{result_id} as result_id, future_projects.id as future_project_id, future_projects.the_geom, "
-  #   sub_query += "future_projects.m2_built, #{MapUtil::HEATMAP_VALUE} as heatmap_value, "
-  #   sub_query += "future_project_types.color as marker_color FROM future_projects " + build_joins.join(" ") + " "
-  #   sub_query += "WHERE #{conditions(filters)}"
-  #   sub_query
-  # end
+      data = reports(filters)
+      kml = KMLFile.new
+      document = KML::Document.new(name: "Expedients Municipales")
+      data.each do |d|
+        document.features << KML::Placemark.new(
+          :name => d.name,
+          :description =>"Expediente: #{d.future_project_type.name}
+                         Viviendas: #{d.total_units}
+                        Superficie: #{d.m2_field  }",
+          :geometry =>  KML::Point.new(:coordinates => {:lat => d.the_geom.y, :lng => d.the_geom.x}) 
+             )
+      end
+      kml.objects << document
+      kml.render
+    end
 end

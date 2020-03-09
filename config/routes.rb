@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   get 'demography/general' => 'demography#general'
   get 'reports/index' => 'reports#index'
   get 'reports/future_projects_data' => 'reports#future_projects_data'
+  get 'reports/future_projects_data_kml' => 'reports#future_projects_data_kml'
   get 'reports/future_projects_summary' => 'reports#future_projects_summary'
   get 'reports/transactions_data' => 'reports#transactions_data'
   get 'reports/transactions_summary' => 'reports#transactions_summary'
