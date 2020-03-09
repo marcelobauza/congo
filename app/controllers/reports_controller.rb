@@ -17,7 +17,7 @@ class ReportsController < ApplicationController
     @xl = FutureProject.kml_data(filters)
     send_data @xl,
           :type => 'text/xml; charset=UTF-8;',
-              :disposition => "attachment; filename=entries.kml"
+              :disposition => "attachment; filename=Expedientes_Municipales.kml"
   end
 
   def future_projects_summary
