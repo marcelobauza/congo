@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   get 'reports/future_projects_data_kml' => 'reports#future_projects_data_kml'
   get 'reports/future_projects_summary' => 'reports#future_projects_summary'
   get 'reports/transactions_data' => 'reports#transactions_data'
+  get 'reports/transactions_data_kml' => 'reports#transactions_data_kml'
   get 'reports/transactions_summary' => 'reports#transactions_summary'
   get 'reports/transactions_pdf' => 'reports#transactions_pdf'
   get 'reports/building_regulations_pdf' => 'reports#building_regulations_pdf'

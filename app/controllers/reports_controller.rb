@@ -19,6 +19,14 @@ class ReportsController < ApplicationController
           :type => 'text/xml; charset=UTF-8;',
               :disposition => "attachment; filename=Expedientes_Municipales.kml"
   end
+  
+  def transactions_data_kml
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @xl = Transaction.kml_data(filters)
+    send_data @xl,
+          :type => 'text/xml; charset=UTF-8;',
+              :disposition => "attachment; filename=CBR.kml"
+  end
 
   def future_projects_summary
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
