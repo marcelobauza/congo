@@ -16,6 +16,7 @@
           <th>C3</th>
           <th>D</th>
           <th>E</th>
+          <th>Total</th>
         </tr>  
         <% @b.each do |d| %>
             <tr>
@@ -25,8 +26,17 @@
               <td><%= d.c3 %></td>
               <td><%= d.d %></td>
               <td><%= d.e %></td>
+              <td><%= d.total_expenses %></td>
             </tr>
-        <% end %>
+          <% end %>
+          <tr>
+            <td>Total</td>
+            <td><%= @s[0]['total_abc1'].to_f %></td>
+            <td><%= @s[0]['total_c2'].to_f %></td>
+            <td><%= @s[0]['total_c3'].to_f %></td>
+            <td><%= @s[0]['total_d'].to_f %></td>
+            <td><%= @s[0]['total_e'].to_f %></td>
+          </tr>
       </table>
     </div>
   </div>

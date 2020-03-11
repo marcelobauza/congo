@@ -195,8 +195,24 @@ result
               ( c2 * #{@a.to_f} ) / #{one_millon} as c2,  
               ( c3 * #{@a.to_f} ) / #{one_millon} as c3,  
               ( d * #{@a.to_f} ) / #{one_millon} as d,  
-              ( e * #{@a.to_f} ) / #{one_millon} as e, 
+              ( e * #{@a.to_f} ) / #{one_millon} as e,
+              round((((abc1 + c2 + c3 + d + e) * #{@a.to_f}) / #{one_millon}),2) as total_expenses,
              expense_type_id")
+    @c
+  end
+  
+  def self.sum_gse filters
+    @a = Censu.where(filter_area_conditions(filters)).sum(:home_tot) 
+    one_millon = '1000000'
+    @c = Expense.joins(:expense_type).
+      where(verification_for_region(filters)).
+      select("
+              round(((sum(abc1) * #{@a.to_f} ) / #{one_millon}),2) as total_abc1,
+              round(((sum(c2) * #{@a.to_f} ) / #{one_millon}),2) as total_c2,
+              round(((sum(c3) * #{@a.to_f} ) / #{one_millon}),2) as total_c3,
+              round(((sum(d) * #{@a.to_f} ) / #{one_millon}),2) as total_e,
+              round(( (sum(e) * #{@a.to_f} ) / #{one_millon}),2) as total_d
+            ") 
     @c
   end
 end
