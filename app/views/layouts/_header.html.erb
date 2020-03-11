@@ -18,12 +18,7 @@
 
     <!-- Selección Dropdown -->
     <div class="nav-item dropdown">
-      <button class="btn btn-primary nav-link dropdown-toggle nocaret dropdown-width" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-map-pin" title="Selección"></i>
-      </button>
-      <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
-        <%= link_to counties_index_path(), remote: true, 'class' => 'dropdown-item custom-item', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class=" fas fa-clipboard-list chart-modal" title="Comunas" style="font-size: 26px"></i> <% end %>
-      </div>
+        <%= link_to counties_index_path(), remote: true, 'class' => 'btn btn-primary nav-link dropdown-toggle nocaret dropdown-width', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class=" fas fa-list chart-modal" title="Comunas" ></i> <% end %>
     </div>
 
     <!-- Capas Dropdown -->
@@ -156,7 +151,7 @@
           <%= link_to "#", id: "boost", class: "dropdown-item custom-item", remote: true do %> <i class=" fas fa-database" title="Ver Base Completa" style="font-size: 26px"></i> <%end %>
 
           <% end %>
-            <%= link_to demography_calculated_gse_path, id: "census", class: "dropdown-item custom-item reports", style:"display: none", remote: true  do  %> <i class="far fa-file-excel" title="GSE" style="font-size: 26px"></i>
+            <%= link_to demography_calculated_gse_path, id: "census", class: "dropdown-item custom-item reports", style:"display: none", remote: true  do  %> <i class="fas fa-dollar-sign" title="GSE" style="font-size: 26px"></i>
           <% if (current_user.role.name == 'IPRO+'|| (current_user.role.name == 'Admin')) %>
             <div class="dropdown-divider"></div>
             <%= link_to "#", id: "pdf", class: "dropdown-item custom-item reports", data: {remote: true} do  %> <i class=" fas fa-file-pdf" title="Informe PDF" style="font-size: 26px"></i><% end %>
