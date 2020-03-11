@@ -343,6 +343,8 @@ Congo.demography.action_dashboards = function(){
         $("#heat-cbr").hide();
         $("#heat-em-dem").show();
 
+        //Ocultamos KML
+        $("#kml").hide();
         // Eliminamos los chart-containter de la capa anterior
         $(".chart-container").remove();
 
