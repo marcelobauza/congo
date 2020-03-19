@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_30_140650) do
+ActiveRecord::Schema.define(version: 2020_03_18_180308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -602,6 +602,16 @@ ActiveRecord::Schema.define(version: 2020_01_30_140650) do
     t.index ["county_id"], name: "index_lots_on_county_id"
   end
 
+  create_table "monthly_census_incomes", force: :cascade do |t|
+    t.decimal "abc1", default: "0.0", null: false
+    t.decimal "c2", default: "0.0", null: false
+    t.decimal "c3", default: "0.0", null: false
+    t.decimal "d", default: "0.0", null: false
+    t.decimal "e", default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "parcels", force: :cascade do |t|
     t.string "region"
     t.string "province"
@@ -1176,7 +1186,6 @@ ActiveRecord::Schema.define(version: 2020_01_30_140650) do
     t.float "shape_area"
   end
 
-  add_foreign_key "agency_rols", "agencies"
   add_foreign_key "building_regulations", "counties"
   add_foreign_key "building_regulations", "density_types"
   add_foreign_key "counties_users", "counties"

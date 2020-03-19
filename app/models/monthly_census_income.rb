@@ -1,0 +1,2 @@
+class MonthlyCensusIncome < ApplicationRecord
+end

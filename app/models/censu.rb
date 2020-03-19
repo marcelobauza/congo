@@ -20,46 +20,46 @@ class Censu < ApplicationRecord
       conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
     elsif !filters[:wkt].nil?
       conditions = WhereBuilder.build_within_condition(filters[:wkt])
-      else
-        conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
-      end
+    else
+      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
+    end
     conditions
   end
 
   def self.education_levels(filters)
-        conditions = "census.census_source_id = #{filters[:census_source_id]}"
-        select = "SUM(basica) AS basica, SUM(media) AS media,  SUM(media_tec) AS media_tec, SUM(tecnica) AS tecnica, SUM(profesional) AS profesional, SUM(magister) AS magister, sum(doctor) as doctor"
-        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
-    end
+    conditions = "census.census_source_id = #{filters[:census_source_id]}"
+    select = "SUM(basica) AS basica, SUM(media) AS media,  SUM(media_tec) AS media_tec, SUM(tecnica) AS tecnica, SUM(profesional) AS profesional, SUM(magister) AS magister, sum(doctor) as doctor"
+    @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
+  end
 
 
   def self.civil_status(filters)
-        conditions = "census.census_source_id = #{filters[:census_source_id]}"
-        select = "SUM(separated) AS separated, SUM(widowed) AS widowed,  SUM(single) AS single, SUM(married) AS married, SUM(coexist) as coexist, sum(canceled) as canceled"
-        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
+    conditions = "census.census_source_id = #{filters[:census_source_id]}"
+    select = "SUM(separated) AS separated, SUM(widowed) AS widowed,  SUM(single) AS single, SUM(married) AS married, SUM(coexist) as coexist, sum(canceled) as canceled"
+    @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
 
   end
 
   def self.gse(filters)
-        conditions = "census.census_source_id = #{filters[:census_source_id]}"
-        select = "SUM(n_abc1) AS abc1, SUM(n_c2) AS c2,  SUM(n_c3) AS c3, SUM(n_d) AS d, SUM(n_e) as e"
-        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
+    conditions = "census.census_source_id = #{filters[:census_source_id]}"
+    select = "SUM(n_abc1) AS abc1, SUM(n_c2) AS c2,  SUM(n_c3) AS c3, SUM(n_d) AS d, SUM(n_e) as e"
+    @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
 
   end
 
   def self.age(filters)
-        conditions = "census.census_source_id = #{filters[:census_source_id]}"
-        select = "SUM(age_0_9) AS age_0_9, SUM(age_10_19) AS age_10_19,  SUM(age_20_29) AS age_20_29, SUM(age_30_39) AS age_30_39, SUM(age_40_49) as age_40_49, "
-        select += " SUM(age_50_59) AS age_50_59, SUM(age_60_69) AS age_60_69,  SUM(age_70_79) AS age_70_79, SUM(age_80_more) AS age_80_more"
-        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
+    conditions = "census.census_source_id = #{filters[:census_source_id]}"
+    select = "SUM(age_0_9) AS age_0_9, SUM(age_10_19) AS age_10_19,  SUM(age_20_29) AS age_20_29, SUM(age_30_39) AS age_30_39, SUM(age_40_49) as age_40_49, "
+    select += " SUM(age_50_59) AS age_50_59, SUM(age_60_69) AS age_60_69,  SUM(age_70_79) AS age_70_79, SUM(age_80_more) AS age_80_more"
+    @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
 
   end
 
   def self.homes(filters)
-        conditions = "census.census_source_id = #{filters[:census_source_id]}"
-        select = "SUM(home_1p) AS home_1p, SUM(home_2p) AS home_2p,  SUM(home_3p) AS home_3p, SUM(home_4p) AS home_4p, "
-        select += " SUM(home_5p) as home_5p, SUM(home_6_more) as  "
-        @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
+    conditions = "census.census_source_id = #{filters[:census_source_id]}"
+    select = "SUM(home_1p) AS home_1p, SUM(home_2p) AS home_2p,  SUM(home_3p) AS home_3p, SUM(home_4p) AS home_4p, "
+    select += " SUM(home_5p) as home_5p, SUM(home_6_more) as  "
+    @data = Censu.where(filter_area_conditions(filters)).where(conditions).select(select).take
   end
 
   def self.professions(filters)
@@ -114,7 +114,7 @@ class Censu < ApplicationRecord
 
 
 
-  @gse = gse(params)
+    @gse = gse(params)
     data =[
       {name: "abc", count: @gse.abc1.to_i},
       {name: "c2", count: @gse.c2.to_i},
@@ -170,7 +170,7 @@ class Censu < ApplicationRecord
       {name: "Gratuita", count: @property_tenure.free },
     ]
     result.push({"title":"Tenencia de la Vivienda", "data": data})
-  
+
     @civil_status = civil_status(params)
 
     data =[
@@ -184,35 +184,81 @@ class Censu < ApplicationRecord
 
     result.push({"title":"Estado Civil","data": data})
 
-result
+    result
   end
   def self.calculated_gse filters
-    @a = Censu.where(filter_area_conditions(filters)).sum(:home_tot) 
+    @a = Censu.where(filter_area_conditions(filters)).
+      where(census_source_id: filters[:census_source_id]).
+      select("
+        sum(n_abc1) as total_house_abc1,
+        sum(n_c2) as total_house_c2,
+        sum(n_c3) as total_house_c3,
+        sum(n_d) as total_house_d,
+        sum(n_e) as total_house_e,
+        (sum(n_abc1) + sum(n_c2) + sum(n_c3) + sum(n_d) + sum(n_e)) as total_house")
+
     one_millon = '1000000'
     @c = Expense.joins(:expense_type).
       where(verification_for_region(filters)).
-      select("( abc1 * #{@a.to_f} ) / #{one_millon} as abc1, 
-              ( c2 * #{@a.to_f} ) / #{one_millon} as c2,  
-              ( c3 * #{@a.to_f} ) / #{one_millon} as c3,  
-              ( d * #{@a.to_f} ) / #{one_millon} as d,  
-              ( e * #{@a.to_f} ) / #{one_millon} as e,
-              round((((abc1 + c2 + c3 + d + e) * #{@a.to_f}) / #{one_millon}),2) as total_expenses,
+      select("( abc1 * #{@a[0].total_house_abc1.to_f} ) / #{one_millon} as abc1, 
+              ( c2 * #{@a[0].total_house_c2.to_f} ) / #{one_millon} as c2,  
+              ( c3 * #{@a[0].total_house_c3.to_f} ) / #{one_millon} as c3,  
+              ( d * #{@a[0].total_house_d.to_f} ) / #{one_millon} as d,  
+              ( e * #{@a[0].total_house_e.to_f} ) / #{one_millon} as e,
+              round((((( abc1 * #{@a[0].total_house_abc1.to_f} ) + 
+                       ( c2 * #{@a[0].total_house_abc1.to_f} ) + 
+                       ( c3 * #{@a[0].total_house_abc1.to_f} ) + 
+                       ( d * #{@a[0].total_house_abc1.to_f} ) + 
+                       ( e * #{@a[0].total_house_abc1.to_f} ) )) / 1000000),2) as total_expenses,
              expense_type_id")
     @c
   end
-  
-  def self.sum_gse filters
-    @a = Censu.where(filter_area_conditions(filters)).sum(:home_tot) 
-    one_millon = '1000000'
-    @c = Expense.joins(:expense_type).
-      where(verification_for_region(filters)).
+
+  def self.sum_expenses filters
+
+    @a = Censu.where(filter_area_conditions(filters)).
+      where(census_source_id: filters[:census_source_id]).
       select("
-              round(((sum(abc1) * #{@a.to_f} ) / #{one_millon}),2) as total_abc1,
-              round(((sum(c2) * #{@a.to_f} ) / #{one_millon}),2) as total_c2,
-              round(((sum(c3) * #{@a.to_f} ) / #{one_millon}),2) as total_c3,
-              round(((sum(d) * #{@a.to_f} ) / #{one_millon}),2) as total_e,
-              round(( (sum(e) * #{@a.to_f} ) / #{one_millon}),2) as total_d
-            ") 
+        sum(n_abc1) as total_house_abc1,
+        sum(n_c2) as total_house_c2,
+        sum(n_c3) as total_house_c3,
+        sum(n_d) as total_house_d,
+        sum(n_e) as total_house_e ")
+
+    one_millon = '1000000'
+    @c = Expense.
+      where(verification_for_region(filters)).
+      select("( sum(abc1) * #{@a[0].total_house_abc1.to_f} ) / #{one_millon} as abc1, 
+              ( sum(c2) * #{@a[0].total_house_c2.to_f} ) / #{one_millon} as c2,  
+              ( sum(c3) * #{@a[0].total_house_c3.to_f} ) / #{one_millon} as c3,  
+              ( sum(d) * #{@a[0].total_house_d.to_f} ) / #{one_millon} as d,  
+              ( sum(e) * #{@a[0].total_house_e.to_f} ) / #{one_millon} as e")
     @c
+  end
+
+
+  def self.sum_house filters
+    @a = Censu.where(filter_area_conditions(filters)).
+      where(census_source_id: filters[:census_source_id]).
+      select("
+        sum(n_abc1) as total_house_abc1,
+        sum(n_c2) as total_house_c2,
+        sum(n_c3) as total_house_c3,
+        sum(n_d) as total_house_d,
+        sum(n_e) as total_house_e,
+        (sum(n_abc1) + sum(n_c2) + sum(n_c3) + sum(n_d) + sum(n_e)) as total_house")
+    @a
+  end
+  def self.sum_monthly_incomes filters
+    incomes = MonthlyCensusIncome.first
+    @e = Censu.where(filter_area_conditions(filters)).
+      where(census_source_id: filters[:census_source_id]).
+      select("
+        #{incomes.abc1} * sum(n_abc1) as total_income_abc1,
+        #{incomes.c2} * sum(n_c2) as total_income_c2,
+        #{incomes.c3} * sum(n_c3) as total_income_c3,
+        #{incomes.d} * sum(n_d) as total_income_d,
+        #{incomes.e} * sum(n_e) as total_income_e")
+             @e
   end
 end

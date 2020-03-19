@@ -16,7 +16,9 @@ class DemographyController < ApplicationController
   def calculated_gse
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
    @b = Censu.calculated_gse filters
-   @s = Censu.sum_gse filters
+   @sum_expenses = Censu.sum_expenses filters
+   @houses = Censu.sum_house filters
+   @incomes = Censu.sum_monthly_incomes filters
   end
 
 end

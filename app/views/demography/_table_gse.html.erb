@@ -31,11 +31,28 @@
           <% end %>
           <tr>
             <td>Total</td>
-            <td><%= @s[0]['total_abc1'].to_f %></td>
-            <td><%= @s[0]['total_c2'].to_f %></td>
-            <td><%= @s[0]['total_c3'].to_f %></td>
-            <td><%= @s[0]['total_d'].to_f %></td>
-            <td><%= @s[0]['total_e'].to_f %></td>
+            <td><%= @sum_expenses[0]['abc1'].to_f %></td>
+            <td><%= @sum_expenses[0]['c2'].to_f %></td>
+            <td><%= @sum_expenses[0]['c3'].to_f %></td>
+            <td><%= @sum_expenses[0]['d'].to_f %></td>
+            <td><%= @sum_expenses[0]['e'].to_f %></td>
+          </tr>
+          <tr>
+            <td>Hogares</td>
+            <td><%= @houses[0]['total_house_abc1'].to_f %></td>
+            <td><%= @houses[0]['total_house_c2'].to_f %></td>
+            <td><%= @houses[0]['total_house_c3'].to_f %></td>
+            <td><%= @houses[0]['total_house_d'].to_f %></td>
+            <td><%= @houses[0]['total_house_e'].to_f %></td>
+            <td><%= @houses[0]['total_house'].to_f %></td>
+          </tr>
+          <tr>
+            <td>Ingresos</td>
+            <td><%= @incomes[0]['total_income_abc1'].to_f %></td>
+            <td><%= @incomes[0]['total_income_c2'].to_f %></td>
+            <td><%= @incomes[0]['total_income_c3'].to_f %></td>
+            <td><%= @incomes[0]['total_income_d'].to_f %></td>
+            <td><%= @incomes[0]['total_income_e'].to_f %></td>
           </tr>
       </table>
     </div>
