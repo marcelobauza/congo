@@ -1,9 +1,5 @@
 class ReportsController < ApplicationController
 
-  def future_projects_pdf
-
-  end
-
   def future_projects_data
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @xl = FutureProject.reports(filters)
@@ -74,12 +70,9 @@ class ReportsController < ApplicationController
       value_1 = item[:values].first["y_value"].to_i rescue 0
       value_2 = item[:values][1]["y_value"].to_i rescue 0
       value_3 = item[:values].last["y_value"].to_i rescue 0
-
       result.push([(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), value_1, value_2, value_3])
     end
-    @ub = result
-
-    result =[]
+    @ubc = result
     @built_bimester = FutureProject.future_projects_by_period("SUM", "m2_built_bimester", filters)
     result.push(["Bimestre", "Anteproyecto", "Permiso edificacion", "Recepcion Municipal"])
     @built_bimester.last.each do |item|
@@ -319,7 +312,6 @@ class ReportsController < ApplicationController
   def projects_pdf
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @pdf = Project.reports_pdf filters
-
     render json: {"data":@pdf}
 
   end
@@ -336,5 +328,12 @@ class ReportsController < ApplicationController
 
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @data = BuildingRegulation.reports_pdf filters
+  end
+  def building_regulations_kml
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @data = BuildingRegulation.kml_data filters  
+    send_data @data,
+          :type => 'text/xml; charset=UTF-8;',
+              :disposition => "attachment; filename=Normativas.kml"
   end
 end

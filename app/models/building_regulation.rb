@@ -207,4 +207,46 @@ class BuildingRegulation < ApplicationRecord
     @b = BuildingRegulationLandUseType.joins(:land_use_type).where(building_regulation_id: id).select(:name)
     return [data, @b]
   end
+
+  def self.kml_data filters
+
+    data = BuildingRegulation.includes(:land_use_types).where(build_where_condition(filters))
+    kml = KMLFile.new
+    kml.objects << KML::Style.new(
+            :id => "style_polygon",
+                  :line_style => KML::LineStyle.new(
+                            :color=> 'fd454f',
+                            :width => 2.5
+                  ),
+                        :poly_style => KML::PolyStyle.new(
+                                  :color => '343455'
+                                        )
+                      )
+    document = KML::Document.new(name: "Normativa")
+    data.each do |c|
+      polygon = []
+      c.the_geom.coordinates.each do |arr1|  
+        arr1.each do |arr2|  
+          arr2.each do |point| 
+            polygon.push(point[0], point[1], 100)  
+          end 
+        end 
+      end
+      @pp = polygon.join(',')
+      document.features << KML::Placemark.new(
+        :name => "nombre",
+        :style_url => '#style_polygon',
+        :geometry =>  KML::Polygon.new(
+          :outer_boundary_is => KML::LinearRing.new(
+            :coordinates => "#{@pp}"
+        )
+                                      )
+      ) 
+    end
+    kml.objects << document
+    kml.render
+
+  end
+
+
 end
