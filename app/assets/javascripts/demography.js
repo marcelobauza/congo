@@ -70,8 +70,6 @@ Congo.demography.action_dashboards = function(){
       datatype: 'json',
       data: data,
       success: function(data) {
-        console.log(data)
-
         // Creamos el doc
         var doc = new jsPDF();
 
@@ -116,9 +114,9 @@ Congo.demography.action_dashboards = function(){
         footer()
 
         // Separamos la información
-        for (var i = 2; i < data.length; i++) {
+        for (var i = 2; i < data[0].length; i++) {
 
-          var reg = data[i];
+          var reg = data[0][i];
           var title = reg['title'];
           var series = reg['data']
           var datasets = [];
@@ -175,7 +173,7 @@ Congo.demography.action_dashboards = function(){
                   let sum = 0;
                   let dataArr = ctx.chart.data.datasets[0].data;
                   dataArr.map(data => {
-                      sum += data;
+                    sum += data;
                   });
                   let percentage = (value*100 / sum).toFixed(2);
                   if (percentage > 4) {
@@ -243,6 +241,123 @@ Congo.demography.action_dashboards = function(){
           } // Cierra else impar
         } // Cierra for
 
+        doc.addPage('a4', 'portrait')
+        // Cantidad
+        doc.setFontSize(16);
+        doc.setFontStyle("bold");
+        doc.text('GASTO MENSUAL E INGRESO PROMEDIO', 10, 25, null, null, 'left');
+        doc.setFontSize(10);
+        doc.setFontStyle("normal");
+        gse = data[1];
+        sum_expenses = data[2][0];
+        houses = data[3][0];
+        incomes = data[4][0];
+        console.log(incomes);
+        // Líneas Tabla
+        doc.line(10, 45, 200, 45);
+        doc.line(10, 55, 200, 55);
+        doc.line(10, 65, 200, 65);
+        doc.line(10, 75, 200, 75);
+        doc.line(10, 85, 200, 85);
+        doc.line(10, 95, 200, 95);
+        doc.line(10, 105, 200, 105);
+        doc.line(10, 115, 200, 115);
+        doc.line(10, 125, 200, 125);
+        doc.line(10, 135, 200, 135);
+        doc.line(10, 145, 200, 145);
+        doc.line(10, 155, 200, 155);
+        doc.line(10, 165, 200, 165);
+        doc.line(10, 175, 200, 175);
+        doc.line(10, 185, 200, 185);
+        doc.line(10, 195, 200, 195);
+        doc.line(10, 205, 200, 205);
+
+        // Columna Ítem
+        var spos = 20
+        var epos = 52
+        doc.text('ÍTEM', spos, epos, null, null, 'center');
+        spos = spos + 82  
+        doc.text('ABC1', spos, epos, null, null, 'center');
+        spos = spos + 18
+        doc.text('C2', spos, epos, null, null, 'center');
+        spos = spos + 18
+        doc.text('C3', spos, epos, null, null, 'center');
+        spos = spos + 18
+        doc.text('D', spos, epos, null, null, 'center');
+        spos = spos + 18
+        doc.text('E', spos, epos, null, null, 'center');
+        spos = spos + 18
+        doc.text('TOTAL',spos, epos, null, null, 'center');
+        spos = 12
+        epos = 62
+        for (var i = 0, len = gse.length; i < len; i++) {
+
+          doc.text(gse[i]['name'], spos, epos);
+          spos = spos + 82  
+          doc.text(gse[i]['abc1'], spos, epos);
+          spos = spos + 18  
+          doc.text(gse[i]['c2'], spos, epos);
+          spos = spos + 18  
+          doc.text(gse[i]['c3'], spos, epos);
+          spos = spos + 18  
+          doc.text(gse[i]['d'], spos, epos);
+          spos = spos + 18  
+          doc.text(gse[i]['e'], spos, epos);
+          spos = spos + 18 
+          doc.text(gse[i]['total_expenses'], spos, epos);
+          spos = 12 
+          epos = epos + 10
+        }
+
+        // Totales
+        //
+        spos = 20 
+        epos = epos + 10
+        doc.text('Totales', spos, 182, null, null, 'center');
+        spos = spos + 82 
+        doc.text(sum_expenses['abc1'], spos, 182, null, null, 'center');
+        spos = spos + 18 
+        doc.text(sum_expenses['c2'], spos, 182, null, null, 'center');
+        spos = spos + 18 
+        doc.text(sum_expenses['c3'], spos, 182, null, null, 'center');
+        spos = spos + 18 
+        doc.text(sum_expenses['d'], spos, 182, null, null, 'center');
+        spos = spos + 18 
+        doc.text(sum_expenses['e'], spos, 182, null, null, 'center');
+
+        spos = 20 
+        epos = epos + 10
+        // Hogares
+        doc.text('Hogares', spos, 192, null, null, 'center');
+        spos = spos + 82 
+        doc.text(houses['total_house_abc1'], spos, 192, null, null, 'center');
+        spos = spos + 18 
+        doc.text(houses['total_house_c2'], spos, 192, null, null, 'center');
+        spos = spos + 18 
+        doc.text(houses['total_house_c3'], spos, 192, null, null, 'center');
+        spos = spos + 18 
+        doc.text(houses['total_house_d'], spos, 192, null, null, 'center');
+        spos = spos + 18 
+        doc.text(houses['total_house_e'], spos, 192, null, null, 'center');
+        spos = 20 
+        epos = epos + 10
+
+        // Ingresos
+        doc.text('Ingresos', spos, 202, null, null, 'center');
+        spos = spos + 82
+        doc.text(incomes['total_income_abc1'], spos, 202, null, null, 'center');
+        spos = spos + 18 
+        doc.text(incomes['total_income_c2'], spos, 202, null, null, 'center');
+        spos = spos + 18 
+        doc.text(incomes['total_income_c3'], spos, 202, null, null, 'center');
+        spos = spos + 18 
+        doc.text(incomes['total_income_d'], spos, 202, null, null, 'center');
+        spos = spos + 18 
+        doc.text(incomes['total_income_e'], spos, 202, null, null, 'center');
+
+        doc.text('MILLONES DE PESOS', 10, 215, null, null, 'left');
+        doc.text('FUENTE: CENSO 2017 | ENCUESTA PRESUPUESTO FAMILIARES', 10, 225, null, null, 'left');
+        doc.text('2017 | ESTIMACIÓN GSE OCUP PUC ', 10, 235, null, null, 'left');
         // Descarga el archivo PDF
         doc.save("Informe_Demografía&Gastos.pdf");
 
@@ -250,62 +365,62 @@ Congo.demography.action_dashboards = function(){
     }) // Cierra ajax
   } // Cierra demography_report_pdf
 
-    indicator_demography = function(){
-          county_id = [];
-          $.each(Congo.dashboards.config.county_id, function(a,b){
-                   county_id =b;
-                })
-          radius = Congo.dashboards.config.radius;
-          centerPoint = Congo.dashboards.config.centerpt;
-          wkt = Congo.dashboards.config.size_box;
-          type_geometry = Congo.dashboards.config.typeGeometry;
-          layer_type = Congo.dashboards.config.layer_type;
-          style_layer = Congo.dashboards.config.style_layer;
-      census_source_id = Congo.demography.config.census_source;
+  indicator_demography = function(){
+    county_id = [];
+    $.each(Congo.dashboards.config.county_id, function(a,b){
+      county_id =b;
+    })
+    radius = Congo.dashboards.config.radius;
+    centerPoint = Congo.dashboards.config.centerpt;
+    wkt = Congo.dashboards.config.size_box;
+    type_geometry = Congo.dashboards.config.typeGeometry;
+    layer_type = Congo.dashboards.config.layer_type;
+    style_layer = Congo.dashboards.config.style_layer;
+    census_source_id = Congo.demography.config.census_source;
 
-          // Creamos el overlay
-          Congo.dashboards.action_index.create_overlay_and_filter_card();
+    // Creamos el overlay
+    Congo.dashboards.action_index.create_overlay_and_filter_card();
 
-      if (county_id != '') {
+    if (county_id != '') {
 
-        data = {
-          county_id: county_id,
-          type_geometry: type_geometry,
-          layer_type: layer_type,
-          style_layer: style_layer,
-          census_source_id: census_source_id
-        };
-
-      } else if (centerPoint != '') {
-
-        data = {
-          centerpt: centerPoint,
-          radius: radius,
-          type_geometry: type_geometry,
-          layer_type: layer_type,
-          style_layer: style_layer,
-          census_source_id: census_source_id
-        };
-
-      } else {
-
-        data = {
-          wkt: JSON.stringify(wkt),
-          type_geometry: type_geometry,
-          layer_type: layer_type,
-          style_layer: style_layer,
-          census_source_id: census_source_id
-        };
-
+      data = {
+        county_id: county_id,
+        type_geometry: type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer,
+        census_source_id: census_source_id
       };
-  //Legends
-      Congo.demography.config.legends = [];
 
-        Congo.demography.config.legends.push({'name':'ABC1', 'color':'004b99'});
-        Congo.demography.config.legends.push({'name':'C2', 'color':'3b8ea5'});
-        Congo.demography.config.legends.push({'name':'C3', 'color':'f5ee9e'});
-        Congo.demography.config.legends.push({'name':'D', 'color':'f49e4c'});
-        Congo.demography.config.legends.push({'name':'E', 'color':'ab3428'});
+    } else if (centerPoint != '') {
+
+      data = {
+        centerpt: centerPoint,
+        radius: radius,
+        type_geometry: type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer,
+        census_source_id: census_source_id
+      };
+
+    } else {
+
+      data = {
+        wkt: JSON.stringify(wkt),
+        type_geometry: type_geometry,
+        layer_type: layer_type,
+        style_layer: style_layer,
+        census_source_id: census_source_id
+      };
+
+    };
+    //Legends
+    Congo.demography.config.legends = [];
+
+    Congo.demography.config.legends.push({'name':'ABC1', 'color':'004b99'});
+    Congo.demography.config.legends.push({'name':'C2', 'color':'3b8ea5'});
+    Congo.demography.config.legends.push({'name':'C3', 'color':'f5ee9e'});
+    Congo.demography.config.legends.push({'name':'D', 'color':'f49e4c'});
+    Congo.demography.config.legends.push({'name':'E', 'color':'ab3428'});
 
     $.ajax({
       type: 'GET',
@@ -361,6 +476,7 @@ Congo.demography.action_dashboards = function(){
       },
       success: function(data) {
 
+        data = data[0]
         // Ocultamos el spinner y habilitamos los botones
         $("#spinner").hide();
         $('.btn').removeClass('disabled')
@@ -450,7 +566,7 @@ Congo.demography.action_dashboards = function(){
                 $('#body' + i).append(item);
               })
 
-            // Gráficos
+              // Gráficos
             } else {
 
               var info = reg['data']
@@ -523,7 +639,7 @@ Congo.demography.action_dashboards = function(){
                       var label = ctx.chart.data.labels[ctx.dataIndex]
                       let dataArr = ctx.chart.data.datasets[0].data;
                       dataArr.map(data => {
-                          sum += data;
+                        sum += data;
                       });
                       let percentage = (value*100 / sum).toFixed(2);
                       if (percentage > 4) {

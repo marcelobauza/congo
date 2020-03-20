@@ -210,7 +210,7 @@ class Censu < ApplicationRecord
                        ( c3 * #{@a[0].total_house_abc1.to_f} ) + 
                        ( d * #{@a[0].total_house_abc1.to_f} ) + 
                        ( e * #{@a[0].total_house_abc1.to_f} ) )) / 1000000),2) as total_expenses,
-             expense_type_id")
+             expense_type_id, abbreviation, name")
     @c
   end
 
@@ -251,14 +251,15 @@ class Censu < ApplicationRecord
   end
   def self.sum_monthly_incomes filters
     incomes = MonthlyCensusIncome.first
+    one_millon = '1000000'
     @e = Censu.where(filter_area_conditions(filters)).
       where(census_source_id: filters[:census_source_id]).
       select("
-        #{incomes.abc1} * sum(n_abc1) as total_income_abc1,
-        #{incomes.c2} * sum(n_c2) as total_income_c2,
-        #{incomes.c3} * sum(n_c3) as total_income_c3,
-        #{incomes.d} * sum(n_d) as total_income_d,
-        #{incomes.e} * sum(n_e) as total_income_e")
-             @e
+       round((#{incomes.abc1} * sum(n_abc1)) / #{one_millon},2)  as total_income_abc1,
+       round((#{incomes.c2} * sum(n_c2)) / #{one_millon},2) as total_income_c2,
+       round((#{incomes.c3} * sum(n_c3)) / #{one_millon},2) as total_income_c3,
+       round((#{incomes.d} * sum(n_d)) / #{one_millon},2) as total_income_d,
+       round((#{incomes.e} * sum(n_e))/ #{one_millon},2) as total_income_e")
+    @e
   end
 end
