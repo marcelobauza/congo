@@ -1291,4 +1291,37 @@ end
 
     return CsvParser.get_projects_csv_data(projects)
   end
+
+
+    def self.kml_data filters
+
+    select = "projects.name, "
+    select += "sum (project_instance_mixes.total_units) as total_units, "
+    select += "sum(project_instance_mixes.stock_units) as stock_units, "
+    select += "the_geom "
+
+    if !filters[:county_id].nil?
+      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
+    elsif !filters[:wkt].nil?
+      conditions = WhereBuilder.build_within_condition(filters[:wkt])
+    else
+      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
+      end
+    data = Project.joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
+      method_selection(filters).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).where("agency_rols.rol = 'INMOBILIARIA'").
+                     select(select).
+                     group(:name, :the_geom ).uniq
+      kml = KMLFile.new
+      document = KML::Document.new(name: "PRV")
+      data.each do |c|
+        document.features << KML::Placemark.new(
+          :name => c.name,
+          :description =>"Viviendas: #{c.total_units}
+                        Stock: #{c.stock_units}",
+          :geometry =>  KML::Point.new(:coordinates => {:lat => c.the_geom.y, :lng => c.the_geom.x}) 
+             )
+      end
+      kml.objects << document
+      kml.render
+    end
 end

@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   get 'reports/transactions_pdf' => 'reports#transactions_pdf'
   get 'reports/building_regulations_pdf' => 'reports#building_regulations_pdf'
   get 'reports/projects_data' => 'reports#projects_data'
+  get 'reports/projects_data_kml' => 'reports#projects_data_kml'
   get 'reports/projects_summary' => 'reports#projects_summary'
   get 'reports/projects_pdf' => 'reports#projects_pdf'
   get 'downloads/index' => 'downloads#index'

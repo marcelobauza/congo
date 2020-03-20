@@ -178,6 +178,13 @@ class ReportsController < ApplicationController
     end
 
   end
+  def projects_data_kml
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @xl = Project.kml_data(filters)
+    send_data @xl,
+          :type => 'text/xml; charset=UTF-8;',
+              :disposition => "attachment; filename=PRV.kml"
+  end
 
   def projects_summary
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
