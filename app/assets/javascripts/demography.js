@@ -64,6 +64,12 @@ Congo.demography.action_dashboards = function(){
       };
     };
 
+    Number.prototype.format = function(n, x, s, c) {
+          var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+                num = this.toFixed(Math.max(0, ~~n));
+
+          return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+    };
     $.ajax({
       type: 'GET',
       url: '/demography/general.json',
@@ -77,27 +83,14 @@ Congo.demography.action_dashboards = function(){
 
         // Pie de página
         function footer() {
-          doc.setFontSize(10);
-          doc.setFontStyle("bold");
-
-          doc.text('Fuentes:', 10, 270);
-
-          doc.text('Variables Demográficas:', 10, 275);
-          doc.setFontStyle("normal");
-          doc.text('Censo de Población y Vivienda 2002 (INE)', 53, 275);
-
-          doc.setFontStyle("bold");
-          doc.text('Proyección 2010:', 10, 280);
-          doc.setFontStyle("normal");
-          doc.text('Proyección elaborada por PXQ en base a Compraventas nuevas del CBR', 40, 280);
-
-          doc.setFontStyle("bold");
-          doc.text('Seg. Socioeconómica:', 10, 285);
-          doc.setFontStyle("normal");
-          doc.text('Modelación de grupos socioeconómicos (GSE) elaborada por PxQ en base a Censo 2002', 49, 285);
-          doc.text('(Canasta de Bienes versus Años de Estudio Jefe de Hogar)', 10, 290);
+        
 
           doc.setFontSize(10);
+          doc.setFontStyle("bold");
+          doc.text('MILES DE PESOS', 10, 280, null, null, 'left');
+          doc.text('FUENTE: CENSO 2017 | ENCUESTA PRESUPUESTO FAMILIARES', 10, 285, null, null, 'left');
+          doc.text('2017 | ESTIMACIÓN GSE OCUP PUC ', 10, 290, null, null, 'left');
+
           doc.text('p. ' + doc.page, 194, 290);
           doc.page++;
         };
@@ -252,7 +245,6 @@ Congo.demography.action_dashboards = function(){
         sum_expenses = data[2][0];
         houses = data[3][0];
         incomes = data[4][0];
-        console.log(incomes);
         // Líneas Tabla
         doc.line(10, 45, 200, 45);
         doc.line(10, 55, 200, 55);
@@ -271,12 +263,14 @@ Congo.demography.action_dashboards = function(){
         doc.line(10, 185, 200, 185);
         doc.line(10, 195, 200, 195);
         doc.line(10, 205, 200, 205);
+        doc.line(180, 45, 180, 205);
 
         // Columna Ítem
-        var spos = 20
+        doc.setFontType('bold');
+        var spos = 18
         var epos = 52
         doc.text('ÍTEM', spos, epos, null, null, 'center');
-        spos = spos + 82  
+        spos = spos + 85
         doc.text('ABC1', spos, epos, null, null, 'center');
         spos = spos + 18
         doc.text('C2', spos, epos, null, null, 'center');
@@ -290,74 +284,81 @@ Congo.demography.action_dashboards = function(){
         doc.text('TOTAL',spos, epos, null, null, 'center');
         spos = 12
         epos = 62
+        doc.setFontType('normal');
         for (var i = 0, len = gse.length; i < len; i++) {
 
           doc.text(gse[i]['name'], spos, epos);
-          spos = spos + 82  
-          doc.text(gse[i]['abc1'], spos, epos);
+          spos = spos + 90  
+          doc.text(gse[i]['abc1'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
           spos = spos + 18  
-          doc.text(gse[i]['c2'], spos, epos);
+          doc.text(gse[i]['c2'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
           spos = spos + 18  
-          doc.text(gse[i]['c3'], spos, epos);
+          doc.text(gse[i]['c3'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
           spos = spos + 18  
-          doc.text(gse[i]['d'], spos, epos);
+          doc.text(gse[i]['d'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
           spos = spos + 18  
-          doc.text(gse[i]['e'], spos, epos);
+          doc.text(gse[i]['e'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
           spos = spos + 18 
-          doc.text(gse[i]['total_expenses'], spos, epos);
+        doc.setFontType('bold');
+          doc.text(gse[i]['total_expenses'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
+        doc.setFontType('normal');
           spos = 12 
           epos = epos + 10
         }
 
         // Totales
         //
-        spos = 20 
+        spos = 18 
         epos = epos + 10
+        doc.setFontType('bold');
         doc.text('Totales', spos, 182, null, null, 'center');
-        spos = spos + 82 
-        doc.text(sum_expenses['abc1'], spos, 182, null, null, 'center');
+        spos = spos + 85 
+        doc.text(sum_expenses['abc1'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
         spos = spos + 18 
-        doc.text(sum_expenses['c2'], spos, 182, null, null, 'center');
+        doc.text(sum_expenses['c2'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
         spos = spos + 18 
-        doc.text(sum_expenses['c3'], spos, 182, null, null, 'center');
+        doc.text(sum_expenses['c3'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
         spos = spos + 18 
-        doc.text(sum_expenses['d'], spos, 182, null, null, 'center');
+        doc.text(sum_expenses['d'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
         spos = spos + 18 
-        doc.text(sum_expenses['e'], spos, 182, null, null, 'center');
+        doc.text(sum_expenses['e'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
+        spos = spos + 18 
+        doc.text(sum_expenses['total_sum_expenses'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
 
-        spos = 20 
+        spos = 18 
         epos = epos + 10
         // Hogares
         doc.text('Hogares', spos, 192, null, null, 'center');
-        spos = spos + 82 
-        doc.text(houses['total_house_abc1'], spos, 192, null, null, 'center');
+        spos = spos + 85 
+        doc.text(houses['total_house_abc1'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
         spos = spos + 18 
-        doc.text(houses['total_house_c2'], spos, 192, null, null, 'center');
+        doc.text(houses['total_house_c2'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
         spos = spos + 18 
-        doc.text(houses['total_house_c3'], spos, 192, null, null, 'center');
+        doc.text(houses['total_house_c3'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
         spos = spos + 18 
-        doc.text(houses['total_house_d'], spos, 192, null, null, 'center');
+        doc.text(houses['total_house_d'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
         spos = spos + 18 
-        doc.text(houses['total_house_e'], spos, 192, null, null, 'center');
-        spos = 20 
+        doc.text(houses['total_house_e'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
+        spos = spos + 18 
+        doc.text(houses['total_houses'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
+        spos = 18
         epos = epos + 10
-
         // Ingresos
         doc.text('Ingresos', spos, 202, null, null, 'center');
-        spos = spos + 82
-        doc.text(incomes['total_income_abc1'], spos, 202, null, null, 'center');
+        spos = spos + 85
+        doc.text(incomes['abc1'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
         spos = spos + 18 
-        doc.text(incomes['total_income_c2'], spos, 202, null, null, 'center');
+        doc.text(incomes['c2'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
         spos = spos + 18 
-        doc.text(incomes['total_income_c3'], spos, 202, null, null, 'center');
+        doc.text(incomes['c3'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
         spos = spos + 18 
-        doc.text(incomes['total_income_d'], spos, 202, null, null, 'center');
+        doc.text(incomes['d'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
         spos = spos + 18 
-        doc.text(incomes['total_income_e'], spos, 202, null, null, 'center');
-
-        doc.text('MILLONES DE PESOS', 10, 215, null, null, 'left');
-        doc.text('FUENTE: CENSO 2017 | ENCUESTA PRESUPUESTO FAMILIARES', 10, 225, null, null, 'left');
-        doc.text('2017 | ESTIMACIÓN GSE OCUP PUC ', 10, 235, null, null, 'left');
+        doc.text(incomes['e'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
+        spos = spos + 18 
+        doc.text(incomes['weighted_average'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
+        
+        footer()
         // Descarga el archivo PDF
         doc.save("Informe_Demografía&Gastos.pdf");
 

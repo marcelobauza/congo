@@ -3,7 +3,7 @@
     <div class="modal-content text-light">
 
       <div class="modal-header">
-        <h5 class="modal-title"> GSE </h5>
+        <h5 class="modal-title text-center">GASTO MENSUAL E INGRESO PROMEDIO</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -16,45 +16,52 @@
           <th>C3</th>
           <th>D</th>
           <th>E</th>
-          <th>Total</th>
+          <th class="table-dark">Total</th>
         </tr>  
         <% @b.each do |d| %>
             <tr>
               <td><%= d.expense_type.name %></td>
-              <td><%= d.abc1 %></td>
-              <td><%= d.c2 %></td>
-              <td><%= d.c3 %></td>
-              <td><%= d.d %></td>
-              <td><%= d.e %></td>
-              <td><%= d.total_expenses %></td>
+              <td><%=  number_with_delimiter(d.abc1.to_i, delimiter:'.') %></td>
+              <td><%= number_with_delimiter(d.c2.to_i, delimiter:'.')%></td>
+              <td><%= number_with_delimiter(d.c3.to_i, delimiter:'.') %></td>
+              <td><%= number_with_delimiter(d.d.to_i, delimiter:'.') %></td>
+              <td><%= number_with_delimiter(d.e.to_i, delimiter:'.') %></td>
+              <td class="table-dark" ><%= number_with_delimiter(d.total_expenses.to_i, delimiter:'.') %></td>
             </tr>
           <% end %>
           <tr>
-            <td>Total</td>
-            <td><%= @sum_expenses[0]['abc1'].to_f %></td>
-            <td><%= @sum_expenses[0]['c2'].to_f %></td>
-            <td><%= @sum_expenses[0]['c3'].to_f %></td>
-            <td><%= @sum_expenses[0]['d'].to_f %></td>
-            <td><%= @sum_expenses[0]['e'].to_f %></td>
+            <th class="table-dark">Total</th>
+            <th class="table-dark"><%= number_with_delimiter(@sum_expenses[0]['abc1'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@sum_expenses[0]['c2'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@sum_expenses[0]['c3'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@sum_expenses[0]['d'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@sum_expenses[0]['e'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@sum_expenses[0]['total_sum_expenses'].to_i, delimiter:'.') %></th>
           </tr>
           <tr>
-            <td>Hogares</td>
-            <td><%= @houses[0]['total_house_abc1'].to_f %></td>
-            <td><%= @houses[0]['total_house_c2'].to_f %></td>
-            <td><%= @houses[0]['total_house_c3'].to_f %></td>
-            <td><%= @houses[0]['total_house_d'].to_f %></td>
-            <td><%= @houses[0]['total_house_e'].to_f %></td>
-            <td><%= @houses[0]['total_house'].to_f %></td>
+            <th class="table-dark">Hogares</td>
+            <th class="table-dark"><%= number_with_delimiter(@houses[0]['total_house_abc1'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@houses[0]['total_house_c2'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@houses[0]['total_house_c3'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@houses[0]['total_house_d'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@houses[0]['total_house_e'].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@houses[0]['total_houses'].to_i, delimiter:'.') %></th>
           </tr>
           <tr>
-            <td>Ingresos</td>
-            <td><%= @incomes[0]['total_income_abc1'].to_f %></td>
-            <td><%= @incomes[0]['total_income_c2'].to_f %></td>
-            <td><%= @incomes[0]['total_income_c3'].to_f %></td>
-            <td><%= @incomes[0]['total_income_d'].to_f %></td>
-            <td><%= @incomes[0]['total_income_e'].to_f %></td>
+            <th class="table-dark">Ingresos</th>
+            <th class="table-dark"><%= number_with_delimiter(@incomes[0][:abc1].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@incomes[0][:c2].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@incomes[0][:c3].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@incomes[0][:d].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@incomes[0][:e].to_i, delimiter:'.') %></th>
+            <th class="table-dark"><%= number_with_delimiter(@incomes[0][:weighted_average].to_i, delimiter:'.') %></th>
           </tr>
       </table>
+      <div class="ml-5">
+          <p>MILES DE PESOS</p>
+          <p>FUENTE: CENSO 2017 | ENCUESTA PRESUPUESTO FAMILIARES</p>
+          <p>2017 | ESTIMACIÓN GSE OCUP PUC</p>
+      </div>
     </div>
   </div>
 </div>
