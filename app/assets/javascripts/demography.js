@@ -89,7 +89,7 @@ Congo.demography.action_dashboards = function(){
           doc.setFontStyle("bold");
           doc.text('MILES DE PESOS', 10, 280, null, null, 'left');
           doc.text('FUENTE: CENSO 2017 | ENCUESTA PRESUPUESTO FAMILIARES', 10, 285, null, null, 'left');
-          doc.text('2017 | ESTIMACIÓN GSE OCUP PUC ', 10, 290, null, null, 'left');
+          doc.text('2017 | ESTIMACIÓN GSE OCUC PUC ', 10, 290, null, null, 'left');
 
           doc.text('p. ' + doc.page, 194, 290);
           doc.page++;
