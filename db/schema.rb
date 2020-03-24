@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_19_211357) do
+ActiveRecord::Schema.define(version: 2020_03_23_131359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -427,6 +427,8 @@ ActiveRecord::Schema.define(version: 2020_03_19_211357) do
     t.integer "code_sii"
     t.integer "number_last_project_future"
     t.boolean "enabled", default: false
+    t.bigint "region_id"
+    t.index ["region_id"], name: "index_counties_on_region_id"
     t.index ["the_geom"], name: "sidx_counties_the_geom", using: :gist
   end
 
@@ -489,11 +491,11 @@ ActiveRecord::Schema.define(version: 2020_03_19_211357) do
 
   create_table "expenses", force: :cascade do |t|
     t.bigint "expense_type_id"
-    t.decimal "abc1", precision: 12, scale: 2
-    t.decimal "c2", precision: 12, scale: 2
-    t.decimal "c3", precision: 12, scale: 2
-    t.decimal "d", precision: 12, scale: 2
-    t.decimal "e", precision: 12, scale: 2
+    t.integer "abc1"
+    t.integer "c2"
+    t.integer "c3"
+    t.integer "d"
+    t.integer "e"
     t.boolean "santiago_only"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -604,11 +606,11 @@ ActiveRecord::Schema.define(version: 2020_03_19_211357) do
   end
 
   create_table "monthly_census_incomes", force: :cascade do |t|
-    t.decimal "abc1", default: "0.0", null: false
-    t.decimal "c2", default: "0.0", null: false
-    t.decimal "c3", default: "0.0", null: false
-    t.decimal "d", default: "0.0", null: false
-    t.decimal "e", default: "0.0", null: false
+    t.integer "abc1", default: 0, null: false
+    t.integer "c2", default: 0, null: false
+    t.integer "c3", default: 0, null: false
+    t.integer "d", default: 0, null: false
+    t.integer "e", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -1189,6 +1191,7 @@ ActiveRecord::Schema.define(version: 2020_03_19_211357) do
 
   add_foreign_key "building_regulations", "counties"
   add_foreign_key "building_regulations", "density_types"
+  add_foreign_key "counties", "regions"
   add_foreign_key "counties_users", "counties"
   add_foreign_key "counties_users", "users"
   add_foreign_key "county_ufs", "counties"
