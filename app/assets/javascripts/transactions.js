@@ -650,14 +650,12 @@ function transactions_report_pdf(){
 
         // Extraemos las series
         $.each(series, function(a, b){
-
-          if (title == 'Compraventas') {
+          if (title == 'Compraventas1') {
 
             var data = b['data']
 
             // Separamos las comunas
             for (var i = 1; i < data.length; i++) {
-
               var reg = data[i];
 
               var label = reg[0]
