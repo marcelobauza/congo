@@ -1,6 +1,7 @@
 class Admin::SurveyorsController < ApplicationController
   before_action :set_surveyor, only: [:show, :edit, :update, :destroy]
 
+  layout 'admin'
   # GET /surveyors
   # GET /surveyors.json
   def index
