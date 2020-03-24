@@ -4,7 +4,7 @@
     <div class="form-group">
       <center> <%=image_tag "round_inciti.png", class: "mb-4", height:"120" %> </center>
       <%= f.text_field :name, autofocus: true, autocomplete: "email", class: 'form-control', placeholder: "Usuario" %>
-      <%= f.password_field :password, autocomplete: "current-password", class: 'form-control', placeholder: "Password" %>
+      <%= f.password_field :password, autocomplete: "current-password", class: 'form-control', placeholder: "Contraseña" %>
     </div>
 
     <% if devise_mapping.rememberable? %>
