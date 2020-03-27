@@ -2,22 +2,16 @@
 
 <h1>Building Regulations</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>Building zone</th>
       <th>Construct</th>
       <th>Land ocupation</th>
-      <th>Site</th>
-      <th>The geom</th>
-      <th>Identifier</th>
       <th>Density type</th>
       <th>County</th>
       <th>Comments</th>
       <th>Hectarea inhabitants</th>
-      <th>Grouping</th>
-      <th>Parkings</th>
-      <th>Am cc</th>
       <th>Aminciti</th>
       <th>Icinciti</th>
       <th>Osinciti</th>
@@ -31,27 +25,17 @@
         <td><%= building_regulation.building_zone %></td>
         <td><%= building_regulation.construct %></td>
         <td><%= building_regulation.land_ocupation %></td>
-        <td><%= building_regulation.site %></td>
-        <td><%= building_regulation.the_geom %></td>
-        <td><%= building_regulation.identifier %></td>
-        <td><%= building_regulation.density_type %></td>
-        <td><%= building_regulation.county %></td>
+        <td><%= building_regulation.density_type.name %></td>
+        <td><%= building_regulation.county.name %></td>
         <td><%= building_regulation.comments %></td>
         <td><%= building_regulation.hectarea_inhabitants %></td>
-        <td><%= building_regulation.grouping %></td>
-        <td><%= building_regulation.parkings %></td>
-        <td><%= building_regulation.am_cc %></td>
         <td><%= building_regulation.aminciti %></td>
         <td><%= building_regulation.icinciti %></td>
         <td><%= building_regulation.osinciti %></td>
-        <td><%= link_to 'Show', building_regulation %></td>
-        <td><%= link_to 'Edit', edit_building_regulation_path(building_regulation) %></td>
-        <td><%= link_to 'Destroy', building_regulation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Edit', edit_admin_building_regulation_path(building_regulation) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
 <br>
 
-<%= link_to 'New Building Regulation', new_building_regulation_path %>

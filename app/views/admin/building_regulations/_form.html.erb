@@ -1,0 +1,28 @@
+<div class="card shadow">
+  <div class="card-body">
+    <%= simple_form_for([:admin,@building_regulation]) do |f| %>
+      <% if @building_regulation.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@building_regulation.errors.count, "error") %> prohibited this county from being saved:</h2>
+          <ul><% @buildin_regulation.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>
+        </div>
+      <% end %>
+      <%= f.input :building_zone, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' }  %>
+      <%= f.input :construct , input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' }%>
+      <%= f.input :land_ocupation, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+      <%= f.input :site, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+      <%= f.association :density_type, wrapper_html: { class: 'form-group row' }%>
+      <%= f.association :county, wrapper_html: { class: 'form-group row' }%>
+      <%= f.input :comments, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+      <%= f.input :hectarea_inhabitants, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+      <%= f.input :grouping, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+      <%= f.input :parkings, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+      <%= f.input :am_cc, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+      <%= f.input :aminciti, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+      <%= f.input :icinciti, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+      <%= f.input :osinciti, input_html: {class: "form-control"}, wrapper_html: { class: 'col-md-3 form-group row' } %>
+
+      <div class="form-actions">
+        <%= f.button :submit %>
+      </div>
+    <% end %>

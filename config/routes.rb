@@ -91,6 +91,7 @@ Rails.application.routes.draw do
     resources :future_projects
     resources :transactions
     resources :feedbacks
+    resources :building_regulations
 
 
     resources :projects do
