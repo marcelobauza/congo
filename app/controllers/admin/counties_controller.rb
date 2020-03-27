@@ -1,4 +1,4 @@
-class Admin::CountiesController < ApplicationController
+class Admin::CountiesController < Admin::DashboardsController
   before_action :set_county, only: [:show, :edit, :update, :destroy]
 
   layout 'admin'
