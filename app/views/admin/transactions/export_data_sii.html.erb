@@ -14,7 +14,14 @@
     </div>
   </div>
 
-  <div class="span4">
+    <span class="label success"><%= t('activerecord.attributes.kpi.polygon')%></span>
+    <%= select "", 'kpi_type', options_for_select({ "POLIGONO"=> "1", "COMUNA" => "2"} ), {:include_blank => true} %>
+  </div>
+  <div class="span4" id="polygons">
+    <span class="label success"><%= t('activerecord.attributes.kpi.polygon')%></span>
+    <%= select "", :polygon_id, options_for_select(ApplicationStatus.where(user_id: current_user.id).collect{ |c| [c.name, c.id]} ), {:include_blank => true} %>
+  </div>
+  <div class="span4" id="counties">
     <span class="label success"><%= t('activerecord.attributes.kpi.county')%></span>
     <%= f.select 'county_id', options_for_select(@counties.collect{ |c| [c.name, c.id]}), {:include_hidden => false},{multiple: true}%>
   </div>
