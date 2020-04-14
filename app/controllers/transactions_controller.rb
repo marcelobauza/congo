@@ -23,6 +23,7 @@ class TransactionsController < ApplicationController
   def transactions_summary
     session[:data] = params.clone
     params[:user_id] = current_user.id
+    save_polygon = UserPolygon.save_polygons_for_user params
     @result = Transaction.summary(params)
    return @result
   end
