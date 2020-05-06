@@ -201,16 +201,16 @@ class Censu < ApplicationRecord
     thousands = '1000'
     @c = Expense.joins(:expense_type).
       where(verification_for_region(filters)).
-      select("( abc1 * #{@a[0].total_house_abc1.to_f} ) / #{thousands} as abc1, 
-              ( c2 * #{@a[0].total_house_c2.to_f} ) / #{thousands} as c2,  
-              ( c3 * #{@a[0].total_house_c3.to_f} ) / #{thousands} as c3,  
-              ( d * #{@a[0].total_house_d.to_f} ) / #{thousands} as d,  
+      select("( abc1 * #{@a[0].total_house_abc1.to_f} ) / #{thousands} as abc1,
+              ( c2 * #{@a[0].total_house_c2.to_f} ) / #{thousands} as c2,
+              ( c3 * #{@a[0].total_house_c3.to_f} ) / #{thousands} as c3,
+              ( d * #{@a[0].total_house_d.to_f} ) / #{thousands} as d,
               ( e * #{@a[0].total_house_e.to_f} ) / #{thousands} as e,
-              (((( abc1 * #{@a[0].total_house_abc1.to_f} ) + 
-                       ( c2 * #{@a[0].total_house_c2.to_f} ) + 
-                       ( c3 * #{@a[0].total_house_c3.to_f} ) + 
-                       ( d * #{@a[0].total_house_d.to_f} ) + 
-                       ( e * #{@a[0].total_house_e.to_f} ))) / #{thousands})::integer as total_expenses,
+              (((( abc1 * #{@a[0].total_house_abc1.to_f} ) +
+                       ( c2 * #{@a[0].total_house_c2.to_f} ) +
+                       ( c3 * #{@a[0].total_house_c3.to_f} ) +
+                       ( d * #{@a[0].total_house_d.to_f} ) +
+                       ( e * #{@a[0].total_house_e.to_f} ))) / #{thousands})::numeric as total_expenses,
              expense_type_id, abbreviation, name")
     @c
   end
@@ -230,16 +230,16 @@ class Censu < ApplicationRecord
     thousands = '1000'
     @c = Expense.
       where(verification_for_region(filters)).
-      select("( sum(abc1) * #{@a[0].total_house_abc1.to_f} ) / #{thousands} as abc1, 
-              ( sum(c2) * #{@a[0].total_house_c2.to_f} ) / #{thousands} as c2,  
-              ( sum(c3) * #{@a[0].total_house_c3.to_f} ) / #{thousands} as c3,  
-              ( sum(d) * #{@a[0].total_house_d.to_f} ) / #{thousands} as d,  
+      select("( sum(abc1) * #{@a[0].total_house_abc1.to_f} ) / #{thousands} as abc1,
+              ( sum(c2) * #{@a[0].total_house_c2.to_f} ) / #{thousands} as c2,
+              ( sum(c3) * #{@a[0].total_house_c3.to_f} ) / #{thousands} as c3,
+              ( sum(d) * #{@a[0].total_house_d.to_f} ) / #{thousands} as d,
               ( sum(e) * #{@a[0].total_house_e.to_f} ) / #{thousands} as e,
-              (((( sum(abc1) * #{@a[0].total_house_abc1.to_f} ) + 
-                       ( sum(c2) * #{@a[0].total_house_c2.to_f} ) + 
-                       ( sum(c3) * #{@a[0].total_house_c3.to_f} ) + 
-                       ( sum(d) * #{@a[0].total_house_d.to_f} ) + 
-                       ( sum(e) * #{@a[0].total_house_e.to_f} ))) / #{thousands})::integer as total_sum_expenses
+              (((( sum(abc1) * #{@a[0].total_house_abc1.to_f} ) +
+                       ( sum(c2) * #{@a[0].total_house_c2.to_f} ) +
+                       ( sum(c3) * #{@a[0].total_house_c3.to_f} ) +
+                       ( sum(d) * #{@a[0].total_house_d.to_f} ) +
+                       ( sum(e) * #{@a[0].total_house_e.to_f} ))) / #{thousands})::numeric as total_sum_expenses
              ")
     @c
   end
@@ -249,12 +249,12 @@ class Censu < ApplicationRecord
     @a = Censu.where(filter_area_conditions(filters)).
       where(census_source_id: filters[:census_source_id]).
       select("
-        sum(n_abc1)::integer as total_house_abc1,
-        sum(n_c2)::integer as total_house_c2,
-        sum(n_c3)::integer as total_house_c3,
-        sum(n_d)::integer as total_house_d,
-        sum(n_e)::integer as total_house_e,
-        (sum(n_abc1) + sum(n_c2) + sum(n_c3) + sum(n_d) + sum(n_e))::integer as total_houses")
+        sum(n_abc1)::numeric as total_house_abc1,
+        sum(n_c2)::numeric as total_house_c2,
+        sum(n_c3)::numeric as total_house_c3,
+        sum(n_d)::numeric as total_house_d,
+        sum(n_e)::numeric as total_house_e,
+        (sum(n_abc1) + sum(n_c2) + sum(n_c3) + sum(n_d) + sum(n_e))::numeric as total_houses")
     @a
   end
   def self.sum_monthly_incomes filters
@@ -264,18 +264,18 @@ class Censu < ApplicationRecord
     product_income_times_expense = Censu.where(filter_area_conditions(filters)).
       where(census_source_id: filters[:census_source_id]).
       select("
-       ((#{incomes.abc1} * sum(n_abc1)))::integer +
-       ((#{incomes.c2} * sum(n_c2)) )::integer +
-       ((#{incomes.c3} * sum(n_c3)) )::integer +
-       ((#{incomes.d} * sum(n_d)) )::integer +
-       ((#{incomes.e} * sum(n_e)))::integer as total_income")
+       ((#{incomes.abc1} * sum(n_abc1)))::numeric +
+       ((#{incomes.c2} * sum(n_c2)) )::numeric +
+       ((#{incomes.c3} * sum(n_c3)) )::numeric +
+       ((#{incomes.d} * sum(n_d)) )::numeric +
+       ((#{incomes.e} * sum(n_e)))::numeric as total_income")
 
     total_houses = sum_house filters
 
     weighted_average = product_income_times_expense[0].total_income / total_houses[0].total_houses
     @total_incomes = [{'abc1': incomes.abc1, 'c2':incomes.c2, 'c3':incomes.c3, 'd':incomes.d, 'e':incomes.e, 'weighted_average': weighted_average }]
 
-    @total_incomes 
+    @total_incomes
 
 
 
