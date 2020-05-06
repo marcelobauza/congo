@@ -38,6 +38,8 @@ class ProjectInstance < ApplicationRecord
 
   # validates_numericality_of :bimester, :less_than_or_equal_to => 6, :only_integer => true
   # validates_numericality_of :year, :only_integer => true, :unless => 'year.blank?'
+  #
+  validates :project_id, :project_status_id, :bimester, :year, :cadastre, presence: true
 
 #  delegate :name, :to => :project_status, :prefix => true, :allow_nil => true
   delegate :name, :to => :project, :prefix => true, :allow_nil => true
@@ -46,17 +48,17 @@ class ProjectInstance < ApplicationRecord
   delegate :agency_name, :to => :project, :prefix => true, :allow_nil => true
 
   def save_instance_data_fulcrum(project_id, project_status_id, bimester, year, cadastre, comments )
- 
+
   self.project_id = project_id
   self.project_status_id = project_status_id
   self.bimester = bimester
   self.year = year
-  self.cadastre = cadastre.strftime("%d/%m/%y") 
+  self.cadastre = cadastre.strftime("%d/%m/%y")
 
   self.comments= comments
 
     return self.save
-  
+
   end
 
 def save_instance_data(data, mixes, t_units, st_units, sld_units, project_type)
@@ -82,8 +84,8 @@ def save_instance_data(data, mixes, t_units, st_units, sld_units, project_type)
          self.home_type = "Aislada-Pareada"
        end
      else
-       self.usable_square_meters = data["M2_UTILES"] unless data["M2_UTILES"] == -1
-       self.terrace_square_meters = data["M2_TERRAZA"] unless data["M2_TERRAZA"] == -1
+       #self.mix_usable_square_meters = data["M2_UTILES"] unless data["M2_UTILES"] == -1
+       #self.mix_terrace_square_meters = data["M2_TERRAZA"] unless data["M2_TERRAZA"] == -1
      end
 
      self.comments = data["COMMENTS"]

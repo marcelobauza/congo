@@ -43,7 +43,7 @@ module Util
 
     # Parse the shape file
     shps = file_find(temp_path, "*.shp", true)
-
+    #shps = file_find(temp_path, "*.geojson", true)
     return shps, temp_path
   end
 

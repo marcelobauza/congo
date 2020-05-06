@@ -4,7 +4,7 @@ class Admin::ImportProcessesController < ApplicationController
   # GET /import_processes
   # GET /import_processes.json
   def index
-    @import_processes = ImportProcess.all
+    @import_processes = ImportProcess.all.order(id: :desc)
   end
 
   # GET /import_processes/1

@@ -32,22 +32,22 @@ class Project < ApplicationRecord
     :latitude
 
   validate :point_is_located_within_the_specified_county, :unless => Proc.new { |t| t.county.blank? or t.longitude.blank? or t.latitude.blank? }
-  #  validates_numericality_of :floors, :only_integer => true, :unless => 'floors.blank?'
+  #validates_numericality_of :floors, :only_integer => true, :unless => 'floors.blank?'
 
-  validates_each :build_date, :sale_date, :transfer_date do |record, attr, value|
-    if value.split('/').count != 3
-      record.errors.add(attr, "La fecha no tiene el formato esperado. El formato debe ser 'dd/mm/aaaa'")
-    else
-      d, m, y = value.split('/')
-      if !(1..31).include? d.to_i
-        record.errors.add(attr, "El dia debe ser un valor entre 1 y 31 (dd/mm/aaaa)")
-      end
+   # validates_each :build_date, :sale_date, :transfer_date do |record, attr, value|
+   #   if value.split('/').count != 3
+   #     record.errors.add(attr, "La fecha no tiene el formato esperado. El formato debe ser 'dd/mm/aaaa'")
+   #   else
+   #     d, m, y = value.split('/')
+   #     if !(1..31).include? d.to_i
+   #       record.errors.add(attr, "El dia debe ser un valor entre 1 y 31 (dd/mm/aaaa)")
+   #     end
 
-      if !(1..12).include? m.to_i
-        record.errors.add(attr, "El mes debe ser un valor entre 1 y 12 (dd/mm/aaaa)")
-      end
-    end
-  end
+   #     if !(1..12).include? m.to_i
+   #       record.errors.add(attr, "El mes debe ser un valor entre 1 y 12 (dd/mm/aaaa)")
+   #     end
+   #   end
+   # end
 
   accepts_nested_attributes_for :project_instances, :project_instance_mixes
 
