@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
+  name: 'Casa'
   color: MyString
   is_active: false
 
 two:
-  name: MyString
+  name: 'Departamento'
   color: MyString
   is_active: false
