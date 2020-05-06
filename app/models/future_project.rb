@@ -58,10 +58,7 @@ class FutureProject < ApplicationRecord
   end
 
   def file_date=(val)
-
     self[:file_date] = val
-    #self.bimester = val.to_date.bimester
-    #self.year = val.to_date.year
   end
 
   def save_future_project_data(geom, data, year, bimester, future_type)
@@ -135,7 +132,6 @@ class FutureProject < ApplicationRecord
   end
     query += ")" + Util.and
   end
-
 
   def self.find_globals(filters)
     select = "COUNT(*) as count_project, (COUNT(*)/ CAST(COUNT(DISTINCT (year,bimester)) AS FLOAT) ) as avg_project_bim, "
@@ -274,14 +270,6 @@ class FutureProject < ApplicationRecord
     result.reverse
   end
 
-  # def self.get_bench_values(ids)
-  #   projects= FutureProject.all(:joins => :future_project_type,
-  #                               :include => :future_project_type,
-  #                               :conditions => "future_projects.id IN (#{ids.join(',')})")
-
-  #   return projects
-  # end
-
   private
 
   def build_geom
@@ -305,32 +293,7 @@ class FutureProject < ApplicationRecord
       :selected_county => self.county.name) unless point_county.id == self.county_id
   end
 
-  # def self.values_by_period(widget, select, filters, bimesters)
-  #   result = []
-  #   cond = conditions(filters, widget)
-
-  #   bimesters.each do |bimester|
-  #     cond_query = get_periods_query(bimester[:period], bimester[:year]) + Util.and
-  #       cond_query += cond
-
-  #     project = FutureProject.find(:first,
-  #                                  :select => select,
-  #                                  :joins => build_joins.join(" "),
-  #                                  :conditions => cond_query,
-  #                                  :group => 'future_projects.year, future_projects.bimester',
-  #                                  :order => 'future_projects.year, future_projects.bimester')
-
-  #     if project.nil?
-  #       result << {:value => "null", :bimester => bimester[:period], :year => bimester[:year]}
-  #     else
-  #       result << {:value => project[:value], :bimester => bimester[:period], :year => bimester[:year]}
-  #     end
-  #   end
-
-  #   result.reverse
-  # end
   def self.conditions(filters, self_not_filter=nil, filter_range=false)
-
     conditions = ""
     if !filters[:county_id].nil?
       conditions += WhereBuilder.build_in_condition("county_id",filters[:county_id]) + Util.and
@@ -352,7 +315,7 @@ class FutureProject < ApplicationRecord
     if filters.has_key? :project_type_ids or filters.has_key? :future_project_type_ids
     conditions +=  ids_conditions(filters, self_not_filter)
     end
-    
+
     conditions += "future_projects.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
     conditions.chomp!(Util.and)
     conditions
@@ -480,7 +443,7 @@ class FutureProject < ApplicationRecord
   end
 
   def self.summary f
-    filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
+    filters  = JSON.parse(f.to_json, {symbolize_names: true})
     radius = (f[:radius].to_f / 1000)
     UserPolygon.save_polygons_for_user f
 
@@ -675,7 +638,7 @@ class FutureProject < ApplicationRecord
           :description =>"Expediente: #{d.future_project_type.name}
                          Viviendas: #{d.total_units}
                         Superficie: #{d.m2_field  }",
-          :geometry =>  KML::Point.new(:coordinates => {:lat => d.the_geom.y, :lng => d.the_geom.x}) 
+          :geometry =>  KML::Point.new(:coordinates => {:lat => d.the_geom.y, :lng => d.the_geom.x})
              )
       end
       kml.objects << document
