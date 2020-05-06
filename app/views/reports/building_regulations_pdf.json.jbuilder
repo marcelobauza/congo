@@ -8,7 +8,11 @@ json.array! @data do |p|
   json.construct p.construct
   json.osinciti p.osinciti
   json.site p.site
-  json.density_type_name  p.density_type.name
+  if p.density_type_id != nil
+    json.density_type_name  p.density_type.name
+  else
+    json.density_type_name  ''
+  end
   json.hectarea_inhabitants p.hectarea_inhabitants
   json.grouping p.grouping
   json.icinciti p.icinciti
