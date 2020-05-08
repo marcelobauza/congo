@@ -280,12 +280,11 @@ class Project < ApplicationRecord
 
   #FIND PROJECTS BY WIDGETS. COUNT
   def self.projects_group_by_count(widget, filters, has_color, range)
-
     case widget
     when 'agencies'
       joins = [:project_instances, [agency_rols: :agency]]
-      select = "agency_name, agency_id"
-      count = "agency_name"
+      select = "agencies.name, agencies.id"
+      count = "agencies.name"
     when 'project_types'
       joins =  [:project_type, :project_instances]
       select = "#{widget}.id, #{widget}.name"
@@ -611,7 +610,7 @@ class Project < ApplicationRecord
     self.the_geom = "POINT(#{self.longitude.to_f}  #{self.latitude.to_f})" if self.latitude and self.longitude
   end
 
-  def self.build_conditions_new(filters, self_not_filter=nil, useView = false, range=true)
+  def self.build_conditions_new(filters, self_not_filter=nil, useView = false, range=true, agencies_not_filter=false)
     @conditions = ''
     if filters.has_key? :to_period and range == true
       @conditions += WhereBuilder.build_range_periods_by_bimester_projects(filters[:to_period], filters[:to_year], BIMESTER_QUANTITY, useView)
@@ -622,12 +621,13 @@ class Project < ApplicationRecord
       @conditions += bimesters_condition(filters, self_not_filter, useView)
     end
     @conditions += between_condition_new(filters, self_not_filter)
-    @conditions += ids_conditions_new(filters, self_not_filter, useView)
+    @conditions += ids_conditions_new(filters, self_not_filter, useView) if agencies_not_filter == false
 
     @conditions += "county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
     @conditions.chomp!(Util.and)
     @conditions
   end
+
   def self.bimesters_condition(filters, self_not_filter, useView = false)
     conditions = ""
 
@@ -712,7 +712,7 @@ class Project < ApplicationRecord
     #terminar condicion con la relacion de las agencias
     #AGENCIES
     if filters.has_key? :project_agency_ids and self_not_filter != 'agencies'
-      conditions += "  project_instance_mix_views.agency_id IN (#{filters[:project_agency_ids].join(",")}) "
+      conditions += " agency_id IN (#{filters[:project_agency_ids].join(",")}) "
       conditions += Util.and
     end
     conditions
@@ -853,6 +853,28 @@ end
         general_data = {label: I18n.t(:AVG_TERRACE_AREA), value: global_information[:pp_terrace]}
 end
 
+  def self.projects_by_agencies filters
+    joins = [:project_instances, [agency_rols: :agency]]
+    select = "agencies.name, agencies.id"
+    count = "agencies.name"
+
+    @a = Project.select( "#{select}, COUNT(#{count}) as value").
+      joins(joins).
+      where(build_conditions_new(filters, 'agencies', false, false, true)).
+      method_selection(filters).
+      group(select).
+      order("#{count}")
+
+    if filters.has_key? :project_agency_ids
+      @a = @a.filter_by_agencies(filters)
+    end
+    @a
+  end
+
+  def self.filter_by_agencies filters
+    where("agency_rols.agency_id IN (#{filters[:project_agency_ids].join(',')})")
+  end
+
   def self.summary f
 
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
@@ -877,43 +899,30 @@ end
       ]
       general_data << house_general(house_information) if !house_information[:ps_terreno].nil?
       general_data << department_general(global_information) if !global_information[:pp_terrace].nil?
-      p "status"
-      pstatus = Project.projects_group_by_count('project_statuses', filters, false,false)
-      p "types"
-      ptypes = Project.projects_group_by_count('project_types', filters, true, false)
-      p "mixes"
-      pmixes = Project.projects_group_by_mix('mix', filters, false)
-      p "avai"
-      avai = Project.projects_sum_by_stock(filters)
-      p "uf_values"
-      uf_values = Project.projects_by_uf(filters)
-      p "uf_m2_valus"
+      pstatus      = Project.projects_group_by_count('project_statuses', filters, false,false)
+      ptypes       = Project.projects_group_by_count('project_types', filters, true, false)
+      pmixes       = Project.projects_group_by_mix('mix', filters, false)
+      avai         = Project.projects_sum_by_stock(filters)
+      uf_values    = Project.projects_by_uf(filters)
       uf_m2_values = Project.projects_by_uf_m2(filters)
-      p "uarea"
-      uarea = Project.projects_by_usable_area(filters)
-      p "garea"
-      garea = Project.projects_by_ground_area('ground_area', filters)
-      p "sbim"
-      sbim = Project.projects_count_by_period('sale_bimester', filters)
-      p "cfloor"
-      cfloor = Project.projects_by_ranges('floors', filters)
-      p "ranges"
-      uf_ranges = Project.projects_by_ranges('uf_avg_percent', filters)
-      p "agencies"
-      agencies = Project.projects_group_by_count('agencies', filters, false, false)
+      uarea        = Project.projects_by_usable_area(filters)
+      garea        = Project.projects_by_ground_area('ground_area', filters)
+      sbim         = Project.projects_count_by_period('sale_bimester', filters)
+      cfloor       = Project.projects_by_ranges('floors', filters)
+      uf_ranges    = Project.projects_by_ranges('uf_avg_percent', filters)
+      agencies     = projects_by_agencies filters
+      result       = []
+      data         = []
 
-      result =[]
-      data =[]
       #GENERAL
       general_data.each do |item|
-
         data.push("name": item[:label], "count": ("%.1f" % item[:value]).to_f) if !item[:value].nil?
       end
-
-    result.push({"title":"Resumen", "data": data})
+      result.push({"title":"Resumen", "data": data})
       ##ESTADO PROYECTO
 
       data =[]
+
       pstatus.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end
@@ -1046,9 +1055,9 @@ end
       #Agencias
       data =[]
       agencies.each do |agency|
-        data.push("name": agency.agency_name, "id":agency.agency_id)
+        data.push("name": agency.name, "id":agency.id)
       end
-    result.push({"title": "Proyectos por Inmobiliaria", "data":data})
+      result.push({"title": "Proyectos por Inmobiliaria", "data":data})
 
     rescue
       #result[:data] = ["Sin datos"]
