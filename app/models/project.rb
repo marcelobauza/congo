@@ -499,7 +499,7 @@ class Project < ApplicationRecord
 
     county = County.find_by_code(data["COMUNA"].to_i.to_s)
     agency = Agency.find_or_create_by(name: ic.iconv(data["INMOBILIAR"]))
-
+    agency_rols = AgencyRol.find_or_create_by(project_id: self.id, agency_id: agency.id)
     self.code = data["COD_PROY"]
     self.address = ic.iconv(data["DIRECCION"].gsub("'","''"))
     self.name = ic.iconv(data["NOMBRE"])
