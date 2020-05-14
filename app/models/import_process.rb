@@ -214,6 +214,16 @@ class ImportProcess < ApplicationRecord
           mix_instance.total_units = data["OFERTA_T"].to_i
           mix_instance.stock_units = data["STOCK"].to_i
 
+          mix_instance.sold_units = data["UN_VEND"].to_i
+          mix_instance.uf_min = data["UF_MIN"].to_i
+          mix_instance.uf_max = data["UF_MAX"].to_i
+          mix_instance.discount = data["DESC"].to_f
+          mix_instance.uf_parking = data['UF_ESTACIO']
+          mix_instance.uf_cellar = data['UF_BODEGA']
+          mix_instance.h_office = data['HOFFICE']
+          mix_instance.service_room = data['TIPO_SERVI']
+          mix_instance.living_room = data['ESTAR']
+
           if @project_type == "Departamentos"
             mix_instance.mix_usable_square_meters = data["T_M2_UTILE"].to_f
             mix_instance.mix_terrace_square_meters = data["T_M2_TERRA"].to_f
