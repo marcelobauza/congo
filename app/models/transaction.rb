@@ -102,8 +102,8 @@ class Transaction < ApplicationRecord
 
   def inscription_date=(val)
     self[:inscription_date] = val
-    self.quarter =  val.quarter
-    self.bimester = val.bimester
+    #self.quarter =  val.quarter
+    #self.bimester = val.bimester
     self.year = val.year
   end
 
@@ -142,61 +142,47 @@ class Transaction < ApplicationRecord
   def save_transaction_data(geom, data, county_id, user_id)
     ic = Iconv.new('UTF-8', 'ISO-8859-1')
 
-    property_type, calc_uf = PropertyType.get_property_type_transaction(data["PROPERTY_T"])
-    seller = SellerType.get_seller_type(data["SELLER_TYP"])
-
-    quarter = data["INSCRIPTIO"].to_date.quarter
-    year = data["INSCRIPTIO"].to_date.year
-
-    self.property_type_id = property_type.id
-    self.address = ic.iconv(data["ADDRESS"].gsub("'","''"))
-    self.sheet = data["SHEET"].to_i unless data["SHEET"] == -1
-    self.number = data["NUMBER"].to_i unless data["NUMBER"] == -1
-    self.cellar = data["BOD"].to_i unless data["BOD"] == -1
-    self.parking = data["EST"].to_i unless data["EST"] == -1
-
-    self.inscription_date = ic.iconv(data["INSCRIPTIO"].to_s).to_date
-    self.buyer_name = ic.iconv(data["BUYER_NAME"].to_s)
-    self.buyer_rut = ic.iconv(data["BUYER_RUT"].to_s)
-    self.seller_type_id = seller.id
-    self.seller_name = ic.iconv(data["SELLER_NAM"].to_s)
-    self.department = ic.iconv(data["DEPARTMENT"].to_s)
-    self.blueprint = ic.iconv(data["BLUEPRINT"].to_s)
-    self.quarter = quarter
-    self.year = year
-    self.sample_factor = data["SAMPLE_FAC"]
-    self.county_id = county_id
-    self.role = ic.iconv(data["ROL"].to_s)
-    self.the_geom = geom
-    self.real_value = data["REAL_VALUE"].to_f unless data["REAL_VALUE"] == -1
-    self.calculated_value = data["CALCULATED"].to_f unless data["CALCULATED"] == -1
-
-    self.surface = data["SUPERFICIE"] unless data["SUPERFICIE"] == -1
-    self.uf_m2 = (self.calculated_value / self.surface) unless self.surface == 0 or self.surface.nil?
-
-    self.village = ic.iconv(data["VILLA"].to_s)
-    self.block = ic.iconv(data["MANZANA"].to_s)
-    self.tome = data["TOMO"].to_i unless data["TOMO"] == -1
-
-    self.requiring_entity = data["REQUIRIENTE"]
-    self.comments = ic.iconv(data["COMMENTS"].to_s)
-    self.surveyor_id = Surveyor.find_by_name(data["ENCUESTADOR"].to_s.downcase.titleize).id unless data["ENCUESTADOR"].nil?
-    self.user_id = user_id
-
-    self.code_sii = data["code_sii"]
-
+    property_type, calc_uf      = PropertyType.get_property_type_transaction(data["PROPERTY_T"])
+    seller                      = SellerType.get_seller_type(data["SELLER_TYP"])
+    self.property_type_id       = property_type.id
+    self.address                = ic.iconv(data["ADDRESS"].gsub("'","''"))
+    self.sheet                  = data["SHEET"].to_i unless data["SHEET"] == -1
+    self.number                 = data["NUMBER"].to_i unless data["NUMBER"] == -1
+    self.cellar                 = data["BOD"].to_i unless data["BOD"] == -1
+    self.parkingi               = data["EST"].to_i unless data["EST"] == -1
+    self.inscription_date       = ic.iconv(data["INSCRIPTIO"].to_s).to_date
+    self.buyer_name             = ic.iconv(data["BUYER_NAME"].to_s)
+    self.buyer_rut              = ic.iconv(data["BUYER_RUT"].to_s)
+    self.seller_type_id         = seller.id
+    self.seller_name            = ic.iconv(data["SELLER_NAM"].to_s)
+    self.department             = ic.iconv(data["DEPARTMENT"].to_s)
+    self.blueprint              = ic.iconv(data["BLUEPRINT"].to_s)
+    self.year                   = data["YEAR"]
+    self.bimester               = data["BIMESTER"]
+    self.sample_factor          = data["SAMPLE_FAC"]
+    self.county_id              = county_id
+    self.role                   = ic.iconv(data["ROL"].to_s)
+    self.the_geom               = geom
+    self.real_value             = data["REAL_VALUE"].to_f unless data["REAL_VALUE"] == -1
+    self.calculated_value       = data["CALCULATED"].to_f unless data["CALCULATED"] == -
+    self.surface                = data["SUPERFICIE"] unless data["SUPERFICIE"] == -1
+    self.uf_m2                  = (self.calculated_value / self.surface) unless self.surface == 0 or self.surface.nil?
+    self.village                = ic.iconv(data["VILLA"].to_s)
+    self.block                  = ic.iconv(data["MANZANA"].to_s)
+    self.tome                   = data["TOMO"].to_i unless data["TOMO"] == -1
+    self.requiring_entity       = data["REQUIRIENTE"]
+    self.comments               = ic.iconv(data["COMMENTS"].to_s)
+    self.surveyor_id            = Surveyor.find_by(name: data["ENCUESTADO"].to_s.downcase.titleize).id if !data["ENCUESTADO"].nil?
+    self.user_id                = user_id
+    self.code_sii               = data["CODE_SII"]
     self.total_surface_building = 0
 
     conditions = "rol_number = '#{self.role}'  #{Util.and} "
-    conditions += "county_sii_id = #{data['code_sii']}"
-    self.total_surface_terrain = TaxLand.sum('land_m2', :conditions => conditions)
-    self.total_surface_building = TaxUsefulSurface.sum('m2_built', :conditions => conditions)
+    conditions += "county_sii_id = #{data['CODE_SII']}"
+    self.total_surface_terrain = TaxLand.where(conditions).sum('land_m2')
+    self.total_surface_building = TaxUsefulSurface.where(conditions).sum('m2_built')
     self.uf_m2_u = self.calculated_value / self.total_surface_building unless self.total_surface_building == 0 or self.total_surface_building.nil?
     self.uf_m2_t = self.calculated_value / self.total_surface_terrain unless self.total_surface_terrain == 0 or self.total_surface_terrain.nil?
-
-    #building_regulation = BuildingRegulation.find(:first,  :conditions =>"county_id = #{self.county_id} #{Util.and} ST_Contains(the_geom, ST_Transform(ST_GeomFromText('POINT(#{data["X"]} #{data["Y"]})',4326),4326)) " )
-
-    #self.building_regulation = building_regulation.name_ze.to_s unless building_regulation.nil?
 
     if self.save
       County.update(county_id, :transaction_data => true) unless county_id.nil?
@@ -612,7 +598,7 @@ class Transaction < ApplicationRecord
   end
 
   def self.get_csv_data(filters)
-    if !filters[:fromID].nil? 
+    if !filters[:fromID].nil?
       cond = "transactions.id BETWEEN #{filters[:fromID]} AND #{filters[:toID]}"
     else
       cond = "transactions.inscription_date BETWEEN '#{filters[:date_from]}'"
@@ -636,7 +622,7 @@ class Transaction < ApplicationRecord
       elsif !filters[:centerpt].nil?
         cond += WhereBuilder.build_within_condition_radius(session_saved['centerpt'], session_saved['radius'] ) + Util.and
         else
-        
+
       cond += " AND county_id in(#{session_saved[:county_id].join(",")})" if !session_saved[:county_id].blank?
         end
       else
@@ -1207,7 +1193,7 @@ class Transaction < ApplicationRecord
                         UF: #{d.calculated_value}
                         Util: #{d.uf_m2_u}
                         Terreno: #{d.total_surface_terrain}}",
-                        :geometry =>  KML::Point.new(:coordinates => {:lat => d.the_geom.y, :lng => d.the_geom.x}) 
+                        :geometry =>  KML::Point.new(:coordinates => {:lat => d.the_geom.y, :lng => d.the_geom.x})
       )
     end
     kml.objects << document

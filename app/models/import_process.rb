@@ -112,17 +112,17 @@ class ImportProcess < ApplicationRecord
       end
  end
 
-  def self.parse_transactions(shp_file, import_logger)
+  def parse_transactions(shp_file, import_logger)
     RGeo::Shapefile::Reader.open(shp_file) do |shp|
       field = []
       shp.each do |shape|
         if shape.index == 0
-        shape.keys.each do |f|
-          field.push(f)
-        end
+          shape.keys.each do |f|
+            field.push(f)
+          end
         end
 
-      verify_attributes(field, "Transactions")
+        verify_attributes(field, "Transactions")
 
         import_logger.current_row_index = shape.index
         import_logger.processed += 1
@@ -132,24 +132,18 @@ class ImportProcess < ApplicationRecord
           next
         end
 
-   #     unless shape.geometry.is_a? Point
-   #       import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-   #       next
-   #     end
+        geom     = shape.geometry
+        data     = shape.attributes
+        bimester = data["BIMESTER"]
+        year     = data["INSCRIPTIO"].to_date.year
+        number   = data["NUMBER"].to_i
 
-        geom = shape.geometry
-        data = shape.attributes
-        bimester = data["INSCRIPTIO"].to_date.bimester
-        year = data["INSCRIPTIO"].to_date.year
-        number = data["NUMBER"].to_i
-
-        county = County.find_by_code(data["CODCOM"].to_i.to_s)
+        county   = County.find_by_code(data["CODCOM"].to_i.to_s)
         if county.nil?
           import_logger.details << { :row_index => import_logger.current_row_index, :message => "No se pudo encontrar el county con codigo #{data["CODCOM"]}" }
           next
         end
-
-        tran = Transaction.find_or_initialize_by_number_and_bimester_and_year_and_county_id(number, bimester, year, county.id)
+        tran    = Transaction.where(number: number, bimester: bimester, year: year, county_id: county.id).first_or_initialize
         was_new = tran.new_record?
 
         if tran.save_transaction_data(geom, data, county.id, user.id)
@@ -214,7 +208,7 @@ class ImportProcess < ApplicationRecord
           mix_instance.total_units = data["OFERTA_T"].to_i
           mix_instance.stock_units = data["STOCK"].to_i
 
-          mix_instance.sold_units = data["UN_VEND"].to_i
+          #mix_instance.sold_units = data["UN_VEND"].to_i
           mix_instance.uf_min = data["UF_MIN"].to_i
           mix_instance.uf_max = data["UF_MAX"].to_i
           mix_instance.discount = data["DESC"].to_f
