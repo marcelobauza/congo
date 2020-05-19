@@ -25,7 +25,32 @@ class Transaction < ApplicationRecord
   #named_scope :by_role, lambda { |t| {:conditions => {:role => t}} unless t.blank? }
   #named_scope :by_property_type, lambda { |t| {:conditions => {:property_type_id => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
 
-  QUARTERS_QUANTITY = 5
+ validates :address,
+    :county_id,
+    :property_type_id,
+    :inscription_date,
+    :sheet,
+    :number,
+    :longitude,
+    :latitude,
+    :seller_type_id,
+    :sample_factor,
+    :tome,
+    :code_sii, presence: true
+
+  validate :point_is_located_within_the_specified_county, :unless => Proc.new { |t| t.county.blank? or t.longitude.blank? or t.latitude.blank? }
+
+  validates :parkingi, numericality: { greater_than_or_equal_to: 0, only_integer: true }, unless: -> { :parkingi.blank? }
+  validates :cellar, numericality: { greater_than_or_equal_to: 0, only_integer: true }, unless: -> { :cellar.blank? }
+  validates :number, numericality: { only_integer: true } , unless: -> { :number.blank? }
+  validates :sheet, numericality: { only_integer: true }, unless: -> { :sheet.blank? }
+  #validates :quarter, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 4, only_integer: true}, unless: -> { :quarter.blank? }
+  validates :bimester, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 6, only_integer: true}, unless: -> { :bimester.blank? }
+  validates :real_value, numericality: { greater_than_or_equal_to: 0 }, unless: -> { :real_value.blank? }
+  #validates :uf_m2, numericality: { greater_than_or_equal_to: 0 }, unless: -> { :uf_m2.blank? }
+  #validates :sample_factor, numericality: { greater_than: 0 }, if: !sample_factor.blank?
+  #validates :sample_factor, numericality: { less_than_or_equal_to: 1 }, if: !sample_factor.blank?
+
   BIMESTER_QUANTITY = 6
 
   SUM_CRITERIA = 0
@@ -616,7 +641,6 @@ class Transaction < ApplicationRecord
     cond = "transactions.inscription_date BETWEEN '#{filters[:date_from]}' "
     if !filters['polygon_id'].nil?
         session_saved = ApplicationStatus.find(filters[:polygon_id])
-        byebug
       if !filters[:wkt].nil?
         cond += WhereBuilder.build_within_condition(session_saved['wkt']) + Util.and
       elsif !filters[:centerpt].nil?
