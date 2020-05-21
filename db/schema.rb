@@ -87,257 +87,6 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "censo_2012_csv", id: :integer, default: -> { "nextval('cens0_2012_csv_id_seq'::regclass)" }, force: :cascade do |t|
-    t.string "geocode"
-    t.integer "age_0_9"
-    t.integer "age_10_19"
-    t.integer "age_20_29"
-    t.integer "age_30_39"
-    t.integer "age_40_49"
-    t.integer "age_50_59"
-    t.integer "age_60_69"
-    t.integer "age_70_79"
-    t.integer "age_80_more"
-    t.integer "age_tot"
-    t.integer "home_1p"
-    t.integer "home_2p"
-    t.integer "home_3p"
-    t.integer "home_4p"
-    t.integer "home_5p"
-    t.integer "home_6_more"
-    t.integer "home_tot"
-    t.integer "male"
-    t.integer "female"
-    t.integer "basica"
-    t.integer "media"
-    t.integer "media_tec"
-    t.integer "tecnica"
-    t.integer "profesional"
-    t.integer "magister"
-    t.integer "doctor"
-    t.integer "owner"
-    t.integer "leased"
-    t.integer "transferred"
-    t.integer "free"
-    t.integer "possesion"
-    t.integer "married"
-    t.integer "coexist"
-    t.integer "single"
-    t.integer "canceled"
-    t.integer "separated"
-    t.integer "widowed"
-    t.integer "salaried"
-    t.integer "domestic_service"
-    t.integer "independent"
-    t.integer "employee_employer"
-    t.integer "unpaid_familiar"
-    t.string "ISMT_zn"
-    t.string "GSE_zn"
-    t.string "N_hog"
-    t.string "N_ABC1"
-    t.string "N_C2"
-    t.string "N_C3"
-    t.string "N_D"
-    t.string "N_E"
-  end
-
-  create_table "censo_2012_para_census", id: :integer, default: nil, force: :cascade do |t|
-    t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
-    t.bigint "geocode"
-    t.integer "age_0_9"
-    t.integer "age_10_19"
-    t.integer "age_20_29"
-    t.integer "age_30_39"
-    t.integer "age_40_49"
-    t.integer "age_50_59"
-    t.integer "age_60_69"
-    t.integer "age_70_79"
-    t.integer "age_80_more"
-    t.integer "age_tot"
-    t.integer "home_1p"
-    t.integer "home_2p"
-    t.integer "home_3p"
-    t.integer "home_4p"
-    t.integer "home_5p"
-    t.integer "home_6_more"
-    t.integer "home_tot"
-    t.integer "male"
-    t.integer "female"
-    t.integer "basica"
-    t.integer "media"
-    t.integer "media_tec"
-    t.integer "tecnica"
-    t.integer "profesional"
-    t.integer "magister"
-    t.integer "doctor"
-    t.integer "owner"
-    t.integer "leased"
-    t.integer "transferred"
-    t.integer "free"
-    t.integer "possesion"
-    t.integer "married"
-    t.integer "coexist"
-    t.integer "single"
-    t.integer "canceled"
-    t.integer "separated"
-    t.integer "widowed"
-    t.integer "salaried"
-    t.integer "domestic_service"
-    t.integer "independent"
-    t.integer "employee_employer"
-    t.integer "unpaid_familiar"
-    t.string "ismt_zn"
-    t.string "gse_zn"
-    t.geometry "the_geom_point", limit: {:srid=>4326, :type=>"st_point"}
-    t.integer "county_id"
-    t.bigint "census_source_id"
-    t.bigint "n_abc1"
-    t.bigint "n_c2"
-    t.bigint "n_c3"
-    t.bigint "n_d"
-    t.bigint "n_e"
-    t.bigint "n_hog"
-    t.index ["the_geom"], name: "sidx_censo_2012_para_census_geom", using: :gist
-  end
-
-  create_table "censo_data", id: :serial, force: :cascade do |t|
-    t.string "geocode"
-    t.integer "age_0_9"
-    t.integer "age_10_19"
-    t.integer "age_20_29"
-    t.integer "age_30_39"
-    t.integer "age_40_49"
-    t.integer "age_50_59"
-    t.integer "age_60_69"
-    t.integer "age_70_79"
-    t.integer "age_80_more"
-    t.integer "age_tot"
-    t.integer "home_1p"
-    t.integer "home_2p"
-    t.integer "home_3p"
-    t.integer "home_4p"
-    t.integer "home_5p"
-    t.integer "home_6_more"
-    t.integer "home_tot"
-    t.integer "male"
-    t.integer "female"
-    t.integer "basica"
-    t.integer "media"
-    t.integer "media_tec"
-    t.integer "tecnica"
-    t.integer "profesional"
-    t.integer "magister"
-    t.integer "doctor"
-    t.integer "owner"
-    t.integer "leased"
-    t.integer "transferred"
-    t.integer "free"
-    t.integer "possesion"
-    t.integer "married"
-    t.integer "coexist"
-    t.integer "single"
-    t.integer "canceled"
-    t.integer "separated"
-    t.integer "widowed"
-    t.integer "salaried"
-    t.integer "domestic_service"
-    t.integer "independent"
-    t.integer "employee_employer"
-    t.integer "unpaid_familiar"
-    t.string "ISMT_zn"
-    t.string "GSE_zn"
-    t.string "N_hog"
-    t.string "N_ABC1"
-    t.string "N_C2"
-    t.string "N_C3"
-    t.string "N_D"
-    t.string "N_E"
-  end
-
-  create_table "censo_data_2012", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.bigint "cut"
-    t.string "area_c", limit: 6
-    t.float "manzent"
-    t.integer "distrito"
-    t.integer "zona"
-    t.integer "manzana"
-    t.string "codine11_t", limit: 254
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "censo_data_2017", id: :serial, force: :cascade do |t|
-    t.string "geocode"
-    t.integer "age_0_9"
-    t.integer "age_10_19"
-    t.integer "age_20_29"
-    t.integer "age_30_39"
-    t.integer "age_40_49"
-    t.integer "age_50_59"
-    t.integer "age_60_69"
-    t.integer "age_70_79"
-    t.integer "age_80_more"
-    t.integer "age_tot"
-    t.integer "home_1p"
-    t.integer "home_2p"
-    t.integer "home_3p"
-    t.integer "home_4p"
-    t.integer "home_5p"
-    t.integer "home_6_more"
-    t.integer "home_tot"
-    t.integer "male"
-    t.integer "female"
-    t.integer "basica"
-    t.integer "media"
-    t.integer "media_tec"
-    t.integer "tecnica"
-    t.integer "profesional"
-    t.integer "magister"
-    t.integer "doctor"
-    t.integer "owner"
-    t.integer "leased"
-    t.integer "transferred"
-    t.integer "free"
-    t.integer "possesion"
-    t.integer "married"
-    t.integer "coexist"
-    t.integer "single"
-    t.integer "canceled"
-    t.integer "separated"
-    t.integer "widowed"
-    t.integer "salaried"
-    t.integer "domestic_service"
-    t.integer "independent"
-    t.integer "employee_employer"
-    t.integer "unpaid_familiar"
-    t.string "ISMT_zn"
-    t.string "GSE_zn"
-    t.integer "N_hog"
-    t.string "N_ABC1"
-    t.string "N_C2"
-    t.string "N_C3"
-    t.string "N_D"
-    t.string "N_E"
-  end
-
-  create_table "censo_loc", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4326, :type=>"multi_polygon"}
-    t.string "region", limit: 2
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 3
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 5
-    t.string "nom_comuna", limit: 60
-    t.integer "distrito"
-    t.integer "loc_zon"
-    t.string "nom_locali", limit: 70
-    t.string "geocodigo", limit: 11
-    t.float "shape_leng"
-    t.float "shape_area"
-    t.bigint "geocode"
-  end
-
   create_table "census", id: :bigint, default: nil, force: :cascade do |t|
     t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
     t.string "geocode", limit: 254
@@ -459,26 +208,6 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
     t.integer "identifier"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "entidad_ind", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 2
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 3
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 5
-    t.string "nom_comuna", limit: 60
-    t.integer "distrito"
-    t.integer "loc_zon"
-    t.integer "ent_man"
-    t.integer "categoria"
-    t.string "nom_catego", limit: 25
-    t.string "manzent_i", limit: 14
-    t.integer "total_pers"
-    t.integer "total_vivi"
-    t.float "shape_leng"
-    t.float "shape_area"
   end
 
   create_table "expense_types", force: :cascade do |t|
@@ -932,263 +661,6 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
-  create_table "zona_c17", primary_key: "gid", id: :serial, force: :cascade do |t|
-    t.serial "id", null: false
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_10", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_11", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_12", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_13", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_14", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_15", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_2", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_3", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_4", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_5", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_6", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_7", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_8", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_9", id: :serial, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 3
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 4
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 6
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 254
-    t.bigint "distrito"
-    t.bigint "zona"
-    t.float "geocodigo"
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
-  create_table "zona_c17_old", id: :integer, default: -> { "nextval('zona_c17_id_seq'::regclass)" }, force: :cascade do |t|
-    t.geometry "geom", limit: {:srid=>4674, :type=>"multi_polygon"}
-    t.string "region", limit: 2
-    t.string "nom_region", limit: 60
-    t.string "provincia", limit: 3
-    t.string "nom_provin", limit: 60
-    t.string "comuna", limit: 5
-    t.string "nom_comuna", limit: 60
-    t.string "urbano", limit: 30
-    t.integer "distrito"
-    t.integer "loc_zon"
-    t.string "geocodigo", limit: 11
-    t.float "shape_leng"
-    t.float "shape_area"
-  end
-
   add_foreign_key "building_regulations", "counties"
   add_foreign_key "building_regulations", "density_types"
   add_foreign_key "counties", "regions"
@@ -1229,7 +701,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       DECLARE m int;
       BEGIN
         m = months2(cadastre, sale_date);
-        RETURN ( SELECT CASE (total_units - stock_units) WHEN 0 THEN 0 
+        RETURN ( SELECT CASE (total_units - stock_units) WHEN 0 THEN 0
         ELSE CASE m WHEN 0 THEN null
         ELSE (stock_units / ((total_units - stock_units)::double precision /m)) END
                                                       END) as masud;
@@ -1251,7 +723,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
         if (disp = 0) then
           return 0;
         else
-          RETURN (select sum(pim.mix_usable_square_meters * pim.stock_units)/disp::int 
+          RETURN (select sum(pim.mix_usable_square_meters * pim.stock_units)/disp::int
             as pp_utiles
             from project_instance_mixes pim
             where pim.project_instance_id = proj_instance_id);
@@ -1265,7 +737,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-        
+
       	RETURN (select (date_part('year', to_date(cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(sale_date, 'DD/MM/YYYY'))) * 12 +
       (date_part('month', to_date(cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(sale_date, 'DD/MM/YYYY'))));
 
@@ -1352,7 +824,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
         BEGIN
-            
+
             RETURN (select (date_part('year', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(p.sale_date, 'DD/MM/YYYY'))) * 12 +
               (date_part('month', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(p.sale_date, 'DD/MM/YYYY')))
               from project_instances pi inner join projects p
@@ -1448,7 +920,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
         BEGIN
-            
+
             RETURN (select (date_part('year', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(p.sale_date, 'DD/MM/YYYY'))) * 12 +
               (date_part('month', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(p.sale_date, 'DD/MM/YYYY')))
               from project_instances pi inner join projects p
@@ -1463,7 +935,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
         BEGIN
-            
+
             RETURN (select sum(vhmu) from project_instance_mix_views where project_instance_id = proj_instance_id) as vhmo;
 
           END;
@@ -1554,10 +1026,10 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       								and pi.year between yearFrom and yearTo
       								and pi.bimester between bimFrom and bimTo
       								group by pi.year, pi.bimester loop
-      		
+
       		PERFORM inciti_kpi_project_primary_data(c_id, rec.year, rec.bimester, project_type_idi);
       	end loop;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_mas, sql_definition: <<-SQL
@@ -1567,11 +1039,11 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       AS $function$
       BEGIN
 
-      	return (select 
-      	CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) 
+      	return (select
+      	CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END)
       			ELSE SUM(pimv.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END as mas
       	--CASE sum(pimv.vhmud) WHEN 0 THEN null ELSE sum(pimv.masud * pimv.vhmud)/sum(pimv.vhmud) END as mas
-      	from parcels r, project_instance_mix_views pimv 
+      	from parcels r, project_instance_mix_views pimv
       	where pimv.county_id = county_id
       	and pimv.project_type_id = project_type_idi
       	and pimv.year  = y
@@ -1580,7 +1052,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	and r.id = sec_id
       	group by r.commune, r.area_name, pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_project_availability, sql_definition: <<-SQL
@@ -1598,7 +1070,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
+      		order by pi.year, pi.bimester);
       	else
       		return (select sum(pim.stock_units) as availability
       		from parcels r, (projects p inner join project_instances pi on p.id = pi.project_id
@@ -1612,7 +1084,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by r.commune, r.area_name, pi.year, pi.bimester
       		order by pi.year, pi.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_project_offer, sql_definition: <<-SQL
@@ -1630,7 +1102,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
+      		order by pi.year, pi.bimester);
       	else
       		return (select sum(pim.total_units) as offer
       		from parcels r, (projects p inner join project_instances pi on p.id = pi.project_id
@@ -1644,7 +1116,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by r.commune, r.area_name, pi.year, pi.bimester
       		order by pi.year, pi.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_project_qty, sql_definition: <<-SQL
@@ -1661,13 +1133,13 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);	
+      		order by pi.year, pi.bimester);
       	else
       		return (select count(p.*) as qty
       		from parcels r, (projects p inner join project_instances pi on p.id = pi.project_id
       		)
       		where p.county_id = county_id
-      		and p.project_type_id = project_type_idi 
+      		and p.project_type_id = project_type_idi
       		and pi.year  = y
       		and pi.bimester = bim
       		and ST_Contains(r.the_geom, p.the_geom)
@@ -1675,7 +1147,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by r.commune, r.area_name, pi.year, pi.bimester
       		order by pi.year, pi.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_pxq, sql_definition: <<-SQL
@@ -1692,7 +1164,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
+      		order by pi.year, pi.bimester);
       	else
       		return (select sum(pxq(pi.id)) as pxq
       		from parcels r, (projects p inner join project_instances pi on p.id = pi.project_id)
@@ -1705,7 +1177,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by r.commune, r.area_name, pi.year, pi.bimester
       		order by pi.year, pi.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_uf, sql_definition: <<-SQL
@@ -1725,7 +1197,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	and r.id = sec_id
       	group by r.commune, r.area_name, pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_uf_m2, sql_definition: <<-SQL
@@ -1747,8 +1219,8 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	group by r.commune, r.area_name, pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
       else
-      	return (select 
-      	CASE SUM(pimv.ps_terreno) WHEN 0 THEN 0 
+      	return (select
+      	CASE SUM(pimv.ps_terreno) WHEN 0 THEN 0
       	ELSE (SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno))))  END AS uf_m2
       	--(SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno)))) AS uf_m2
       	--sum(pimv.uf_m2_home * pimv.vhmu)/sum(pimv.vhmu) as uf_m2
@@ -1762,7 +1234,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	group by r.commune, r.area_name, pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
       end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_uf_m2_u, sql_definition: <<-SQL
@@ -1782,7 +1254,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	and r.id = sec_id
       	group by r.commune, r.area_name, pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_usable_m2, sql_definition: <<-SQL
@@ -1792,8 +1264,8 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       AS $function$
         DECLARE Sum_vhmu float;
       BEGIN
-      	
-      	return (select CASE SUM(pimv.total_units) WHEN 0 THEN 0 
+
+      	return (select CASE SUM(pimv.total_units) WHEN 0 THEN 0
       			ELSE SUM(pimv.mix_usable_square_meters * pimv.total_units)/SUM(pimv.total_units) end as usable_m2
       --sum(pimv.mix_usable_square_meters * pimv.total_units)/sum(pimv.total_units) end as usable_m2
       	from parcels r, project_instance_mix_views pimv
@@ -1805,7 +1277,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	and r.id = sec_id
       	group by r.commune, r.area_name, pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_vmd, sql_definition: <<-SQL
@@ -1822,7 +1294,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
+      		order by pi.year, pi.bimester);
       	else
       		return (select sum(vhmd(pi.id)) as vmd
       		from parcels r, (projects p inner join project_instances pi on p.id = pi.project_id)
@@ -1835,7 +1307,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by r.commune, r.area_name, pi.year, pi.bimester
       		order by pi.year, pi.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_vmr, sql_definition: <<-SQL
@@ -1852,7 +1324,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pimv.year = y
       		and pimv.bimester = bim
       		group by pimv.year, pimv.bimester
-      		order by pimv.year, pimv.bimester);		
+      		order by pimv.year, pimv.bimester);
       	else
       		return (select sum(pimv.vhmu) as vmr
       		from parcels r, project_instance_mix_views pimv
@@ -1865,7 +1337,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by r.commune, r.area_name, pimv.year, pimv.bimester
       		order by pimv.year, pimv.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_terrace_m2, sql_definition: <<-SQL
@@ -1898,7 +1370,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by r.commune, r.area_name, pimv.year, pimv.bimester
       		order by pimv.year, pimv.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :pxq_d, sql_definition: <<-SQL
@@ -1926,7 +1398,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
+      		order by pi.year, pi.bimester);
       	else
       		return (select sum(pxq_d(pi.id::integer)) as pxq_d
       		from parcels r, (projects p inner join project_instances pi on p.id = pi.project_id)
@@ -1939,7 +1411,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by r.commune, r.area_name, pi.year, pi.bimester
       		order by pi.year, pi.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_project_primary_data, sql_definition: <<-SQL
@@ -1950,7 +1422,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	declare parcel RECORD;
       BEGIN
       	for parcel in select p.* from parcels p inner join counties c on p.code = c.code where p.code = c_id loop
-      		insert into project_primary_data (parcel_id, year, bimester, proj_qty, offer, availability, vmr, vmd, 
+      		insert into project_primary_data (parcel_id, year, bimester, proj_qty, offer, availability, vmr, vmd,
       		vvm, mas, usable_m2, terrace, uf_m2, uf, uf_m2_u, pxqr, pxqd)
       		values(parcel.id,
       			y,
@@ -1972,7 +1444,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
 
       		);
       	end loop;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_generate_primary_data, sql_definition: <<-SQL
@@ -1985,16 +1457,16 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	delete from project_primary_data;
       	for rec in select pi.year, pi.bimester from projects p inner join counties c on p.county_id = c.id
       								inner join project_instances pi on p.id = pi.project_id
-      								where 
+      								where
       								ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
       								and p.project_type_id = project_type_id_
       								and pi.year between yearFrom and yearTo
       								and pi.bimester between bimFrom and bimTo
       								group by pi.year, pi.bimester loop
-      		
+
       		PERFORM kpi__polygon_project_primary_data(polygon_id, rec.year, rec.bimester, project_type_id_);
       	end loop;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_project_availability, sql_definition: <<-SQL
@@ -2011,9 +1483,9 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__polygon_project_offer, sql_definition: <<-SQL
@@ -2022,19 +1494,19 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-      	
+
       		return (select sum(pim.total_units) as offer
       		from (projects p inner join project_instances pi on p.id = pi.project_id
       		inner join project_instance_mixes pim on pi.id = pim.project_instance_id)
-      		where 
+      		where
       		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
       		and p.project_type_id = project_type_id_
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__polygon_project_qty, sql_definition: <<-SQL
@@ -2045,14 +1517,14 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       BEGIN
       		return (select count(p.*) as qty
       		from (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where 
+      		where
       		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
       		and p.project_type_id = project_type_id_
       		and pi.year = y
       		and  pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);	
-      END;	
+      		order by pi.year, pi.bimester);
+      END;
       $function$
   SQL
   create_function :kpi__polygon_pxq, sql_definition: <<-SQL
@@ -2061,7 +1533,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-      	
+
       		return (select sum(pxq(pi.id)) as pxq
       		from (projects p inner join project_instances pi on p.id = pi.project_id)
       		where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
@@ -2069,9 +1541,9 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__polygon_uf, sql_definition: <<-SQL
@@ -2089,7 +1561,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	and pimv.bimester = bim
       	group by  pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_uf_m2, sql_definition: <<-SQL
@@ -2100,13 +1572,13 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       BEGIN
 
       if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_id_) then
-      	return (select case sum(pimv.total_m2) when 0 then 0 else 
+      	return (select case sum(pimv.total_m2) when 0 then 0 else
       round(SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.5 * mix_terrace_square_meters))),2) end as uf_m2
 
 
       	--round(sum(pimv.uf_m2 * pimv.total_m2)/sum(pimv.total_m2),1) end as uf_m2
       	from parcels r, project_instance_mix_views pimv
-      	where 
+      	where
       	pimv.project_type_id = project_type_id_
       	and pimv.year  = y
       	and pimv.bimester = bim
@@ -2114,9 +1586,9 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	group by  pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
       else
-      	return (select (SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno)))) AS uf_m2 
+      	return (select (SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno)))) AS uf_m2
       	from parcels r, project_instance_mix_views pimv
-      	where 
+      	where
       	pimv.project_type_id = project_type_id_
       	and pimv.year  = y
       	and pimv.bimester = bim
@@ -2124,7 +1596,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	group by pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
       end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_uf_m2_u, sql_definition: <<-SQL
@@ -2136,14 +1608,14 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
 
       	return (select case sum(pimv.vhmu) when 0 then 0 else sum(pimv.uf_m2_u * pimv.total_m2)/sum(pimv.total_m2) end as uf_m2_u
       	from project_instance_mix_views pimv
-      	where 
+      	where
       	pimv.project_type_id = project_type_id_
       	and pimv.year  = y
       	and pimv.bimester = bim
       	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
       	group by  pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_usable_m2, sql_definition: <<-SQL
@@ -2153,7 +1625,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       AS $function$
         DECLARE Sum_vhmu float;
       BEGIN
-      	
+
       	return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_usable_square_meters * pimv.total_units)/sum(pimv.total_units) end as usable_m2
       	from project_instance_mix_views pimv
       	where
@@ -2163,7 +1635,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
       	group by  pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_vmd, sql_definition: <<-SQL
@@ -2172,18 +1644,18 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-      	
+
       		return (select sum(vhmd(pi.id)) as vmd
       		from (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where 
+      		where
       		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
       		and p.project_type_id = project_type_id_
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__polygon_vmr, sql_definition: <<-SQL
@@ -2195,14 +1667,14 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
 
       		return (select sum(pimv.vhmu) as vmr
       		from project_instance_mix_views pimv
-      		where 
+      		where
       		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
       		and pimv.project_type_id = project_type_id_
       		and pimv.year = y
       		and pimv.bimester = bim
       		group by pimv.year, pimv.bimester
-      		order by pimv.year, pimv.bimester);		
-      END;	
+      		order by pimv.year, pimv.bimester);
+      END;
       $function$
   SQL
   create_function :kpi__polygon_mas, sql_definition: <<-SQL
@@ -2212,25 +1684,25 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       AS $function$
       BEGIN
 
-      	return (select 
-      			CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) 
+      	return (select
+      			CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END)
       			ELSE SUM(pimv.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END as mas
       	--CASE sum(pimv.vhmud) WHEN 0 THEN null ELSE sum(pimv.masud * pimv.vhmud)/sum(pimv.vhmud) END as mas
-      	from 
-      	--parcels r, 
-      	project_instance_mix_views pimv 
-      	where 
+      	from
+      	--parcels r,
+      	project_instance_mix_views pimv
+      	where
       	pimv.project_type_id = project_type_id_
       	and pimv.year  = y
       	and pimv.bimester = bim
       	and ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
 
       	--and ST_Contains(r.the_geom, pimv.the_geom)
-      	group by 
-      	--r.nom_com, r.area_name, 
+      	group by
+      	--r.nom_com, r.area_name,
       	pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_terrace_m2, sql_definition: <<-SQL
@@ -2243,7 +1715,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_id_) then
       		return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_terrace_square_meters * pimv.total_units)/sum(pimv.total_units) end as terrace_m2
       		from  project_instance_mix_views pimv
-      		where 
+      		where
       		pimv.project_type_id = project_type_id_
       		and pimv.year  = y
       		and pimv.bimester = bim
@@ -2261,7 +1733,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by  pimv.year, pimv.bimester
       		order by pimv.year, pimv.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_project_primary_data, sql_definition: <<-SQL
@@ -2271,11 +1743,11 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       AS $function$
       	declare parcel RECORD;
       BEGIN
-      	for parcel in 
-      		select pi.bimester, pi.year from counties c inner join projects pr on pr.county_id = c.id 
+      	for parcel in
+      		select pi.bimester, pi.year from counties c inner join projects pr on pr.county_id = c.id
       					inner join project_instances pi on pi.project_id = pr.id
-      where 
-      	 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pr.the_geom) 
+      where
+      	 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pr.the_geom)
       	and year = y and bimester = bim
       	group by pi.year, pi.bimester
       	loop
@@ -2299,7 +1771,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       			kpi__polygon_pxq_d(polygon_id, y, bim,  project_type_id)
       		);
       	end loop;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_pxq_d, sql_definition: <<-SQL
@@ -2308,7 +1780,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-      	
+
       		return (select sum(pxq_d(pi.id::integer)) as pxq_d
       		from (projects p inner join project_instances pi on p.id = pi.project_id)
       		where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
@@ -2316,9 +1788,9 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__circle_generate_primary_data, sql_definition: <<-SQL
@@ -2331,16 +1803,16 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	delete from project_primary_data;
       	for rec in select pi.year, pi.bimester from projects p inner join counties c on p.county_id = c.id
       								inner join project_instances pi on p.id = pi.project_id
-      								where 
+      								where
       								(select st_Dwithin(st_geomfromtext('POINT(' || (filters->>'centerpt')::varchar || ')',4326), p.the_geom, (filters->>'radius')::numeric, false)  from application_statuses where id = polygon_id)
       								and p.project_type_id = project_type_id_
       								and pi.year between yearFrom and yearTo
       								and pi.bimester between bimFrom and bimTo
       								group by pi.year, pi.bimester loop
-      		
+
       		PERFORM kpi__circle_project_primary_data(polygon_id, rec.year, rec.bimester, project_type_id_);
       	end loop;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__circle_mas, sql_definition: <<-SQL
@@ -2350,26 +1822,26 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       AS $function$
       BEGIN
 
-      	return (select 
-      			CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) 
+      	return (select
+      			CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END)
       			ELSE SUM(pimv.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END as mas
       	--CASE sum(pimv.vhmud) WHEN 0 THEN null ELSE sum(pimv.masud * pimv.vhmud)/sum(pimv.vhmud) END as mas
-      	from 
-      	--parcels r, 
-      	project_instance_mix_views pimv 
-      	where 
+      	from
+      	--parcels r,
+      	project_instance_mix_views pimv
+      	where
       	pimv.project_type_id = project_type_id_
       	and pimv.year  = y
       	and pimv.bimester = bim
-      	and 
+      	and
       	(select st_Dwithin(st_geomfromtext('POINT(' || (filters->>'centerpt')::varchar || ')',4326), pimv.the_geom, (filters->>'radius')::numeric, false)  from application_statuses where id = polygon_id)
 
       	--and ST_Contains(r.the_geom, pimv.the_geom)
-      	group by 
-      	--r.nom_com, r.area_name, 
+      	group by
+      	--r.nom_com, r.area_name,
       	pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__circle_project_availability, sql_definition: <<-SQL
@@ -2387,9 +1859,9 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__circle_project_offer, sql_definition: <<-SQL
@@ -2398,20 +1870,20 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-      	
+
       		return (select sum(pim.total_units) as offer
       		from (projects p inner join project_instances pi on p.id = pi.project_id
       		inner join project_instance_mixes pim on pi.id = pim.project_instance_id)
-      		where 
+      		where
       		 	(select st_Dwithin(st_geomfromtext('POINT(' || (filters->>'centerpt')::varchar || ')',4326), p.the_geom, (filters->>'radius')::numeric, false)  from application_statuses where id = polygon_id)
 
       		and p.project_type_id = project_type_id_
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__circle_project_primary_data, sql_definition: <<-SQL
@@ -2421,10 +1893,10 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       AS $function$
       	declare parcel RECORD;
       BEGIN
-      	for parcel in 
-      		select pi.bimester, pi.year from counties c inner join projects pr on pr.county_id = c.id 
+      	for parcel in
+      		select pi.bimester, pi.year from counties c inner join projects pr on pr.county_id = c.id
       					inner join project_instances pi on pi.project_id = pr.id
-      where 
+      where
       	 	(select st_Dwithin(st_geomfromtext('POINT(' || (filters->>'centerpt')::varchar || ')',4326), pr.the_geom, (filters->>'radius')::numeric, false)  from application_statuses where id = polygon_id)
 
       	and year = y and bimester = bim
@@ -2450,7 +1922,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       			kpi__circle_pxq_d(polygon_id, y, bim,  project_type_id)
       		);
       	end loop;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__circle_project_qty, sql_definition: <<-SQL
@@ -2461,15 +1933,15 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       BEGIN
       		return (select count(p.*) as qty
       		from (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where 
+      		where
       		 	(select st_Dwithin(st_geomfromtext('POINT(' || (filters->>'centerpt')::varchar || ')',4326), p.the_geom, (filters->>'radius')::numeric, false)  from application_statuses where id = polygon_id)
 
       		and p.project_type_id = project_type_id_
       		and pi.year = y
       		and  pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);	
-      END;	
+      		order by pi.year, pi.bimester);
+      END;
       $function$
   SQL
   create_function :kpi__circle_pxq, sql_definition: <<-SQL
@@ -2478,7 +1950,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-      	
+
       		return (select sum(pxq(pi.id)) as pxq
       		from (projects p inner join project_instances pi on p.id = pi.project_id)
       		where 	(select st_Dwithin(st_geomfromtext('POINT(' || (filters->>'centerpt')::varchar || ')',4326), p.the_geom, (filters->>'radius')::numeric, false)  from application_statuses where id = polygon_id)
@@ -2487,9 +1959,9 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__circle_pxq_d, sql_definition: <<-SQL
@@ -2498,7 +1970,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-      	
+
       		return (select sum(pxq_d(pi.id::integer)) as pxq_d
       		from (projects p inner join project_instances pi on p.id = pi.project_id)
       		where	(select st_Dwithin(st_geomfromtext('POINT(' || (filters->>'centerpt')::varchar || ')',4326), p.the_geom, (filters->>'radius')::numeric, false)  from application_statuses where id = polygon_id)
@@ -2507,9 +1979,9 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__circle_terrace_m2, sql_definition: <<-SQL
@@ -2522,7 +1994,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_id_) then
       		return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_terrace_square_meters * pimv.total_units)/sum(pimv.total_units) end as terrace_m2
       		from  project_instance_mix_views pimv
-      		where 
+      		where
       		pimv.project_type_id = project_type_id_
       		and pimv.year  = y
       		and pimv.bimester = bim
@@ -2542,7 +2014,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       		group by  pimv.year, pimv.bimester
       		order by pimv.year, pimv.bimester);
       	end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__circle_uf, sql_definition: <<-SQL
@@ -2561,7 +2033,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	and pimv.bimester = bim
       	group by  pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__circle_uf_m2, sql_definition: <<-SQL
@@ -2572,13 +2044,13 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       BEGIN
 
       if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_id_) then
-      	return (select case sum(pimv.total_m2) when 0 then 0 else 
+      	return (select case sum(pimv.total_m2) when 0 then 0 else
       round(SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.5 * mix_terrace_square_meters))),2) end as uf_m2
 
 
       	--round(sum(pimv.uf_m2 * pimv.total_m2)/sum(pimv.total_m2),1) end as uf_m2
       	from parcels r, project_instance_mix_views pimv
-      	where 
+      	where
       	pimv.project_type_id = project_type_id_
       	and pimv.year  = y
       	and pimv.bimester = bim
@@ -2587,9 +2059,9 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	group by  pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
       else
-      	return (select (SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno)))) AS uf_m2 
+      	return (select (SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno)))) AS uf_m2
       	from parcels r, project_instance_mix_views pimv
-      	where 
+      	where
       	pimv.project_type_id = project_type_id_
       	and pimv.year  = y
       	and pimv.bimester = bim
@@ -2598,7 +2070,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	group by pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
       end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__circle_uf_m2_u, sql_definition: <<-SQL
@@ -2610,7 +2082,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
 
       	return (select case sum(pimv.vhmu) when 0 then 0 else sum(pimv.uf_m2_u * pimv.total_m2)/sum(pimv.total_m2) end as uf_m2_u
       	from project_instance_mix_views pimv
-      	where 
+      	where
       	pimv.project_type_id = project_type_id_
       	and pimv.year  = y
       	and pimv.bimester = bim
@@ -2618,7 +2090,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
 
       	group by  pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__circle_usable_m2, sql_definition: <<-SQL
@@ -2628,7 +2100,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       AS $function$
         DECLARE Sum_vhmu float;
       BEGIN
-      	
+
       	return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_usable_square_meters * pimv.total_units)/sum(pimv.total_units) end as usable_m2
       	from project_instance_mix_views pimv
       	where
@@ -2639,7 +2111,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
 
       	group by  pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__circle_vmd, sql_definition: <<-SQL
@@ -2648,19 +2120,19 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-      	
+
       		return (select sum(vhmd(pi.id)) as vmd
       		from (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where 
+      		where
       			(select st_Dwithin(st_geomfromtext('POINT(' || (filters->>'centerpt')::varchar || ')',4326), p.the_geom, (filters->>'radius')::numeric, false)  from application_statuses where id = polygon_id)
 
       		and p.project_type_id = project_type_id_
       		and pi.year = y
       		and pi.bimester = bim
       		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
+      		order by pi.year, pi.bimester);
+
+      END;
       $function$
   SQL
   create_function :kpi__circle_vmr, sql_definition: <<-SQL
@@ -2672,15 +2144,15 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
 
       		return (select sum(pimv.vhmu) as vmr
       		from project_instance_mix_views pimv
-      		where 
+      		where
       		 	(select st_Dwithin(st_geomfromtext('POINT(' || (filters->>'centerpt')::varchar || ')',4326), pimv.the_geom, (filters->>'radius')::numeric,false)  from application_statuses where id = polygon_id)
 
       		and pimv.project_type_id = project_type_id_
       		and pimv.year = y
       		and pimv.bimester = bim
       		group by pimv.year, pimv.bimester
-      		order by pimv.year, pimv.bimester);		
-      END;	
+      		order by pimv.year, pimv.bimester);
+      END;
       $function$
   SQL
   create_function :percent_venta, sql_definition: <<-SQL
@@ -2697,7 +2169,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
 
       	if (offer = 0) then
       	  return 0;
-      	else  
+      	else
       	  RETURN (select sum(total_units - stock_units) / offer::real * 100
       		from project_instance_mixes
       		where project_instance_id = proj_instance_id) as percent_venta;
@@ -2720,12 +2192,12 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       	if (disp = 0) then
       	  return 0;
       	else
-      	  RETURN (select sum(pim.mix_terrace_square_meters * pim.stock_units)/disp::int 
+      	  RETURN (select sum(pim.mix_terrace_square_meters * pim.stock_units)/disp::int
       		as pp_utiles_terrace
       		from project_instance_mixes pim
       		where pim.project_instance_id = proj_instance_id);
       	end if;
-      		
+
       END;
       $function$
   SQL
@@ -2735,17 +2207,13 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-        
+
       	RETURN (select case when sum(pimv.stock_units) = 0 then 0 else sum(pimv.ps_terreno * pimv.stock_units)/sum(pimv.stock_units) end
       		as pp_terreno
       	from project_instance_mix_views pimv
       	where pimv.project_instance_id = proj_instance_id);
       END;
       $function$
-  SQL
-
-  create_trigger :layer_integrity_checks, sql_definition: <<-SQL
-      CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE PROCEDURE topology.layertrigger()
   SQL
 
   create_view "project_instance_mix_views_anterior", sql_definition: <<-SQL
@@ -2849,63 +2317,6 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
       transactions.year_sii,
       transactions.role_associated
      FROM transactions;
-  SQL
-  create_view "view_zona_c17", sql_definition: <<-SQL
-      SELECT z.geom,
-      cd.id,
-      cd.geocode,
-      cd.age_0_9,
-      cd.age_10_19,
-      cd.age_20_29,
-      cd.age_30_39,
-      cd.age_40_49,
-      cd.age_50_59,
-      cd.age_60_69,
-      cd.age_70_79,
-      cd.age_80_more,
-      cd.age_tot,
-      cd.home_1p,
-      cd.home_2p,
-      cd.home_3p,
-      cd.home_4p,
-      cd.home_5p,
-      cd.home_6_more,
-      cd.home_tot,
-      cd.male,
-      cd.female,
-      cd.basica,
-      cd.media,
-      cd.media_tec,
-      cd.tecnica,
-      cd.profesional,
-      cd.magister,
-      cd.doctor,
-      cd.owner,
-      cd.leased,
-      cd.transferred,
-      cd.free,
-      cd.possesion,
-      cd.married,
-      cd.coexist,
-      cd.single,
-      cd.canceled,
-      cd.separated,
-      cd.widowed,
-      cd.salaried,
-      cd.domestic_service,
-      cd.independent,
-      cd.employee_employer,
-      cd.unpaid_familiar,
-      cd."ISMT_zn",
-      cd."GSE_zn",
-      cd."N_hog",
-      cd."N_ABC1",
-      cd."N_C2",
-      cd."N_C3",
-      cd."N_D",
-      cd."N_E"
-     FROM (zona_c17 z
-       JOIN censo_data_2017 cd ON ((z.geocodigo = ((cd.geocode)::numeric)::double precision)));
   SQL
   create_view "project_department_reports", sql_definition: <<-SQL
       SELECT project_instances.bimester,

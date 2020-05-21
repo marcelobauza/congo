@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
+pro:
+  id: 1
+  name: Pro
   read_only: false
 
-two:
-  name: MyString
+admin:
+  id: 2
+  name: Admin
   read_only: false

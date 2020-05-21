@@ -4,10 +4,10 @@ one:
   rol_number: MyString
   address: MyString
   destination_code: MyString
-  land_m2: MyString
+  land_m2: 12
 
 two:
   rol_number: MyString
   address: MyString
   destination_code: MyString
-  land_m2: MyString
+  land_m2: 15
