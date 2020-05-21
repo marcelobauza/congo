@@ -10,141 +10,27 @@
         <% end %>
       <% end %>
 
-
-      <div class="form-group row">
-        <%= f.label :user_name, class: "col-md-2 text-right col-form-label" %>
-        <div class="col-md-3">
-          <%= f.text_field :name, class: "form-control" %>
-        </div>
+      <%= f.input :name, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <%= f.input :complete_name, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <%= f.input :rut, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <%= f.input :email, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <%= f.input :company, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <%= f.input :city, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <% if !@user.new_record? %>
+        <%= f.input :current_password, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <% end %>
+      <%= f.input :password, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <%= f.input :password_confirmation, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <%= f.input :is_temporal, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <%= f.input :disabled, wrapper_html: { class: "col-md-4 form-group row" } %>
+      <%= f.collection_select(:role_id, Role.all, :id, :name, { include_blank: true }) %>
+      <%= f.collection_select( :county_ids, County.all, :id, :name, { include_blank: false }, {multiple: true}) %>
+      <%= f.collection_select( :layer_types, LayerType.all, :id, :title, { include_blank: false }, {multiple: true}) %>
+      <div class="col-md-3">
+        <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
       </div>
-
-      <div class="form-group row">
-        <%= f.label :complete_name, class: "col-md-2 text-right col-form-label" %>
-        <div class="col-md-3">
-          <%= f.text_field :complete_name, class: "form-control" %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <%= f.label :rut, class: "col-md-2 text-right col-form-label" %>
-        <div class="col-md-3">
-          <%= f.text_field :rut, class: "form-control" %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <%= f.label :email, 'E-mail', class: "col-md-2 text-right col-form-label" %>
-        <div class="col-md-3">
-          <%= f.text_field :email, class: "form-control" %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <%= f.label :company, class: "col-md-2 text-right col-form-label" %>
-        <div class="col-md-3">
-          <%= f.text_field :company, class: "form-control" %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <%= f.label :city, class: "col-md-2 text-right col-form-label" %>
-        <div class="col-md-3">
-          <%= f.text_field :city, class: "form-control" %>
-        </div>
-      </div>
-      <div class="form-group row">
-        <%= f.label :current_password, "Contraseña Actual", class: "col-md-2 text-right col-form-label" %>
-        <div class="col-md-3">
-          <%= f.password_field :current_password, class: "form-control"%>
-        </div>
-      </div>
-      <div class="form-group row">
-        <%= f.label :password, class: "col-md-2 text-right col-form-label" %>
-        <div class="col-md-3">
-          <%= f.password_field :password, class: "form-control" %>
-        </div>
-      </div>
-      <div class="form-group row">
-        <%= f.label :password_confirmation, class: "col-md-2 text-right col-form-label" %>
-        <div class="col-md-3">
-          <%= f.password_field :password_confirmation , class: "form-control"%>
-        </div>
-      </div>
-      <div class="form-group row">
-        <%= f.label :is_temporal, class: "col-md-2 text-right form-check-label" %>
-        <div class="col-md-3">
-          <%= f.check_box :is_temporal %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <%= f.label :disabled, class: "col-md-2 text-right form-check-label" %>
-        <div class="col-md-3">
-          <%= f.check_box :disabled %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <div class="col-md-2 text-right">
-          <%= label_tag t('activerecord.models.role.one') %>
-        </div>
-        <div class="col-md-3">
-          <%= select("user", :role_id, roles_for_select, {}, { :class => 'form-control'}) %>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <div class="span8">
-          <%= label_tag t('activerecord.models.county.one') %>
-          <div class="input">
-            <%= select_tag 'user[county_ids][]', options_for_select(counties_for_select, @user_counties.map { |county| county.id }), :multiple => true, :size => 10 %><br/>
-            <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
-          </div>
-        </div>
-      <div class="form-inputs">
-        <div class="col-md-2 text-right">
-          <%= label_tag 'Capas' %>
-        </div>
-        <%= select_tag 'user[layer_types][]', options_for_select(layer_types_for_select, @user.layer_types.map { |layer| layer} ), :multiple => true, :size => 5 %><br/>
-      </div>
-        <div class="col-md-2 text-right">
-          <%= label_tag t('activerecord.models.county.one') %>
-        </div>
-        <div class="col-md-3">
-          <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
-        </div>
-        <div class="col-md-3">
-          <table class="table table-striped table-hover table-bordered">
-            <thead>
-              <tr>
-                <th><%= User.human_attribute_name :county_contract  %></th>
-                <th><%= User.human_attribute_name :expiration_date %></th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <div class="col-md-2 text-right">
-          <h2><%=h t('activerecord.attributes.user.permissions') %></h2>
-        </div>
-        <div class="col-md-3">
-          <div class="btn" onclick="selectAll('modules')"><i class="far fa-check-square"></i></div>
-          <div class="btn" onclick="unselectAll('modules')"><i class="far fa-window-close"></i></div>
-        </div>
-      </div>
-
-
-
-      <div class="form-group row">
-        <div class="col-md-5 text-right">
-          <%= link_to 'Cancelar', admin_users_path, :class => 'btn btn-secondary' %>
-          <%= f.button :submit, :class => 'btn btn-primary', value: "Guardar" %>
-        </div>
-      </div>
-
+      <%= link_to 'Cancelar', admin_users_path, :class => 'btn btn-secondary' %>
+      <%= f.submit "Guardar", class: 'btn btn-primary'%>
     <% end %>
-
   </div>
 </div>
