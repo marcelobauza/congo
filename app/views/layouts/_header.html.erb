@@ -28,13 +28,13 @@
       </button>
 
       <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
-        <%if current_user.layer_types.include? 5  %>
+        <%if current_user.layer_types.include? 3  %>
           <%= link_to demography_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-male" title="Demografía y Gastos" style="font-size: 26px"></i><% end %>
         <% end %>
         <%if current_user.layer_types.include? 4  %>
           <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-file-alt" title="Normativa" style="font-size: 26px"></i><% end %>
         <% end %>
-        <%if current_user.layer_types.include? 3  %>
+        <%if current_user.layer_types.include? 5  %>
           <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-handshake" title="Compraventas" style="font-size: 26px"></i><% end %>
         <% end %>
         <%if current_user.layer_types.include? 2  %>
