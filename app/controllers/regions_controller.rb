@@ -1,6 +1,11 @@
 class RegionsController < ApplicationController
   before_action :set_region, only: [:show, :edit, :update, :destroy]
 
+  def search_regions
+    @counties = County.where(region_id: params[:ids]).pluck(:id)
+    render json: @counties
+  end
+
   # GET /regions
   # GET /regions.json
   def index

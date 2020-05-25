@@ -24,8 +24,9 @@
       <%= f.input :is_temporal, wrapper_html: { class: "col-md-4 form-group row" } %>
       <%= f.input :disabled, wrapper_html: { class: "col-md-4 form-group row" } %>
       <%= f.collection_select(:role_id, Role.all, :id, :name, { include_blank: true }) %>
-      <%= f.collection_select( :county_ids, County.all, :id, :name, { include_blank: false }, {multiple: true}) %>
-      <%= f.collection_select( :layer_types, LayerType.all, :id, :title, { include_blank: false }, {multiple: true}) %>
+      <%= f.collection_select(:region_ids, Region.all, :id, :name, {include_blank: true}, {multiple: true}) %>
+      <%= f.collection_select(:county_ids, County.all, :id, :name, { include_blank: false }, {multiple: true}) %>
+      <%= f.collection_select(:layer_types, LayerType.all, :id, :title, { include_blank: false }, {multiple: true}) %>
       <div class="col-md-3">
         <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
       </div>

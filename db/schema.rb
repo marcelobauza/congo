@@ -510,6 +510,15 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "regions_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "region_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["region_id"], name: "index_regions_users_on_region_id"
+    t.index ["user_id"], name: "index_regions_users_on_user_id"
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.boolean "read_only"
@@ -676,6 +685,8 @@ ActiveRecord::Schema.define(version: 2020_03_23_131359) do
   add_foreign_key "lots", "counties"
   add_foreign_key "pois", "poi_subcategories"
   add_foreign_key "project_instances", "project_statuses"
+  add_foreign_key "regions_users", "regions"
+  add_foreign_key "regions_users", "users"
   add_foreign_key "user_polygons", "users"
   add_foreign_key "users", "regions"
 
