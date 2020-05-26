@@ -7,9 +7,10 @@ Rails.application.routes.draw do
   resources :feedbacks
   resources :lots
   resources :categories
-  resources :regions
+
   get 'dashboards/index'
 
+  get 'regions/search_regions' => 'regions#search_regions'
   get 'counties/index'
   get 'future_projects/index'
   get 'projects/index'
@@ -68,7 +69,7 @@ Rails.application.routes.draw do
   get 'building_regulations/building_regulation_download' => 'building_regulations#building_regulation_download'
 
 
-  
+
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
     get 'user_polygons/export_data' => 'user_polygons#export_data'
@@ -93,6 +94,7 @@ Rails.application.routes.draw do
     resources :feedbacks
     resources :building_regulations
 
+    resources :regions
 
     resources :projects do
     resources :project_instances do
@@ -102,7 +104,7 @@ Rails.application.routes.draw do
     end
     resources :project_mixes
     resources :roles
-    resources :users 
+    resources :users
     resources :counties
     resources :surveyors
     resources :uf_conversions
@@ -119,7 +121,7 @@ Rails.application.routes.draw do
   resources :density_types
   resources :building_regulations
   resources :project_statuses
-  
+
   resources :property_types
 
   resources :future_project_types
