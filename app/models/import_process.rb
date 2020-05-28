@@ -222,6 +222,16 @@ class ImportProcess < ApplicationRecord
             mix_instance.mix_usable_square_meters = data["T_M2_UTILE"].to_f
             mix_instance.mix_terrace_square_meters = data["T_M2_TERRA"].to_f
           else
+            case data["TIPO_C"].to_s
+            when "A"
+              mix_instance.home_type = "Aislada"
+            when "P"
+              mix_instance.home_type = "Pareada"
+            when "T"
+              mix_instance.home_type = "Tren"
+            when "A-P"
+              mix_instance.home_type = "Aislada-Pareada"
+            end
             mix_instance.mix_m2_field = data["T_M2_TERRE"].to_f
             mix_instance.mix_m2_built = data["T_M2_CONST"].to_f
           end

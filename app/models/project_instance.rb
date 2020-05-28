@@ -69,24 +69,23 @@ def save_instance_data(data, mixes, t_units, st_units, sld_units, project_type)
      self.year = data["YEAR"].to_i
      self.bimester = data["BIMESTRE"].to_i
 
-     if project_type == "Casas"
+     #if project_type == "Casas"
       # self.m2_field = data["M2_TERRENO"].to_f unless data["M2_TERRENO"].to_i == -1
       # self.m2_built = data["M2_CONST"].to_f unless data["M2_CONST"].to_i == -1
-
-       case data["TIPO_C"].to_s
-       when "A"
-         self.home_type = "Aislada"
-       when "P"
-         self.home_type = "Pareada"
-       when "T"
-         self.home_type = "Tren"
-       when "A-P"
-         self.home_type = "Aislada-Pareada"
-       end
-     else
-       #self.mix_usable_square_meters = data["M2_UTILES"] unless data["M2_UTILES"] == -1
-       #self.mix_terrace_square_meters = data["M2_TERRAZA"] unless data["M2_TERRAZA"] == -1
-     end
+       #case data["TIPO_C"].to_s
+       #when "A"
+       #   mixes.home_type = "Aislada"
+       #when "P"
+       #   mixes.home_type = "Pareada"
+       #when "T"
+       #  mixes.home_type = "Tren"
+       #when "A-P"
+       #   mixes.home_type = "Aislada-Pareada"
+       #end
+     #else
+       ##self.mix_usable_square_meters = data["M3_UTILES"] unless data["M2_UTILES"] == -1
+       ##self.mix_terrace_square_meters = data["M2_TERRAZA"] unless data["M2_TERRAZA"] == -1
+     #end
 
      self.comments = data["COMMENTS"]
      ProjectInstanceMix.associate_instance_mix_data(mixes, self, t_units)
