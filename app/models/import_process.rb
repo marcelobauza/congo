@@ -228,8 +228,8 @@ class ImportProcess < ApplicationRecord
             when "A-P"
               mix_instance.home_type               = "Aislada-Pareada"
             end
-            mix_instance.mix_usable_square_meters  = data["T_M2_CONST"].to_f
-            mix_instance.mix_m2_field              = data["T_M2_TERRE"].to_f
+            mix_instance.mix_usable_square_meters  = data["UTIL_M2"].to_f
+            mix_instance.mix_m2_field              = data["TERRENO_M2"].to_f
           end
 
           instance_mixes << mix_instance
