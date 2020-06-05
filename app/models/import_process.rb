@@ -165,10 +165,6 @@ class ImportProcess < ApplicationRecord
   def parse_projects(shape_file, project_type, import_logger)
     mixes = []
     instance_mixes = []
-    total_units = 0
-    stock_units = 0
-    sold_units = 0
-    @project_type = project_type
 
     RGeo::Shapefile::Reader.open(shape_file) do |shp|
       field = []
@@ -199,54 +195,47 @@ class ImportProcess < ApplicationRecord
             next
           end
 
-          mix_instance = ProjectInstanceMix.new
-          mix_instance.mix_id = mix.id
-          mix_instance.stock_units = data["STOCK"].to_i
-          mix_instance.mix_uf_m2 = data["T_UF_M2"].to_f
-          mix_instance.mix_selling_speed = data["T_VEL_VTA"].to_f
-          mix_instance.mix_uf_value = data["T_PRECIO_U"].to_f
-          mix_instance.total_units = data["OFERTA_T"].to_i
-          mix_instance.stock_units = data["STOCK"].to_i
+          mix_instance                             = ProjectInstanceMix.new
+          mix_instance.mix_id                      = mix.id
+          mix_instance.stock_units                 = data["STOCK"].to_i
+          mix_instance.mix_uf_m2                   = data["T_UF_M2"].to_f
+          mix_instance.mix_selling_speed           = data["T_VEL_VTA"].to_f
+          mix_instance.mix_uf_value                = data["T_PRECIO_U"].to_f
+          mix_instance.total_units                 = data["OFERTA_T"].to_i
+          mix_instance.uf_min                      = data["UF_MIN"].to_i
+          mix_instance.uf_max                      = data["UF_MAX"].to_i
+          mix_instance.discount                    = data["DESC"].to_f
+          mix_instance.uf_parking                  = data['UF_ESTACIO']
+          mix_instance.uf_cellar                   = data['UF_BODEGA']
+          mix_instance.h_office                    = data['HOFFICE']
+          mix_instance.service_room                = data['TIPO_SERVI']
+          mix_instance.living_room                 = data['ESTAR']
 
-          #mix_instance.sold_units = data["UN_VEND"].to_i
-          mix_instance.uf_min = data["UF_MIN"].to_i
-          mix_instance.uf_max = data["UF_MAX"].to_i
-          mix_instance.discount = data["DESC"].to_f
-          mix_instance.uf_parking = data['UF_ESTACIO']
-          mix_instance.uf_cellar = data['UF_BODEGA']
-          mix_instance.h_office = data['HOFFICE']
-          mix_instance.service_room = data['TIPO_SERVI']
-          mix_instance.living_room = data['ESTAR']
-
-          if @project_type == "Departamentos"
-            mix_instance.mix_usable_square_meters = data["T_M2_UTILE"].to_f
-            mix_instance.mix_terrace_square_meters = data["T_M2_TERRA"].to_f
+          if project_type == 'Departamentos'
+            mix_instance.mix_usable_square_meters  = data["UTIL_M2"].to_f
+            mix_instance.mix_terrace_square_meters = data["TERRAZA_M2"].to_f
           else
-              mix_instance.model = data["MODEL"]
-                    mix_instance.t_min = data["T_MIN"]
-                          mix_instance.t_max = data["T_MAX"]
+            mix_instance.model = data["MODEL"]
+            mix_instance.t_min = data["T_MIN"]
+            mix_instance.t_max = data["T_MAX"]
             case data["TIPO_C"].to_s
             when "A"
-              mix_instance.home_type = "Aislada"
+              mix_instance.home_type               = "Aislada"
             when "P"
-              mix_instance.home_type = "Pareada"
+              mix_instance.home_type               = "Pareada"
             when "T"
-              mix_instance.home_type = "Tren"
+              mix_instance.home_type               = "Tren"
             when "A-P"
-              mix_instance.home_type = "Aislada-Pareada"
+              mix_instance.home_type               = "Aislada-Pareada"
             end
-            mix_instance.mix_m2_field = data["T_M2_TERRE"].to_f
-            mix_instance.mix_m2_built = data["T_M2_CONST"].to_f
+            mix_instance.mix_usable_square_meters  = data["T_M2_CONST"].to_f
+            mix_instance.mix_m2_field              = data["T_M2_TERRE"].to_f
           end
 
           instance_mixes << mix_instance
-
-          total_units += data["OFERTA_T"].to_i
-          stock_units += data["STOCK"].to_i
-          sold_units += data["UN_VEND"].to_i
         end
 
-        store_project(geom, data, instance_mixes, total_units, stock_units, sold_units, import_logger)
+        store_project(geom, data, instance_mixes, import_logger, project_type)
         mixes.clear
         instance_mixes.clear
         total_units = 0
@@ -256,11 +245,11 @@ class ImportProcess < ApplicationRecord
     end
   end
 
-  def store_project(geom, data, mixes, total_units, stock_units, sold_units, import_logger)
+  def store_project(geom, data, mixes, import_logger, project_type)
     project = Project.find_or_initialize_by(code: data["COD_PROY"])
 
     is_new_record = project.new_record?
-    project.save_project_data(data, @project_type, geom)
+    project.save_project_data(data, project_type, geom)
     if project.errors.any?
       import_logger.failed += 1
       project.errors.full_messages.each do |error_message|
@@ -270,7 +259,7 @@ class ImportProcess < ApplicationRecord
     end
 
     instance = ProjectInstance.find_or_initialize_by(project_id: project.id, year: data['YEAR'], bimester: data['BIMESTRE'])
-    instance.save_instance_data(data, mixes, total_units, stock_units, sold_units, @project_type)
+    instance.save_instance_data(data, mixes, project_type)
 
     if instance.errors.any?
       import_logger.failed += 1
@@ -624,16 +613,8 @@ class ImportProcess < ApplicationRecord
       attributes << [ "DIRECCION", "C" ]
       attributes << [ "NOMBRE", "C" ]
       attributes << [ "N_PISOS", "N" ]
-      attributes << [ "M2_UTILES", "N" ]
-      attributes << [ "M2_TERRAZA", "N" ]
       attributes << [ "OFERTA_T", "N" ]
       attributes << [ "STOCK", "N" ]
-      attributes << [ "UN_VEND", "N" ]
-      attributes << [ "MESES_VTA", "N" ]
-      attributes << [ "UF_M2", "N" ]
-      attributes << [ "PRECIO_UF", "N" ]
-      attributes << [ "VEL_VTA", "N" ]
-      attributes << [ "PCTJE_VEND", "N" ]
       attributes << [ "INI_CONST", "C" ]
       attributes << [ "INI_VTAS", "C" ]
       attributes << [ "ENTREGA", "C" ]
@@ -650,17 +631,9 @@ class ImportProcess < ApplicationRecord
       attributes << [ "DIRECCION", "C" ]
       attributes << [ "NOMBRE", "C" ]
       attributes << [ "TIPO_C", "C" ]
-      attributes << [ "M2_TERRENO", "N" ]
-      attributes << [ "M2_CONST", "N" ]
       attributes << [ "N_PISOS", "N" ]
       attributes << [ "OFERTA_T", "N" ]
       attributes << [ "STOCK", "N" ]
-      attributes << [ "UN_VEND", "N" ]
-      attributes << [ "MESES_VTA", "N" ]
-      attributes << [ "UF_M2", "N" ]
-      attributes << [ "PRECIO_UF", "N" ]
-      attributes << [ "VEL_VTA", "N" ]
-      attributes << [ "PCTJE_VEND", "N" ]
       attributes << [ "INI_CONST", "C" ]
       attributes << [ "INI_VTAS", "C" ]
       attributes << [ "ENTREGA", "C" ]

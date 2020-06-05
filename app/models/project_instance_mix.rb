@@ -7,7 +7,7 @@ class ProjectInstanceMix < ApplicationRecord
 
   attr_accessor :get_bedroom, :get_bathroom
 
-  def self.associate_instance_mix_data(mixes, project_instance, units_total)
+  def self.associate_instance_mix_data(mixes, project_instance)
     #ProjectInstanceMix.delete_all(:project_instance_id => project_instance)
 
     mixes.each do |mix|

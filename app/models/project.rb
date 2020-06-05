@@ -1,5 +1,9 @@
 class Project < ApplicationRecord
   # acts_as_indexed :fields => [:name, :address, :code]
+  include Projects::Validations
+  include WhereBuilder
+  include Util
+  include Ranges
 
   has_many :project_instances, :dependent => :destroy
   has_many :project_instance_mixes, :through => :project_instances
@@ -18,36 +22,6 @@ class Project < ApplicationRecord
   delegate :id, :to => :get_constructor, :prefix => true, :allow_nil => true
   delegate :name, :to => :get_seller, :prefix => true, :allow_nil => true
   delegate :id, :to => :get_seller, :prefix => true, :allow_nil => true
-
-  include WhereBuilder
-  include Util
-  include Ranges
-
-  validates_presence_of :address,
-    :county_id,
-    :project_type_id,
-    :name,
-    :floors,
-    :longitude,
-    :latitude
-
-  validate :point_is_located_within_the_specified_county, :unless => Proc.new { |t| t.county.blank? or t.longitude.blank? or t.latitude.blank? }
-  #validates_numericality_of :floors, :only_integer => true, :unless => 'floors.blank?'
-
-   # validates_each :build_date, :sale_date, :transfer_date do |record, attr, value|
-   #   if value.split('/').count != 3
-   #     record.errors.add(attr, "La fecha no tiene el formato esperado. El formato debe ser 'dd/mm/aaaa'")
-   #   else
-   #     d, m, y = value.split('/')
-   #     if !(1..31).include? d.to_i
-   #       record.errors.add(attr, "El dia debe ser un valor entre 1 y 31 (dd/mm/aaaa)")
-   #     end
-
-   #     if !(1..12).include? m.to_i
-   #       record.errors.add(attr, "El mes debe ser un valor entre 1 y 12 (dd/mm/aaaa)")
-   #     end
-   #   end
-   # end
 
   accepts_nested_attributes_for :project_instances, :project_instance_mixes
 
@@ -70,10 +44,8 @@ class Project < ApplicationRecord
   end
 
   def self.emi(not_project, project_type_id, wkt, bimester, year,  county_id = nil)
-
     joins = " inner join agency_rols on project_instance_mix_views.project_id = agency_rols.project_id "
     joins += " inner join agencies on agency_rols.agency_id = agencies.id "
-
     selects = " distinct on (project_instance_mix_views.the_geom) project_instance_mix_views.the_geom, "
     selects += " project_instance_mix_views.name as name,  "
     selects += " agencies.name as agency_name, "
@@ -83,7 +55,6 @@ class Project < ApplicationRecord
     selects += " round(pp_uf_m2 (project_instance_mix_views.project_instance_id)::numeric,1)  as uf_m2, "
     selects += "(select round(sum((mix_usable_square_meters * total_units) * (uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / mix_usable_square_meters ) / sum(mix_usable_square_meters * total_units),1)  from project_instance_mixes where project_instance_id = project_instance_mix_views.project_instance_id ) as uf_m2_u,  "
     selects += "pp_uf(project_instance_mix_views.project_instance_id) as uf_value"
-
     conditions =  "ST_Contains(ST_Transform(ST_GeomFromText('#{wkt}',4326),4326), project_instance_mix_views.the_geom)" if !wkt.nil?
     conditions +=  " and project_instance_mix_views.project_type_id = '#{project_type_id}' "
     conditions += " and  project_instance_mix_views.project_id not in (#{not_project}) "  unless not_project.nil? || not_project.empty?
@@ -98,17 +69,16 @@ class Project < ApplicationRecord
     return projects;
   end
 
-
   def self.kpi(county_id, year_from, year_to, bimester, project_type_id, polygon_id )
-
     if  ((county_id.empty? || polygon_id.empty?) && year_from.empty? && year_to.empty? && bimester.empty? && project_type_id.empty?)
       return;
     end
 
     if !county_id.empty?
-      county = County.where(id: county_id).first
-      county_code  = county.code.to_i
+      county      = County.where(id: county_id).first
+      county_code = county.code.to_i
     end
+
     bim_from, bim_to = 1, 6
 
     if bimester != "0"
@@ -127,12 +97,11 @@ class Project < ApplicationRecord
       end
     end
     kpi = Util.execute(result)
-
   end
 
   def self.getPrimaryEvolution
     Util.execute("select p.area_name, ppd.* from project_primary_data ppd
-                       inner join parcels p on p.id = ppd.parcel_id order by year, bimester")
+                  inner join parcels p on p.id = ppd.parcel_id order by year, bimester")
   end
 
   def self.getCountyEvolution ()
@@ -162,7 +131,7 @@ class Project < ApplicationRecord
   end
 
   def self.find_index(project_type, bimester, county, year, search)
-    
+
     select = " project_instances.project_id ,"
     select += " projects.project_type_id,"
     select += " bimester,"
@@ -264,13 +233,13 @@ class Project < ApplicationRecord
       where(build_conditions_new(filters, nil, true, range)).
       select(select).first
   end
-  
+
   def self.house_general_information(filters, range)
     select = "CASE SUM(project_instance_mix_views.total_units) WHEN 0 THEN 0 "
     select += "ELSE SUM((project_instance_mix_views.t_min + project_instance_mix_views.t_max)/2 * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units)END AS ps_terreno, "
     select += "CASE SUM(project_instance_mix_views.ps_terreno) WHEN 0 THEN 0 "
     select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno))))  END AS pp_uf_dis_home "
-    
+
     @a = ProjectInstanceMixView.method_selection(filters).
       where(build_conditions_new(filters, nil, true, range)).
       where(project_type_id: 1).
@@ -326,7 +295,7 @@ class Project < ApplicationRecord
     select += "MAX(uf_avg_percent) as max, "
     select += "CASE sum(total_m2) WHEN 0 THEN 0 ELSE sum(total_m2 * uf_avg_percent)/sum(total_m2) END AS avg,"
     select += "project_instance_mix_views.year, project_instance_mix_views.bimester"
-    
+
     values_by_period3("uf", select, filters, load_min_avg_max_values)
 
   end
@@ -342,7 +311,7 @@ class Project < ApplicationRecord
   end
 
   def self.projects_by_ranges(widget, filters)
-    
+
     query_condition = " year = #{filters[:to_year]}  "
     query_condition += " and bimester = #{filters[:to_period]} "
     query_condition += " and " +  WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids]) if filters.has_key? :project_type_ids
@@ -374,7 +343,7 @@ class Project < ApplicationRecord
     else
       ranges = get_ranges
     end
-    
+
     min_value = values[0]["min"].to_i
     max_value = values[0]["max"].to_i
     index_min = -1
@@ -494,57 +463,33 @@ class Project < ApplicationRecord
   end
 
   def save_project_data(data, project_type, geom)
-    ic = Iconv.new('UTF-8', 'ISO-8859-1')
-    type = ProjectType.find_by_name(project_type)
+    ic                                 = Iconv.new('UTF-8', 'ISO-8859-1')
+    type                               = ProjectType.find_by_name(project_type)
+    county                             = County.find_by(code: data["COMUNA"])
+    agency                             = Agency.find_or_create_by(name: ic.iconv(data["INMOBILIAR"]))
+    agency_rols                        = AgencyRol.find_or_create_by(
+      project_id: self.id,
+      agency_id: agency.id,
+      rol: 'INMOBILIARIA'
+    )
+    self.code                          = data["COD_PROY"]
+    self.address                       = ic.iconv(data["DIRECCION"].gsub("'","''"))
+    self.name                          = ic.iconv(data["NOMBRE"])
+    self.floors                        = data["N_PISOS"].to_i
+    self.agency_id                     = agency.id
+    self.project_type_id               = type.id
+    self.county_id                     = county.id
+    self.the_geom                      = geom
+    self.build_date                    = data['INI_CONST']
+    self.sale_date                     = data['INI_VTAS']
+    self.transfer_date                 = data['ENTREGA']
+    self.pilot_opening_date            = data['ESTRENO']
+    self.elevators                     = data['ASC']
+    self.quantity_department_for_floor = data["DPTO_PISO"]
+    result                             = self.save
 
-    county = County.find_by_code(data["COMUNA"].to_i.to_s)
-    agency = Agency.find_or_create_by(name: ic.iconv(data["INMOBILIAR"]))
-    agency_rols = AgencyRol.find_or_create_by(project_id: self.id, agency_id: agency.id, rol: 'INMOBILIARIA')
-    self.code = data["COD_PROY"]
-    self.address = ic.iconv(data["DIRECCION"].gsub("'","''"))
-    self.name = ic.iconv(data["NOMBRE"])
-    self.floors = data["N_PISOS"].to_i unless data["N_PISOS"] == -1
-    self.agency_id = agency.id
-    self.project_type_id = type.id
-    self.county_id = county.id
-    self.the_geom = geom
-    self.build_date = data['INI_CONST']
-    self.sale_date = data['INI_VTAS']
-    self.transfer_date= data['ENTREGA']
-    self.pilot_opening_date = data['ESTRENO']
-    # self.elevators = data['ascensores']
-    # self.quantity_department_for_floor = data["dpto_piso"]
-    # self.general_observation = data['gral_ob']
-
-    result = self.save
     County.update(county.id, :sales_project_data => true) unless county.nil? if result
 
-    result
-  end
-  def save_project_data_fulcrum(data,  geom)
-    ic = Iconv.new('UTF-8', 'ISO-8859-1')
-    type = ProjectType.find_by_name(data['tipo_de_pr'])
-    county = County.find_by_code(data["county_id"].to_i.to_s)
-    agency = Agency.find_or_create_by_name(ic.iconv(data["inmobiliar"]))
-
-    self.code = data["cod_proy"]
-    self.name = ic.iconv(data["nombre"])
-    self.address = ic.iconv(data["direccion"].gsub("'","''"))
-    self.floors = data["n_pisos"].to_i unless data["n_pisos"] == -1
-    self.county_id = county.id
-    self.project_type_id = type.id
-    #self.agency_id = agency.id
-    self.the_geom = geom
-    self.build_date = data['build_date'].strftime("%d/%m/%y")
-    self.sale_date = data['sale_date'].strftime("%d/%m/%y")
-    self.transfer_date= data['transfer_d'].strftime("%d/%m/%y")
-    self.pilot_opening_date = data['pilot_open'].strftime("%d/%m/%y")
-    self.elevators = data['ascensores']
-    self.quantity_department_for_floor = data["dpto_piso"]
-    self.general_observation = data['gral_ob']
-
-    result = self.save
-    County.update(county.id, :sales_project_data => true) unless county.nil? if result
     result
   end
 
@@ -594,23 +539,6 @@ class Project < ApplicationRecord
 
   def agency_name
     self.agency.try :name
-  end
-
-  def point_is_located_within_the_specified_county
-    point_county = County.find_by_lon_lat(self.longitude, self.latitude)
-    if point_county.nil?
-      errors.add(
-        :county_id,
-        :not_within_county,
-        :point_county => I18n.t(:none),
-        :selected_county => self.county.name)
-    else
-      errors.add(
-        :county_id,
-        :not_within_county,
-        :point_county => point_county.name,
-        :selected_county => self.county.name) unless point_county.id == self.county_id
-    end
   end
 
   def build_geom
