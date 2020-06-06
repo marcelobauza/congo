@@ -298,8 +298,8 @@ class ImportProcess < ApplicationRecord
         geom = shape.geometry
         data = shape.attributes
 
-        bimester = data["bim"]
-        year = data["year"]
+        bimester = data["BIM"]
+        year = data["YEAR"]
 
         future_type = FutureProjectType.find_by(abbrev: data["FUENTE"])
 
@@ -643,7 +643,6 @@ class ImportProcess < ApplicationRecord
       attributes << [ "DORMS_T", "N"]
       attributes << [ "BANOS_T", "N"]
     when "Future Projects"
-      attributes << [ "COD_PROY", "C" ]
       attributes << [ "DIRECCION", "C" ]
       attributes << [ "COD_COM", "N" ]
       attributes << [ "N_ROL", "C" ]
