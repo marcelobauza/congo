@@ -450,7 +450,7 @@ class FutureProject < ApplicationRecord
       data =[]
       result=[]
       general_data.each do |item|
-        data.push("name": item[:label], "count":("%.1f" % item[:value]).to_f)
+        data.push("name": item[:label], "count": item[:value].nil? ? 0 : ("%.1f" % item[:value]).to_f)
       end
       result.push({"title":"Resumen", "data": data})
 
@@ -468,6 +468,7 @@ class FutureProject < ApplicationRecord
         data.push("name": item["project_type_name"], "count": item["value"].to_i, "id":item["project_id"])
       end
       result.push({"title":"Destino Obra",  "series": [{"data": data}]})
+
       ##TIPO DE EXPEDIENTE / DESTINO
       categories = []
       series = []
@@ -525,7 +526,6 @@ class FutureProject < ApplicationRecord
         r.push("name": (item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":0)
 
         item[:values].each do |itm|
-
 
           if itm["y_label"] == 'ANTEPROYECTO'
             a[i][:count] = itm["y_value"].to_f
