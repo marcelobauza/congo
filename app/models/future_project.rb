@@ -84,7 +84,7 @@ class FutureProject < ApplicationRecord
     self.m2_built               = data["M2_EDIF"]
     self.m2_field               = data["M2_TERR"] if data["M2_TERR"]
     self.t_ofi                  = data["T_OFI"] if data["T_OFI"]
-    self.cadastral_date         = data["F_CATASTRO"].to_date  data["F_CATASTRO"].nil?
+    self.cadastral_date         = data["F_CATASTRO"].to_date unless data["F_CATASTRO"].nil?
     self.comments               = ic.iconv(data["OBSERVACIO"]).to_s
     self.year                   = year
     self.bimester               = bimester
