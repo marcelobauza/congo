@@ -639,7 +639,7 @@ class Project < ApplicationRecord
 
     #MIXES funciona
     if filters.has_key? :mix_ids and self_not_filter != 'mix'
-      query_field = useView ? "project_instance_mix_views.project_instance_id":  "project_instances.id" 
+      query_field = useView ? "project_instance_mix_views.project_instance_id":  "project_instances.id"
       conditions += "#{query_field}  IN (SELECT project_instance_id "
       conditions += "FROM project_instance_mixes WHERE mix_id IN(#{filters[:mix_ids].join(",")}))"
       conditions += Util.and
@@ -678,11 +678,11 @@ class Project < ApplicationRecord
   end
 
   def self.get_valid_min_max_limits(column, filters, useView = true)
-  
+
     ProjectInstanceMixView.method_selection(filters).
       where(build_conditions_new(filters, column, useView)).
       where("#{column} > 1" ).
-      select("ROUND(MIN(#{column})) as MIN, ROUND(MAX(#{column})) AS MAX") 
+      select("ROUND(MIN(#{column})) as MIN, ROUND(MAX(#{column})) AS MAX")
   end
 
   def self.get_bimesters filters
@@ -865,17 +865,18 @@ end
 
       ##TIPO PROYECTO
       data =[]
+
       ptypes.each do |item|
         data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
       end
       result.push({"title":"Uso", "series":[{"data": data}]})
 
       ##MIX
-      data =[]
+      data        = []
+      stock_units = []
+      sold_units  = []
+      categories  = []
 
-      stock_units =[]
-      sold_units =[]
-      categories=[]
       pmixes.each do |item|
         stock_units.push("name":item.mix_type, "count": item[:stock_units], "id":item.id)
         sold_units.push("name":item.mix_type, "count": item[:sold_units], "id":item.id)
@@ -885,10 +886,11 @@ end
       result.push({"title":"Venta & Disponibilidad por Programa", "series":categories})
 
       ##OFERTA, VENTA
-      total_units=[]
-      sold_units=[]
-      stock_units=[]
-      categories=[]
+      total_units = []
+      sold_units  = []
+      stock_units = []
+      categories  = []
+
       avai.each do |item|
         total_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:total_units].to_i)
         sold_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:sold_units].to_i)
@@ -1007,7 +1009,7 @@ end
       conditions = WhereBuilder.build_within_condition(filters[:wkt])
     else
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
-      end
+    end
     @project_departments = ProjectDepartmentReport.where(conditions).where( year: filters[:to_year], bimester: filters[:to_period])
     @project_homes = ProjectHomeReport.where(conditions).where( year: filters[:to_year], bimester: filters[:to_period])
     return @project_homes, @project_departments
@@ -1034,11 +1036,11 @@ end
       conditions = WhereBuilder.build_within_condition(filters[:wkt])
     else
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
-      end
+    end
     data = Project.joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
       method_selection(filters).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).where("agency_rols.rol = 'INMOBILIARIA'").
-                     select(select).
-                     group(:code, :name, :address, :project_types_name, 'agencies.name' ).uniq
+      select(select).
+      group(:code, :name, :address, :project_types_name, 'agencies.name' ).uniq
     data
   end
 
@@ -1075,10 +1077,10 @@ end
     select += "round(SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END),1) AS vhmdd, "
     select += "sum(vhmud) as vhmd, "
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built1 "
-    
+
     data = ProjectInstanceMixView.method_selection(filters).
       where(year: filters[:to_year], bimester: filters[:to_period], project_type_id: 2).
-                     select(select)
+      select(select)
     data
   end
 
@@ -1116,94 +1118,94 @@ end
     select += "round((SUM(total_units * total_m2) / SUM(total_units)),1) as avg_m2_built"
 
     data = ProjectInstanceMixView.method_selection(filters).
-        where(year: filters[:to_year], bimester: filters[:to_period], project_type_id: 1).
-                     select(select)
+      where(year: filters[:to_year], bimester: filters[:to_period], project_type_id: 1).
+      select(select)
     data
   end
 
   def self.reports_pdf filters
 
-      result =[]
-      list_project = list_projects filters
-      pmixes = Project.projects_group_by_mix('mix', filters, false)
-      avai = Project.projects_sum_by_stock(filters)
-      uf_values = Project.projects_by_uf(filters)
-      uf_m2_values = Project.projects_by_uf_m2(filters)
-      pstatus = Project.projects_group_by_count('project_statuses', filters, false, false)
-      info_department = Project.information_general_department filters
-      info_house = Project.information_general_house filters
+    result          = []
+    list_project    = list_projects filters
+    pmixes          = Project.projects_group_by_mix('mix', filters, false)
+    avai            = Project.projects_sum_by_stock(filters)
+    uf_values       = Project.projects_by_uf(filters)
+    uf_m2_values    = Project.projects_by_uf_m2(filters)
+    pstatus         = Project.projects_group_by_count('project_statuses', filters, false, false)
+    info_department = Project.information_general_department filters
+    info_house      = Project.information_general_house filters
 
-      result.push({"list_projet":list_project})
+    result.push({"list_projet":list_project})
 
-      result.push({"info_department": info_department})
-      result.push({"info_house": info_house})
+    result.push({"info_department": info_department})
+    result.push({"info_house": info_house})
 
-      data =[]
-      stock_units =[]
-      sold_units =[]
-      categories=[]
-      pmixes.each do |item|
-        stock_units.push("name":item.mix_type, "count": item[:stock_units], "id":item.id)
-        sold_units.push("name":item.mix_type, "count": item[:sold_units], "id":item.id)
-      end
-      categories.push({"label":"Vendidas", "data": sold_units});
-      categories.push({"label":"Disponibles", "data": stock_units});
-      result.push({"title":"Venta & Disponibilidad por Programa", "series":categories})
+    data =[]
+    stock_units =[]
+    sold_units =[]
+    categories=[]
+    pmixes.each do |item|
+      stock_units.push("name":item.mix_type, "count": item[:stock_units], "id":item.id)
+      sold_units.push("name":item.mix_type, "count": item[:sold_units], "id":item.id)
+    end
+    categories.push({"label":"Vendidas", "data": sold_units});
+    categories.push({"label":"Disponibles", "data": stock_units});
+    result.push({"title":"Venta & Disponibilidad por Programa", "series":categories})
 
-      ##OFERTA, VENTA
-      total_units=[]
-      sold_units=[]
-      stock_units=[]
-      categories=[]
-      avai.each do |item|
-        total_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:total_units].to_i)
-        sold_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:sold_units].to_i)
-        stock_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:stock_units].to_i)
-      end
-      categories.push({"label":"Oferta Total", "data": total_units});
-      categories.push({"label":"Ventas Total", "data": sold_units});
-      categories.push({"label":"Disponibilidad Total", "data": stock_units});
-      result.push({"title":"Oferta, Venta & Disponibilidad", "series":categories})
+    ##OFERTA, VENTA
+    total_units=[]
+    sold_units=[]
+    stock_units=[]
+    categories=[]
+    avai.each do |item|
+      total_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:total_units].to_i)
+      sold_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:sold_units].to_i)
+      stock_units.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count": item[:stock_units].to_i)
+    end
+    categories.push({"label":"Oferta Total", "data": total_units});
+    categories.push({"label":"Ventas Total", "data": sold_units});
+    categories.push({"label":"Disponibilidad Total", "data": stock_units});
+    result.push({"title":"Oferta, Venta & Disponibilidad", "series":categories})
 
-      ##VALOR UF BIMESTRE
-      min =[]
-      max =[]
-      avg =[]
-      categories=[]
-      uf_values.each do |item|
-        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
-        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
-        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
-      end
+    ##VALOR UF BIMESTRE
+    min =[]
+    max =[]
+    avg =[]
+    categories=[]
+    uf_values.each do |item|
+      min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
+      max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
+      avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+    end
 
-      categories.push({"label":"UF Mínimo", "data": min});
-      categories.push({"label":"UF Máximo", "data": max});
-      categories.push({"label":"UF Promedio", "data": avg});
+    categories.push({"label":"UF Mínimo", "data": min});
+    categories.push({"label":"UF Máximo", "data": max});
+    categories.push({"label":"UF Promedio", "data": avg});
 
-      result.push({"title":"Precio | UF", "series":categories})
+    result.push({"title":"Precio | UF", "series":categories})
 
-      min =[]
-      max =[]
-      avg =[]
-      categories=[]
-      uf_m2_values.each do |item|
-        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
-        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
-        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
-      end
-      categories.push({"label":"UF Mínimo", "data": min});
-      categories.push({"label":"UF Máximo", "data": max});
-      categories.push({"label":"UF Promedio", "data": avg});
+    min =[]
+    max =[]
+    avg =[]
+    categories=[]
+    uf_m2_values.each do |item|
+      min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
+      max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
+      avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+    end
+    categories.push({"label":"UF Mínimo", "data": min});
+    categories.push({"label":"UF Máximo", "data": max});
+    categories.push({"label":"UF Promedio", "data": avg});
 
-      result.push({"title":"Precio Promedio | UFm² Útil", "series":categories})
+    result.push({"title":"Precio Promedio | UFm² Útil", "series":categories})
 
-      ##ESTADO PROYECTO
+    ##ESTADO PROYECTO
 
-      data =[]
-      pstatus.each do |item|
-        data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
-      end
-      result.push({"title":"Estado Obra", "series":[{"data": data}]})
+    data =[]
+    pstatus.each do |item|
+      data.push("name": item.name.capitalize, "count": item.value.to_i, "id":item.id)
+    end
+    result.push({"title":"Estado Obra", "series":[{"data": data}]})
 
     result
   end
@@ -1229,15 +1231,15 @@ end
     select += " ps.name as project_status_name"
 
     projects = Project.select(select).
-            joins(@joins).
-            where(cond).
-            order("projects.created_at")
+      joins(@joins).
+      where(cond).
+      order("projects.created_at")
 
     return CsvParser.get_projects_csv_data(projects)
   end
 
 
-    def self.kml_data filters
+  def self.kml_data filters
 
     select = "projects.name, "
     select += "sum (project_instance_mixes.total_units) as total_units, "
@@ -1250,22 +1252,25 @@ end
       conditions = WhereBuilder.build_within_condition(filters[:wkt])
     else
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
-      end
+    end
     data = Project.joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
       method_selection(filters).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).where("agency_rols.rol = 'INMOBILIARIA'").
-                     select(select).
-                     group(:name, :the_geom ).uniq
-      kml = KMLFile.new
-      document = KML::Document.new(name: "PRV")
-      data.each do |c|
-        document.features << KML::Placemark.new(
-          :name => c.name,
-          :description =>"Viviendas: #{c.total_units}
+      select(select).
+      group(:name, :the_geom ).uniq
+    kml = KMLFile.new
+    document = KML::Document.new(name: "PRV")
+    data.each do |c|
+      document.features << KML::Placemark.new(
+        name: c.name,
+        description: "Viviendas: #{c.total_units}
                         Stock: #{c.stock_units}",
-          :geometry =>  KML::Point.new(:coordinates => {:lat => c.the_geom.y, :lng => c.the_geom.x}) 
-             )
-      end
-      kml.objects << document
-      kml.render
+                        geometry: KML::Point.new(coordinates: {
+                          lat: c.the_geom.y,
+                          lng: c.the_geom.x
+                        })
+      )
     end
+    kml.objects << document
+    kml.render
+  end
 end
