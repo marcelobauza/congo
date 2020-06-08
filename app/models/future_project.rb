@@ -18,7 +18,7 @@ class FutureProject < ApplicationRecord
     :code,
     :file_date
 
-  validate :point_is_located_within_the_specified_county, :unless => "county.nil?"
+  validate :point_is_located_within_the_specified_county, unless: Proc.new { |t| t.county.blank? or t.longitude.blank? or t.latitude.blank? }
 
   # validates_numericality_of :floors, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "floors.blank?"
   # validates_numericality_of :undergrounds, :only_integer => true, :greater_than_or_equal_to => 0, :unless => "undergrounds.blank?"
