@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_25_195334) do
+ActiveRecord::Schema.define(version: 2020_06_02_190202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -666,6 +666,9 @@ ActiveRecord::Schema.define(version: 2020_05_25_195334) do
     t.datetime "updated_at", null: false
     t.bigint "region_id"
     t.integer "layer_types", default: [], array: true
+    t.integer "projects_downloads", default: 0
+    t.integer "transactions_downloads", default: 0
+    t.integer "future_projects_downloads", default: 0
     t.index ["region_id"], name: "index_users_on_region_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
