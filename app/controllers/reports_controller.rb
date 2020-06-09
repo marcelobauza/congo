@@ -1,13 +1,18 @@
 class ReportsController < ApplicationController
 
   def future_projects_data
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
-    @xl = FutureProject.reports(filters)
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+    @xl      = FutureProject.reports(filters)
+    u        = User.find(current_user.id)
+    quantity = u.future_projects_downloads
+
+    u.update! future_projects_downloads:  @xl.count + quantity
+
     respond_to do |format|
       format.xlsx
     end
   end
-  
+
   def future_projects_data_kml
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @xl = FutureProject.kml_data(filters)
@@ -15,7 +20,7 @@ class ReportsController < ApplicationController
           :type => 'text/xml; charset=UTF-8;',
               :disposition => "attachment; filename=Expedientes_Municipales.kml"
   end
-  
+
   def transactions_data_kml
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @xl = Transaction.kml_data(filters)
@@ -98,10 +103,13 @@ class ReportsController < ApplicationController
   def transactions_data
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @transaction = Transaction.reports(filters)
+    u        = User.find(current_user.id)
+    quantity = u.transactions_downloads
+    u.update! transactions_downloads:  @transaction.count + quantity
+
     respond_to do |format|
       format.xlsx
     end
-
   end
 
   def transactions_summary
@@ -116,7 +124,7 @@ class ReportsController < ApplicationController
     @transaction_bimester=[]
 
     @transactions_by_periods = Transaction.group_transaction_bimester(filters)
-   
+
     # @transactions_by_periods.each do |tt|
     #   @transaction_bimester.push([tt[0][:periods],tt[0][:value]])
     # end
@@ -166,6 +174,12 @@ class ReportsController < ApplicationController
   def projects_data
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @project_homes, @project_departments = Project.reports(filters)
+
+    u        = User.find(current_user.id)
+    quantity = u.projects_downloads
+
+    u.update! projects_downloads:  @project_homes.count + @project_departments.count + quantity
+
     respond_to do |format|
       format.xlsx
     end
@@ -331,7 +345,7 @@ class ReportsController < ApplicationController
   end
   def building_regulations_kml
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
-    @data = BuildingRegulation.kml_data filters  
+    @data = BuildingRegulation.kml_data filters
     send_data @data,
           :type => 'text/xml; charset=UTF-8;',
               :disposition => "attachment; filename=Normativas.kml"
