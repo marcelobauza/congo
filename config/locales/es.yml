@@ -480,6 +480,9 @@ es:
         expire: Vencido?
         created_at: Fecha de Alta
         last_buy_date: Fecha Ultima Compra
+        transactions_downloads: "Transacciones descargadas"
+        projects_downloads: "Proyectos descargados"
+        future_projects_downloads: "Expedientes descargados"
       role:
         name: Nombre
       order:
