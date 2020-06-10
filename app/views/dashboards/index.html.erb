@@ -1,6 +1,8 @@
 <div id="alerts"></div>
 <div id="map"></div>
 
+<div id="downloads" data-allowed-area='<%= current_user.role.square_meters_download_area %>'
+ data-allowed-radius='<%= current_user.role.meters_download_radius %>'></div>
 <div class="report" style="width: 720px;">
   <div id="chart-report-1">
     <canvas id="report-canvas-1"></canvas>

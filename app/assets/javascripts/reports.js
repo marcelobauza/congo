@@ -2,16 +2,18 @@ Congo.namespace("reports");
 Congo.reports = function(){
 
   layer_type = Congo.dashboards.config.layer_type;
-  kind_reports = Congo.dashboards.config.kind_reports; 
+  kind_reports = Congo.dashboards.config.kind_reports;
   let url;
   area = Congo.dashboards.config.area;
   radius = Congo.dashboards.config.radius;
+  smda = Congo.dashboards.config.square_meters_download_area;
+  mdr = Congo.dashboards.config.meters_download_radius;
 
   switch (layer_type) {
     case 'future_projects_info':
       switch(kind_reports){
         case 'graph':
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
             url = '/reports/future_projects_summary.xlsx';
             window.open(url, '_blank');
           }else{
@@ -20,7 +22,7 @@ Congo.reports = function(){
           }
           break;
         case 'base':
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
             url = '/reports/future_projects_data.xlsx';
             window.open(url, '_blank');
           }else{
@@ -33,7 +35,7 @@ Congo.reports = function(){
             url = future_projects_report_pdf();
           break;
         case 'kml':
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
             url = '/reports/future_projects_data_kml.kml';
             window.open(url, '_blank');
           }else{
@@ -50,8 +52,7 @@ Congo.reports = function(){
             window.open(url, '_blank');
           break;
         case 'base':
-          console.log(area);
-          if ((area > 0 && area < 785398) || (radius > 0 && radius < 500)) {
+          if ((area > 0 && area < (smda / 2)) || (radius > 0 && radius < (mdr/2))) {
             url = '/reports/transactions_data.xlsx';
             window.open(url, '_blank');
           }else{
@@ -64,7 +65,7 @@ Congo.reports = function(){
           url = transactions_report_pdf();
           break;
         case 'kml':
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
             url = '/reports/transactions_data_kml.kml';
             window.open(url, '_blank');
           }else{
@@ -78,7 +79,7 @@ Congo.reports = function(){
       switch(kind_reports){
         case 'graph':
 
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
             url = '/reports/projects_summary.xlsx';
             window.open(url, '_blank');
           }else{
@@ -89,7 +90,7 @@ Congo.reports = function(){
           break;
         case 'base':
 
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
             url = '/reports/projects_data.xlsx';
             window.open(url, '_blank');
           }else{
@@ -101,7 +102,7 @@ Congo.reports = function(){
           url = projects_report_pdf();
           break;
         case 'kml':
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
             url = '/reports/projects_data_kml.kml';
             window.open(url, '_blank');
           }else{
@@ -117,7 +118,7 @@ Congo.reports = function(){
           url = building_regulations_report_pdf();
           break;
         case 'kml':
-          if ((area > 0 && area < 3140000) || (radius > 0 && radius < 1000)) {
+          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
             url = '/reports/building_regulations_kml.kml';
             window.open(url, '_blank');
           }else{
@@ -136,5 +137,4 @@ Congo.reports = function(){
     default:
 
   }
-  //  window.open(url, '_blank');
 }

@@ -485,6 +485,8 @@ es:
         future_projects_downloads: "Expedientes descargados"
       role:
         name: Nombre
+        square_meters_download_area: "Metros cuadrados de descarga"
+        meters_download_radius: "Metros de radio de descarga"
       order:
         user_data: Datos del Usuario
         data_bases: Bases de Datos

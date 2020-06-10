@@ -60,6 +60,10 @@ $(document).ready(function(){
   $('#building_regulations_floors').on('click', function(){
     Congo.dashboards.config.widget = 'building_regulations_floors';
   });
+
+  var va = document.querySelector('#downloads');
+  Congo.dashboards.config.meters_download_radius = va.dataset.allowedRadius
+  Congo.dashboards.config.square_meters_download_area = va.dataset.allowedArea
 });
 
 Congo.namespace('dashboards.action_index');
@@ -83,7 +87,9 @@ Congo.dashboards.config = {
   draw_active: false,
   slider_periods: [],
   row_id: '',
-  widget: ''
+  widget: '',
+  meters_download_radius: 0,
+  square_meters_download_area: 0
 }
 
 Congo.dashboards.pois =function(){
