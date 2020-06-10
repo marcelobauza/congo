@@ -142,7 +142,7 @@
 
     <!-- Útiles Dropdown -->
 
-    <% if (current_user.role.name == 'IPRO') || (current_user.role.name == 'IPRO+'|| (current_user.role.name == 'Admin') || (current_user.role.name == 'MYPE')) %>
+    <% if (current_user.role.name == 'IPRO') || (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin') || (current_user.role.name == 'MYPE') %>
       <div class="nav-item dropdown">
         <button class="btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-plus" title="Útiles"></i>
@@ -152,7 +152,7 @@
 
           <% end %>
             <%= link_to demography_calculated_gse_path, id: "census", class: "dropdown-item custom-item reports", style:"display: none", remote: true  do  %> <i class="fas fa-dollar-sign" title="GSE" style="font-size: 26px"></i>
-          <% if (current_user.role.name == 'IPRO+'|| (current_user.role.name == 'Admin')) %>
+          <% if (current_user.role.name == 'IPRO+'|| (current_user.role.name == 'Admin') || (current_user.role.name == 'MYPE')) %>
             <div class="dropdown-divider"></div>
             <%= link_to "#", id: "pdf", class: "dropdown-item custom-item reports", data: {remote: true} do  %> <i class=" fas fa-file-pdf" title="Informe PDF" style="font-size: 26px"></i><% end %>
             <%= link_to "#", id: "base", class: "dropdown-item custom-item reports", remote: true  do  %> <i class=" fas fa-file-excel" title="Descarga XLS" style="font-size: 26px"></i><% end %>
