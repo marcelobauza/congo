@@ -1,4 +1,4 @@
-if current_user.role.name == 'IPRO+' || current_user.role.name == 'Admin'
+if current_user.role.name == 'IPRO+' || current_user.role.name == 'Admin' || current_user.role.name == 'MYPE'
 
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Compraventas") do |sheet|
