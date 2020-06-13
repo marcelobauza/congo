@@ -33,6 +33,20 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
+  #Don't care if the mailer can't send.
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  #config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.default_url_options = { host: ENV['HOST_MAIL']}
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              ENV['ADDRESS_MAIL'],
+    port:                 ENV['PORT_MAIL'],
+    domain:               ENV['DOMAIN'],
+    user_name:            ENV['COMPANY_MAIL'],
+    password:             ENV['PASSWORD_MAIL_INCITI'],
+    authentication:       'plain',
+    enable_starttls_auto: true }
   config.action_mailer.perform_caching = false
 
   # Print deprecation notices to the Rails logger.
