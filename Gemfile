@@ -78,7 +78,7 @@ group :development do
   gem 'capistrano3-unicorn'
   gem 'letter_opener'
   gem 'rubocop-github'
-
+  gem 'paper_trail'
 
 end
 
