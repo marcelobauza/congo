@@ -2,7 +2,7 @@
   <%if !@transaction.the_geom.nil?  %>
      Congo.admin_transactions.config.latitude.push(<%= @transaction.the_geom.y %>);
      Congo.admin_transactions.config.longitude.push(<%= @transaction.the_geom.x %>);
-  <% end %> 
+  <% end %>
 </script>
 <div class="card shadow">
   <div class="card-body">
@@ -22,6 +22,7 @@
           <%= f.label :inscription_date %>
           <div class="form-inline">
             <%= f.date_field :inscription_date, {start_year: 2008, end_year: Date.today.year, use_month_numbers: true , class: 'form-control mx-1'} %>
+            <%= f.input :year %>
           </div>
         </div>
         <div class="form-group col-md-3">
