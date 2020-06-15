@@ -4,9 +4,8 @@ class ReportsController < ApplicationController
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names => true})
     @xl      = FutureProject.reports(filters)
     u        = User.find(current_user.id)
-    quantity = u.future_projects_downloads
 
-    u.update! future_projects_downloads:  @xl.count + quantity
+    u.downloads_users.create! future_projects:  @xl.count
 
     respond_to do |format|
       format.xlsx
@@ -104,8 +103,8 @@ class ReportsController < ApplicationController
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @transaction = Transaction.reports(filters)
     u        = User.find(current_user.id)
-    quantity = u.transactions_downloads
-    u.update! transactions_downloads:  @transaction.count + quantity
+
+    u.downloads_users.create! transactions:  @transaction.count
 
     respond_to do |format|
       format.xlsx
@@ -174,11 +173,9 @@ class ReportsController < ApplicationController
   def projects_data
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @project_homes, @project_departments = Project.reports(filters)
-
     u        = User.find(current_user.id)
-    quantity = u.projects_downloads
 
-    u.update! projects_downloads:  @project_homes.count + @project_departments.count + quantity
+    u.downloads_users.create! projects:   @project_homes.count + @project_departments.count
 
     respond_to do |format|
       format.xlsx

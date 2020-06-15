@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :regions_users
   has_many :regions, through: :regions_users
   has_many :feedbacks
+  has_many :downloads_users
   belongs_to :role
 
    def active_for_authentication?
