@@ -1228,8 +1228,9 @@ end
     select += " pim.stock_units, pim.mix_usable_square_meters, pim.mix_terrace_square_meters, pim.living_room, pim.service_room, pim.h_office, pim.uf_min, pim.uf_max, pim.uf_parking, pim.uf_cellar, pim.common_expenses, pim.total_units, pim.t_min, pim.t_max, pim.home_type, pim.model, projects.the_geom, "
     select += " c.name as countyname, "
     select += " pt.name as project_type_name, "
-    select += " ps.name as project_status_name"
-
+    select += " ps.name as project_status_name,"
+    select += " pm.bedroom as bedroom, "
+    select += " pm.bathroom as bathroom "
     projects = Project.select(select).
       joins(@joins).
       where(cond).
