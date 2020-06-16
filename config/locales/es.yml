@@ -410,6 +410,7 @@ es:
         lot: Lote
         tome: Tomo
         active: Punto Activo
+        comments: 'Observaciones'
       kpi:
         polygon: Seleccione Poligono
         county: Comuna

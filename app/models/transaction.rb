@@ -125,13 +125,6 @@ class Transaction < ApplicationRecord
                   :clean_directory_path => true})
   end
 
-  def inscription_date=(val)
-    self[:inscription_date] = val
-    #self.quarter =  val.quarter
-    #self.bimester = val.bimester
-    self.year = val.year
-  end
-
   def latitude
     @latitude ||= self.the_geom.y if self.the_geom
     return @latitude ? @latitude : ""
