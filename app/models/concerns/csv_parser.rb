@@ -78,7 +78,7 @@ POLYGON_HEADER = ["USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
     CSV.open(tempFile.path, "w") do |writer|
       writer << PROJECT_HEADER
       projects.each do |t|
-        values = [t.code, t.name, t.address, t.floors, t.countyname, t.project_type_name, t.build_date, t.sale_date, t.transfer_date, t.pilot_opening_date, t.project_status_name, t.quantity_department_for_floor , t.elevators, t.general_observation, t.project_status_id, t.bimester, t.year, t.cadastre, t.stock_units, t.mix_usable_square_meters, t.mix_terrace_square_meters, t.living_room, t.service_room, t.h_office, t.uf_min, t.uf_max, t.uf_parking, t.uf_cellar, t.common_expenses, t.total_units, t.t_min, t.t_max, t.home_type, t.model, t.the_geom.x, t.the_geom.y, t.bedroom, t.bathroom]
+        values = [t.code, t.name, t.address, t.floors, t.countyname, t.project_type_name, t.build_date, t.sale_date, t.transfer_date, t.pilot_opening_date, t.project_status_name, t.quantity_department_for_floor , t.elevators, t.general_observation, t.project_status_id, t.bimester, t.year, t.cadastre, t.stock_units, t.mix_usable_square_meters, t.mix_terrace_square_meters, t.living_room, t.service_room, t.h_office, t.uf_min, t.uf_max, t.uf_parking, t.uf_cellar, t.common_expenses, t.total_units, t.t_min, t.t_max, t.home_type, t.model, t.the_geom.x, t.the_geom.y, t.bathroom, t.bedroom]
         writer << values
       end
     end
