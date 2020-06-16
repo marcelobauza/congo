@@ -25,7 +25,7 @@
       <%= f.input :disabled, wrapper_html: { class: "col-md-4 form-group row" } %>
       <%= f.collection_select(:role_id, roles, :id, :name, { include_blank: true }) %>
       <%= f.collection_select(:region_ids, Region.all.order(:name), :id, :name, {include_blank: true}, {multiple: true}) %>
-      <%= f.collection_select(:county_ids, County.all.order(:name), :id, :name, { include_blank: false }, {multiple: true}) %>
+      <%= f.collection_select(:county_ids, County.where(enabled: true).order(:name), :id, :name, { include_blank: false }, {multiple: true}) %>
       <%= f.collection_select(:layer_types, LayerType.all, :id, :title, { include_blank: false }, {multiple: true}) %>
       <div class="col-md-3">
         <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
