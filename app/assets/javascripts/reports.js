@@ -4,10 +4,14 @@ Congo.reports = function(){
   layer_type = Congo.dashboards.config.layer_type;
   kind_reports = Congo.dashboards.config.kind_reports;
   let url;
-  area = Congo.dashboards.config.area;
-  radius = Congo.dashboards.config.radius;
-  smda = Congo.dashboards.config.square_meters_download_area;
-  mdr = Congo.dashboards.config.meters_download_radius;
+  var area              = Congo.dashboards.config.area;
+  var radius            = Congo.dashboards.config.radius;
+  var smdProjects       = Congo.dashboards.config.square_meters_download_projects;
+  var mdrProjects       = Congo.dashboards.config.meters_download_radius_projects;
+  var smdFutureProjects = Congo.dashboards.config.square_meters_download_future_projects;
+  var mdrFutureProjects = Congo.dashboards.config.meters_download_radius_future_projects;
+  var smdtransactions   = Congo.dashboards.config.square_meters_download_transactions;
+  var mdrtransactions   = Congo.dashboards.config.meters_download_radius_transactions;
 
   switch (layer_type) {
     case 'future_projects_info':
@@ -22,7 +26,7 @@ Congo.reports = function(){
           }
           break;
         case 'base':
-          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
+          if ((area > 0 && area < smdFutureProjects) || (radius > 0 && radius < mdrFutureProjects)) {
             url = '/reports/future_projects_data.xlsx';
             window.open(url, '_blank');
           }else{
@@ -35,7 +39,7 @@ Congo.reports = function(){
             url = future_projects_report_pdf();
           break;
         case 'kml':
-          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
+          if ((area > 0 && area < smdFutureProjects) || (radius > 0 && radius < mdrFutureProjects)) {
             url = '/reports/future_projects_data_kml.kml';
             window.open(url, '_blank');
           }else{
@@ -52,7 +56,7 @@ Congo.reports = function(){
             window.open(url, '_blank');
           break;
         case 'base':
-          if ((area > 0 && area < (smda / 2)) || (radius > 0 && radius < (mdr/2))) {
+          if ((area > 0 && area < smdTransactions) || (radius > 0 && radius < mdrTransactions)) {
             url = '/reports/transactions_data.xlsx';
             window.open(url, '_blank');
           }else{
@@ -65,7 +69,7 @@ Congo.reports = function(){
           url = transactions_report_pdf();
           break;
         case 'kml':
-          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
+          if ((area > 0 && area < smdTransactions) || (radius > 0 && radius < mdrTransactions)) {
             url = '/reports/transactions_data_kml.kml';
             window.open(url, '_blank');
           }else{
@@ -78,19 +82,12 @@ Congo.reports = function(){
     case 'projects_feature_info':
       switch(kind_reports){
         case 'graph':
-
-          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
-            url = '/reports/projects_summary.xlsx';
-            window.open(url, '_blank');
-          }else{
-            var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
-            $('#alerts').append(alert);
-          }
-
+          url = '/reports/projects_summary.xlsx';
+          window.open(url, '_blank');
           break;
         case 'base':
 
-          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
+          if ((area > 0 && area < smdProjects) || (radius > 0 && radius < mdrProjects)) {
             url = '/reports/projects_data.xlsx';
             window.open(url, '_blank');
           }else{
@@ -102,7 +99,7 @@ Congo.reports = function(){
           url = projects_report_pdf();
           break;
         case 'kml':
-          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
+          if ((area > 0 && area < smdProjects) || (radius > 0 && radius < mdrProjects)) {
             url = '/reports/projects_data_kml.kml';
             window.open(url, '_blank');
           }else{
@@ -118,7 +115,7 @@ Congo.reports = function(){
           url = building_regulations_report_pdf();
           break;
         case 'kml':
-          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
+          if ((area > 0 && area < smdProjects) || (radius > 0 && radius < mdrProjects)) {
             url = '/reports/building_regulations_kml.kml';
             window.open(url, '_blank');
           }else{

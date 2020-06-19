@@ -4,8 +4,15 @@
       <%= f.error_notification %>
       <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
       <%= f.input :name, input_html: { class: 'form-control'}, wrapper_html: { class: 'form-group row col-md-3' } %>
-      <%= f.input :square_meters_download_area, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
-      <%= f.input :meters_download_radius, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :square_meters_download_projects, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :meters_download_radius_projects, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :square_meters_download_future_projects, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :meters_download_radius_future_projects, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :square_meters_download_transactions, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :meters_download_radius_transactions, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :total_download_projects, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :total_download_future_projects, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :total_download_transactions, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
       <%= link_to 'Cancelar', admin_roles_path(), :class => 'btn btn-secondary', wrapper_html: { class: 'form-group row' } %>
       <%= f.submit :submit, class: 'btn btn-primary', value: "Guardar", wrapper_html: { class: 'form-group row' } %>
     <% end %>

@@ -1,8 +1,14 @@
 <div id="alerts"></div>
 <div id="map"></div>
 
-<div id="downloads" data-allowed-area='<%= current_user.role.square_meters_download_area %>'
- data-allowed-radius='<%= current_user.role.meters_download_radius %>'></div>
+<div id="downloads"
+  data-allowed-area-projects='<%= current_user.role.square_meters_download_projects %>'
+  data-allowed-radius-projects='<%= current_user.role.meters_download_radius_projects %>'
+  data-allowed-area-future-projects='<%= current_user.role.square_meters_download_future_projects %>'
+  data-allowed-radius-future-projects='<%= current_user.role.meters_download_radius_future_projects %>'
+  data-allowed-area-transactions='<%= current_user.role.square_meters_download_transactions %>'
+  data-allowed-radius-transactions='<%= current_user.role.meters_download_radius_transactions %>'>
+</div>
 <div class="report" style="width: 720px;">
   <div id="chart-report-1">
     <canvas id="report-canvas-1"></canvas>

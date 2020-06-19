@@ -62,8 +62,12 @@ $(document).ready(function(){
   });
 
   var va = document.querySelector('#downloads');
-  Congo.dashboards.config.meters_download_radius = va.dataset.allowedRadius
-  Congo.dashboards.config.square_meters_download_area = va.dataset.allowedArea
+  Congo.dashboards.config.square_meters_download_projects = va.dataset.allowedAreaProjects
+  Congo.dashboards.config.meters_download_radius_projects = va.dataset.allowedRadiusProjects
+  Congo.dashboards.config.square_meters_download_radius_future_projects = va.dataset.allowedAreaFutureProjects
+  Congo.dashboards.config.meters_download_radius_future_projects = va.dataset.allowedRadiusFutureProjects
+  Congo.dashboards.config.square_meters_download_transactions = va.dataset.allowedAreaTransactions
+  Congo.dashboards.config.meters_download_radius_transactions = va.dataset.allowedRadiusTransactions
 });
 
 Congo.namespace('dashboards.action_index');
@@ -88,8 +92,12 @@ Congo.dashboards.config = {
   slider_periods: [],
   row_id: '',
   widget: '',
-  meters_download_radius: 0,
-  square_meters_download_area: 0
+  square_meters_download_projects: 0,
+  meters_download_radius_projects: 0,
+  square_meters_download_future_projects: 0,
+  meters_download_radius_future_projects: 0,
+  square_meters_download_transactions: 0,
+  meters_download_radius_transastions: 0
 }
 
 Congo.dashboards.pois =function(){

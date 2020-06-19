@@ -1,14 +1,26 @@
 class ReportsController < ApplicationController
 
-  def future_projects_data
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names => true})
-    @xl      = FutureProject.reports(filters)
-    u        = User.find(current_user.id)
+  def index
 
-    u.downloads_users.create! future_projects:  @xl.count
+  end
+  respond_to :xlsx, :js
+  def future_projects_data
+    filters         = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+    @xl             = FutureProject.reports(filters)
+    u               = User.find(current_user.id)
+    total_downloads_allowed = u.role.total_download_future_projects
+    total_accumulated_downloads = u.downloads_users.sum(:future_projects)
+    total_downloads = total_accumulated_downloads + @xl.count
 
     respond_to do |format|
-      format.xlsx
+      if total_downloads < total_downloads_allowed
+        u.downloads_users.create! future_projects:  @xl.count
+
+        format.xlsx
+      else
+        @sss = "El limite de descarga"
+        format.xlsx
+      end
     end
   end
 
