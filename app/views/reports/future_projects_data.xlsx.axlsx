@@ -1,4 +1,4 @@
-if @sss
+if @message
   wb = xlsx_package.workbook
 
   wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|

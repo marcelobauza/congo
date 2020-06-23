@@ -84,7 +84,7 @@ class Admin::TransactionsController < ApplicationController
   def destroy
     @transaction.destroy
     respond_to do |format|
-      format.html { redirect_to transactions_url, notice: 'Transaction was successfully destroyed.' }
+      format.html { redirect_to admin_transactions_url, notice: 'Transaction was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

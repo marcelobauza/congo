@@ -16,6 +16,8 @@ class Admin::FutureProjectsController < ApplicationController
     @future_projects = FutureProject.where(nil)
     @future_projects = @future_projects.future_project_type_filter(params[:future_project_type_id]) if !params[:future_project_type_id].nil?
     @future_projects = @future_projects.project_type_filter(params[:project_type_id]) if !params[:project_type_id].nil?
+    @future_projects = @future_projects.code_filter(params[:code]) if !params[:code].nil?
+
     @future_projects = @future_projects.all.paginate(page: params[:page])
   end
 
@@ -68,7 +70,7 @@ class Admin::FutureProjectsController < ApplicationController
   def destroy
     @future_project.destroy
     respond_to do |format|
-      format.html { redirect_to future_projects_url, notice: 'Future project was successfully destroyed.' }
+      format.html { redirect_to admin_future_projects_url, notice: 'Future project was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

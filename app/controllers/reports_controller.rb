@@ -1,9 +1,5 @@
 class ReportsController < ApplicationController
 
-  def index
-
-  end
-  respond_to :xlsx, :js
   def future_projects_data
     filters         = JSON.parse(session[:data].to_json, {:symbolize_names => true})
     @xl             = FutureProject.reports(filters)
@@ -15,12 +11,11 @@ class ReportsController < ApplicationController
     respond_to do |format|
       if total_downloads < total_downloads_allowed
         u.downloads_users.create! future_projects:  @xl.count
-
-        format.xlsx
       else
-        @sss = "El limite de descarga"
-        format.xlsx
+        @message = "Ha superado el límite de descarga"
       end
+
+      format.xlsx
     end
   end
 
@@ -112,12 +107,22 @@ class ReportsController < ApplicationController
   end
 
   def transactions_data
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
-    @transaction = Transaction.reports(filters)
-    u        = User.find(current_user.id)
+    filters                     = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+    @transaction                = Transaction.reports(filters)
+    u                           = User.find(current_user.id)
+    total_downloads_allowed     = u.role.total_download_transactions
+    total_accumulated_downloads = u.downloads_users.sum(:transactions)
+    total_downloads             = total_accumulated_downloads + @transaction.count
 
-    u.downloads_users.create! transactions:  @transaction.count
+    respond_to do |format|
+      if total_downloads < total_downloads_allowed
+        u.downloads_users.create! transactions:  @transaction.count
+      else
+        @message = "Ha superado el límite de descarga"
+      end
 
+      format.xlsx
+    end
     respond_to do |format|
       format.xlsx
     end
@@ -183,16 +188,22 @@ class ReportsController < ApplicationController
   end
 
   def projects_data
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    filters                              = JSON.parse(session[:data].to_json, {:symbolize_names => true})
     @project_homes, @project_departments = Project.reports(filters)
-    u        = User.find(current_user.id)
-
-    u.downloads_users.create! projects:   @project_homes.count + @project_departments.count
+    u                                    = User.find(current_user.id)
+    total_downloads_allowed              = u.role.total_download_projects
+    total_accumulated_downloads          = u.downloads_users.sum(:projects)
+    total_downloads = total_accumulated_downloads + @project_homes.count + @project_departments.count
 
     respond_to do |format|
+      if total_downloads < total_downloads_allowed
+        u.downloads_users.create! projects:   @project_homes.count + @project_departments.count
+      else
+        @message = "Ha superado el límite de descarga"
+      end
+
       format.xlsx
     end
-
   end
   def projects_data_kml
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})

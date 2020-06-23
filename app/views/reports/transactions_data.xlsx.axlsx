@@ -1,3 +1,10 @@
+if @message
+  wb = xlsx_package.workbook
+
+  wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
+    sheet.add_row ['Ha superado el limite máximo de Descaras ']
+  end
+else
 if current_user.role.name == 'IPRO+' || current_user.role.name == 'Admin' || current_user.role.name == 'MYPE'
 
 wb = xlsx_package.workbook
@@ -61,6 +68,7 @@ wb.add_worksheet(name: "Compraventas") do |sheet|
       row.year_sii,
       row.comments
     ]
+end
 end
 end
 end

@@ -357,7 +357,7 @@ class Transaction < ApplicationRecord
       conditions += "(bimester = #{per[:period]} and year = #{per[:year]})#{Util.and}"
       conditions += build_ids_conditions(filters)
       conditions += build_calculated_value_condition(filters)
-      conditions += "transactions.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
+      conditions += "transactions.county_id IN (#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")}) #{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
       conditions = conditions.chomp!(Util.and)
 
       joins = build_joins
@@ -632,21 +632,20 @@ class Transaction < ApplicationRecord
   def self.get_csv_data_sii(filters)
 
     cond = "transactions.inscription_date BETWEEN '#{filters[:date_from]}' "
-    if !filters['polygon_id'].nil?
+    cond += "AND '#{filters[:date_to]}' "
+    if !filters['polygon_id'].empty?
         session_saved = ApplicationStatus.find(filters[:polygon_id])
       if !filters[:wkt].nil?
         cond += WhereBuilder.build_within_condition(session_saved['wkt']) + Util.and
       elsif !filters[:centerpt].nil?
         cond += WhereBuilder.build_within_condition_radius(session_saved['centerpt'], session_saved['radius'] ) + Util.and
         else
-
-      cond += " AND county_id in(#{session_saved[:county_id].join(",")})" if !session_saved[:county_id].blank?
+      cond += " AND county_id in (#{session_saved[:county_id].join(",")}) " if !session_saved[:county_id].blank?
         end
       else
-      cond += " AND county_id in(#{filters[:county_id].join(",")})" if !filters[:county_id].blank?
+        cond += " AND county_id in (#{filters[:county_id].join(",")}) " if !filters[:county_id].blank?
     end
 
-    cond += "AND '#{filters[:date_to]}'"
     cond += " AND property_type_id = #{filters[:property_type_id]}" if !filters[:property_type_id].blank?
     transactions = Transaction.includes(:seller_type, :surveyor, :user, :county, :property_type).
       where(cond).

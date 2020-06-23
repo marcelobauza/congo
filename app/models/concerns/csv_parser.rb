@@ -7,7 +7,7 @@ module CsvParser
   CBR_HEADER_SII = ["N°","FECHA","TOMO","FOJA","NUMERO","RUT_COMP","COMPRADOR","VENDEDOR","VENDE","CALLE","NUMERO","COMUNA","LOTE","MANZANA",
                     "VILLA","CASA","DPTO","ESTAC","CANT_EST","BODEGA","CANT_BOD","OFICINA","LOCAL","USO","SUPERFICIE","PLANO","PESOS","UF","ROL","ROL2", "ROL3","REQUIRIENTE",  "OBSERVACIONES","LEVANTADO","DIGITADO", "LON", "LAT", "TOTAL_SUP_CONSTRUIDO", "TOTAL_SUP_TERRENO", "UF_M2_U", "UF_M2_T","CODIGO_DEST", "CODIGO_MAT.", "ANO_SII"]
 
-  FUTURE_PROJECT = ["CODE", "ADDRESS","NAME", "ROLE_NUMBER", "FILE_NUMBER", "FILE_DATE", "OWNER", "LEGAL_AGENT", "ARCHITECH", "FLOORS", "UNDERGROUNDS", "TOTAL_UNITS", "TOTAL_PARKING", "TOTAL_COMMERCIALS", "M2_APPROVED", "M2_BUILT", "M2_FIELD", "CADASTRAL_DATE", "COMMENTS", "BIMESTER", "YEAR", "CADASTRE", "PROJECT_TYPE_ID", "FUTURE_PROJECT_TYPE_ID", "COUNTY", "X", "Y", "ID"]
+  FUTURE_PROJECT = ["CODE", "ADDRESS","NAME", "ROLE_NUMBER", "FILE_NUMBER", "FILE_DATE", "OWNER", "LEGAL_AGENT", "ARCHITECH", "FLOORS", "UNDERGROUNDS", "TOTAL_UNITS", "TOTAL_PARKING", "TOTAL_COMMERCIALS", "M2_APPROVED", "M2_BUILT", "M2_FIELD", "CADASTRAL_DATE", "COMMENTS", "BIMESTER", "YEAR", "CADASTRE", "PROJECT_TYPE_ID", "FUTURE_PROJECT_TYPE_ID", "COUNTY", "X", "Y", "ID", "T_OFI"]
   PROJECT_HEADER = ["CODE","NAME", "ADDRESS", "FLOORS", "COUNTY", "PROJECT_TYPE", "BUILD_DATE", "SALE_DATE", "TRANSFER_DATE", "PILOT_DATE", "PROJECT_STATUS", "QUANTITY_DEPARTMENT", "ELEVATORS", "OBSERVATIONS", "PROJECT_STATUS_ID", "BIMESTER", "YEAR", "CADASTRE",  "STOCK_UNITS", "MIX_USABLE_M2", "MIX_TERRACE_M2", "LIVING", "SERVICE", "OFFICE", "UF_MIN", "UF_MAX", "UF_PARKING", "UF_CELLAR", "COMMON_EXPENSES", "TOTAL_UNITS", "T_MIN", "T_MAX", "HOME_TYPE", "MODEL", "LON", "LAT", "BAÑOS", "DORMITORIOS"]
 
 POLYGON_HEADER = ["USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
@@ -63,7 +63,7 @@ POLYGON_HEADER = ["USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
       writer << FUTURE_PROJECT
 
       future_projects.each do |t|
-        values = [t.code, t.address, t.name, t.role_number, t.file_number, t.file_date, t.owner, t.legal_agent, t.architect, t.floors, t.undergrounds, t.total_units, t.total_parking, t.total_commercials, t.m2_approved, t.m2_built, t.m2_field, t.cadastral_date, t.comments, t.bimester, t.year, t.cadastre, t.project_type.name, t.future_project_type.name, t.county_name, t.the_geom.x, t.the_geom.y, t.id]
+        values = [t.code, t.address, t.name, t.role_number, t.file_number, t.file_date, t.owner, t.legal_agent, t.architect, t.floors, t.undergrounds, t.total_units, t.total_parking, t.total_commercials, t.m2_approved, t.m2_built, t.m2_field, t.cadastral_date, t.comments, t.bimester, t.year, t.cadastre, t.project_type.name, t.future_project_type.name, t.county_name, t.the_geom.x, t.the_geom.y, t.id, t.t_ofi]
 
         writer << values
       end

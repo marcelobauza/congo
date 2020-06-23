@@ -4,7 +4,7 @@
 
   <div class="span4">
     <span class="label success"><%= t('activerecord.attributes.kpi.county')%></span>
-  	<%= f.select :county_id, options_for_select(County.all.map{ |c| [c.name, c.id]}), {include_hidden: false}, {:multiple=>'true'}%>
+  	<%= f.select :county_id, options_for_select(County.where(enabled: true).order(:name).map{ |c| [c.name, c.id]}), {include_hidden: false}, {:multiple=>'true'}%>
   </div>
 	<div class="span4">
 		<span class="label success"><%= t('activerecord.attributes.kpi.property_type')%></span>

@@ -14,9 +14,9 @@
     </div>
   </div>
 
-  <div class="span4">
+  <div class="col-md-4">
     <span class="label success"><%= t('activerecord.attributes.kpi.county')%></span>
-    <%= f.select 'county_id', options_for_select(County.all.collect{ |c| [c.name, c.id]}), {include_hidden: false}, {:multiple=>'true'}%>
+    <%= f.select 'county_id', options_for_select(County.where(enabled: true).order(:name).collect{ |c| [c.name, c.id]}), {include_hidden: false}, {:multiple=>'true'}%>
   </div>
   <div class="span4">
     <span class="label success"><%= t('activerecord.attributes.kpi.property_type')%></span>

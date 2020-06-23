@@ -10,8 +10,8 @@ Congo.reports = function(){
   var mdrProjects       = Congo.dashboards.config.meters_download_radius_projects;
   var smdFutureProjects = Congo.dashboards.config.square_meters_download_future_projects;
   var mdrFutureProjects = Congo.dashboards.config.meters_download_radius_future_projects;
-  var smdtransactions   = Congo.dashboards.config.square_meters_download_transactions;
-  var mdrtransactions   = Congo.dashboards.config.meters_download_radius_transactions;
+  var smdTransactions   = Congo.dashboards.config.square_meters_download_transactions;
+  var mdrTransactions   = Congo.dashboards.config.meters_download_radius_transactions;
 
   switch (layer_type) {
     case 'future_projects_info':

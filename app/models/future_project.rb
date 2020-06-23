@@ -57,6 +57,11 @@ class FutureProject < ApplicationRecord
     where(project_type_id: project_type_id)
   end
 
+  def self.code_filter code
+    return all  unless  !code.empty?
+    where(code: code)
+  end
+
   def file_date=(val)
     self[:file_date] = val
   end

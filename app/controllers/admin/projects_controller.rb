@@ -14,14 +14,12 @@ class Admin::ProjectsController < ApplicationController
         if !params['county_id'].empty?
           @kpi_primary_data = Project.getPrimaryEvolution()
           @county_name = County.where(id: params[:county_id]).select(:name)
-        end   
+        end
         @kpi_evolution = Project.getCountyEvolution
 
-      end         
+      end
     end
   end
-
-
 
   def export_data
     @projects = Project.new
@@ -91,7 +89,7 @@ class Admin::ProjectsController < ApplicationController
   def destroy
     @project.destroy
     respond_to do |format|
-      format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
+      format.html { redirect_to admin_projects_url, notice: 'Project was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
