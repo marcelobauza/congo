@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
     @xl             = FutureProject.reports(filters)
     u               = User.find(current_user.id)
     total_downloads_allowed = u.role.total_download_future_projects
-    total_accumulated_downloads = u.downloads_users.sum(:future_projects)
+    total_accumulated_downloads = u.downloads_users.where('created_at::date = ?', Date.today).sum(:future_projects)
     total_downloads = total_accumulated_downloads + @xl.count
 
     respond_to do |format|
@@ -111,7 +111,7 @@ class ReportsController < ApplicationController
     @transaction                = Transaction.reports(filters)
     u                           = User.find(current_user.id)
     total_downloads_allowed     = u.role.total_download_transactions
-    total_accumulated_downloads = u.downloads_users.sum(:transactions)
+    total_accumulated_downloads = u.downloads_users.where('created_at::date = ?', Date.today).sum(:transactions)
     total_downloads             = total_accumulated_downloads + @transaction.count
 
     respond_to do |format|
@@ -192,7 +192,7 @@ class ReportsController < ApplicationController
     @project_homes, @project_departments = Project.reports(filters)
     u                                    = User.find(current_user.id)
     total_downloads_allowed              = u.role.total_download_projects
-    total_accumulated_downloads          = u.downloads_users.sum(:projects)
+    total_accumulated_downloads          = u.downloads_users.where('created_at::date = ?', Date.today).sum(:projects)
     total_downloads = total_accumulated_downloads + @project_homes.count + @project_departments.count
 
     respond_to do |format|

@@ -2,7 +2,7 @@ if @message
   wb = xlsx_package.workbook
 
   wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
-    sheet.add_row ['Ha superado el limite máximo de Descaras ']
+    sheet.add_row ['Ha superado el limite máximo de Descargas']
   end
 else
   if current_user.role.name == 'IPRO+' || current_user.role.name == 'Admin'
