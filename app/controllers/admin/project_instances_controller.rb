@@ -46,7 +46,7 @@ class Admin::ProjectInstancesController < ApplicationController
   def update
     respond_to do |format|
       if @project_instance.update(project_instance_params)
-        format.html { redirect_to @project_instance, notice: 'Project instance was successfully updated.' }
+        format.html { redirect_to admin_project_project_instances_path(@project), notice: 'Project instance was successfully updated.' }
         format.json { render :show, status: :ok, location: @project_instance }
       else
         format.html { render :edit }

@@ -45,7 +45,7 @@ class Admin::ProjectInstanceMixesController < ApplicationController
   def update
     respond_to do |format|
       if @project_instance_mix.update(project_instance_mix_params)
-        format.html { redirect_to @project_instance_mix, notice: 'Project instance mix was successfully updated.' }
+        format.html { redirect_to admin_project_project_instance_project_instance_mixes_path(@project, @project_instance), notice: 'Project instance mix was successfully updated.' }
         format.json { render :show, status: :ok, location: @project_instance_mix }
       else
         format.html { render :edit }
