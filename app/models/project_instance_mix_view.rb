@@ -8,9 +8,11 @@ class ProjectInstanceMixView < ApplicationRecord
   select +=" sum(sold_units) as sold_units, floors,  pp_uf_m2(project_instance_id) as pp_uf_m2 , pp_uf(project_instance_id) as pp_uf, "
   select +=" round(sum(vhmu),1) as vhmu, round((1::numeric - sum(stock_units)::numeric / sum(total_units::numeric)) * 100::numeric, 1) AS percentage_sold, "
   select +=" build_date, sale_date, transfer_date,   project_instance_id, round((avg(mix_usable_square_meters))::numeric,1) as mix_usable_square_meters, "
-  select +=" round((avg(mix_terrace_square_meters))::numeric,1) as mix_terrace_square_meters, avg(uf_m2) as uf_m2"
-  
-  group = %w[ bimester year project_status_id build_date sale_date transfer_date floors address project_status_id agency_name name project_instance_id ]
+  select +=" round((avg(mix_terrace_square_meters))::numeric,1) as mix_terrace_square_meters, avg(uf_m2) as uf_m2,"
+
+  select +=" project_type_id "
+
+  group = %w[ bimester year project_status_id build_date sale_date transfer_date floors address project_status_id agency_name name project_instance_id project_type_id ]
 
     @data = ProjectInstanceMixView.where(project_id: project_id, bimester: bimester, year: year).group(group).select(select).first
   end

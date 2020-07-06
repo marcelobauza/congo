@@ -258,11 +258,11 @@ projects_popup = function(id){
           }).append(
             $('<div>', {
               'class': 'col-md-6 text-right',
-              'text': 'Terraza:'
+              'text': data.project_type_id == '1' ? 'Terreno' : 'Terraza:'
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.mix_terrace_square_meters
+              'text': data.project_type_id == '1' ? data.mix_usable_square_meters : data.mix_terrace_square_meters
             }),
           ),
           $('<div>', {
@@ -745,7 +745,6 @@ function projects_report_pdf(){
 
           // Validamos si existen proyectos de casas
           if (project_count > 0) {
-        
 
             var vhmo = info_house['vhmo'];
             var vhmdd_h = info_house['vhmdd'];
