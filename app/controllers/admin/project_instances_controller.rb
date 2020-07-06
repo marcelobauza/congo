@@ -8,7 +8,7 @@ class Admin::ProjectInstancesController < ApplicationController
   # GET /project_instances.json
   def index
 
-    @project_instances = @project.project_instances.all
+    @project_instances = @project.project_instances.order(year: :desc, bimester: :desc)
   end
 
   # GET /project_instances/1
