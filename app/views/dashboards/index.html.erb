@@ -7,7 +7,10 @@
   data-allowed-area-future-projects='<%= current_user.role.square_meters_download_future_projects %>'
   data-allowed-radius-future-projects='<%= current_user.role.meters_download_radius_future_projects %>'
   data-allowed-area-transactions='<%= current_user.role.square_meters_download_transactions %>'
-  data-allowed-radius-transactions='<%= current_user.role.meters_download_radius_transactions %>'>
+     data-allowed-radius-transactions='<%= current_user.role.meters_download_radius_transactions %>'
+     data-uid='<%= current_user.id %>'
+
+     >
 </div>
 <div class="report" style="width: 720px;">
   <div id="chart-report-1">

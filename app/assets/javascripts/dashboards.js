@@ -97,7 +97,8 @@ Congo.dashboards.config = {
   square_meters_download_future_projects: 0,
   meters_download_radius_future_projects: 0,
   square_meters_download_transactions: 0,
-  meters_download_radius_transastions: 0
+  meters_download_radius_transastions: 0,
+  user_id: 0
 }
 
 Congo.dashboards.pois =function(){

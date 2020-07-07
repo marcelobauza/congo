@@ -58,7 +58,7 @@ Congo.map_utils = function(){
       collapsed: true
     }).addTo(map);
 
-
+    countiesEnabled();
     editableLayers = new L.FeatureGroup();
 
     // Agrega el toolbar de selección al mapa
@@ -377,7 +377,7 @@ Congo.map_utils = function(){
     if (groupLayer !=undefined){
       groupLayer.eachLayer(function(layer) {
         layerControl.removeLayer(groupLayer);
-        layerControl.removeLayer(sourcePois); 
+        layerControl.removeLayer(sourcePois);
         layerControl.removeLayer(sourceLots);
         groupLayer.removeLayer(layer);
 
@@ -390,7 +390,7 @@ Congo.map_utils = function(){
     layer_type = Congo.dashboards.config.layer_type;
     switch(layer_type) {
       case 'demography_info':
-        
+
         census_source_id = Congo.demography.config.census_source;
         filter_layer =  "census_source_id =" + census_source_id;
         Congo.demography.action_dashboards.indicator_demography();
@@ -542,7 +542,7 @@ Congo.map_utils = function(){
         if (allowed_use_ids.length > 0 ){
           filter_layer = filter_layer + " AND land_use_type_id IN ("+ allowed_use_ids + ")";
         }
-        
+
         if (from_construct != '' && to_construct != '' ){
           filter_layer = filter_layer + "AND construct between " + from_construct + " AND "+ to_construct ;
         }
@@ -621,7 +621,7 @@ Congo.map_utils = function(){
               })
             });
 
-            cql_filter = "1 =1"; 
+            cql_filter = "1 =1";
             env = "polygon: Polygon(("+coord_geoserver+"))";
           }
 
@@ -641,7 +641,7 @@ Congo.map_utils = function(){
         if (layer_type == 'building_regulations_info'){
           cql_filter = "1=1";
           filter_layer = ''
-          
+
           widget =  Congo.dashboards.config.widget;
           switch (widget) {
             case 'building_regulations_max_density':
@@ -873,6 +873,47 @@ Congo.map_utils = function(){
           groupLayer.addLayer(geojson);
 
           ;
+        }
+      });
+  }
+
+  function countiesEnabled(){
+    //var va = document.querySelector('#downloads');
+     //Congo.dashboards.config.user_id= va.dataset.uid
+    //user_id = Congo.dashboards.config.user_id;
+    user_id = 2;
+      var owsrootUrl = "http://"+url+":8080/geoserver/ows";
+      var defaultParameters = {
+        service: 'WFS',
+        version: '1.0.0',
+        request: 'GetFeature',
+        typeName: 'inciti_v2:counties_enabled_by_users',
+        outputFormat: 'application/json',
+        CQL_FILTER: "user_id IN("+ user_id + ")"
+      }
+
+    var geojsonMarkerOptions = {
+          radius: 8,
+          fillColor: "#ff7800",
+          color: "#000",
+          weight: 1,
+          opacity: 0.4,
+          fillOpacity: 0.4
+    };
+
+
+    var parameters = L.Util.extend(defaultParameters);
+      var URL = owsrootUrl + L.Util.getParamString(parameters);
+      $.ajax({
+        url: URL,
+        success: function (data) {
+          var geojson = new L.geoJson(data, {
+                pointToLayer: function (feature, latlng) {
+                          return L.circleMarker(latlng, geojsonMarkerOptions);
+                      }
+          }).addTo(map);
+          map.fitBounds(geojson.getBounds());
+          map.addLayer(geojson);
         }
       });
   }

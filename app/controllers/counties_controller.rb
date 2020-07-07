@@ -4,7 +4,7 @@ class CountiesController < ApplicationController
     def index
 
     respond_to do |format|
-      format.js 
+      format.js
     end
     end
 
@@ -12,18 +12,13 @@ class CountiesController < ApplicationController
     @id = params[:search][:name]
     @county = County.where(id: @id)
     respond_to do |format|
-      format.js 
+      format.js
     end
   end
 
-  def counties_users 
+  def counties_users
     @counties = CountiesUser.where(user_id: current_user.id).pluck(:county_id)
-   
+
     render json: @counties
   end
-
-
-
-
-
 end

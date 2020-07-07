@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_16_190146) do
+ActiveRecord::Schema.define(version: 2020_07_07_133707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -2773,5 +2773,13 @@ ActiveRecord::Schema.define(version: 2020_06_16_190146) do
       sum(project_primary_data.pxqd) AS total_pxqd
      FROM project_primary_data
     GROUP BY project_primary_data.year, project_primary_data.bimester;
+  SQL
+  create_view "counties_enabled_by_users", sql_definition: <<-SQL
+      SELECT c.name,
+      u.id AS user_id,
+      st_centroid(c.the_geom) AS geom
+     FROM ((counties_users cu
+       JOIN users u ON ((cu.user_id = u.id)))
+       JOIN counties c ON ((cu.county_id = c.id)));
   SQL
 end
