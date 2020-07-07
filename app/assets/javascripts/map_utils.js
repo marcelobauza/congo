@@ -878,10 +878,9 @@ Congo.map_utils = function(){
   }
 
   function countiesEnabled(){
-    //var va = document.querySelector('#downloads');
-     //Congo.dashboards.config.user_id= va.dataset.uid
-    //user_id = Congo.dashboards.config.user_id;
-    user_id = 2;
+    var va = document.querySelector('#downloads');
+    Congo.dashboards.config.user_id= va.dataset.uid
+    user_id = Congo.dashboards.config.user_id;
       var owsrootUrl = "http://"+url+":8080/geoserver/ows";
       var defaultParameters = {
         service: 'WFS',
