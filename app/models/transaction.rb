@@ -36,6 +36,9 @@ class Transaction < ApplicationRecord
     :seller_type_id,
     :sample_factor,
     :tome,
+    :role,
+    :calculated_value,
+    :uf_value,
     :code_sii, presence: true
 
   validate :point_is_located_within_the_specified_county, :unless => Proc.new { |t| t.county.blank? or t.longitude.blank? or t.latitude.blank? }
@@ -630,31 +633,30 @@ class Transaction < ApplicationRecord
   end
 
   def self.get_csv_data_sii(filters)
-
     cond = "transactions.inscription_date BETWEEN '#{filters[:date_from]}' "
     cond += "AND '#{filters[:date_to]}' "
+
     if !filters['polygon_id'].empty?
         session_saved = ApplicationStatus.find(filters[:polygon_id])
-      if !filters[:wkt].nil?
-        cond += WhereBuilder.build_within_condition(session_saved['wkt']) + Util.and
-      elsif !filters[:centerpt].nil?
-        cond += WhereBuilder.build_within_condition_radius(session_saved['centerpt'], session_saved['radius'] ) + Util.and
+      if !session_saved[:filters][:wkt].nil?
+        cond += WhereBuilder.build_within_condition(session_saved[:filters]['wkt']) + Util.and
+      elsif !session_saved[:filters]['centerpt'].nil?
+        cond += " AND " +  WhereBuilder.build_within_condition_radius(session_saved[:filters]['centerpt'], session_saved[:filters]['radius'] )
         else
-      cond += " AND county_id in (#{session_saved[:county_id].join(",")}) " if !session_saved[:county_id].blank?
+      cond += " AND county_id in (#{session_saved[:filters]['county_id'].join(",")}) " if !session_saved[:filters]['county_id'].blank?
         end
       else
         cond += " AND county_id in (#{filters[:county_id].join(",")}) " if !filters[:county_id].blank?
     end
 
     cond += " AND property_type_id = #{filters[:property_type_id]}" if !filters[:property_type_id].blank?
+
     transactions = Transaction.includes(:seller_type, :surveyor, :user, :county, :property_type).
       where(cond).
       order("transactions.inscription_date")
 
     return CsvParser.get_transactions_csv_data_sii(transactions)
   end
-
-
 
   def self.get_bench_values(result_id, seller_type_ids=nil)
     conditions = "result_id = #{result_id}"
