@@ -481,9 +481,12 @@ es:
         expire: Vencido?
         created_at: Fecha de Alta
         last_buy_date: Fecha Ultima Compra
-        transactions_downloads: "Transacciones descargadas"
-        projects_downloads: "Proyectos descargados"
-        future_projects_downloads: "Expedientes descargados"
+        transactions_downloads: "CBR D"
+        transactions_accumulated_downloads: "CBR A"
+        projects_downloads: "PRV D"
+        projects_accumulated_downloads: "PRV A"
+        future_projects_downloads: "EM D"
+        future_projects_accumulated_downloads: "EM A"
       role:
         name: Nombre
         square_meters_download_projects: "Metros cuadrados de descarga en PRV"
