@@ -37,8 +37,6 @@ class Transaction < ApplicationRecord
     :sample_factor,
     :tome,
     :role,
-    :calculated_value,
-    :uf_value,
     :code_sii, presence: true
 
   validate :point_is_located_within_the_specified_county, :unless => Proc.new { |t| t.county.blank? or t.longitude.blank? or t.latitude.blank? }
@@ -638,8 +636,8 @@ class Transaction < ApplicationRecord
 
     if !filters['polygon_id'].empty?
         session_saved = ApplicationStatus.find(filters[:polygon_id])
-      if !session_saved[:filters][:wkt].nil?
-        cond += WhereBuilder.build_within_condition(session_saved[:filters]['wkt']) + Util.and
+      if !session_saved[:filters]['wkt'].nil?
+        cond += " AND " + WhereBuilder.build_within_condition(session_saved[:filters]['wkt'])
       elsif !session_saved[:filters]['centerpt'].nil?
         cond += " AND " +  WhereBuilder.build_within_condition_radius(session_saved[:filters]['centerpt'], session_saved[:filters]['radius'] )
         else
