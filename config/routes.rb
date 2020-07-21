@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
 
 
+
   resources :expenses
   resources :expense_types
   resources :feedbacks
@@ -93,6 +94,7 @@ Rails.application.routes.draw do
     resources :transactions
     resources :feedbacks
     resources :building_regulations
+    resources :future_project_sub_types
 
     resources :regions
 

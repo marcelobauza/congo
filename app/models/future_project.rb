@@ -1,6 +1,7 @@
 class FutureProject < ApplicationRecord
   belongs_to :project_type
   belongs_to :future_project_type
+  belongs_to :future_project_sub_type, optional: true
   belongs_to :county
 
   before_validation :build_geom

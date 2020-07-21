@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Admin Future Project Sub Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @future_project_sub_types.each do |admin_future_project_sub_type| %>
+      <tr>
+        <td><%= admin_future_project_sub_type.name %></td>
+        <td><%= link_to 'Edit', edit_admin_future_project_sub_type_path(admin_future_project_sub_type) %></td>
+        <td><%= link_to 'Destroy', admin_future_project_sub_type_path(admin_future_project_sub_type), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Admin Future Project Sub Type', new_admin_future_project_sub_type_path %>

@@ -10,13 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_133707) do
+ActiveRecord::Schema.define(version: 2020_07_21_124537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "postgis"
   enable_extension "postgis_topology"
+
+  create_table "admin_future_sub_project_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "agencies", force: :cascade do |t|
     t.string "name"
@@ -252,6 +258,12 @@ ActiveRecord::Schema.define(version: 2020_07_07_133707) do
     t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
+  create_table "future_project_sub_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "future_project_types", force: :cascade do |t|
     t.string "name"
     t.string "abbrev"
@@ -292,7 +304,9 @@ ActiveRecord::Schema.define(version: 2020_07_07_133707) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.geometry "the_geom_3857", limit: {:srid=>3857, :type=>"st_point"}
+    t.bigint "future_project_sub_type_id"
     t.index ["county_id"], name: "index_future_projects_on_county_id"
+    t.index ["future_project_sub_type_id"], name: "index_future_projects_on_future_project_sub_type_id"
     t.index ["future_project_type_id"], name: "index_future_projects_on_future_project_type_id"
     t.index ["project_type_id"], name: "index_future_projects_on_project_type_id"
   end
@@ -711,6 +725,7 @@ ActiveRecord::Schema.define(version: 2020_07_07_133707) do
   add_foreign_key "county_ufs", "property_types"
   add_foreign_key "expenses", "expense_types"
   add_foreign_key "future_projects", "counties"
+  add_foreign_key "future_projects", "future_project_sub_types"
   add_foreign_key "future_projects", "future_project_types"
   add_foreign_key "future_projects", "project_types"
   add_foreign_key "import_processes", "users"

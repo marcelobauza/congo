@@ -1,0 +1,1 @@
+json.partial! "admin_future_project_sub_types/admin_future_project_sub_type", admin_future_project_sub_type: @admin_future_project_sub_type
