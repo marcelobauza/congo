@@ -97,6 +97,6 @@ class Admin::TransactionsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def transaction_params
-    params.require(:transaction).permit(:property_type_id, :address, :sheet, :number, :inscription_date, :buyer_name, :seller_type_id, :department, :blueprint, :uf_value, :real_value, :calculated_value, :quarter,:year, :sample_factor, :county_id, :the_geom, :cellar, :parkingi, :role, :seller_name, :buller_rut, :uf_m2, :tome, :lot, :block, :village, :surface, :requiring_entity, :commments, :user_id, :surveyor_id, :active, :bimester, :code_sii, :total_surface_building, :total_surface_terrain, :uf_m2_u, :uf_m2_t, :building_regulation, :role_1, :role_2, :code_destination, :code_material, :year_sii, :latitude, :longitude).merge(user_id: current_user.id)
+    params.require(:transaction).permit(:property_type_id, :address, :sheet, :number, :inscription_date, :buyer_name, :buyer_rut, :seller_type_id, :department, :blueprint, :uf_value, :real_value, :calculated_value, :quarter,:year, :sample_factor, :county_id, :the_geom, :cellar, :parkingi, :role, :seller_name, :buller_rut, :uf_m2, :tome, :lot, :block, :village, :surface, :requiring_entity, :commments, :user_id, :surveyor_id, :active, :bimester, :code_sii, :total_surface_building, :total_surface_terrain, :uf_m2_u, :uf_m2_t, :building_regulation, :role_1, :role_2, :code_destination, :code_material, :year_sii, :latitude, :longitude).merge(user_id: current_user.id)
   end
 end

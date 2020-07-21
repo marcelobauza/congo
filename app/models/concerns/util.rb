@@ -155,4 +155,50 @@ module Util
     end
     colors
   end
+  #Validating rut using Module 11 algorithm
+  def self.is_rut_valid? sender, field, mandatory = false
+    return true if !mandatory and (sender[field].nil? or sender[field].empty?)
+
+    if mandatory and (sender[field].nil? or sender[field].to_s.empty?)
+      sender.errors.add(field, :required_rut)
+      return false
+    end
+
+    sender[field] = sender[field].to_s.gsub(".", "")
+
+    if sender[field].to_s.match(/^(|\d{1,8}-(\d{1}|K|k))$/).nil?
+      sender.errors.add(field, :invalid_rut_format)
+      return false
+    end
+
+    number_verif_digit = sender[field].to_s.gsub(".", "").split("-")
+
+    if number_verif_digit.size != 2
+      sender.errors.add(field, :invalid_rut_format)
+      return false
+    end
+
+    number = number_verif_digit.first
+    digit = number_verif_digit.last
+    digit = 10 if number_verif_digit.last == "K" or number_verif_digit.last == "k"
+
+    serie = [2,3,4,5,6,7]
+    sum = 0
+
+    number.split("").reverse.each_with_index do |n, i|
+      serie_value = serie[i]
+      serie_value = serie[i - serie.size] if serie_value.nil?
+      sum += n.to_i * serie_value
+    end
+
+    result = 11 - (sum % 11)
+    result = 0 if result == 11
+
+    if result != digit.to_i
+      sender.errors.add(field, :invalid_verification_digit)
+      return false
+    end
+
+    return true
+  end
 end
