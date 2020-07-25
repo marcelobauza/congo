@@ -44,6 +44,7 @@ gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
 gem 'axlsx_rails'
 gem 'jquery_file_download-rails'
 gem 'ruby_kml'
+gem 'bootstrap-datepicker-rails'
  # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -79,6 +80,7 @@ group :development do
   gem 'letter_opener'
   gem 'rubocop-github'
   gem 'paper_trail'
+  gem 'brakeman'
 
 end
 

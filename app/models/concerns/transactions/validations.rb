@@ -1,4 +1,4 @@
-module Transactions::Validation
+module Transactions::Validations
   extend ActiveSupport::Concern
 
   included do

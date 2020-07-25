@@ -12,14 +12,13 @@ class Admin::TransactionsController < ApplicationController
     send_file file, :type => 'text/csv', :disposition => "inline", :filename => "transactions.csv"
   end
 
-
   def export_data_sii
     @counties = County.order(name: :asc)
     @transactions = Transaction.new
   end
 
   def generate_csv_sii
-    file = Transaction.get_csv_data_sii(params)
+    file = Transaction.get_csv_data_sii(params[:search])
     send_file file, :type => 'text/csv', :disposition => "inline", :filename => "transactions.csv"
   end
 

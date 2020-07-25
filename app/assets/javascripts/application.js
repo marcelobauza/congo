@@ -17,7 +17,13 @@
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets
+//= require bootstrap-datepicker
 //= require rails-ujs
 //= require activestorage
 //= require congo
 //= require_tree .
+
+$.fn.datepicker.defaults.format = "yyyy/mm/dd";
+$(document).ready(function(){
+  $('.datepicker').datepicker();
+});

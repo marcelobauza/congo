@@ -81,6 +81,9 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
+    bootstrap-datepicker-rails (1.9.0.1)
+      railties (>= 3.0)
+    brakeman (4.8.2)
     builder (3.2.3)
     byebug (11.0.1)
     capistrano (3.11.0)
@@ -382,6 +385,8 @@ DEPENDENCIES
   axlsx_rails
   bootsnap (>= 1.1.0)
   bootstrap (~> 4.3.1)
+  bootstrap-datepicker-rails
+  brakeman
   byebug
   capistrano (~> 3.10)
   capistrano-bundler

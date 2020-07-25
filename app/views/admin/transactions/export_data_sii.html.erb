@@ -1,52 +1,41 @@
-<%= form_with  url: admin_transactions_generate_csv_sii_path, method: :get, local:true do |f| %>
-   <div class="alert-message block-message info">
+<%= simple_form_for :search, url: admin_transactions_generate_csv_sii_path,
+  method: :get  do |f| %>
+  <div class="col-md-12 card">
     <p><strong><%= t(:EXPORT_CSV_BETWEEN_DATES) %></strong></p>
   </div>
-  <div class="clearfix">
-    <label for="xlInput"><strong><%= t(:INSCRIPTION_DATE_FROM) %></strong></label>
-    <div class="input">
-      <%= f.date_field :date_from, class:'datepicker' %>
-    </div>
-    <br/>
-    <label for="xlInput"><strong><%= t(:INSCRIPTION_DATE_TO) %></strong></label>
-    <div class="input">
-      <%= f.date_field :date_to, class: 'datepicker' %>
-    </div>
-  </div>
-
-    <span class="label success"><%= t('activerecord.attributes.kpi.polygon')%></span>
-    <%= select "", 'kpi_type', options_for_select({ "POLIGONO"=> "1", "COMUNA" => "2"} ), {:include_blank => true} %>
-  </div>
-  <div class="span4" id="polygons">
-    <span class="label success"><%= t('activerecord.attributes.kpi.polygon')%></span>
-    <%= select "", :polygon_id, options_for_select(ApplicationStatus.where(user_id: current_user.id).collect{ |c| [c.name, c.id]} ), {:include_blank => true} %>
-  </div>
-  <div class="span4" id="counties">
-    <span class="label success"><%= t('activerecord.attributes.kpi.county')%></span>
-    <%= f.select 'county_id', options_for_select(@counties.collect{ |c| [c.name, c.id]}), {:include_hidden => false},{multiple: true}%>
-  </div>
-  <div class="span4">
-    <span class="label success"><%= t('activerecord.attributes.kpi.property_type')%></span>
-    <%= f.select 'property_type_id', options_for_select(PropertyType.all.collect{ |p| [p.name, p.id]} ), {:include_blank => true}  %>
-  </div>
-  <%= submit_tag "Exportar", :class => 'btn primary' %>
-  <% unless @transactions.errors.count.zero? %>
+  <div class="card">
+    <%= f.input :date_from,
+      label: t(:INSCRIPTION_DATE_FROM),
+      input_html:{ class: 'form-control datepicker'},
+      wrapper_html:{ class: "form-group col-md-4"} %>
+    <%= f.input :date_to,
+      label: t(:INSCRIPTION_DATE_TO),
+      input_html:{ class: 'form-control datepicker'},
+      wrapper_html:{ class: "form-group col-md-4"} %>
+    <%= f.input :kpi_type,
+      collection: [['Poligonos', 1], ['Comunas', 2]],
+      prompt: "Seleccione",
+      input_html:{ class: 'form-control'},
+      wrapper_html:{ class: "form-group col-md-4"} %>
+    <%= f.input :polygon_id, label: false,
+      collection: application_statuses_for_select,
+      prompt:"Seleccione poligono",
+      input_html:{ class: "form-control"},
+      wrapper_html:{ class: "form-group col-md-4 ml-4"} %>
+    <%= f.input :county_id, label: false,
+      collection: counties_for_select,
+      prompt: "Seleccione comuna",
+      input_html:{ class: "'form-control col-md-4", multiple: true, size: 10},
+      wrapper_html:{ class: "form-group col-md-4 ml-4"} %>
+    <%= f.input 'property_type_id',
+      label: t('activerecord.attributes.kpi.property_type'),
+      collection: property_type_for_select,
+      prompt: "Seleccione propiedad",
+      input_html:{ class: 'form-control'},
+      wrapper_html:{ class: "form-group col-md-4"} %>
     <div>
-      <p>Errores</p>
-      <table>
-        <tr>
-          <td>fila</td>
-          <td>errores</td>
-        </tr>
-        <% @errors.each_index do |i| %>
-        <tr>
-          <td><%= @erroneous_rows[i].to_s %></td>
-          <td><%= @errors[i].full_messages.to_s %></td>
-        </tr>
-        <% end %>
-      </table>
+      <%= f.submit "Exportar", :class => 'btn primary' %>
     </div>
-  <% end %>
-  
+  </div>
 <% end %>
 
