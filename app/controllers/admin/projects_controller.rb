@@ -25,7 +25,7 @@ class Admin::ProjectsController < ApplicationController
     @projects = Project.new
   end
   def generate_csv
-    file = Project.get_csv_data(params)
+    file = Project.get_csv_data(params[:search])
     send_file file, :type => 'text/csv', :disposition => "inline", :filename => "projects.csv"
   end
 
