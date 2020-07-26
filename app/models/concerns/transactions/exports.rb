@@ -13,10 +13,12 @@ module Transactions::Exports
         elsif !session_saved[:filters]['centerpt'].nil?
           cond += " AND " +  WhereBuilder.build_within_condition_radius(session_saved[:filters]['centerpt'], session_saved[:filters]['radius'] )
         else
+
           cond += " AND county_id in (#{session_saved[:filters]['county_id'].join(",")}) " if !session_saved[:filters]['county_id'].blank?
         end
       else
-        cond += " AND county_id in (#{filters[:county_id].join(",")}) " if !filters[:county_id].blank?
+        counties = filters[:county_id].reject!(&:blank?)
+        cond += " AND county_id in (#{counties.join(",")}) " if !filters[:county_id].blank?
       end
 
       cond += " AND property_type_id = #{filters[:property_type_id]}" if !filters[:property_type_id].blank?

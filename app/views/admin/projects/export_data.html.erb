@@ -1,24 +1,43 @@
-<%= form_with  url: admin_projects_generate_csv_path, method: :get, local:true do |f| %>
+<%= simple_form_for :search, url: admin_projects_generate_csv_path,
+  method: :get do |f| %>
 
-<div class="row">
-
-  <div class="span4">
-    <span class="label success"><%= t('activerecord.attributes.kpi.county')%></span>
-  	<%= f.select :county_id, options_for_select(County.where(enabled: true).order(:name).map{ |c| [c.name, c.id]}), {include_hidden: false}, {:multiple=>'true'}%>
+  <div class="card">
+    <%= f.input :project_type_id,
+      label: t('activerecord.attributes.kpi.property_type'),
+      collection: [['CASAS', '1'], ['DEPARTAMENTOS', '2']],
+      input_html: {class: 'form-control'},
+      wrapper_html: {class: 'form-group col-md-4'},
+      prompt: 'Seleccione tipo de proyecto'%>
+    <%= f.input :year,
+      label: t('activerecord.attributes.kpi.year'),
+      collection: 2010..Date.today.year,
+      input_html:{ class: 'form-control'},
+      wrapper_html:{ class: "form-group col-md-4"},
+      prompt: 'Seleccione año'
+    %>
+    <%= f.input :bimester,
+      label: t('activerecord.attributes.kpi.bimester'),
+      collection: 1..6,
+      input_html:{ class: 'form-control'},
+      wrapper_html:{ class: "form-group col-md-4"},
+      prompt: 'Seleccione año'%>
+    <%= f.input :kpi_type,
+      collection: [['Poligonos', 1], ['Comunas', 2]],
+      prompt: "Seleccione",
+      input_html:{ class: 'form-control'},
+      wrapper_html:{ class: "form-group col-md-4"} %>
+    <%= f.input :polygon_id, label: false,
+      collection: application_statuses_for_select,
+      prompt:"Seleccione poligono",
+      input_html:{ class: "form-control"},
+      wrapper_html:{ class: "form-group col-md-4 ml-4"} %>
+    <%= f.input :county_id, label: false,
+      collection: counties_for_select,
+      prompt: "Seleccione comuna",
+      input_html:{ class: "'form-control col-md-4",
+                   multiple: true, size: 10,
+                   include_hidden: false},
+      wrapper_html:{ class: "form-group col-md-4 ml-4"} %>
+  <%= f.submit "Buscar", class: 'btn primary'%>
   </div>
-	<div class="span4">
-		<span class="label success"><%= t('activerecord.attributes.kpi.property_type')%></span>
-		<%= f.select 'project_type_id', options_for_select({ "CASAS"=> "1", "DEPARTAMENTOS" => "2"}, :selected => params['project_type_id'] || ''  ), {:include_blank => true}  %>
-	</div>
-
-  <div class="span4">
-    <span class="label success"><%= t('activerecord.attributes.kpi.bimester')%></span>
-  <%= f.select 'bimester', options_for_select([1,2,3,4,5,6], {:include_blank => true}), {:include_blank => true} %>
-  </div>
-  <div class="span4">
-    <span class="label success"><%= t('activerecord.attributes.kpi.year_from')%></span>
-  <%= f.select 'year', options_for_select([2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020]), {:include_blank => true} %>
-  </div>
-</div>
-<%= submit_tag "Filtrar", :class=>'btn primary'%>
 <% end %>

@@ -1,19 +1,19 @@
 module WhereBuilder
   extend ActiveSupport::Concern
 
-  def self.build_within_condition(wkt)
+  def self.build_within_condition(wkt, the_geom = 'the_geom')
     polygon = JSON.parse(wkt)
- "ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326), the_geom)"
+ "ST_CONTAINS(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"polygon\", \"coordinates\":#{polygon[0]}}'),4326), #{the_geom})"
 #    "ST_Within(the_geom, ST_GeomFromText('POLYGON((#{polygon[1]}))', #{Util::WGS84_SRID}))"
   end
 
 
-  def self.build_within_condition_radius(center_pt, radius, geography = false)
+  def self.build_within_condition_radius(center_pt, radius, geography = false, the_geom='the_geom')
     @geography = geography
     if @geography == true
-    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius}, #{@geography})"
+    "ST_DWithin(#{the_geom}, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius}, #{@geography})"
     else
-    "ST_DWithin(the_geom, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius}, #{geography})"
+    "ST_DWithin(#{the_geom}, ST_GeomFromText('POINT(#{center_pt})', #{Util::WGS84_SRID}), #{radius}, #{geography})"
   end
   end
 
