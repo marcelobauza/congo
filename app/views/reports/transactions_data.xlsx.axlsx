@@ -5,10 +5,51 @@ if @message
     sheet.add_row ['Ha superado el limite máximo de Descargas']
   end
 else
-if current_user.role.name == 'IPRO+' || current_user.role.name == 'Admin' || current_user.role.name == 'MYPE'
+if current_user.role.name == 'MYPE'
 
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Compraventas") do |sheet|
+  sheet.add_row [
+    'Tipo',
+    'Dirección',
+    'Comuna',
+    'Rol',
+    'Foja',
+    'Numero',
+    'Fecha',
+    'Tipo Vendedor',
+    'UF',
+    'uf_m2_u',
+    'Est.',
+    'Bod.',
+    'sup.t_te',
+    'Sup_l_cons',
+    'Año Construccion',
+  ]
+  @transaction.each do |row|
+    sheet.add_row [
+      row.property_type_name,
+      row.address,
+      row.county_name,
+      row.role,
+      row.sheet,
+      row.number,
+      row.inscription_date,
+      row.seller_type_name,
+      row.calculated_value,
+      row.uf_m2_u,
+      row.parkingi,
+      row.cellar,
+      row.total_surface_terrain,
+      row.total_surface_building,
+      row.year_sii,
+    ]
+end
+end
+else
+if current_user.role.name == 'IPRO+' || current_user.role.name == 'Admin'
+  wb = xlsx_package.workbook
+  wb.add_worksheet(name: "Compraventas") do |sheet|
   sheet.add_row [
     'X',
     'Y',
@@ -68,6 +109,7 @@ wb.add_worksheet(name: "Compraventas") do |sheet|
       row.year_sii,
       row.comments
     ]
+end
 end
 end
 end
