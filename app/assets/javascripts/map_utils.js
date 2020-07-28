@@ -400,9 +400,11 @@ Congo.map_utils = function(){
         break;
       case 'transactions_info':
       case 'transactions_heatmap_amount':
+
         year = Congo.dashboards.config.year;
         bimester = Congo.dashboards.config.bimester;
         Congo.transactions.action_dashboards.indicator_transactions();
+
         property_type_ids = Congo.transactions.config.property_type_ids
         seller_type_ids = Congo.transactions.config.seller_type_ids
         boost = Congo.dashboards.config.boost;
@@ -624,11 +626,11 @@ Congo.map_utils = function(){
             cql_filter = "1 =1";
             env = "polygon: Polygon(("+coord_geoserver+"))";
           }
-
-
           cql_filter ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)"+ filter_layer;
-          cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)";
         }
+
+      cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)";
+
         break;
       case 'polygon':
         polygon_size = Congo.dashboards.config.size_box;
