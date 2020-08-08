@@ -30,7 +30,7 @@ default: &default
 
 development:
   <<: *default
-  port: 5435
+  port: 5432
   database: congo_development
 
   # The specified database role being used to connect to postgres.

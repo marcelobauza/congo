@@ -1,6 +1,6 @@
 class DashboardsController < ApplicationController
   def index
-    allowed_layers = current_user.layer_types.reject!(&:blank?)
+    allowed_layers = current_user.layer_types.reject(&:blank?)
     @initial_layer  = LayerType.where(id: allowed_layers).first
   end
 
