@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+
+  include Util
   #has_paper_trail
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -11,6 +13,12 @@ class User < ApplicationRecord
   has_many :feedbacks
   has_many :downloads_users
   belongs_to :role
+
+  validate :is_rut_valid
+
+  def is_rut_valid
+    Util.is_rut_valid?(self, :rut, true)
+  end
 
    def active_for_authentication?
        super && !disabled
