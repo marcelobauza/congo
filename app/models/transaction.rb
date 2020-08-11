@@ -19,6 +19,7 @@ class Transaction < ApplicationRecord
   include WhereBuilder
   include Transactions::Exports
   include Transactions::Validations
+  include Transactions::Kml
 
   #named_scope :by_number, lambda { |t| {:conditions => {:number => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
   #named_scope :by_user, lambda { |t| {:conditions => {:user_id => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
@@ -166,36 +167,38 @@ class Transaction < ApplicationRecord
     seller                      = SellerType.get_seller_type(data["SELLER_TYP"])
     self.property_type_id       = property_type.id
     self.address                = ic.iconv(data["ADDRESS"].gsub("'","''"))
-    self.sheet                  = data["SHEET"].to_i unless data["SHEET"] == -1
-    self.number                 = data["NUMBER"].to_i unless data["NUMBER"] == -1
-    self.cellar                 = data["BOD"].to_i unless data["BOD"] == -1
-    self.parkingi               = data["EST"].to_i unless data["EST"] == -1
+    self.sheet                  = data["SHEET"].to_i
+    self.number                 = data["NUMBER"].to_i
     self.inscription_date       = ic.iconv(data["INSCRIPTIO"].to_s).to_date
     self.buyer_name             = ic.iconv(data["BUYER_NAME"].to_s)
-    self.buyer_rut              = ic.iconv(data["BUYER_RUT"].to_s)
     self.seller_type_id         = seller.id
-    self.seller_name            = ic.iconv(data["SELLER_NAM"].to_s)
     self.department             = ic.iconv(data["DEPARTMENT"].to_s)
     self.blueprint              = ic.iconv(data["BLUEPRINT"].to_s)
+    self.real_value             = data["REAL_VALUE"].to_f
+    self.calculated_value       = data["CALCULATED"].to_f
     self.year                   = data["YEAR"]
-    self.bimester               = data["BIMESTER"]
     self.sample_factor          = data["SAMPLE_FAC"]
     self.county_id              = county_id
-    self.role                   = ic.iconv(data["ROL"].to_s)
     self.the_geom               = geom
-    self.real_value             = data["REAL_VALUE"].to_f unless data["REAL_VALUE"] == -1
-    self.calculated_value       = data["CALCULATED"].to_f unless data["CALCULATED"] == -
-    self.surface                = data["SUPERFICIE"] unless data["SUPERFICIE"] == -1
+    self.cellar                 = data["BOD"].to_i
+    self.parkingi               = data["EST"].to_i
+    self.role                   = ic.iconv(data["ROL"].to_s)
+    self.seller_name            = ic.iconv(data["SELLER_NAM"].to_s)
+    self.buyer_rut              = ic.iconv(data["BUYER_RUT"].to_s)
     self.uf_m2                  = (self.calculated_value / self.surface) unless self.surface == 0 or self.surface.nil?
-    self.village                = ic.iconv(data["VILLA"].to_s)
-    self.block                  = ic.iconv(data["MANZANA"].to_s)
     self.tome                   = data["TOMO"].to_i unless data["TOMO"] == -1
-    self.requiring_entity       = data["REQUIRIENTE"]
+    self.lot                    = data["LOT"]
+    self.block                  = ic.iconv(data["MANZANA"].to_s)
+    self.village                = ic.iconv(data["VILLA"].to_s)
+    self.surface                = data["SUPERFICIE"] unless data["SUPERFICIE"] == -1
+    self.requiring_entity       = data["REQUIRING"]
     self.comments               = ic.iconv(data["COMMENTS"].to_s)
-    self.surveyor_id            = Surveyor.find_by(name: data["ENCUESTADO"].to_s.downcase.titleize).id if !data["ENCUESTADO"].nil?
     self.user_id                = user_id
+    self.surveyor_id            = Surveyor.find_by(name: data["ENCUESTADO"].to_s.downcase.titleize).id if !data["ENCUESTADO"].nil?
+    self.bimester               = data["BIMESTER"]
     self.code_sii               = data["CODE_SII"]
-    self.total_surface_building = 0
+    self.role_1                   = data["ROL2"]
+    self.role_2                   = data["ROL3"]
 
     conditions = "rol_number = '#{self.role}'  #{Util.and} "
     conditions += "county_sii_id = #{data['CODE_SII']}"
@@ -268,20 +271,30 @@ class Transaction < ApplicationRecord
   end
 
   def self.find_globals(filters)
+    result = {
+      uf_min_value: 0.0,
+      uf_max_value: 0.0,
+      average: 0.0,
+      deviation: 0.0,
+      avg_trans_count: 0,
+      avg_uf_volume: 0.0
+    }
 
-    result = {:uf_min_value => 0.0,
-              :uf_max_value => 0.0,
-              :average => 0.0, :deviation => 0.0,
-              :avg_trans_count => 0, :avg_uf_volume => 0.0}
-    global_transactions = Transaction.select(
-      'min(transactions.calculated_value) as uf_min_value,
-                 max(transactions.calculated_value) as uf_max_value,
-                 avg(transactions.calculated_value) as average,
-                 stddev(transactions.calculated_value) as deviation,
-                 ROUND((ROUND(SUM(1 / sample_factor)) / COUNT(DISTINCT(year, bimester)))) as avg_trans_count,
-                 (SUM(calculated_value) / COUNT(DISTINCT(year, bimester))) as avg_uf_volume').
-    joins(build_joins.join(" ") ).
-    where(build_conditions(filters)).order("uf_min_value").first
+    select = <<-SQL
+        min(transactions.calculated_value) as uf_min_value,
+        max(transactions.calculated_value) as uf_max_value,
+        avg(transactions.calculated_value) as average,
+        stddev(transactions.calculated_value) as deviation,
+        ROUND((ROUND(SUM(1 / sample_factor)) / COUNT(DISTINCT(year, bimester)))) as avg_trans_count,
+        (SUM(calculated_value) / COUNT(DISTINCT(year, bimester))) as avg_uf_volume
+    SQL
+
+    global_transactions = Transaction.
+      select(select).
+      joins(build_joins.join(" ") ).
+      where(build_conditions(filters)).
+      order("uf_min_value").first
+
     return result if global_transactions.nil?
 
     result[:uf_min_value] = global_transactions[:uf_min_value] unless global_transactions[:uf_min_value].nil?
@@ -291,7 +304,7 @@ class Transaction < ApplicationRecord
     result[:avg_trans_count] = global_transactions[:avg_trans_count] unless global_transactions[:avg_trans_count].nil?
     result[:avg_uf_volume] = global_transactions[:avg_uf_volume] unless global_transactions[:avg_uf_volume].nil?
 
-    return result
+    result
   end
 
   def self.group_transaction_criteria_by_period(filters, criteria)
@@ -901,7 +914,7 @@ class Transaction < ApplicationRecord
   def self.summary params
     result =[]
     begin
-      global_transactions = Transaction.find_globals(params)
+      global_transactions = find_globals(params)
       general_data = [
         {:label => I18n.t(:UF_MIN_VALUE), :value => global_transactions[:uf_min_value]},
         {:label => I18n.t(:UF_MAX_VALUE), :value => global_transactions[:uf_max_value]},
@@ -909,6 +922,7 @@ class Transaction < ApplicationRecord
         {:label => I18n.t(:UF_DEVIATION), :value => global_transactions[:deviation]},
         {:label => I18n.t(:AVG_TRANSACTIONS_BIMESTER), :value => global_transactions[:avg_trans_count]},
         {:label => I18n.t(:AVG_UF_VOLUME_BIMESTER), :value => global_transactions[:avg_uf_volume]}]
+
 
       ptypes = PropertyType.group_transactions_by_prop_types(params)
       stypes = SellerType.group_transactions_by_seller_type(params)
@@ -1169,25 +1183,5 @@ class Transaction < ApplicationRecord
         csv << product.attributes.values_at(*desired_column)
       end
     end
-  end
-
-  def self.kml_data filters
-
-    data = reports(filters)
-    kml = KMLFile.new
-    document = KML::Document.new(name: "CBR")
-    data.each do |d|
-      document.features << KML::Placemark.new(
-        :name => d.address,
-        :description =>"Uso: #{d.code_destination}
-                        Fecha: #{d.inscription_date}
-                        UF: #{d.calculated_value}
-                        Util: #{d.uf_m2_u}
-                        Terreno: #{d.total_surface_terrain}}",
-                        :geometry =>  KML::Point.new(:coordinates => {:lat => d.the_geom.y, :lng => d.the_geom.x})
-      )
-    end
-    kml.objects << document
-    kml.render
   end
 end

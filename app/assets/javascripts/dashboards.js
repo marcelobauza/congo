@@ -71,6 +71,19 @@ $(document).ready(function(){
     Congo.dashboards.config.square_meters_download_transactions = va.dataset.allowedAreaTransactions
     Congo.dashboards.config.meters_download_radius_transactions = va.dataset.allowedRadiusTransactions
     Congo.dashboards.config.layer_type = va.dataset.initialLayerName
+
+    layer_type = Congo.dashboards.config.layer_type;
+    switch(layer_type){
+      case 'future_projects_info':
+        Congo.dashboards.config.style_layer= 'future_projects_normal_point';
+        break;
+      case 'transactions_info':
+        Congo.dashboards.config.style_layer= 'poi_new';
+        break;
+      case 'projects_feature_info':
+        Congo.dashboards.config.style_layer= 'poi_new';
+        break;
+    }
   }
 });
 
