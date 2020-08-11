@@ -29,7 +29,7 @@ class BuildingRegulation < ApplicationRecord
   def self.group_by_hectarea_inhabitants filters
     hectarea_inhabitants = find_by_columns_range(filters, 'hectarea_inhabitants')
   end
-	
+
   def self.find_by_columns_range filters, column
     range = BuildingRegulation.select("min(#{column}), max(#{column})").
       where(build_interval_conditions(filters, column)).take
@@ -81,7 +81,7 @@ class BuildingRegulation < ApplicationRecord
     else
       condition = "county_id = #{filters[:county_id]} AND "
     end
-	  
+
 		condition += "ST_Intersects(the_geom, ST_GeomFromText('#{selected_point}', #{Util::WGS84_SRID}))"
 		condition += " AND ST_Intersects(ST_GeomFromText('#{filters[:wkt]}', #{Util::WGS84_SRID}), ST_GeomFromText('#{selected_point}', #{Util::WGS84_SRID}))" unless filters[:wkt].nil?
 		condition +=  build_conditions(filters)
@@ -100,7 +100,7 @@ class BuildingRegulation < ApplicationRecord
 		else
       cond = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius], true )
 		end
-    		  
+
 #		cond += build_range_condition(filters[:from_construct], filters[:to_construct], 'construct') if filters.has_key? :from_construct and filters.has_key? :to_construct and column != "construct"
 #		cond += build_range_condition(filters[:from_land_ocupation], filters[:to_land_ocupation], 'land_ocupation') if filters.has_key? :from_land_ocupation and filters.has_key? :to_land_ocupation and column != "land_ocupation"
 #		cond += build_in_condition(filters[:allowed_use_ids], 'building_regulation_land_use_types.land_use_type_id')  if filters.has_key? :allowed_use_ids and filters.has_key? :allowed_use_ids
@@ -131,36 +131,34 @@ class BuildingRegulation < ApplicationRecord
 		cond = cond.chomp(" OR") + ")"
 	end
 
-	def save_building_regulation_data(geom, data)
-		ic = Iconv.new('UTF-8', 'ISO-8859-1')
+  def save_building_regulation_data(geom, data)
+    ic = Iconv.new('UTF-8', 'ISO-8859-1')
+    county = County.find_by_code(data["cod_com"].to_i.to_s)
 
-                     county = County.find_by_code(data["COD_COM"].to_i.to_s)
-                     self.building_zone =  ic.iconv(data["zona"])
-                    # self.max_height = ic.iconv(data["altMax"])
-                     self.construct = data["IC"]
-                     self.land_ocupation = data["OS"]
-                     #self.last_actualization = ic.iconv(data["FuenteFech"])
-                     self.density_type_id = data["AM_CC"]
-                     self.county_id = county.id unless county.nil?
-                     self.site = ic.iconv(data["URL"])
-                     self.identifier = data["id"]
-                     self.comments = ic.iconv(data["Nota"])
-                     self.the_geom = geom
-                     self.hectarea_inhabitants = data["Habha"]
-                     self.grouping = data["Agrupamien"]
-                     self.parkings = data["Estacionam"]
-                     self.am_cc = data["AM_CC"]
-                     self.aminciti = data["am_inciti"]
-                     self.icinciti = data["ic_inciti"]
-                     self.osinciti = data["os_inciti"]
+    self.building_zone =  ic.iconv(data["zona"])
+    self.construct = data["ic"]
+    self.land_ocupation = data["os"]
+    self.density_type_id = data["am_cc"]
+    self.county_id = county.id unless county.nil?
+    self.site = ic.iconv(data["url"])
+    self.identifier = data["id"]
+    self.comments = ic.iconv(data["nota"])
+    self.the_geom = geom
+    self.hectarea_inhabitants = data["habha"]
+    self.grouping = data["agrupamien"]
+    self.parkings = data["estacionam"]
+    self.am_cc = data["am_cc"]
+    self.aminciti = data["aminciti"]
+    self.icinciti = data["icinciti"]
+    self.osinciti = data["osinciti"]
 
-		if self.save
-			save_land_use_types(data["Usos"], self.id)
-			County.update(county.id, :legislation_data => true) unless county.nil?
-			return true
-		end
-		false
-	end
+    if self.save
+      save_land_use_types(data["usos"], self.id)
+      County.update(county.id, :legislation_data => true) unless county.nil?
+      return true
+    end
+    false
+  end
 
 	def self.get_construct_limits
 		select = "MIN(construct) as min, MAX(construct) as max"
@@ -195,11 +193,11 @@ class BuildingRegulation < ApplicationRecord
 			BuildingRegulationLandUseType.create(:building_regulation_id => build_id, :land_use_type_id => land_use_id)
 		end
 	end
-  
-  def self.reports_pdf filters 
+
+  def self.reports_pdf filters
     @pdf = BuildingRegulation.includes(:land_use_types).where(build_where_condition(filters))
   end
-  
+
   def self.info_popup id
     select = "building_zone, construct, osinciti, aminciti, hectarea_inhabitants, grouping, density_type_id, id, "
     select += "round((St_area(the_geom, false))::numeric,2) as area, county_id, comments, parkings, identifier "
@@ -225,28 +223,29 @@ class BuildingRegulation < ApplicationRecord
     document = KML::Document.new(name: "Normativa")
     data.each do |c|
       polygon = []
-      c.the_geom.coordinates.each do |arr1|  
-        arr1.each do |arr2|  
-          arr2.each do |point| 
-            polygon.push(point[0], point[1], 100)  
-          end 
-        end 
+      c.the_geom.coordinates.each do |arr1|
+        arr1.each do |arr2|
+          arr2.each do |point|
+            polygon.push(point[0], point[1], 100)
+          end
+        end
       end
       @pp = polygon.join(',')
       document.features << KML::Placemark.new(
-        :name => "nombre",
+        :name => "Normativa",
+        :description =>"Normativa Edificación: #{c.building_zone}
+                       IC: #{c.construct}
+                       Altura: #{c.aminciti}
+                       Ha/Ha: #{c.hectarea_inhabitants}",
         :style_url => '#style_polygon',
         :geometry =>  KML::Polygon.new(
           :outer_boundary_is => KML::LinearRing.new(
             :coordinates => "#{@pp}"
         )
                                       )
-      ) 
+      )
     end
     kml.objects << document
     kml.render
-
   end
-
-
 end
