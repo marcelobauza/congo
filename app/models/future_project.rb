@@ -9,6 +9,7 @@ class FutureProject < ApplicationRecord
   include WhereBuilder
   include Util
   include CsvParser
+  include FutureProjects::Exports
 
   validates_presence_of :address,
     :county_id,
@@ -610,35 +611,21 @@ class FutureProject < ApplicationRecord
     render :xml => pois.to_xml(:skip_instruct => true, :skip_types => true, :dasherize => false)
   end
 
-    def self.get_csv_data(filters)
-      @ff = filters
-      cond = "future_projects.file_date BETWEEN '#{filters[:date_from]}' "
-      cond += "AND '#{filters[:date_to]}'"
-  cond += " AND county_id in ( #{filters[:county_id].join(',')})" if !filters[:county_id].blank?
-  cond += " AND project_type_id in( #{filters[:project_type_id].join(',')})" if !filters[:project_type_id].blank?
-  cond += " AND future_project_type_id = #{filters[:future_project_type_id]}" if !filters[:future_project_type_id].blank?
-    future_projects = FutureProject.includes(:county, :project_type, :future_project_type).
-          where(cond).
-          order("future_projects.file_date")
+  def self.kml_data filters
 
-    return CsvParser.get_future_projects_csv_data(future_projects)
-  end
-
-    def self.kml_data filters
-
-      data = reports(filters)
-      kml = KMLFile.new
-      document = KML::Document.new(name: "Expedients Municipales")
-      data.each do |d|
-        document.features << KML::Placemark.new(
-          :name => d.name,
-          :description =>"Expediente: #{d.future_project_type.name}
+    data = reports(filters)
+    kml = KMLFile.new
+    document = KML::Document.new(name: "Expedients Municipales")
+    data.each do |d|
+      document.features << KML::Placemark.new(
+        :name => d.name,
+        :description =>"Expediente: #{d.future_project_type.name}
                          Viviendas: #{d.total_units}
                         Superficie: #{d.m2_field  }",
-          :geometry =>  KML::Point.new(:coordinates => {:lat => d.the_geom.y, :lng => d.the_geom.x})
-             )
-      end
-      kml.objects << document
-      kml.render
+                        :geometry =>  KML::Point.new(:coordinates => {:lat => d.the_geom.y, :lng => d.the_geom.x})
+      )
     end
+    kml.objects << document
+    kml.render
+  end
 end

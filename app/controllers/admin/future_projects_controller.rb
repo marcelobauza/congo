@@ -6,7 +6,7 @@ class Admin::FutureProjectsController < ApplicationController
     @future_project = FutureProject.new
   end
   def generate_csv
-    file = FutureProject.get_csv_data(params)
+    file = FutureProject.get_csv_data(params[:search])
     send_file file, :type => 'text/csv', :disposition => "inline", :filename => "future_project.csv"
   end
 
