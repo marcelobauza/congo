@@ -247,7 +247,6 @@ class Project < ApplicationRecord
       select(select).first
   end
 
-
   #FIND PROJECTS BY WIDGETS. COUNT
   def self.projects_group_by_count(widget, filters, has_color, range)
     case widget
@@ -1031,15 +1030,10 @@ end
     select += "project_types.name as project_types_name, "
     select += "agencies.name as agencyname"
 
-    if !filters[:county_id].nil?
-      conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
-    elsif !filters[:wkt].nil?
-      conditions = WhereBuilder.build_within_condition(filters[:wkt])
-    else
-      conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
-    end
-    data = Project.joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
-      method_selection(filters).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).where("agency_rols.rol = 'INMOBILIARIA'").
+    data = Project.
+      joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
+      method_selection(filters).where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).
+      where("agency_rols.rol = 'INMOBILIARIA'").
       select(select).
       group(:code, :name, :address, :project_types_name, 'agencies.name' ).uniq
     data
