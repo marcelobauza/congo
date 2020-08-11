@@ -45,7 +45,7 @@ sheet.add_row([])
 sheet.add_row([])
   sheet.add_row ["Transacciones por UF"]
   sheet.add_row ["Rango UF", "Total de transacciones"]
-  @average_uf_periods.each do |r|
+  @transactions_ufs.each do |r|
   sheet.add_row [r[0], r[1]]
   end
   end
