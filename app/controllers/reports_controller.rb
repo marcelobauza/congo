@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if total_downloads > 0
-        limit = @xl.count >= total_downloads ? @xl.count : total_downloads
+        limit = @xl.count <= total_downloads ? @xl.count : total_downloads
         @xl   = @xl.limit(limit)
 
         u.downloads_users.create! future_projects: limit
@@ -120,7 +120,7 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if total_downloads > 0
-        limit = @transaction.count >= total_downloads ? @transaction.count : total_downloads
+        limit = @transaction.count <= total_downloads ? @transaction.count : total_downloads
         @transaction = @transaction.limit(total_downloads)
 
         u.downloads_users.create! transactions: limit
