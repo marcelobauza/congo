@@ -11,9 +11,10 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if total_downloads > 0
-        @xl = @xl.limit(total_downloads)
+        limit = @xl.count >= total_downloads ? @xl.count : total_downloads
+        @xl   = @xl.limit(limit)
 
-        u.downloads_users.create! future_projects: @xl.count
+        u.downloads_users.create! future_projects: limit
       else
         @message = "Ha superado el límite de descarga"
       end
@@ -119,9 +120,10 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if total_downloads > 0
+        limit = @transaction.count >= total_downloads ? @transaction.count : total_downloads
         @transaction = @transaction.limit(total_downloads)
 
-        u.downloads_users.create! transactions: @transaction.count
+        u.downloads_users.create! transactions: limit
       else
         @message = "Ha superado el límite de descarga"
       end
@@ -202,6 +204,7 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if total_downloads > 0
+
         if total_downloads >= @project_departments.count
           @project_departments = @project_departments.limit(@project_departments.count)
           total_downloads -= @project_departments.count
@@ -236,7 +239,7 @@ class ReportsController < ApplicationController
     @xl = Project.kml_data(filters)
     send_data @xl,
           :type => 'text/xml; charset=UTF-8;',
-              :disposition => "attachment; filename=PRV.kml"
+          :disposition => "attachment; filename=PRV.kml"
   end
 
   def projects_summary
@@ -394,6 +397,6 @@ class ReportsController < ApplicationController
     @data = BuildingRegulation.kml_data filters
     send_data @data,
           :type => 'text/xml; charset=UTF-8;',
-              :disposition => "attachment; filename=Normativas.kml"
+          :disposition => "attachment; filename=Normativas.kml"
   end
 end
