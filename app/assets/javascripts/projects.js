@@ -1407,8 +1407,14 @@ Congo.projects.action_dashboards = function(){
           $("#spinner").hide();
           $('.btn').removeClass('disabled')
           $('.close').prop('disabled', false);
+          bimester = Congo.dashboards.config.bimester;
+          year = Congo.dashboards.config.year;
+          periods = `${bimester}/${year}`;
+          slider_periods = Congo.dashboards.config.slider_periods
+          from = slider_periods.indexOf(periods) || slider_periods - 1;
           $("#time_slider").data("ionRangeSlider").update({
-            block: false
+            block: false,
+            from: from
           });
 
           // Separamos la información
