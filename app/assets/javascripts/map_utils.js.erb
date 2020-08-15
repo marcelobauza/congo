@@ -902,6 +902,10 @@ Congo.map_utils = function(){
           fillOpacity: 0.4
     };
 
+var incitiIcon = L.icon({
+  iconUrl:          "<%= image_path('round_inciti.png') %>",
+  iconSize:     [20, 20], // size of the icon
+});
 
     var parameters = L.Util.extend(defaultParameters);
       var URL = owsrootUrl + L.Util.getParamString(parameters);
@@ -910,7 +914,7 @@ Congo.map_utils = function(){
         success: function (data) {
           var geojson = new L.geoJson(data, {
                 pointToLayer: function (feature, latlng) {
-                          return L.circleMarker(latlng, geojsonMarkerOptions);
+                          return L.marker(latlng, {icon: incitiIcon});
                       }
           }).addTo(map);
           map.fitBounds(geojson.getBounds());
