@@ -10,19 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_21_124537) do
+ActiveRecord::Schema.define(version: 2020_08_17_131039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "postgis"
   enable_extension "postgis_topology"
-
-  create_table "admin_future_sub_project_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "agencies", force: :cascade do |t|
     t.string "name"
@@ -48,7 +42,6 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.jsonb "filters"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "only_polygon", default: false
     t.index ["layer_type_id"], name: "index_application_statuses_on_layer_type_id"
     t.index ["user_id"], name: "index_application_statuses_on_user_id"
   end
@@ -72,15 +65,15 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.bigint "density_type_id"
     t.bigint "county_id"
     t.string "comments"
+    t.decimal "hectarea_inhabitants"
     t.string "grouping"
     t.string "parkings"
     t.integer "am_cc"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.decimal "aminciti"
     t.decimal "icinciti"
     t.decimal "osinciti"
-    t.decimal "aminciti"
-    t.decimal "hectarea_inhabitants"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["county_id"], name: "index_building_regulations_on_county_id"
     t.index ["density_type_id"], name: "index_building_regulations_on_density_type_id"
   end
@@ -150,8 +143,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.bigint "n_c3"
     t.bigint "n_d"
     t.bigint "n_e"
-    t.index ["census_source_id"], name: "census_source_idx", order: "NULLS FIRST"
-    t.index ["id"], name: "census_idx"
+    t.index ["census_source_id"], name: "source_id"
     t.index ["the_geom_point"], name: "sidx_census_the_geom_point", using: :gist
   end
 
@@ -161,31 +153,24 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "counties", id: :serial, force: :cascade do |t|
-    t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
+  create_table "counties", force: :cascade do |t|
     t.string "name"
-    t.integer "code"
-    t.string "state"
-    t.string "transaction_data"
-    t.string "demography_data"
-    t.string "legislation_data"
-    t.string "sales_project_data"
-    t.string "created_at"
-    t.string "updated_at"
-    t.string "simple_geom"
-    t.string "future_project_data"
+    t.string "code2"
+    t.boolean "transaction_data"
+    t.boolean "demography_data"
+    t.boolean "legislation_data"
+    t.boolean "sales_project_data"
+    t.boolean "future_project_data"
     t.string "commercial_project_data"
-    t.float "rate"
-    t.string "zip_file_file_name"
-    t.string "zip_file_content_type"
-    t.integer "zip_file_file_size"
-    t.string "zip_file_updated_at"
     t.integer "code_sii"
     t.integer "number_last_project_future"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
     t.boolean "enabled", default: false
+    t.integer "code"
     t.bigint "region_id"
     t.index ["region_id"], name: "index_counties_on_region_id"
-    t.index ["the_geom"], name: "sidx_counties_the_geom", using: :gist
   end
 
   create_table "counties_users", force: :cascade do |t|
@@ -299,11 +284,10 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.bigint "project_type_id"
     t.bigint "future_project_type_id"
     t.bigint "county_id"
-    t.geometry "the_geom", limit: {:srid=>4326, :type=>"st_point"}
+    t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
     t.integer "t_ofi"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.geometry "the_geom_3857", limit: {:srid=>3857, :type=>"st_point"}
     t.bigint "future_project_sub_type_id"
     t.index ["county_id"], name: "index_future_projects_on_county_id"
     t.index ["future_project_sub_type_id"], name: "index_future_projects_on_future_project_sub_type_id"
@@ -399,8 +383,8 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.string "name"
     t.bigint "poi_subcategory_id"
     t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["poi_subcategory_id"], name: "index_pois_on_poi_subcategory_id"
   end
 
@@ -448,10 +432,8 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.boolean "validated", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bimester"], name: "project_bimester_idx", order: "NULLS FIRST"
     t.index ["project_id"], name: "index_project_instances_on_project_id"
     t.index ["project_status_id"], name: "index_project_instances_on_project_status_id"
-    t.index ["year"], name: "projects_year_idx", order: "NULLS FIRST"
   end
 
   create_table "project_mixes", force: :cascade do |t|
@@ -506,7 +488,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.bigint "county_id"
     t.bigint "agency_id"
     t.bigint "project_type_id"
-    t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
+    t.geometry "the_geom", limit: {:srid=>4326, :type=>"st_point"}
     t.string "build_date"
     t.string "sale_date"
     t.string "transfer_date"
@@ -517,7 +499,6 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.geometry "the_geom_3", limit: {:srid=>3857, :type=>"st_point"}
-    t.index ["agency_id"], name: "index_projects_on_agency_id"
     t.index ["county_id"], name: "index_projects_on_county_id"
     t.index ["project_type_id"], name: "index_projects_on_project_type_id"
   end
@@ -578,11 +559,11 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.string "rol_number"
     t.string "address"
     t.string "destination_code"
+    t.string "land_m2_char"
     t.integer "county_sii_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "land_m2", precision: 12, scale: 2
-    t.index ["rol_number"], name: "tax_land_roles", order: "NULLS FIRST"
+    t.decimal "land_m2", precision: 12, scale: 1
   end
 
   create_table "tax_useful_surfaces", force: :cascade do |t|
@@ -595,8 +576,37 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.string "code_material"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["county_sii_id"], name: "idx_county_sii_id", order: "NULLS FIRST"
-    t.index ["rol_number"], name: "role_id_tax"
+  end
+
+  create_table "tmp_tax_lands", id: false, force: :cascade do |t|
+    t.integer "id"
+    t.string "number_block"
+    t.string "number_area"
+    t.string "address"
+    t.string "tax_appraisal"
+    t.string "semester_contribution"
+    t.string "code_destination"
+    t.string "appraisal_free"
+    t.string "code"
+    t.string "number_block_1"
+    t.string "number_area_1"
+    t.string "code2"
+    t.string "number_block_2"
+    t.string "number_area2"
+    t.decimal "m2_land"
+  end
+
+  create_table "tmp_tax_useful_surfaces", id: false, force: :cascade do |t|
+    t.integer "id"
+    t.string "number_block"
+    t.string "number_area"
+    t.integer "sequence_build"
+    t.string "material_code"
+    t.string "code_quality"
+    t.string "year"
+    t.decimal "m2_built"
+    t.string "code_destination"
+    t.string "special_code"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -684,7 +694,7 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.string "phone"
     t.string "address"
     t.integer "role_id"
-    t.string "email", default: ""
+    t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -701,6 +711,15 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
     t.datetime "updated_at", null: false
     t.bigint "region_id"
     t.integer "layer_types", default: [], array: true
+    t.integer "projects_downloads", default: 0
+    t.integer "transactions_downloads", default: 0
+    t.integer "future_projects_downloads", default: 0
+    t.string "unique_session_id"
+    t.datetime "last_activity_at"
+    t.datetime "expired_at"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["expired_at"], name: "index_users_on_expired_at"
+    t.index ["last_activity_at"], name: "index_users_on_last_activity_at"
     t.index ["region_id"], name: "index_users_on_region_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
@@ -720,7 +739,6 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
   add_foreign_key "building_regulations", "density_types"
   add_foreign_key "counties", "regions"
   add_foreign_key "counties_users", "counties"
-  add_foreign_key "counties_users", "users"
   add_foreign_key "county_ufs", "counties"
   add_foreign_key "county_ufs", "property_types"
   add_foreign_key "expenses", "expense_types"
@@ -731,77 +749,11 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
   add_foreign_key "import_processes", "users"
   add_foreign_key "lots", "counties"
   add_foreign_key "pois", "poi_subcategories"
-  add_foreign_key "project_instances", "project_statuses"
   add_foreign_key "regions_users", "regions"
   add_foreign_key "regions_users", "users"
   add_foreign_key "user_polygons", "users"
   add_foreign_key "users", "regions"
 
-  create_function :vhmu, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.vhmu(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      DECLARE m int;
-      BEGIN
-
-        m = months2(cadastre, sale_date);
-        RETURN (  SELECT CASE m WHEN 0 THEN 1
-        ELSE (total_units - stock_units) / m::numeric END) as vhmu;
-        END;
-      $function$
-  SQL
-  create_function :masud, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.masud(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      DECLARE m int;
-      BEGIN
-        m = months2(cadastre, sale_date);
-        RETURN ( SELECT CASE (total_units - stock_units) WHEN 0 THEN 0 
-        ELSE CASE m WHEN 0 THEN null
-        ELSE (stock_units / ((total_units - stock_units)::double precision /m)) END
-                                                      END) as masud;
-
-                                                  END;
-                                                  $function$
-  SQL
-  create_function :pp_utiles, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.pp_utiles(proj_instance_id bigint)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      declare disp int;
-      BEGIN
-        disp = (select sum(pim.stock_units)
-          from project_instance_mixes pim
-          where pim.project_instance_id = proj_instance_id);
-
-        if (disp = 0) then
-          return 0;
-        else
-          RETURN (select sum(pim.mix_usable_square_meters * pim.stock_units)/disp::int 
-            as pp_utiles
-            from project_instance_mixes pim
-            where pim.project_instance_id = proj_instance_id);
-        end if;
-                                          END;
-                                          $function$
-  SQL
-  create_function :months2, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.months2(cadastre character varying, sale_date character varying)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-        
-      	RETURN (select (date_part('year', to_date(cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(sale_date, 'DD/MM/YYYY'))) * 12 +
-      (date_part('month', to_date(cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(sale_date, 'DD/MM/YYYY'))));
-
-      END;
-      $function$
-  SQL
   create_function :cleangeometry, sql_definition: <<-SQL
       CREATE OR REPLACE FUNCTION public.cleangeometry(geometry)
        RETURNS geometry
@@ -839,235 +791,13 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
           END IF;
           End;$function$
   SQL
-  create_function :cleangeometry1, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.cleangeometry1(geometry)
-       RETURNS geometry
-       LANGUAGE plpgsql
-      AS $function$DECLARE
-        inGeom ALIAS for $1;
-        outGeom geometry;
-        tmpLinestring geometry;
-
-      Begin
-
-        outGeom := NULL;
-
-        IF (GeometryType(inGeom) = 'POLYGON' OR GeometryType(inGeom) = 'MULTIPOLYGON') THEN
-          if not isValid(inGeom) THEN
-            tmpLinestring := st_union(st_multi(st_boundary(inGeom)),st_pointn(boundary(inGeom),1));
-            outGeom = buildarea(tmpLinestring);
-            IF (GeometryType(inGeom) = 'MULTIPOLYGON') THEN
-              RETURN st_multi(outGeom);
-            ELSE
-              RETURN outGeom;
-            END IF;
-          else
-            RETURN inGeom;
-          END IF;
-        ELSIF (GeometryType(inGeom) = 'LINESTRING') THEN
-          outGeom := st_union(st_multi(inGeom),st_pointn(inGeom,1));
-          RETURN outGeom;
-        ELSIF (GeometryType(inGeom) = 'MULTILINESTRING') THEN
-          outGeom := multi(st_union(st_multi(inGeom),st_pointn(inGeom,1)));
-          RETURN outGeom;
-        ELSE
-          RAISE NOTICE 'The input type % is not supported',GeometryType(inGeom);
-          RETURN inGeom;
-        END IF;
-      End;$function$
-  SQL
-  create_function :months, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.months(proj_instance_id integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-        BEGIN
-            
-            RETURN (select (date_part('year', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(p.sale_date, 'DD/MM/YYYY'))) * 12 +
-              (date_part('month', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(p.sale_date, 'DD/MM/YYYY')))
-              from project_instances pi inner join projects p
-              on pi.project_id = p.id where pi.id = proj_instance_id) as months;
-
-          END;
-          $function$
-  SQL
-  create_function :pp_uf, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.pp_uf(proj_instance_id bigint)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      declare t_m2 real;
-      BEGIN
-        t_m2 = (select sum(total_m2) from project_instance_mix_views
-          where project_instance_id = proj_instance_id);
-
-        if (t_m2 = 0) then
-          return 0;
-        else
-          RETURN (select (sum(total_m2 * uf_avg_percent)/t_m2)
-            as pp_uf
-            from project_instance_mix_views
-            where project_instance_id = proj_instance_id);
-        end if;
-                                            END;
-                                            $function$
-  SQL
-  create_function :pxq, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.pxq(proj_instance_id bigint)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-        declare ppuf real;
-        BEGIN
-            ppuf = (select pp_uf(proj_instance_id));
-
-              if (ppuf = 0) then
-                    return 0;
-                      else
-                            RETURN (select vhmo(proj_instance_id) * ppuf / 1000) as pxq;
-                              end if;
-
-                            END;
-                            $function$
-  SQL
-  create_function :vhmd, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.vhmd(proj_instance_id bigint)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      declare
-      mixes RECORD;
-      result REAL;
-      BEGIN
-        result = 0.0;
-
-        for mixes in select project_instance_id, vhmu, masud from project_instance_mix_views where project_instance_id = proj_instance_id loop
-          if mixes.masud > 0 then
-            result = result + mixes.vhmu;
-          end if;
-        end loop;
-
-        RETURN result;
-
-                                    END;
-                                    $function$
-  SQL
-  create_function :pp_uf_dis, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.pp_uf_dis(proj_instance_id bigint)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      declare sum_dis_m2 real;
-      BEGIN
-        sum_dis_m2 = (select sum(dis_m2) from project_instance_mix_views where project_instance_id = proj_instance_id);
-
-        if (sum_dis_m2 = 0) then
-          return 0;
-        else
-          RETURN (select sum(dis_m2 * uf_avg_percent) / sum(dis_m2::real)
-            from project_instance_mix_views
-            where project_instance_id = proj_instance_id) as pp_uf_dis;
-        end if;
-
-                                      END;
-                                      $function$
-  SQL
-  create_function :months, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.months(proj_instance_id bigint)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-        BEGIN
-            
-            RETURN (select (date_part('year', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(p.sale_date, 'DD/MM/YYYY'))) * 12 +
-              (date_part('month', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(p.sale_date, 'DD/MM/YYYY')))
-              from project_instances pi inner join projects p
-              on pi.project_id = p.id where pi.id = proj_instance_id) as months;
-
-          END;
-          $function$
-  SQL
-  create_function :vhmo, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.vhmo(proj_instance_id bigint)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-        BEGIN
-            
-            RETURN (select sum(vhmu) from project_instance_mix_views where project_instance_id = proj_instance_id) as vhmo;
-
-          END;
-          $function$
-  SQL
-  create_function :country_name, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.country_name(country_id integer)
-       RETURNS character varying
-       LANGUAGE plpgsql
-      AS $function$BEGIN
-          RETURN(Select name from counties where id = country_id);
-        END;$function$
-  SQL
   create_function :county_name, sql_definition: <<-SQL
       CREATE OR REPLACE FUNCTION public.county_name(county_id integer)
        RETURNS character varying
        LANGUAGE plpgsql
       AS $function$BEGIN
-          RETURN(Select name from counties where id = county_id);
-        END;$function$
-  SQL
-  create_function :masd, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.masd(proj_instance_id bigint)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      declare
-      result REAL;
-      BEGIN
-        result = vhmd(proj_instance_id);
-
-        if result > 0 then
-          RETURN (select total_available(proj_instance_id) / result) as masd;
-        else
-          return result;
-        end if;
-
-                            END;
-                            $function$
-  SQL
-  create_function :total_available, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.total_available(proj_instance_id bigint)
-       RETURNS integer
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-
-        RETURN (select sum(stock_units)
-          from project_instance_mixes
-          where project_instance_id = proj_instance_id) as total_available;
-
-                END;
-                $function$
-  SQL
-  create_function :pp_uf_m2, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.pp_uf_m2(proj_instance_id bigint)
-       RETURNS bigint
-       LANGUAGE plpgsql
-      AS $function$
-      declare t_m2 bigint;
-      BEGIN
-      	t_m2 = (select sum(total_m2) from project_instance_mix_views
-      		where project_instance_id = proj_instance_id);
-
-      	if (t_m2 = 0) then
-      	  return 0;
-      	else
-      	  RETURN (select sum(total_m2 * uf_m2)/t_m2
-      		as pp_uf_m2
-      		from project_instance_mix_views
-      		where project_instance_id = proj_instance_id);
-      	end if;
-      END;
-      $function$
+      	RETURN(Select name from counties where id = county_id);
+      END;$function$
   SQL
   create_function :inciti_kpi_generate_primary_data, sql_definition: <<-SQL
       CREATE OR REPLACE FUNCTION public.inciti_kpi_generate_primary_data(c_id integer, yearfrom integer, yearto integer, bimfrom integer, bimto integer, project_type_idi integer)
@@ -1177,6 +907,39 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
       END;	
       $function$
   SQL
+  create_function :inciti_kpi_project_primary_data, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.inciti_kpi_project_primary_data(c_id integer, y integer, bim integer, project_type_idi integer)
+       RETURNS void
+       LANGUAGE plpgsql
+      AS $function$
+      	declare parcel RECORD;
+      BEGIN
+      	for parcel in select p.* from parcels p inner join counties c on p.code = c.code where p.code = c_id loop
+      		insert into project_primary_data (parcel_id, year, bimester, proj_qty, offer, availability, vmr, vmd, 
+      		vvm, mas, usable_m2, terrace, uf_m2, uf, uf_m2_u, pxqr, pxqd)
+      		values(parcel.id,
+      			y,
+      			bim,
+      			inciti_kpi_project_qty(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_project_offer(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_project_availability(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_vmr(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_vmd(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_vmd(c_id, y, bim, parcel.id::integer, project_type_idi)/inciti_kpi_project_qty(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_mas(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_usable_m2(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_terrace_m2(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_uf_m2(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_uf(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_uf_m2_u(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_pxq(c_id, y, bim, parcel.id::integer, project_type_idi),
+      			inciti_kpi_pxq_d(c_id, y, bim, parcel.id::integer, project_type_idi)
+
+      		);
+      	end loop;
+      END;	
+      $function$
+  SQL
   create_function :inciti_kpi_project_qty, sql_definition: <<-SQL
       CREATE OR REPLACE FUNCTION public.inciti_kpi_project_qty(c_id integer, y integer, bim integer, sec_id integer, project_type_idi integer)
        RETURNS bigint
@@ -1234,6 +997,69 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
       		and r.id = sec_id
       		group by r.commune, r.area_name, pi.year, pi.bimester
       		order by pi.year, pi.bimester);
+      	end if;
+      END;	
+      $function$
+  SQL
+  create_function :inciti_kpi_pxq_d, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.inciti_kpi_pxq_d(c_id integer, y integer, bim integer, sec_id integer, project_type_idi integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+      	if (sec_id = -1) then
+      		return (select sum(pxq_d(pi.id::integer)) as pxq_d
+      		from (projects p inner join project_instances pi on p.id = pi.project_id)
+      		where p.county_id = c_id
+      		and p.project_type_id = project_type_idi
+      		and pi.year = y
+      		and pi.bimester = bim
+      		group by pi.year, pi.bimester
+      		order by pi.year, pi.bimester);		
+      	else
+      		return (select sum(pxq_d(pi.id::integer)) as pxq_d
+      		from parcels r, (projects p inner join project_instances pi on p.id = pi.project_id)
+      		where p.county_id = county_id
+      		and p.project_type_id = project_type_idi
+      		and pi.year  = y
+      		and pi.bimester = bim
+      		and ST_Contains(r.the_geom, p.the_geom)
+      		and r.id = sec_id
+      		group by r.commune, r.area_name, pi.year, pi.bimester
+      		order by pi.year, pi.bimester);
+      	end if;
+      END;	
+      $function$
+  SQL
+  create_function :inciti_kpi_terrace_m2, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.inciti_kpi_terrace_m2(c_id integer, y integer, bim integer, sec_id integer, project_type_idi integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+
+      	if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_idi) then
+      		return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_terrace_square_meters * pimv.total_units)/sum(pimv.total_units) end as terrace_m2
+      		from parcels r, project_instance_mix_views pimv
+      		where pimv.county_id = county_id
+      		and pimv.project_type_id = project_type_idi
+      		and pimv.year  = y
+      		and pimv.bimester = bim
+      		and ST_Contains(r.the_geom, pimv.the_geom)
+      		and r.id = sec_id
+      		group by r.commune, r.area_name, pimv.year, pimv.bimester
+      		order by pimv.year, pimv.bimester);
+      	else
+      		return (select sum((pimv.t_min + pimv.t_max)/2 * pimv.total_units)/sum(pimv.total_units) as terrain
+      		from parcels r, project_instance_mix_views pimv
+      		where pimv.county_id = county_id
+      		and pimv.project_type_id = project_type_idi
+      		and pimv.year  = y
+      		and pimv.bimester = bim
+      		and ST_Contains(r.the_geom, pimv.the_geom)
+      		and r.id = sec_id
+      		group by r.commune, r.area_name, pimv.year, pimv.bimester
+      		order by pimv.year, pimv.bimester);
       	end if;
       END;	
       $function$
@@ -1395,459 +1221,6 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
       		group by r.commune, r.area_name, pimv.year, pimv.bimester
       		order by pimv.year, pimv.bimester);
       	end if;
-      END;	
-      $function$
-  SQL
-  create_function :inciti_kpi_terrace_m2, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.inciti_kpi_terrace_m2(c_id integer, y integer, bim integer, sec_id integer, project_type_idi integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-
-      	if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_idi) then
-      		return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_terrace_square_meters * pimv.total_units)/sum(pimv.total_units) end as terrace_m2
-      		from parcels r, project_instance_mix_views pimv
-      		where pimv.county_id = county_id
-      		and pimv.project_type_id = project_type_idi
-      		and pimv.year  = y
-      		and pimv.bimester = bim
-      		and ST_Contains(r.the_geom, pimv.the_geom)
-      		and r.id = sec_id
-      		group by r.commune, r.area_name, pimv.year, pimv.bimester
-      		order by pimv.year, pimv.bimester);
-      	else
-      		return (select sum((pimv.t_min + pimv.t_max)/2 * pimv.total_units)/sum(pimv.total_units) as terrain
-      		from parcels r, project_instance_mix_views pimv
-      		where pimv.county_id = county_id
-      		and pimv.project_type_id = project_type_idi
-      		and pimv.year  = y
-      		and pimv.bimester = bim
-      		and ST_Contains(r.the_geom, pimv.the_geom)
-      		and r.id = sec_id
-      		group by r.commune, r.area_name, pimv.year, pimv.bimester
-      		order by pimv.year, pimv.bimester);
-      	end if;
-      END;	
-      $function$
-  SQL
-  create_function :pxq_d, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.pxq_d(proj_instance_id integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-
-      	RETURN (select vhmd(proj_instance_id) * pp_uf_dis(proj_instance_id)/1000) as pxq_d;
-      END;
-      $function$
-  SQL
-  create_function :inciti_kpi_pxq_d, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.inciti_kpi_pxq_d(c_id integer, y integer, bim integer, sec_id integer, project_type_idi integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-      	if (sec_id = -1) then
-      		return (select sum(pxq_d(pi.id::integer)) as pxq_d
-      		from (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where p.county_id = c_id
-      		and p.project_type_id = project_type_idi
-      		and pi.year = y
-      		and pi.bimester = bim
-      		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	else
-      		return (select sum(pxq_d(pi.id::integer)) as pxq_d
-      		from parcels r, (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where p.county_id = county_id
-      		and p.project_type_id = project_type_idi
-      		and pi.year  = y
-      		and pi.bimester = bim
-      		and ST_Contains(r.the_geom, p.the_geom)
-      		and r.id = sec_id
-      		group by r.commune, r.area_name, pi.year, pi.bimester
-      		order by pi.year, pi.bimester);
-      	end if;
-      END;	
-      $function$
-  SQL
-  create_function :inciti_kpi_project_primary_data, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.inciti_kpi_project_primary_data(c_id integer, y integer, bim integer, project_type_idi integer)
-       RETURNS void
-       LANGUAGE plpgsql
-      AS $function$
-      	declare parcel RECORD;
-      BEGIN
-      	for parcel in select p.* from parcels p inner join counties c on p.code = c.code where p.code = c_id loop
-      		insert into project_primary_data (parcel_id, year, bimester, proj_qty, offer, availability, vmr, vmd, 
-      		vvm, mas, usable_m2, terrace, uf_m2, uf, uf_m2_u, pxqr, pxqd)
-      		values(parcel.id,
-      			y,
-      			bim,
-      			inciti_kpi_project_qty(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_project_offer(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_project_availability(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_vmr(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_vmd(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_vmd(c_id, y, bim, parcel.id::integer, project_type_idi)/inciti_kpi_project_qty(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_mas(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_usable_m2(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_terrace_m2(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_uf_m2(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_uf(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_uf_m2_u(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_pxq(c_id, y, bim, parcel.id::integer, project_type_idi),
-      			inciti_kpi_pxq_d(c_id, y, bim, parcel.id::integer, project_type_idi)
-
-      		);
-      	end loop;
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_generate_primary_data, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_generate_primary_data(polygon_id integer, yearfrom integer, yearto integer, bimfrom integer, bimto integer, project_type_id_ integer)
-       RETURNS void
-       LANGUAGE plpgsql
-      AS $function$
-      	declare rec RECORD;
-      BEGIN
-      	delete from project_primary_data;
-      	for rec in select pi.year, pi.bimester from projects p inner join counties c on p.county_id = c.id
-      								inner join project_instances pi on p.id = pi.project_id
-      								where 
-      								ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
-      								and p.project_type_id = project_type_id_
-      								and pi.year between yearFrom and yearTo
-      								and pi.bimester between bimFrom and bimTo
-      								group by pi.year, pi.bimester loop
-      		
-      		PERFORM kpi__polygon_project_primary_data(polygon_id, rec.year, rec.bimester, project_type_id_);
-      	end loop;
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_project_availability, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_project_availability(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS bigint
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-      		return (select sum(pim.stock_units) as availability
-      		from (projects p inner join project_instances pi on p.id = pi.project_id
-      		inner join project_instance_mixes pim on pi.id = pim.project_instance_id)
-      		where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
-      		and p.project_type_id = project_type_id_
-      		and pi.year = y
-      		and pi.bimester = bim
-      		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_project_offer, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_project_offer(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS bigint
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-      	
-      		return (select sum(pim.total_units) as offer
-      		from (projects p inner join project_instances pi on p.id = pi.project_id
-      		inner join project_instance_mixes pim on pi.id = pim.project_instance_id)
-      		where 
-      		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
-      		and p.project_type_id = project_type_id_
-      		and pi.year = y
-      		and pi.bimester = bim
-      		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_project_qty, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_project_qty(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS bigint
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-      		return (select count(p.*) as qty
-      		from (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where 
-      		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
-      		and p.project_type_id = project_type_id_
-      		and pi.year = y
-      		and  pi.bimester = bim
-      		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);	
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_pxq, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_pxq(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-      	
-      		return (select sum(pxq(pi.id)) as pxq
-      		from (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
-      		and p.project_type_id = project_type_id_
-      		and pi.year = y
-      		and pi.bimester = bim
-      		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_uf, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_uf(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-
-      	return (select case sum(pimv.vhmu) when 0 then 0 else sum(pimv.uf_avg_percent * pimv.total_m2)/sum(pimv.total_m2) end as uf
-      	from  project_instance_mix_views pimv
-      	where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
-      	and pimv.project_type_id = project_type_id_
-      	and pimv.year  = y
-      	and pimv.bimester = bim
-      	group by  pimv.year, pimv.bimester
-      	order by pimv.year, pimv.bimester);
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_uf_m2, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_uf_m2(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-
-      if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_id_) then
-      	return (select case sum(pimv.total_m2) when 0 then 0 else 
-      round(SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.5 * mix_terrace_square_meters))),2) end as uf_m2
-
-
-      	--round(sum(pimv.uf_m2 * pimv.total_m2)/sum(pimv.total_m2),1) end as uf_m2
-      	from parcels r, project_instance_mix_views pimv
-      	where 
-      	pimv.project_type_id = project_type_id_
-      	and pimv.year  = y
-      	and pimv.bimester = bim
-      	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
-      	group by  pimv.year, pimv.bimester
-      	order by pimv.year, pimv.bimester);
-      else
-      	return (select (SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno)))) AS uf_m2 
-      	from parcels r, project_instance_mix_views pimv
-      	where 
-      	pimv.project_type_id = project_type_id_
-      	and pimv.year  = y
-      	and pimv.bimester = bim
-      	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
-      	group by pimv.year, pimv.bimester
-      	order by pimv.year, pimv.bimester);
-      end if;
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_uf_m2_u, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_uf_m2_u(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-
-      	return (select case sum(pimv.vhmu) when 0 then 0 else sum(pimv.uf_m2_u * pimv.total_m2)/sum(pimv.total_m2) end as uf_m2_u
-      	from project_instance_mix_views pimv
-      	where 
-      	pimv.project_type_id = project_type_id_
-      	and pimv.year  = y
-      	and pimv.bimester = bim
-      	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
-      	group by  pimv.year, pimv.bimester
-      	order by pimv.year, pimv.bimester);
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_usable_m2, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_usable_m2(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-        DECLARE Sum_vhmu float;
-      BEGIN
-      	
-      	return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_usable_square_meters * pimv.total_units)/sum(pimv.total_units) end as usable_m2
-      	from project_instance_mix_views pimv
-      	where
-      	pimv.project_type_id = project_type_id_
-      	and pimv.year  = y
-      	and pimv.bimester = bim
-      	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
-      	group by  pimv.year, pimv.bimester
-      	order by pimv.year, pimv.bimester);
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_vmd, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_vmd(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-      	
-      		return (select sum(vhmd(pi.id)) as vmd
-      		from (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where 
-      		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
-      		and p.project_type_id = project_type_id_
-      		and pi.year = y
-      		and pi.bimester = bim
-      		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_vmr, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_vmr(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-
-      		return (select sum(pimv.vhmu) as vmr
-      		from project_instance_mix_views pimv
-      		where 
-      		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
-      		and pimv.project_type_id = project_type_id_
-      		and pimv.year = y
-      		and pimv.bimester = bim
-      		group by pimv.year, pimv.bimester
-      		order by pimv.year, pimv.bimester);		
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_mas, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_mas(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-
-      	return (select 
-      			CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) 
-      			ELSE SUM(pimv.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END as mas
-      	--CASE sum(pimv.vhmud) WHEN 0 THEN null ELSE sum(pimv.masud * pimv.vhmud)/sum(pimv.vhmud) END as mas
-      	from 
-      	--parcels r, 
-      	project_instance_mix_views pimv 
-      	where 
-      	pimv.project_type_id = project_type_id_
-      	and pimv.year  = y
-      	and pimv.bimester = bim
-      	and ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
-
-      	--and ST_Contains(r.the_geom, pimv.the_geom)
-      	group by 
-      	--r.nom_com, r.area_name, 
-      	pimv.year, pimv.bimester
-      	order by pimv.year, pimv.bimester);
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_terrace_m2, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_terrace_m2(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-
-      	if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_id_) then
-      		return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_terrace_square_meters * pimv.total_units)/sum(pimv.total_units) end as terrace_m2
-      		from  project_instance_mix_views pimv
-      		where 
-      		pimv.project_type_id = project_type_id_
-      		and pimv.year  = y
-      		and pimv.bimester = bim
-      		and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
-      		group by pimv.year, pimv.bimester
-      		order by pimv.year, pimv.bimester);
-      	else
-      		return (select sum((pimv.t_min + pimv.t_max)/2 * pimv.total_units)/sum(pimv.total_units) as terrain
-      		from project_instance_mix_views pimv
-      		where
-      		pimv.project_type_id = project_type_id_
-      		and pimv.year  = y
-      		and pimv.bimester = bim
-      		and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
-      		group by  pimv.year, pimv.bimester
-      		order by pimv.year, pimv.bimester);
-      	end if;
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_project_primary_data, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_project_primary_data(polygon_id integer, y integer, bim integer, project_type_id integer)
-       RETURNS void
-       LANGUAGE plpgsql
-      AS $function$
-      	declare parcel RECORD;
-      BEGIN
-      	for parcel in 
-      		select pi.bimester, pi.year from counties c inner join projects pr on pr.county_id = c.id 
-      					inner join project_instances pi on pi.project_id = pr.id
-      where 
-      	 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pr.the_geom) 
-      	and year = y and bimester = bim
-      	group by pi.year, pi.bimester
-      	loop
-      		insert into project_primary_data ( year, bimester, proj_qty, offer, availability, vmr, vmd, vvm, mas, usable_m2, terrace, uf_m2, uf, uf_m2_u, pxqr, pxqd
-      		)
-      		values( y,
-      			bim,
-      			kpi__polygon_project_qty( polygon_id, y, bim, project_type_id),
-      			kpi__polygon_project_offer(polygon_id, y, bim,  project_type_id),
-      			kpi__polygon_project_availability(polygon_id, y, bim, project_type_id),
-      			kpi__polygon_vmr(polygon_id, y, bim, project_type_id),
-      			kpi__polygon_vmd(polygon_id, y, bim,  project_type_id),
-      			kpi__polygon_vmd(polygon_id, y, bim, project_type_id)/kpi__polygon_project_qty(polygon_id, y, bim, project_type_id),
-      			kpi__polygon_mas(polygon_id, y, bim, project_type_id),
-      			kpi__polygon_usable_m2(polygon_id, y, bim, project_type_id),
-      			kpi__polygon_terrace_m2(polygon_id, y, bim, project_type_id),
-      			kpi__polygon_uf_m2(polygon_id, y, bim,  project_type_id),
-      			kpi__polygon_uf(polygon_id, y, bim,  project_type_id),
-      			kpi__polygon_uf_m2_u(polygon_id, y, bim,  project_type_id),
-      			kpi__polygon_pxq(polygon_id, y, bim,  project_type_id),
-      			kpi__polygon_pxq_d(polygon_id, y, bim,  project_type_id)
-      		);
-      	end loop;
-      END;	
-      $function$
-  SQL
-  create_function :kpi__polygon_pxq_d, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.kpi__polygon_pxq_d(polygon_id integer, y integer, bim integer, project_type_id_ integer)
-       RETURNS real
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-      	
-      		return (select sum(pxq_d(pi.id::integer)) as pxq_d
-      		from (projects p inner join project_instances pi on p.id = pi.project_id)
-      		where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
-      		and p.project_type_id = project_type_id_
-      		and pi.year = y
-      		and pi.bimester = bim
-      		group by pi.year, pi.bimester
-      		order by pi.year, pi.bimester);		
-      	
       END;	
       $function$
   SQL
@@ -2213,6 +1586,430 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
       END;	
       $function$
   SQL
+  create_function :kpi__polygon_generate_primary_data, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_generate_primary_data(polygon_id integer, yearfrom integer, yearto integer, bimfrom integer, bimto integer, project_type_id_ integer)
+       RETURNS void
+       LANGUAGE plpgsql
+      AS $function$
+      	declare rec RECORD;
+      BEGIN
+      	delete from project_primary_data;
+      	for rec in select pi.year, pi.bimester from projects p inner join counties c on p.county_id = c.id
+      								inner join project_instances pi on p.id = pi.project_id
+      								where 
+      								ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
+      								and p.project_type_id = project_type_id_
+      								and pi.year between yearFrom and yearTo
+      								and pi.bimester between bimFrom and bimTo
+      								group by pi.year, pi.bimester loop
+      		
+      		PERFORM kpi__polygon_project_primary_data(polygon_id, rec.year, rec.bimester, project_type_id_);
+      	end loop;
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_mas, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_mas(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+
+      	return (select 
+      			CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) 
+      			ELSE SUM(pimv.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END as mas
+      	--CASE sum(pimv.vhmud) WHEN 0 THEN null ELSE sum(pimv.masud * pimv.vhmud)/sum(pimv.vhmud) END as mas
+      	from 
+      	--parcels r, 
+      	project_instance_mix_views pimv 
+      	where 
+      	pimv.project_type_id = project_type_id_
+      	and pimv.year  = y
+      	and pimv.bimester = bim
+      	and ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
+
+      	--and ST_Contains(r.the_geom, pimv.the_geom)
+      	group by 
+      	--r.nom_com, r.area_name, 
+      	pimv.year, pimv.bimester
+      	order by pimv.year, pimv.bimester);
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_project_availability, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_project_availability(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS bigint
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+      		return (select sum(pim.stock_units) as availability
+      		from (projects p inner join project_instances pi on p.id = pi.project_id
+      		inner join project_instance_mixes pim on pi.id = pim.project_instance_id)
+      		where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
+      		and p.project_type_id = project_type_id_
+      		and pi.year = y
+      		and pi.bimester = bim
+      		group by pi.year, pi.bimester
+      		order by pi.year, pi.bimester);		
+      	
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_project_offer, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_project_offer(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS bigint
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+      	
+      		return (select sum(pim.total_units) as offer
+      		from (projects p inner join project_instances pi on p.id = pi.project_id
+      		inner join project_instance_mixes pim on pi.id = pim.project_instance_id)
+      		where 
+      		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
+      		and p.project_type_id = project_type_id_
+      		and pi.year = y
+      		and pi.bimester = bim
+      		group by pi.year, pi.bimester
+      		order by pi.year, pi.bimester);		
+      	
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_project_primary_data, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_project_primary_data(polygon_id integer, y integer, bim integer, project_type_id integer)
+       RETURNS void
+       LANGUAGE plpgsql
+      AS $function$
+      	declare parcel RECORD;
+      BEGIN
+      	for parcel in 
+      		select pi.bimester, pi.year from counties c inner join projects pr on pr.county_id = c.id 
+      					inner join project_instances pi on pi.project_id = pr.id
+      where 
+      	 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pr.the_geom) 
+      	and year = y and bimester = bim
+      	group by pi.year, pi.bimester
+      	loop
+      		insert into project_primary_data ( year, bimester, proj_qty, offer, availability, vmr, vmd, vvm, mas, usable_m2, terrace, uf_m2, uf, uf_m2_u, pxqr, pxqd
+      		)
+      		values( y,
+      			bim,
+      			kpi__polygon_project_qty( polygon_id, y, bim, project_type_id),
+      			kpi__polygon_project_offer(polygon_id, y, bim,  project_type_id),
+      			kpi__polygon_project_availability(polygon_id, y, bim, project_type_id),
+      			kpi__polygon_vmr(polygon_id, y, bim, project_type_id),
+      			kpi__polygon_vmd(polygon_id, y, bim,  project_type_id),
+      			kpi__polygon_vmd(polygon_id, y, bim, project_type_id)/kpi__polygon_project_qty(polygon_id, y, bim, project_type_id),
+      			kpi__polygon_mas(polygon_id, y, bim, project_type_id),
+      			kpi__polygon_usable_m2(polygon_id, y, bim, project_type_id),
+      			kpi__polygon_terrace_m2(polygon_id, y, bim, project_type_id),
+      			kpi__polygon_uf_m2(polygon_id, y, bim,  project_type_id),
+      			kpi__polygon_uf(polygon_id, y, bim,  project_type_id),
+      			kpi__polygon_uf_m2_u(polygon_id, y, bim,  project_type_id),
+      			kpi__polygon_pxq(polygon_id, y, bim,  project_type_id),
+      			kpi__polygon_pxq_d(polygon_id, y, bim,  project_type_id)
+      		);
+      	end loop;
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_project_qty, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_project_qty(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS bigint
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+      		return (select count(p.*) as qty
+      		from (projects p inner join project_instances pi on p.id = pi.project_id)
+      		where 
+      		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
+      		and p.project_type_id = project_type_id_
+      		and pi.year = y
+      		and  pi.bimester = bim
+      		group by pi.year, pi.bimester
+      		order by pi.year, pi.bimester);	
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_pxq, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_pxq(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+      	
+      		return (select sum(pxq(pi.id)) as pxq
+      		from (projects p inner join project_instances pi on p.id = pi.project_id)
+      		where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
+      		and p.project_type_id = project_type_id_
+      		and pi.year = y
+      		and pi.bimester = bim
+      		group by pi.year, pi.bimester
+      		order by pi.year, pi.bimester);		
+      	
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_pxq_d, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_pxq_d(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+      	
+      		return (select sum(pxq_d(pi.id::integer)) as pxq_d
+      		from (projects p inner join project_instances pi on p.id = pi.project_id)
+      		where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
+      		and p.project_type_id = project_type_id_
+      		and pi.year = y
+      		and pi.bimester = bim
+      		group by pi.year, pi.bimester
+      		order by pi.year, pi.bimester);		
+      	
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_terrace_m2, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_terrace_m2(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+
+      	if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_id_) then
+      		return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_terrace_square_meters * pimv.total_units)/sum(pimv.total_units) end as terrace_m2
+      		from  project_instance_mix_views pimv
+      		where 
+      		pimv.project_type_id = project_type_id_
+      		and pimv.year  = y
+      		and pimv.bimester = bim
+      		and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
+      		group by pimv.year, pimv.bimester
+      		order by pimv.year, pimv.bimester);
+      	else
+      		return (select sum((pimv.t_min + pimv.t_max)/2 * pimv.total_units)/sum(pimv.total_units) as terrain
+      		from project_instance_mix_views pimv
+      		where
+      		pimv.project_type_id = project_type_id_
+      		and pimv.year  = y
+      		and pimv.bimester = bim
+      		and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
+      		group by  pimv.year, pimv.bimester
+      		order by pimv.year, pimv.bimester);
+      	end if;
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_uf, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_uf(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+
+      	return (select case sum(pimv.vhmu) when 0 then 0 else sum(pimv.uf_avg_percent * pimv.total_m2)/sum(pimv.total_m2) end as uf
+      	from  project_instance_mix_views pimv
+      	where  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
+      	and pimv.project_type_id = project_type_id_
+      	and pimv.year  = y
+      	and pimv.bimester = bim
+      	group by  pimv.year, pimv.bimester
+      	order by pimv.year, pimv.bimester);
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_uf_m2, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_uf_m2(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+
+      if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_id_) then
+      	return (select case sum(pimv.total_m2) when 0 then 0 else 
+      round(SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.5 * mix_terrace_square_meters))),2) end as uf_m2
+
+
+      	--round(sum(pimv.uf_m2 * pimv.total_m2)/sum(pimv.total_m2),1) end as uf_m2
+      	from parcels r, project_instance_mix_views pimv
+      	where 
+      	pimv.project_type_id = project_type_id_
+      	and pimv.year  = y
+      	and pimv.bimester = bim
+      	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
+      	group by  pimv.year, pimv.bimester
+      	order by pimv.year, pimv.bimester);
+      else
+      	return (select (SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno)))) AS uf_m2 
+      	from parcels r, project_instance_mix_views pimv
+      	where 
+      	pimv.project_type_id = project_type_id_
+      	and pimv.year  = y
+      	and pimv.bimester = bim
+      	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
+      	group by pimv.year, pimv.bimester
+      	order by pimv.year, pimv.bimester);
+      end if;
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_uf_m2_u, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_uf_m2_u(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+
+      	return (select case sum(pimv.vhmu) when 0 then 0 else sum(pimv.uf_m2_u * pimv.total_m2)/sum(pimv.total_m2) end as uf_m2_u
+      	from project_instance_mix_views pimv
+      	where 
+      	pimv.project_type_id = project_type_id_
+      	and pimv.year  = y
+      	and pimv.bimester = bim
+      	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
+      	group by  pimv.year, pimv.bimester
+      	order by pimv.year, pimv.bimester);
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_usable_m2, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_usable_m2(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+        DECLARE Sum_vhmu float;
+      BEGIN
+      	
+      	return (select case sum(pimv.total_units) when 0 then 0 else sum(pimv.mix_usable_square_meters * pimv.total_units)/sum(pimv.total_units) end as usable_m2
+      	from project_instance_mix_views pimv
+      	where
+      	pimv.project_type_id = project_type_id_
+      	and pimv.year  = y
+      	and pimv.bimester = bim
+      	and  ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
+      	group by  pimv.year, pimv.bimester
+      	order by pimv.year, pimv.bimester);
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_vmd, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_vmd(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+      	
+      		return (select sum(vhmd(pi.id)) as vmd
+      		from (projects p inner join project_instances pi on p.id = pi.project_id)
+      		where 
+      		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), p.the_geom)
+      		and p.project_type_id = project_type_id_
+      		and pi.year = y
+      		and pi.bimester = bim
+      		group by pi.year, pi.bimester
+      		order by pi.year, pi.bimester);		
+      	
+      END;	
+      $function$
+  SQL
+  create_function :kpi__polygon_vmr, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.kpi__polygon_vmr(polygon_id integer, y integer, bim integer, project_type_id_ integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+
+      		return (select sum(pimv.vhmu) as vmr
+      		from project_instance_mix_views pimv
+      		where 
+      		 ST_Contains(st_setsrid((ST_geomfromgeojson('{"type":"MultiPolygon","coordinates":'|| (select filters->>'wkt' from application_statuses where id = polygon_id) || '}')), 4326), pimv.the_geom)
+      		and pimv.project_type_id = project_type_id_
+      		and pimv.year = y
+      		and pimv.bimester = bim
+      		group by pimv.year, pimv.bimester
+      		order by pimv.year, pimv.bimester);		
+      END;	
+      $function$
+  SQL
+  create_function :masd, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.masd(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      declare
+      result REAL;
+      BEGIN
+        result = vhmd(proj_instance_id);
+
+        if result > 0 then
+          RETURN (select total_available(proj_instance_id) / result) as masd;
+        else
+          return result;
+        end if;
+
+                            END;
+                            $function$
+  SQL
+  create_function :masud, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.masud(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      DECLARE m int;
+      BEGIN
+        m = months2(cadastre, sale_date);
+        RETURN ( SELECT CASE (total_units - stock_units) WHEN 0 THEN 0 
+        ELSE CASE m WHEN 0 THEN null
+        ELSE (stock_units / ((total_units - stock_units)::double precision /m)) END
+                                                      END) as masud;
+
+                                                  END;
+                                                  $function$
+  SQL
+  create_function :months, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.months(proj_instance_id integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+        BEGIN
+            
+            RETURN (select (date_part('year', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(p.sale_date, 'DD/MM/YYYY'))) * 12 +
+              (date_part('month', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(p.sale_date, 'DD/MM/YYYY')))
+              from project_instances pi inner join projects p
+              on pi.project_id = p.id where pi.id = proj_instance_id) as months;
+
+          END;
+          $function$
+  SQL
+  create_function :months, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.months(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+        BEGIN
+            
+            RETURN (select (date_part('year', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(p.sale_date, 'DD/MM/YYYY'))) * 12 +
+              (date_part('month', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(p.sale_date, 'DD/MM/YYYY')))
+              from project_instances pi inner join projects p
+              on pi.project_id = p.id where pi.id = proj_instance_id) as months;
+
+          END;
+          $function$
+  SQL
+  create_function :months2, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.months2(cadastre character varying, sale_date character varying)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+        
+      	RETURN (select (date_part('year', to_date(cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(sale_date, 'DD/MM/YYYY'))) * 12 +
+      (date_part('month', to_date(cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(sale_date, 'DD/MM/YYYY'))));
+
+      END;
+      $function$
+  SQL
   create_function :percent_venta, sql_definition: <<-SQL
       CREATE OR REPLACE FUNCTION public.percent_venta(proj_instance_id integer)
        RETURNS real
@@ -2234,6 +2031,104 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
       	end if;
       END;
       $function$
+  SQL
+  create_function :pp_terreno, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_terreno(proj_instance_id integer)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+        
+      	RETURN (select case when sum(pimv.stock_units) = 0 then 0 else sum(pimv.ps_terreno * pimv.stock_units)/sum(pimv.stock_units) end
+      		as pp_terreno
+      	from project_instance_mix_views pimv
+      	where pimv.project_instance_id = proj_instance_id);
+      END;
+      $function$
+  SQL
+  create_function :pp_uf, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_uf(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      declare t_m2 real;
+      BEGIN
+        t_m2 = (select sum(total_m2) from project_instance_mix_views
+          where project_instance_id = proj_instance_id);
+
+        if (t_m2 = 0) then
+          return 0;
+        else
+          RETURN (select (sum(total_m2 * uf_avg_percent)/t_m2)
+            as pp_uf
+            from project_instance_mix_views
+            where project_instance_id = proj_instance_id);
+        end if;
+                                            END;
+                                            $function$
+  SQL
+  create_function :pp_uf_dis, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_uf_dis(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      declare sum_dis_m2 real;
+      BEGIN
+        sum_dis_m2 = (select sum(dis_m2) from project_instance_mix_views where project_instance_id = proj_instance_id);
+
+        if (sum_dis_m2 = 0) then
+          return 0;
+        else
+          RETURN (select sum(dis_m2 * uf_avg_percent) / sum(dis_m2::real)
+            from project_instance_mix_views
+            where project_instance_id = proj_instance_id) as pp_uf_dis;
+        end if;
+
+                                      END;
+                                      $function$
+  SQL
+  create_function :pp_uf_m2, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_uf_m2(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      declare t_m2 real;
+      BEGIN
+      	t_m2 = (select sum(total_m2) from project_instance_mix_views
+      		where project_instance_id = proj_instance_id);
+
+      	if (t_m2 = 0) then
+      	  return 0;
+      	else
+      	  RETURN (select sum(total_m2 * uf_m2)/t_m2
+      		as pp_uf_m2
+      		from project_instance_mix_views
+      		where project_instance_id = proj_instance_id);
+      	end if;
+      END;
+      $function$
+  SQL
+  create_function :pp_utiles, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pp_utiles(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      declare disp int;
+      BEGIN
+        disp = (select sum(pim.stock_units)
+          from project_instance_mixes pim
+          where pim.project_instance_id = proj_instance_id);
+
+        if (disp = 0) then
+          return 0;
+        else
+          RETURN (select sum(pim.mix_usable_square_meters * pim.stock_units)/disp::int 
+            as pp_utiles
+            from project_instance_mixes pim
+            where pim.project_instance_id = proj_instance_id);
+        end if;
+                                          END;
+                                          $function$
   SQL
   create_function :pp_utiles_terrace, sql_definition: <<-SQL
       CREATE OR REPLACE FUNCTION public.pp_utiles_terrace(proj_instance_id integer)
@@ -2259,61 +2154,238 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
       END;
       $function$
   SQL
-  create_function :pp_terreno, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.pp_terreno(proj_instance_id integer)
+  create_function :pxq, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pxq(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+        declare ppuf real;
+        BEGIN
+            ppuf = (select pp_uf(proj_instance_id));
+
+              if (ppuf = 0) then
+                    return 0;
+                      else
+                            RETURN (select vhmo(proj_instance_id) * ppuf / 1000) as pxq;
+                              end if;
+
+                            END;
+                            $function$
+  SQL
+  create_function :pxq_d, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.pxq_d(proj_instance_id integer)
        RETURNS real
        LANGUAGE plpgsql
       AS $function$
       BEGIN
-        
-      	RETURN (select case when sum(pimv.stock_units) = 0 then 0 else sum(pimv.ps_terreno * pimv.stock_units)/sum(pimv.stock_units) end
-      		as pp_terreno
-      	from project_instance_mix_views pimv
-      	where pimv.project_instance_id = proj_instance_id);
+
+      	RETURN (select vhmd(proj_instance_id) * pp_uf_dis(proj_instance_id)/1000) as pxq_d;
       END;
+      $function$
+  SQL
+  create_function :total_available, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.total_available(proj_instance_id bigint)
+       RETURNS integer
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+
+        RETURN (select sum(stock_units)
+          from project_instance_mixes
+          where project_instance_id = proj_instance_id) as total_available;
+
+                END;
+                $function$
+  SQL
+  create_function :vhmd, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.vhmd(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      declare
+      mixes RECORD;
+      result REAL;
+      BEGIN
+        result = 0.0;
+
+        for mixes in select project_instance_id, vhmu, masud from project_instance_mix_views where project_instance_id = proj_instance_id loop
+          if mixes.masud > 0 then
+            result = result + mixes.vhmu;
+          end if;
+        end loop;
+
+        RETURN result;
+
+                                    END;
+                                    $function$
+  SQL
+  create_function :vhmo, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.vhmo(proj_instance_id bigint)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+        BEGIN
+            
+            RETURN (select sum(vhmu) from project_instance_mix_views where project_instance_id = proj_instance_id) as vhmo;
+
+          END;
+          $function$
+  SQL
+  create_function :vhmu, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.vhmu(total_units integer, stock_units integer, cadastre character varying, sale_date character varying)
+       RETURNS real
+       LANGUAGE plpgsql
+      AS $function$
+      DECLARE m int;
+      BEGIN
+
+        m = months2(cadastre, sale_date);
+        RETURN (  SELECT CASE m WHEN 0 THEN 1
+        ELSE (total_units - stock_units) / m::numeric END) as vhmu;
+        END;
       $function$
   SQL
 
   create_trigger :layer_integrity_checks, sql_definition: <<-SQL
-      CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE PROCEDURE topology.layertrigger()
+      CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE FUNCTION topology.layertrigger()
   SQL
 
-  create_view "project_instance_mix_views_anterior", sql_definition: <<-SQL
-      SELECT pim.project_instance_id,
-      (pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_min_percent,
-      (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_max_percent,
-      (((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) AS uf_avg_percent,
-      (pim.mix_usable_square_meters * (pim.total_units)::numeric) AS total_m2,
-      (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5)) AS u_half_terrace,
-      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5))) AS uf_m2,
-      (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric))::double precision / ((pim.mix_usable_square_meters)::double precision + ((((pim.t_min + pim.t_max))::double precision / (2)::double precision) * (0.25)::double precision))) AS uf_m2_home,
-      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters) AS uf_m2_u,
-      (vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date))::numeric AS vhmu,
-      ((pim.stock_units)::numeric * pim.mix_usable_square_meters) AS dis_m2,
-      masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date) AS masud,
-          CASE masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
-              WHEN 0 THEN (0)::real
-              ELSE vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
-          END AS vhmud,
-      (pim.total_units - pim.stock_units) AS sold_units,
-      pim.id,
-      (((pim.t_min + pim.t_max))::double precision / (2)::double precision) AS ps_terreno,
-      pim.stock_units,
-      pim.total_units,
-      pim.mix_terrace_square_meters,
-      pim.mix_usable_square_meters,
-      pim.t_min,
-      pim.t_max,
-      p.county_id,
-      p.id AS project_id,
-      p.the_geom,
-      pi.year,
-      pi.bimester,
-      pi.project_status_id,
-      p.project_type_id
-     FROM ((project_instance_mixes pim
-       JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
-       JOIN projects p ON ((pi.project_id = p.id)));
+  create_view "building_regulations_info", sql_definition: <<-SQL
+      SELECT building_regulations.id,
+      building_regulations.building_zone,
+      ( SELECT array_to_string(array_agg(land_use_types.abbreviation), ','::text) AS array_to_string
+             FROM (building_regulation_land_use_types
+               JOIN land_use_types ON ((building_regulation_land_use_types.land_use_type_id = land_use_types.id)))
+            WHERE (building_regulation_land_use_types.building_regulation_id = building_regulations.id)) AS land_use,
+      building_regulations.the_geom,
+      round(building_regulations.construct, 1) AS construct,
+      round(building_regulations.land_ocupation, 1) AS land_ocupation,
+      building_regulations.hectarea_inhabitants AS max_density,
+      building_regulations."grouping",
+      building_regulations.site,
+      building_regulations.comments,
+      building_regulations.aminciti,
+      building_regulations.parkings,
+      building_regulations.updated_at,
+      building_regulations.county_id,
+      density_types.color,
+      building_regulations.identifier,
+      round((building_regulations.aminciti / (3)::numeric)) AS floors
+     FROM (building_regulations
+       JOIN density_types ON ((building_regulations.density_type_id = density_types.id)))
+    ORDER BY building_regulations.updated_at DESC;
+  SQL
+  create_view "counties_info", sql_definition: <<-SQL
+      SELECT counties.id AS county_id,
+      counties.name,
+      counties.the_geom
+     FROM counties;
+  SQL
+  create_view "demography_info", sql_definition: <<-SQL
+      SELECT c1.county_id,
+      c1.gse_zn,
+      (c3.the_geom)::geometry(Polygon,4326) AS the_geom,
+      c1.census_source_id
+     FROM (( SELECT (st_dump(st_voronoipolygons(st_collect(census.the_geom_point)))).geom AS the_geom
+             FROM census) c3
+       JOIN census c1 ON (st_contains(c3.the_geom, c1.the_geom_point)))
+    WHERE (c1.census_source_id = 1);
+  SQL
+  create_view "demography_info_census_2012", sql_definition: <<-SQL
+      SELECT c1.county_id,
+      c1.gse_zn,
+      (c3.the_geom)::geometry(Polygon,4326) AS the_geom,
+      c1.census_source_id
+     FROM (( SELECT (st_dump(st_voronoipolygons(st_collect(census.the_geom_point)))).geom AS the_geom
+             FROM census
+            WHERE (census.census_source_id = 2)) c3
+       JOIN census c1 ON (st_contains(c3.the_geom, c1.the_geom_point)))
+    WHERE (c1.census_source_id = 2);
+  SQL
+  create_view "demography_info_census_2017", sql_definition: <<-SQL
+      SELECT c1.county_id,
+      c1.gse_zn,
+      (c3.the_geom)::geometry(Polygon,4326) AS the_geom,
+      c1.census_source_id
+     FROM (( SELECT (st_dump(st_voronoipolygons(st_collect(census.the_geom_point)))).geom AS the_geom
+             FROM census
+            WHERE (census.census_source_id = 1)) c3
+       JOIN census c1 ON (st_contains(c3.the_geom, c1.the_geom_point)))
+    WHERE (c1.census_source_id = 1);
+  SQL
+  create_view "evolution_view", sql_definition: <<-SQL
+      SELECT project_primary_data.year,
+      project_primary_data.bimester,
+      sum(project_primary_data.proj_qty) AS total_qty,
+      sum(project_primary_data.offer) AS total_offer,
+      sum(project_primary_data.availability) AS total_avail,
+      sum(project_primary_data.vmr) AS total_vmr,
+      sum(project_primary_data.vmd) AS total_vmd,
+      ((sum(project_primary_data.vmd))::double precision / (sum(project_primary_data.proj_qty))::double precision) AS total_vvm,
+          CASE
+              WHEN (sum(project_primary_data.vmd) = (0)::numeric) THEN (0)::numeric
+              ELSE (sum((project_primary_data.mas * project_primary_data.vmd)) / sum(project_primary_data.vmd))
+          END AS total_mas,
+          CASE
+              WHEN ((sum(project_primary_data.vmr))::double precision = (0)::double precision) THEN (0)::double precision
+              ELSE (sum(((project_primary_data.usable_m2)::double precision * (project_primary_data.vmr)::double precision)) / (sum(project_primary_data.vmr))::double precision)
+          END AS total_usable_m2,
+          CASE
+              WHEN ((sum(project_primary_data.vmr))::double precision = (0)::double precision) THEN (0)::double precision
+              ELSE (sum(((project_primary_data.terrace)::double precision * (project_primary_data.vmr)::double precision)) / (sum(project_primary_data.vmr))::double precision)
+          END AS total_terrace,
+          CASE
+              WHEN ((sum(project_primary_data.vmr))::double precision = (0)::double precision) THEN (0)::double precision
+              ELSE (sum(((project_primary_data.uf_m2)::double precision * (project_primary_data.vmr)::double precision)) / (sum(project_primary_data.vmr))::double precision)
+          END AS total_uf_m2,
+          CASE
+              WHEN ((sum(project_primary_data.vmr))::double precision = (0)::double precision) THEN (0)::double precision
+              ELSE (sum(((project_primary_data.uf)::double precision * (project_primary_data.vmr)::double precision)) / (sum(project_primary_data.vmr))::double precision)
+          END AS total_uf,
+          CASE
+              WHEN ((sum(project_primary_data.vmr))::double precision = (0)::double precision) THEN (0)::numeric
+              ELSE (sum((project_primary_data.uf_m2_u * (project_primary_data.vmr)::numeric)) / (sum(project_primary_data.vmr))::numeric)
+          END AS total_uf_m2_u,
+      sum(project_primary_data.pxqr) AS total_pxqr,
+      sum(project_primary_data.pxqd) AS total_pxqd
+     FROM project_primary_data
+    GROUP BY project_primary_data.year, project_primary_data.bimester;
+  SQL
+  create_view "future_projects_info", sql_definition: <<-SQL
+      SELECT future_projects.id,
+      future_projects.code,
+      future_projects.address,
+      future_projects.name,
+      future_projects.role_number,
+      future_projects.file_number,
+      future_projects.file_date,
+      future_projects.owner,
+      future_projects.legal_agent,
+      future_projects.architect,
+      future_projects.floors,
+      future_projects.undergrounds,
+      future_projects.total_units,
+      future_projects.total_parking,
+      future_projects.total_commercials,
+      future_projects.m2_approved,
+      future_projects.m2_built,
+      future_projects.m2_field,
+      future_projects.cadastral_date,
+      future_projects.comments,
+      future_projects.bimester,
+      future_projects.year,
+      future_projects.cadastre,
+      future_projects.active,
+      future_projects.project_type_id,
+      future_projects.future_project_type_id,
+      future_projects.county_id,
+      future_projects.the_geom,
+      future_projects.t_ofi,
+      future_projects.created_at,
+      future_projects.updated_at,
+      future_project_types.color AS marker_color
+     FROM (future_projects
+       JOIN future_project_types ON ((future_projects.future_project_type_id = future_project_types.id)));
   SQL
   create_view "pois_infos", sql_definition: <<-SQL
       SELECT p.name,
@@ -2323,62 +2395,6 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
      FROM ((pois p
        JOIN poi_subcategories ps ON ((p.poi_subcategory_id = ps.id)))
        JOIN counties ON (st_contains(counties.the_geom, p.the_geom)));
-  SQL
-  create_view "counties_info", sql_definition: <<-SQL
-      SELECT counties.id AS county_id,
-      counties.name,
-      counties.the_geom
-     FROM counties;
-  SQL
-  create_view "transactions_info", sql_definition: <<-SQL
-      SELECT transactions.id,
-      transactions.property_type_id,
-      transactions.address,
-      transactions.sheet,
-      transactions.number,
-      transactions.inscription_date,
-      transactions.buyer_name,
-      transactions.seller_type_id,
-      transactions.department,
-      transactions.blueprint,
-      transactions.real_value,
-      transactions.calculated_value,
-      transactions.quarter,
-      transactions.year,
-      transactions.sample_factor,
-      transactions.county_id,
-      transactions.created_at,
-      transactions.updated_at,
-      transactions.the_geom,
-      transactions.cellar,
-      transactions.role,
-      transactions.seller_name,
-      transactions.buyer_rut,
-      transactions.uf_m2,
-      transactions.tome,
-      transactions.lot,
-      transactions.block,
-      transactions.village,
-      transactions.surface,
-      transactions.requiring_entity,
-      transactions.comments,
-      transactions.user_id,
-      transactions.surveyor_id,
-      transactions.active,
-      transactions.bimester,
-      transactions.code_sii,
-      transactions.total_surface_building,
-      transactions.total_surface_terrain,
-      transactions.uf_m2_u,
-      transactions.uf_m2_t,
-      transactions.building_regulation,
-      transactions.role_1,
-      transactions.role_2,
-      transactions.code_destination,
-      transactions.code_material,
-      transactions.year_sii,
-      transactions.role_associated
-     FROM transactions;
   SQL
   create_view "project_department_reports", sql_definition: <<-SQL
       SELECT project_instances.bimester,
@@ -2579,106 +2595,6 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
        JOIN project_statuses ON ((project_statuses.id = project_instances.project_status_id)))
     WHERE (projects.project_type_id = 1);
   SQL
-  create_view "transactions_heatmap_amount", sql_definition: <<-SQL
-      SELECT count(transactions.id) AS amount,
-      transactions.the_geom,
-      transactions.year,
-      transactions.bimester,
-      transactions.county_id
-     FROM transactions
-    GROUP BY transactions.the_geom, transactions.year, transactions.bimester, transactions.county_id;
-  SQL
-  create_view "future_projects_info", sql_definition: <<-SQL
-      SELECT future_projects.id,
-      future_projects.code,
-      future_projects.address,
-      future_projects.name,
-      future_projects.role_number,
-      future_projects.file_number,
-      future_projects.file_date,
-      future_projects.owner,
-      future_projects.legal_agent,
-      future_projects.architect,
-      future_projects.floors,
-      future_projects.undergrounds,
-      future_projects.total_units,
-      future_projects.total_parking,
-      future_projects.total_commercials,
-      future_projects.m2_approved,
-      future_projects.m2_built,
-      future_projects.m2_field,
-      future_projects.cadastral_date,
-      future_projects.comments,
-      future_projects.bimester,
-      future_projects.year,
-      future_projects.cadastre,
-      future_projects.active,
-      future_projects.project_type_id,
-      future_projects.future_project_type_id,
-      future_projects.county_id,
-      future_projects.the_geom,
-      future_projects.t_ofi,
-      future_projects.created_at,
-      future_projects.updated_at,
-      future_project_types.color AS marker_color
-     FROM (future_projects
-       JOIN future_project_types ON ((future_projects.future_project_type_id = future_project_types.id)));
-  SQL
-  create_view "demography_info_census_2012", sql_definition: <<-SQL
-      SELECT c1.county_id,
-      c1.gse_zn,
-      (c3.the_geom)::geometry(Polygon,4326) AS the_geom,
-      c1.census_source_id
-     FROM (( SELECT (st_dump(st_voronoipolygons(st_collect(census.the_geom_point)))).geom AS the_geom
-             FROM census
-            WHERE (census.census_source_id = 2)) c3
-       JOIN census c1 ON (st_contains(c3.the_geom, c1.the_geom_point)))
-    WHERE (c1.census_source_id = 2);
-  SQL
-  create_view "demography_info_census_2017", sql_definition: <<-SQL
-      SELECT c1.county_id,
-      c1.gse_zn,
-      (c3.the_geom)::geometry(Polygon,4326) AS the_geom,
-      c1.census_source_id
-     FROM (( SELECT (st_dump(st_voronoipolygons(st_collect(census.the_geom_point)))).geom AS the_geom
-             FROM census
-            WHERE (census.census_source_id = 1)) c3
-       JOIN census c1 ON (st_contains(c3.the_geom, c1.the_geom_point)))
-    WHERE (c1.census_source_id = 1);
-  SQL
-  create_view "projects_feature_info", sql_definition: <<-SQL
-      SELECT projects.id,
-      projects.address,
-      projects.name AS project_name,
-      project_statuses.name AS status_name,
-      sum(project_instance_mixes.total_units) AS total_units,
-      sum(project_instance_mixes.stock_units) AS stock_units,
-      sum((project_instance_mixes.total_units - project_instance_mixes.stock_units)) AS sold_units,
-      projects.floors,
-      round(sum(project_instance_mixes.mix_m2_field), 1) AS m2_field,
-      round(sum(project_instance_mixes.mix_m2_built), 1) AS m2_built,
-      project_instance_mixes.home_type,
-      project_instances.bimester,
-      project_instances.year,
-      projects.the_geom,
-      projects.build_date,
-      projects.sale_date,
-      projects.transfer_date,
-      projects.pilot_opening_date,
-      project_instances.comments,
-      projects.county_id,
-      projects.project_type_id,
-      project_instances.project_status_id,
-      ar.agency_id,
-      project_instance_mixes.project_instance_id,
-      (sum((project_instance_mixes.uf_min + project_instance_mixes.uf_max)) / (2)::numeric) AS uf_avg_percent
-     FROM ((((project_instances
-       JOIN project_instance_mixes ON ((project_instances.id = project_instance_mixes.project_instance_id)))
-       JOIN projects ON ((projects.id = project_instances.project_id)))
-       JOIN project_statuses ON ((project_instances.project_status_id = project_statuses.id)))
-       JOIN agency_rols ar ON ((projects.id = ar.project_id)))
-    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors, projects.project_type_id, project_instances.project_status_id, ar.agency_id, project_instance_mixes.project_instance_id;
-  SQL
   create_view "project_instance_mix_views", sql_definition: <<-SQL
       SELECT pim.project_instance_id,
       round((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric)))) AS uf_min_percent,
@@ -2737,57 +2653,130 @@ ActiveRecord::Schema.define(version: 2020_07_21_124537) do
             WHERE ((agency_rols.rol)::text ~~* 'inmobiliaria'::text)) ar ON ((p.id = ar.project_id)))
        JOIN agencies a ON ((a.id = ar.agency_id)));
   SQL
+  create_view "project_instance_mix_views_anterior", sql_definition: <<-SQL
+      SELECT pim.project_instance_id,
+      (pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_min_percent,
+      (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_max_percent,
+      (((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) AS uf_avg_percent,
+      (pim.mix_usable_square_meters * (pim.total_units)::numeric) AS total_m2,
+      (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5)) AS u_half_terrace,
+      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5))) AS uf_m2,
+      (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric))::double precision / ((pim.mix_usable_square_meters)::double precision + ((((pim.t_min + pim.t_max))::double precision / (2)::double precision) * (0.25)::double precision))) AS uf_m2_home,
+      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters) AS uf_m2_u,
+      (vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date))::numeric AS vhmu,
+      ((pim.stock_units)::numeric * pim.mix_usable_square_meters) AS dis_m2,
+      masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date) AS masud,
+          CASE masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
+              WHEN 0 THEN (0)::real
+              ELSE vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
+          END AS vhmud,
+      (pim.total_units - pim.stock_units) AS sold_units,
+      pim.id,
+      (((pim.t_min + pim.t_max))::double precision / (2)::double precision) AS ps_terreno,
+      pim.stock_units,
+      pim.total_units,
+      pim.mix_terrace_square_meters,
+      pim.mix_usable_square_meters,
+      pim.t_min,
+      pim.t_max,
+      p.county_id,
+      p.id AS project_id,
+      p.the_geom,
+      pi.year,
+      pi.bimester,
+      pi.project_status_id,
+      p.project_type_id
+     FROM ((project_instance_mixes pim
+       JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
+       JOIN projects p ON ((pi.project_id = p.id)));
+  SQL
+  create_view "projects_feature_info", sql_definition: <<-SQL
+      SELECT projects.id,
+      projects.address,
+      projects.name AS project_name,
+      project_statuses.name AS status_name,
+      sum(project_instance_mixes.total_units) AS total_units,
+      sum(project_instance_mixes.stock_units) AS stock_units,
+      sum((project_instance_mixes.total_units - project_instance_mixes.stock_units)) AS sold_units,
+      projects.floors,
+      round(sum(project_instance_mixes.mix_m2_field), 1) AS m2_field,
+      round(sum(project_instance_mixes.mix_m2_built), 1) AS m2_built,
+      project_instance_mixes.home_type,
+      project_instances.bimester,
+      project_instances.year,
+      projects.the_geom,
+      projects.build_date,
+      projects.sale_date,
+      projects.transfer_date,
+      projects.pilot_opening_date,
+      project_instances.comments,
+      projects.county_id,
+      projects.project_type_id,
+      project_instances.project_status_id,
+      ar.agency_id
+     FROM ((((project_instances
+       JOIN project_instance_mixes ON ((project_instances.id = project_instance_mixes.project_instance_id)))
+       JOIN projects ON ((projects.id = project_instances.project_id)))
+       JOIN project_statuses ON ((project_instances.project_status_id = project_statuses.id)))
+       JOIN agency_rols ar ON ((projects.id = ar.project_id)))
+    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors, projects.project_type_id, project_instances.project_status_id, ar.agency_id;
+  SQL
+  create_view "transactions_info", sql_definition: <<-SQL
+      SELECT transactions.id,
+      transactions.property_type_id,
+      transactions.address,
+      transactions.sheet,
+      transactions.number,
+      transactions.inscription_date,
+      transactions.buyer_name,
+      transactions.seller_type_id,
+      transactions.department,
+      transactions.blueprint,
+      transactions.real_value,
+      transactions.calculated_value,
+      transactions.quarter,
+      transactions.year,
+      transactions.sample_factor,
+      transactions.county_id,
+      transactions.created_at,
+      transactions.updated_at,
+      transactions.the_geom,
+      transactions.cellar,
+      transactions.role,
+      transactions.seller_name,
+      transactions.buyer_rut,
+      transactions.uf_m2,
+      transactions.tome,
+      transactions.lot,
+      transactions.block,
+      transactions.village,
+      transactions.surface,
+      transactions.requiring_entity,
+      transactions.comments,
+      transactions.user_id,
+      transactions.surveyor_id,
+      transactions.active,
+      transactions.bimester,
+      transactions.code_sii,
+      transactions.total_surface_building,
+      transactions.total_surface_terrain,
+      transactions.uf_m2_u,
+      transactions.uf_m2_t,
+      transactions.building_regulation,
+      transactions.role_1,
+      transactions.role_2,
+      transactions.code_destination,
+      transactions.code_material,
+      transactions.year_sii,
+      transactions.role_associated
+     FROM transactions;
+  SQL
   create_view "view_lots", sql_definition: <<-SQL
       SELECT round(lots.surface) AS surface,
       lots.the_geom,
       lots.identifier,
       lots.county_id
      FROM lots;
-  SQL
-  create_view "building_regulations_info", sql_definition: <<-SQL
-      SELECT building_regulations.id,
-      building_regulations.building_zone,
-      ( SELECT array_to_string(array_agg(land_use_types.abbreviation), ','::text) AS array_to_string
-             FROM (building_regulation_land_use_types
-               JOIN land_use_types ON ((building_regulation_land_use_types.land_use_type_id = land_use_types.id)))
-            WHERE (building_regulation_land_use_types.building_regulation_id = building_regulations.id)) AS land_use,
-      building_regulations.the_geom,
-      round(building_regulations.construct, 1) AS construct,
-      round(building_regulations.land_ocupation, 1) AS land_ocupation,
-      building_regulations.hectarea_inhabitants AS max_density,
-      building_regulations."grouping",
-      building_regulations.site,
-      building_regulations.comments,
-      building_regulations.aminciti,
-      building_regulations.parkings,
-      building_regulations.updated_at,
-      building_regulations.county_id,
-      density_types.color,
-      building_regulations.identifier,
-      round((building_regulations.aminciti / (3)::numeric)) AS floors
-     FROM (building_regulations
-       JOIN density_types ON ((building_regulations.density_type_id = density_types.id)))
-    ORDER BY building_regulations.updated_at DESC;
-  SQL
-  create_view "evolution_view", sql_definition: <<-SQL
-      SELECT project_primary_data.year,
-      project_primary_data.bimester,
-      sum(project_primary_data.proj_qty) AS total_qty,
-      sum(project_primary_data.offer) AS total_offer,
-      sum(project_primary_data.availability) AS total_avail,
-      sum(project_primary_data.vmr) AS total_vmr,
-      sum(project_primary_data.vmd) AS total_vmd,
-      ((sum(project_primary_data.vmd))::double precision / (sum(project_primary_data.proj_qty))::double precision) AS total_vvm,
-      (sum((project_primary_data.mas * project_primary_data.vmd)) / sum(project_primary_data.vmd)) AS total_mas,
-      (sum(((project_primary_data.usable_m2)::double precision * (project_primary_data.vmr)::double precision)) / (sum(project_primary_data.vmr))::double precision) AS total_usable_m2,
-      (sum(((project_primary_data.terrace)::double precision * (project_primary_data.vmr)::double precision)) / (sum(project_primary_data.vmr))::double precision) AS total_terrace,
-      (sum(((project_primary_data.uf_m2)::double precision * (project_primary_data.vmr)::double precision)) / (sum(project_primary_data.vmr))::double precision) AS total_uf_m2,
-      (sum(((project_primary_data.uf)::double precision * (project_primary_data.vmr)::double precision)) / (sum(project_primary_data.vmr))::double precision) AS total_uf,
-      (sum((project_primary_data.uf_m2_u * (project_primary_data.vmr)::numeric)) / (sum(project_primary_data.vmr))::numeric) AS total_uf_m2_u,
-      sum(project_primary_data.pxqr) AS total_pxqr,
-      sum(project_primary_data.pxqd) AS total_pxqd
-     FROM project_primary_data
-    GROUP BY project_primary_data.year, project_primary_data.bimester;
   SQL
   create_view "counties_enabled_by_users", sql_definition: <<-SQL
       SELECT c.name,
