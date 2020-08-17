@@ -919,6 +919,8 @@ var incitiIcon = L.icon({
           }).addTo(map);
           map.fitBounds(geojson.getBounds());
           map.addLayer(geojson);
+          totalCounties = geojson.getLayers().length;
+          if(totalCounties == 1) {map.setZoom(8);}
         }
       });
   }
