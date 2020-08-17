@@ -34,7 +34,7 @@ class Admin::CountyUfsController < ApplicationController
 
     respond_to do |format|
       if @admin_county_uf.save
-        format.html { redirect_to @admin_county_uf, notice: 'County uf was successfully created.' }
+        format.html { redirect_to admin_county_ufs_path, notice: 'County uf was successfully created.' }
         format.json { render :show, status: :created, location: @admin_county_uf }
       else
         format.html { render :new }
@@ -48,7 +48,7 @@ class Admin::CountyUfsController < ApplicationController
   def update
     respond_to do |format|
       if @admin_county_uf.update(admin_county_uf_params)
-        format.html { redirect_to @admin_county_uf, notice: 'County uf was successfully updated.' }
+        format.html { redirect_to admin_county_ufs_path, notice: 'County uf was successfully updated.' }
         format.json { render :show, status: :ok, location: @admin_county_uf }
       else
         format.html { render :edit }
@@ -75,6 +75,6 @@ class Admin::CountyUfsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def admin_county_uf_params
-    params.require(:admin_county_uf).permit(:county_id, :property_type_id, :uf_min, :uf_max)
+    params.require(:county_uf).permit(:county_id, :property_type_id, :uf_min, :uf_max)
   end
 end
