@@ -45,6 +45,7 @@ gem 'axlsx_rails'
 gem 'jquery_file_download-rails'
 gem 'ruby_kml'
 gem 'bootstrap-datepicker-rails'
+gem 'devise-security'
  # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
