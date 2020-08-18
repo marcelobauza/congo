@@ -16,7 +16,7 @@ class UserPolygon < ApplicationRecord
   def self.convert_geometry_as_text data
     type_geometry = data[:type_geometry]
     case type_geometry
-    when 'circle' 
+    when 'circle'
       radius = data['radius'].to_f / 1000
       @wkt = ActiveRecord::Base.connection.execute("select ST_ASTEXT(st_buffer(ST_GeomFromText('POINT(#{data[:centerpt]})'), #{radius}, 8 )) as wkt")
     when 'polygon'
@@ -35,11 +35,10 @@ class UserPolygon < ApplicationRecord
 
   def self.get_csv_data(filters)
 
-    cond = "created_at::date BETWEEN '#{Date.strptime(filters[:date_from], "%d/%m/%Y").to_s}' " 
-    cond += "AND '#{Date.strptime(filters[:date_to], "%d/%m/%Y").to_s}'"
-    user_polygons = UserPolygon.where(cond)  
+    cond = "created_at::date BETWEEN '#{Date.strptime(filters[:date_from], "%Y/%m/%d").to_s}' "
+    cond += "AND '#{Date.strptime(filters[:date_to], "%Y/%m/%d").to_s}'"
+    user_polygons = UserPolygon.where(cond)
      return CsvParser.get_user_polygons_csv_data(user_polygons)
-  
   end
 
   def self.to_csv(options = {})

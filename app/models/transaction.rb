@@ -1,6 +1,12 @@
 class Transaction < ApplicationRecord
+  include CsvParser
+  include Ranges
+  include Util
+  include WhereBuilder
+  include Transactions::Exports
+  include Transactions::Validations
+  include Transactions::Kml
 
-  has_many :transaction_results
   belongs_to :surveyor
   belongs_to :user
   belongs_to :property_type
@@ -12,14 +18,6 @@ class Transaction < ApplicationRecord
   before_validation :build_geom
   before_save :update_calculated_value, :titleize_attributes
   before_save :pm2
-
-  include CsvParser
-  include Ranges
-  include Util
-  include WhereBuilder
-  include Transactions::Exports
-  include Transactions::Validations
-  include Transactions::Kml
 
   #named_scope :by_number, lambda { |t| {:conditions => {:number => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
   #named_scope :by_user, lambda { |t| {:conditions => {:user_id => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
@@ -630,19 +628,7 @@ class Transaction < ApplicationRecord
     end
   end
 
-  def self.get_csv_data(filters)
-    if !filters[:fromID].nil?
-      cond = "transactions.id BETWEEN #{filters[:fromID]} AND #{filters[:toID]}"
-    else
-      cond = "transactions.inscription_date BETWEEN '#{filters[:date_from]}'"
-      cond += "AND '#{filters[:date_to]}'"
-    end
-    transactions = Transaction.includes(:seller_type, :surveyor, :user, :county, :property_type).
-      where(cond).
-      order("transactions.id")
 
-    return CsvParser.get_transactions_csv_data(transactions)
-  end
 
   def self.get_bench_values(result_id, seller_type_ids=nil)
     conditions = "result_id = #{result_id}"

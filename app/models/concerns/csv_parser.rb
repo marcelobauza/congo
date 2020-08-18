@@ -24,7 +24,7 @@ POLYGON_HEADER = ["USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
                   t.lot, t.block, t.village,t.department.scan(/\bC\d+/).join("-"), t.department.scan(/D\d+/).join("-"),
                   t.department.scan(/E\d+/).join("-"), t.parkingi,t.department.scan(/B\d+/).join("-"), t.cellar, t.department.scan(/O\d+/).join("-"),
                   t.department.scan(/LC\d+/).join("-"),t.property_type.get_my_initials, t.surface, t.blueprint, t.real_value, t.calculated_value, t.role, t.role_1, t.role_2,
-                  t.requiring_entity,t.comments, t.surveyor_id.nil? ? "" : t.surveyor.nil? ? "": t.surveyor.name, t.user.nil? ? "" : t.user.complete_name, t.the_geom.x,
+                  t.requiring_entity,t.comments, t.surveyor_id.nil? ? "" : t.surveyor.name, t.surveyor.nil? ? "": t.surveyor.name, t.the_geom.x,
                   t.the_geom.y]
 
         writer << values
@@ -46,7 +46,7 @@ POLYGON_HEADER = ["USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
                   t.lot, t.block, t.village,t.department.scan(/\bC\d+/).join("-"), t.department.scan(/D\d+/).join("-"),
                   t.department.scan(/E\d+/).join("-"), t.parkingi,t.department.scan(/B\d+/).join("-"), t.cellar, t.department.scan(/O\d+/).join("-"),
                   t.department.scan(/LC\d+/).join("-"),t.property_type.get_my_initials, t.surface, t.blueprint, t.real_value, t.calculated_value, t.role, t.role_1, t.role_2,
-                  t.requiring_entity,t.comments, t.surveyor_id.nil? ? "" : t.surveyor.nil? ? "": t.surveyor.name, t.user.nil? ? "" : t.user.complete_name, t.the_geom.x,
+                  t.requiring_entity,t.comments, t.surveyor_id.nil? ? "" : t.surveyor.name, t.surveyor.nil? ? "": t.surveyor.name, t.the_geom.x,
                   t.the_geom.y, t.total_surface_building, t.total_surface_terrain, t.uf_m2_u, t.uf_m2_t,t.code_destination, t.code_material, t.year_sii]
 
         writer << values

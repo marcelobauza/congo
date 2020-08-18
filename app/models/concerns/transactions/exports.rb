@@ -29,6 +29,20 @@ module Transactions::Exports
 
       return CsvParser.get_transactions_csv_data_sii(transactions)
     end
+
+    def get_csv_data(filters)
+      if !filters[:fromID].nil?
+        cond = "transactions.id BETWEEN #{filters[:fromID]} AND #{filters[:toID]}"
+      else
+        cond = "transactions.inscription_date BETWEEN '#{filters[:date_from]}'"
+        cond += "AND '#{filters[:date_to]}'"
+      end
+      transactions = Transaction.includes(:seller_type, :surveyor, :user, :county, :property_type).
+        where(cond).
+        order("transactions.id")
+
+      return CsvParser.get_transactions_csv_data(transactions)
+    end
   end
 end
 
