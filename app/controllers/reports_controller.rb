@@ -204,28 +204,35 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if total_downloads > 0
+        @code_departments = @project_departments.map { |p| p.code }.uniq
 
-        if total_downloads >= @project_departments.count
-          @project_departments = @project_departments.limit(@project_departments.count)
-          total_downloads -= @project_departments.count
+        if @code_departments.any?
+          if total_downloads >= @code_departments.count
+            @project_departments = @project_departments.where(code: @code_departments).order(:code)
+            total_downloads -= @code_departments.count
 
-          u.downloads_users.create! projects: @project_departments.count
-        else
-          @project_departments = @project_departments.limit(total_downloads)
+            u.downloads_users.create! projects: @code_departments.count
+          else
+            @project_departments = @project_departments.where(code: @code_departments.take(total_downloads)).order(:code)
 
-          u.downloads_users.create! projects: total_downloads
+            u.downloads_users.create! projects: total_downloads
 
-          total_downloads = 0
+            total_downloads = 0
+          end
         end
 
-        if total_downloads >= @project_homes.count
-          @project_homes = @project_homes.limit(@project_homes.count)
+        @code_homes = @project_homes.map { |p| p.code }.uniq
 
-          u.downloads_users.create! projects: @project_homes.count
-        else
-          @project_homes = @project_homes.limit(total_downloads)
+        if @code_homes.any?
+          if total_downloads >= @code_homes.count
+            @project_homes = @project_homes.where(code: @code_homes).order(:code)
 
-          u.downloads_users.create! projects: total_downloads
+            u.downloads_users.create! projects: @code_homes.count
+          else
+            @project_homes = @project_homes.where(code: @code_homes.take(total_downloads)).order(:code)
+
+            u.downloads_users.create! projects: total_downloads
+          end
         end
       else
         @message = "Ha superado el límite de descarga"
