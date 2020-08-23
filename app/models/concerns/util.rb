@@ -47,6 +47,18 @@ module Util
     return shps, temp_path
   end
 
+  def self.get_geojson_files_from_zip(file_path)
+    # Create the directory
+    temp_path = File.join(Dir::tmpdir, Time.now.to_f.to_s)
+    FileUtils.mkdir temp_path
+    # Extract the file
+    extract(file_path, temp_path)
+
+    # Parse the shape file
+    shps = file_find(temp_path, "*.geojson", true)
+    return shps, temp_path
+  end
+
   def self.extract(src, dst)
     require 'rubygems'
     require 'zip'
