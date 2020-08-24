@@ -144,6 +144,18 @@
           <%= f.text_field :role, placeholder: "XXXXX-XXXXX", :class => 'form-control' %>
         </div>
         <div class="form-group col-md-2">
+          <%= f.label :role_1 %>
+          <%= f.text_field :role_1, placeholder: "XXXXX-XXXXX", :class => 'form-control' %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :role_2 %>
+          <%= f.text_field :role_2, placeholder: "XXXXX-XXXXX", :class => 'form-control' %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.label :additional_roles %>
+          <%= f.text_field :additional_roles, placeholder: "XXXXX-XXXXX", :class => 'form-control' %>
+        </div>
+        <div class="form-group col-md-2">
           <%= f.label :requiring_entity %>
           <%= f.text_field :requiring_entity, :class => 'form-control' %>
         </div>
@@ -151,6 +163,9 @@
           <%= f.label :surveyor %>
           <%= f.select :surveyor_id, surveyors_for_select, { :prompt => t(:select_item_from_list) }, :class => 'form-control' %>
         </div>
+
+      </div>
+      <div class="form-row">
         <%= f.input :comments, as: :text, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-4'} %>
       </div>
       <%= f.hidden_field :latitude, class: 'latitude'  %>

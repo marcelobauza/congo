@@ -195,8 +195,9 @@ class Transaction < ApplicationRecord
     self.surveyor_id            = Surveyor.find_by(name: data["ENCUESTADO"].to_s.downcase.titleize).id if !data["ENCUESTADO"].nil?
     self.bimester               = data["BIMESTER"]
     self.code_sii               = data["CODE_SII"]
-    self.role_1                   = data["ROL2"]
-    self.role_2                   = data["ROL3"]
+    self.role_1                 = data["ROL2"]
+    self.role_2                 = data["ROL3"]
+    self.additional_roles       = data["ROLES_ADIC"]
 
     conditions = "rol_number = '#{self.role}'  #{Util.and} "
     conditions += "county_sii_id = #{data['CODE_SII']}"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_17_131039) do
+ActiveRecord::Schema.define(version: 2020_08_23_235826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -659,6 +659,7 @@ ActiveRecord::Schema.define(version: 2020_08_17_131039) do
     t.string "role_associated"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "additional_roles"
     t.index ["county_id"], name: "index_transactions_on_county_id"
     t.index ["property_type_id"], name: "index_transactions_on_property_type_id"
     t.index ["seller_type_id"], name: "index_transactions_on_seller_type_id"
@@ -2488,7 +2489,8 @@ ActiveRecord::Schema.define(version: 2020_08_17_131039) do
       projects.the_geom,
       st_x(projects.the_geom) AS x,
       st_y(projects.the_geom) AS y,
-      county_name((projects.county_id)::integer) AS county_name
+      county_name((projects.county_id)::integer) AS county_name,
+      projects.project_type_id
      FROM (((((projects
        JOIN project_instances ON ((project_instances.project_id = projects.id)))
        JOIN project_instance_mixes pim ON ((project_instances.id = pim.project_instance_id)))
@@ -2586,7 +2588,8 @@ ActiveRecord::Schema.define(version: 2020_08_17_131039) do
       round((masd(project_instances.id))::numeric, 1) AS vhmud,
       projects.the_geom,
       st_x(projects.the_geom) AS x,
-      st_y(projects.the_geom) AS y
+      st_y(projects.the_geom) AS y,
+      projects.project_type_id
      FROM (((((projects
        JOIN project_instances ON ((project_instances.project_id = projects.id)))
        JOIN project_instance_mixes pim ON ((project_instances.id = pim.project_instance_id)))
