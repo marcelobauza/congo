@@ -316,9 +316,9 @@ class ReportsController < ApplicationController
    ufm2_values = Project.projects_by_uf_m2(filters)
 
    ufm2_values.each do |ufb|
-      max = ufb[:max].to_i rescue 0
-      min = ufb[:min].to_i rescue 0
-      avg = ufb[:avg].to_i rescue 0
+      max = ufb[:max].to_f rescue 0
+      min = ufb[:min].to_f rescue 0
+      avg = ufb[:avg].to_f rescue 0
       bimester = ufb[:bimester].to_s + "/" + ufb[:year].to_s[2,3]
       result.push({"bimester":bimester,"max":max, "min":min,"avg":avg})
    end

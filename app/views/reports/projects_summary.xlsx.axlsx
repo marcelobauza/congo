@@ -46,7 +46,12 @@ end
   sheet.add_row ["Valor Precio Promedio | UFm² Útil"], :style=> title
   sheet.add_row ["Bimestre", "Minimo", "Maximo", "Promedio"], :style=> title
 @ufm2b.each do |ufb|
-  sheet.add_row [ufb[:bimester],ufb[:min], ufb[:max], ufb[:avg]]
+  sheet.add_row [
+    ufb[:bimester],
+    ('%.2f' % ufb[:min]).to_f,
+    ('%.2f' % ufb[:max]).to_f,
+    ('%.2f' % ufb[:avg]).to_f
+  ]
 end
 
   sheet.add_row([])
