@@ -66,7 +66,7 @@ $(document).ready(function(){
   if (va){
     Congo.dashboards.config.square_meters_download_projects = va.dataset.allowedAreaProjects
     Congo.dashboards.config.meters_download_radius_projects = va.dataset.allowedRadiusProjects
-    Congo.dashboards.config.square_meters_download_radius_future_projects = va.dataset.allowedAreaFutureProjects
+    Congo.dashboards.config.square_meters_download_future_projects = va.dataset.allowedAreaFutureProjects
     Congo.dashboards.config.meters_download_radius_future_projects = va.dataset.allowedRadiusFutureProjects
     Congo.dashboards.config.square_meters_download_transactions = va.dataset.allowedAreaTransactions
     Congo.dashboards.config.meters_download_radius_transactions = va.dataset.allowedRadiusTransactions
