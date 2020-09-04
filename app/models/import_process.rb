@@ -97,7 +97,7 @@ class ImportProcess < ApplicationRecord
            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
            next
          end
-         unless a.geometry.geometry_type.to_s == 'MultiPolygon'
+         unless a.geometry.geometry_type.to_s == 'MultiPolygon' || a.geometry.geometry_type.to_s == 'Polygon'
            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
            next
          end
