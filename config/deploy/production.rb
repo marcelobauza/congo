@@ -7,7 +7,7 @@
   set :stage, :production
   set :rails_env, 'production'
 
-  server 'congo_do.com', user: 'deployer', roles: %w{ web app}, my_property: :my_value
+  server 'app.inciti.com', user: 'deployer', roles: %w{ web app}, my_property: :my_value
 # role-based syntax
 # ==================
 
