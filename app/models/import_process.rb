@@ -15,12 +15,11 @@ class ImportProcess < ApplicationRecord
     import_logger = Ibiza::ImportLogger.new(import_process)
     import_process.update_attributes status: 'working'
     ActiveRecord::Base.transaction do
-      if load_type = 'Building Regulation'
+      if load_type == 'Building Regulation'
         shps, dir_path = Util::get_geojson_files_from_zip(self.file_path)
       else
         shps, dir_path = Util::get_shape_files_from_zip(self.file_path)
       end
-
       dir = []
       shps.each do |shp|
         begin
