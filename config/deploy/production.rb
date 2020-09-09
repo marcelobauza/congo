@@ -17,9 +17,9 @@
 # Don't use `:all`, it's a meta role.
 
 set :rvm_ruby_version, '2.4.1'
-  role :app, %w{deployer@congo_do.com}
-  role :web, %w{deployer@congo_do.com}
-  role :db,  %w{deployer@congo_do.com}
+role :app, %w{deployer@app.inciti.com}
+role :web, %w{deployer@app.inciti.com}
+role :db,  %w{deployer@app.inciti.com}
 
 
 
