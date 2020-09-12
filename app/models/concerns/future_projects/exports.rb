@@ -20,7 +20,7 @@ module FutureProjects::Exports
 
     def project_type filters
       pt = filters['project_type_id'].reject(&:blank?)
-      filters['project_type_id'].present? ? where(project_type_id: pt) : all
+      filters['project_type_id'].blank? ? where(project_type_id: pt) : all
     end
 
     def future_project_counties_or_polygon filters
