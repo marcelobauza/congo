@@ -506,27 +506,18 @@ class ImportProcess < ApplicationRecord
   end
 
   def parse_pois(shp_file, import_logger)
-    ic = Iconv.new('UTF-8', 'ISO-8859-1')
-
-    ShpFile.open(shp_file) do |shp|
+    RGeo::Shapefile::Reader.open(shp_file) do |shp|
       shp.each do |shape|
-
         if shape.geometry.nil?
           import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
           next
         end
 
-        unless shape.geometry.is_a? Point
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-          next
-        end
+        geom    = shape.geometry
+        data    = shape.attributes
+        sub_cat = PoiSubcategory.find_or_create_by(name: data["TIPO_POIS"])
 
-        geom = shape.geometry
-        geom.srid = 4326
-        data = shape.data
-
-        sub_cat = PoiSubcategory.find_or_create_by_name(data["TIPO_POIS"])
-        if Poi.create(:name => ic.iconv(data["NOMBRE"]), :poi_subcategory_id => sub_cat.id, :the_geom => geom)
+        if Poi.create(name: data["NOMBRE"], poi_subcategory_id: sub_cat.id, the_geom: geom)
           import_logger.inserted += 1
         else
           import_logger.failed += 1
