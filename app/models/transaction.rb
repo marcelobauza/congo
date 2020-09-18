@@ -226,9 +226,9 @@ class Transaction < ApplicationRecord
   end
 
   def self.get_last_period
-    period = Transaction.where(active: true).select(:year, :bimester).order("year DESC, bimester DESC").first
-    return nil if period.nil?
-    return Period.get_periods(period.bimester, period.year, BIMESTER_QUANTITY, 1)
+    period = Transaction.select(:year, :bimester).
+      where(active: 'true').
+      order(year: :desc, bimester: :desc).first
   end
 
   def self.get_first_period_with_transactions

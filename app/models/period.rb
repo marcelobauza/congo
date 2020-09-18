@@ -77,7 +77,7 @@ class Period < ApplicationRecord
 
       ranges << {:from => from.round(), :to => to.round()}
 
-      1.upto(4) do 
+      1.upto(4) do
         from = to
         to = from + jump
         ranges << {:from => from.round(), :to => to.round()}
@@ -94,7 +94,16 @@ class Period < ApplicationRecord
       period_string = period + " " + I18n.translate(period_type) + " 20" + year
       return period_string
     end
-    def self.get_period_current()
-      period_current = Period.where(active: true).order(year: :desc,bimester: :desc).first
+
+    def self.get_period_current(layer_type)
+      case layer_type
+        when 'future_projects_info'
+          @last_period = FutureProject.get_last_period
+        when 'transactions_info'
+          @last_period = Transaction.get_last_period
+        when 'projects_feature_info'
+          @last_period = ProjectInstance.get_last_period
+        end
+    @last_period
     end
   end
