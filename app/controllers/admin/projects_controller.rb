@@ -1,11 +1,8 @@
 class Admin::ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
-
   layout 'admin'
 
-
   def kpi
-
     if !params['county_id'].nil? || !params['polygon_id'].nil?
       @kpi = Project.kpi(params['county_id'], params['year_from'], params['year_to'], params['bimester_id'],  params['project_type_id'], params[:polygon_id])
 
@@ -33,11 +30,8 @@ class Admin::ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects = ''
-    if ((!params[:project_type_id].nil? && !params[:bimester_id].nil?) || !params[:search].nil?)
-      @projects = Project.find_index(params[:project_type_id], params[:bimester_id], params[:county_id], params[:date_id], params[:search])
-      @projects = @projects.paginate(page: params[:page])
-    end
+      @projects = Project.find_index(params)
+        .paginate(page: params[:page], per_page: 10)
   end
 
   # GET /projects/1

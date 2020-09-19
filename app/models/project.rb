@@ -5,6 +5,7 @@ class Project < ApplicationRecord
   include Util
   include Ranges
   include Projects::Exports
+  include Projects::Scopes
 
   has_many :project_instances, :dependent => :destroy
   has_many :project_instance_mixes, :through => :project_instances
@@ -129,43 +130,6 @@ class Project < ApplicationRecord
 
   def get_seller
     get_agency_by_rol(Agency::ROL[:seller])
-  end
-
-  def self.find_index(project_type, bimester, county, year, search)
-    select = "projects.id, bimester, year, code, projects.name, projects.county_id"
-    conditions = " 1=1 "
-    conditions += " and projects.project_type_id = #{project_type}" if project_type.present?
-    conditions += " and county_id = #{county} " if county.present?
-    conditions += " and year = #{year} " if year.present?
-    conditions += " and code = '#{search}'"  if search.present?
-    groups = "projects.id, bimester, year, code, projects.name, projects.county_id"
-
-      Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
-      where(conditions).
-      bimesters_filters(bimester).
-      select(select).
-      group(groups).
-      order(:year, :bimester)
-  end
-
-  def self.bimesters_filters bimester
-    bimester.present? ? where(project_instances: {bimester: bimester}) : all
-  end
-
-  def counties_filters
-
-  end
-
-  def year_filters
-
-  end
-
-  def code_filters
-
-  end
-
-  def project_types_filters
-
   end
 
   def self.find_globals(filters, range)
