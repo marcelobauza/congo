@@ -1,4 +1,4 @@
-if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin')
+if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin') || (current_user.role.name == 'IPRO+ Plus')
 wb = xlsx_package.workbook
 title = wb.styles.add_style(:bg_color => "FFFFFFFF", :fg_color=>"#FFFFFFFF", :sz=>12,  :border=> {:style => :thin, :color => "FFFFFFFF"})
 wb.add_worksheet(name: "PRV") do |sheet|
