@@ -1,20 +1,19 @@
 class UsersController < ApplicationController
-
   before_action :set_user, only: [:account, :update]
+
   def account
     respond_to do |format|
-      format.js 
+      format.js
     end
   end
 
   def update
-
     @errorMessage = []
 
     respond_to do |format|
      if @user.update(user_params)
       bypass_sign_in(@user)
-      format.js 
+      format.js
       else
       format.js
       @user.errors.any?
@@ -24,6 +23,13 @@ class UsersController < ApplicationController
     end
     end
   end
+
+  def export_csv_downloads_by_company
+    data = DownloadsUser.export_csv_downloads_by_company current_user.company_id
+
+    send_file data, :type => 'text/csv', :disposition => "inline", :filename => "Descargar_por_empresa.csv"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -34,5 +40,4 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:complete_name, :password, :password_confirmation, :name, :email, :company, :city)
     end
-
 end

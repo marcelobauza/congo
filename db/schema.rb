@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_23_235826) do
+ActiveRecord::Schema.define(version: 2020_10_10_131202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -149,6 +149,15 @@ ActiveRecord::Schema.define(version: 2020_08_23_235826) do
 
   create_table "census_sources", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "companies", force: :cascade do |t|
+    t.string "name"
+    t.integer "projects_downloads", default: 0, null: false
+    t.integer "transactions_downloads", default: 0, null: false
+    t.integer "future_projects_downloads", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -686,7 +695,6 @@ ActiveRecord::Schema.define(version: 2020_08_23_235826) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "complete_name"
-    t.string "company"
     t.string "city"
     t.string "token"
     t.boolean "is_temporal", default: false
@@ -718,6 +726,8 @@ ActiveRecord::Schema.define(version: 2020_08_23_235826) do
     t.string "unique_session_id"
     t.datetime "last_activity_at"
     t.datetime "expired_at"
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"
     t.index ["last_activity_at"], name: "index_users_on_last_activity_at"

@@ -12,6 +12,30 @@ module CsvParser
 
 POLYGON_HEADER = ["USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
 
+DOWNLOADS_USERS_HEADER = ["USUARIO", "FECHA", "COMPRAVENTAS", "EXPEDIENTES", "PROYECTOS"]
+
+def self.get_downloads_users_csv_data du
+  tempFile = Tempfile.new('transactions.csv')
+
+  CSV.open(tempFile.path, "w") do |writer|
+    writer << DOWNLOADS_USERS_HEADER
+
+    du.each do |d|
+      values = [
+        d.user.name,
+        d.created_at,
+        d.transactions,
+        d.future_projects,
+        d.projects
+      ]
+
+      writer << values
+    end
+  end
+
+  return tempFile.path
+end
+
   def self.get_transactions_csv_data(transactions)
     tempFile = Tempfile.new('transactions.csv')
 

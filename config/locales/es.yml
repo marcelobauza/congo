@@ -179,9 +179,9 @@ es:
       prompt: "Por favor seleccione"
 
     submit:
-      create: 'Cargando' #'Crear %{model}'
-      update: 'Cargando' #'Actualizar %{model}'
-      submit: 'Cargando' #'Guardar %{model}'
+      create: 'Crear %{model}'
+      update: 'Actualizar %{model}'
+      submit: 'Guardar %{model}'
 
   errors:
     format: "%{attribute} %{message}"
@@ -253,6 +253,9 @@ es:
         order:
           invalid_rut_format: "Verifique el formato del RUT ingresado en facturacion y vuelva a intentar"
     models:
+      company:
+        one: Empresa
+        other: Empresas
       project:
         one: Proyecto
         other: Proyectos
@@ -282,6 +285,11 @@ es:
         other: Comunas seleccionadas
 
     attributes:
+      company:
+        name: 'Nombre'
+        projects_downloads: 'Descargas PRV'
+        transactions_downloads: 'Descargas CBR'
+        future_projects_downloads: 'Descargas EM'
       project_instance:
         usable_square_meters: Superficie util
         terrace_square_meters: Superficie terraza
@@ -579,15 +587,15 @@ es:
 
   actions:
     delete: Eliminar
-    edit: Editar
+    edit: 'Editar %{model}'
     back: Volver
     save: Guardar
     save_and_continue: Guardar y seguir
     logout: Salir
     calculate: Calcular
-    editing: "Editando %{model}"
-    creating: "Creando %{model}"
-    new: Nuevo
+    editing: 'Editando %{model}'
+    creating: 'Creando %{model}'
+    new: 'Nuevo %{model}'
 
   questions:
     are_you_sure: ¿Estas seguro?

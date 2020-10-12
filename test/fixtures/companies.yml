@@ -1,0 +1,7 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+inciti:
+  name: Inciti
+  projects_downloads: 100
+  transactions_downloads: 100
+  future_projects_downloads: 100
