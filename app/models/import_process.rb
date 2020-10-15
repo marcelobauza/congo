@@ -180,7 +180,7 @@ class ImportProcess < ApplicationRecord
         geom = shape.geometry
         data = shape.attributes
         unless data["DORMS_T"].to_i == 0 or data["BANOS_T"].to_i == 0
-          mix = ProjectMix.find_or_create_by(bedroom: data["DORMS_T"].to_f,  bathroom: data["BANOS_T"].round, mix_type:"#{data["DORMS_T"].to_f}d#{data["BANOS_T"].round}b")
+          mix = ProjectMix.find_or_create_by(bedroom: data["DORMS_T"].to_f,  bathroom: data["BANOS_T"].to_i, mix_type:"#{data["DORMS_T"].to_f}d#{data["BANOS_T"].to_i}b")
           if mix.nil?
             import_logger.failed += 1
             mix.errors.full_messages.each do |error_message|
