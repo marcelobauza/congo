@@ -145,9 +145,9 @@ class Project < ApplicationRecord
     select += "CASE SUM(project_instance_mix_views.total_m2) WHEN 0 THEN 0 "
     select += "ELSE SUM(project_instance_mix_views.total_m2 * project_instance_mix_views.uf_avg_percent)/SUM(project_instance_mix_views.total_m2) END AS pp_uf, "
     select += "CASE SUM(project_instance_mix_views.dis_m2) WHEN 0 THEN 0 "
-    select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * mix_usable_square_meters ))) END AS pp_uf_dis_dpto, "
+    select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.5 * mix_terrace_square_meters)))) END AS pp_uf_dis_dpto, "
     select += "CASE SUM(project_instance_mix_views.ps_terreno) WHEN 0 THEN 0 "
-    select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * mix_usable_square_meters )))  END AS pp_uf_dis_home, "
+    select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno))))  END AS pp_uf_dis_home, "
     select += "CASE SUM(project_instance_mix_views.total_m2) WHEN 0 THEN 0 "
     select += "ELSE AVG(project_instance_mix_views.uf_m2_home) END AS pp_uf_m2, "
     select += "SUM(vhmu) AS vhmo, "
@@ -170,7 +170,7 @@ class Project < ApplicationRecord
     select = "CASE SUM(project_instance_mix_views.total_units) WHEN 0 THEN 0 "
     select += "ELSE SUM((project_instance_mix_views.t_min + project_instance_mix_views.t_max)/2 * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units)END AS ps_terreno, "
     select += "CASE SUM(project_instance_mix_views.ps_terreno) WHEN 0 THEN 0 "
-    select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * mix_usable_square_meters )))  END AS pp_uf_dis_home "
+    select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno))))  END AS pp_uf_dis_home "
 
     @a = ProjectInstanceMixView.method_selection(filters).
       where(build_conditions_new(filters, nil, true, range)).
@@ -987,7 +987,7 @@ end
     select += "ROUND(MIN(project_instance_mix_views.uf_m2),2) as min_uf_m21, "
     select += "ROUND(MAX(project_instance_mix_views.uf_m2),2) as max_uf_m21, "
     select += "CASE SUM(project_instance_mix_views.total_m2) WHEN 0 THEN 0 else "
-    select += "round(SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * mix_usable_square_meters )),1) end as avg_uf_m2,"
+    select += "round(SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.5 * mix_terrace_square_meters))),1) end as avg_uf_m2,"
     select += "round(MIN(project_instance_mix_views.mix_usable_square_meters),1) as min_usable_square_m21, "
     select += "round(MAX(mix_usable_square_meters),1) as max_usable_square_m21, "
     select += "round((CASE SUM(project_instance_mix_views.total_units) WHEN 0 THEN 0 ELSE SUM(project_instance_mix_views.mix_usable_square_meters * project_instance_mix_views.total_units)/SUM(project_instance_mix_views.total_units)END),1) AS avg_usable_square_m21, "
@@ -1027,7 +1027,7 @@ end
     select += "round((MIN(project_instance_mix_views.uf_m2_home))::numeric,2) as min_uf_m2, "
     select += "round((MAX(project_instance_mix_views.uf_m2_home))::numeric ,2) as max_uf_m2, "
     select += "CASE SUM(project_instance_mix_views.ps_terreno) WHEN 0 THEN 0 "
-    select += "ELSE round((SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * mix_usable_square_meters )))::numeric, 1)  END AS avg_uf_m2, "
+    select += "ELSE round((SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno))))::numeric, 1)  END AS avg_uf_m2, "
     select += "round(MIN(mix_usable_square_meters),1) as min_usable_square_m2, "
     select += "round(MAX(mix_usable_square_meters),1)  as max_usable_square_m2, "
     select += "round(AVG(mix_usable_square_meters),1) as avg_usable_square_m2, "
