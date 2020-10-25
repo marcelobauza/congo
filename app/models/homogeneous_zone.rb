@@ -1,0 +1,2 @@
+class HomogeneousZone < ApplicationRecord
+end
