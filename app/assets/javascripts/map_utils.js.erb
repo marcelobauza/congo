@@ -587,6 +587,7 @@ Congo.map_utils = function(){
               coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
             })
           });
+
           env = "polygon: Polygon(("+coord_geoserver+"))";
           cql_filter = "1=1" ;
           if (census_source_id == '1'){
@@ -616,7 +617,7 @@ Congo.map_utils = function(){
             var radius = radius;
             var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
             var circle = turf.circle(center, radius, options);
-            var pol = circle['geometry']['coordinates'];
+              var pol = circle['geometry']['coordinates'];
             $.each(pol, function(a, b){
               $.each(b, function(c,d){
                 coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
@@ -669,6 +670,7 @@ Congo.map_utils = function(){
             layer_type = 'demography_info_census_2012'
           }
 
+console.log(coord_geoserver);
             env = "polygon: Polygon(("+coord_geoserver+"))";
           }else{
             cql_filter ="WITHIN(the_geom,  Polygon(("+coord_geoserver+"))) "+ filter_layer;
@@ -687,9 +689,32 @@ Congo.map_utils = function(){
 
             layer_type = 'demography_info_census_2012'
           }
-          Congo.dashboards.config.style_layer = 'census_voronoi_gse_zn';
+          var geo;
+      $.ajax({
+        async: false,
+        type: 'get',
+        data: { county_id: county_id},
+        url: '/admin/counties/search_geojson.json',
+        datatype: 'json',
+        success: function(data){
+          geo = JSON.parse(data['geo'])
         }
-        cql_filter = "county_id='"+ county_id + "'"+   filter_layer;
+      })
+          var options = {tolerance: 0.01, highQuality: false};
+          var simplified = turf.simplify(geo, options);
+        $.each(simplified['coordinates'][0], function(a, b){
+          $.each(b, function(c,d){
+            coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
+          })
+        });
+
+console.log(coord_geoserver);
+          env = "polygon: Polygon(("+coord_geoserver+"))";
+          Congo.dashboards.config.style_layer = 'census_voronoi_clip';
+          cql_filter = filter_layer;
+        }else{
+          cql_filter = "county_id='"+ county_id + "'"+   filter_layer;
+        }
         cql_filter_pois = "county_id='"+ county_id + "'";
         break;
       default:
@@ -751,7 +776,7 @@ Congo.map_utils = function(){
     sourceLots = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_lots);
     layerControl.addOverlay(sourceLots, "Plancheta Predial");
 
-    if(county_id != ''){
+   if(county_id != undefined && (county_id != '' || county_id.length > 0 )){
       search_county(county_id);
     }
 
@@ -881,7 +906,7 @@ Congo.map_utils = function(){
 
   function countiesEnabled(){
     var va = document.querySelector('#downloads');
-    Congo.dashboards.config.user_id= va.dataset.uid
+     Congo.dashboards.config.user_id= va.dataset.uid
     user_id = Congo.dashboards.config.user_id;
       var owsrootUrl = "http://"+url+":8080/geoserver/ows";
       var defaultParameters = {
@@ -932,3 +957,23 @@ var incitiIcon = L.icon({
     draw_geometry: draw_geometry
   }
 }();
+
+function polygon_county(county_id){
+
+  var county_id = county_id[0];
+
+  $.ajax({
+    async: false,
+    type: 'get',
+    data: { county_id: county_id},
+    url: '/admin/counties/search_geojson.json',
+    datatype: 'json',
+    success: function(data){
+      geo = JSON.parse(data['geo'])
+    },
+    error: function (jqxhr, textstatus, errorthrown) { console.log("algo malo paso"); }
+  })
+
+}
+
+

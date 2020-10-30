@@ -155,9 +155,4 @@ def get_pxq_d
       result = Util.execute(select)
         result[0]['pxq_d'].to_f
 end
-
-  def self.get_last_period
-    period = ProjectInstance.select(:year, :bimester).
-      order(year: :desc, bimester: :desc).first
-  end
 end
