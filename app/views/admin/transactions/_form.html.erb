@@ -1,6 +1,6 @@
 <script charset="utf-8">
   <%if !@transaction.the_geom.nil?  %>
-     Congo.admin_transactions.config.latitude.push(<%= @transaction.the_geom.y %>);
+ Congo.admin_transactions.config.latitude.push(<%= @transaction.the_geom.y %>);
      Congo.admin_transactions.config.longitude.push(<%= @transaction.the_geom.x %>);
   <% end %>
 </script>
@@ -20,13 +20,13 @@
       <div class="form-row">
         <div class="form-group col-md-2">
           <%= f.label :inscription_date %>
-            <%= f.date_field :inscription_date, {start_year: 2008, end_year: Date.today.year, use_month_numbers: true , class: 'form-control mx-1'} %>
+          <%= f.date_field :inscription_date, {start_year: 2008, end_year: Date.today.year, use_month_numbers: true , class: 'form-control mx-1'} %>
         </div>
-            <%= f.input :bimester, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'} %>
-            <%= f.input :year, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'} %>
-          <%= f.input :tome, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'}%>
-          <%= f.input :sheet, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'}%>
-          <%= f.input :number, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'} %>
+        <%= f.input :bimester, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'} %>
+        <%= f.input :year, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'} %>
+        <%= f.input :tome, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'}%>
+        <%= f.input :sheet, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'}%>
+        <%= f.input :number, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-2'} %>
       </div>
       <div class="form-row">
         <div class="form-group col-md-3">
@@ -72,8 +72,6 @@
         </div>
         <div class="form-group col-md-6">
           <div  id="admin_map" class="admin_map_transactions border rounded"></div>
-          <%= f.text_field :longitude %>
-          <%= f.text_field :latitude %>
         </div>
       </div>
 
