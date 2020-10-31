@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
 
 
+
   resources :expenses
   resources :expense_types
   resources :feedbacks
@@ -68,8 +69,7 @@ Rails.application.routes.draw do
   get 'downloads/projects_csv' => 'downloads#projects_csv'
   get 'pois/get_around_pois' => 'pois#get_around_pois'
   get 'building_regulations/building_regulation_download' => 'building_regulations#building_regulation_download'
-
-
+  get 'users/export_csv_downloads_by_company' => 'users#export_csv_downloads_by_company'
 
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
@@ -86,9 +86,11 @@ Rails.application.routes.draw do
     get 'transactions/generate_csv_sii' => 'transactions#generate_csv_sii'
     get 'periods/active_periods'
     get 'uf_conversions/calculate_uf' => 'uf_conversions#calculate_uf'
+    get 'counties/search_geojson' => 'counties#search_geojson'
     resources :agencies
     resources :periods
     resources :import_processes
+    resources :companies
     resources :county_ufs
     resources :future_projects
     resources :transactions

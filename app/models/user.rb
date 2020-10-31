@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :regions, through: :regions_users
   has_many :feedbacks
   has_many :downloads_users
+  belongs_to :company
   belongs_to :role
 
   validate :is_rut_valid

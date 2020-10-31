@@ -60,31 +60,6 @@ $(document).ready(function(){
   $('#building_regulations_floors').on('click', function(){
     Congo.dashboards.config.widget = 'building_regulations_floors';
   });
-
-
-  var va = document.querySelector('#downloads');
-  if (va){
-    Congo.dashboards.config.square_meters_download_projects = va.dataset.allowedAreaProjects
-    Congo.dashboards.config.meters_download_radius_projects = va.dataset.allowedRadiusProjects
-    Congo.dashboards.config.square_meters_download_radius_future_projects = va.dataset.allowedAreaFutureProjects
-    Congo.dashboards.config.meters_download_radius_future_projects = va.dataset.allowedRadiusFutureProjects
-    Congo.dashboards.config.square_meters_download_transactions = va.dataset.allowedAreaTransactions
-    Congo.dashboards.config.meters_download_radius_transactions = va.dataset.allowedRadiusTransactions
-    Congo.dashboards.config.layer_type = va.dataset.initialLayerName
-
-    layer_type = Congo.dashboards.config.layer_type;
-    switch(layer_type){
-      case 'future_projects_info':
-        Congo.dashboards.config.style_layer= 'future_projects_normal_point';
-        break;
-      case 'transactions_info':
-        Congo.dashboards.config.style_layer= 'poi_new';
-        break;
-      case 'projects_feature_info':
-        Congo.dashboards.config.style_layer= 'poi_new';
-        break;
-    }
-  }
 });
 
 Congo.namespace('dashboards.action_index');
@@ -176,11 +151,34 @@ Congo.dashboards.pois =function(){
     }) // Cierra ajax
 }
 
-
-
 Congo.dashboards.action_index = function() {
 
   init = function() {
+    var va = document.querySelector('#downloads');
+    var layer_type;
+
+    if (va){
+      Congo.dashboards.config.square_meters_download_projects = va.dataset.allowedAreaProjects
+      Congo.dashboards.config.meters_download_radius_projects = va.dataset.allowedRadiusProjects
+      Congo.dashboards.config.square_meters_download_future_projects = va.dataset.allowedAreaFutureProjects
+      Congo.dashboards.config.meters_download_radius_future_projects = va.dataset.allowedRadiusFutureProjects
+      Congo.dashboards.config.square_meters_download_transactions = va.dataset.allowedAreaTransactions
+      Congo.dashboards.config.meters_download_radius_transactions = va.dataset.allowedRadiusTransactions
+      Congo.dashboards.config.layer_type = va.dataset.initialLayerName
+
+      layer_type = Congo.dashboards.config.layer_type;
+      switch(layer_type){
+        case 'future_projects_info':
+          Congo.dashboards.config.style_layer= 'future_projects_normal_point';
+          break;
+        case 'transactions_info':
+          Congo.dashboards.config.style_layer= 'poi_new';
+          break;
+        case 'projects_feature_info':
+          Congo.dashboards.config.style_layer= 'poi_new';
+          break;
+      }
+    }
     // Aplica el boost si cumple con la condición
     $('#boost').on('click', function() {
       area = Congo.dashboards.config.area;
@@ -210,17 +208,7 @@ Congo.dashboards.action_index = function() {
         $('#alerts').append(alert);
       }
     })
-
-    $.ajax({
-      async: false,
-      type: 'GET',
-      url: '/dashboards/filter_period.json',
-      datatype: 'json',
-      success: function(data) {
-        Congo.dashboards.config.year = data['year'];
-        Congo.dashboards.config.bimester = data['bimester'];
-      }
-    });
+    Congo.dashboards.action_index.get_last_period();
     Congo.map_utils.init();
 
     $.ajax({
@@ -372,6 +360,21 @@ Congo.dashboards.action_index = function() {
     $('#alerts').append(alert);
   }
 
+  get_last_period = function() {
+    layer_type = Congo.dashboards.config.layer_type;
+    $.ajax({
+      async: false,
+      type: 'GET',
+      url: '/dashboards/filter_period.json',
+      data: {layer_type: layer_type},
+      datatype: 'json',
+      success: function(data) {
+        Congo.dashboards.config.year = data['year'];
+        Congo.dashboards.config.bimester = data['bimester'];
+      }
+    });
+}
+
   return {
     init: init,
     del_boost_filter: del_boost_filter,
@@ -379,8 +382,11 @@ Congo.dashboards.action_index = function() {
     empty_selection_alert: empty_selection_alert,
     add_county_filter_item: add_county_filter_item,
     add_time_slider: add_time_slider,
+    get_last_period: get_last_period
   }
 }();
+
+
 
 Congo.dashboards.action_graduated_points = function() {
 
@@ -389,5 +395,4 @@ Congo.dashboards.action_graduated_points = function() {
   return {
     init: init
   }
-
 }();

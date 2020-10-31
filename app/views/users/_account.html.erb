@@ -13,70 +13,97 @@
 
         <%= f.error_notification %>
         <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+        <div class="modal-body">
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              <%= f.label :name %>
+            </div>
+            <div class="col-md-7">
+              <%= f.input :name, label: false %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              <%= f.label :complete_name %>
+            </div>
+            <div class="col-md-7">
+              <%= f.input :complete_name, label: false %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              <%= f.label :email, "E-mail" %>
+            </div>
+            <div class="col-md-7">
+              <%= f.input :email, label: false %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              <%= f.label :company %>
+            </div>
+            <div class="col-md-7">
+              <%= f.input :company, label: false %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              <%= f.label :city %>
+            </div>
+            <div class="col-md-7">
+              <%= f.input :city, label: false %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              <%= f.label :password %>
+            </div>
+            <div class="col-md-7">
+              <%= f.password_field :password, autocomplete: "new-password", label: false %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              <%= f.label :password_confirmation, "Confirme Contraseña" %>
+            </div>
+            <div class="col-md-7">
+              <%= f.password_field :password_confirmation, autocomplete: "new-password", label: false %>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              Descargas Compraventas
+            </div>
+              <div class="col-md-7">
+                <span class="col-md-3"><%= accumulated_download_by_company(@user.id, 'transactions') %></span>
+                <span class="col-md-3"><%= current_user.company.transactions_downloads %></span>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              Descargas Expedientes
+            </div>
+              <div class="col-md-7">
+                <span class="col-md-3"><%= accumulated_download_by_company(@user.id, 'future_projects') %></span>
+                <span class="col-md-3"><%= current_user.company.future_projects_downloads %></span>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-5 text-right">
+              Descargas Proyectos
+            </div>
+              <div class="col-md-7">
+                <span class="col-md-3"><%= accumulated_download_by_company(@user.id, 'projects') %></span>
+                <span class="col-md-3"><%= current_user.company.projects_downloads %></span>
+            </div>
+          </div>
+          <div id="users_error"></div>
+        </div>
 
-      <div class="modal-body">
-        <div class="form-group row">
-          <div class="col-md-5 text-right">
-            <%= f.label :name %>
-          </div>
-          <div class="col-md-7">
-            <%= f.input :name, label: false %>
-          </div>
+        <div class="modal-footer">
+          <%= link_to "Exportar descargas", users_export_csv_downloads_by_company_path %>
+          <%= f.submit class: 'btn btn-primary', value: "Guardar" %>
         </div>
-        <div class="form-group row">
-          <div class="col-md-5 text-right">
-            <%= f.label :complete_name %>
-          </div>
-          <div class="col-md-7">
-            <%= f.input :complete_name, label: false %>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-md-5 text-right">
-            <%= f.label :email, "E-mail" %>
-          </div>
-          <div class="col-md-7">
-            <%= f.input :email, label: false %>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-md-5 text-right">
-            <%= f.label :company %>
-          </div>
-          <div class="col-md-7">
-            <%= f.input :company, label: false %>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-md-5 text-right">
-            <%= f.label :city %>
-          </div>
-          <div class="col-md-7">
-            <%= f.input :city, label: false %>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-md-5 text-right">
-            <%= f.label :password %>
-          </div>
-          <div class="col-md-7">
-            <%= f.password_field :password, autocomplete: "new-password", label: false %>
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-md-5 text-right">
-            <%= f.label :password_confirmation, "Confirme Contraseña" %>
-          </div>
-          <div class="col-md-7">
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", label: false %>
-          </div>
-        </div>
-        <div id="users_error"></div>
-      </div>
-
-      <div class="modal-footer">
-        <%= f.submit class: 'btn btn-primary', value: "Guardar" %>
-      </div>
 
       <% end %>
 

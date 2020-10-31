@@ -5,7 +5,7 @@ if @message
     sheet.add_row ['Ha superado el limite máximo de Descargas']
   end
 else
-  if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin')
+  if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'IPRO+ Plus') || (current_user.role.name == 'Admin')
     wb = xlsx_package.workbook
     forced_integer_format = wb.styles.add_style :format_code => '0'
     forced_float_format = wb.styles.add_style :format_code => '0.0'

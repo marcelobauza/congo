@@ -5,16 +5,17 @@ class Project < ApplicationRecord
   include Util
   include Ranges
   include Projects::Exports
+  include Projects::Scopes
 
   has_many :project_instances, :dependent => :destroy
   has_many :project_instance_mixes, :through => :project_instances
   has_many :project_statuses, :through => :project_instances
-  belongs_to :project_type
   has_many :agency_rols
   has_many :agencies, :through => :agency_rols
-
   belongs_to :project_type
   belongs_to :county
+
+  accepts_nested_attributes_for :project_instances, :project_instance_mixes
 
   delegate :name, :to => :county, :prefix => true, :allow_nil => true
   delegate :name, :to => :get_agency, :prefix => true, :allow_nil => true
@@ -24,7 +25,7 @@ class Project < ApplicationRecord
   delegate :name, :to => :get_seller, :prefix => true, :allow_nil => true
   delegate :id, :to => :get_seller, :prefix => true, :allow_nil => true
 
-  accepts_nested_attributes_for :project_instances, :project_instance_mixes
+
 
   attr_accessor :latitude, :longitude
 
@@ -129,76 +130,6 @@ class Project < ApplicationRecord
 
   def get_seller
     get_agency_by_rol(Agency::ROL[:seller])
-  end
-
-  def self.find_index(project_type, bimester, county, year, search)
-
-    select = " project_instances.project_id ,"
-    select += " projects.project_type_id,"
-    select += " bimester,"
-    select += " year,"
-    select += " code,"
-    select += " projects.name,"
-    select += " county_id, "
-    if !search.blank?
-      letter =  search.at(6)
-      letter = letter.delete('"')
-      if letter == 'C'
-        project_type = "1"
-      else
-        project_type = "2"
-      end
-    end
-    if ( project_type == "1")
-
-      select += " min((t_min + t_max) /2)   as ps_terreno_min, "
-      select += " max((t_min + t_max)/2 ) as ps_terreno_max, "
-      select += " min(round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) AS uf_m2_ut_min, "
-      select += " max(round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) AS uf_m2_ut_max, "
-      select += " round(sum((mix_usable_square_meters * total_units) * round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + ((t_min + t_max)/2) * 0.25)::numeric,1)) / sum(mix_usable_square_meters * total_units), 1) as pp_UFm2ut,"
-    else
-      select += " projects.floors,"
-      select += " min(mix_terrace_square_meters) as min_terrazas,"
-      select += " max(mix_terrace_square_meters) as max_terrazas,"
-      select += " min(round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + mix_terrace_square_meters * 0.5),1)) AS uf_m2_min,"
-      select += " max(round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + mix_terrace_square_meters * 0.5),1)) AS uf_m2_max,"
-      select += " round(sum((mix_usable_square_meters * total_units) * round((uf_min * (1::numeric - percentage / 100::numeric) + uf_max * (1::numeric - percentage / 100::numeric)) / 2::numeric / (mix_usable_square_meters + mix_terrace_square_meters * 0.5),1)) / sum(mix_usable_square_meters * total_units), 1)  as pp_UFm2ut,"
-
-      select += " round((sum(mix_usable_square_meters * total_units) / sum(total_units))::numeric, 1)  as pp_utiles,"
-      select += " round(sum(mix_terrace_square_meters * total_units) / sum(total_units), 1)  as pp_terrazas,"
-
-    end
-
-    select += " min(mix_usable_square_meters) as Min_utiles,"
-    select += " max(mix_usable_square_meters) as Max_utiles,"
-    #select += " count(project_mixes.bedroom) as bedroom,"
-    select += " sum(discount) as discount,"
-    select += " (select min(uf_min) from project_instance_mixes where project_instance_id = project_instances.id) as uf_min_percent,"
-    select += " (select max(uf_min) from project_instance_mixes where project_instance_id = project_instances.id) as uf_max_percent,"
-    select += " round(pp_uf(project_instances.id)::numeric,0) AS pp_uf,"
-    select += " sum(total_units) as total_units,"
-    select += " sum(stock_units)  as stock_units,"
-    select += " sum(total_units - stock_units) AS sold_units,"
-    select += " sum(round((vhmu(total_units, stock_units,cadastre, projects.sale_date)::numeric),1)) AS vhmu,"
-    select += " round(sum(total_units - stock_units) / sum(total_units::numeric) * 100,1)  as percentage_sold,"
-    select += " sum(round(masd(project_instances.id)::numeric,1)) as vhmud,"
-    select += " round(pxq(project_instances.id)::numeric, 1) AS pxq,"
-    select += " round((vhmd(project_instances.id) * pp_uf_dis(project_instances.id) / 1000::double precision)::numeric,1) AS pxq_d,"
-    select += " project_statuses.name as status"
-
-    conditions = " 1 = 1"
-    conditions += " and projects.project_type_id = #{project_type}" if !project_type.empty?
-    conditions += " and bimester = #{bimester } " if !bimester.empty?
-    conditions += " and county_id = #{county} " if !county.empty?
-    conditions += " and year = #{year} " if !year.empty?
-    conditions += " and code = '#{search}'"  if !search.empty?
-    groups = "project_instances.project_id, bimester, year, code, projects.name,  floors,  uf_min_percent, uf_max_percent, pp_uf,  pxq, status, pxq_d, project_type_id, projects.county_id"
-
-      Project.joins(:project_type, project_instances:[:project_status, :project_instance_mixes]).
-      where(conditions).
-      select(select).
-      group(groups).
-      order(:year, :bimester)
   end
 
   def self.find_globals(filters, range)

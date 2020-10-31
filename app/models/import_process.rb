@@ -15,25 +15,15 @@ class ImportProcess < ApplicationRecord
     import_logger = Ibiza::ImportLogger.new(import_process)
     import_process.update_attributes status: 'working'
     ActiveRecord::Base.transaction do
-      if load_type = 'Building Regulation'
+      if load_type == 'Building Regulation' || load_type == 'Lot'
         shps, dir_path = Util::get_geojson_files_from_zip(self.file_path)
       else
         shps, dir_path = Util::get_shape_files_from_zip(self.file_path)
       end
-
       dir = []
       shps.each do |shp|
         begin
-          if load_type == 'Project_Fulcrum'
-            dir << shp
-            if dir.count % 2 == 0
-              #parse_shp(dir, load_type, import_logger)
-            else
-              next
-            end
-          else
-            parse_shp(shp, load_type, import_logger)
-          end
+          parse_shp(shp, load_type, import_logger)
 
           if import_logger.details.any?
             import_logger.inserted = 0
@@ -70,12 +60,6 @@ class ImportProcess < ApplicationRecord
       parse_projects(shp_file, "Casas", import_logger)
     when "Future Projects"
       parse_future_projects(shp_file, import_logger)
-    when "Offices"
-      parse_office_project(shp_file, "OFFICES_PROJECT_SUB_TYPE", import_logger)
-    when "Cellars"
-      parse_cellar_project(shp_file, "CELLARS_PROJECT_SUB_TYPE", import_logger)
-    when "Strip Centers"
-      parse_strip_center_project(shp_file, "STRIP_CENTERS_PROJECT_SUB_TYPE", import_logger)
     when "Lot"
       parse_lots(shp_file, import_logger)
     when "POI"
@@ -90,32 +74,37 @@ class ImportProcess < ApplicationRecord
 
     st1 = JSON.parse(File.read(shp_file))
     json_data = RGeo::GeoJSON.decode(st1, :json_parser => :json)
-        json_data.each_with_index do |a, index|
-        import_logger.current_row_index =index
+    json_data.each_with_index do |a, index|
+      import_logger.current_row_index =index
 
-         if a.geometry.nil?
-           import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
-           next
-         end
-         unless a.geometry.geometry_type.to_s == 'MultiPolygon'
-           import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
-           next
-         end
-        geom = a.geometry.as_text
-        da = a.properties
-        data = {}
-        da.each do |a| data[a[0].downcase] = a[1] end
-        building = BuildingRegulation.find_or_initialize_by(identifier: data["id"])
-        building.new_record? ? import_logger.inserted +=1 : import_logger.updated += 1
-        building.save_building_regulation_data(geom, data)
+      if a.geometry.nil?
+        import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+        next
+      end
+      unless a.geometry.geometry_type.to_s == 'MultiPolygon' || a.geometry.geometry_type.to_s == 'Polygon'
+        import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+        next
+      end
 
-        if building.errors.any?
-          building.errors.full_messages.each do |error_message|
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
-          end
+      unless a.geometry.valid?
+        import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+        next
+      end
+      geom = a.geometry.as_text
+      da = a.properties
+      data = {}
+      da.each do |a| data[a[0].downcase] = a[1] end
+      building = BuildingRegulation.find_or_initialize_by(identifier: data["id"])
+      building.new_record? ? import_logger.inserted +=1 : import_logger.updated += 1
+      building.save_building_regulation_data(geom, data)
+
+      if building.errors.any?
+        building.errors.full_messages.each do |error_message|
+          import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
         end
       end
- end
+    end
+  end
 
   def parse_transactions(shp_file, import_logger)
     RGeo::Shapefile::Reader.open(shp_file) do |shp|
@@ -191,7 +180,7 @@ class ImportProcess < ApplicationRecord
         geom = shape.geometry
         data = shape.attributes
         unless data["DORMS_T"].to_i == 0 or data["BANOS_T"].to_i == 0
-          mix = ProjectMix.find_or_create_by(bedroom: data["DORMS_T"].to_f,  bathroom: data["BANOS_T"].round, mix_type:"#{data["DORMS_T"].to_f}d#{data["BANOS_T"].round}b")
+          mix = ProjectMix.find_or_create_by(bedroom: data["DORMS_T"].to_f,  bathroom: data["BANOS_T"].to_i, mix_type:"#{data["DORMS_T"].to_f}d#{data["BANOS_T"].to_i}b")
           if mix.nil?
             import_logger.failed += 1
             mix.errors.full_messages.each do |error_message|
@@ -281,12 +270,12 @@ class ImportProcess < ApplicationRecord
       field = []
       shp.each do |shape|
         if shape.index == 0
-        shape.keys.each do |f|
-          field.push(f)
-        end
+          shape.keys.each do |f|
+            field.push(f)
+          end
         end
 
-      verify_attributes(field, "Future Projects")
+        verify_attributes(field, "Future Projects")
 
         import_logger.current_row_index = shape.index
         import_logger.processed += 1
@@ -295,10 +284,6 @@ class ImportProcess < ApplicationRecord
           import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
           next
         end
-      #  unless shape.geometry.is_a? Point
-      #    import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-      #    next
-      #  end
 
         geom = shape.geometry
         data = shape.attributes
@@ -328,169 +313,38 @@ class ImportProcess < ApplicationRecord
     end
   end
 
-  def parse_cellar_project(shp_file, commercial_type, import_logger)
-    ShpFile.open(shp_file) do |shp|
-      verify_attributes(shp, commercial_type)
-
-      shp.each_with_index do |shape, i|
-        import_logger.current_row_index = i + 1
-        import_logger.processed += 1
-
-        if shape.geometry.nil?
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-          next
-        end
-
-        unless shape.geometry.is_a? Point
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-          next
-        end
-
-        geom = shape.geometry
-        geom.srid = 4326
-
-        cellar = CommercialCellar.find_or_initialize_by_code_and_year_and_bimester(shape.data["COD_PROY"], shape.data["YEAR"], shape.data["BIMESTRE"])
-        cellar.new_record? ? was_new = true : was_new = false
-
-        if cellar.save_cellar_data(shape.data, geom)
-          if was_new
-            import_logger.inserted += 1
-          else
-            import_logger.updated += 1
-          end
-        else
-          import_logger.failed += 1
-          fut_proj.errors.full_messages.each do |error_message|
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
-          end
-        end
-      end
-    end
-  end
-
-  def parse_office_project(shp_file, commercial_type, import_logger)
-    ShpFile.open(shp_file) do |shp|
-      verify_attributes(shp, commercial_type)
-
-      shp.each_with_index do |shape, i|
-        import_logger.current_row_index = i + 1
-        import_logger.processed += 1
-        was_new = nil
-
-        if shape.geometry.nil?
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-          next
-        end
-
-        unless shape.geometry.is_a? Point
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-          next
-        end
-
-        geom = shape.geometry
-        geom.srid = 4326
-
-        office = CommercialOffice.find_or_initialize_by_code_and_year_and_bimester(shape.data["COD_PROY"], shape.data["YEAR"], shape.data["BIMESTRE"])
-        office.new_record? ? was_new = true : was_new = false
-
-        if office.save_office_data(shape.data, geom)
-          was_new ? import_logger.inserted += 1 : import_logger.updated += 1
-        else
-          import_logger.failed += 1
-          office.errors.full_messages.each do |error_message|
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
-          end
-        end
-      end
-    end
-  end
-
-  def parse_strip_center_project(shp_file, commercial_type, import_logger)
-    ShpFile.open(shp_file) do |shp|
-      verify_attributes(shp, commercial_type)
-
-      was_new = true
-
-      strip_center = nil
-      shp.each_with_index do |shape, i|
-
-        import_logger.current_row_index = i + 1
-        import_logger.processed += 1
-
-        if shape.geometry.nil?
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-          next
-        end
-
-        unless shape.geometry.is_a? Point
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-          next
-        end
-
-        geom = shape.geometry
-        geom.srid = 4326
-        data = shape.data
-
-        if strip_center.nil?
-          strip_center = CommercialStrip.find_or_initialize_by_code_and_year_and_bimester(data["COD_PROY"], data["YEAR"], data["BIMESTRE"])
-          strip_center.new_record? ? was_new = true : was_new = false
-          Shop.delete_all("commercial_strip_id = #{strip_center.id}") if was_new == false
-        end
-
-        shop = Shop.new
-        shop.fill_data(data)
-        strip_center.shops << shop
-
-        if data["FILTRO"] == 1
-          if strip_center.save_strip_center_data(data, geom)
-            if was_new
-              import_logger.inserted += 1
-            else
-              import_logger.updated += 1
-            end
-          else
-            import_logger.failed += 1
-            fut_proj.errors.full_messages.each do |error_message|
-              import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
-            end
-          end
-          strip_center = nil
-        end
-      end
-    end
-  end
-
   def parse_lots(shp_file, import_logger)
-    ShpFile.open(shp_file) do |shp|
-      verify_attributes(shp, "LOTS")
+    st1 = JSON.parse(File.read(shp_file))
+    json_data = RGeo::GeoJSON.decode(st1, :json_parser => :json)
+    json_data.each_with_index do |a, index|
+      import_logger.current_row_index =index
 
-      shp.each_with_index do |shape, i|
+      if a.geometry.nil?
+        import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+        next
+      end
+      unless a.geometry.geometry_type.to_s == 'MultiPolygon' || a.geometry.geometry_type.to_s == 'Polygon'
+        import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+        next
+      end
 
-        import_logger.current_row_index = i + 1
-        import_logger.processed += 1
-
-        if shape.geometry.nil?
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
-          next
-        end
-
-        unless shape.geometry.is_a? MultiPolygon
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
-          next
-        end
-
-        geom = shape.geometry
-        geom.srid = 4326
-        data = shape.data
-
-        county = County.find_by_code(data['ID_COMUNA'].to_s)
+      unless a.geometry.valid?
+        import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+        next
+      end
+      geom = a.geometry.as_text
+      da = a.properties
+      data = {}
+      da.each do |a| data[a[0].downcase] = a[1] end
+      puts data['lot_id']
+        county = County.find_by_code(data['county_id'].to_s)
         if county.nil?
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => "No encuentro la comuna con codigo #{data['ID_COMUNA'].to_s}" }
+          import_logger.details << { :row_index => import_logger.current_row_index, :message => "No encuentro la comuna con codigo #{data['county_id'].to_s}" }
           next
         end
 
-        lot = Lot.find_or_initialize_by_county_id_and_identifier(county.id, data['ID_PREDIO'].to_s)
-        lot.surface = data["SUP_m"]
+        lot = Lot.find_or_initialize_by(county_id: county.id, identifier: data['lot_id'].to_s)
+        lot.surface = data["surface"]
         lot.the_geom = geom
 
         if lot.save
@@ -501,33 +355,22 @@ class ImportProcess < ApplicationRecord
             import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
           end
         end
-
       end
     end
-  end
 
   def parse_pois(shp_file, import_logger)
-    ic = Iconv.new('UTF-8', 'ISO-8859-1')
-
-    ShpFile.open(shp_file) do |shp|
+    RGeo::Shapefile::Reader.open(shp_file) do |shp|
       shp.each do |shape|
-
         if shape.geometry.nil?
           import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
           next
         end
 
-        unless shape.geometry.is_a? Point
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
-          next
-        end
+        geom    = shape.geometry
+        data    = shape.attributes
+        sub_cat = PoiSubcategory.find_or_create_by(name: data["TIPO_POIS"])
 
-        geom = shape.geometry
-        geom.srid = 4326
-        data = shape.data
-
-        sub_cat = PoiSubcategory.find_or_create_by_name(data["TIPO_POIS"])
-        if Poi.create(:name => ic.iconv(data["NOMBRE"]), :poi_subcategory_id => sub_cat.id, :the_geom => geom)
+        if Poi.create(name: data["NOMBRE"], poi_subcategory_id: sub_cat.id, the_geom: geom)
           import_logger.inserted += 1
         else
           import_logger.failed += 1
@@ -576,21 +419,20 @@ class ImportProcess < ApplicationRecord
 
     case load_type
     when "Building Regulation"
-       attributes << [ "URL", "C" ]
-       attributes << [ "Zona", "C" ]
-       attributes << [ "Usos", "C" ]
-       attributes << [ "Nota", "C" ]
-       attributes << [ "IC", "C" ]
-       attributes << [ "OS", "C" ]
-       attributes << [ "Habha", "N" ]
-       attributes << [ "AltMax", "N" ]
-       attributes << [ "Agrupamien", "C" ]
+      attributes << [ "URL", "C" ]
+      attributes << [ "Zona", "C" ]
+      attributes << [ "Usos", "C" ]
+      attributes << [ "Nota", "C" ]
+      attributes << [ "IC", "C" ]
+      attributes << [ "OS", "C" ]
+      attributes << [ "Habha", "N" ]
+      attributes << [ "AltMax", "N" ]
+      attributes << [ "Agrupamien", "C" ]
       attributes << [ "Estacionam", "C" ]
-    attributes << [ "AM_CC", "C" ]
-    attributes << [ "FuenteFech", "N" ]
-    attributes << [ "COD_COM", "C" ]
-    attributes << [ "id", "C" ]
-
+      attributes << [ "AM_CC", "C" ]
+      attributes << [ "FuenteFech", "N" ]
+      attributes << [ "COD_COM", "C" ]
+      attributes << [ "id", "C" ]
     when "Transactions"
       attributes << [ "PROPERTY_T", "C" ]
       attributes << [ "SELLER_TYP", "C" ]
@@ -670,142 +512,18 @@ class ImportProcess < ApplicationRecord
       attributes << [ "BIM", "C" ]
       attributes << [ "YEAR", "N" ]
       attributes << [ "OBSERVACIO", "C" ]
-    when "OFFICES_PROJECT_SUB_TYPE"
-      attributes << [ "TIPO", "C" ]
-      attributes << [ "COD_PROY", "C" ]
-      attributes << [ "NOMBRE", "C" ]
-      attributes << [ "DIRECCION", "C" ]
-      attributes << [ "INMOB", "C" ]
-      attributes << [ "P_S_N_I_PB", "N" ]
-      attributes << [ "SUBT", "N" ]
-      attributes << [ "CLASE", "C" ]
-      attributes << [ "OFICINAS_P", "N" ]
-      attributes << [ "COMERCIO_P", "N" ]
-      attributes << [ "RESIDENT_P", "N" ]
-      attributes << [ "EQUIPAM_P", "N" ]
-      attributes << [ "MECANICO_P", "N" ]
-      attributes << [ "EST_P", "N" ]
-      attributes << [ "OFICINAS_U", "N" ]
-      attributes << [ "LOCCOM_U", "N" ]
-      attributes << [ "BODEGAS_U", "N" ]
-      attributes << [ "EST_U", "N" ]
-      attributes << [ "ASCENS_U", "N" ]
-      attributes << [ "OFICINAS_M", "N" ]
-      attributes << [ "COMERCIO_M", "N" ]
-      attributes << [ "EQUIPAM_M", "N" ]
-      attributes << [ "EST_M", "N" ]
-      attributes << [ "MAQUINAS_M", "N" ]
-      attributes << [ "OTRO_M", "N" ]
-      attributes << [ "M2_E_TOT", "N" ]
-      attributes << [ "M2_T_TOT", "N" ]
-      attributes << [ "SUP_OF_MIN", "N" ]
-      attributes << [ "SUP_OF_MAX", "N" ]
-      attributes << [ "SUPPROMM2", "N" ]
-      attributes << [ "T_UN_OF_V", "N" ]
-      attributes << [ "TUN_OF_D_V", "N" ]
-      attributes << [ "T_UN_OF_VE", "N" ]
-      attributes << [ "vufm2_minv", "N" ]
-      attributes << [ "vufm2_maxv", "N" ]
-      attributes << [ "P_UFM2_V", "N" ]
-      attributes << [ "PPTST_DISV", "N" ]
-      attributes << [ "MES_VENT", "N" ]
-      attributes << [ "S_T_OF_V", "N" ]
-      attributes << [ "S_D_OF_V", "N" ]
-      attributes << [ "SUP_V_OF", "N" ]
-      attributes << [ "SUPVMHOF", "N" ]
-      attributes << [ "PABTH_STOV", "N" ]
-      attributes << [ "PPTAMH_STO", "N" ]
-      attributes << [ "T_UN_OF_A", "N" ]
-      attributes << [ "TUN_OF_D_A", "N" ]
-      attributes << [ "T_UN_OF_AR", "N" ]
-      attributes << [ "vufm2_mina", "N" ]
-      attributes << [ "vufm2_maxa", "N" ]
-      attributes << [ "P_UFM2_A", "N" ]
-      attributes << [ "PPTST_DISA", "N" ]
-      attributes << [ "MES_ARR", "N" ]
-      attributes << [ "S_T_OF_A", "N" ]
-      attributes << [ "S_D_OF_A", "N" ]
-      attributes << [ "SUP_A_OF", "N" ]
-      attributes << [ "SUPAMHOF", "N" ]
-      attributes << [ "SUPOTHOF", "N" ]
-      attributes << [ "PPT0MH_STO", "N" ]
-      attributes << [ "ESTADO", "C" ]
-      attributes << [ "IN_CONST", "C" ]
-      attributes << [ "IN_VENT", "C" ]
-      attributes << [ "IN_ARR", "C" ]
-      attributes << [ "E_IN_D_ES_", "C" ]
-      attributes << [ "F_CAT_PROY", "C" ]
-      attributes << [ "BIMESTRE", "N" ]
-      attributes << [ "YEAR", "N" ]
-    when "CELLARS_PROJECT_SUB_TYPE"
-      attributes << [ "COD_PROY", "C" ]
-      attributes << [ "NOMBRE", "C" ]
-      attributes << [ "PROPIET_", "C" ]
-      attributes << [ "DIRECCION", "C" ]
-      attributes << [ "LOTEO", "C" ]
-      attributes << [ "SUP_T_OF_C", "N" ]
-      attributes << [ "S_T_B_C_AR", "N" ]
-      attributes << [ "S_T_B_D_AR", "N" ]
-      attributes << [ "UF_M2_ARR", "N" ]
-      attributes << [ "VALOR_G_C", "N" ]
-      attributes << [ "VAC_B", "N" ]
-      attributes << [ "S_MIN_ARR", "N" ]
-      attributes << [ "S_MAX_ARR", "N" ]
-      attributes << [ "ALT_HOMB", "N" ]
-      attributes << [ "ALT_CUMB", "N" ]
-      attributes << [ "COD_COMUNA", "C" ]
-      attributes << [ "TIPO_B", "C" ]
-      attributes << [ "ZONA", "C" ]
-      attributes << [ "OPERADOR", "C" ]
-      attributes << [ "MAT_MUROS", "C" ]
-      attributes << [ "MAT_MUROS", "C" ]
-      attributes << [ "MAT_PISO", "C" ]
-      attributes << [ "MAT_TECHOS", "C" ]
-      attributes << [ "SIST_D_S", "C" ]
-      attributes << [ "AND_O_MULL", "C" ]
-      attributes << [ "F_CAT_PROY", "C" ]
-      attributes << [ "YEAR", "N" ]
-      attributes << [ "BIMESTRE", "C" ]
-    when "STRIP_CENTERS_PROJECT_SUB_TYPE"
-      attributes << [ "COD_PROY", "C" ]
-      attributes << [ "NOMBRE", "C" ]
-      attributes << [ "DIRECCION", "C" ]
-      attributes << [ "COD_COMUNA", "N" ]
-      attributes << [ "OPERADOR", "C" ]
-      attributes << [ "EMPLAZAM", "C" ]
-      attributes << [ "N_PISOS", "N" ]
-      attributes << [ "SUP_T", "N" ]
-      attributes << [ "SUP_T_DISP", "N" ]
-      attributes << [ "PTVAC_MOD", "N" ]
-      attributes << [ "N_T_LOC", "N" ]
-      attributes << [ "CANT_T_M", "N" ]
-      attributes << [ "N_T_EST", "N" ]
-      attributes << [ "N_LOC_D_V", "N" ]
-      attributes << [ "VAL_UF_ARR", "N" ]
-      attributes << [ "UFM2_ARR", "N" ]
-      attributes << [ "F_EN_PROY", "C" ]
-      attributes << [ "F_CAT_PROY", "C" ]
-      attributes << [ "TIPO_LOC", "C" ]
-      attributes << [ "R_LOC", "C" ]
-      attributes << [ "CANT_LOC_R", "N" ]
-      attributes << [ "NOMB_LOC", "C" ]
-      attributes << [ "PTOC_LOC_R", "N" ]
-      attributes << [ "SUPTLOC_O", "N" ]
-      attributes << [ "YEAR", "N" ]
-      attributes << [ "BIMESTRE", "C" ]
     when "LOTS"
       attributes << [ "ID_COMUNA", "N" ]
       attributes << [ "SUP_M", "N" ]
     end
 
-      attributes.each do |attr|
+    attributes.each do |attr|
       finded = false
       value = field.include? attr[0]
-      p value
       if value
         finded = true
       end
       raise I18n.translate(:ERROR_STRUCTURE_FILE) + " " + attr[0] unless finded
-      end
     end
+  end
   end

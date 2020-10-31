@@ -152,7 +152,7 @@ class BuildingRegulation < ApplicationRecord
     self.icinciti = data["icinciti"]
     self.osinciti = data["osinciti"]
 
-    if self.save
+    if self.save!
       save_land_use_types(data["usos"], self.id)
       County.update(county.id, :legislation_data => true) unless county.nil?
       return true

@@ -15,10 +15,37 @@
     </div>
   </div>
 </div>
-<% if !@projects.blank? %>
-  <% if params['project_type_id']  == '2' || @projects[0].project_type_id == 2  %>
-    <%=render :partial => 'department'  %>
-  <% else %>
-    <%=render :partial => 'home'  %>
-  <% end %>
+<% if @projects.present? %>
+  <div class="card shadow">
+    <div class="card-body">
+      <%= will_paginate @projects %>
+      <table class="table table-striped table-hover table-bordered">
+
+        <thead>
+          <tr>
+            <th>Codigo</th>
+            <th>Bimestre</th>
+            <th>Año</th>
+            <th>Nombre</th>
+            <th>Comuna</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @projects.each do |project| %>
+            <% project.project_instances.each do |pi| %>
+              <tr>
+                <td><%= project.code %></td>
+
+                <td><%= pi.bimester %></td>
+                <td><%= pi.year %></td>
+
+                <td><%= link_to project.name, edit_admin_project_path(project.id) %></td>
+                <td><%= project.county.name %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 <% end %>

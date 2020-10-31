@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @company.name %>
+</p>
+
+<p>
+  <strong>Projects downloads:</strong>
+  <%= @company.projects_downloads %>
+</p>
+
+<p>
+  <strong>Transactions downloads:</strong>
+  <%= @company.transactions_downloads %>
+</p>
+
+<p>
+  <strong>Future projects downloads:</strong>
+  <%= @company.future_projects_downloads %>
+</p>
+
+<%= link_to 'Edit', edit_admin_company_path(@company) %> |
+<%= link_to 'Back', admin_companies_path %>

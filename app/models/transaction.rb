@@ -15,7 +15,7 @@ class Transaction < ApplicationRecord
 
   attr_accessor :latitude, :longitude
 
-  before_validation :build_geom
+
   before_save :update_calculated_value, :titleize_attributes
   before_save :pm2
 
@@ -226,9 +226,9 @@ class Transaction < ApplicationRecord
   end
 
   def self.get_last_period
-    period = Transaction.where(active: true).select(:year, :bimester).order("year DESC, bimester DESC").first
-    return nil if period.nil?
-    return Period.get_periods(period.bimester, period.year, BIMESTER_QUANTITY, 1)
+    period = Transaction.select(:year, :bimester).
+      where(active: 'true').
+      order(year: :desc, bimester: :desc).first
   end
 
   def self.get_first_period_with_transactions
@@ -770,10 +770,6 @@ class Transaction < ApplicationRecord
     end
 
     return true
-  end
-
-  def build_geom
-    self.the_geom = "POINT(#{self.longitude.to_f} #{self.latitude.to_f})" if self.latitude and self.longitude
   end
 
   def self.build_ids_conditions(filters, self_not_filter=nil)

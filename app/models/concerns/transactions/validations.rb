@@ -2,6 +2,9 @@ module Transactions::Validations
   extend ActiveSupport::Concern
 
   included do
+
+    before_validation :build_geom
+
     validates :address,
       :county_id,
       :property_type_id,
@@ -32,5 +35,9 @@ module Transactions::Validations
 
   def is_rut_valid
     Util.is_rut_valid?(self, :buyer_rut, true)
+  end
+
+  def build_geom
+    self.the_geom = "POINT(#{self.longitude.to_f} #{self.latitude.to_f})" if self.latitude and self.longitude
   end
 end
