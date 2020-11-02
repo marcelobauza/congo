@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_10_131202) do
+ActiveRecord::Schema.define(version: 2020_10_31_232429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -160,6 +160,8 @@ ActiveRecord::Schema.define(version: 2020_10_10_131202) do
     t.integer "future_projects_downloads", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "enabled", default: true
+    t.date "enabled_date"
   end
 
   create_table "counties", force: :cascade do |t|
@@ -302,6 +304,47 @@ ActiveRecord::Schema.define(version: 2020_10_10_131202) do
     t.index ["future_project_sub_type_id"], name: "index_future_projects_on_future_project_sub_type_id"
     t.index ["future_project_type_id"], name: "index_future_projects_on_future_project_type_id"
     t.index ["project_type_id"], name: "index_future_projects_on_project_type_id"
+  end
+
+  create_table "homogeneous_zones", force: :cascade do |t|
+    t.integer "objectid", default: 0, null: false
+    t.integer "cnt_cod_zc", default: 0, null: false
+    t.integer "sum_house_p", default: 0, null: false
+    t.integer "sum_house_a", default: 0, null: false
+    t.integer "sum_house_o", default: 0, null: false
+    t.integer "sum_other_p", default: 0, null: false
+    t.integer "sum_other_o", default: 0, null: false
+    t.integer "total_population", default: 0, null: false
+    t.integer "total17", default: 0, null: false
+    t.integer "sum_dept_p", default: 0, null: false
+    t.integer "sum_dept_a", default: 0, null: false
+    t.integer "sum_dept_o", default: 0, null: false
+    t.integer "sum_other_a", default: 0, null: false
+    t.integer "total12", default: 0, null: false
+    t.integer "mp250", default: 0, null: false
+    t.decimal "shape_leng", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "shape_area", precision: 10, scale: 2, default: "0.0", null: false
+    t.integer "house", default: 0, null: false
+    t.integer "dpto", default: 0, null: false
+    t.integer "house_prop", default: 0, null: false
+    t.integer "dept_prop", default: 0, null: false
+    t.integer "house_arr", default: 0, null: false
+    t.integer "dept_arr", default: 0, null: false
+    t.string "province", null: false
+    t.string "commune", null: false
+    t.string "region", null: false
+    t.bigint "conty_id"
+    t.integer "zone_txt", default: 0, null: false
+    t.integer "district_txt", default: 0, null: false
+    t.integer "cod_zc_txt", default: 0, null: false
+    t.integer "occupied_dwelling_17", default: 0, null: false
+    t.integer "vancant_dwelling_17", default: 0, null: false
+    t.integer "house_17", default: 0, null: false
+    t.integer "dept_17", default: 0, null: false
+    t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conty_id"], name: "index_homogeneous_zones_on_conty_id"
   end
 
   create_table "import_errors", force: :cascade do |t|
