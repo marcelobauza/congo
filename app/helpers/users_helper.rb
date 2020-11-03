@@ -32,4 +32,24 @@ module UsersHelper
     day = Date.today.day
     i_day <  day ?  Date.today.change(day: i_day) : Date.today.change(day: i_day).prev_month
   end
+
+  def surplus_downloads user, layer
+    acc     = accumulated_download_by_company user, layer
+    surplus = 0
+
+    total_downloads = case layer
+                      when 'future_projects'
+                        current_user.company.future_projects_downloads
+                      when 'transactions'
+                        current_user.company.transactions_downloads
+                      when 'projects'
+                        current_user.company.projects_downloads
+                      end
+
+    if acc > total_downloads
+      surplus = acc - total_downloads
+    end
+
+    surplus
+  end
 end
