@@ -16,7 +16,7 @@ module FutureProjects::Periods
         where(WhereBuilder.build_in_condition("county_id",filters[:county_id]))
       elsif !filters[:wkt].nil?
         where(WhereBuilder.build_within_condition(filters[:wkt]))
-      elsif !filters[:centerpt].empty? && filters[:radius].empty?
+      elsif !filters[:centerpt].empty? && !filters[:radius].empty?
         where(WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius]))
       else
         all
