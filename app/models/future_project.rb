@@ -10,6 +10,7 @@ class FutureProject < ApplicationRecord
   include Util
   include CsvParser
   include FutureProjects::Exports
+  include FutureProjects::Periods
 
   validates_presence_of :address,
     :county_id,
@@ -362,22 +363,7 @@ class FutureProject < ApplicationRecord
     conditions
   end
 
-  def self.get_last_period
-    period = FutureProject.select(:year, :bimester).
-                           where(active: 'true').
-                           order(year: :desc, bimester: :desc).first
-  end
 
-  def self.get_first_bimester_with_future_projects
-    period = FutureProject.select("future_projects.year, future_projects.bimester").
-                           joins(build_joins.join(" ")).
-                           where("active = true").
-                           group("year, bimester").
-                           order("year, bimester").first
-
-    return nil if period.nil?
-    return {:period => period.bimester, :year => period.year}
-  end
 
   def self.is_periods_distance_allowed?(from_period, to_period, distance)
     f_period = from_period[:period]

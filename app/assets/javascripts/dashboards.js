@@ -362,11 +362,27 @@ Congo.dashboards.action_index = function() {
 
   get_last_period = function() {
     layer_type = Congo.dashboards.config.layer_type;
+    county_id = [];
+    $.each(Congo.dashboards.config.county_id, function(a,b){
+       county_id =b;
+    })
+    radius = Congo.dashboards.config.radius;
+    centerPoint = Congo.dashboards.config.centerpt;
+    wkt = Congo.dashboards.config.size_box;
+
+    data ={
+      wkt: wkt,
+      radius: radius,
+      centerpt: centerPoint,
+      county_id: county_id,
+      layer_type: layer_type
+    }
+
     $.ajax({
       async: false,
       type: 'GET',
       url: '/dashboards/filter_period.json',
-      data: {layer_type: layer_type},
+      data: {data: data},
       datatype: 'json',
       success: function(data) {
         Congo.dashboards.config.year = data['year'];

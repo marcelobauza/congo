@@ -16,7 +16,7 @@ class DashboardsController < ApplicationController
   end
 
   def filter_period
-    @period = Period.get_period_current params['layer_type']
+    @period = Period.get_period_current params['data']
     render json: {year: @period.year, bimester: @period.bimester}
   end
 end

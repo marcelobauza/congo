@@ -4,6 +4,7 @@ class Transaction < ApplicationRecord
   include Util
   include WhereBuilder
   include Transactions::Exports
+  include Transactions::Periods
   include Transactions::Validations
   include Transactions::Kml
 
@@ -225,19 +226,7 @@ class Transaction < ApplicationRecord
     #self.building_regulation = building_regulation.name_ze.to_s unless building_regulation.nil?
   end
 
-  def self.get_last_period
-    period = Transaction.select(:year, :bimester).
-      where(active: 'true').
-      order(year: :desc, bimester: :desc).first
-  end
 
-  def self.get_first_period_with_transactions
-
-    period = Transaction.select(:year, :bimester).group(:year, :bimester).order(:year, :bimester).first
-
-    return nil if period.nil?
-    return {:period => period.bimester, :year => period.year}
-  end
 
   def self.is_periods_distance_allowed? from_period, to_period, distance
     f_period = from_period[:period].to_i
