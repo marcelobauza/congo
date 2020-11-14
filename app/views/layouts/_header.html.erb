@@ -43,6 +43,7 @@
         <%if current_user.layer_types.include? 1  %>
           <%= link_to future_projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-landmark" title="Expedientes Municipales" style="font-size: 26px"></i><% end %>
         <% end %>
+          <%= link_to rent_indicators_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-building" title="Indicadores Arriendo" style="font-size: 26px"></i><% end %>
       </div>
     </div>
 

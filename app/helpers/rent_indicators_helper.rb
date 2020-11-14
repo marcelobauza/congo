@@ -1,0 +1,2 @@
+module RentIndicatorsHelper
+end

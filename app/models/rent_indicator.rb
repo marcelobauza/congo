@@ -1,0 +1,2 @@
+class RentIndicator < ApplicationRecord
+end

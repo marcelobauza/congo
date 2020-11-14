@@ -1,9 +1,6 @@
 Rails.application.routes.draw do
 
 
-
-
-
   resources :expenses
   resources :expense_types
   resources :feedbacks
@@ -22,6 +19,7 @@ Rails.application.routes.draw do
   get 'dashboards/heatmap'
   get 'dashboards/filter_county_for_lon_lat'
   get 'dashboards/filter_period'
+
   get 'future_project_types/legend_points'
   get 'density_types/legend_points'
   get 'counties/find' => 'counties#find'
@@ -44,6 +42,7 @@ Rails.application.routes.draw do
   get 'future_projects/dashboards' => 'future_projects#dashboards'
   get 'future_projects/graduated_points' => 'future_projects#graduated_points'
   get 'projects/dashboards' => 'projects#dashboards'
+  get 'rent_indicators/dashboards' => 'rent_indicators#dashboards'
   get 'census/dashboards' => 'census#dashboards'
   get 'demography/calculated_gse' => 'demography#calculated_gse'
   get 'projects/graduated_points' => 'projects#graduated_points'
@@ -125,7 +124,6 @@ Rails.application.routes.draw do
   resources :density_types
   resources :building_regulations
   resources :project_statuses
-
   resources :property_types
 
   resources :future_project_types
