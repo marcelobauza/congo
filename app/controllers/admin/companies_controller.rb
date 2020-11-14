@@ -76,6 +76,6 @@ class Admin::CompaniesController < Admin::DashboardsController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def company_params
-      params.require(:company).permit(:name, :projects_downloads, :transactions_downloads, :future_projects_downloads)
+      params.require(:company).permit(:name, :projects_downloads, :transactions_downloads, :future_projects_downloads, :enabled, :enabled_date)
     end
 end

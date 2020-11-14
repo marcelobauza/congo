@@ -6,6 +6,8 @@
 
       <div class="form-inputs">
         <%= f.input :name, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+        <%= f.input :enabled_date, as: :string, input_html: { class: "form-control datepicker" }, wrapper_html: { class: "col-md-4 form-group row" } %>
+        <%= f.input :enabled, as: :boolean, input_html: { class: "form-control datepicker" }, wrapper_html: { class: "col-md-4 form-group row" } %>
         <%= f.input :projects_downloads, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
         <%= f.input :transactions_downloads, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
         <%= f.input :future_projects_downloads, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>

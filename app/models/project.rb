@@ -5,6 +5,7 @@ class Project < ApplicationRecord
   include Util
   include Ranges
   include Projects::Exports
+  include Projects::Periods
   include Projects::Scopes
 
   has_many :project_instances, :dependent => :destroy
@@ -1172,4 +1173,6 @@ end
     kml.objects << document
     kml.render
   end
+
+
 end

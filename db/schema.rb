@@ -12,9 +12,6 @@
 
 <<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_10_21_223113) do
-=======
-ActiveRecord::Schema.define(version: 2020_10_10_131202) do
->>>>>>> master
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -164,6 +161,8 @@ ActiveRecord::Schema.define(version: 2020_10_10_131202) do
     t.integer "future_projects_downloads", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "enabled", default: true
+    t.date "enabled_date"
   end
 
   create_table "counties", force: :cascade do |t|

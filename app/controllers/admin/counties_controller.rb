@@ -9,6 +9,19 @@ class Admin::CountiesController < Admin::DashboardsController
       end
       render json:  @county
   end
+
+  def search_geojson
+
+    #if !params[:county_id].nil?
+      @county = County.where(
+        id: 1
+      ).select(
+        'st_asgeojson(the_geom) as geo'
+      ).first
+    #end
+    render json:  @county
+  end
+
   # GET /counties
   # GET /counties.json
   def index
