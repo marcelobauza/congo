@@ -1,52 +1,57 @@
-if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin') || (current_user.role.name == 'IPRO+ Plus')
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Compraventas") do |sheet|
 
-sheet.add_row ["Información General"]
-@info.each do |r|
-sheet.add_row [r[0], r[1]]
+  sheet.add_row ["Información General"]
+
+  @info.each do |r|
+    sheet.add_row [r[0], r[1]]
   end
-sheet.add_row([])
+
+  sheet.add_row([])
   sheet.add_row ["Tipo de Propiedad"]
   sheet.add_row ["Tipo", "Total de transacciones"]
+
   @ptypes.each do |r|
-  sheet.add_row [r[0], r[1]]
+    sheet.add_row [r[0], r[1]]
   end
-sheet.add_row([])
+
+  sheet.add_row([])
   sheet.add_row ["Tipo de Vendedor"]
   sheet.add_row ["Tipo", "Total de transacciones"]
+
   @seller.each do |r|
-  sheet.add_row [r[0], r[1]]
+    sheet.add_row [r[0], r[1]]
   end
 
-sheet.add_row([])
+  sheet.add_row([])
   sheet.add_row ["UF por Bimestre"]
   sheet.add_row ["Bimestre", "UF"]
+
   @uf_periods.each do |r|
-  sheet.add_row [r[0], r[1]]
+    sheet.add_row [r[0], r[1]]
   end
 
-sheet.add_row([])
+  sheet.add_row([])
   sheet.add_row ["Transacciones por Bimestre"]
   sheet.add_row ["Bimestre", "Total"]
+
   @transaction_bimester.each do |r|
-  sheet.add_row [r[0], r[1]]
+    sheet.add_row [r[0], r[1]]
   end
 
-
-
-sheet.add_row([])
+  sheet.add_row([])
   sheet.add_row ["Precio Promedio en UF por Bimestre"]
   sheet.add_row ["Bimestre", "Promedio UF"]
+
   @average_uf_periods.each do |r|
-  sheet.add_row [r[0], r[1]]
+    sheet.add_row [r[0], r[1]]
   end
 
-sheet.add_row([])
+  sheet.add_row([])
   sheet.add_row ["Transacciones por UF"]
   sheet.add_row ["Rango UF", "Total de transacciones"]
+
   @transactions_ufs.each do |r|
-  sheet.add_row [r[0], r[1]]
+    sheet.add_row [r[0], r[1]]
   end
-  end
-  end
+end
