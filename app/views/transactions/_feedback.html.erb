@@ -1,13 +1,16 @@
 <%= a.input :layer_type, input_html: {value: "CBR"}, as: :hidden %>
-<%= a.input :row_id,  input_html: {class: 'feedback_transaction_id'}, readonly: true %>
+<%= a.input :row_id, as: :hidden, input_html: {class: 'feedback_transaction_id'}, readonly: true %>
+<div>
+  <p>Complete campos que considere necesarios (uno o más)</p>
+</div>
 <div class="form-group row">
-  <%= a.label :uf_value, label: 'Valor UF:', class: 'col-md-4 text-right' %>
+  <%= a.label :uf_value, label: 'Valor UF:', class: 'col-md-4 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :uf_value, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :comments, label: 'Comentarios:', class: 'col-md-4 text-right' %>
+  <%= a.label :comments, label: 'Comentarios:', class: 'col-md-4 text-right', required: false %>
   <div class="col-md-6">
     <%= a.text_area :comments, rows: '6', label: false, :class => 'form-control form-control-sm' %>
   </div>
