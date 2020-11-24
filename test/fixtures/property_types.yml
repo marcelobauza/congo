@@ -1,9 +1,7 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+industria:
+  name: 'Industria'
+  description: 'Descripcion industria'
 
-one:
-  name: MyString
-  description: MyString
-
-two:
-  name: MyString
-  description: MyString
+departamento:
+  name: 'Departamento'
+  description: 'Descripción departamento'
