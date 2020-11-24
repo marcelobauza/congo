@@ -1,12 +1,14 @@
 Congo.namespace('rent_indicators.action_dashboards');
 
-Congo.rent_indicators.action_dashboards = function(){
+Congo.rent_indicators.action_dashboards = function() {
+
   console.log("rent_i");
-  init = function(){
+
+  init = function() {
     Congo.map_utils.init();
   }
 
-  indicators = function(){
+  indicators = function() {
     console.log("indicators");
   }
 
