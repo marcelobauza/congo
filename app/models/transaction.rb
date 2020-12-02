@@ -419,6 +419,7 @@ class Transaction < ApplicationRecord
     end
 
     conditions += build_ids_conditions(filters, widget)
+    conditions += "transactions.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
     conditions += build_calculated_value_condition(filters, widget)
     conditions.chomp!(Util.and)
     conditions
