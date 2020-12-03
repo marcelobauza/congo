@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   get 'future_projects/graduated_points' => 'future_projects#graduated_points'
   get 'projects/dashboards' => 'projects#dashboards'
   get 'rent_indicators/dashboards' => 'rent_indicators#dashboards'
+  get 'rent_indicators/rent_indicators_summary' => 'rent_indicators#rent_indicators_summary'
   get 'census/dashboards' => 'census#dashboards'
   get 'demography/calculated_gse' => 'demography#calculated_gse'
   get 'projects/graduated_points' => 'projects#graduated_points'
