@@ -398,7 +398,7 @@ class Project < ApplicationRecord
     ic                                 = Iconv.new('UTF-8', 'ISO-8859-1')
     type                               = ProjectType.find_by_name(project_type)
     county                             = County.find_by(code: data["COMUNA"])
-    agency                             = Agency.find_or_create_by(name: ic.iconv(data["INMOBILIAR"]))
+    agency                             = Agency.where(name: data["INMOBILIAR"]).first_or_create!
     agency_rols                        = AgencyRol.find_or_create_by(
       project_id: self.id,
       agency_id: agency.id,
@@ -418,7 +418,8 @@ class Project < ApplicationRecord
     self.pilot_opening_date            = data['ESTRENO']
     self.elevators                     = data['ASC']
     self.quantity_department_for_floor = data["DPTO_PISO"]
-    result                             = self.save
+
+    result = self.save!
 
     County.update(county.id, :sales_project_data => true) unless county.nil? if result
 

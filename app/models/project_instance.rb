@@ -48,7 +48,6 @@ class ProjectInstance < ApplicationRecord
   delegate :agency_name, :to => :project, :prefix => true, :allow_nil => true
 
 def save_instance_data(data, mixes, project_type)
-     ic                     = Iconv.new('UTF-8', 'ISO-8859-1')
      status                 = ProjectStatus.find_or_create_by(name: data["ESTADO"])
      self.project_status_id = status.id
      self.cadastre          = data['CATASTRO']
@@ -57,7 +56,7 @@ def save_instance_data(data, mixes, project_type)
      self.comments          = data["COMMENTS"]
 
      ProjectInstanceMix.associate_instance_mix_data(mixes, self)
-     return self.save
+     return self.save!
    end
 
   def self.find_offer_mix(instance_id)

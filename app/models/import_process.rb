@@ -14,6 +14,7 @@ class ImportProcess < ApplicationRecord
     import_process = ImportProcess.find self.id
     import_logger = Ibiza::ImportLogger.new(import_process)
     import_process.update_attributes status: 'working'
+
     ActiveRecord::Base.transaction do
       if load_type == 'Building Regulation' || load_type == 'Lot'
         shps, dir_path = Util::get_geojson_files_from_zip(self.file_path)
@@ -157,30 +158,36 @@ class ImportProcess < ApplicationRecord
   end
 
   def parse_projects(shape_file, project_type, import_logger)
-    mixes = []
+    mixes          = []
     instance_mixes = []
+    project_code   = nil
 
     RGeo::Shapefile::Reader.open(shape_file) do |shp|
       field = []
+
       shp.each do |shape|
         if shape.index == 0
           shape.keys.each do |f|
             field.push(f)
           end
         end
+
         verify_attributes(field, project_type)
 
         import_logger.current_row_index = shape.index
-        import_logger.processed += 1
+        import_logger.processed        += 1
 
         if shape.geometry.nil?
           import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
           next
         end
+
         geom = shape.geometry
         data = shape.attributes
+
         unless data["DORMS_T"].to_i == 0 or data["BANOS_T"].to_i == 0
           mix = ProjectMix.find_or_create_by(bedroom: data["DORMS_T"].to_f,  bathroom: data["BANOS_T"].to_i, mix_type:"#{data["DORMS_T"].to_f}d#{data["BANOS_T"].to_i}b")
+
           if mix.nil?
             import_logger.failed += 1
             mix.errors.full_messages.each do |error_message|
@@ -189,21 +196,21 @@ class ImportProcess < ApplicationRecord
             next
           end
 
-          mix_instance                             = ProjectInstanceMix.new
-          mix_instance.mix_id                      = mix.id
-          mix_instance.stock_units                 = data["STOCK"].to_i
-          mix_instance.mix_uf_m2                   = data["T_UF_M2"].to_f
-          mix_instance.mix_selling_speed           = data["T_VEL_VTA"].to_f
-          mix_instance.mix_uf_value                = data["T_PRECIO_U"].to_f
-          mix_instance.total_units                 = data["OFERTA_T"].to_i
-          mix_instance.uf_min                      = data["UF_MIN"].to_i
-          mix_instance.uf_max                      = data["UF_MAX"].to_i
-          mix_instance.discount                    = data["DESC"].to_f
-          mix_instance.uf_parking                  = data['UF_ESTACIO']
-          mix_instance.uf_cellar                   = data['UF_BODEGA']
-          mix_instance.h_office                    = data['HOFFICE']
-          mix_instance.service_room                = data['TIPO_SERVI']
-          mix_instance.living_room                 = data['ESTAR']
+          mix_instance                   = ProjectInstanceMix.new
+          mix_instance.mix_id            = mix.id
+          mix_instance.stock_units       = data["STOCK"].to_i
+          mix_instance.mix_uf_m2         = data["T_UF_M2"].to_f
+          mix_instance.mix_selling_speed = data["T_VEL_VTA"].to_f
+          mix_instance.mix_uf_value      = data["T_PRECIO_U"].to_f
+          mix_instance.total_units       = data["OFERTA_T"].to_i
+          mix_instance.uf_min            = data["UF_MIN"].to_i
+          mix_instance.uf_max            = data["UF_MAX"].to_i
+          mix_instance.discount          = data["DESC"].to_f
+          mix_instance.uf_parking        = data['UF_ESTACIO']
+          mix_instance.uf_cellar         = data['UF_BODEGA']
+          mix_instance.h_office          = data['HOFFICE']
+          mix_instance.service_room      = data['TIPO_SERVI']
+          mix_instance.living_room       = data['ESTAR']
 
           if project_type == 'Departamentos'
             mix_instance.mix_usable_square_meters  = data["UTIL_M2"].to_f
@@ -226,15 +233,20 @@ class ImportProcess < ApplicationRecord
             mix_instance.mix_m2_field              = data["TERRENO_M2"].to_f
           end
 
-          instance_mixes << mix_instance
-        end
+          if (data['COD_PROY'] != project_code && !project_code.nil?) || shp.num_records - 1 == shape.index
+            instance_mixes << mix_instance
+            store_project(geom, data, instance_mixes, import_logger, project_type)
+            mixes.clear
+            instance_mixes.clear
 
-        store_project(geom, data, instance_mixes, import_logger, project_type)
-        mixes.clear
-        instance_mixes.clear
-        total_units = 0
-        stock_units = 0
-        sold_units = 0
+            total_units = 0
+            stock_units = 0
+            sold_units  = 0
+          else
+            instance_mixes << mix_instance
+          end
+        end
+        project_code = data['COD_PROY']
       end
     end
   end
@@ -262,7 +274,9 @@ class ImportProcess < ApplicationRecord
       end
       return false
     end
-    is_new_record ? import_logger.inserted += 1 : import_logger.updated += 1
+    processed_rows = instance.project_instance_mixes.count
+
+    is_new_record ? import_logger.inserted += processed_rows : import_logger.updated += processed_rows
   end
 
   def parse_future_projects(shp_file, import_logger)
