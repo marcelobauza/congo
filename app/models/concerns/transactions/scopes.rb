@@ -1,7 +1,7 @@
 module Transactions::Scopes
   extend ActiveSupport::Concern
 
-  included do
+  module ClassMethods
     def number_filter number
       return all unless !number.empty?
       where(number: number)
