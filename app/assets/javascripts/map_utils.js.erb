@@ -675,7 +675,6 @@ Congo.map_utils = function(){
             layer_type = 'demography_info_census_2012'
           }
 
-console.log(coord_geoserver);
             env = "polygon: Polygon(("+coord_geoserver+"))";
           }else{
             cql_filter ="WITHIN(the_geom,  Polygon(("+coord_geoserver+"))) "+ filter_layer;
@@ -713,7 +712,6 @@ console.log(coord_geoserver);
           })
         });
 
-console.log(coord_geoserver);
           env = "polygon: Polygon(("+coord_geoserver+"))";
           Congo.dashboards.config.style_layer = 'census_voronoi_clip';
           cql_filter = filter_layer;
@@ -746,6 +744,18 @@ console.log(coord_geoserver);
         cql_filter_pois = "county_id IN ("+ county_id + ")";
         break;
     }
+    //ICA
+    if (layer_type == 'rent_indicators_info'){
+        centerpt = Congo.dashboards.config.centerpt;
+        radius = Congo.dashboards.config.radius ;
+          geometry = centerpt.split(' ');
+          var center = [geometry[0],geometry[1]];
+          var radius = radius;
+          var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
+          //var circle = turf.circle(center, radius, options);
+      ica();
+    }
+
     groupLayer = L.layerGroup();
     style_layer = Congo.dashboards.config.style_layer;
     //POIS
@@ -766,20 +776,7 @@ console.log(coord_geoserver);
     layerControl.addOverlay(sourcePois, "Puntos de Interés");
 
     //Lots
-    var options_lots = {
-      layers: "inciti_v2:view_lots",//nombre de la capa (ver get capabilities)
-      format: 'image/png',
-      transparent: 'true',
-      opacity: 1,
-      version: '1.0.0',//wms version (ver get capabilities)
-      tiled: true,
-      styles: 'lots',
-      INFO_FORMAT: 'application/json',
-      format_options: 'callback:getJson',
-      CQL_FILTER: cql_filter_pois
-    };
-    sourceLots = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_lots);
-    layerControl.addOverlay(sourceLots, "Plancheta Predial");
+      load_lots(map, layerControl, url);
 
    if(county_id != undefined && (county_id != '' || county_id.length > 0 )){
       search_county(county_id);
@@ -880,6 +877,35 @@ console.log(coord_geoserver);
   }
   }
 
+  function ica(){
+        centerpt = Congo.dashboards.config.centerpt;
+        radius = Congo.dashboards.config.radius ;
+    polygon_size = Congo.dashboards.config.size_box;
+          geometry = centerpt.split(' ');
+          var center = [geometry[0],geometry[1]];
+          var radius = radius;
+          var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
+          var wkt = turf.circle(center, radius, options);
+//    wkt = {wkt: JSON.stringify(polygon_size)}
+
+      $.ajax({
+        type: 'GET',
+        url: '/rent_indicators/search.json',
+        datatype: 'json',
+        data: {centerpt: centerpt, r: radius} ,
+        success: function (data) {
+          var geojson = new L.geoJson(data, {
+            style: {"color":"red","weight":3, "fillOpacity": 0},
+            zIndex: 1
+          }
+          );
+          map.fitBounds(geojson.getBounds());
+          groupLayer.addLayer(geojson);
+
+          ;
+        }
+      });
+  }
   function search_county(county_id){
 
       var owsrootUrl = "http://"+url+":8080/geoserver/ows";

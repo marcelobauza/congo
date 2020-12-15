@@ -530,6 +530,7 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
     t.boolean "is_active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["id"], name: "project_type_idx"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -616,6 +617,8 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "land_m2", precision: 12, scale: 1
+    t.index ["county_sii_id"], name: "tax_lands_county_sii_idx"
+    t.index ["rol_number"], name: "tax_lands_role_idx"
   end
 
   create_table "tax_useful_surfaces", force: :cascade do |t|
@@ -628,6 +631,8 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
     t.string "code_material"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["county_sii_id"], name: "tus_county_sii"
+    t.index ["rol_number"], name: "tus_role"
   end
 
   create_table "tmp_tax_lands", id: false, force: :cascade do |t|
@@ -712,10 +717,12 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "additional_roles"
+    t.index ["bimester"], name: "index_transactions_bimester"
     t.index ["county_id"], name: "index_transactions_on_county_id"
-    t.index ["property_type_id"], name: "index_transactions_on_property_type_id"
-    t.index ["seller_type_id"], name: "index_transactions_on_seller_type_id"
+    t.index ["number"], name: "index_transactions_number"
+    t.index ["role"], name: "role_1_idx"
     t.index ["user_id"], name: "index_transactions_on_user_id"
+    t.index ["year"], name: "index_transactions_year"
   end
 
   create_table "uf_conversions", force: :cascade do |t|
@@ -1172,7 +1179,7 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
       	group by r.commune, r.area_name, pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
       end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :inciti_kpi_uf_m2_u, sql_definition: <<-SQL
@@ -1555,7 +1562,7 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
       	group by pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
       end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__circle_uf_m2_u, sql_definition: <<-SQL
@@ -1881,7 +1888,7 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
       BEGIN
 
       if ((select id from project_types where is_active = true and name ilike 'casas') <> project_type_id_) then
-      	return (select case sum(pimv.total_m2) when 0 then 0 else 
+      		return (select case sum(pimv.total_m2) when 0 then 0 else 
       round(SUM(pimv.total_m2 * uf_avg_percent) / (SUM(pimv.total_m2 * (mix_usable_square_meters + 0.5 * mix_terrace_square_meters))),2) end as uf_m2
 
 
@@ -1905,7 +1912,7 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
       	group by pimv.year, pimv.bimester
       	order by pimv.year, pimv.bimester);
       end if;
-      END;	
+      END;
       $function$
   SQL
   create_function :kpi__polygon_uf_m2_u, sql_definition: <<-SQL
@@ -2329,6 +2336,14 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
        JOIN density_types ON ((building_regulations.density_type_id = density_types.id)))
     ORDER BY building_regulations.updated_at DESC;
   SQL
+  create_view "counties_enabled_by_users", sql_definition: <<-SQL
+      SELECT c.name,
+      u.id AS user_id,
+      st_centroid(c.the_geom) AS geom
+     FROM ((counties_users cu
+       JOIN users u ON ((cu.user_id = u.id)))
+       JOIN counties c ON ((cu.county_id = c.id)));
+  SQL
   create_view "counties_info", sql_definition: <<-SQL
       SELECT counties.id AS county_id,
       counties.name,
@@ -2542,8 +2557,7 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
       projects.the_geom,
       st_x(projects.the_geom) AS x,
       st_y(projects.the_geom) AS y,
-      county_name((projects.county_id)::integer) AS county_name,
-      projects.project_type_id
+      county_name((projects.county_id)::integer) AS county_name
      FROM (((((projects
        JOIN project_instances ON ((project_instances.project_id = projects.id)))
        JOIN project_instance_mixes pim ON ((project_instances.id = pim.project_instance_id)))
@@ -2551,147 +2565,6 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
        JOIN project_types ON ((project_types.id = projects.project_type_id)))
        JOIN project_statuses ON ((project_statuses.id = project_instances.project_status_id)))
     WHERE (projects.project_type_id = 2);
-  SQL
-  create_view "project_instance_mix_views", sql_definition: <<-SQL
-      SELECT pim.project_instance_id,
-      round((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric)))) AS uf_min_percent,
-      round((pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) AS uf_max_percent,
-      round((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric)) AS uf_avg_percent,
-      (pim.mix_usable_square_meters * (pim.total_units)::numeric) AS total_m2,
-      (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5)) AS u_half_terrace,
-      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5))) AS uf_m2,
-      (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric))::double precision / ((pim.mix_usable_square_meters)::double precision + ((((pim.t_min + pim.t_max))::double precision / (2)::double precision) * (0.25)::double precision))) AS uf_m2_home,
-      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters) AS uf_m2_u,
-      (vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date))::numeric AS vhmu,
-      ((pim.stock_units)::numeric * pim.mix_usable_square_meters) AS dis_m2,
-      masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date) AS masud,
-          CASE masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
-              WHEN 0 THEN (0)::real
-              ELSE vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
-          END AS vhmud,
-      (pim.total_units - pim.stock_units) AS sold_units,
-      pim.id AS project_instance_mix_id,
-      p.id,
-      (((pim.t_min + pim.t_max))::double precision / (2)::double precision) AS ps_terreno,
-      pim.stock_units,
-      pim.total_units,
-      pim.mix_terrace_square_meters,
-      pim.mix_usable_square_meters,
-      pim.t_min,
-      pim.t_max,
-      p.county_id,
-      p.id AS project_id,
-      p.the_geom,
-      pi.year,
-      pi.bimester,
-      pi.project_status_id,
-      p.project_type_id,
-      pim.mix_id,
-      p.name,
-      pp_utiles(pi.id) AS pp_utiles,
-      p.floors,
-      p.address,
-      p.build_date,
-      p.sale_date,
-      p.transfer_date,
-      a.name AS agency_name,
-      a.id AS agency_id,
-      p.code
-     FROM ((((project_instance_mixes pim
-       JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
-       JOIN projects p ON ((pi.project_id = p.id)))
-       JOIN ( SELECT agency_rols.id,
-              agency_rols.rol,
-              agency_rols.project_id,
-              agency_rols.agency_id,
-              agency_rols.created_at,
-              agency_rols.updated_at
-             FROM agency_rols
-            WHERE ((agency_rols.rol)::text ~~* 'inmobiliaria'::text)) ar ON ((p.id = ar.project_id)))
-       JOIN agencies a ON ((a.id = ar.agency_id)));
-  SQL
-  create_view "project_instance_mix_views_anterior", sql_definition: <<-SQL
-      SELECT pim.project_instance_id,
-      (pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_min_percent,
-      (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_max_percent,
-      (((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) AS uf_avg_percent,
-      (pim.mix_usable_square_meters * (pim.total_units)::numeric) AS total_m2,
-      (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5)) AS u_half_terrace,
-      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5))) AS uf_m2,
-      (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric))::double precision / ((pim.mix_usable_square_meters)::double precision + ((((pim.t_min + pim.t_max))::double precision / (2)::double precision) * (0.25)::double precision))) AS uf_m2_home,
-      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters) AS uf_m2_u,
-      (vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date))::numeric AS vhmu,
-      ((pim.stock_units)::numeric * pim.mix_usable_square_meters) AS dis_m2,
-      masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date) AS masud,
-          CASE masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
-              WHEN 0 THEN (0)::real
-              ELSE vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
-          END AS vhmud,
-      (pim.total_units - pim.stock_units) AS sold_units,
-      pim.id,
-      (((pim.t_min + pim.t_max))::double precision / (2)::double precision) AS ps_terreno,
-      pim.stock_units,
-      pim.total_units,
-      pim.mix_terrace_square_meters,
-      pim.mix_usable_square_meters,
-      pim.t_min,
-      pim.t_max,
-      p.county_id,
-      p.id AS project_id,
-      p.the_geom,
-      pi.year,
-      pi.bimester,
-      pi.project_status_id,
-      p.project_type_id
-     FROM ((project_instance_mixes pim
-       JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
-       JOIN projects p ON ((pi.project_id = p.id)));
-  SQL
-  create_view "projects_feature_info", sql_definition: <<-SQL
-      SELECT projects.id,
-      projects.address,
-      projects.name AS project_name,
-      project_statuses.name AS status_name,
-      sum(project_instance_mixes.total_units) AS total_units,
-      sum(project_instance_mixes.stock_units) AS stock_units,
-      sum((project_instance_mixes.total_units - project_instance_mixes.stock_units)) AS sold_units,
-      projects.floors,
-      round(sum(project_instance_mixes.mix_m2_field), 1) AS m2_field,
-      round(sum(project_instance_mixes.mix_m2_built), 1) AS m2_built,
-      project_instance_mixes.home_type,
-      project_instances.bimester,
-      project_instances.year,
-      projects.the_geom,
-      projects.build_date,
-      projects.sale_date,
-      projects.transfer_date,
-      projects.pilot_opening_date,
-      project_instances.comments,
-      projects.county_id,
-      projects.project_type_id,
-      project_instances.project_status_id,
-      ar.agency_id
-     FROM ((((project_instances
-       JOIN project_instance_mixes ON ((project_instances.id = project_instance_mixes.project_instance_id)))
-       JOIN projects ON ((projects.id = project_instances.project_id)))
-       JOIN project_statuses ON ((project_instances.project_status_id = project_statuses.id)))
-       JOIN agency_rols ar ON ((projects.id = ar.project_id)))
-    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors, projects.project_type_id, project_instances.project_status_id, ar.agency_id;
-  SQL
-  create_view "view_lots", sql_definition: <<-SQL
-      SELECT round(lots.surface) AS surface,
-      lots.the_geom,
-      lots.identifier,
-      lots.county_id
-     FROM lots;
-  SQL
-  create_view "counties_enabled_by_users", sql_definition: <<-SQL
-      SELECT c.name,
-      u.id AS user_id,
-      st_centroid(c.the_geom) AS geom
-     FROM ((counties_users cu
-       JOIN users u ON ((cu.user_id = u.id)))
-       JOIN counties c ON ((cu.county_id = c.id)));
   SQL
   create_view "project_home_reports", sql_definition: <<-SQL
       SELECT project_instances.bimester,
@@ -2791,6 +2664,132 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
        JOIN project_statuses ON ((project_statuses.id = project_instances.project_status_id)))
     WHERE (projects.project_type_id = 1);
   SQL
+  create_view "project_instance_mix_views", sql_definition: <<-SQL
+      SELECT pim.project_instance_id,
+      round((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric)))) AS uf_min_percent,
+      round((pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) AS uf_max_percent,
+      round((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric)) AS uf_avg_percent,
+      (pim.mix_usable_square_meters * (pim.total_units)::numeric) AS total_m2,
+      (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5)) AS u_half_terrace,
+      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5))) AS uf_m2,
+      (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric))::double precision / ((pim.mix_usable_square_meters)::double precision + ((((pim.t_min + pim.t_max))::double precision / (2)::double precision) * (0.25)::double precision))) AS uf_m2_home,
+      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters) AS uf_m2_u,
+      (vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date))::numeric AS vhmu,
+      ((pim.stock_units)::numeric * pim.mix_usable_square_meters) AS dis_m2,
+      masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date) AS masud,
+          CASE masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
+              WHEN 0 THEN (0)::real
+              ELSE vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
+          END AS vhmud,
+      (pim.total_units - pim.stock_units) AS sold_units,
+      pim.id AS project_instance_mix_id,
+      p.id,
+      (((pim.t_min + pim.t_max))::double precision / (2)::double precision) AS ps_terreno,
+      pim.stock_units,
+      pim.total_units,
+      pim.mix_terrace_square_meters,
+      pim.mix_usable_square_meters,
+      pim.t_min,
+      pim.t_max,
+      p.county_id,
+      p.id AS project_id,
+      p.the_geom,
+      pi.year,
+      pi.bimester,
+      pi.project_status_id,
+      p.project_type_id,
+      pim.mix_id,
+      p.name,
+      pp_utiles(pi.id) AS pp_utiles,
+      p.floors,
+      p.address,
+      p.build_date,
+      p.sale_date,
+      p.transfer_date,
+      a.name AS agency_name,
+      a.id AS agency_id,
+      p.code
+     FROM ((((project_instance_mixes pim
+       JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
+       JOIN projects p ON ((pi.project_id = p.id)))
+       JOIN ( SELECT agency_rols.id,
+              agency_rols.rol,
+              agency_rols.project_id,
+              agency_rols.agency_id,
+              agency_rols.created_at,
+              agency_rols.updated_at
+             FROM agency_rols
+            WHERE ((agency_rols.rol)::text ~~* 'inmobiliaria'::text)) ar ON ((p.id = ar.project_id)))
+       JOIN agencies a ON ((a.id = ar.agency_id)));
+  SQL
+  create_view "project_instance_mix_views_anterior", sql_definition: <<-SQL
+      SELECT pim.project_instance_id,
+      (pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_min_percent,
+      (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric))) AS uf_max_percent,
+      (((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) AS uf_avg_percent,
+      (pim.mix_usable_square_meters * (pim.total_units)::numeric) AS total_m2,
+      (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5)) AS u_half_terrace,
+      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters) AS uf_m2,
+      (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric))::double precision / (pim.mix_usable_square_meters)::double precision) AS uf_m2_home,
+      ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters) AS uf_m2_u,
+      (vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date))::numeric AS vhmu,
+      ((pim.stock_units)::numeric * pim.mix_usable_square_meters) AS dis_m2,
+      masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date) AS masud,
+          CASE masud(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
+              WHEN 0 THEN (0)::real
+              ELSE vhmu(pim.total_units, pim.stock_units, pi.cadastre, p.sale_date)
+          END AS vhmud,
+      (pim.total_units - pim.stock_units) AS sold_units,
+      pim.id,
+      (((pim.t_min + pim.t_max))::double precision / (2)::double precision) AS ps_terreno,
+      pim.stock_units,
+      pim.total_units,
+      pim.mix_terrace_square_meters,
+      pim.mix_usable_square_meters,
+      pim.t_min,
+      pim.t_max,
+      p.county_id,
+      p.id AS project_id,
+      p.the_geom,
+      pi.year,
+      pi.bimester,
+      pi.project_status_id,
+      p.project_type_id
+     FROM ((project_instance_mixes pim
+       JOIN project_instances pi ON ((pim.project_instance_id = pi.id)))
+       JOIN projects p ON ((pi.project_id = p.id)));
+  SQL
+  create_view "projects_feature_info", sql_definition: <<-SQL
+      SELECT projects.id,
+      projects.address,
+      projects.name AS project_name,
+      project_statuses.name AS status_name,
+      sum(project_instance_mixes.total_units) AS total_units,
+      sum(project_instance_mixes.stock_units) AS stock_units,
+      sum((project_instance_mixes.total_units - project_instance_mixes.stock_units)) AS sold_units,
+      projects.floors,
+      round(sum(project_instance_mixes.mix_m2_field), 1) AS m2_field,
+      round(sum(project_instance_mixes.mix_m2_built), 1) AS m2_built,
+      project_instance_mixes.home_type,
+      project_instances.bimester,
+      project_instances.year,
+      projects.the_geom,
+      projects.build_date,
+      projects.sale_date,
+      projects.transfer_date,
+      projects.pilot_opening_date,
+      project_instances.comments,
+      projects.county_id,
+      projects.project_type_id,
+      project_instances.project_status_id,
+      ar.agency_id
+     FROM ((((project_instances
+       JOIN project_instance_mixes ON ((project_instances.id = project_instance_mixes.project_instance_id)))
+       JOIN projects ON ((projects.id = project_instances.project_id)))
+       JOIN project_statuses ON ((project_instances.project_status_id = project_statuses.id)))
+       JOIN agency_rols ar ON ((projects.id = ar.project_id)))
+    GROUP BY projects.id, projects.address, projects.name, project_statuses.name, project_instance_mixes.home_type, project_instances.bimester, project_instances.year, projects.the_geom, projects.build_date, projects.sale_date, projects.transfer_date, projects.pilot_opening_date, project_instances.comments, projects.floors, projects.project_type_id, project_instances.project_status_id, ar.agency_id;
+  SQL
   create_view "transactions_info", sql_definition: <<-SQL
       SELECT transactions.id,
       transactions.property_type_id,
@@ -2840,5 +2839,12 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
       transactions.year_sii,
       transactions.role_associated
      FROM transactions;
+  SQL
+  create_view "view_lots", sql_definition: <<-SQL
+      SELECT round(lots.surface) AS surface,
+      lots.the_geom,
+      lots.identifier,
+      lots.county_id
+     FROM lots;
   SQL
 end
