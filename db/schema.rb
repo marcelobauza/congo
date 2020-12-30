@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_31_232429) do
+ActiveRecord::Schema.define(version: 2020_12_29_160853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -306,6 +306,94 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
     t.index ["project_type_id"], name: "index_future_projects_on_project_type_id"
   end
 
+  create_table "homogeneous_zones", primary_key: "idx", id: :serial, force: :cascade do |t|
+    t.geometry "geom", limit: {:srid=>4326, :type=>"multi_polygon", :has_z=>true}
+    t.bigint "fid_barrio"
+    t.bigint "objectid"
+    t.string "nombre", limit: 50
+    t.bigint "check"
+    t.string "tipo", limit: 20
+    t.string "id_barrios", limit: 50
+    t.float "geocodigo"
+    t.string "redcode", limit: 11
+    t.float "ismt_pn"
+    t.bigint "alto"
+    t.bigint "medio"
+    t.bigint "bajo"
+    t.bigint "total"
+    t.bigint "mp_vn_345"
+    t.string "nom_cmn", limit: 80
+    t.float "geocode"
+    t.float "dv_shnn"
+    t.bigint "tot_hog"
+    t.float "porc"
+    t.bigint "con_hijos"
+    t.bigint "sin_hijos"
+    t.float "por_sh"
+    t.float "por_ch"
+    t.bigint "sum_person"
+    t.bigint "sum_total_"
+    t.float "ha_1"
+    t.float "den_pob"
+    t.float "den_viv"
+    t.float "ave_averde"
+    t.integer "anio"
+    t.bigint "matacep_1"
+    t.bigint "matrec_1"
+    t.bigint "matirrec_1"
+    t.float "ata_2017"
+    t.float "lst_ver_17"
+    t.float "lst_inv_17"
+    t.float "ndvi_inv17"
+    t.float "ndvi_ver17"
+    t.float "evo_ver"
+    t.float "ndvi_2017"
+    t.float "int_inv7"
+    t.float "ent1"
+    t.float "ent2"
+    t.float "entmean"
+    t.float "entwgt"
+    t.integer "prv_casa"
+    t.integer "prv_deptos"
+    t.bigint "prv_c_n"
+    t.bigint "prve_d_n"
+    t.float "min_ic"
+    t.float "max_ic"
+    t.float "ave_ic"
+    t.float "min_os"
+    t.float "max_os"
+    t.float "ave_os"
+    t.float "min_am"
+    t.float "max_am"
+    t.float "ave_am"
+    t.float "min_hac"
+    t.float "max_hac"
+    t.float "ave_hac"
+    t.float "ave_ufsuel"
+    t.float "i_mat"
+    t.bigint "id"
+    t.float "p1"
+    t.float "ave_ufm2"
+    t.bigint "casa"
+    t.bigint "depto"
+    t.bigint "otros"
+    t.float "totviv"
+    t.float "pcasa"
+    t.float "pdepto"
+    t.float "potros"
+    t.integer "objectid_1"
+    t.float "geocodig_1"
+    t.bigint "cnt_geocod"
+    t.float "ave_db_hi"
+    t.decimal "kmf"
+    t.integer "oid_"
+    t.string "geocode_1", limit: 254
+    t.integer "cnt_geoc_1"
+    t.float "ave_min_to"
+    t.decimal "km_v16"
+    t.index ["geom"], name: "sidx_homogeneous_zones_geom", using: :gist
+  end
+
   create_table "households_censu", force: :cascade do |t|
     t.integer "objectid", default: 0, null: false
     t.integer "cnt_cod_zc", default: 0, null: false
@@ -401,6 +489,13 @@ ActiveRecord::Schema.define(version: 2020_10_31_232429) do
     t.integer "c3", default: 0, null: false
     t.integer "d", default: 0, null: false
     t.integer "e", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "neighborhoods", force: :cascade do |t|
+    t.string "name"
+    t.geometry "the_geom", limit: {:srid=>4326, :type=>"multi_polygon"}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

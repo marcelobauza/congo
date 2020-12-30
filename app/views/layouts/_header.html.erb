@@ -35,7 +35,7 @@
           <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-file-alt" title="Normativa" style="font-size: 26px"></i><% end %>
         <% end %>
         <%if current_user.layer_types.include? 5  %>
-          <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-handshake" title="Compraventas" style="font-size: 26px"></i><% end %>
+          <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", id: 'transactions_menu',  remote: true  do  %><i class=" fas fa-handshake" title="Compraventas" style="font-size: 26px"></i><% end %>
         <% end %>
         <%if current_user.layer_types.include? 2  %>
           <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-home" title="Proyectos Residenciales en Venta" style="font-size: 26px"></i><% end %>

@@ -7,7 +7,7 @@ class ImportProcess < ApplicationRecord
 
   include Ibiza
 
-  after_create :load_from_zip
+  after_create_commit :load_from_zip
 
   def load_from_zip
     load_type = self.data_source
@@ -301,11 +301,12 @@ class ImportProcess < ApplicationRecord
             import_logger.inserted += 1
           else
             import_logger.updated += 1
+            import_logger.details << { row_index: import_logger.current_row_index, message: 'Registro duplicado' }
           end
         else
           import_logger.failed += 1
           fut_proj.errors.full_messages.each do |error_message|
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
+            import_logger.details << { row_index: import_logger.current_row_index, message: error_message }
           end
         end
 

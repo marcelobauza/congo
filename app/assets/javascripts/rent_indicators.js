@@ -18,128 +18,11 @@ Congo.projects.config = {
 }
 
 Congo.rent_indicators.action_dashboards = function() {
-
-  console.log("rent_i");
-
   init = function() {
     Congo.map_utils.init();
   }
 
   indicators = function() {
-
-    county_id = [];
-    $.each(Congo.dashboards.config.county_id, function(a, b) {
-      county_id = b;
-    })
-    to_year = Congo.dashboards.config.year;
-    to_bimester = Congo.dashboards.config.bimester;
-    radius = Congo.dashboards.config.radius;
-    centerPoint = Congo.dashboards.config.centerpt;
-    wkt = Congo.dashboards.config.size_box;
-    project_status_ids = Congo.projects.config.project_status_ids;
-    project_type_ids = Congo.projects.config.project_type_ids;
-    mix_ids = Congo.projects.config.mix_ids;
-    periods = Congo.projects.config.periods;
-    years = Congo.projects.config.years;
-    from_floor = Congo.projects.config.from_floor;
-    to_floor = Congo.projects.config.to_floor;
-    from_uf_value = Congo.projects.config.from_uf_value;
-    to_uf_value = Congo.projects.config.to_uf_value;
-    project_agency_ids = Congo.projects.config.project_agency_ids;
-    type_geometry = Congo.dashboards.config.typeGeometry;
-    layer_type = Congo.dashboards.config.layer_type;
-    style_layer = Congo.dashboards.config.style_layer;
-
-    // Sino se realizó la selección muestra un mensaje de alerta
-    if (county_id.length == 0 && centerPoint == '' && wkt.length == 0) {
-
-      Congo.dashboards.action_index.empty_selection_alert();
-
-      // Si se realizó la selección, añade los elementos al dashboard
-    } else {
-
-      // Creamos el overlay y el time_slider
-      Congo.dashboards.action_index.create_overlay_and_filter_card();
-      Congo.dashboards.action_index.add_time_slider();
-
-      if (county_id != '') {
-
-        // Agregamos filtro Comuna
-        Congo.dashboards.action_index.add_county_filter_item()
-
-        data = {
-          to_year: to_year,
-          to_period: to_bimester,
-          periods_quantity: "5",
-          project_status_ids: project_status_ids,
-          project_type_ids: project_type_ids,
-          mix_ids: mix_ids,
-          periods: periods,
-          years: years,
-          from_floor: from_floor,
-          to_floor: to_floor,
-          from_uf_value: from_uf_value,
-          to_uf_value: to_uf_value,
-          project_agency_ids: project_agency_ids,
-          county_id: county_id,
-          type_geometry: type_geometry,
-          layer_type: layer_type,
-          style_layer: style_layer
-        };
-
-      } else if (centerPoint != '') {
-
-        // Eliminamos filtro comuna
-        $('#item-comuna').remove();
-
-        data = {
-          to_year: to_year,
-          to_period: to_bimester,
-          periods_quantity: "5",
-          project_status_ids: project_status_ids,
-          project_type_ids: project_type_ids,
-          mix_ids: mix_ids,
-          periods: periods,
-          years: years,
-          from_floor: from_floor,
-          to_floor: to_floor,
-          from_uf_value: from_uf_value,
-          to_uf_value: to_uf_value,
-          project_agency_ids: project_agency_ids,
-          centerpt: centerPoint,
-          radius: radius,
-          type_geometry: type_geometry,
-          layer_type: layer_type,
-          style_layer: style_layer
-        };
-
-      } else {
-
-        // Eliminamos filtro comuna
-        $('#item-comuna').remove();
-
-        data = {
-          to_year: to_year,
-          to_period: to_bimester,
-          periods_quantity: "5",
-          project_status_ids: project_status_ids,
-          project_type_ids: project_type_ids,
-          mix_ids: mix_ids,
-          periods: periods,
-          years: years,
-          from_floor: from_floor,
-          to_floor: to_floor,
-          from_uf_value: from_uf_value,
-          to_uf_value: to_uf_value,
-          project_agency_ids: project_agency_ids,
-          wkt: JSON.stringify(wkt),
-          type_geometry: type_geometry,
-          layer_type: layer_type,
-          style_layer: style_layer
-        };
-
-      };
-
       $.ajax({
         type: 'GET',
         url: '/rent_indicators/rent_indicators_summary.json',
@@ -210,15 +93,10 @@ Congo.rent_indicators.action_dashboards = function() {
           });
 
 
-          console.log('antes');
-          console.log(data);
-
           data = '[{"title":"Resumen Bimestre","data":[{"name":"Total Viviendas","count":53867},{"name":"Total Departamentos","count":15663},{"name":"Tenencia Arriendo","count":7504},{"name":"Oferta Arriendo","count":197},{"name":"Tasa de Vacancia","count":2.6},{"name":"Rentabilidad Bruta Anual (al 2B 2020)*","count":8.2},{"name":"Superficie Util Oferta Arriendo","count":54},{"name":"Superficie Util Compraventas (al 3B 2020)*","count":55.2},{"name":"Superficie Terraza Oferta Arriendo","count":4.3},{"name":"Precio Compraventas | UF (al 3B 2020)*","count":1993},{"name":"Precio Oferta Arriendo | UF mensual","count":13.5},{"name":"Precio Oferta Arriendo | UFm2 mensual","count":0.27},{"name":"PxQ Mensual | UF miles","count":98.4}]},{"title":"Distribución Programas","series":[{"label":"Parque","data":[{"name":"1|1","count":23,"id":28},{"name":"2|1","count":18,"id":31},{"name":"2|2","count":28,"id":30},{"name":"3|1","count":9,"id":29},{"name":"3|2","count":21,"id":29},{"name":"4+","count":1,"id":29}]},{"label":"Oferta","data":[{"name":"1|1","count":48,"id":28},{"name":"2|1","count":10,"id":31},{"name":"2|2","count":26,"id":30},{"name":"3|1","count":1,"id":29},{"name":"3|2","count":13,"id":29},{"name":"4+","count":2,"id":29}]}]},{"title":"Superficie","series":[{"label":"Arriendo","data":[{"name":"6/19","count":54},{"name":"1/20","count":54},{"name":"2/20","count":53},{"name":"3/20","count":59},{"name":"4/20","count":60},{"name":"5/20","count":54}]},{"label":"Venta","data":[{"name":"6/19","count":55},{"name":"1/20","count":49},{"name":"2/20","count":55},{"name":"3/20","count":61},{"name":"4/20","count":56},{"name":"5/20","count":54}]}]},{"title":"Precio UF mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":13.5},{"name":"1/20","count":14},{"name":"2/20","count":15.1},{"name":"3/20","count":15},{"name":"4/20","count":14},{"name":"5/20","count":15}]},{"label":"Venta","data":[{"name":"6/19","count":2000},{"name":"1/20","count":2200},{"name":"2/20","count":2000},{"name":"3/20","count":2500},{"name":"4/20","count":1900},{"name":"5/20","count":2100}]}]},{"title":"UFm2 mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":0.27},{"name":"1/20","count":0.27},{"name":"2/20","count":0.28},{"name":"3/20","count":0.28},{"name":"4/20","count":0.27},{"name":"5/20","count":0.27}]},{"label":"Venta","data":[{"name":"6/19","count":38},{"name":"1/20","count":48},{"name":"2/20","count":38},{"name":"3/20","count":40},{"name":"4/20","count":36},{"name":"5/20","count":41}]}]},{"title":"Relación Precios | Vacancia","series":[{"label":"Arriendo/Venta","data":[{"name":"6/19","count":0.72},{"name":"1/20","count":0.58},{"name":"2/20","count":0.76},{"name":"3/20","count":0.7},{"name":"4/20","count":0.78},{"name":"5/20","count":0.62}]},{"label":"Vacancia","data":[{"name":"6/19","count":2.6},{"name":"1/20","count":1.8},{"name":"2/20","count":1.7},{"name":"3/20","count":1.2},{"name":"4/20","count":1.1},{"name":"5/20","count":1.2}]}]}]'
 
           data = JSON.parse(data)
 
-          console.log('despues');
-          console.log(data);
 
           // Separamos la información
           for (var i = 0; i < data.length; i++) {

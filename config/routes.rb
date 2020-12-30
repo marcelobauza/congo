@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   get 'application_statuses/load' => 'application_statuses#load'
   get 'application_statuses/colleagues' => 'application_statuses#colleagues'
   get 'application_statuses/share_users' => 'application_statuses#share_users'
+  get 'dashboard/enabled_transaction_data'
 
   get 'transactions/dashboards' => 'transactions#dashboards'
   get 'transactions/graduated_points' => 'transactions#graduated_points'
