@@ -233,20 +233,14 @@ class ImportProcess < ApplicationRecord
             mix_instance.mix_m2_field              = data["TERRENO_M2"].to_f
           end
 
-          if (data['COD_PROY'] != project_code && !project_code.nil?) || shp.num_records - 1 == shape.index
             instance_mixes << mix_instance
-            store_project(geom, data, instance_mixes, import_logger, project_type)
-            mixes.clear
-            instance_mixes.clear
-
-            total_units = 0
-            stock_units = 0
-            sold_units  = 0
-          else
-            instance_mixes << mix_instance
-          end
         end
-        project_code = data['COD_PROY']
+        store_project(geom, data, instance_mixes, import_logger, project_type)
+        mixes.clear
+        instance_mixes.clear
+        total_units = 0
+        stock_units = 0
+        sold_units = 0
       end
     end
   end
@@ -274,9 +268,10 @@ class ImportProcess < ApplicationRecord
       end
       return false
     end
-    processed_rows = instance.project_instance_mixes.count
+    is_new_record ? import_logger.inserted += 1 : import_logger.updated += 1
+    #processed_rows = instance.project_instance_mixes.count
 
-    is_new_record ? import_logger.inserted += processed_rows : import_logger.updated += processed_rows
+    #is_new_record ? import_logger.inserted += processed_rows : import_logger.updated += processed_rows
   end
 
   def parse_future_projects(shp_file, import_logger)
