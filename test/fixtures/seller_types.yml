@@ -1,7 +1,5 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+cooperativa:
+  name: 'Cooperativa'
 
-one:
-  name: MyString
-
-two:
-  name: MyString
+inmobiliaria:
+  name: 'Inmobiliaria'

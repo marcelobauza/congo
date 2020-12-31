@@ -16,4 +16,9 @@ class ActiveSupport::TestCase
       sign_in(user)
     end
   end
+  def assert_error model, attribute, type, options = {}
+    error = model.errors.generate_message attribute, type, options
+
+    assert_includes model.errors[attribute], error
+  end
 end

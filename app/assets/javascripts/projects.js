@@ -262,7 +262,7 @@ projects_popup = function(id){
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.project_type_id == '1' ? data.mix_usable_square_meters : data.mix_terrace_square_meters
+              'text': data.project_type_id == '1' ? data.ps_terreno : data.mix_terrace_square_meters
             }),
           ),
           $('<div>', {

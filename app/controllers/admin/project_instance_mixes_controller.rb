@@ -76,6 +76,6 @@ class Admin::ProjectInstanceMixesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def project_instance_mix_params
-    params.require(:project_instance_mix).permit(:project_instance_id, :mix_id, :percentage, :stock_units, :mix_m2_field, :mix_m2_built, :mix_usable_square_meters, :mix_terrace_square_meters, :mix_uf_m2, :mix_selling_speed, :mix_uf_value, :living_room, :service_room, :h_office, :discount, :uf_min, :uf_max, :uf_parking, :uf_cellar, :common_expenses, :withdrawal_percent, :total_units, :t_min, :t_max, :home_type, :model, :get_bedroom, :get_bathroom)
+    params.require(:project_instance_mix).permit(:project_instance_id, :mix_id, :percentage, :stock_units, :mix_m2_field, :mix_m2_built, :mix_usable_square_meters, :mix_terrace_square_meters, :mix_uf_m2, :mix_selling_speed, :mix_uf_value, :living_room, :service_room, :h_office, :discount, :uf_min, :uf_max, :uf_parking, :uf_cellar, :common_expenses, :withdrawal_percent, :total_units, :t_min, :t_max, :home_type, :model, :get_bedroom, :get_bathroom, :mix_id)
   end
 end

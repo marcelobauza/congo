@@ -78,6 +78,7 @@ Rails.application.routes.draw do
     get 'user_polygons/export_data' => 'user_polygons#export_data'
     get 'user_polygons/generate_csv' => 'user_polygons#generate_csv'
     get 'projects/export_data' => 'projects#export_data'
+    get 'users/export_data' => 'users#export_data'
     get 'projects/generate_csv' => 'projects#generate_csv'
     get 'projects/kpi' => 'projects#kpi'
     get 'future_projects/export_data' => 'future_projects#export_data'

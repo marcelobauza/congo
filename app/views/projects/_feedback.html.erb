@@ -1,80 +1,83 @@
 <%= a.input :layer_type, input_html: {value: "PRV"}, as: :hidden %>
-<%= a.input :row_id, input_html: {class: 'feedback_project_id'}, readonly: true %>
+<%= a.input :row_id, as: :hidden, input_html: {class: 'feedback_project_id'}, readonly: true %>
+<div>
+  <p>Complete campos que considere necesarios (uno o más)</p>
+</div>
 <div class="form-group row">
-  <%= a.label :address, label: 'Dirección:', class: 'col-md-5 text-right' %>
+  <%= a.label :address, label: 'Dirección:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
-    <%= a.input :address, label: false, input_html: {class: 'form-control form-control-sm'} %>
+    <%= a.input :address, label: false, input_html: {class: 'form-control form-control-sm', required: false} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :name, label: 'Nombre:', class: 'col-md-5 text-right' %>
+  <%= a.label :name, label: 'Nombre:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :name, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :status, label: 'Estado:', class: 'col-md-5 text-right' %>
+  <%= a.label :status, label: 'Estado:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :status, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :total_units, label: 'Total de Unidades:', class: 'col-md-5 text-right' %>
+  <%= a.label :total_units, label: 'Total de Unidades:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :total_units, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :stock, label: 'Stock:', class: 'col-md-5 text-right' %>
+  <%= a.label :stock, label: 'Stock:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :stock, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :sold_units, label: 'Unidades Vendidas:', class: 'col-md-5 text-right' %>
+  <%= a.label :sold_units, label: 'Unidades Vendidas:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :sold_units, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :floors, label: 'Altura Edificio:', class: 'col-md-5 text-right' %>
+  <%= a.label :floors, label: 'Altura Edificio:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :floors, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 
 <div class="form-group row">
-  <%= a.label :uf_m2, label: 'Precio UF:', class: 'col-md-5 text-right' %>
+  <%= a.label :uf_m2, label: 'Precio UF:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :uf, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :uf_m2, label: 'Precio UF m²:', class: 'col-md-5 text-right' %>
+  <%= a.label :uf_m2, label: 'Precio UF m²:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :uf_m2, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :date_building, label: 'Fecha de Construcción:', class: 'col-md-5 text-right' %>
+  <%= a.label :date_building, label: 'Fecha de Construcción:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :date_building, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :date_sold, label: 'Fecha de Venta:', class: 'col-md-5 text-right' %>
+  <%= a.label :date_sold, label: 'Fecha de Venta:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :date_sold, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :data_transfer, label: 'Fecha de Entrega:', class: 'col-md-5 text-right' %>
+  <%= a.label :data_transfer, label: 'Fecha de Entrega:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.input :data_transfer, label: false, input_html: {class: 'form-control form-control-sm'} %>
   </div>
 </div>
 <div class="form-group row">
-  <%= a.label :comments, label: 'Comentarios:', class: 'col-md-5 text-right' %>
+  <%= a.label :comments, label: 'Comentarios:', class: 'col-md-5 text-right', required: false %>
   <div class="col-md-6">
     <%= a.text_area :comments, rows: '3', label: false, :class => 'form-control form-control-sm' %>
   </div>

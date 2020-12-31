@@ -7,10 +7,11 @@
         <h2>Usuarios</h2>
       </div>
       <div class="col-md-8 text-center">
-        <%= render :partial => 'filters' %>
+        <%= render partial: 'filters' %>
       </div>
       <div class="col-md-2 text-right">
-        <%= link_to 'Nuevo', new_admin_user_path, :class => 'btn btn-primary' %>
+        <%= link_to 'Exportar', admin_users_export_data_path, class: 'btn btn-primary' %>
+        <%= link_to 'Nuevo', new_admin_user_path, class: 'btn btn-primary' %>
       </div>
     </div>
   </div>

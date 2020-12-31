@@ -112,6 +112,7 @@ class ReportsController < ApplicationController
 
   def transactions_data
     filters                     = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+    filters[:user_id]          = current_user.id
     @transaction                = Transaction.reports(filters)
     u                           = User.find(current_user.id)
     total_downloads_allowed     = u.role.total_download_transactions
@@ -136,7 +137,8 @@ class ReportsController < ApplicationController
   end
 
   def transactions_summary
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    filters           = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    filters[:user_id] = current_user.id
     @transaction = Transaction.summary(filters)
     @info=[]
     @ptypes=[]

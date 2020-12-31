@@ -27,7 +27,7 @@ module FutureProjects::Exports
       if !filters['polygon_id'].empty?
         session_saved = ApplicationStatus.find(filters[:polygon_id])
         if !session_saved[:filters]['wkt'].nil?
-          where(WhereBuilder.build_within_condition(session_saved[:filters]['wkt'], 'projects.the_geom'))
+          where(WhereBuilder.build_within_condition(session_saved[:filters]['wkt'], 'future_projects.the_geom'))
         elsif !session_saved[:filters]['centerpt'].nil?
           where(WhereBuilder.build_within_condition_radius(session_saved[:filters]['centerpt'], session_saved[:filters]['radius'], false, 'projects.the_geom'))
         else

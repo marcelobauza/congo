@@ -3,6 +3,8 @@ class Admin::UsersController < Admin::DashboardsController
   layout 'admin'
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+  include Admin::Users::Export
+
   # GET /users
   # GET /users.json
   def index

@@ -4,91 +4,28 @@ class Transaction < ApplicationRecord
   include Util
   include WhereBuilder
   include Transactions::Exports
+  include Transactions::Imports
   include Transactions::Periods
+  include Transactions::Popup
+  include Transactions::Scopes
   include Transactions::Validations
   include Transactions::Kml
 
-  belongs_to :surveyor
-  belongs_to :user
+  belongs_to :county
   belongs_to :property_type
   belongs_to :seller_type
-  belongs_to :county
+  belongs_to :surveyor
+  belongs_to :user
 
   attr_accessor :latitude, :longitude
 
-
-  before_save :update_calculated_value, :titleize_attributes
-  before_save :pm2
-
-  #named_scope :by_number, lambda { |t| {:conditions => {:number => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
-  #named_scope :by_user, lambda { |t| {:conditions => {:user_id => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
-  #named_scope :by_inscription_date, lambda { |t| {:conditions => {:inscription_date => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
-  #named_scope :by_role, lambda { |t| {:conditions => {:role => t}} unless t.blank? }
-  #named_scope :by_property_type, lambda { |t| {:conditions => {:property_type_id => t}, :include => [:property_type, :seller_type, :county]} unless t.blank? }
-
- validates :address,
-    :county_id,
-    :property_type_id,
-    :inscription_date,
-    :sheet,
-    :number,
-    :longitude,
-    :latitude,
-    :seller_type_id,
-    :sample_factor,
-    :tome,
-    :role,
-    :code_sii, presence: true
-
-  validate :point_is_located_within_the_specified_county, :unless => Proc.new { |t| t.county.blank? or t.longitude.blank? or t.latitude.blank? }
-
-  validates :parkingi, numericality: { greater_than_or_equal_to: 0, only_integer: true }, unless: -> { :parkingi.blank? }
-  validates :cellar, numericality: { greater_than_or_equal_to: 0, only_integer: true }, unless: -> { :cellar.blank? }
-  validates :number, numericality: { only_integer: true } , unless: -> { :number.blank? }
-  validates :sheet, numericality: { only_integer: true }, unless: -> { :sheet.blank? }
-  #validates :quarter, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 4, only_integer: true}, unless: -> { :quarter.blank? }
-  validates :bimester, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 6, only_integer: true}, unless: -> { :bimester.blank? }
-  validates :real_value, numericality: { greater_than_or_equal_to: 0 }, unless: -> { :real_value.blank? }
-  #validates :uf_m2, numericality: { greater_than_or_equal_to: 0 }, unless: -> { :uf_m2.blank? }
-  #validates :sample_factor, numericality: { greater_than: 0 }, if: !sample_factor.blank?
-  #validates :sample_factor, numericality: { less_than_or_equal_to: 1 }, if: !sample_factor.blank?
-
   BIMESTER_QUANTITY = 6
-
-  SUM_CRITERIA = 0
-  COUNT_CRITERIA = 1
-  AVG_CRITERIA = 2
+  SUM_CRITERIA      = 0
+  COUNT_CRITERIA    = 1
+  AVG_CRITERIA      = 2
   AVG_CRITERIA_UFM2 = 3
 
-
-  def self.popup params
-
-    @row = Transaction.where(id: params[:id]).first
-    @data = Transaction.where("st_Dwithin(st_geomfromtext('#{@row.the_geom}',4326), the_geom, 15, false)").where(WhereBuilder.build_range_periods_by_bimester_transaction_popup(params[:bimester], params[:year], 6))
-  end
-
-  def self.number_filter number
-    return all unless !number.empty?
-    where(number: number)
-  end
-
-  def self.role_filter role
-    return all unless !role.empty?
-    where(role: role)
-  end
-
-  def self.property_type_filter property_type_id
-    return all unless !property_type_id.empty?
-    where(property_type_id: property_type_id)
-  end
-
-  def self.inscription_date_filter inscription_date
-    return all unless !inscription_date.empty?
-    where(inscription_date: inscription_date)
-  end
-
   def  self.pois params
-
     @joins = " INNER JOIN property_types ON property_types.id = transactions.property_type_id "
     @joins += " INNER JOIN seller_types ON seller_types.id = transactions.seller_type_id "
 
@@ -110,21 +47,6 @@ class Transaction < ApplicationRecord
                                    :conditions => conditions
                                   )
     return transaction
-
-  end
-
-
-  def download_xls
-
-    brief = {:sheet => "Resumen", :data => []}
-    details = {:sheet => "Prospectos", :data => []}
-    load_xls_headers details[:data]
-    load_brief_sheet_data brief[:data], filters
-    credits = Credit.all_filtered filters, {:order_by => "credits.credit_status_id"}
-    credits.each {|credit| load_prospects_sheet_data details[:data], credit}
-    Xls.generate([brief, details], "/bank/xls",
-                 {:file_name => "#{Time.now.strftime("%Y-%m-%d_%H.%M")}_clientes",
-                  :clean_directory_path => true})
   end
 
   def latitude
@@ -143,96 +65,22 @@ class Transaction < ApplicationRecord
   end
 
   def titleize_attributes
-    self.buyer_name = self.buyer_name.titleize
-    self.seller_name = self.seller_name.titleize
-    self.address = self.address.titleize
-    self.village = self.village.to_s.titleize
+    self.buyer_name       = self.buyer_name.titleize
+    self.seller_name      = self.seller_name.titleize
+    self.address          = self.address.titleize
+    self.village          = self.village.to_s.titleize
     self.requiring_entity = self.requiring_entity.to_s.titleize
-    self.comments = self.comments.to_s.titleize
-
-    self.block = self.block.to_s.upcase
-    self.department = self.department.to_s.upcase
-    self.blueprint = self.blueprint.to_s.upcase
+    self.comments         = self.comments.to_s.titleize
+    self.block            = self.block.to_s.upcase
+    self.department       = self.department.to_s.upcase
+    self.blueprint        = self.blueprint.to_s.upcase
   end
-
-  def valid_date?
-    errors.add(:inscription_date, :inscription_date_less_than_today) if self.inscription_date > Date.today
-  end
-
-  def save_transaction_data(geom, data, county_id, user_id)
-    ic = Iconv.new('UTF-8', 'ISO-8859-1')
-
-    property_type, calc_uf      = PropertyType.get_property_type_transaction(data["PROPERTY_T"])
-    seller                      = SellerType.get_seller_type(data["SELLER_TYP"])
-    self.property_type_id       = property_type.id
-    self.address                = ic.iconv(data["ADDRESS"].gsub("'","''"))
-    self.sheet                  = data["SHEET"].to_i
-    self.number                 = data["NUMBER"].to_i
-    self.inscription_date       = ic.iconv(data["INSCRIPTIO"].to_s).to_date
-    self.buyer_name             = ic.iconv(data["BUYER_NAME"].to_s)
-    self.seller_type_id         = seller.id
-    self.department             = ic.iconv(data["DEPARTMENT"].to_s)
-    self.blueprint              = ic.iconv(data["BLUEPRINT"].to_s)
-    self.real_value             = data["REAL_VALUE"].to_f
-    self.calculated_value       = data["CALCULATED"].to_f
-    self.year                   = data["YEAR"]
-    self.sample_factor          = data["SAMPLE_FAC"]
-    self.county_id              = county_id
-    self.the_geom               = geom
-    self.cellar                 = data["BOD"].to_i
-    self.parkingi               = data["EST"].to_i
-    self.role                   = ic.iconv(data["ROL"].to_s)
-    self.seller_name            = ic.iconv(data["SELLER_NAM"].to_s)
-    self.buyer_rut              = ic.iconv(data["BUYER_RUT"].to_s)
-    self.uf_m2                  = (self.calculated_value / self.surface) unless self.surface == 0 or self.surface.nil?
-    self.tome                   = data["TOMO"].to_i unless data["TOMO"] == -1
-    self.lot                    = data["LOT"]
-    self.block                  = ic.iconv(data["MANZANA"].to_s)
-    self.village                = ic.iconv(data["VILLA"].to_s)
-    self.surface                = data["SUPERFICIE"] unless data["SUPERFICIE"] == -1
-    self.requiring_entity       = data["REQUIRING"]
-    self.comments               = ic.iconv(data["COMMENTS"].to_s)
-    self.user_id                = user_id
-    self.surveyor_id            = Surveyor.find_by(name: data["ENCUESTADO"].to_s.downcase.titleize).id if !data["ENCUESTADO"].nil?
-    self.bimester               = data["BIMESTER"]
-    self.code_sii               = data["CODE_SII"]
-    self.role_1                 = data["ROL2"]
-    self.role_2                 = data["ROL3"]
-    self.additional_roles       = data["ROLES_ADIC"]
-
-    conditions = "rol_number = '#{self.role}'  #{Util.and} "
-    conditions += "county_sii_id = #{data['CODE_SII']}"
-    self.total_surface_terrain = TaxLand.where(conditions).sum('land_m2')
-    self.total_surface_building = TaxUsefulSurface.where(conditions).sum('m2_built')
-    self.uf_m2_u = self.calculated_value / self.total_surface_building unless self.total_surface_building == 0 or self.total_surface_building.nil?
-    self.uf_m2_t = self.calculated_value / self.total_surface_terrain unless self.total_surface_terrain == 0 or self.total_surface_terrain.nil?
-
-    if self.save
-      County.update(county_id, :transaction_data => true) unless county_id.nil?
-      return true
-    end
-    return false
-  end
-
-  def pm2
-
-    conditions = "rol_number = '#{self.role}'  #{Util.and} "
-    conditions += "county_sii_id = #{self.code_sii}"
-    self.total_surface_terrain = TaxLand.where(conditions).sum('land_m2')
-    self.total_surface_building = TaxUsefulSurface.where(conditions).sum('m2_built')
-    self.uf_m2_u = self.calculated_value / self.total_surface_building unless self.total_surface_building == 0 or self.total_surface_building.nil?
-    self.uf_m2_t = self.calculated_value / self.total_surface_terrain unless self.total_surface_terrain == 0 or self.total_surface_terrain.nil?
-    building_regulation = BuildingRegulation.where("county_id = #{self.county_id} #{Util.and} ST_Contains(the_geom, ST_Transform(ST_GeomFromText('POINT(#{self.longitude} #{self.latitude})',4326),4326)) " ).first
-    #self.building_regulation = building_regulation.name_ze.to_s unless building_regulation.nil?
-  end
-
-
 
   def self.is_periods_distance_allowed? from_period, to_period, distance
     f_period = from_period[:period].to_i
-    f_year = from_period[:year].to_i
+    f_year   = from_period[:year].to_i
     t_period = to_period[:period].to_i
-    t_year = to_period[:year].to_i
+    t_year   = to_period[:year].to_i
 
     if Period.get_distance_between_periods(f_period, f_year, t_period, t_year, 2) < distance
       return false
@@ -396,19 +244,12 @@ class Transaction < ApplicationRecord
         item["y0_value".to_sym] = values_sum
       end
 
-      # if q[:counties].exists?
-      #  item["y1_value".to_sym] = "null"
-      # else
-      #   item["y9_label".to_sym] = I18n.t(:ALL_COUNTIES_LABEL)
-      #   values_sum_total == 0 ? item["y9_value".to_sym] = 0 : item["y9_value".to_sym] = values_sum
-      # end
       values << item
     end
     return values.reverse
   end
 
   def self.group_transactions_by_uf(filters)
-
     values = get_calculated_value_ranges(filters)
     result = []
 
@@ -457,11 +298,9 @@ class Transaction < ApplicationRecord
     inf_limit = Float(t.avg) - Float(t.dev)
     inf_limit = 0.0 if inf_limit < 0.0
     sup_limit = Float(t.avg) + Float(t.dev)
-
     increment = (Float(sup_limit) - Float(inf_limit)) / 9.0 #5.0
-
-    from = inf_limit
-    to = from + increment
+    from      = inf_limit
+    to        = from + increment
 
     ranges = []
     ranges << {:from => original_min, :to => to}
@@ -478,25 +317,19 @@ class Transaction < ApplicationRecord
   end
 
   def self.get_valid_ranges(values)
-    ranges = Ranges.get_ranges
-
+    ranges    = Ranges.get_ranges
     min_value = values[0][:from].to_i
     max_value = values[values.count - 1][:to].to_i
-
     index_min = -1
     index_max = -1
 
     ranges.each_with_index do |r, index|
-
       index_min = index if min_value >= r["min"].to_i && min_value <= r["max"].to_i
-
       index_max = index if max_value <= r["max"].to_i && max_value >= r["min"].to_i
       index_max = index if max_value > r["max"].to_i
     end
 
-
     ranges[index_min..index_max]
-
   end
 
   def self.group_by_uf(filters, criteria, periods)
@@ -515,8 +348,7 @@ class Transaction < ApplicationRecord
 
     periods.each do |per|
       trans_group = {:period => per[:period], :year => per[:year], :value => "null"}
-
-      conditions = "active = true #{Util.and}"
+      conditions  = "active = true #{Util.and}"
 
       if !filters[:wkt].nil?
         conditions += WhereBuilder.build_within_condition(filters[:wkt]) + Util.and
@@ -587,11 +419,8 @@ class Transaction < ApplicationRecord
     end
 
     conditions += build_ids_conditions(filters, widget)
+    conditions += "transactions.county_id IN(#{CountiesUser.where(user_id: filters[:user_id]).pluck(:county_id).join(",")})#{Util.and}" if CountiesUser.where(user_id: filters[:user_id]).count > 0
     conditions += build_calculated_value_condition(filters, widget)
-    #FILTER DATA BY COUNTIES ASSOCIATED TO THE USER
-    #ver que hace esto
-    #   conditions += "transactions.county_id IN(#{User.current.county_ids.join(",")})#{Util.and}" if User.current.county_ids.length > 0
-
     conditions.chomp!(Util.and)
     conditions
   end
@@ -617,8 +446,6 @@ class Transaction < ApplicationRecord
         by_role(params[:role]).by_inscription_date(params[:inscription_date])
     end
   end
-
-
 
   def self.get_bench_values(result_id, seller_type_ids=nil)
     conditions = "result_id = #{result_id}"
@@ -690,7 +517,6 @@ class Transaction < ApplicationRecord
     joins = []
     joins << "INNER JOIN property_types ON property_types.id = transactions.property_type_id"
     joins << "INNER JOIN seller_types ON seller_types.id = transactions.seller_type_id"
-    #    joins << "INNER JOIN user_expirations ON user_expirations.county_id = transactions.county_id" if User.current.is_count_down?
     joins
   end
 
@@ -706,59 +532,6 @@ class Transaction < ApplicationRecord
       errors.add(:calculated_value, :not_valid_uf_value)
       return false
     end
-  end
-
-  def point_is_located_within_a_lot
-    errors.add(:point, :not_within_lot) if Lot.find_by_lon_lat(self.longitude, self.latitude).nil?
-  end
-
-  def point_is_located_within_the_specified_county
-    point_county = County.find_by_lon_lat(self.longitude, self.latitude)
-    if point_county.nil?
-      errors.add(
-        :county_id,
-        :not_within_county,
-        :point_county => I18n.t(:none),
-        :selected_county => self.county.name)
-    else
-      errors.add(
-        :county_id,
-        :not_within_county,
-        :point_county => point_county.name,
-        :selected_county => self.county.name) unless point_county.id == self.county_id
-    end
-  end
-
-  #Validating rut using Module 11 algorithm
-  def is_buyer_rut_verification_digit_valid
-    if self.buyer_rut.match(/^(|\d{1,8}-(\d{1}|K))$/).nil?
-      errors.add(:buyer_rut, :invalid_buyer_rut_format)
-      return false
-    end
-
-    number_verif_digit = self.buyer_rut.gsub(".", "").split("-")
-    number = number_verif_digit.first
-
-    number_verif_digit.last == "K" ? digit = 10 : digit = number_verif_digit.last
-
-    serie = [2,3,4,5,6,7]
-    sum = 0
-
-    number.split("").reverse.each_with_index do |n, i|
-      serie_value = serie[i]
-      serie_value = serie[i - serie.size] if serie_value.nil?
-      sum += n.to_i * serie_value
-    end
-
-    result = 11 - (sum % 11)
-    result = 0 if result == 11
-
-    if result != digit.to_i
-      errors.add(:buyer_rut, :invalid_buyer_rut_verification_digit)
-      return false
-    end
-
-    return true
   end
 
   def self.build_ids_conditions(filters, self_not_filter=nil)
@@ -830,17 +603,13 @@ class Transaction < ApplicationRecord
     @imx = index_max
     @vv = values
     ranges.each_with_index do |r, index|
-
       index_min = index if min_value >= r["min"].to_i && min_value <= r["max"].to_i
-
     end
 
     ranges[index_min..index_max]
-
   end
 
   def self.group_avg_by_chart_pdf(filters, option)
-
     result = []
     counties = ["sum_counties"]
 

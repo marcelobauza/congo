@@ -33,10 +33,17 @@
           </div>
         <% end %>
         <div class="form-group col-md-2">
-          <%= f.input :get_bedroom, input_html: {class:'form-control form-control-sm'}  %>
+          <%= f.input :mix_id,
+            collection: project_mixes_for_select,
+            prompt:"Seleccione Mix",
+            input_html:{ class: "form-control form-control-sm"}
+          %>
         </div>
         <div class="form-group col-md-2">
-          <%= f.input :get_bathroom, input_html: {class:'form-control form-control-sm'}  %>
+          <%= f.input :get_bathroom, input_html: {class:'form-control form-control-sm', readonly: true}  %>
+        </div>
+        <div class="form-group col-md-2">
+          <%= f.input :get_bedroom, input_html: {class:'form-control form-control-sm', readonly: true}  %>
         </div>
         <div class="form-group col-md-2">
           <%= f.input :living_room, input_html: {class:'form-control form-control-sm'}  %>

@@ -11,6 +11,7 @@ class FeedbacksController < ApplicationController
     @feedback = Feedback.new(feedback_params)
     @feedback.properties = params[:feedback].as_json
     @feedback.layer_type = params[:feedback]['layer_type']
+
     respond_to do |format|
       if @feedback.save
         FeedbackMailer.with(feedback: @feedback).new_feedback_email.deliver_later

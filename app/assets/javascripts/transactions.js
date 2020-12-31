@@ -51,18 +51,13 @@ Congo.transactions.action_heatmap = function(){
         Congo.transactions.config.legends.push({'name':'Bajo', 'color':'fcd930'});
         Congo.map_utils.counties();
         $('#layer-name').text('Compraventas - Cantidad');
-
         break;
     }
-
-
   }
   return {
     init: init,
   }
 }();
-
-
 
 transactions_popup = function(id, latlng){
 
@@ -71,7 +66,8 @@ transactions_popup = function(id, latlng){
   Congo.dashboards.config.row_id = id;
   lat = latlng['lat'];
   lng = latlng['lng'];
-  data = {id: id, bimester: bimester, year: year, lat: lat, lng: lng};
+  boost = Congo.dashboards.config.boost
+  data = {id: id, bimester: bimester, year: year, lat: lat, lng: lng, boost: boost};
   $.ajax({
     type: 'GET',
     url: '/transactions/index.json',
