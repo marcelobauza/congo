@@ -2,6 +2,7 @@ Congo.namespace('map_utils');
 
 Congo.map_utils.config={
   cql_filter: '',
+  map: ''
 }
 
 Congo.map_utils = function(){
@@ -44,7 +45,11 @@ Congo.map_utils = function(){
       layers: [streets]
     });
 
+    groupLayer = L.featureGroup();
+    Congo.dashboards.config.map = map
+    Congo.dashboards.config.groupLayer = groupLayer;
     // Agrega el ícono de capas al mapa
+
     baseMaps = {
       "Calles": streets,
       "Satelital": satellite,
@@ -53,6 +58,7 @@ Congo.map_utils = function(){
     };
     var overlays =  {
     };
+
     layerControl = L.control.layers(baseMaps, overlays, {
       position: 'topleft',
       collapsed: true
@@ -60,7 +66,8 @@ Congo.map_utils = function(){
 
     countiesEnabled();
 
-    editableLayers = new L.FeatureGroup();
+   // editableLayers = new L.FeatureGroup();
+    Congo.dashboards.config.editableLayers =  new L.FeatureGroup();
 
     // Agrega el toolbar de selección al mapa
     var drawControl = new L.Control.Draw({
@@ -69,12 +76,12 @@ Congo.map_utils = function(){
         rectangle: false,
         circlemarker: false,
       },
-      edit: {
+      /*edit: {
         featureGroup: editableLayers,
-        edit: true,
+        edit: false,
         remove: false,
         marker: false
-      }
+      }*/
     });
     // Establece los nombres de las leyendas del toolbar
       toolbar_name(map, drawControl);
@@ -96,6 +103,7 @@ Congo.map_utils = function(){
     });
     map.addControl(zoomControl);
 
+
     // Agregamos el spinner de carga
     var loadingControl = L.Control.loading({
       position: 'topleft',
@@ -106,14 +114,15 @@ Congo.map_utils = function(){
 
     map.on(L.Draw.Event.CREATED, function (event) {
       var typeGeometry = event.layerType;
-      size_box = [];
+      size_box         = [];
+      editableLayers   = Congo.dashboards.config.editableLayers;
 
       if(typeof(editableLayers)!=='undefined'){
         editableLayers.eachLayer(function (layer) {
           map.removeLayer(layer);
         });
 
-      editableLayers = new L.FeatureGroup();
+        editableLayers = new L.FeatureGroup();
       }
 
       layer = event.layer;
@@ -176,8 +185,20 @@ Congo.map_utils = function(){
       editableLayers.addLayer(layer).addTo(map);
       map.fitBounds(editableLayers.getBounds());
       layer_type = Congo.dashboards.config.layer_type;
+
       if (layer_type != ''){
-        counties();
+        if (layer_type == 'rent_indicators_info'){
+          centerpt = Congo.dashboards.config.centerpt;
+          radius = Congo.dashboards.config.radius ;
+          geometry = centerpt.split(' ');
+          var center = [geometry[0],geometry[1]];
+          var radius = radius;
+          var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
+          //var circle = turf.circle(center, radius, options);
+          ica();
+        }else{
+          counties();
+        }
       }
     });
 
@@ -252,7 +273,31 @@ Congo.map_utils = function(){
   }
 
   counties = function(){
+    srcPois = Congo.dashboards.config.sourcePois;
+    srcLots = Congo.dashboards.config.sourceLots;
+    layer_type = Congo.dashboards.config.layer_type;
 
+
+    if (groupLayer.getLayers().length > 0 ){
+      groupLayer.eachLayer(function(layer) {
+        groupLayer.removeLayer(layer);
+      });
+
+      layerControl.removeLayer(srcPois);
+      layerControl.removeLayer(srcLots);
+      layerControl.removeLayer(groupLayer);
+      remove_legend();
+    }
+    if (layer_type == 'rent_indicators_info'){
+      ica();
+    }else{
+      others();
+    }
+  }
+
+  others = function(){
+
+    //groupLayer = L.layerGroup();
     var bimester, year, filter_for_layer;
     var filter_layer = "AND 1 = 1 ";
     var env = Congo.dashboards.config.env;
@@ -273,25 +318,15 @@ Congo.map_utils = function(){
       HandlerGeometry.disable();
     }
 
-    if (groupLayer !=undefined){
-      groupLayer.eachLayer(function(layer) {
-        layerControl.removeLayer(groupLayer);
-        layerControl.removeLayer(sourcePois);
-        layerControl.removeLayer(sourceLots);
-        groupLayer.removeLayer(layer);
-
-      });
-    }
-
     if (sourcePois !=undefined){
       map.removeLayer(sourcePois);
     }
     layer_type = Congo.dashboards.config.layer_type;
     switch(layer_type) {
       case 'rent_indicators_info':
-        Congo.rent_indicators.action_dashboards.indicators();
 
-        remove_legend();
+
+        //remove_legend();
         break;
       case 'demography_info':
 
@@ -644,24 +679,15 @@ Congo.map_utils = function(){
         break;
     }
     //ICA
-    if (layer_type == 'rent_indicators_info'){
-        centerpt = Congo.dashboards.config.centerpt;
-        radius = Congo.dashboards.config.radius ;
-          geometry = centerpt.split(' ');
-          var center = [geometry[0],geometry[1]];
-          var radius = radius;
-          var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
-          //var circle = turf.circle(center, radius, options);
-      ica();
-    }
 
-    groupLayer = L.layerGroup();
+
+
     style_layer = Congo.dashboards.config.style_layer;
 
     //POIS
     load_pois(layerControl, cql_filter_pois, url);
     //Lots
-      load_lots(map, layerControl, url);
+    load_lots(map, layerControl, url);
 
    if(county_id != undefined && (county_id != '' || county_id.length > 0 )){
       search_county(county_id);
@@ -690,11 +716,7 @@ Congo.map_utils = function(){
     return;
     }
 
-  function remove_legend(){
-    if(typeof(htmlLegend)!=='undefined'){
-      map.removeControl(htmlLegend);
-    }
-  }
+
 
   function draw_geometry(type_geometry){
 
@@ -704,6 +726,7 @@ Congo.map_utils = function(){
       });
 
       editableLayers = new L.FeatureGroup();
+      Congo.dashboards.config.editableLayers = editableLayers;
     }
 
     switch(type_geometry) {
@@ -739,6 +762,7 @@ Congo.map_utils = function(){
     geometry = centerpt.split(' ');
     typeGeometry = Congo.dashboards.config.typeGeometry;
     county_id = Congo.dashboards.config.county_id;
+  //  Congo.rent_indicators.action_dashboards.indicators();
     //var center = [geometry[0],geometry[1]];
 
     //var radius = radius;
@@ -756,6 +780,7 @@ Congo.map_utils = function(){
       datatype: 'json',
       data: wkt,
       success: function (data) {
+        console.log(data);
         var geojson = new L.geoJson(data, {
           style: {"color":"red","weight":3, "fillOpacity": 0},
           onEachFeature: onEachFeature,
@@ -764,19 +789,33 @@ Congo.map_utils = function(){
         );
         map.fitBounds(geojson.getBounds());
         groupLayer.addLayer(geojson);
+        layerControl.addOverlay(groupLayer, "Datos");
+        groupLayer.addTo(map)
         ;
       }
     });
   }
 
-onEachFeature = function(feature, layer) {
+  onEachFeature = function(feature, layer) {
+    name = feature.properties.name;
+
     layer.on({
       click: whenClicked
     });
+    layer.on({
+      mouseover: whenTooltip
+    })
+    layer.bindTooltip("Nombre: " + name, {opacity: 0.9})
   }
 
   whenClicked = function(e) {
-    Congo.rent_indicators.action_dashboards.indicators();
+    nId = e.target.feature.properties.id;
+    Congo.rent_indicators.action_dashboards.indicators(nId);
+  }
+
+  whenTooltip = function(e) {
+    //console.log(e.target.feature.properties.code);
+ //   Congo.rent_indicators.action_dashboards.indicators();
   }
 
   function search_county(county_id){
@@ -858,6 +897,7 @@ onEachFeature = function(feature, layer) {
   return{
     init:init,
     counties: counties,
+    ica: ica,
     legend_points: legend_points,
     draw_geometry: draw_geometry
   }

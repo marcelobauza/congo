@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :bots
+  resources :rent_projects
   resources :expenses
   resources :expense_types
   resources :feedbacks

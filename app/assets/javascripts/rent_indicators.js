@@ -22,7 +22,19 @@ Congo.rent_indicators.action_dashboards = function() {
     Congo.map_utils.init();
   }
 
-  indicators = function() {
+
+  indicators = function(nId) {
+
+
+    console.log("paso el id:" + nId);
+    to_year = Congo.dashboards.config.year;
+    to_bimester = Congo.dashboards.config.bimester;
+       var data = {
+          to_year: to_year,
+          to_period: to_bimester,
+          id: nId
+        }
+
       $.ajax({
         type: 'GET',
         url: '/rent_indicators/rent_indicators_summary.json',
@@ -34,9 +46,9 @@ Congo.rent_indicators.action_dashboards = function() {
           $("#spinner").show();
           $('.btn').addClass('disabled')
           $('.close').prop('disabled', true);
-          $("#time_slider").data("ionRangeSlider").update({
+          /*$("#time_slider").data("ionRangeSlider").update({
             block: true
-          });
+          });*/
 
           // Establece el nombre de la capa en el navbar
           $('#layer-name').text('Indicadores Clave de Arriendo');
@@ -87,10 +99,10 @@ Congo.rent_indicators.action_dashboards = function() {
           periods = `${bimester}/${year}`;
           slider_periods = Congo.dashboards.config.slider_periods
           from = slider_periods.indexOf(periods) || slider_periods - 1;
-          $("#time_slider").data("ionRangeSlider").update({
+         /* $("#time_slider").data("ionRangeSlider").update({
             block: false,
             from: from
-          });
+          });*/
 
 
           data = '[{"title":"Resumen Bimestre","data":[{"name":"Total Viviendas","count":53867},{"name":"Total Departamentos","count":15663},{"name":"Tenencia Arriendo","count":7504},{"name":"Oferta Arriendo","count":197},{"name":"Tasa de Vacancia","count":2.6},{"name":"Rentabilidad Bruta Anual (al 2B 2020)*","count":8.2},{"name":"Superficie Util Oferta Arriendo","count":54},{"name":"Superficie Util Compraventas (al 3B 2020)*","count":55.2},{"name":"Superficie Terraza Oferta Arriendo","count":4.3},{"name":"Precio Compraventas | UF (al 3B 2020)*","count":1993},{"name":"Precio Oferta Arriendo | UF mensual","count":13.5},{"name":"Precio Oferta Arriendo | UFm2 mensual","count":0.27},{"name":"PxQ Mensual | UF miles","count":98.4}]},{"title":"Distribución Programas","series":[{"label":"Parque","data":[{"name":"1|1","count":23,"id":28},{"name":"2|1","count":18,"id":31},{"name":"2|2","count":28,"id":30},{"name":"3|1","count":9,"id":29},{"name":"3|2","count":21,"id":29},{"name":"4+","count":1,"id":29}]},{"label":"Oferta","data":[{"name":"1|1","count":48,"id":28},{"name":"2|1","count":10,"id":31},{"name":"2|2","count":26,"id":30},{"name":"3|1","count":1,"id":29},{"name":"3|2","count":13,"id":29},{"name":"4+","count":2,"id":29}]}]},{"title":"Superficie","series":[{"label":"Arriendo","data":[{"name":"6/19","count":54},{"name":"1/20","count":54},{"name":"2/20","count":53},{"name":"3/20","count":59},{"name":"4/20","count":60},{"name":"5/20","count":54}]},{"label":"Venta","data":[{"name":"6/19","count":55},{"name":"1/20","count":49},{"name":"2/20","count":55},{"name":"3/20","count":61},{"name":"4/20","count":56},{"name":"5/20","count":54}]}]},{"title":"Precio UF mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":13.5},{"name":"1/20","count":14},{"name":"2/20","count":15.1},{"name":"3/20","count":15},{"name":"4/20","count":14},{"name":"5/20","count":15}]},{"label":"Venta","data":[{"name":"6/19","count":2000},{"name":"1/20","count":2200},{"name":"2/20","count":2000},{"name":"3/20","count":2500},{"name":"4/20","count":1900},{"name":"5/20","count":2100}]}]},{"title":"UFm2 mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":0.27},{"name":"1/20","count":0.27},{"name":"2/20","count":0.28},{"name":"3/20","count":0.28},{"name":"4/20","count":0.27},{"name":"5/20","count":0.27}]},{"label":"Venta","data":[{"name":"6/19","count":38},{"name":"1/20","count":48},{"name":"2/20","count":38},{"name":"3/20","count":40},{"name":"4/20","count":36},{"name":"5/20","count":41}]}]},{"title":"Relación Precios | Vacancia","series":[{"label":"Arriendo/Venta","data":[{"name":"6/19","count":0.72},{"name":"1/20","count":0.58},{"name":"2/20","count":0.76},{"name":"3/20","count":0.7},{"name":"4/20","count":0.78},{"name":"5/20","count":0.62}]},{"label":"Vacancia","data":[{"name":"6/19","count":2.6},{"name":"1/20","count":1.8},{"name":"2/20","count":1.7},{"name":"3/20","count":1.2},{"name":"4/20","count":1.1},{"name":"5/20","count":1.2}]}]}]'
@@ -566,7 +578,7 @@ Congo.rent_indicators.action_dashboards = function() {
           } // Cierra for
         } // Cierra success
       }) // Cierra ajax
-    } // Cierra else
+    //} // Cierra else
   } // Cierra indicators
 
   return {
