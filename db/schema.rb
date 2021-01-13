@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2021_01_05_034106) do
     t.string "modality"
     t.string "properties"
     t.string "region"
+    t.bigint "county_id"
     t.string "comune"
     t.string "street"
     t.string "number"
@@ -63,18 +64,20 @@ ActiveRecord::Schema.define(version: 2021_01_05_034106) do
     t.integer "bathroom"
     t.string "parking_lo"
     t.string "cellar"
-    t.decimal "surface", precision: 10, scale: 2
-    t.decimal "surface_t", precision: 10, scale: 2
-    t.decimal "price", precision: 10, scale: 2
-    t.decimal "price_uf", precision: 10, scale: 2
-    t.decimal "price_usd", precision: 10, scale: 2
-    t.string "owner"
+    t.decimal "surface", precision: 12, scale: 2
+    t.decimal "surface_t", precision: 12, scale: 2
+    t.decimal "price", precision: 12, scale: 2
+    t.decimal "price_uf", precision: 12, scale: 2
+    t.decimal "price_usd", precision: 12, scale: 2
+    t.string "real_state"
     t.string "phone"
     t.string "email"
-    t.string "bimester"
+    t.integer "bimester"
+    t.integer "year"
     t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["county_id"], name: "index_bots_on_county_id"
   end
 
   create_table "building_regulation_land_use_types", force: :cascade do |t|
@@ -570,6 +573,9 @@ ActiveRecord::Schema.define(version: 2021_01_05_034106) do
     t.geometry "the_geom", limit: {:srid=>4326, :type=>"st_polygon"}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "tenure", precision: 4, scale: 2
+    t.integer "total_houses"
+    t.integer "total_departments"
   end
 
   create_table "parcels", force: :cascade do |t|

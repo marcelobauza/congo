@@ -4,6 +4,10 @@ class DashboardsController < ApplicationController
     @initial_layer  = LayerType.where(id: allowed_layers).first
   end
 
+  def enabled_transaction_data
+    render json: {data: true}
+  end
+
   def graduated_points
   end
 

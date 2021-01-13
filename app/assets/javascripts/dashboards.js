@@ -90,7 +90,13 @@ Congo.dashboards.config = {
   meters_download_radius_future_projects: 0,
   square_meters_download_transactions: 0,
   meters_download_radius_transastions: 0,
-  user_id: 0
+  user_id: 0,
+  map: {},
+  groupLayer: {},
+  layerControl: {},
+  editableLayers: {},
+  sourcePois: {},
+  sourceLots: {}
 }
 
 Congo.dashboards.pois =function(){
@@ -354,7 +360,7 @@ Congo.dashboards.action_index = function() {
     })
     radius = Congo.dashboards.config.radius;
     centerPoint = Congo.dashboards.config.centerpt;
-    wkt = Congo.dashboards.config.size_box;
+    wkt = JSON.stringify(Congo.dashboards.config.size_box);
 
     data ={
       wkt: wkt,
@@ -363,7 +369,6 @@ Congo.dashboards.action_index = function() {
       county_id: county_id,
       layer_type: layer_type
     }
-
     $.ajax({
       async: false,
       type: 'GET',
@@ -371,6 +376,7 @@ Congo.dashboards.action_index = function() {
       data: {data: data},
       datatype: 'json',
       success: function(data) {
+
         Congo.dashboards.config.year = data['year'];
         Congo.dashboards.config.bimester = data['bimester'];
       }

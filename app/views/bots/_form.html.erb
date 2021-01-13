@@ -1,0 +1,38 @@
+
+<%= simple_form_for(@bot) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :publish %>
+    <%= f.input :code %>
+    <%= f.input :type %>
+    <%= f.input :modality %>
+    <%= f.input :properties %>
+    <%= f.input :region %>
+    <%= f.input :comune %>
+    <%= f.input :street %>
+    <%= f.input :number %>
+    <%= f.input :furnished %>
+    <%= f.input :apt %>
+    <%= f.input :floor %>
+    <%= f.input :bedroom %>
+    <%= f.input :bathroom %>
+    <%= f.input :parkink_lo %>
+    <%= f.input :cellar %>
+    <%= f.input :surface %>
+    <%= f.input :surface_t %>
+    <%= f.input :price %>
+    <%= f.input :price_uf %>
+    <%= f.input :price_usd %>
+    <%= f.input :owner %>
+    <%= f.input :phone %>
+    <%= f.input :email %>
+    <%= f.input :bimester %>
+    <%= f.input :the_geom %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

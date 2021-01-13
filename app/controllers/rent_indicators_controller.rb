@@ -10,7 +10,5 @@ class RentIndicatorsController < ApplicationController
 
   def rent_indicators_summary
     @result = RentIndicator.summary(params)
-
-    render json: {data: @result}
   end
 end

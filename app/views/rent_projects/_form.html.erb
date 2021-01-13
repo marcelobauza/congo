@@ -1,0 +1,33 @@
+
+<%= simple_form_for(@rent_project) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :code %>
+    <%= f.input :name %>
+    <%= f.association :county %>
+    <%= f.association :project_type %>
+    <%= f.input :floors %>
+    <%= f.input :sale_date %>
+    <%= f.input :catastral_date %>
+    <%= f.input :offer %>
+    <%= f.input :surface_util %>
+    <%= f.input :terrace %>
+    <%= f.input :price %>
+    <%= f.input :the_geom %>
+    <%= f.input :bedroom %>
+    <%= f.input :bathroom %>
+    <%= f.input :half_bedroom %>
+    <%= f.input :total_beds %>
+    <%= f.input :population_per_building %>
+    <%= f.input :square_meters_terrain %>
+    <%= f.input :uf_terrain %>
+    <%= f.input :bimester %>
+    <%= f.input :year %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -66,8 +66,8 @@ Congo.map_utils = function(){
 
     countiesEnabled();
 
-   // editableLayers = new L.FeatureGroup();
     Congo.dashboards.config.editableLayers =  new L.FeatureGroup();
+    Congo.dashboards.config.layerControl =  layerControl;
 
     // Agrega el toolbar de selección al mapa
     var drawControl = new L.Control.Draw({
@@ -103,7 +103,6 @@ Congo.map_utils = function(){
     });
     map.addControl(zoomControl);
 
-
     // Agregamos el spinner de carga
     var loadingControl = L.Control.loading({
       position: 'topleft',
@@ -116,7 +115,6 @@ Congo.map_utils = function(){
       var typeGeometry = event.layerType;
       size_box         = [];
       editableLayers   = Congo.dashboards.config.editableLayers;
-
       if(typeof(editableLayers)!=='undefined'){
         editableLayers.eachLayer(function (layer) {
           map.removeLayer(layer);
@@ -186,6 +184,8 @@ Congo.map_utils = function(){
       map.fitBounds(editableLayers.getBounds());
       layer_type = Congo.dashboards.config.layer_type;
 
+    Congo.dashboards.config.editableLayers =  editableLayers;
+
       if (layer_type != ''){
         if (layer_type == 'rent_indicators_info'){
           centerpt = Congo.dashboards.config.centerpt;
@@ -195,7 +195,7 @@ Congo.map_utils = function(){
           var radius = radius;
           var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
           //var circle = turf.circle(center, radius, options);
-          ica();
+          counties();
         }else{
           counties();
         }
@@ -240,9 +240,7 @@ Congo.map_utils = function(){
       img.width = dimensions.x;
       img.height = dimensions.y;
       img.src = canvas.toDataURL();
-      console.log(img);
     });
-
   }
 
   var LatLngToCoords = function (LatLng, reverse) { // (LatLng, Boolean) -> Array
@@ -273,31 +271,31 @@ Congo.map_utils = function(){
   }
 
   counties = function(){
-    srcPois = Congo.dashboards.config.sourcePois;
-    srcLots = Congo.dashboards.config.sourceLots;
-    layer_type = Congo.dashboards.config.layer_type;
-
+    srcPois      = Congo.dashboards.config.sourcePois;
+    srcLots      = Congo.dashboards.config.sourceLots;
+    layer_type   = Congo.dashboards.config.layer_type;
+    groupLayer   = Congo.dashboards.config.groupLayer;
+    layerControl = Congo.dashboards.config.layerControl;
 
     if (groupLayer.getLayers().length > 0 ){
       groupLayer.eachLayer(function(layer) {
         groupLayer.removeLayer(layer);
       });
 
-      layerControl.removeLayer(srcPois);
-      layerControl.removeLayer(srcLots);
+      //layerControl.removeLayer(srcPois);
+      //layerControl.removeLayer(srcLots);
       layerControl.removeLayer(groupLayer);
       remove_legend();
     }
     if (layer_type == 'rent_indicators_info'){
       ica();
     }else{
-      others();
+      other_layers();
     }
   }
 
-  others = function(){
+  other_layers = function(){
 
-    //groupLayer = L.layerGroup();
     var bimester, year, filter_for_layer;
     var filter_layer = "AND 1 = 1 ";
     var env = Congo.dashboards.config.env;
@@ -714,6 +712,7 @@ Congo.map_utils = function(){
     layerControl.addOverlay(groupLayer, "Datos");
     groupLayer.addTo(map);
     return;
+    Congo.dashboards.config.groupLayer = groupLayer;
     }
 
 
@@ -762,6 +761,7 @@ Congo.map_utils = function(){
     geometry = centerpt.split(' ');
     typeGeometry = Congo.dashboards.config.typeGeometry;
     county_id = Congo.dashboards.config.county_id;
+    groupLayer = Congo.dashboards.config.groupLayer;
   //  Congo.rent_indicators.action_dashboards.indicators();
     //var center = [geometry[0],geometry[1]];
 
@@ -780,7 +780,6 @@ Congo.map_utils = function(){
       datatype: 'json',
       data: wkt,
       success: function (data) {
-        console.log(data);
         var geojson = new L.geoJson(data, {
           style: {"color":"red","weight":3, "fillOpacity": 0},
           onEachFeature: onEachFeature,
@@ -790,8 +789,8 @@ Congo.map_utils = function(){
         map.fitBounds(geojson.getBounds());
         groupLayer.addLayer(geojson);
         layerControl.addOverlay(groupLayer, "Datos");
-        groupLayer.addTo(map)
-        ;
+        groupLayer.addTo(map);
+        Congo.dashboards.config.groupLayer = groupLayer;
       }
     });
   }
