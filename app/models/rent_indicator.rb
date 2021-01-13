@@ -1,9 +1,6 @@
 class RentIndicator < ApplicationRecord
-
   include GeometryOptions
   include RentIndicators::Summary
-
-
 
   def self.rent_geo filters
     #county
@@ -35,5 +32,12 @@ class RentIndicator < ApplicationRecord
 
   def select_neighboorhood
     b = Neighboorhood.first
+  end
+
+  def self.reports_pdf filters
+    result = {}
+    charts = []
+    result['charts'] = charts
+    result
   end
 end

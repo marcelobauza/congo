@@ -388,6 +388,12 @@ class ReportsController < ApplicationController
 
   end
 
+  def rent_indicators_pdf
+    filters = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+    @pdf = RentIndicator.reports_pdf filters
+    render json: @pdf
+  end
+
   def transactions_pdf
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @pdf = Transaction.reports_pdf filters

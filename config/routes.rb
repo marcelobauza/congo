@@ -55,6 +55,7 @@ Rails.application.routes.draw do
   get 'demography/dashboards' => 'demography#dashboards'
   get 'demography/general' => 'demography#general'
   get 'reports/index' => 'reports#index'
+  get 'reports/rent_indicators_pdf' => 'reports#rent_indicators_pdf'
   get 'reports/future_projects_data' => 'reports#future_projects_data'
   get 'reports/future_projects_data_kml' => 'reports#future_projects_data_kml'
   get 'reports/future_projects_summary' => 'reports#future_projects_summary'
