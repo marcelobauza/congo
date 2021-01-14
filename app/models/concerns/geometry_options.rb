@@ -16,8 +16,9 @@ module GeometryOptions
     def conditions_by filters
       case filters[:type_geometry]
       when 'circle'
+        @conditions = circle_condition filters
       when 'marker'
-        @conditions = marker_conditions filters
+        @conditions = marker_condition filters
       when 'polygon'
         @conditions = polygon_condition filters
       when 'list'
@@ -41,7 +42,7 @@ module GeometryOptions
         SQL
       end
 
-      def marker_conditions filters
+      def marker_condition filters
         c = filters[:county_id]['0'].join
         conditions = <<-SQL
           ST_Intersects(the_geom,
@@ -63,7 +64,18 @@ module GeometryOptions
               ), #{Util::WGS84_SRID}
             )
           )
-      SQL
+        SQL
+      end
+
+      def circle_condition filters
+        condition = <<-SQL
+          ST_DWithin(
+            the_geom,
+            ST_GeomFromText(
+              'POINT(#{filters[:centerpt]})', #{Util::WGS84_SRID}
+            ), #{filters[:radius]}, false
+          )
+        SQL
       end
   end
 end

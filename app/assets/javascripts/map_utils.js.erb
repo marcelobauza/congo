@@ -762,16 +762,13 @@ Congo.map_utils = function(){
     typeGeometry = Congo.dashboards.config.typeGeometry;
     county_id = Congo.dashboards.config.county_id;
     groupLayer = Congo.dashboards.config.groupLayer;
-  //  Congo.rent_indicators.action_dashboards.indicators();
-    //var center = [geometry[0],geometry[1]];
 
-    //var radius = radius;
-    //var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
-    //var wkt = turf.circle(center, radius, options);
     wkt = {
       wkt: JSON.stringify(polygon_size),
       county_id: county_id,
-      type_geometry: typeGeometry
+      type_geometry: typeGeometry,
+      centerpt: centerpt,
+      radius: radius
     }
 
     $.ajax({

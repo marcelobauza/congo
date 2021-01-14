@@ -105,6 +105,8 @@ class Period < ApplicationRecord
           @last_period = Transaction.get_last_period data
         when 'projects_feature_info'
           @last_period = Project.get_last_period data
+        else
+          @last_period = Period.where(active: true).last
         end
     @last_period
     end
