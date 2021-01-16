@@ -442,6 +442,8 @@ Congo.rent_indicators.action_dashboards = function() {
           to_period: to_bimester,
           id: nId
         }
+    Congo.dashboards.action_index.create_overlay_and_filter_card();
+    Congo.dashboards.action_index.add_time_slider();
 
       $.ajax({
         type: 'GET',
