@@ -419,7 +419,7 @@ class Project < ApplicationRecord
     self.elevators                     = data['ASC']
     self.quantity_department_for_floor = data["DPTO_PISO"]
 
-    result = self.save!
+    result = self.save
 
     County.update(county.id, :sales_project_data => true) unless county.nil? if result
 
