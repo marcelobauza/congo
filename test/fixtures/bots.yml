@@ -1,57 +1,29 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
+department_one:
   publish: 2021-01-05
-  code: MyString
-  type: 
-  modality: MyString
-  properties: MyString
-  region: MyString
-  comune: MyString
-  street: MyString
-  number: MyString
-  furnished: MyString
-  apt: MyString
+  code: code01
+  type: Usado
+  modality: Arriendo
+  properties: Departamento
+  region: Metropolitana
+  county_id:
+  comune: Providencia
+  street: Valle grande
+  number: 57
+  furnished: true
+  apt: 907
   floor: 1
   bedroom: 1
   bathroom: 1
-  parkink_lo: MyString
-  cellar: MyString
-  surface: 1.5
-  surface_t: 1.5
-  price: 
-  price_uf: 
-  price_usd: 
-  owner: MyString
-  phone: MyString
-  email: MyString
-  bimester: MyString
-  the_geom: 
-
-two:
-  publish: 2021-01-05
-  code: MyString
-  type: 
-  modality: MyString
-  properties: MyString
-  region: MyString
-  comune: MyString
-  street: MyString
-  number: MyString
-  furnished: MyString
-  apt: MyString
-  floor: 1
-  bedroom: 1
-  bathroom: 1
-  parkink_lo: MyString
-  cellar: MyString
-  surface: 1.5
-  surface_t: 1.5
-  price: 
-  price_uf: 
-  price_usd: 
-  owner: MyString
-  phone: MyString
-  email: MyString
-  bimester: MyString
-  the_geom: 
+  parkink_lo: 1
+  cellar: 1
+  surface: 60.5
+  surface_t: 108.5
+  price: 380000
+  price_uf: 19
+  price_usd: 50
+  real_state: casa_inmo
+  phone: 543344334
+  email: example@gmail.com
+  bimester: 5
+  year: 2020
+  the_geom: '0101000020E61000007980DD9FC1A651C0C879FF1F27C240C0'

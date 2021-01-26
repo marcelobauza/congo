@@ -11,6 +11,17 @@ module RentIndicators::Summary
 
       neighborhood = Neighborhood.find(params[:id])
 
+      result.push({"title": "Resumen Bimestre", data: brief(neighborhood, bimester, year)})
+      result.push({"title": "Distribución Programas", "series": distribution_by_mix_types(neighborhood, bimester, year)})
+      result.push({"title": "Superficie", "series": surface(neighborhood, bimester, year)})
+      result.push({"title": "Precio UF mes", "series": price_uf_by_bimester(neighborhood, bimester, year)})
+      result.push({"title": "UFm2 mes", "series": price_uf_by_bimester(neighborhood, bimester, year)})
+      result.push({"title": "Relación Precios | Vacancia", "series": relation_price_by_vacancy(neighborhood, bimester, year)})
+    end
+
+    private
+    def brief neighborhood, bimester, year
+      data = []
       projects = RentProject.where(
         "ST_CONTAINS(
           ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
@@ -20,20 +31,20 @@ module RentIndicators::Summary
       transactions = Transaction.where(
         "ST_CONTAINS(
           ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
-        ).
-        where(bimester: bimester, year: year)
+      ).
+      where(bimester: bimester, year: year)
 
       future_projects = FutureProject.where(
         "ST_CONTAINS(
           ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
-        ).
-        where(bimester: bimester, year: year)
+      ).
+      where(bimester: bimester, year: year)
 
       bots = Bot.where(
         "ST_CONTAINS(
           ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
-        ).
-        where(bimester: bimester, year: year)
+      ).
+      where(bimester: bimester, year: year)
 
       rent_offer = (bots.count / 0.9)
       rent_department = (neighborhood.total_departments.to_i + future_projects.count) * neighborhood.tenure
@@ -58,15 +69,9 @@ module RentIndicators::Summary
       data.push("name": "Precio Oferta Arriendo | UFm2 mensual", "count": avg_price_uf_m2.to_f)
       data.push("name": "PxQ mensual | UF miles", "count": 4)
 
-      result.push({"title": "Resumen Bimestre", data: data})
-      result.push({"title": "Distribución Programas", "series": distribution_by_mix_types(projects)})
-      result.push({"title": "Superficie", "series": surface(neighborhood, bimester, year)})
-      result.push({"title": "Precio UF mes", "series": price_uf_by_bimester(neighborhood, bimester, year)})
-      result.push({"title": "UFm2 mes", "series": price_uf_by_bimester(neighborhood, bimester, year)})
-      result.push({"title": "Relación Precios | Vacancia", "series": relation_price_by_vacancy(bots)})
+      data
     end
 
-    private
       def total_vacancy rent_department, rent_offer
         return 0 if (rent_department == 0 || rent_offer == 0)
           rent_department / rent_offer
@@ -84,7 +89,13 @@ module RentIndicators::Summary
         conditions += ")"
       end
 
-    def distribution_by_mix_types projects
+    def distribution_by_mix_types neighborhood, bimester, year
+      projects = RentProject.where(
+        "ST_CONTAINS(
+          ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+      ).
+      where(bimester: bimester, year: year)
+
       mix_types = projects.group_by { |s| "#{s.bedroom}.#{s.half_bedroom}|#{s.bathroom}"}
       data      = []
 
@@ -158,7 +169,12 @@ module RentIndicators::Summary
       }]
     end
 
-    def relation_price_by_vacancy bots
+    def relation_price_by_vacancy neighborhood, bimester,year
+      bots = Bot.where(
+        "ST_CONTAINS(
+          ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+      ).
+      where(bimester: bimester, year: year)
       avg  = bots.average(:price_uf).to_f
       data = []
 
