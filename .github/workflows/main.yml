@@ -1,9 +1,8 @@
-name: Test
-
 on: push
 
+name: Test
+
 jobs:
-  # This workflow contains a single job called "build"
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -21,7 +20,6 @@ jobs:
             --health-retries 5
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
       - uses: actions/checkout@v2
 
