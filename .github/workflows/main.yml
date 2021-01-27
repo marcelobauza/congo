@@ -9,35 +9,30 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13
+        image: postgres:11
         ports: ['5432:5432']
-        env:
-          POSTGRES_PASSWORD: password
-          options: >-
-            --health-cmd pg_isready
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
-
-  steps:
-    - uses: actions/checkout@v2
-    - name: Setup
-      uses: ruby/setup-ruby@v1.64.4
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup
+        uses: ruby/setup-ruby@v1.64.4
       with:
-        ruby-version: 2.7.2
+        ruby-version: 2.5.2
 
-    - name: Bundle
-      run: |
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
-
-    - name: Run Tests
-      env:
-        DB_NAME: postgres
-        DB_USERNAME: postgres
-        DB_PASSWORD: password
-        RAILS_ENV: test
+      - name: Install Dependencies
         run: |
-          cp config/application.example.yml config/application.yml
-          bin/rails db:setup
-          bin/rails test
+          sudo apt install -yqq libpq-dev
+          gem intall bundler
+
+      - name: Install Gems
+        run: |
+          bundle install
+
+      - name: Prepare Database
+        run: |
+          bundle exec rails db:prepare
+
+      - name: Run Tests
+        env:
+          DATABASE_URL: postgres://postgres:@localhost:5432/congo_test
+        run: |
+          bundle exec rails test
