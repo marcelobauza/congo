@@ -21,7 +21,6 @@ jobs:
 
   steps:
     uses: actions/checkout@v2
-
     - name: Setup
       uses: ruby/setup-ruby@v1.64.4
       with:
