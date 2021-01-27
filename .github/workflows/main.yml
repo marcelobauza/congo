@@ -14,9 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup Ruby
-      - uses: ruby/setup-ruby@v1.62.0
-      with:
-        ruby-version: 2.5.2
+        uses: ruby/setup-ruby@v1.62.0
+        with:
+          ruby-version: 2.5.2
 
       - name: Install Dependencies
         run: |
