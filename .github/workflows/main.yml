@@ -13,8 +13,8 @@ jobs:
         ports: ['5432:5432']
     steps:
       - uses: actions/checkout@v2
-      - name: Setup
-        uses: ruby/setup-ruby@v1.62.0
+      - name: Setup Ruby
+      - uses: ruby/setup-ruby@v1.62.0
       with:
         ruby-version: 2.5.2
 
