@@ -28,7 +28,8 @@ jobs:
 
       - name: Prepare Database
         run: |
-          bundle exec rails db:prepare
+          bundle exec rails db:create
+          bundle exec rails db:migrate
 
       - name: Run Tests
         env:
