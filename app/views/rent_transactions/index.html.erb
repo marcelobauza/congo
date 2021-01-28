@@ -1,0 +1,117 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Rent Transactions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Property type</th>
+      <th>Address</th>
+      <th>Sheet</th>
+      <th>Number</th>
+      <th>Inscription date</th>
+      <th>Buyer name</th>
+      <th>Seller type</th>
+      <th>Department</th>
+      <th>Blueprint</th>
+      <th>Uf value</th>
+      <th>Real value</th>
+      <th>Calculated value</th>
+      <th>Quarter</th>
+      <th>Quarter date</th>
+      <th>Year</th>
+      <th>Sample factor</th>
+      <th>County</th>
+      <th>The geom</th>
+      <th>Cellar</th>
+      <th>Parking</th>
+      <th>Role</th>
+      <th>Seller name</th>
+      <th>Buyer rut</th>
+      <th>Uf m2</th>
+      <th>Tome</th>
+      <th>Lot</th>
+      <th>Block</th>
+      <th>Village</th>
+      <th>Surface</th>
+      <th>Requirin entity</th>
+      <th>Comments</th>
+      <th>Surveyor</th>
+      <th>Active</th>
+      <th>Bimester</th>
+      <th>Code sii</th>
+      <th>Total surface building</th>
+      <th>Total surface terrain</th>
+      <th>Uf m2 u</th>
+      <th>Uf m2 t</th>
+      <th>Role 1</th>
+      <th>Role 2</th>
+      <th>Code destination</th>
+      <th>Code material</th>
+      <th>Year sii</th>
+      <th>Role associated</th>
+      <th>Additional roles</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @rent_transactions.each do |rent_transaction| %>
+      <tr>
+        <td><%= rent_transaction.property_type_id %></td>
+        <td><%= rent_transaction.address %></td>
+        <td><%= rent_transaction.sheet %></td>
+        <td><%= rent_transaction.number %></td>
+        <td><%= rent_transaction.inscription_date %></td>
+        <td><%= rent_transaction.buyer_name %></td>
+        <td><%= rent_transaction.seller_type_id %></td>
+        <td><%= rent_transaction.department %></td>
+        <td><%= rent_transaction.blueprint %></td>
+        <td><%= rent_transaction.uf_value %></td>
+        <td><%= rent_transaction.real_value %></td>
+        <td><%= rent_transaction.calculated_value %></td>
+        <td><%= rent_transaction.quarter %></td>
+        <td><%= rent_transaction.quarter_date %></td>
+        <td><%= rent_transaction.year %></td>
+        <td><%= rent_transaction.sample_factor %></td>
+        <td><%= rent_transaction.county_id %></td>
+        <td><%= rent_transaction.the_geom %></td>
+        <td><%= rent_transaction.cellar %></td>
+        <td><%= rent_transaction.parking %></td>
+        <td><%= rent_transaction.role %></td>
+        <td><%= rent_transaction.seller_name %></td>
+        <td><%= rent_transaction.buyer_rut %></td>
+        <td><%= rent_transaction.uf_m2 %></td>
+        <td><%= rent_transaction.tome %></td>
+        <td><%= rent_transaction.lot %></td>
+        <td><%= rent_transaction.block %></td>
+        <td><%= rent_transaction.village %></td>
+        <td><%= rent_transaction.surface %></td>
+        <td><%= rent_transaction.requirin_entity %></td>
+        <td><%= rent_transaction.comments %></td>
+        <td><%= rent_transaction.surveyor_id %></td>
+        <td><%= rent_transaction.active %></td>
+        <td><%= rent_transaction.bimester %></td>
+        <td><%= rent_transaction.code_sii %></td>
+        <td><%= rent_transaction.total_surface_building %></td>
+        <td><%= rent_transaction.total_surface_terrain %></td>
+        <td><%= rent_transaction.uf_m2_u %></td>
+        <td><%= rent_transaction.uf_m2_t %></td>
+        <td><%= rent_transaction.role_1 %></td>
+        <td><%= rent_transaction.role_2 %></td>
+        <td><%= rent_transaction.code_destination %></td>
+        <td><%= rent_transaction.code_material %></td>
+        <td><%= rent_transaction.year_sii %></td>
+        <td><%= rent_transaction.role_associated %></td>
+        <td><%= rent_transaction.additional_roles %></td>
+        <td><%= link_to 'Show', rent_transaction %></td>
+        <td><%= link_to 'Edit', edit_rent_transaction_path(rent_transaction) %></td>
+        <td><%= link_to 'Destroy', rent_transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Rent Transaction', new_rent_transaction_path %>

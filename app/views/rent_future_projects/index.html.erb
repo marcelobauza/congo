@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Rent Future Projects</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Address</th>
+      <th>Name</th>
+      <th>Role number</th>
+      <th>File number</th>
+      <th>File date</th>
+      <th>Owner</th>
+      <th>Legal agent</th>
+      <th>Architech</th>
+      <th>Floors</th>
+      <th>Undergrounds</th>
+      <th>Total units</th>
+      <th>Total parking</th>
+      <th>Total commercials</th>
+      <th>M2 approved</th>
+      <th>M2 built</th>
+      <th>M2 field</th>
+      <th>T ofi</th>
+      <th>Cadastral date</th>
+      <th>Comments</th>
+      <th>Bimester</th>
+      <th>Year</th>
+      <th>Project type</th>
+      <th>Future project type</th>
+      <th>County</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @rent_future_projects.each do |rent_future_project| %>
+      <tr>
+        <td><%= rent_future_project.code %></td>
+        <td><%= rent_future_project.address %></td>
+        <td><%= rent_future_project.name %></td>
+        <td><%= rent_future_project.role_number %></td>
+        <td><%= rent_future_project.file_number %></td>
+        <td><%= rent_future_project.file_date %></td>
+        <td><%= rent_future_project.owner %></td>
+        <td><%= rent_future_project.legal_agent %></td>
+        <td><%= rent_future_project.architech %></td>
+        <td><%= rent_future_project.floors %></td>
+        <td><%= rent_future_project.undergrounds %></td>
+        <td><%= rent_future_project.total_units %></td>
+        <td><%= rent_future_project.total_parking %></td>
+        <td><%= rent_future_project.total_commercials %></td>
+        <td><%= rent_future_project.m2_approved %></td>
+        <td><%= rent_future_project.m2_built %></td>
+        <td><%= rent_future_project.m2_field %></td>
+        <td><%= rent_future_project.t_ofi %></td>
+        <td><%= rent_future_project.cadastral_date %></td>
+        <td><%= rent_future_project.comments %></td>
+        <td><%= rent_future_project.bimester %></td>
+        <td><%= rent_future_project.year %></td>
+        <td><%= rent_future_project.project_type_id %></td>
+        <td><%= rent_future_project.future_project_type_id %></td>
+        <td><%= rent_future_project.county_id %></td>
+        <td><%= link_to 'Show', rent_future_project %></td>
+        <td><%= link_to 'Edit', edit_rent_future_project_path(rent_future_project) %></td>
+        <td><%= link_to 'Destroy', rent_future_project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Rent Future Project', new_rent_future_project_path %>

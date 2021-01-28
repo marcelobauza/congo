@@ -1,0 +1,58 @@
+
+<%= simple_form_for(@rent_transaction) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :property_type_id %>
+    <%= f.input :address %>
+    <%= f.input :sheet %>
+    <%= f.input :number %>
+    <%= f.input :inscription_date %>
+    <%= f.input :buyer_name %>
+    <%= f.input :seller_type_id %>
+    <%= f.input :department %>
+    <%= f.input :blueprint %>
+    <%= f.input :uf_value %>
+    <%= f.input :real_value %>
+    <%= f.input :calculated_value %>
+    <%= f.input :quarter %>
+    <%= f.input :quarter_date %>
+    <%= f.input :year %>
+    <%= f.input :sample_factor %>
+    <%= f.input :county_id %>
+    <%= f.input :the_geom %>
+    <%= f.input :cellar %>
+    <%= f.input :parking %>
+    <%= f.input :role %>
+    <%= f.input :seller_name %>
+    <%= f.input :buyer_rut %>
+    <%= f.input :uf_m2 %>
+    <%= f.input :tome %>
+    <%= f.input :lot %>
+    <%= f.input :block %>
+    <%= f.input :village %>
+    <%= f.input :surface %>
+    <%= f.input :requirin_entity %>
+    <%= f.input :comments %>
+    <%= f.input :surveyor_id %>
+    <%= f.input :active %>
+    <%= f.input :bimester %>
+    <%= f.input :code_sii %>
+    <%= f.input :total_surface_building %>
+    <%= f.input :total_surface_terrain %>
+    <%= f.input :uf_m2_u %>
+    <%= f.input :uf_m2_t %>
+    <%= f.input :role_1 %>
+    <%= f.input :role_2 %>
+    <%= f.input :code_destination %>
+    <%= f.input :code_material %>
+    <%= f.input :year_sii %>
+    <%= f.input :role_associated %>
+    <%= f.input :additional_roles %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
