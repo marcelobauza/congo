@@ -28,13 +28,13 @@ module RentIndicators::Summary
       ).
       where(bimester: bimester, year: year)
 
-      transactions = Transaction.where(
+      transactions = RentTransaction.where(
         "ST_CONTAINS(
           ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
       ).
       where(bimester: bimester, year: year)
 
-      future_projects = FutureProject.where(
+      future_projects = RentFutureProject.where(
         "ST_CONTAINS(
           ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
       ).
