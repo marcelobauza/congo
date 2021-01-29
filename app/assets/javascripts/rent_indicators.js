@@ -63,30 +63,30 @@ function rent_indicators_report_pdf() {
       doc.setFontSize(16);
       doc.text('Información General', 105, 35, null, null, 'center');
 
-      // Validamos si hay algún filtro aplicado
-      if (periods == '') {
-
-        // Periodo Actual
-        doc.setFontSize(12);
-        doc.setFontStyle("bold");
-        doc.text('Periodo de tiempo seleccionado:', 10, 49);
-        doc.setFontStyle("normal");
-        doc.text(to_bimester + '° bimestre del ' + to_year, 78, 49);
-
-      } else {
-
-        // Periodos Filtrados
-        doc.setFontSize(12);
-        doc.setFontStyle("bold");
-        doc.text('Periodos de tiempo seleccionados:', 10, 49);
-        doc.setFontStyle("normal");
-        var tab = 83
-        for (var i = 0; i < periods.length; i++) {
-          doc.text(periods[i] + '/' + years[i] + ', ', tab, 49);
-          tab = tab + 16
-        }
-
-      }
+      // // Validamos si hay algún filtro aplicado
+      // if (periods == '') {
+      //
+      //   // Periodo Actual
+      //   doc.setFontSize(12);
+      //   doc.setFontStyle("bold");
+      //   doc.text('Periodo de tiempo seleccionado:', 10, 49);
+      //   doc.setFontStyle("normal");
+      //   doc.text(to_bimester + '° bimestre del ' + to_year, 78, 49);
+      //
+      // } else {
+      //
+      //   // Periodos Filtrados
+      //   doc.setFontSize(12);
+      //   doc.setFontStyle("bold");
+      //   doc.text('Periodos de tiempo seleccionados:', 10, 49);
+      //   doc.setFontStyle("normal");
+      //   var tab = 83
+      //   for (var i = 0; i < periods.length; i++) {
+      //     doc.text(periods[i] + '/' + years[i] + ', ', tab, 49);
+      //     tab = tab + 16
+      //   }
+      //
+      // }
 
       // Pie de página
       footer()
