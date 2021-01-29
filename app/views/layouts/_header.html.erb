@@ -140,6 +140,21 @@
         </div>
         <%= link_to dashboards_heatmap_path(), class: "dropdown-item custom-item", id: 'heat-em-dem', style: 'display: none', remote: true  do  %><i class=" fas fa-fire" title="Heatmap" style="font-size: 26px"></i><% end %>
 
+        <!-- Colores ICA -->
+        <div href="#" id="col-ica" class="dropdown-submenu" style="display: none">
+          <a class="dropdown-item custom-item item-submenu" href="#">
+            <i class="fas fa-dice-d20" title="Colorear Polígonos" style="font-size: 22px"></i>
+          </a>
+          <div class="dropdown-menu">
+            <div class="dropdown-item">
+              <%= link_to 'Vacancia', rent_indicators_dashboards_path(), remote: true, id: 'col_ica_vacancy' %>
+            </div>
+            <div class="dropdown-item">
+              <%= link_to 'Precio', rent_indicators_dashboards_path(), remote: true, id: 'col_ica_price' %>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 

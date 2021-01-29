@@ -453,7 +453,7 @@ Congo.rent_indicators.action_dashboards = function() {
     $("#kml").hide();
 
     // Mostramos el icono de Puntos/Poligonos correspondiente
-    $("#type_point").show();
+    $("#type_point").hide();
     $("#poly_build").hide();
     $("#vor_dem").hide();
 
@@ -466,6 +466,9 @@ Congo.rent_indicators.action_dashboards = function() {
     $("#heat-prv").hide();
     $("#heat-cbr").hide();
     $("#heat-em-dem").hide();
+
+    // Mostramos el icono de colorear polígonos
+    $("#col-ica").show();
 
     // Eliminamos los chart-containter de la capa anterior
     $(".chart-container").remove();
