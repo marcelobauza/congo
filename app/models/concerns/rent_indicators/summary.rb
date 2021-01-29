@@ -123,7 +123,7 @@ module RentIndicators::Summary
         "data": data
       },
       {
-        "label": "Arriendo1",
+        "label": "Venta",
         "data": data_cbr
       }]
     end
@@ -151,7 +151,7 @@ module RentIndicators::Summary
         "data": data
       },
       {
-        "label": "Arriendo1",
+        "label": "Venta",
         "data": data_cbr
       }]
     end
@@ -183,7 +183,7 @@ module RentIndicators::Summary
         "data": data
       },
       {
-        "label": "Arriendo1",
+        "label": "Venta",
         "data": data_cbr
       }]
     end
@@ -197,7 +197,7 @@ module RentIndicators::Summary
         data.push("name": "#{p[:period]}/#{p[:year]}", "count": result.to_f )
       end
       series = [{
-        "label": "Arriendo",
+        "label": "Arriendo/Venta",
         "data": data
       }]
     end
