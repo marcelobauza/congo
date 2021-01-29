@@ -1,6 +1,7 @@
 Congo.namespace('rent_indicators.action_dashboards');
 
-Congo.projects.config = {
+Congo.rent_indicators.config = {
+  nId: '',
   county_name: '',
   county_id: '',
   layer_type: 'rent_indicators_info',
@@ -21,21 +22,29 @@ Congo.projects.config = {
 
 function rent_indicators_report_pdf() {
 
+  to_year = Congo.dashboards.config.year;
+  to_bimester = Congo.dashboards.config.bimester;
+  nId = Congo.rent_indicators.config.nId;
+
+  var data = {
+    to_year: to_year,
+    to_period: to_bimester,
+    id: nId
+  }
+
   $.ajax({
     type: 'GET',
-    url: '/reports/rent_indicators_pdf.json',
+    url: '/rent_indicators/rent_indicators_summary.json',
     datatype: 'json',
     data: data,
     success: function(data) {
 
-      console.log('data que llega');
+      console.log('Data del reporte:');
       console.log(data);
 
-      data = '{"charts":[{"title":"Distribución Programas","series":[{"label":"Parque","data":[{"name":"1|1","count":23,"id":28},{"name":"2|1","count":18,"id":31},{"name":"2|2","count":28,"id":30},{"name":"3|1","count":9,"id":29},{"name":"3|2","count":21,"id":29},{"name":"4+","count":1,"id":29}]},{"label":"Oferta","data":[{"name":"1|1","count":48,"id":28},{"name":"2|1","count":10,"id":31},{"name":"2|2","count":26,"id":30},{"name":"3|1","count":1,"id":29},{"name":"3|2","count":13,"id":29},{"name":"4+","count":2,"id":29}]}]},{"title":"Superficie","series":[{"label":"Arriendo","data":[{"name":"6/19","count":54},{"name":"1/20","count":54},{"name":"2/20","count":53},{"name":"3/20","count":59},{"name":"4/20","count":60},{"name":"5/20","count":54}]},{"label":"Venta","data":[{"name":"6/19","count":55},{"name":"1/20","count":49},{"name":"2/20","count":55},{"name":"3/20","count":61},{"name":"4/20","count":56},{"name":"5/20","count":54}]}]},{"title":"Precio UF mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":13.5},{"name":"1/20","count":14},{"name":"2/20","count":15.1},{"name":"3/20","count":15},{"name":"4/20","count":14},{"name":"5/20","count":15}]},{"label":"Venta","data":[{"name":"6/19","count":2000},{"name":"1/20","count":2200},{"name":"2/20","count":2000},{"name":"3/20","count":2500},{"name":"4/20","count":1900},{"name":"5/20","count":2100}]}]},{"title":"UFm2 mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":0.27},{"name":"1/20","count":0.27},{"name":"2/20","count":0.28},{"name":"3/20","count":0.28},{"name":"4/20","count":0.27},{"name":"5/20","count":0.27}]},{"label":"Venta","data":[{"name":"6/19","count":38},{"name":"1/20","count":48},{"name":"2/20","count":38},{"name":"3/20","count":40},{"name":"4/20","count":36},{"name":"5/20","count":41}]}]},{"title":"Relación Precios | Vacancia","series":[{"label":"Arriendo/Venta","data":[{"name":"6/19","count":0.72},{"name":"1/20","count":0.58},{"name":"2/20","count":0.76},{"name":"3/20","count":0.7},{"name":"4/20","count":0.78},{"name":"5/20","count":0.62}]},{"label":"Vacancia","data":[{"name":"6/19","count":2.6},{"name":"1/20","count":1.8},{"name":"2/20","count":1.7},{"name":"3/20","count":1.2},{"name":"4/20","count":1.1},{"name":"5/20","count":1.2}]}]}]}'
+      // data = '{"charts":[{"title":"Distribución Programas","series":[{"label":"Parque","data":[{"name":"1|1","count":23,"id":28},{"name":"2|1","count":18,"id":31},{"name":"2|2","count":28,"id":30},{"name":"3|1","count":9,"id":29},{"name":"3|2","count":21,"id":29},{"name":"4+","count":1,"id":29}]},{"label":"Oferta","data":[{"name":"1|1","count":48,"id":28},{"name":"2|1","count":10,"id":31},{"name":"2|2","count":26,"id":30},{"name":"3|1","count":1,"id":29},{"name":"3|2","count":13,"id":29},{"name":"4+","count":2,"id":29}]}]},{"title":"Superficie","series":[{"label":"Arriendo","data":[{"name":"6/19","count":54},{"name":"1/20","count":54},{"name":"2/20","count":53},{"name":"3/20","count":59},{"name":"4/20","count":60},{"name":"5/20","count":54}]},{"label":"Venta","data":[{"name":"6/19","count":55},{"name":"1/20","count":49},{"name":"2/20","count":55},{"name":"3/20","count":61},{"name":"4/20","count":56},{"name":"5/20","count":54}]}]},{"title":"Precio UF mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":13.5},{"name":"1/20","count":14},{"name":"2/20","count":15.1},{"name":"3/20","count":15},{"name":"4/20","count":14},{"name":"5/20","count":15}]},{"label":"Venta","data":[{"name":"6/19","count":2000},{"name":"1/20","count":2200},{"name":"2/20","count":2000},{"name":"3/20","count":2500},{"name":"4/20","count":1900},{"name":"5/20","count":2100}]}]},{"title":"UFm2 mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":0.27},{"name":"1/20","count":0.27},{"name":"2/20","count":0.28},{"name":"3/20","count":0.28},{"name":"4/20","count":0.27},{"name":"5/20","count":0.27}]},{"label":"Venta","data":[{"name":"6/19","count":38},{"name":"1/20","count":48},{"name":"2/20","count":38},{"name":"3/20","count":40},{"name":"4/20","count":36},{"name":"5/20","count":41}]}]},{"title":"Relación Precios | Vacancia","series":[{"label":"Arriendo/Venta","data":[{"name":"6/19","count":0.72},{"name":"1/20","count":0.58},{"name":"2/20","count":0.76},{"name":"3/20","count":0.7},{"name":"4/20","count":0.78},{"name":"5/20","count":0.62}]},{"label":"Vacancia","data":[{"name":"6/19","count":2.6},{"name":"1/20","count":1.8},{"name":"2/20","count":1.7},{"name":"3/20","count":1.2},{"name":"4/20","count":1.1},{"name":"5/20","count":1.2}]}]}]}'
 
-      data = JSON.parse(data)
-
-      console.log(data);
+      // data = JSON.parse(data)
 
       // Creamos el doc
       var doc = new jsPDF();
@@ -48,7 +57,7 @@ function rent_indicators_report_pdf() {
         doc.setFontSize(12);
         doc.text('Fuente:', 20, 290);
         doc.setFontStyle("normal");
-        doc.text('Preguntar a Marce cuál es la fuente', 37, 290);
+        doc.text('', 37, 290);
         doc.setFontSize(10);
         doc.text('p. ' + doc.page, 194, 290);
         doc.page++;
@@ -94,13 +103,13 @@ function rent_indicators_report_pdf() {
       // Agrega nueva página
       doc.addPage('a4', 'portrait')
 
-      $.each(data, function(key, value) {
+      // $.each(data, function(key, value) {
 
-        if (key == 'charts') {
+        // if (key == 'charts') {
 
-          for (var i = 0; i < value.length; i++) {
+          for (var i = 1; i < data.length; i++) {
 
-            var reg = value[i];
+            var reg = data[i];
             var title = reg['title'];
             var series = reg['series'];
             var datasets = [];
@@ -388,7 +397,7 @@ function rent_indicators_report_pdf() {
 
             var chart = final_chart.toBase64Image();
 
-            if (i % 2 != 1) {
+            if (i % 2 == 1) {
 
               // Título del gráfico
               doc.setFontSize(16);
@@ -416,8 +425,8 @@ function rent_indicators_report_pdf() {
 
             } // Cierra if impar
           }
-        }
-      })
+        // }
+      // })
 
       // Descarga el archivo PDF
       doc.save("Informe_ICA.pdf");

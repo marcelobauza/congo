@@ -837,6 +837,7 @@ Congo.map_utils = function(){
 
   whenClicked = function(e) {
     nId = e.target.feature.properties.id;
+    Congo.rent_indicators.config.nId = nId
     Congo.rent_indicators.action_dashboards.indicators(nId);
   }
 
