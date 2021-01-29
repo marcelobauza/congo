@@ -620,6 +620,12 @@ Congo.rent_indicators.action_dashboards = function() {
                 var label = b['label']
                 var data = b['data']
 
+                if (a == 0) {
+                  position_y_axis = 'right-y-axis'
+                } else {
+                  position_y_axis = 'left-y-axis'
+                }
+
                 // Setea los colores dependiendo de la serie
                 if (title == 'Superficie' || title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
 
@@ -711,43 +717,12 @@ Congo.rent_indicators.action_dashboards = function() {
                   })
                 }
 
-                if (title == 'Precio UF mes') {
+                if (title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
                     data: count,
-                    fill: false,
-                    borderColor: serie_colour,
-                    borderWidth: 4,
-                    pointRadius: 1,
-                    lineTension: 0,
-                    pointHoverBackgroundColor: '#e8ebef',
-                    pointHoverBorderWidth: 3,
-                    pointHitRadius: 5,
-                  })
-                }
-
-                if (title == 'UFm2 mes') {
-                  chart_type = 'line';
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    fill: false,
-                    borderColor: serie_colour,
-                    borderWidth: 4,
-                    pointRadius: 1,
-                    lineTension: 0,
-                    pointHoverBackgroundColor: '#e8ebef',
-                    pointHoverBorderWidth: 3,
-                    pointHitRadius: 5,
-                  })
-                }
-
-                if (title == 'Relación Precios | Vacancia') {
-                  chart_type = 'line';
-                  datasets.push({
-                    label: label,
-                    data: count,
+                    yAxisID: position_y_axis,
                     fill: false,
                     borderColor: serie_colour,
                     borderWidth: 4,
@@ -889,6 +864,57 @@ Congo.rent_indicators.action_dashboards = function() {
 
               } else { // Line
 
+                if (title != 'Superficie') {
+
+                  y_axes = [{
+                    id: 'left-y-axis',
+                    position: 'left',
+                    ticks: {
+                      callback: function(label, index, labels) {
+                        label = label.toLocaleString('es-ES')
+                        return label;
+                      },
+                      beginAtZero: true,
+                      fontColor: '#e8ebef'
+                    },
+                    gridLines: {
+                      color: "#2c2e34"
+                    },
+                  }, {
+                    id: 'right-y-axis',
+                    position: 'right',
+                    ticks: {
+                      callback: function(label, index, labels) {
+                        label = label.toLocaleString('es-ES')
+                        return label;
+                      },
+                      beginAtZero: true,
+                      fontColor: '#e8ebef'
+                    },
+                    gridLines: {
+                      color: "#2c2e34"
+                    },
+                  }]
+
+                } else {
+
+                  y_axes = [{
+                    ticks: {
+                      callback: function(label, index, labels) {
+                        label = label.toLocaleString('es-ES')
+                        return label;
+                      },
+                      beginAtZero: true,
+                      fontColor: '#e8ebef'
+                    },
+                    gridLines: {
+                      color: "#2c2e34"
+                    },
+                  }]
+
+                }
+
+
                 var chart_options = {
                   onClick: function(c, i) {
 
@@ -983,19 +1009,7 @@ Congo.rent_indicators.action_dashboards = function() {
                         color: "#2c2e34"
                       },
                     }],
-                    yAxes: [{
-                      ticks: {
-                        callback: function(label, index, labels) {
-                          label = label.toLocaleString('es-ES')
-                          return label;
-                        },
-                        beginAtZero: true,
-                        fontColor: '#e8ebef'
-                      },
-                      gridLines: {
-                        color: "#2c2e34"
-                      },
-                    }],
+                    yAxes: y_axes,
                   }
                 };
 
