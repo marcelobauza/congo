@@ -808,7 +808,8 @@ Congo.map_utils = function(){
   }
 
   styleGeojson = function(feature){
-    let  vacancy = parseFloat(feature.properties.vacancy);
+    if(Congo.dashboards.config.widget == 'col_ica_vacancy'){
+      let  vacancy = parseFloat(feature.properties.vacancy);
     switch (true){
       case (vacancy < 4):
         return {"fillColor":  "#fcd930", "color": "#fcd93", "fillOpacity": "0.8"};
@@ -820,6 +821,24 @@ Congo.map_utils = function(){
         return {"fillColor":  "#f94710", "color": "#f94710", "fillOpacity": "0.8"};
       case (vacancy >= 16):
         return {"fillColor":  "#9d2608", "color": "#9d2608", "fillOpacity": "0.8"};
+    }
+    }
+
+    if(Congo.dashboards.config.widget == 'col_ica_price'){
+      var  price = parseFloat(feature.properties.price);
+
+    switch (true){
+      case (price < 400000):
+        return {"fillColor":  "#fcd930", "color": "#fcd93", "fillOpacity": "0.8"};
+      case (price >= 400000) && (price < 800000):
+        return {"fillColor":  "#fda821", "color": "#fda821", "fillOpacity": "0.8"};
+      case (price >= 800000) && (price < 1200000):
+        return {"fillColor":  "#fa7c16", "color": "#fa7c16", "fillOpacity": "0.8"};
+      case (price >= 1200000) && (price < 1600000):
+        return {"fillColor":  "#f94710", "color": "#f94710", "fillOpacity": "0.8"};
+      case (price >= 1600000):
+        return {"fillColor":  "#9d2608", "color": "#9d2608", "fillOpacity": "0.8"};
+    }
     }
   }
 

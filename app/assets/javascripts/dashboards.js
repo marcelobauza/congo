@@ -36,6 +36,12 @@ $(document).ready(function(){
   $('#heat_prv_uf_m2_util').on('click', function(){
     Congo.dashboards.config.widget = 'heat_prv_uf_m2_u';
   });
+  $('#col_ica_vacancy').on('click', function(){
+    Congo.dashboards.config.widget = 'col_ica_vacancy';
+  });
+  $('#col_ica_price').on('click', function(){
+    Congo.dashboards.config.widget = 'col_ica_price';
+  });
   $('#type_point').on('click', function(){
 
     layer_type = Congo.dashboards.config.layer_type;
