@@ -762,13 +762,17 @@ Congo.map_utils = function(){
     typeGeometry = Congo.dashboards.config.typeGeometry;
     county_id = Congo.dashboards.config.county_id;
     groupLayer = Congo.dashboards.config.groupLayer;
+    year = Congo.dashboards.config.year;
+    bimester = Congo.dashboards.config.bimester;
 
     wkt = {
       wkt: JSON.stringify(polygon_size),
       county_id: county_id,
       type_geometry: typeGeometry,
       centerpt: centerpt,
-      radius: radius
+      radius: radius,
+      year: year,
+      bimester: bimester
     }
 
     $.ajax({
@@ -778,7 +782,7 @@ Congo.map_utils = function(){
       data: wkt,
       success: function (data) {
         var geojson = new L.geoJson(data, {
-          style: {"color":"red","weight":3, "fillOpacity": 0},
+          style: styleGeojson,
           onEachFeature: onEachFeature,
           zIndex: 1
         }
@@ -791,11 +795,36 @@ Congo.map_utils = function(){
       }
     });
 
+        Congo.future_projects.config.legends = [];
+        Congo.future_projects.config.legends.push({'name':'Alto', 'color':'9d2608'});
+        Congo.future_projects.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
+        Congo.future_projects.config.legends.push({'name':'Medio', 'color':'fa7c16'});
+        Congo.future_projects.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
+        Congo.future_projects.config.legends.push({'name':'Bajo', 'color':'fcd930'});
+    legends =  Congo.future_projects.config.legends
+    remove_legend();
+        legend_points(legends, map);
     Congo.rent_indicators.action_dashboards.indicators();
   }
 
+  styleGeojson = function(feature){
+    let  vacancy = parseFloat(feature.properties.vacancy);
+    switch (true){
+      case (vacancy < 4):
+        return {"fillColor":  "#fcd930", "color": "#fcd93", "fillOpacity": "0.8"};
+      case (vacancy >= 4) && (vacancy < 8):
+        return {"fillColor":  "#fda821", "color": "#fda821", "fillOpacity": "0.8"};
+      case (vacancy >= 8) && (vacancy < 12):
+        return {"fillColor":  "#fa7c16", "color": "#fa7c16", "fillOpacity": "0.8"};
+      case (vacancy >= 12) && (vacancy < 16):
+        return {"fillColor":  "#f94710", "color": "#f94710", "fillOpacity": "0.8"};
+      case (vacancy >= 16):
+        return {"fillColor":  "#9d2608", "color": "#9d2608", "fillOpacity": "0.8"};
+    }
+  }
+
   onEachFeature = function(feature, layer) {
-    name = feature.properties.name;
+    name    = feature.properties.name;
 
     layer.on({
       click: whenClicked
@@ -803,7 +832,7 @@ Congo.map_utils = function(){
     layer.on({
       mouseover: whenTooltip
     })
-    layer.bindTooltip("Nombre: " + name, {opacity: 0.9})
+    layer.bindTooltip(name, {opacity: 0.9})
   }
 
   whenClicked = function(e) {

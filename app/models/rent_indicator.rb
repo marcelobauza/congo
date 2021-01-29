@@ -5,16 +5,13 @@ class RentIndicator < ApplicationRecord
   def self.rent_geo filters
     rent =  Neighborhood.where(
       conditions_by(filters)).
-      select(
-       'the_geom',
-        'name',
-        'id'
-      ).order(id: :desc)
+      order(id: :desc)
 
     factory = RGeo::GeoJSON::EntityFactory.instance
     feature = []
     rent.each do |c|
-      feature << factory.feature(c.the_geom,nil,{name: c.name, id: c.id})
+      vacancy = total_vacancy(c, filters[:bimester], filters[:year])
+      feature << factory.feature(c.the_geom,nil,{name: c.name, id: c.id, vacancy: (vacancy * 100).to_i })
     end
 
     output_geojson_collection =  RGeo::GeoJSON.encode factory.feature_collection(feature)
