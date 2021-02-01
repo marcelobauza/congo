@@ -57,7 +57,7 @@ function rent_indicators_report_pdf() {
         doc.setFontSize(12);
         doc.text('Fuente:', 20, 290);
         doc.setFontStyle("normal");
-        doc.text('Encuesta digital en portales de internet', 37, 290);
+        doc.text('Inciti - IEUT Pontificia Universidad Católica de Chile', 37, 290);
         doc.setFontSize(10);
         doc.text('p. ' + doc.page, 194, 290);
         doc.page++;
