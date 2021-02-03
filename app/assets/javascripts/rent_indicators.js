@@ -51,19 +51,14 @@ function rent_indicators_report_pdf() {
       // console.log(data);
 
       let build_image_map = new Promise((resolve, reject) => {
-
         leafletImage(map, function(err, canvas) {
-
           var img = document.createElement('img');
           var dimensions = map.getSize();
           img.width = dimensions.x;
           img.height = dimensions.y;
           img.src = canvas.toDataURL();
-
           resolve(img);
-
         });
-
       });
 
       build_image_map.then(function(img) {
@@ -94,18 +89,8 @@ function rent_indicators_report_pdf() {
         doc.setFontSize(16);
         doc.text('Información General', 105, 35, null, null, 'center');
 
-
-        // Congo.map_utils.draw_geometry();
-
+        // Agrega mapa
         doc.addImage(img, 'JPEG', 9, 30);
-
-        //
-        // console.log('Acá se ejecuta build_image_map desde rent_indicators ->');
-        // Congo.map_utils.build_image_map.then(function(data) {
-        //   console.log('Pero mirá como llega la imagen al then papá:');
-        //   console.log(data);
-        // });
-
 
         // // Validamos si hay algún filtro aplicado
         // if (periods == '') {
@@ -138,343 +123,327 @@ function rent_indicators_report_pdf() {
         // Agrega nueva página
         doc.addPage('a4', 'portrait')
 
-        // $.each(data, function(key, value) {
+        for (var i = 1; i < data.length; i++) {
 
-          // if (key == 'charts') {
+          var reg = data[i];
+          var title = reg['title'];
+          var series = reg['series'];
+          var datasets = [];
+          var serie_colour;
 
-            for (var i = 1; i < data.length; i++) {
+          // Extraemos las series
+          $.each(series, function(a, b) {
 
-              var reg = data[i];
-              var title = reg['title'];
-              var series = reg['series'];
-              var datasets = [];
-              var serie_colour;
+            var label = b['label']
+            var data = b['data']
 
-              // Extraemos las series
-              $.each(series, function(a, b) {
+            if (a == 0) {
+              position_y_axis = 'right-y-axis'
+            } else {
+              position_y_axis = 'left-y-axis'
+            }
 
-                var label = b['label']
-                var data = b['data']
+            // Setea los colores dependiendo de la serie
+            if (title == 'Superficie' || title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
 
-                if (a == 0) {
-                  position_y_axis = 'right-y-axis'
-                } else {
-                  position_y_axis = 'left-y-axis'
+              switch (label) {
+                case 'Arriendo':
+                case 'Arriendo/Venta':
+                  serie_colour = '#ff0000'
+                  break;
+                case 'Promedio':
+                case 'Venta':
+                case 'Vacancia':
+                  serie_colour = '#5dceaf'
+                  break;
+              }
+            }
+
+            var name = [];
+            var count = [];
+            var id = [];
+            var name_colour = [];
+            var colour;
+
+            // Extraemos los datos de las series
+            $.each(data, function(c, d) {
+              name.push(d['name'])
+              count.push(d['count'])
+              id.push(d['id'])
+
+              // Setea los colores dependiendo del label
+              if (title == 'Distribución Programas') {
+                switch (d['name']) {
+                  case '1|1':
+                    colour = '#4e67c8'
+                    break;
+                  case '2|1':
+                    colour = '#5eccf3'
+                    break;
+                  case '2|2':
+                    colour = '#a7ea52'
+                    break;
+                  case '3|1':
+                    colour = '#5dceaf'
+                    break;
+                  case '3|2':
+                    colour = '#ff8021'
+                    break;
+                  case '4+':
+                    colour = '#f14124'
+                    break;
                 }
 
-                // Setea los colores dependiendo de la serie
-                if (title == 'Superficie' || title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
-
-                  switch (label) {
-                    case 'Arriendo':
-                    case 'Arriendo/Venta':
-                      serie_colour = '#ff0000'
-                      break;
-                    case 'Promedio':
-                    case 'Venta':
-                    case 'Vacancia':
-                      serie_colour = '#5dceaf'
-                      break;
-                  }
-                }
-
-                var name = [];
-                var count = [];
-                var id = [];
-                var name_colour = [];
-                var colour;
-
-                // Extraemos los datos de las series
-                $.each(data, function(c, d) {
-                  name.push(d['name'])
-                  count.push(d['count'])
-                  id.push(d['id'])
-
-                  // Setea los colores dependiendo del label
-                  if (title == 'Distribución Programas') {
-                    switch (d['name']) {
-                      case '1|1':
-                        colour = '#4e67c8'
-                        break;
-                      case '2|1':
-                        colour = '#5eccf3'
-                        break;
-                      case '2|2':
-                        colour = '#a7ea52'
-                        break;
-                      case '3|1':
-                        colour = '#5dceaf'
-                        break;
-                      case '3|2':
-                        colour = '#ff8021'
-                        break;
-                      case '4+':
-                        colour = '#f14124'
-                        break;
-                    }
-
-                    name_colour.push(colour)
-                  }
-
-                })
-
-                // Guardamos "datasets" y "chart_type"
-                if (title == 'Distribución Programas') {
-                  chart_type = 'doughnut';
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    id: id,
-                    backgroundColor: name_colour,
-                  })
-                }
-
-                if (title == 'Superficie') {
-                  chart_type = 'line';
-                  // position_y_axis =
-                    datasets.push({
-                      label: label,
-                      data: count,
-                      fill: false,
-                      borderColor: serie_colour,
-                      borderWidth: 4,
-                      pointRadius: 1,
-                      lineTension: 0,
-                      pointHoverBackgroundColor: '#e8ebef',
-                      pointHoverBorderWidth: 3,
-                      pointHitRadius: 5,
-                    })
-                }
-
-                if (title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
-                  chart_type = 'line';
-                  // position_y_axis =
-                    datasets.push({
-                      label: label,
-                      data: count,
-                      yAxisID: position_y_axis,
-                      fill: false,
-                      borderColor: serie_colour,
-                      borderWidth: 4,
-                      pointRadius: 1,
-                      lineTension: 0,
-                      pointHoverBackgroundColor: '#e8ebef',
-                      pointHoverBorderWidth: 3,
-                      pointHitRadius: 5,
-                    })
-                }
-
-                chart_data = {
-                  labels: name,
-                  datasets: datasets
-                }
-
-              })
-
-              // Guardamos "options"
-              if (chart_type == 'doughnut') { // Doughnut
-
-                var chart_options = {
-                  animation: false,
-                  responsive: true,
-                  title: {
-                    display: false
-                  },
-                  legend: {
-                    display: true,
-                    position: 'bottom',
-                    labels: {
-                      fontColor: '#3d4046',
-                      fontSize: 12,
-                      usePointStyle: true,
-                    }
-                  },
-                  plugins: {
-                    datalabels: {
-                      formatter: (value, ctx) => {
-                        // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
-                        let sum = 0;
-                        let dataArr = ctx.chart.data.datasets[0].data;
-                        dataArr.map(data => {
-                          sum += data;
-                        });
-                        let percentage = (value * 100 / sum).toFixed(2);
-                        if (percentage > 4) {
-                          return percentage + '%';
-                        } else {
-                          return null;
-                        }
-                      },
-                      align: 'center',
-                      anchor: 'center',
-                      color: '#FFFFFF',
-                      font: {
-                        weight: 'bold'
-                      },
-                      textStrokeColor: '#3d4046',
-                      textStrokeWidth: 1,
-                      textShadowColor: '#000000',
-                      textShadowBlur: 3,
-                    }
-                  },
-                };
-
-              } else { // Line
-
-                if (title != 'Superficie') {
-
-                  y_axes = [{
-                    id: 'left-y-axis',
-                    position: 'left',
-                    ticks: {
-                      callback: function(label, index, labels) {
-                        label = label.toLocaleString('es-ES')
-                        return label;
-                      },
-                      beginAtZero: true,
-                      display: true,
-                      fontSize: 10,
-                      fontColor: '#3d4046'
-                    },
-                  }, {
-                    id: 'right-y-axis',
-                    position: 'right',
-                    ticks: {
-                      callback: function(label, index, labels) {
-                        label = label.toLocaleString('es-ES')
-                        return label;
-                      },
-                      beginAtZero: true,
-                      display: true,
-                      fontSize: 10,
-                      fontColor: '#3d4046'
-                    },
-                  }]
-
-                } else {
-
-                  y_axes = [{
-                    ticks: {
-                      callback: function(label, index, labels) {
-                        label = label.toLocaleString('es-ES')
-                        return label;
-                      },
-                      beginAtZero: true,
-                      display: true,
-                      fontSize: 10,
-                      fontColor: '#3d4046'
-                    },
-                  }]
-
-                }
-
-                var chart_options = {
-                  animation: false,
-                  responsive: true,
-                  title: {
-                    display: false
-                  },
-                  legend: {
-                    display: true,
-                    position: 'bottom',
-                    labels: {
-                      fontColor: '#3d4046',
-                      fontSize: 12,
-                      usePointStyle: true,
-                    }
-                  },
-                  plugins: {
-                    datalabels: {
-                      formatter: function(value, context) {
-                        if (value > 0) {
-                          return value.toLocaleString('es-ES')
-                        } else {
-                          return null
-                        }
-                      },
-                      align: 'start',
-                      anchor: 'start',
-                      color: '#3d4046',
-                      font: {
-                        size: 10
-                      },
-                    }
-                  },
-                  scales: {
-                    xAxes: [{
-                      // stacked: true,
-                      ticks: {
-                        display: true,
-                        fontSize: 10,
-                        fontColor: '#3d4046'
-                      }
-                    }],
-                    yAxes: y_axes,
-                  }
-                };
-
-              } // Cierra else ("options")
-
-              var chart_settings = {
-                type: chart_type,
-                data: chart_data,
-                options: chart_options
+                name_colour.push(colour)
               }
 
-              // Creamos y adjuntamos el canvas
-              var canvas = document.createElement('canvas');
-              canvas.id = 'report-canvas-' + i;
+            })
 
-              $('#chart-report' + i).append(canvas);
-
-              var chart_canvas = document.getElementById('report-canvas-' + i).getContext('2d');
-              var final_chart = new Chart(chart_canvas, chart_settings);
-
-              var chart = final_chart.toBase64Image();
-
-              if (i % 2 == 1) {
-
-                // Título del gráfico
-                doc.setFontSize(16);
-                doc.setFontStyle("bold");
-                doc.text(title, 105, 20, null, null, 'center');
-
-                // Gráfico
-                doc.addImage(chart, 'JPEG', 9, 30);
-
-              } else {
-
-                // Título del gráfico
-                doc.setFontSize(16);
-                doc.setFontStyle("bold");
-                doc.text(title, 105, 160, null, null, 'center');
-
-                // Gráfico
-                doc.addImage(chart, 'JPEG', 9, 170);
-
-                // Agrega nueva página
-                doc.addPage('a4', 'portrait')
-
-                // Pie de página
-                footer()
-
-              } // Cierra if impar
+            // Guardamos "datasets" y "chart_type"
+            if (title == 'Distribución Programas') {
+              chart_type = 'doughnut';
+              datasets.push({
+                label: label,
+                data: count,
+                id: id,
+                backgroundColor: name_colour,
+              })
             }
-          // }
-        // })
+
+            if (title == 'Superficie') {
+              chart_type = 'line';
+              datasets.push({
+                label: label,
+                data: count,
+                fill: false,
+                borderColor: serie_colour,
+                borderWidth: 4,
+                pointRadius: 1,
+                lineTension: 0,
+                pointHoverBackgroundColor: '#e8ebef',
+                pointHoverBorderWidth: 3,
+                pointHitRadius: 5,
+              })
+            }
+
+            if (title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
+              chart_type = 'line';
+              datasets.push({
+                label: label,
+                data: count,
+                yAxisID: position_y_axis,
+                fill: false,
+                borderColor: serie_colour,
+                borderWidth: 4,
+                pointRadius: 1,
+                lineTension: 0,
+                pointHoverBackgroundColor: '#e8ebef',
+                pointHoverBorderWidth: 3,
+                pointHitRadius: 5,
+              })
+            }
+
+            chart_data = {
+              labels: name,
+              datasets: datasets
+            }
+
+          })
+
+          // Guardamos "options"
+          if (chart_type == 'doughnut') { // Doughnut
+
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#3d4046',
+                  fontSize: 12,
+                  usePointStyle: true,
+                }
+              },
+              plugins: {
+                datalabels: {
+                  formatter: (value, ctx) => {
+                    // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                      sum += data;
+                    });
+                    let percentage = (value * 100 / sum).toFixed(2);
+                    if (percentage > 4) {
+                      return percentage + '%';
+                    } else {
+                      return null;
+                    }
+                  },
+                  align: 'center',
+                  anchor: 'center',
+                  color: '#FFFFFF',
+                  font: {
+                    weight: 'bold'
+                  },
+                  textStrokeColor: '#3d4046',
+                  textStrokeWidth: 1,
+                  textShadowColor: '#000000',
+                  textShadowBlur: 3,
+                }
+              },
+            };
+
+          } else { // Line
+
+            if (title != 'Superficie') {
+
+              y_axes = [{
+                id: 'left-y-axis',
+                position: 'left',
+                ticks: {
+                  callback: function(label, index, labels) {
+                    label = label.toLocaleString('es-ES')
+                    return label;
+                  },
+                  beginAtZero: true,
+                  display: true,
+                  fontSize: 10,
+                  fontColor: '#3d4046'
+                },
+              }, {
+                id: 'right-y-axis',
+                position: 'right',
+                ticks: {
+                  callback: function(label, index, labels) {
+                    label = label.toLocaleString('es-ES')
+                    return label;
+                  },
+                  beginAtZero: true,
+                  display: true,
+                  fontSize: 10,
+                  fontColor: '#3d4046'
+                },
+              }]
+
+            } else {
+
+              y_axes = [{
+                ticks: {
+                  callback: function(label, index, labels) {
+                    label = label.toLocaleString('es-ES')
+                    return label;
+                  },
+                  beginAtZero: true,
+                  display: true,
+                  fontSize: 10,
+                  fontColor: '#3d4046'
+                },
+              }]
+
+            }
+
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#3d4046',
+                  fontSize: 12,
+                  usePointStyle: true,
+                }
+              },
+              plugins: {
+                datalabels: {
+                  formatter: function(value, context) {
+                    if (value > 0) {
+                      return value.toLocaleString('es-ES')
+                    } else {
+                      return null
+                    }
+                  },
+                  align: 'start',
+                  anchor: 'start',
+                  color: '#3d4046',
+                  font: {
+                    size: 10
+                  },
+                }
+              },
+              scales: {
+                xAxes: [{
+                  // stacked: true,
+                  ticks: {
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#3d4046'
+                  }
+                }],
+                yAxes: y_axes,
+              }
+            };
+
+          } // Cierra else ("options")
+
+          var chart_settings = {
+            type: chart_type,
+            data: chart_data,
+            options: chart_options
+          }
+
+          // Creamos y adjuntamos el canvas
+          var canvas = document.createElement('canvas');
+          canvas.id = 'report-canvas-' + i;
+
+          $('#chart-report' + i).append(canvas);
+
+          var chart_canvas = document.getElementById('report-canvas-' + i).getContext('2d');
+          var final_chart = new Chart(chart_canvas, chart_settings);
+
+          var chart = final_chart.toBase64Image();
+
+          if (i % 2 == 1) {
+
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.setFontStyle("bold");
+            doc.text(title, 105, 20, null, null, 'center');
+
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 30);
+
+          } else {
+
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.setFontStyle("bold");
+            doc.text(title, 105, 160, null, null, 'center');
+
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 170);
+
+            // Agrega nueva página
+            doc.addPage('a4', 'portrait')
+
+            // Pie de página
+            footer()
+
+          } // Cierra if impar
+        }
 
         // Descarga el archivo PDF
         doc.save("Informe_ICA.pdf");
 
-
-
-
-      });
-
-
-
-
-
+      }); // Cierra then
     } // Cierra success
   }) // Cierra ajax
 } // Cierra function projects_report_pdf
@@ -534,7 +503,6 @@ Congo.rent_indicators.action_dashboards = function() {
     $('#time_slider_cbr_item').remove()
     $('#census_filter').remove()
 
-
     if (nId != undefined) {
 
       to_year = Congo.dashboards.config.year;
@@ -544,7 +512,6 @@ Congo.rent_indicators.action_dashboards = function() {
         to_period: to_bimester,
         id: nId
       }
-
 
       // TODO: Acá se debería agregar o eliminar el filtro de comuna
       // pero ese código ya no está en este archivo. Revisar
@@ -1055,9 +1022,6 @@ Congo.rent_indicators.action_dashboards = function() {
                   }
                 };
 
-
-
-
               } // Cierra else ("options")
 
               var chart_settings = {
@@ -1078,8 +1042,7 @@ Congo.rent_indicators.action_dashboards = function() {
           } // Cierra for
         } // Cierra success
       }) // Cierra ajax
-    }
-
+    } // Cierra if (nId != undefined)
   } // Cierra indicators
 
   return {
