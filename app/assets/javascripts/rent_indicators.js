@@ -42,394 +42,438 @@ function rent_indicators_report_pdf() {
       console.log('Data del reporte:');
       console.log(data);
 
-      // data = '{"charts":[{"title":"Distribución Programas","series":[{"label":"Parque","data":[{"name":"1|1","count":23,"id":28},{"name":"2|1","count":18,"id":31},{"name":"2|2","count":28,"id":30},{"name":"3|1","count":9,"id":29},{"name":"3|2","count":21,"id":29},{"name":"4+","count":1,"id":29}]},{"label":"Oferta","data":[{"name":"1|1","count":48,"id":28},{"name":"2|1","count":10,"id":31},{"name":"2|2","count":26,"id":30},{"name":"3|1","count":1,"id":29},{"name":"3|2","count":13,"id":29},{"name":"4+","count":2,"id":29}]}]},{"title":"Superficie","series":[{"label":"Arriendo","data":[{"name":"6/19","count":54},{"name":"1/20","count":54},{"name":"2/20","count":53},{"name":"3/20","count":59},{"name":"4/20","count":60},{"name":"5/20","count":54}]},{"label":"Venta","data":[{"name":"6/19","count":55},{"name":"1/20","count":49},{"name":"2/20","count":55},{"name":"3/20","count":61},{"name":"4/20","count":56},{"name":"5/20","count":54}]}]},{"title":"Precio UF mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":13.5},{"name":"1/20","count":14},{"name":"2/20","count":15.1},{"name":"3/20","count":15},{"name":"4/20","count":14},{"name":"5/20","count":15}]},{"label":"Venta","data":[{"name":"6/19","count":2000},{"name":"1/20","count":2200},{"name":"2/20","count":2000},{"name":"3/20","count":2500},{"name":"4/20","count":1900},{"name":"5/20","count":2100}]}]},{"title":"UFm2 mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":0.27},{"name":"1/20","count":0.27},{"name":"2/20","count":0.28},{"name":"3/20","count":0.28},{"name":"4/20","count":0.27},{"name":"5/20","count":0.27}]},{"label":"Venta","data":[{"name":"6/19","count":38},{"name":"1/20","count":48},{"name":"2/20","count":38},{"name":"3/20","count":40},{"name":"4/20","count":36},{"name":"5/20","count":41}]}]},{"title":"Relación Precios | Vacancia","series":[{"label":"Arriendo/Venta","data":[{"name":"6/19","count":0.72},{"name":"1/20","count":0.58},{"name":"2/20","count":0.76},{"name":"3/20","count":0.7},{"name":"4/20","count":0.78},{"name":"5/20","count":0.62}]},{"label":"Vacancia","data":[{"name":"6/19","count":2.6},{"name":"1/20","count":1.8},{"name":"2/20","count":1.7},{"name":"3/20","count":1.2},{"name":"4/20","count":1.1},{"name":"5/20","count":1.2}]}]}]}'
-
+      // data = '[{"title":"Resumen Bimestre","data":[{"name":"Total Viviendas","count":53867},{"name":"Total Departamentos","count":15663},{"name":"Tenencia Arriendo","count":7504},{"name":"Oferta Arriendo","count":197},{"name":"Tasa de Vacancia","count":2.6},{"name":"Rentabilidad Bruta Anual (al 2B 2020)*","count":8.2},{"name":"Superficie Util Oferta Arriendo","count":54},{"name":"Superficie Util Compraventas (al 3B 2020)*","count":55.2},{"name":"Superficie Terraza Oferta Arriendo","count":4.3},{"name":"Precio Compraventas | UF (al 3B 2020)*","count":1993},{"name":"Precio Oferta Arriendo | UF mensual","count":13.5},{"name":"Precio Oferta Arriendo | UFm2 mensual","count":0.27},{"name":"PxQ Mensual | UF miles","count":98.4}]},{"title":"Distribución Programas","series":[{"label":"Parque","data":[{"name":"1|1","count":23,"id":28},{"name":"2|1","count":18,"id":31},{"name":"2|2","count":28,"id":30},{"name":"3|1","count":9,"id":29},{"name":"3|2","count":21,"id":29},{"name":"4+","count":1,"id":29}]},{"label":"Oferta","data":[{"name":"1|1","count":48,"id":28},{"name":"2|1","count":10,"id":31},{"name":"2|2","count":26,"id":30},{"name":"3|1","count":1,"id":29},{"name":"3|2","count":13,"id":29},{"name":"4+","count":2,"id":29}]}]},{"title":"Superficie","series":[{"label":"Arriendo","data":[{"name":"6/19","count":54},{"name":"1/20","count":54},{"name":"2/20","count":53},{"name":"3/20","count":59},{"name":"4/20","count":60},{"name":"5/20","count":54}]},{"label":"Venta","data":[{"name":"6/19","count":55},{"name":"1/20","count":49},{"name":"2/20","count":55},{"name":"3/20","count":61},{"name":"4/20","count":56},{"name":"5/20","count":54}]}]},{"title":"Precio UF mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":13.5},{"name":"1/20","count":14},{"name":"2/20","count":15.1},{"name":"3/20","count":15},{"name":"4/20","count":14},{"name":"5/20","count":15}]},{"label":"Venta","data":[{"name":"6/19","count":2000},{"name":"1/20","count":2200},{"name":"2/20","count":2000},{"name":"3/20","count":2500},{"name":"4/20","count":1900},{"name":"5/20","count":2100}]}]},{"title":"UFm2 mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":0.27},{"name":"1/20","count":0.27},{"name":"2/20","count":0.28},{"name":"3/20","count":0.28},{"name":"4/20","count":0.27},{"name":"5/20","count":0.27}]},{"label":"Venta","data":[{"name":"6/19","count":38},{"name":"1/20","count":48},{"name":"2/20","count":38},{"name":"3/20","count":40},{"name":"4/20","count":36},{"name":"5/20","count":41}]}]},{"title":"Relación Precios | Vacancia","series":[{"label":"Arriendo/Venta","data":[{"name":"6/19","count":0.72},{"name":"1/20","count":0.58},{"name":"2/20","count":0.76},{"name":"3/20","count":0.7},{"name":"4/20","count":0.78},{"name":"5/20","count":0.62}]},{"label":"Vacancia","data":[{"name":"6/19","count":2.6},{"name":"1/20","count":1.8},{"name":"2/20","count":1.7},{"name":"3/20","count":1.2},{"name":"4/20","count":1.1},{"name":"5/20","count":1.2}]}]}]'
+      //
+      //
       // data = JSON.parse(data)
+      //
+      // console.log('Data del reporte harcodeada:');
+      // console.log(data);
 
-      // Creamos el doc
-      var doc = new jsPDF();
+      let build_image_map = new Promise((resolve, reject) => {
 
-      doc.page = 1;
+        leafletImage(map, function(err, canvas) {
 
-      // Pie de página
-      function footer() {
+          var img = document.createElement('img');
+          var dimensions = map.getSize();
+          img.width = dimensions.x;
+          img.height = dimensions.y;
+          img.src = canvas.toDataURL();
+
+          resolve(img);
+
+        });
+
+      });
+
+      build_image_map.then(function(img) {
+
+        // Creamos el doc
+        var doc = new jsPDF();
+
+        doc.page = 1;
+
+        // Pie de página
+        function footer() {
+          doc.setFontStyle("bold");
+          doc.setFontSize(12);
+          doc.text('Fuente:', 20, 290);
+          doc.setFontStyle("normal");
+          doc.text('Inciti - IEUT Pontificia Universidad Católica de Chile', 37, 290);
+          doc.setFontSize(10);
+          doc.text('p. ' + doc.page, 194, 290);
+          doc.page++;
+        };
+
+        // Título
         doc.setFontStyle("bold");
-        doc.setFontSize(12);
-        doc.text('Fuente:', 20, 290);
-        doc.setFontStyle("normal");
-        doc.text('Inciti - IEUT Pontificia Universidad Católica de Chile', 37, 290);
-        doc.setFontSize(10);
-        doc.text('p. ' + doc.page, 194, 290);
-        doc.page++;
-      };
+        doc.setFontSize(22);
+        doc.text('Informe de Indicadores Claves de Arriendo', 105, 20, null, null, 'center');
 
-      // Título
-      doc.setFontStyle("bold");
-      doc.setFontSize(22);
-      doc.text('Informe de Indicadores Claves de Arriendo', 105, 20, null, null, 'center');
+        // Subtítulo
+        doc.setFontSize(16);
+        doc.text('Información General', 105, 35, null, null, 'center');
 
-      // Subtítulo
-      doc.setFontSize(16);
-      doc.text('Información General', 105, 35, null, null, 'center');
 
-      // // Validamos si hay algún filtro aplicado
-      // if (periods == '') {
-      //
-      //   // Periodo Actual
-      //   doc.setFontSize(12);
-      //   doc.setFontStyle("bold");
-      //   doc.text('Periodo de tiempo seleccionado:', 10, 49);
-      //   doc.setFontStyle("normal");
-      //   doc.text(to_bimester + '° bimestre del ' + to_year, 78, 49);
-      //
-      // } else {
-      //
-      //   // Periodos Filtrados
-      //   doc.setFontSize(12);
-      //   doc.setFontStyle("bold");
-      //   doc.text('Periodos de tiempo seleccionados:', 10, 49);
-      //   doc.setFontStyle("normal");
-      //   var tab = 83
-      //   for (var i = 0; i < periods.length; i++) {
-      //     doc.text(periods[i] + '/' + years[i] + ', ', tab, 49);
-      //     tab = tab + 16
-      //   }
-      //
-      // }
+        // Congo.map_utils.draw_geometry();
 
-      // Pie de página
-      footer()
+        doc.addImage(img, 'JPEG', 9, 30);
 
-      // Agrega nueva página
-      doc.addPage('a4', 'portrait')
+        //
+        // console.log('Acá se ejecuta build_image_map desde rent_indicators ->');
+        // Congo.map_utils.build_image_map.then(function(data) {
+        //   console.log('Pero mirá como llega la imagen al then papá:');
+        //   console.log(data);
+        // });
 
-      // $.each(data, function(key, value) {
 
-        // if (key == 'charts') {
+        // // Validamos si hay algún filtro aplicado
+        // if (periods == '') {
+        //
+        //   // Periodo Actual
+        //   doc.setFontSize(12);
+        //   doc.setFontStyle("bold");
+        //   doc.text('Periodo de tiempo seleccionado:', 10, 49);
+        //   doc.setFontStyle("normal");
+        //   doc.text(to_bimester + '° bimestre del ' + to_year, 78, 49);
+        //
+        // } else {
+        //
+        //   // Periodos Filtrados
+        //   doc.setFontSize(12);
+        //   doc.setFontStyle("bold");
+        //   doc.text('Periodos de tiempo seleccionados:', 10, 49);
+        //   doc.setFontStyle("normal");
+        //   var tab = 83
+        //   for (var i = 0; i < periods.length; i++) {
+        //     doc.text(periods[i] + '/' + years[i] + ', ', tab, 49);
+        //     tab = tab + 16
+        //   }
+        //
+        // }
 
-          for (var i = 1; i < data.length; i++) {
+        // Pie de página
+        footer()
 
-            var reg = data[i];
-            var title = reg['title'];
-            var series = reg['series'];
-            var datasets = [];
-            var serie_colour;
+        // Agrega nueva página
+        doc.addPage('a4', 'portrait')
 
-            // Extraemos las series
-            $.each(series, function(a, b) {
+        // $.each(data, function(key, value) {
 
-              var label = b['label']
-              var data = b['data']
+          // if (key == 'charts') {
 
-              if (a == 0) {
-                position_y_axis = 'right-y-axis'
-              } else {
-                position_y_axis = 'left-y-axis'
-              }
+            for (var i = 1; i < data.length; i++) {
 
-              // Setea los colores dependiendo de la serie
-              if (title == 'Superficie' || title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
+              var reg = data[i];
+              var title = reg['title'];
+              var series = reg['series'];
+              var datasets = [];
+              var serie_colour;
 
-                switch (label) {
-                  case 'Arriendo':
-                  case 'Arriendo/Venta':
-                    serie_colour = '#ff0000'
-                    break;
-                  case 'Promedio':
-                  case 'Venta':
-                  case 'Vacancia':
-                    serie_colour = '#5dceaf'
-                    break;
+              // Extraemos las series
+              $.each(series, function(a, b) {
+
+                var label = b['label']
+                var data = b['data']
+
+                if (a == 0) {
+                  position_y_axis = 'right-y-axis'
+                } else {
+                  position_y_axis = 'left-y-axis'
                 }
-              }
 
-              var name = [];
-              var count = [];
-              var id = [];
-              var name_colour = [];
-              var colour;
+                // Setea los colores dependiendo de la serie
+                if (title == 'Superficie' || title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
 
-              // Extraemos los datos de las series
-              $.each(data, function(c, d) {
-                name.push(d['name'])
-                count.push(d['count'])
-                id.push(d['id'])
-
-                // Setea los colores dependiendo del label
-                if (title == 'Distribución Programas') {
-                  switch (d['name']) {
-                    case '1|1':
-                      colour = '#4e67c8'
+                  switch (label) {
+                    case 'Arriendo':
+                    case 'Arriendo/Venta':
+                      serie_colour = '#ff0000'
                       break;
-                    case '2|1':
-                      colour = '#5eccf3'
-                      break;
-                    case '2|2':
-                      colour = '#a7ea52'
-                      break;
-                    case '3|1':
-                      colour = '#5dceaf'
-                      break;
-                    case '3|2':
-                      colour = '#ff8021'
-                      break;
-                    case '4+':
-                      colour = '#f14124'
+                    case 'Promedio':
+                    case 'Venta':
+                    case 'Vacancia':
+                      serie_colour = '#5dceaf'
                       break;
                   }
+                }
 
-                  name_colour.push(colour)
+                var name = [];
+                var count = [];
+                var id = [];
+                var name_colour = [];
+                var colour;
+
+                // Extraemos los datos de las series
+                $.each(data, function(c, d) {
+                  name.push(d['name'])
+                  count.push(d['count'])
+                  id.push(d['id'])
+
+                  // Setea los colores dependiendo del label
+                  if (title == 'Distribución Programas') {
+                    switch (d['name']) {
+                      case '1|1':
+                        colour = '#4e67c8'
+                        break;
+                      case '2|1':
+                        colour = '#5eccf3'
+                        break;
+                      case '2|2':
+                        colour = '#a7ea52'
+                        break;
+                      case '3|1':
+                        colour = '#5dceaf'
+                        break;
+                      case '3|2':
+                        colour = '#ff8021'
+                        break;
+                      case '4+':
+                        colour = '#f14124'
+                        break;
+                    }
+
+                    name_colour.push(colour)
+                  }
+
+                })
+
+                // Guardamos "datasets" y "chart_type"
+                if (title == 'Distribución Programas') {
+                  chart_type = 'doughnut';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    id: id,
+                    backgroundColor: name_colour,
+                  })
+                }
+
+                if (title == 'Superficie') {
+                  chart_type = 'line';
+                  // position_y_axis =
+                    datasets.push({
+                      label: label,
+                      data: count,
+                      fill: false,
+                      borderColor: serie_colour,
+                      borderWidth: 4,
+                      pointRadius: 1,
+                      lineTension: 0,
+                      pointHoverBackgroundColor: '#e8ebef',
+                      pointHoverBorderWidth: 3,
+                      pointHitRadius: 5,
+                    })
+                }
+
+                if (title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
+                  chart_type = 'line';
+                  // position_y_axis =
+                    datasets.push({
+                      label: label,
+                      data: count,
+                      yAxisID: position_y_axis,
+                      fill: false,
+                      borderColor: serie_colour,
+                      borderWidth: 4,
+                      pointRadius: 1,
+                      lineTension: 0,
+                      pointHoverBackgroundColor: '#e8ebef',
+                      pointHoverBorderWidth: 3,
+                      pointHitRadius: 5,
+                    })
+                }
+
+                chart_data = {
+                  labels: name,
+                  datasets: datasets
                 }
 
               })
 
-              // Guardamos "datasets" y "chart_type"
-              if (title == 'Distribución Programas') {
-                chart_type = 'doughnut';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  id: id,
-                  backgroundColor: name_colour,
-                })
-              }
+              // Guardamos "options"
+              if (chart_type == 'doughnut') { // Doughnut
 
-              if (title == 'Superficie') {
-                chart_type = 'line';
-                position_y_axis =
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    fill: false,
-                    borderColor: serie_colour,
-                    borderWidth: 4,
-                    pointRadius: 1,
-                    lineTension: 0,
-                    pointHoverBackgroundColor: '#e8ebef',
-                    pointHoverBorderWidth: 3,
-                    pointHitRadius: 5,
-                  })
-              }
-
-              if (title == 'Precio UF mes' || title == 'UFm2 mes' || title == 'Relación Precios | Vacancia') {
-                chart_type = 'line';
-                position_y_axis =
-                  datasets.push({
-                    label: label,
-                    data: count,
-                    yAxisID: position_y_axis,
-                    fill: false,
-                    borderColor: serie_colour,
-                    borderWidth: 4,
-                    pointRadius: 1,
-                    lineTension: 0,
-                    pointHoverBackgroundColor: '#e8ebef',
-                    pointHoverBorderWidth: 3,
-                    pointHitRadius: 5,
-                  })
-              }
-
-              chart_data = {
-                labels: name,
-                datasets: datasets
-              }
-
-            })
-
-            // Guardamos "options"
-            if (chart_type == 'doughnut') { // Doughnut
-
-              var chart_options = {
-                animation: false,
-                responsive: true,
-                title: {
-                  display: false
-                },
-                legend: {
-                  display: true,
-                  position: 'bottom',
-                  labels: {
-                    fontColor: '#3d4046',
-                    fontSize: 12,
-                    usePointStyle: true,
-                  }
-                },
-                plugins: {
-                  datalabels: {
-                    formatter: (value, ctx) => {
-                      // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
-                      let sum = 0;
-                      let dataArr = ctx.chart.data.datasets[0].data;
-                      dataArr.map(data => {
-                        sum += data;
-                      });
-                      let percentage = (value * 100 / sum).toFixed(2);
-                      if (percentage > 4) {
-                        return percentage + '%';
-                      } else {
-                        return null;
-                      }
-                    },
-                    align: 'center',
-                    anchor: 'center',
-                    color: '#FFFFFF',
-                    font: {
-                      weight: 'bold'
-                    },
-                    textStrokeColor: '#3d4046',
-                    textStrokeWidth: 1,
-                    textShadowColor: '#000000',
-                    textShadowBlur: 3,
-                  }
-                },
-              };
-
-            } else { // Line
-
-              if (title != 'Superficie') {
-
-                y_axes = [{
-                  id: 'left-y-axis',
-                  position: 'left',
-                  ticks: {
-                    callback: function(label, index, labels) {
-                      label = label.toLocaleString('es-ES')
-                      return label;
-                    },
-                    beginAtZero: true,
-                    display: true,
-                    fontSize: 10,
-                    fontColor: '#3d4046'
+                var chart_options = {
+                  animation: false,
+                  responsive: true,
+                  title: {
+                    display: false
                   },
-                }, {
-                  id: 'right-y-axis',
-                  position: 'right',
-                  ticks: {
-                    callback: function(label, index, labels) {
-                      label = label.toLocaleString('es-ES')
-                      return label;
-                    },
-                    beginAtZero: true,
+                  legend: {
                     display: true,
-                    fontSize: 10,
-                    fontColor: '#3d4046'
+                    position: 'bottom',
+                    labels: {
+                      fontColor: '#3d4046',
+                      fontSize: 12,
+                      usePointStyle: true,
+                    }
                   },
-                }]
-
-              } else {
-
-                y_axes = [{
-                  ticks: {
-                    callback: function(label, index, labels) {
-                      label = label.toLocaleString('es-ES')
-                      return label;
-                    },
-                    beginAtZero: true,
-                    display: true,
-                    fontSize: 10,
-                    fontColor: '#3d4046'
+                  plugins: {
+                    datalabels: {
+                      formatter: (value, ctx) => {
+                        // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                          sum += data;
+                        });
+                        let percentage = (value * 100 / sum).toFixed(2);
+                        if (percentage > 4) {
+                          return percentage + '%';
+                        } else {
+                          return null;
+                        }
+                      },
+                      align: 'center',
+                      anchor: 'center',
+                      color: '#FFFFFF',
+                      font: {
+                        weight: 'bold'
+                      },
+                      textStrokeColor: '#3d4046',
+                      textStrokeWidth: 1,
+                      textShadowColor: '#000000',
+                      textShadowBlur: 3,
+                    }
                   },
-                }]
+                };
 
-              }
+              } else { // Line
 
-              var chart_options = {
-                animation: false,
-                responsive: true,
-                title: {
-                  display: false
-                },
-                legend: {
-                  display: true,
-                  position: 'bottom',
-                  labels: {
-                    fontColor: '#3d4046',
-                    fontSize: 12,
-                    usePointStyle: true,
-                  }
-                },
-                plugins: {
-                  datalabels: {
-                    formatter: function(value, context) {
-                      if (value > 0) {
-                        return value.toLocaleString('es-ES')
-                      } else {
-                        return null
-                      }
-                    },
-                    align: 'start',
-                    anchor: 'start',
-                    color: '#3d4046',
-                    font: {
-                      size: 10
-                    },
-                  }
-                },
-                scales: {
-                  xAxes: [{
-                    // stacked: true,
+                if (title != 'Superficie') {
+
+                  y_axes = [{
+                    id: 'left-y-axis',
+                    position: 'left',
                     ticks: {
+                      callback: function(label, index, labels) {
+                        label = label.toLocaleString('es-ES')
+                        return label;
+                      },
+                      beginAtZero: true,
                       display: true,
                       fontSize: 10,
                       fontColor: '#3d4046'
-                    }
-                  }],
-                  yAxes: y_axes,
+                    },
+                  }, {
+                    id: 'right-y-axis',
+                    position: 'right',
+                    ticks: {
+                      callback: function(label, index, labels) {
+                        label = label.toLocaleString('es-ES')
+                        return label;
+                      },
+                      beginAtZero: true,
+                      display: true,
+                      fontSize: 10,
+                      fontColor: '#3d4046'
+                    },
+                  }]
+
+                } else {
+
+                  y_axes = [{
+                    ticks: {
+                      callback: function(label, index, labels) {
+                        label = label.toLocaleString('es-ES')
+                        return label;
+                      },
+                      beginAtZero: true,
+                      display: true,
+                      fontSize: 10,
+                      fontColor: '#3d4046'
+                    },
+                  }]
+
                 }
-              };
 
-            } // Cierra else ("options")
+                var chart_options = {
+                  animation: false,
+                  responsive: true,
+                  title: {
+                    display: false
+                  },
+                  legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      fontColor: '#3d4046',
+                      fontSize: 12,
+                      usePointStyle: true,
+                    }
+                  },
+                  plugins: {
+                    datalabels: {
+                      formatter: function(value, context) {
+                        if (value > 0) {
+                          return value.toLocaleString('es-ES')
+                        } else {
+                          return null
+                        }
+                      },
+                      align: 'start',
+                      anchor: 'start',
+                      color: '#3d4046',
+                      font: {
+                        size: 10
+                      },
+                    }
+                  },
+                  scales: {
+                    xAxes: [{
+                      // stacked: true,
+                      ticks: {
+                        display: true,
+                        fontSize: 10,
+                        fontColor: '#3d4046'
+                      }
+                    }],
+                    yAxes: y_axes,
+                  }
+                };
 
-            var chart_settings = {
-              type: chart_type,
-              data: chart_data,
-              options: chart_options
+              } // Cierra else ("options")
+
+              var chart_settings = {
+                type: chart_type,
+                data: chart_data,
+                options: chart_options
+              }
+
+              // Creamos y adjuntamos el canvas
+              var canvas = document.createElement('canvas');
+              canvas.id = 'report-canvas-' + i;
+
+              $('#chart-report' + i).append(canvas);
+
+              var chart_canvas = document.getElementById('report-canvas-' + i).getContext('2d');
+              var final_chart = new Chart(chart_canvas, chart_settings);
+
+              var chart = final_chart.toBase64Image();
+
+              if (i % 2 == 1) {
+
+                // Título del gráfico
+                doc.setFontSize(16);
+                doc.setFontStyle("bold");
+                doc.text(title, 105, 20, null, null, 'center');
+
+                // Gráfico
+                doc.addImage(chart, 'JPEG', 9, 30);
+
+              } else {
+
+                // Título del gráfico
+                doc.setFontSize(16);
+                doc.setFontStyle("bold");
+                doc.text(title, 105, 160, null, null, 'center');
+
+                // Gráfico
+                doc.addImage(chart, 'JPEG', 9, 170);
+
+                // Agrega nueva página
+                doc.addPage('a4', 'portrait')
+
+                // Pie de página
+                footer()
+
+              } // Cierra if impar
             }
+          // }
+        // })
 
-            // Creamos y adjuntamos el canvas
-            var canvas = document.createElement('canvas');
-            canvas.id = 'report-canvas-' + i;
+        // Descarga el archivo PDF
+        doc.save("Informe_ICA.pdf");
 
-            $('#chart-report' + i).append(canvas);
 
-            var chart_canvas = document.getElementById('report-canvas-' + i).getContext('2d');
-            var final_chart = new Chart(chart_canvas, chart_settings);
 
-            var chart = final_chart.toBase64Image();
 
-            if (i % 2 == 1) {
+      });
 
-              // Título del gráfico
-              doc.setFontSize(16);
-              doc.setFontStyle("bold");
-              doc.text(title, 105, 20, null, null, 'center');
 
-              // Gráfico
-              doc.addImage(chart, 'JPEG', 9, 30);
 
-            } else {
 
-              // Título del gráfico
-              doc.setFontSize(16);
-              doc.setFontStyle("bold");
-              doc.text(title, 105, 160, null, null, 'center');
-
-              // Gráfico
-              doc.addImage(chart, 'JPEG', 9, 170);
-
-              // Agrega nueva página
-              doc.addPage('a4', 'portrait')
-
-              // Pie de página
-              footer()
-
-            } // Cierra if impar
-          }
-        // }
-      // })
-
-      // Descarga el archivo PDF
-      doc.save("Informe_ICA.pdf");
 
     } // Cierra success
   }) // Cierra ajax
@@ -444,8 +488,6 @@ Congo.rent_indicators.action_dashboards = function() {
 
 
   indicators = function(nId) {
-
-    console.log(nId);
 
     Congo.dashboards.action_index.create_overlay_and_filter_card();
     Congo.dashboards.action_index.add_time_slider();
@@ -494,9 +536,6 @@ Congo.rent_indicators.action_dashboards = function() {
 
 
     if (nId != undefined) {
-
-      console.log('-- Sin selección');
-
 
       to_year = Congo.dashboards.config.year;
       to_bimester = Congo.dashboards.config.bimester;
@@ -547,9 +586,12 @@ Congo.rent_indicators.action_dashboards = function() {
           //    from: from
           //  });
 
-          // data = '[{"title":"Resumen Bimestre","data":[{"name":"Total Viviendas","count":53867},{"name":"Total Departamentos","count":15663},{"name":"Tenencia Arriendo","count":7504},{"name":"Oferta Arriendo","count":197},{"name":"Tasa de Vacancia","count":2.6},{"name":"Rentabilidad Bruta Anual (al 2B 2020)*","count":8.2},{"name":"Superficie Util Oferta Arriendo","count":54},{"name":"Superficie Util Compraventas (al 3B 2020)*","count":55.2},{"name":"Superficie Terraza Oferta Arriendo","count":4.3},{"name":"Precio Compraventas | UF (al 3B 2020)*","count":1993},{"name":"Precio Oferta Arriendo | UF mensual","count":13.5},{"name":"Precio Oferta Arriendo | UFm2 mensual","count":0.27},{"name":"PxQ Mensual | UF miles","count":98.4}]},{"title":"Distribución Programas","series":[{"label":"Parque","data":[{"name":"1|1","count":23,"id":28},{"name":"2|1","count":18,"id":31},{"name":"2|2","count":28,"id":30},{"name":"3|1","count":9,"id":29},{"name":"3|2","count":21,"id":29},{"name":"4+","count":1,"id":29}]},{"label":"Oferta","data":[{"name":"1|1","count":48,"id":28},{"name":"2|1","count":10,"id":31},{"name":"2|2","count":26,"id":30},{"name":"3|1","count":1,"id":29},{"name":"3|2","count":13,"id":29},{"name":"4+","count":2,"id":29}]}]},{"title":"Superficie","series":[{"label":"Arriendo","data":[{"name":"6/19","count":54},{"name":"1/20","count":54},{"name":"2/20","count":53},{"name":"3/20","count":59},{"name":"4/20","count":60},{"name":"5/20","count":54}]},{"label":"Venta","data":[{"name":"6/19","count":55},{"name":"1/20","count":49},{"name":"2/20","count":55},{"name":"3/20","count":61},{"name":"4/20","count":56},{"name":"5/20","count":54}]}]},{"title":"Precio UF mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":13.5},{"name":"1/20","count":14},{"name":"2/20","count":15.1},{"name":"3/20","count":15},{"name":"4/20","count":14},{"name":"5/20","count":15}]},{"label":"Venta","data":[{"name":"6/19","count":2000},{"name":"1/20","count":2200},{"name":"2/20","count":2000},{"name":"3/20","count":2500},{"name":"4/20","count":1900},{"name":"5/20","count":2100}]}]},{"title":"UFm2 mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":0.27},{"name":"1/20","count":0.27},{"name":"2/20","count":0.28},{"name":"3/20","count":0.28},{"name":"4/20","count":0.27},{"name":"5/20","count":0.27}]},{"label":"Venta","data":[{"name":"6/19","count":38},{"name":"1/20","count":48},{"name":"2/20","count":38},{"name":"3/20","count":40},{"name":"4/20","count":36},{"name":"5/20","count":41}]}]},{"title":"Relación Precios | Vacancia","series":[{"label":"Arriendo/Venta","data":[{"name":"6/19","count":0.72},{"name":"1/20","count":0.58},{"name":"2/20","count":0.76},{"name":"3/20","count":0.7},{"name":"4/20","count":0.78},{"name":"5/20","count":0.62}]},{"label":"Vacancia","data":[{"name":"6/19","count":2.6},{"name":"1/20","count":1.8},{"name":"2/20","count":1.7},{"name":"3/20","count":1.2},{"name":"4/20","count":1.1},{"name":"5/20","count":1.2}]}]}]'
+          data_harcoded = '[{"title":"Resumen Bimestre","data":[{"name":"Total Viviendas","count":53867},{"name":"Total Departamentos","count":15663},{"name":"Tenencia Arriendo","count":7504},{"name":"Oferta Arriendo","count":197},{"name":"Tasa de Vacancia","count":2.6},{"name":"Rentabilidad Bruta Anual (al 2B 2020)*","count":8.2},{"name":"Superficie Util Oferta Arriendo","count":54},{"name":"Superficie Util Compraventas (al 3B 2020)*","count":55.2},{"name":"Superficie Terraza Oferta Arriendo","count":4.3},{"name":"Precio Compraventas | UF (al 3B 2020)*","count":1993},{"name":"Precio Oferta Arriendo | UF mensual","count":13.5},{"name":"Precio Oferta Arriendo | UFm2 mensual","count":0.27},{"name":"PxQ Mensual | UF miles","count":98.4}]},{"title":"Distribución Programas","series":[{"label":"Parque","data":[{"name":"1|1","count":23,"id":28},{"name":"2|1","count":18,"id":31},{"name":"2|2","count":28,"id":30},{"name":"3|1","count":9,"id":29},{"name":"3|2","count":21,"id":29},{"name":"4+","count":1,"id":29}]},{"label":"Oferta","data":[{"name":"1|1","count":48,"id":28},{"name":"2|1","count":10,"id":31},{"name":"2|2","count":26,"id":30},{"name":"3|1","count":1,"id":29},{"name":"3|2","count":13,"id":29},{"name":"4+","count":2,"id":29}]}]},{"title":"Superficie","series":[{"label":"Arriendo","data":[{"name":"6/19","count":54},{"name":"1/20","count":54},{"name":"2/20","count":53},{"name":"3/20","count":59},{"name":"4/20","count":60},{"name":"5/20","count":54}]},{"label":"Venta","data":[{"name":"6/19","count":55},{"name":"1/20","count":49},{"name":"2/20","count":55},{"name":"3/20","count":61},{"name":"4/20","count":56},{"name":"5/20","count":54}]}]},{"title":"Precio UF mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":13.5},{"name":"1/20","count":14},{"name":"2/20","count":15.1},{"name":"3/20","count":15},{"name":"4/20","count":14},{"name":"5/20","count":15}]},{"label":"Venta","data":[{"name":"6/19","count":2000},{"name":"1/20","count":2200},{"name":"2/20","count":2000},{"name":"3/20","count":2500},{"name":"4/20","count":1900},{"name":"5/20","count":2100}]}]},{"title":"UFm2 mes","series":[{"label":"Arriendo","data":[{"name":"6/19","count":0.27},{"name":"1/20","count":0.27},{"name":"2/20","count":0.28},{"name":"3/20","count":0.28},{"name":"4/20","count":0.27},{"name":"5/20","count":0.27}]},{"label":"Venta","data":[{"name":"6/19","count":38},{"name":"1/20","count":48},{"name":"2/20","count":38},{"name":"3/20","count":40},{"name":"4/20","count":36},{"name":"5/20","count":41}]}]},{"title":"Relación Precios | Vacancia","series":[{"label":"Arriendo/Venta","data":[{"name":"6/19","count":0.72},{"name":"1/20","count":0.58},{"name":"2/20","count":0.76},{"name":"3/20","count":0.7},{"name":"4/20","count":0.78},{"name":"5/20","count":0.62}]},{"label":"Vacancia","data":[{"name":"6/19","count":2.6},{"name":"1/20","count":1.8},{"name":"2/20","count":1.7},{"name":"3/20","count":1.2},{"name":"4/20","count":1.1},{"name":"5/20","count":1.2}]}]}]'
 
-          // data = JSON.parse(data)
+          data_harcoded = JSON.parse(data_harcoded)
+
+          console.log('Data de ICA harcodeada:');
+          console.log(data_harcoded);
 
           // Separamos la información
           for (var i = 0; i < data.length; i++) {
@@ -1012,6 +1054,9 @@ Congo.rent_indicators.action_dashboards = function() {
                     yAxes: y_axes,
                   }
                 };
+
+
+
 
               } // Cierra else ("options")
 

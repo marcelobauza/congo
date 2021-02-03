@@ -42,6 +42,7 @@ Congo.map_utils = function(){
       center: [-33.4372, -70.6506],
       zoomControl: false,
       zoomAnimation: true,
+      preferCanvas: true,
       layers: [streets]
     });
 
@@ -229,18 +230,6 @@ Congo.map_utils = function(){
       }
       counties();
     })
-  }
-
-  var build_image_map = function(){
-    leafletImage(map, function(err, canvas) {
-      //      now you have canvas
-      // example thing to do with that canvas:
-      var img = document.createElement('img');
-      var dimensions = map.getSize();
-      img.width = dimensions.x;
-      img.height = dimensions.y;
-      img.src = canvas.toDataURL();
-    });
   }
 
   var LatLngToCoords = function (LatLng, reverse) { // (LatLng, Boolean) -> Array
