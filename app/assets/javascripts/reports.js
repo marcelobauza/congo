@@ -17,13 +17,8 @@ Congo.reports = function(){
     case 'future_projects_info':
       switch(kind_reports){
         case 'graph':
-          if ((area > 0 && area < smda) || (radius > 0 && radius < mdr)) {
             url = '/reports/future_projects_summary.xlsx';
             window.open(url, '_blank');
-          }else{
-            var alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El tamaño de la selección excede el permitido. Por favor, intente nuevamente.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
-            $('#alerts').append(alert);
-          }
           break;
         case 'base':
           if ((area > 0 && area < smdFutureProjects) || (radius > 0 && radius < mdrFutureProjects)) {
