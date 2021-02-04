@@ -90,7 +90,8 @@ function rent_indicators_report_pdf() {
         doc.text('Información General', 105, 35, null, null, 'center');
 
         // Agrega mapa
-        doc.addImage(img, 'JPEG', 9, 30);
+        img_height = (img.height * 190) / img.width
+        doc.addImage(img, 'JPEG', 9, 30, 190, img_height);
 
         // // Validamos si hay algún filtro aplicado
         // if (periods == '') {
