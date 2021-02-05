@@ -63,7 +63,7 @@
         <% end %>
 
         <%if current_user.layer_types.include? 6 %>
-          <%= link_to rent_indicators_dashboards_path(), class: "dropdown-item custom-item", remote: true do %>
+          <%= link_to rent_indicators_dashboards_path(), class: "dropdown-item custom-item", remote: true, id: 'ica' do %>
             <%= image_tag "ica.svg", width:"30", height:"30" %>
           <% end %>
         <% end %>

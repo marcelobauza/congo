@@ -36,6 +36,9 @@ $(document).ready(function(){
   $('#heat_prv_uf_m2_util').on('click', function(){
     Congo.dashboards.config.widget = 'heat_prv_uf_m2_u';
   });
+  $('#ica').on('click', function(){
+    Congo.dashboards.config.widget = 'col_ica_vacancy';
+  });
   $('#col_ica_vacancy').on('click', function(){
     Congo.dashboards.config.widget = 'col_ica_vacancy';
   });
