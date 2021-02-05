@@ -21,6 +21,7 @@ module RentIndicators::Summary
     private
     def brief neighborhood, bimester, year
       data = []
+      periods = Period.get_periods(bimester, year, 6, 1).reverse
       projects = RentProject.where(
         "ST_CONTAINS(
           ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
@@ -29,34 +30,39 @@ module RentIndicators::Summary
       transactions = RentTransaction.where(
         "ST_CONTAINS(
           ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
-      ).where(bimester: bimester, year: year)
+      ).where(conditions(bimester, year))
 
       bots = bots_offer(neighborhood, bimester, year)
 
       rent_offer      = (bots.count / 0.9)
       total_vacancy   = total_vacancy(neighborhood, bimester, year)
+      total_households = neighborhood.total_houses + neighborhood.total_departments
       avg_u_rent      = bots.average(:surface)
       avg_u_sale      = transactions.average(:total_surface_building)
       avg_cbr         = transactions.average(:calculated_value)
       avg_price_uf    = bots.average(:price_uf)
       avg_price_uf_m2 = average_price_uf_m2( bots.average(:price_uf).to_f, avg_u_rent.to_f)
+      gross_profitability = (((12 * avg_price_uf) - (total_vacancy * 12 * avg_price_uf)) / avg_cbr)* 100
 
-      data.push("name": "Total Viviendas", "count": neighborhood.total_houses)
+      data.push("name": "Barrio", "count": neighborhood.name)
+      data.push("name": "Total Viviendas", "count": total_households )
       data.push("name": "Total Departamentos", "count": neighborhood.total_departments)
-      data.push("name": "Tenencia de Arriedo", "count": neighborhood.tenure)
+      data.push("name": "Tenencia Arriedo", "count": total_households * neighborhood.tenure)
+      data.push("name": "Porcentaje de Arriedo", "count": neighborhood.tenure)
       data.push("name": "Oferta de Arriendo" , "count": rent_offer.to_i )
       data.push("name": "Tasa de Vacancia", "count": total_vacancy)
-      data.push("name": "Rentabilidad Bruta Anual", "count": 4)
-      data.push("name": "Superficie Util Oferta Arriendo", "count": avg_u_rent.to_f)
-      data.push("name": "Superficie Util Compraventas ", "count": avg_u_sale.to_f)
+      data.push("name": "Rentabilidad Bruta Anual", "count": ("%.1f" % gross_profitability).to_f)
+      data.push("name": "Superficie Util Oferta Arriendo", "count": ("%.1f" % avg_u_rent).to_f)
+      data.push("name": "Superficie Util Compraventas ", "count": ("%.1f" % avg_u_sale).to_f)
       data.push("name": "Superficie Terraza Oferta Arriendo", "count": 4)
-      data.push("name": "Precio Compraventas | UF", "count": avg_cbr.to_f)
-      data.push("name": "Precio Oferta Arriendo | UF mensual", "count": avg_price_uf.to_f)
-      data.push("name": "Precio Oferta Arriendo | UFm2 mensual", "count": avg_price_uf_m2.to_f)
+      data.push("name": "Precio Compraventas | UF", "count": avg_cbr.to_i)
+      data.push("name": "Precio Oferta Arriendo | UF mensual", "count":("%.1f" % avg_price_uf).to_f)
+      data.push("name": "Precio Oferta Arriendo | UFm2 mensual", "count":("%.2f" % avg_price_uf_m2).to_f)
       data.push("name": "PxQ mensual | UF miles", "count": 4)
 
       data
     end
+
     def bots_offer neighborhood, bimester, year
       Bot.where(
         "ST_CONTAINS(
@@ -107,7 +113,7 @@ module RentIndicators::Summary
       data     = []
       data_cbr = []
       periods.each do |p|
-        bots = bots_offer(neighborhood, bimester, year).average(:surface)
+        bots = bots_offer(neighborhood, p[:period], p[:year]).average(:surface)
 
         data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.to_f )
 
@@ -133,7 +139,7 @@ module RentIndicators::Summary
       data     = []
       data_cbr = []
       periods.each do |p|
-        bots = bots_offer(neighborhood, bimester, year).average(:price_uf)
+        bots = bots_offer(neighborhood, p[:period], p[:year]).average(:price_uf)
 
         data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.to_f )
 
@@ -161,7 +167,7 @@ module RentIndicators::Summary
       data     = []
       data_cbr = []
       periods.each do |p|
-        bots = bots_offer(neighborhood, bimester, year).select('avg(price_uf) / avg(surface) as avg_uf_m2').take
+        bots = bots_offer(neighborhood, p[:period], p[:year]).select('avg(price_uf) / avg(surface) as avg_uf_m2').take
 
         data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.avg_uf_m2.to_f )
 
