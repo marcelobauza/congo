@@ -159,6 +159,9 @@ function rent_indicators_report_pdf() {
         // Agrega nueva página
         doc.addPage('a4', 'portrait')
 
+        // Pie de página
+        footer()
+
         for (var i = 1; i < data.length; i++) {
 
           var reg = data[i];
@@ -447,7 +450,7 @@ function rent_indicators_report_pdf() {
 
           var chart = final_chart.toBase64Image();
 
-          if (i % 2 == 1) {
+          if (i % 2 != 0) {
 
             // Título del gráfico
             doc.setFontSize(16);
