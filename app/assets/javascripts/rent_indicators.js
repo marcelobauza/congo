@@ -37,6 +37,25 @@ function rent_indicators_report_pdf() {
     url: '/rent_indicators/rent_indicators_summary.json',
     datatype: 'json',
     data: data,
+    beforeSend: function() {
+
+      // Deshabilita la interacción con el mapa
+      map.dragging.disable();
+      map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
+      document.getElementById('map').style.cursor='default';
+
+      // Muestra el spinner
+      $("#report_spinner").show();
+
+      // Deshabilita los botones
+      $('.btn').addClass('disabled')
+      $('.close').prop('disabled', true);
+      $("#time_slider").data("ionRangeSlider").update({
+        block: true
+      });
+
+    },
     success: function(data) {
 
       console.log('Data del reporte:');
@@ -62,6 +81,22 @@ function rent_indicators_report_pdf() {
       });
 
       build_image_map.then(function(img) {
+
+        // Habilitar la interacción con el mapa
+        map.dragging.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        document.getElementById('map').style.cursor='grab';
+
+        // Oculta el spinner
+        $("#report_spinner").hide();
+
+        // Habilita los botones
+        $('.btn').removeClass('disabled')
+        $('.close').prop('disabled', false);
+        $("#time_slider").data("ionRangeSlider").update({
+          block: false,
+        });
 
         // Creamos el doc
         var doc = new jsPDF();

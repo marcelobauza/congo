@@ -16,6 +16,8 @@
 
     </ul>
 
+    <div class="spinner-border text-light float-right mr-2" role="status" id="report_spinner" style="display: none;"></div>
+
     <!-- Selección Dropdown -->
     <div class="nav-item dropdown">
         <%= link_to counties_index_path(), remote: true, 'class' => 'btn btn-primary nav-link dropdown-toggle nocaret dropdown-width', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class=" fas fa-list chart-modal" title="Comunas" ></i> <% end %>
