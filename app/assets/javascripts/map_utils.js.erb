@@ -271,8 +271,8 @@ Congo.map_utils = function(){
         groupLayer.removeLayer(layer);
       });
 
-      //layerControl.removeLayer(srcPois);
-      //layerControl.removeLayer(srcLots);
+      layerControl.removeLayer(srcPois);
+      layerControl.removeLayer(srcLots);
       layerControl.removeLayer(groupLayer);
       remove_legend();
     }
@@ -308,15 +308,10 @@ Congo.map_utils = function(){
     if (sourcePois !=undefined){
       map.removeLayer(sourcePois);
     }
+
     layer_type = Congo.dashboards.config.layer_type;
     switch(layer_type) {
-      case 'rent_indicators_info':
-
-
-        //remove_legend();
-        break;
       case 'demography_info':
-
         census_source_id = Congo.demography.config.census_source;
         filter_layer =  "census_source_id =" + census_source_id;
         Congo.demography.action_dashboards.indicator_demography();
