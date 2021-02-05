@@ -52,13 +52,13 @@ module RentIndicators::Summary
       data.push("name": "Oferta de Arriendo" , "count": rent_offer.to_i )
       data.push("name": "Tasa de Vacancia", "count": total_vacancy)
       data.push("name": "Rentabilidad Bruta Anual", "count": ("%.1f" % gross_profitability).to_f)
-      data.push("name": "Superficie Util Oferta Arriendo", "count": ("%.1f" % avg_u_rent).to_f)
-      data.push("name": "Superficie Util Compraventas ", "count": ("%.1f" % avg_u_sale).to_f)
+      data.push("name": "Superficie Útil Oferta Arriendo", "count": ("%.1f" % avg_u_rent).to_f)
+      data.push("name": "Superficie Útil Compraventas ", "count": ("%.1f" % avg_u_sale).to_f)
       data.push("name": "Superficie Terraza Oferta Arriendo", "count": 4)
       data.push("name": "Precio Compraventas | UF", "count": avg_cbr.to_i)
       data.push("name": "Precio Oferta Arriendo | UF mensual", "count":("%.1f" % avg_price_uf).to_f)
       data.push("name": "Precio Oferta Arriendo | UFm2 mensual", "count":("%.2f" % avg_price_uf_m2).to_f)
-      data.push("name": "PxQ mensual | UF miles", "count": 4)
+      data.push("name": "PxQ Mensual | UF miles", "count": 4)
 
       data
     end
