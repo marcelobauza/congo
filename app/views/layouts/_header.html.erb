@@ -1,7 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 
   <!-- Logo -->
-  <%= link_to dashboards_index_path() do  %> <%=image_tag "round_inciti.png", width:"40", height:"40" %> <% end %>
+  <%= link_to dashboards_index_path() do %>
+    <%=image_tag "round_inciti.png", width:"40", height:"40" %>
+  <% end %>
 
   <!-- Barra (Todo menos Logo)-->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -20,7 +22,7 @@
 
     <!-- Selección Dropdown -->
     <div class="nav-item dropdown">
-        <%= link_to counties_index_path(), remote: true, 'class' => 'btn btn-primary nav-link dropdown-toggle nocaret dropdown-width', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class=" fas fa-list chart-modal" title="Comunas" ></i> <% end %>
+        <%= link_to counties_index_path(), remote: true, 'class': 'btn btn-primary nav-link dropdown-toggle nocaret dropdown-width', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class=" fas fa-list chart-modal" title="Comunas" ></i> <% end %>
     </div>
 
     <!-- Capas Dropdown -->
@@ -31,23 +33,41 @@
 
       <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
         <%if current_user.layer_types.include? 3 %>
-          <%= link_to demography_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-male" title="Demografía y Gastos" style="font-size: 26px"></i><% end %>
+          <%= link_to demography_dashboards_path(), class: "dropdown-item custom-item", remote: true  do %>
+            <%= image_tag "demografia.svg", width:"30", height:"30" %>
+          <% end %>
         <% end %>
+
         <%if current_user.layer_types.include? 4 %>
-          <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %><i class=" fas fa-file-alt" title="Normativa" style="font-size: 26px"></i><% end %>
+          <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true do %>
+            <%= image_tag "normativa.svg", width:"30", height:"30" %>
+          <% end %>
         <% end %>
+
         <%if current_user.layer_types.include? 5 %>
-          <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", id: 'transactions_menu',  remote: true  do  %><i class=" fas fa-handshake" title="Compraventas" style="font-size: 26px"></i><% end %>
+          <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", id: 'transactions_menu',  remote: true do %>
+            <%= image_tag "cbr.svg", width:"30", height:"30" %>
+          <% end %>
         <% end %>
+
         <%if current_user.layer_types.include? 2 %>
-          <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-home" title="Proyectos Residenciales en Venta" style="font-size: 26px"></i><% end %>
+          <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true do %>
+            <%= image_tag "prv.svg", width:"30", height:"30" %>
+          <% end %>
         <% end %>
+
         <%if current_user.layer_types.include? 1 %>
-          <%= link_to future_projects_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-landmark" title="Expedientes Municipales" style="font-size: 26px"></i><% end %>
+          <%= link_to future_projects_dashboards_path(), class: "dropdown-item custom-item", remote: true do %>
+            <%= image_tag "em.svg", width:"30", height:"30" %>
+          <% end %>
         <% end %>
+
         <%if current_user.layer_types.include? 6 %>
-          <%= link_to rent_indicators_dashboards_path(), class: "dropdown-item custom-item", remote: true  do  %> <i class=" fas fa-building" title="Indicadores Arriendo" style="font-size: 26px"></i><% end %>
+          <%= link_to rent_indicators_dashboards_path(), class: "dropdown-item custom-item", remote: true do %>
+            <%= image_tag "ica.svg", width:"30", height:"30" %>
+          <% end %>
         <% end %>
+
       </div>
     </div>
 
@@ -179,9 +199,7 @@
             <%= link_to "#", id: "graph", class: "dropdown-item custom-item reports", remote: true  do  %> <i class="far fa-file-excel" title="Descarga Resumen XLS" style="font-size: 26px"></i><% end %>
             <%= link_to "#", id: "kml", class: "dropdown-item custom-item reports", remote: true  do  %> <%=image_tag "kml_icon.svg", width:"30", height:"30" %> <% end %>
           <% end %>
-
         </div>
-
       </div>
 
     <% end %>
@@ -197,9 +215,7 @@
         <%= link_to destroy_user_session_path, method: :delete, 'class' => 'dropdown-item custom-item' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
       </div>
     </div>
-
   </div>
-
 </nav>
 
 <%= yield %>
