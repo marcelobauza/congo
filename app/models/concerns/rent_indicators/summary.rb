@@ -13,8 +13,8 @@ module RentIndicators::Summary
       result.push({"title": "Resumen Bimestre", data: brief(neighborhood, bimester, year)})
       result.push({"title": "Distribución Programas", "series": distribution_by_mix_types(neighborhood, bimester, year)})
       result.push({"title": "Superficie", "series": surface(neighborhood, bimester, year)})
-      result.push({"title": "Precio UF mes", "series": price_uf_by_bimester(neighborhood, bimester, year)})
-      result.push({"title": "UFm2 mes", "series": price_ufm2_by_bimester(neighborhood, bimester, year)})
+      result.push({"title": "Precio UF", "series": price_uf_by_bimester(neighborhood, bimester, year)})
+      result.push({"title": "Precio UFm2", "series": price_ufm2_by_bimester(neighborhood, bimester, year)})
       result.push({"title": "Relación Precios | Vacancia", "series": relation_price_by_vacancy(neighborhood, bimester, year)})
     end
 
