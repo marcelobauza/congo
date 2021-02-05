@@ -34,37 +34,37 @@
       <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
         <%if current_user.layer_types.include? 3 %>
           <%= link_to demography_dashboards_path(), class: "dropdown-item custom-item", remote: true  do %>
-            <%= image_tag "demografia.svg", width:"30", height:"30" %>
+            <%= image_tag "demografia.png", width:"30", height:"30" %>
           <% end %>
         <% end %>
 
         <%if current_user.layer_types.include? 4 %>
           <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true do %>
-            <%= image_tag "normativa.svg", width:"30", height:"30" %>
+            <%= image_tag "normativa.png", width:"30", height:"30" %>
           <% end %>
         <% end %>
 
         <%if current_user.layer_types.include? 5 %>
           <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", id: 'transactions_menu',  remote: true do %>
-            <%= image_tag "cbr.svg", width:"30", height:"30" %>
+            <%= image_tag "cbr.png", width:"30", height:"30" %>
           <% end %>
         <% end %>
 
         <%if current_user.layer_types.include? 2 %>
           <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true do %>
-            <%= image_tag "prv.svg", width:"30", height:"30" %>
+            <%= image_tag "prv.png", width:"30", height:"30" %>
           <% end %>
         <% end %>
 
         <%if current_user.layer_types.include? 1 %>
           <%= link_to future_projects_dashboards_path(), class: "dropdown-item custom-item", remote: true do %>
-            <%= image_tag "em.svg", width:"30", height:"30" %>
+            <%= image_tag "em.png", width:"30", height:"30" %>
           <% end %>
         <% end %>
 
         <%if current_user.layer_types.include? 6 %>
           <%= link_to rent_indicators_dashboards_path(), class: "dropdown-item custom-item", remote: true, id: 'ica' do %>
-            <%= image_tag "ica.svg", width:"30", height:"30" %>
+            <%= image_tag "ica.png", width:"30", height:"30" %>
           <% end %>
         <% end %>
 
