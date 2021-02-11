@@ -909,48 +909,31 @@ console.log(coord_geoserver);
 
   function countiesEnabled(){
     var va = document.querySelector('#downloads');
-     Congo.dashboards.config.user_id= va.dataset.uid
+    Congo.dashboards.config.user_id= va.dataset.uid
     user_id = Congo.dashboards.config.user_id;
-      var owsrootUrl = "http://"+url+":8080/geoserver/ows";
-      var defaultParameters = {
-        service: 'WFS',
-        version: '1.0.0',
-        request: 'GetFeature',
-        typeName: 'inciti_v2:counties_enabled_by_users',
-        outputFormat: 'application/json',
-        CQL_FILTER: "user_id IN("+ user_id + ")"
+    var incitiIcon = L.icon({
+      iconUrl:          "<%= image_path('round_inciti.png') %>",
+      iconSize:     [20, 20], // size of the icon
+    });
+
+    $.ajax({
+      type: 'GET',
+      url: '/counties/counties_enabled_by_users.json',
+      datatype: 'json',
+      data: {user_id: user_id},
+      success: function (data) {
+        var geojson = new L.geoJson(data, {
+          pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: incitiIcon});
+          }
+        }).addTo(map);
+        map.fitBounds(geojson.getBounds());
+        map.addLayer(geojson);
+
+        totalCounties = geojson.getLayers().length;
+        if(totalCounties == 1) { map.setZoom(12); }
       }
-
-    var geojsonMarkerOptions = {
-          radius: 8,
-          fillColor: "#ff7800",
-          color: "#000",
-          weight: 1,
-          opacity: 0.4,
-          fillOpacity: 0.4
-    };
-
-var incitiIcon = L.icon({
-  iconUrl:          "<%= image_path('round_inciti.png') %>",
-  iconSize:     [20, 20], // size of the icon
-});
-
-    var parameters = L.Util.extend(defaultParameters);
-      var URL = owsrootUrl + L.Util.getParamString(parameters);
-      $.ajax({
-        url: URL,
-        success: function (data) {
-          var geojson = new L.geoJson(data, {
-                pointToLayer: function (feature, latlng) {
-                          return L.marker(latlng, {icon: incitiIcon});
-                      }
-          }).addTo(map);
-          map.fitBounds(geojson.getBounds());
-          map.addLayer(geojson);
-          totalCounties = geojson.getLayers().length;
-          if(totalCounties == 1) {map.setZoom(12);}
-        }
-      });
+    });
   }
 
   return{
