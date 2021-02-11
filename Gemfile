@@ -47,6 +47,7 @@ gem 'ruby_kml'
 gem 'bootstrap-datepicker-rails'
 gem 'devise-security'
 gem 'sidekiq', '< 6'
+gem 'figaro'
  # Use Redis adapter to run Action Cable in production
 gem 'redis', '~> 4'
 # Use ActiveModel has_secure_password
