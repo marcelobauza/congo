@@ -10,7 +10,6 @@ module Companies::Validations
     validates :projects_downloads,
       :transactions_downloads,
       :future_projects_downloads,
-      numericality: true,
       numericality: { only_integer: true }
   end
 end
