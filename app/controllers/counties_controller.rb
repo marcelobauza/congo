@@ -21,4 +21,10 @@ class CountiesController < ApplicationController
 
     render json: @counties
   end
+
+  def counties_enabled_by_users
+    @counties = CountiesUser.enabled_by_user(params[:user_id])
+
+    render json: @counties
+  end
 end
