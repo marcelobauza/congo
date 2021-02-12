@@ -206,13 +206,15 @@ module.exports = function leafletImage(map, callback) {
             im = new Image(),
             options = marker.options.icon.options,
             size = options.iconSize,
-            pos = pixelPoint.subtract(minPoint),
-            anchor = L.point(options.iconAnchor || size && size.divideBy(2, true));
+            pos = pixelPoint.subtract(minPoint);
+
+        // Se corrigió un bug en la librería que generaba este error: Uncaught TypeError: size.divideBy is not a function
+        // Info sobre la corrección: https://github.com/mapbox/leaflet-image/issues/41#issuecomment-139112801
 
         if (size instanceof L.Point) size = [size.x, size.y];
 
-        var x = Math.round(pos.x - size[0] + anchor.x),
-            y = Math.round(pos.y - anchor.y);
+        var x = pos.x - size[0] + (typeof options.iconAnchor == 'object' ? options.iconAnchor[0] : size[0]/2),
+            y = pos.y - (typeof options.iconAnchor == 'object' ? options.iconAnchor[1] : size[1]/2);
 
         canvas.width = dimensions.x;
         canvas.height = dimensions.y;
