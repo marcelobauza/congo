@@ -126,7 +126,28 @@ function rent_indicators_report_pdf() {
 
         // Agrega mapa
         img_height = (img.height * 190) / img.width
-        doc.addImage(img, 'JPEG', 9, 30, 190, img_height);
+        doc.addImage(img, 'JPEG', 9, 55, 190, img_height);
+
+        // Agrega leyenda
+        map_legends = Congo.rent_indicators.config.legends
+        console.log(map_legends);
+        rect_begin = img_height + 59
+        for (var i = 0; i < map_legends.length; i++) {
+          var leg = map_legends[i]
+          var name = leg['name']
+          var color = leg['color']
+
+          doc.setDrawColor(0)
+          doc.setFillColor(color)
+          doc.rect(20, rect_begin, 3, 3, 'F')
+
+          text_begin = rect_begin + 3
+          doc.setFontSize(10);
+          doc.setFontStyle("normal");
+          doc.text(name, 25, text_begin);
+
+          rect_begin = rect_begin + 6
+        }
 
         // // Validamos si hay algún filtro aplicado
         // if (periods == '') {
