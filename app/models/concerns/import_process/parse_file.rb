@@ -1,4 +1,4 @@
-module ImportProcess::Parse
+module ImportProcess::ParseFile
   extend ActiveSupport::Concern
 
   module ClassMethods
