@@ -96,17 +96,29 @@ module RentIndicators::Summary
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
         ).where(bimester: bimester, year: year)
 
-        mix_types = projects.group_by { |s| "#{s.bedroom}.#{s.half_bedroom}|#{s.bathroom}"}
+        mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}|#{s.bathroom}"}
         data      = []
 
         mix_types.map do |key, mix|
           data.push("name": key, "count": mix.size)
         end
+        data_bots = []
+        bots = bots_offer(neighborhood, bimester, year)
+
+        bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}|#{mt.bathroom}" }
+
+        bots_mix_types.map do |key, mix|
+          data_bots.push("name": key, "count": mix.size)
+        end
 
         series = [{
           "label": "Parque",
           "data": data
-        }]
+        },{
+          "label": "Oferta",
+          "data": data_bots
+        }
+        ]
       end
 
       def surface neighborhood, bimester, year
