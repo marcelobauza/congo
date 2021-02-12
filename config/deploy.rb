@@ -8,7 +8,7 @@ set :repo_url, "https://github.com/asergiop21/congo.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
-
+set :branch, ENV['BRANCH'] || :master
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/opt/inciti"
 set :rvm_ruby_version, '2.4.1'
@@ -29,6 +29,8 @@ set :migration_role, :db
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "public/packs", "node_modules"
+set :linked_files, %w{config/application.yml}
+
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
