@@ -18,7 +18,7 @@ Congo.rent_indicators.config = {
   legends: []
 }
 
-
+var ica_pdf_ajax;
 
 function rent_indicators_report_pdf() {
 
@@ -32,28 +32,23 @@ function rent_indicators_report_pdf() {
     id: nId
   }
 
-  $.ajax({
+  if (ica_pdf_ajax && ica_pdf_ajax.readyState != 4) {
+    ica_pdf_ajax.abort();
+  }
+
+  ica_pdf_ajax = $.ajax({
     type: 'GET',
     url: '/rent_indicators/rent_indicators_summary.json',
     datatype: 'json',
     data: data,
     beforeSend: function() {
 
-      // Deshabilita la interacción con el mapa
+      // Muestra el spinner y deshabilita la interacción con el mapa
+      $("#report_spinner").show();
       map.dragging.disable();
       map.doubleClickZoom.disable();
       map.scrollWheelZoom.disable();
       document.getElementById('map').style.cursor='default';
-
-      // Muestra el spinner
-      $("#report_spinner").show();
-
-      // Deshabilita los botones
-      $('.btn').addClass('disabled')
-      $('.close').prop('disabled', true);
-      $("#time_slider").data("ionRangeSlider").update({
-        block: true
-      });
 
     },
     success: function(data) {
@@ -82,21 +77,12 @@ function rent_indicators_report_pdf() {
 
       build_image_map.then(function(img) {
 
-        // Habilitar la interacción con el mapa
+        // Oculta el spinner y habilitar la interacción con el mapa
+        $("#report_spinner").hide();
         map.dragging.enable();
         map.doubleClickZoom.enable();
         map.scrollWheelZoom.enable();
         document.getElementById('map').style.cursor='grab';
-
-        // Oculta el spinner
-        $("#report_spinner").hide();
-
-        // Habilita los botones
-        $('.btn').removeClass('disabled')
-        $('.close').prop('disabled', false);
-        $("#time_slider").data("ionRangeSlider").update({
-          block: false,
-        });
 
         // Creamos el doc
         var doc = new jsPDF();
