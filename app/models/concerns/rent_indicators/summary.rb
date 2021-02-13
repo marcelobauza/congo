@@ -38,12 +38,12 @@ module RentIndicators::Summary
         rent_offer      = (bots.count / 0.9)
         total_vacancy   = total_vacancy(neighborhood, bimester, year)
         total_households = neighborhood.total_houses + neighborhood.total_departments
-        avg_u_rent      = bots.average(:surface)
-        avg_u_sale      = transactions.average(:total_surface_building)
-        avg_cbr         = transactions.average(:calculated_value)
-        avg_price_uf    = bots.average(:price_uf)
-        avg_price_uf_m2 = average_price_uf_m2( bots.average(:price_uf).to_f, avg_u_rent.to_f)
-        gross_profitability = (((12 * avg_price_uf) - (total_vacancy * 12 * avg_price_uf)) / avg_cbr)* 100
+        avg_u_rent      = bots.average(:surface).to_f
+        avg_u_sale      = transactions.average(:total_surface_building).to_f
+        avg_cbr         = transactions.average(:calculated_value).to_i
+        avg_price_uf    = bots.average(:price_uf).to_i
+        avg_price_uf_m2 = average_price_uf_m2( bots.average(:price_uf).to_f, avg_u_rent.to_f).to_f
+        gross_profitability = ((((12 * avg_price_uf) - (total_vacancy * 12 * avg_price_uf)) / avg_cbr)* 100).to_f
 
         data.push("name": "Barrio", "count": neighborhood.name)
         data.push("name": "Total Viviendas", "count": total_households )
