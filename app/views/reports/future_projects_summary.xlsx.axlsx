@@ -1,6 +1,7 @@
 if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin') || (current_user.role.name == 'IPRO+ Plus')
-wb = xlsx_package.workbook
+wb    = xlsx_package.workbook
 title = wb.styles.add_style(:bg_color => "FFFF0000", :fg_color=>"#FF000000", :sz=>14,  :border=> {:style => :thin, :color => "FFFF0000"})
+bold  = wb.styles.add_style( b: true )
 wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
   sheet.add_row ["Resumen"], :style=> title
   @info.each do |r|
@@ -23,7 +24,7 @@ wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
   @tipo_destino_bar.each do |td|
     @td = td
     @td.each do |s|
-      sheet.add_row [s[0]]
+      sheet.add_row [s[0]], style: bold
       @count = s[1]
       @count.each do |c|
         sheet.add_row [c[0], c[1]]

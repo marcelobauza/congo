@@ -70,9 +70,9 @@ class ReportsController < ApplicationController
         data[:series].each do |td|
           @data_destino_bar=[]
           td[:data].each do |tdb|
-            @data_destino_bar.push([tdb[:name], tdb[:count]])
+            @data_destino_bar.push([tdb[:name], tdb[:count]]) if tdb[:count] > 0
           end
-          @tipo_destino_bar.push({"#{td[:label]}":@data_destino_bar})
+          @tipo_destino_bar.push({"#{td[:label]}":@data_destino_bar}) if @data_destino_bar.any?
         end
       end
     end
