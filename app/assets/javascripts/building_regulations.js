@@ -189,173 +189,240 @@ function building_regulations_report_pdf() {
     url: '/reports/building_regulations_pdf.json',
     datatype: 'json',
     data: data,
+    beforeSend: function() {
+
+      // Deshabilita la interacción con el mapa
+      map.dragging.disable();
+      map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
+      document.getElementById('map').style.cursor='default';
+
+      // Muestra el spinner
+      $("#report_spinner").show();
+
+      // Deshabilita los botones
+      $('.btn').addClass('disabled')
+      $('.close').prop('disabled', true);
+
+    },
     success: function(data) {
 
       console.log(data);
 
-      // Creamos el doc
-      var doc = new jsPDF();
+      let build_image_map = new Promise((resolve, reject) => {
+        leafletImage(map, function(err, canvas) {
+          var img = document.createElement('img');
+          var dimensions = map.getSize();
+          img.width = dimensions.x;
+          img.height = dimensions.y;
+          img.src = canvas.toDataURL();
+          resolve(img);
+        });
+      });
 
-      doc.page = 1;
+      build_image_map.then(function(img) {
 
-      // Pie de página
-      function footer() {
+        // Habilitar la interacción con el mapa
+        map.dragging.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        document.getElementById('map').style.cursor='grab';
+
+        // Oculta el spinner
+        $("#report_spinner").hide();
+
+        // Habilita los botones
+        $('.btn').removeClass('disabled')
+        $('.close').prop('disabled', false);
+
+        // Creamos el doc
+        var doc = new jsPDF();
+
+        doc.page = 1;
+
+        // Pie de página
+        function footer() {
+          doc.setFontStyle("bold");
+          doc.setFontSize(12);
+          doc.text('Fuente:', 20, 290);
+          doc.setFontStyle("normal");
+          doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
+          doc.setFontSize(10);
+          doc.text('p. ' + doc.page, 194, 290);
+          doc.page++;
+        };
+
+        // Título
         doc.setFontStyle("bold");
+        doc.setFontSize(22);
+        doc.text('Informe de Normativa', 105, 20, null, null, 'center');
+
+        // Subtítulo
+        doc.setFontSize(16);
+        doc.text('Información General', 105, 35, null, null, 'center');
+
+        // Agrega mapa
+        img_height = (img.height * 190) / img.width
+        doc.addImage(img, 'JPEG', 9, 49, 190, img_height);
+
+        // Agrega leyenda
+        map_legends = Congo.building_regulations.config.legends
+        rect_begin = img_height + 59
+        for (var i = 0; i < map_legends.length; i++) {
+          var leg = map_legends[i]
+          var name = leg['name']
+          var color = leg['color']
+
+          doc.setDrawColor(0)
+          doc.setFillColor(color)
+          doc.rect(20, rect_begin, 3, 3, 'F')
+
+          text_begin = rect_begin + 3
+          doc.setFontSize(10);
+          doc.setFontStyle("normal");
+          doc.text(name, 25, text_begin);
+
+          rect_begin = rect_begin + 6
+        }
+
+        // Pie de página
+        footer()
+
+        // Agregamos una página
+        doc.addPage('a4', 'portrait')
+
+        // Pie de página
+        footer()
+
+        // Párrafo 1
         doc.setFontSize(12);
-        doc.text('Fuente:', 20, 290);
-        doc.setFontStyle("normal");
-        doc.text('Plan Regulador Comunal y Ordenanza Local vigente (de la comuna consultada)', 37, 290);
-        doc.setFontSize(10);
-        doc.text('p. ' + doc.page, 194, 290);
-        doc.page++;
-      };
+        doc.text('La información respecto a la subdivisión predial mínima, constructibilidad y ocupación de suelo está', 10, 20);
+        doc.text('basada preferentemente en el uso de suelo residencial (RES), exceptuando aquellas zonas cuyo uso', 10, 28);
+        doc.text('es exclusivo, por ejemplo EQUIP, IND, etc.', 10, 36);
 
-      // Título
-      doc.setFontStyle("bold");
-      doc.setFontSize(22);
-      doc.text('Informe de Normativa', 105, 20, null, null, 'center');
+        // Párrafo 2
+        doc.text('La información respecto de altura máxima de edificación esta basada en el sistema de agrupamiento', 10, 52);
+        doc.text('aislado.', 10, 60);
 
-      // Subtítulo
-      doc.setFontSize(16);
-      doc.text('Información General', 105, 35, null, null, 'center');
+        // Párrafo 3
+        doc.text('Para obtener mayor detalle respecto a condiciones normativas de cada zona, se recomienda hacer', 10, 76);
+        doc.text('clic en “Descargar Ordenanza” para obtener la ordenanza local y modificaciones vigentes si', 10, 84);
+        doc.text('corresponde.', 10, 92);
 
-      // Pie de página
-      footer()
+        // Separamos los datos
+        $.each(data, function(i,reg){
 
-      // Agregamos una página
-      doc.addPage('a4', 'portrait')
+          var max_height = reg['aminciti']
+          var building_regulations = reg['building_zone']
+          var allowed_use = reg['use_allow']['name']
+          var land_occupation = reg['osinciti']
+          var web = reg['site']
+          var density = reg['hectarea_inhabitants']
+          var max_density = reg['density_type']
+          var construct = reg['construct']
+          var comments = reg['comments']
 
-      // Pie de página
-      footer()
+          // Arreglamos los valores que llegan con null
+          if (max_density == null) {
+            max_density = ''
+          }
+          if (construct == null) {
+            construct = ''
+          }
 
-      // Párrafo 1
-      doc.setFontSize(12);
-      doc.text('La información respecto a la subdivisión predial mínima, constructibilidad y ocupación de suelo está', 10, 20);
-      doc.text('basada preferentemente en el uso de suelo residencial (RES), exceptuando aquellas zonas cuyo uso', 10, 28);
-      doc.text('es exclusivo, por ejemplo EQUIP, IND, etc.', 10, 36);
+          if (max_height == null){
+              max_height == ''
+          }
 
-      // Párrafo 2
-      doc.text('La información respecto de altura máxima de edificación esta basada en el sistema de agrupamiento', 10, 52);
-      doc.text('aislado.', 10, 60);
+          if (building_regulations == null){
+            building_regulations == ''
+          }
 
-      // Párrafo 3
-      doc.text('Para obtener mayor detalle respecto a condiciones normativas de cada zona, se recomienda hacer', 10, 76);
-      doc.text('clic en “Descargar Ordenanza” para obtener la ordenanza local y modificaciones vigentes si', 10, 84);
-      doc.text('corresponde.', 10, 92);
+          if (allowed_use ==null){
+            allowed_use == ''
+          }
 
-      // Separamos los datos
-      $.each(data, function(i,reg){
+          if (density == null){
+            density == ''
+          }
+          // Cambiamos a string los valores que llegan como integer
+          max_height = max_height.toString()
+          building_regulations = building_regulations.toString()
+          allowed_use = allowed_use.toString()
+          land_occupation = land_occupation.toString()
+          density = density.toString()
 
-        var max_height = reg['aminciti']
-        var building_regulations = reg['building_zone']
-        var allowed_use = reg['use_allow']['name']
-        var land_occupation = reg['osinciti']
-        var web = reg['site']
-        var density = reg['hectarea_inhabitants']
-        var max_density = reg['density_type']
-        var construct = reg['construct']
-        var comments = reg['comments']
+          if (i % 2 == 1) { // impar
 
-        // Arreglamos los valores que llegan con null
-        if (max_density == null) {
-          max_density = ''
-        }
-        if (construct == null) {
-          construct = ''
-        }
-  
-        if (max_height == null){
-            max_height == ''
-        }
+            // Agregamos una página
+            doc.addPage('a4', 'portrait')
 
-        if (building_regulations == null){
-          building_regulations == ''
-        }
+            // Pie de página
+            footer()
 
-        if (allowed_use ==null){
-          allowed_use == ''
-        }
+            // Labels columna arriba
+            doc.setFontStyle("bold");
+            doc.setFontSize(12);
+            doc.text('Normativa de Edificación:', 83, 20, null, null, 'right');
+            doc.text('Uso:', 83, 30, null, null, 'right');
+            doc.text('Constructibilidad:', 83, 40, null, null, 'right');
+            doc.text('Ocupación de suelo:', 83, 50, null, null, 'right');
+            doc.text('Altura Máxima:', 83, 60, null, null, 'right');
+            doc.text('Densidad:', 83, 70, null, null, 'right');
+            doc.text('Densidad Máxima:', 83, 80, null, null, 'right');
+            doc.text('Web:', 83, 90, null, null, 'right');
+            doc.text('Comentarios:', 83, 100, null, null, 'right');
 
-        if (density == null){
-          density == ''
-        }
-        // Cambiamos a string los valores que llegan como integer
-        max_height = max_height.toString()
-        building_regulations = building_regulations.toString()
-        allowed_use = allowed_use.toString()
-        land_occupation = land_occupation.toString()
-        density = density.toString()
+            // Valores columna arriba
+            doc.setFontStyle("normal");
+            doc.text(building_regulations, 85, 20);
+            doc.text(allowed_use, 85, 30);
+            doc.text(construct, 85, 40);
+            doc.text(land_occupation, 85, 50);
+            doc.text(max_height, 85, 60);
+            doc.text(density, 85, 70);
+            doc.text(max_density, 85, 80);
+            doc.text(web, 85, 90);
+            var textLines = doc.splitTextToSize(comments, 120);
+            doc.text(textLines, 85, 100);
 
-        if (i % 2 == 1) { // impar
+          } else { // par
 
-          // Agregamos una página
-          doc.addPage('a4', 'portrait')
+            // Separador
+            doc.line(10, 140, 200, 140);
 
-          // Pie de página
-          footer()
+            // Labels columna abajo
+            doc.setFontStyle("bold");
+            doc.setFontSize(12);
+            doc.text('Normativa de Edificación:', 83, 160, null, null, 'right');
+            doc.text('Uso:', 83, 170, null, null, 'right');
+            doc.text('Constructibilidad:', 83, 180, null, null, 'right');
+            doc.text('Ocupación de suelo:', 83, 190, null, null, 'right');
+            doc.text('Altura Máxima:', 83, 200, null, null, 'right');
+            doc.text('Densidad:', 83, 210, null, null, 'right');
+            doc.text('Densidad Máxima:', 83, 220, null, null, 'right');
+            doc.text('Web:', 83, 230, null, null, 'right');
+            doc.text('Comentarios:', 83, 240, null, null, 'right');
 
-          // Labels columna arriba
-          doc.setFontStyle("bold");
-          doc.setFontSize(12);
-          doc.text('Normativa de Edificación:', 83, 20, null, null, 'right');
-          doc.text('Uso:', 83, 30, null, null, 'right');
-          doc.text('Constructibilidad:', 83, 40, null, null, 'right');
-          doc.text('Ocupación de suelo:', 83, 50, null, null, 'right');
-          doc.text('Altura Máxima:', 83, 60, null, null, 'right');
-          doc.text('Densidad:', 83, 70, null, null, 'right');
-          doc.text('Densidad Máxima:', 83, 80, null, null, 'right');
-          doc.text('Web:', 83, 90, null, null, 'right');
-          doc.text('Comentarios:', 83, 100, null, null, 'right');
+            // Valores columna abajo
+            doc.setFontStyle("normal");
+            doc.text(building_regulations, 85, 160);
+            doc.text(allowed_use, 85, 170);
+            doc.text(construct, 85, 180);
+            doc.text(land_occupation, 85, 190);
+            doc.text(max_height, 85, 200);
+            doc.text(density, 85, 210);
+            doc.text(max_density, 85, 220);
+            doc.text(web, 85, 230);
+            var textLines = doc.splitTextToSize(comments, 120);
+            doc.text(textLines, 85, 240);
+          } // Cierra else par/impar
+        }) // Cierra for
 
-          // Valores columna arriba
-          doc.setFontStyle("normal");
-          doc.text(building_regulations, 85, 20);
-          doc.text(allowed_use, 85, 30);
-          doc.text(construct, 85, 40);
-          doc.text(land_occupation, 85, 50);
-          doc.text(max_height, 85, 60);
-          doc.text(density, 85, 70);
-          doc.text(max_density, 85, 80);
-          doc.text(web, 85, 90);
-          var textLines = doc.splitTextToSize(comments, 120);
-          doc.text(textLines, 85, 100);
+        // Descarga el archivo PDF
+        doc.save("Informe_Normativa.pdf");
 
-        } else { // par
-
-          // Separador
-          doc.line(10, 140, 200, 140);
-
-          // Labels columna abajo
-          doc.setFontStyle("bold");
-          doc.setFontSize(12);
-          doc.text('Normativa de Edificación:', 83, 160, null, null, 'right');
-          doc.text('Uso:', 83, 170, null, null, 'right');
-          doc.text('Constructibilidad:', 83, 180, null, null, 'right');
-          doc.text('Ocupación de suelo:', 83, 190, null, null, 'right');
-          doc.text('Altura Máxima:', 83, 200, null, null, 'right');
-          doc.text('Densidad:', 83, 210, null, null, 'right');
-          doc.text('Densidad Máxima:', 83, 220, null, null, 'right');
-          doc.text('Web:', 83, 230, null, null, 'right');
-          doc.text('Comentarios:', 83, 240, null, null, 'right');
-
-          // Valores columna abajo
-          doc.setFontStyle("normal");
-          doc.text(building_regulations, 85, 160);
-          doc.text(allowed_use, 85, 170);
-          doc.text(construct, 85, 180);
-          doc.text(land_occupation, 85, 190);
-          doc.text(max_height, 85, 200);
-          doc.text(density, 85, 210);
-          doc.text(max_density, 85, 220);
-          doc.text(web, 85, 230);
-          var textLines = doc.splitTextToSize(comments, 120);
-          doc.text(textLines, 85, 240);
-        } // Cierra else par/impar
-      }) // Cierra for
-
-      // Descarga el archivo PDF
-      doc.save("Informe_Normativa.pdf");
-
+      }); // Cierra then
     } // Cierra success
   }) // Cierra ajax
 } // Cierra function building_regulations_report_pdf

@@ -1,0 +1,67 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Rent Projects</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>County</th>
+      <th>Project type</th>
+      <th>Floors</th>
+      <th>Sale date</th>
+      <th>Catastral date</th>
+      <th>Offer</th>
+      <th>Surface util</th>
+      <th>Terrace</th>
+      <th>Price</th>
+      <th>The geom</th>
+      <th>Bedroom</th>
+      <th>Bathroom</th>
+      <th>Half bedroom</th>
+      <th>Total beds</th>
+      <th>Population per building</th>
+      <th>Square meters terrain</th>
+      <th>Uf terrain</th>
+      <th>Bimester</th>
+      <th>Year</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @rent_projects.each do |rent_project| %>
+      <tr>
+        <td><%= rent_project.code %></td>
+        <td><%= rent_project.name %></td>
+        <td><%= rent_project.county %></td>
+        <td><%= rent_project.project_type %></td>
+        <td><%= rent_project.floors %></td>
+        <td><%= rent_project.sale_date %></td>
+        <td><%= rent_project.catastral_date %></td>
+        <td><%= rent_project.offer %></td>
+        <td><%= rent_project.surface_util %></td>
+        <td><%= rent_project.terrace %></td>
+        <td><%= rent_project.price %></td>
+        <td><%= rent_project.the_geom %></td>
+        <td><%= rent_project.bedroom %></td>
+        <td><%= rent_project.bathroom %></td>
+        <td><%= rent_project.half_bedroom %></td>
+        <td><%= rent_project.total_beds %></td>
+        <td><%= rent_project.population_per_building %></td>
+        <td><%= rent_project.square_meters_terrain %></td>
+        <td><%= rent_project.uf_terrain %></td>
+        <td><%= rent_project.bimester %></td>
+        <td><%= rent_project.year %></td>
+        <td><%= link_to 'Show', rent_project %></td>
+        <td><%= link_to 'Edit', edit_rent_project_path(rent_project) %></td>
+        <td><%= link_to 'Destroy', rent_project, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Rent Project', new_rent_project_path %>

@@ -449,238 +449,513 @@ function transactions_report_pdf(){
     url: '/reports/transactions_pdf.json',
     datatype: 'json',
     data: data,
+    beforeSend: function() {
+
+      // Deshabilita la interacción con el mapa
+      map.dragging.disable();
+      map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
+      document.getElementById('map').style.cursor='default';
+
+      // Muestra el spinner
+      $("#report_spinner").show();
+
+      // Deshabilita los botones
+      $('.btn').addClass('disabled')
+      $('.close').prop('disabled', true);
+      $("#time_slider_cbr").data("ionRangeSlider").update({
+        block: true
+      });
+
+    },
     success: function(data) {
 
-      data = data['data']
+      let build_image_map = new Promise((resolve, reject) => {
+        leafletImage(map, function(err, canvas) {
+          var img = document.createElement('img');
+          var dimensions = map.getSize();
+          img.width = dimensions.x;
+          img.height = dimensions.y;
+          img.src = canvas.toDataURL();
+          resolve(img);
+        });
+      });
 
-      // Levantamos los datos
-      var info = data[0]['info'][0]
-      var transactions_count = info['transactions_count']
-      var avg_uf = info['average']
-      var avg_land = info['avg_lands']
-      var avg_build = info['avg_surface_line_build']
-      var avg_uf_m2_land = info['avg_uf_m2_land']
-      var avg_uf_m2_build = info['avg_uf_m2_u']
-      var deviation_uf = info['deviation']
-      var deviation_land = info['deviation_lands']
-      var deviation_build = info['deviation_surface_line_build']
-      var deviation_uf_m2_land = info['deviation_uf_m2_land']
-      var deviation_uf_m2_build = info['deviation_uf_m2_u']
-      var up_limit_uf = info['li_uf']
-      var up_limit_land = info['li_sup_land']
-      var up_limit_build = info['li_surface_line_build']
-      var up_limit_uf_m2_land = info['li_uf_m2_land']
-      var up_limit_uf_m2_build = info['li_uf_m2_u']
-      var low_limit_uf = info['ls_uf']
-      var low_limit_land = info['ls_sup_land']
-      var low_limit_build = info['ls_surface_line_build']
-      var low_limit_uf_m2_land = info['ls_uf_m2_land']
-      var low_limit_uf_m2_build = info['ls_uf_m2_u']
-      var max_val_uf = info['uf_max_value']
-      var max_val_land = info['max_lands']
-      var max_val_build = info['max_surface_line_build']
-      var max_val_uf_m2_land = info['max_uf_m2_land']
-      var max_val_uf_m2_build = info['max_uf_m2_u']
-      var min_val_uf = info['uf_min_value']
-      var min_val_land = info['min_lands']
-      var min_val_build = info['min_surface_line_build']
-      var min_val_uf_m2_land = info['min_uf_m2_land']
-      var min_val_uf_m2_build = info['min_uf_m2_u']
+      build_image_map.then(function(img) {
 
-      // Cambiamos a string los valores que llegan como integer
-      transactions_count = transactions_count.toString()
+        // Habilitar la interacción con el mapa
+        map.dragging.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        document.getElementById('map').style.cursor='grab';
 
-      // Creamos el doc
-      var doc = new jsPDF();
+        // Oculta el spinner
+        $("#report_spinner").hide();
 
-      doc.page = 1;
+        // Habilita los botones
+        $('.btn').removeClass('disabled')
+        $('.close').prop('disabled', false);
+        $("#time_slider_cbr").data("ionRangeSlider").update({
+          block: false,
+        });
 
-      // Pie de página
-      function footer() {
+        data = data['data']
+
+        // Levantamos los datos
+        var info = data[0]['info'][0]
+        var transactions_count = info['transactions_count']
+        var avg_uf = info['average']
+        var avg_land = info['avg_lands']
+        var avg_build = info['avg_surface_line_build']
+        var avg_uf_m2_land = info['avg_uf_m2_land']
+        var avg_uf_m2_build = info['avg_uf_m2_u']
+        var deviation_uf = info['deviation']
+        var deviation_land = info['deviation_lands']
+        var deviation_build = info['deviation_surface_line_build']
+        var deviation_uf_m2_land = info['deviation_uf_m2_land']
+        var deviation_uf_m2_build = info['deviation_uf_m2_u']
+        var up_limit_uf = info['li_uf']
+        var up_limit_land = info['li_sup_land']
+        var up_limit_build = info['li_surface_line_build']
+        var up_limit_uf_m2_land = info['li_uf_m2_land']
+        var up_limit_uf_m2_build = info['li_uf_m2_u']
+        var low_limit_uf = info['ls_uf']
+        var low_limit_land = info['ls_sup_land']
+        var low_limit_build = info['ls_surface_line_build']
+        var low_limit_uf_m2_land = info['ls_uf_m2_land']
+        var low_limit_uf_m2_build = info['ls_uf_m2_u']
+        var max_val_uf = info['uf_max_value']
+        var max_val_land = info['max_lands']
+        var max_val_build = info['max_surface_line_build']
+        var max_val_uf_m2_land = info['max_uf_m2_land']
+        var max_val_uf_m2_build = info['max_uf_m2_u']
+        var min_val_uf = info['uf_min_value']
+        var min_val_land = info['min_lands']
+        var min_val_build = info['min_surface_line_build']
+        var min_val_uf_m2_land = info['min_uf_m2_land']
+        var min_val_uf_m2_build = info['min_uf_m2_u']
+
+        // Cambiamos a string los valores que llegan como integer
+        transactions_count = transactions_count.toString()
+
+        // Creamos el doc
+        var doc = new jsPDF();
+
+        doc.page = 1;
+
+        // Pie de página
+        function footer() {
+          doc.setFontStyle("bold");
+          doc.setFontSize(12);
+          doc.text('Fuente:', 10, 284);
+          doc.setFontStyle("normal");
+          doc.text('Compraventas Inscritas en los Conservadores de Bienes Raíces de la Región Metropolitana', 27, 284);
+          doc.text('(Santiago, San Miguel, Puente Alto y San Bernardo) y Planchetas de Predios Municipales', 10, 290);
+          doc.setFontSize(10);
+          doc.text('p. ' + doc.page, 194, 290);
+          doc.page++;
+        };
+
+        // Título
         doc.setFontStyle("bold");
-        doc.setFontSize(12);
-        doc.text('Fuente:', 10, 284);
-        doc.setFontStyle("normal");
-        doc.text('Compraventas Inscritas en los Conservadores de Bienes Raíces de la Región Metropolitana', 27, 284);
-        doc.text('(Santiago, San Miguel, Puente Alto y San Bernardo) y Planchetas de Predios Municipales', 10, 290);
-        doc.setFontSize(10);
-        doc.text('p. ' + doc.page, 194, 290);
-        doc.page++;
-      };
+        doc.setFontSize(22);
+        doc.text('Informe de Compraventas', 105, 20, null, null, 'center');
 
-      // Título
-      doc.setFontStyle("bold");
-      doc.setFontSize(22);
-      doc.text('Informe de Compraventas', 105, 20, null, null, 'center');
+        // Subtítulo
+        doc.setFontSize(16);
+        doc.text('Información General', 105, 35, null, null, 'center');
 
-      // Subtítulo
-      doc.setFontSize(16);
-      doc.text('Información General', 105, 35, null, null, 'center');
+        // Validamos si hay algún filtro aplicado
+        if (periods == '') {
 
-      // Validamos si hay algún filtro aplicado
-      if (periods == '') {
-
-        // Calculamos el bimestre de incio a partir del bimetre final
-        var bim = to_bimester
-        var year = to_year
-        for (var i = 0; i < 5; i++) {
-          bim = bim - 1
-          if (bim < 1) {
-            year = year - 1
-            bim = 6
+          // Calculamos el bimestre de incio a partir del bimetre final
+          var bim = to_bimester
+          var year = to_year
+          for (var i = 0; i < 5; i++) {
+            bim = bim - 1
+            if (bim < 1) {
+              year = year - 1
+              bim = 6
+            }
           }
+
+          // Periodos Actuales
+          doc.setFontSize(12);
+          doc.setFontStyle("bold");
+          doc.text('Periodos de tiempo seleccionados:', 10, 49);
+          doc.setFontStyle("normal");
+          doc.text('Desde el '+bim+'° bimestre del '+year+' al '+to_bimester+'° bimestre del '+to_year, 83, 49);
+
+        } else {
+
+          // Periodos Filtrados
+          doc.setFontSize(12);
+          doc.setFontStyle("bold");
+          doc.text('Periodos de tiempo seleccionados:', 10, 49);
+          doc.setFontStyle("normal");
+          var tab = 83
+          for (var i = 0; i < periods.length; i++) {
+            doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
+            tab = tab + 16
+          }
+
         }
 
-        // Periodos Actuales
+        // Cantidad
         doc.setFontSize(12);
         doc.setFontStyle("bold");
-        doc.text('Periodos de tiempo seleccionados:', 10, 49);
+        doc.text('Cantidad de Transacciones:', 10, 57);
         doc.setFontStyle("normal");
-        doc.text('Desde el '+bim+'° bimestre del '+year+' al '+to_bimester+'° bimestre del '+to_year, 83, 49);
+        doc.text(transactions_count, 68, 57);
 
-      } else {
+        // Líneas Tabla
+        doc.line(10, 65, 200, 65);
+        doc.line(10, 75, 200, 75);
+        doc.line(10, 85, 200, 85);
+        doc.line(10, 95, 200, 95);
+        doc.line(10, 105, 200, 105);
+        doc.line(10, 115, 200, 115);
+        doc.line(10, 125, 200, 125);
+        doc.line(10, 135, 200, 135);
+        doc.line(10, 65, 10, 135);
+        doc.line(200, 65, 200, 135);
+        doc.line(45, 65, 45, 135);
 
-        // Periodos Filtrados
-        doc.setFontSize(12);
-        doc.setFontStyle("bold");
-        doc.text('Periodos de tiempo seleccionados:', 10, 49);
-        doc.setFontStyle("normal");
-        var tab = 83
-        for (var i = 0; i < periods.length; i++) {
-          doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
-          tab = tab + 16
+        // Columna Ítem
+        doc.text('Ítem', 28, 72, null, null, 'center');
+        doc.text('Promedio', 13, 82);
+        doc.text('Desviación', 13, 92);
+        doc.text('Límite Superior', 13, 102);
+        doc.text('Límite Inferior', 13, 112);
+        doc.text('Valor Máximo', 13, 122);
+        doc.text('Valor Mínimo', 13, 132);
+
+        // Columna Precio UF
+        doc.text('Precio UF', 62, 72, null, null, 'center');
+        doc.text(avg_uf, 62, 82, null, null, 'center');
+        doc.text(deviation_uf, 62, 92, null, null, 'center');
+        doc.text(up_limit_uf, 62, 102, null, null, 'center');
+        doc.text(low_limit_uf, 62, 112, null, null, 'center');
+        doc.text(max_val_uf, 62, 122, null, null, 'center');
+        doc.text(min_val_uf, 62, 132, null, null, 'center');
+
+        // Columna Terreno
+        doc.text('Terreno', 91, 72, null, null, 'center');
+        doc.text(avg_land, 91, 82, null, null, 'center');
+        doc.text(deviation_land, 91, 92, null, null, 'center');
+        doc.text(up_limit_land, 91, 102, null, null, 'center');
+        doc.text(low_limit_land, 91, 112, null, null, 'center');
+        doc.text(max_val_land, 91, 122, null, null, 'center');
+        doc.text(min_val_land, 91, 132, null, null, 'center');
+
+        // Columna Útil
+        doc.text('Útil', 120, 72, null, null, 'center');
+        doc.text(avg_build, 120, 82, null, null, 'center');
+        doc.text(deviation_build, 120, 92, null, null, 'center');
+        doc.text(up_limit_build, 120, 102, null, null, 'center');
+        doc.text(low_limit_build, 120, 112, null, null, 'center');
+        doc.text(max_val_build, 120, 122, null, null, 'center');
+        doc.text(min_val_build, 120, 132, null, null, 'center');
+
+        // Columna UF m² Terreno
+        doc.text('UF m² Terreno', 149, 72, null, null, 'center');
+        doc.text(avg_uf_m2_land, 149, 82, null, null, 'center');
+        doc.text(deviation_uf_m2_land, 149, 92, null, null, 'center');
+        doc.text(up_limit_uf_m2_land, 149, 102, null, null, 'center');
+        doc.text(low_limit_uf_m2_land, 149, 112, null, null, 'center');
+        doc.text(max_val_uf_m2_land, 149, 122, null, null, 'center');
+        doc.text(min_val_uf_m2_land, 149, 132, null, null, 'center');
+
+        // Columna UF m² Útil
+        doc.text('UF m² Útil', 181, 72, null, null, 'center');
+        doc.text(avg_uf_m2_build, 181, 82, null, null, 'center');
+        doc.text(deviation_uf_m2_build, 181, 92, null, null, 'center');
+        doc.text(up_limit_uf_m2_build, 181, 102, null, null, 'center');
+        doc.text(low_limit_uf_m2_build, 181, 112, null, null, 'center');
+        doc.text(max_val_uf_m2_build, 181, 122, null, null, 'center');
+        doc.text(min_val_uf_m2_build, 181, 132, null, null, 'center');
+
+        // Agrega mapa
+        img_height = (img.height * 190) / img.width
+        doc.addImage(img, 'JPEG', 9, 145, 190, img_height);
+        // 55 a 145
+
+        // Agrega leyenda
+        map_legends = Congo.transactions.config.legends
+        rect_begin = img_height + 149
+        for (var i = 0; i < map_legends.length; i++) {
+          var leg = map_legends[i]
+          var name = leg['name']
+          var color = leg['color']
+
+          doc.setDrawColor(0)
+          doc.setFillColor(color)
+          doc.rect(20, rect_begin, 3, 3, 'F')
+
+          text_begin = rect_begin + 3
+          doc.setFontSize(10);
+          doc.setFontStyle("normal");
+          doc.text(name, 25, text_begin);
+
+          rect_begin = rect_begin + 6
         }
 
-      }
+        // Pie de página
+        footer()
 
-      // Cantidad
-      doc.setFontSize(12);
-      doc.setFontStyle("bold");
-      doc.text('Cantidad de Transacciones:', 10, 57);
-      doc.setFontStyle("normal");
-      doc.text(transactions_count, 68, 57);
+        // Agregamos un página
+        doc.addPage('a4', 'portrait')
 
-      // Líneas Tabla
-      doc.line(10, 65, 200, 65);
-      doc.line(10, 75, 200, 75);
-      doc.line(10, 85, 200, 85);
-      doc.line(10, 95, 200, 95);
-      doc.line(10, 105, 200, 105);
-      doc.line(10, 115, 200, 115);
-      doc.line(10, 125, 200, 125);
-      doc.line(10, 135, 200, 135);
-      doc.line(10, 65, 10, 135);
-      doc.line(200, 65, 200, 135);
-      doc.line(45, 65, 45, 135);
+        // Pie de página
+        footer()
 
-      // Columna Ítem
-      doc.text('Ítem', 28, 72, null, null, 'center');
-      doc.text('Promedio', 13, 82);
-      doc.text('Desviación', 13, 92);
-      doc.text('Límite Superior', 13, 102);
-      doc.text('Límite Inferior', 13, 112);
-      doc.text('Valor Máximo', 13, 122);
-      doc.text('Valor Mínimo', 13, 132);
+        // Separamos la información
+        for (var i = 1; i < data.length; i++) {
 
-      // Columna Precio UF
-      doc.text('Precio UF', 62, 72, null, null, 'center');
-      doc.text(avg_uf, 62, 82, null, null, 'center');
-      doc.text(deviation_uf, 62, 92, null, null, 'center');
-      doc.text(up_limit_uf, 62, 102, null, null, 'center');
-      doc.text(low_limit_uf, 62, 112, null, null, 'center');
-      doc.text(max_val_uf, 62, 122, null, null, 'center');
-      doc.text(min_val_uf, 62, 132, null, null, 'center');
+          var reg = data[i];
+          var title = reg['title'];
+          var series = reg['series'];
+          var datasets = [];
 
-      // Columna Terreno
-      doc.text('Terreno', 91, 72, null, null, 'center');
-      doc.text(avg_land, 91, 82, null, null, 'center');
-      doc.text(deviation_land, 91, 92, null, null, 'center');
-      doc.text(up_limit_land, 91, 102, null, null, 'center');
-      doc.text(low_limit_land, 91, 112, null, null, 'center');
-      doc.text(max_val_land, 91, 122, null, null, 'center');
-      doc.text(min_val_land, 91, 132, null, null, 'center');
+          // Extraemos las series
+          $.each(series, function(a, b){
 
-      // Columna Útil
-      doc.text('Útil', 120, 72, null, null, 'center');
-      doc.text(avg_build, 120, 82, null, null, 'center');
-      doc.text(deviation_build, 120, 92, null, null, 'center');
-      doc.text(up_limit_build, 120, 102, null, null, 'center');
-      doc.text(low_limit_build, 120, 112, null, null, 'center');
-      doc.text(max_val_build, 120, 122, null, null, 'center');
-      doc.text(min_val_build, 120, 132, null, null, 'center');
+            // FIXME: Omite el chart Compraventas hasta que lleguen bien los datos
+            if (title == 'Compraventas') {
 
-      // Columna UF m² Terreno
-      doc.text('UF m² Terreno', 149, 72, null, null, 'center');
-      doc.text(avg_uf_m2_land, 149, 82, null, null, 'center');
-      doc.text(deviation_uf_m2_land, 149, 92, null, null, 'center');
-      doc.text(up_limit_uf_m2_land, 149, 102, null, null, 'center');
-      doc.text(low_limit_uf_m2_land, 149, 112, null, null, 'center');
-      doc.text(max_val_uf_m2_land, 149, 122, null, null, 'center');
-      doc.text(min_val_uf_m2_land, 149, 132, null, null, 'center');
+              // var data = b['data']
+              //
+              // // Separamos las comunas
+              // for (var i = 1; i < data.length; i++) {
+              //   var reg = data[i];
+              //
+              //   var label = reg[0]
+              //
+              //   var name = [];
+              //   var count = [];
+              //
+              //   // Separamos los bimestres de la comuna
+              //   for (var a = 1; a < reg.length; a++) {
+              //     var bim = reg[a]
+              //
+              //     var cantidad = bim[0]
+              //     var periodo = bim[1]
+              //     var año = bim[2]
+              //     var nombre = periodo+'/'+año
+              //
+              //     name.push(nombre)
+              //     count.push(cantidad)
+              //
+              //   } // Cierra for bimestre
+              //
+              //   if (title == 'Compraventas') { // Line
+              //     chart_type = 'line';
+              //     datasets.push({
+              //       label: label,
+              //       data: count,
+              //       fill: false,
+              //       borderColor: '#58b9e2',
+              //       borderWidth: 3,
+              //       pointRadius: 0,
+              //       pointStyle: 'line',
+              //       lineTension: 0,
+              //     })
+              //   }
+              //
+              //   chart_data = {
+              //     labels: name,
+              //     datasets: datasets
+              //   }
+              //
+              // } // Cierra for comunas
 
-      // Columna UF m² Útil
-      doc.text('UF m² Útil', 181, 72, null, null, 'center');
-      doc.text(avg_uf_m2_build, 181, 82, null, null, 'center');
-      doc.text(deviation_uf_m2_build, 181, 92, null, null, 'center');
-      doc.text(up_limit_uf_m2_build, 181, 102, null, null, 'center');
-      doc.text(low_limit_uf_m2_build, 181, 112, null, null, 'center');
-      doc.text(max_val_uf_m2_build, 181, 122, null, null, 'center');
-      doc.text(min_val_uf_m2_build, 181, 132, null, null, 'center');
+            } else {
 
-      // Pie de página
-      footer()
-
-      // Agregamos un página
-      doc.addPage('a4', 'portrait')
-
-      // Pie de página
-      footer()
-
-      // Separamos la información
-      for (var i = 1; i < data.length; i++) {
-
-        var reg = data[i];
-        var title = reg['title'];
-        var series = reg['series'];
-        var datasets = [];
-
-        // Extraemos las series
-        $.each(series, function(a, b){
-          if (title == 'Compraventas1') {
-
-            var data = b['data']
-
-            // Separamos las comunas
-            for (var i = 1; i < data.length; i++) {
-              var reg = data[i];
-
-              var label = reg[0]
-
+              var label = b['label']
+              var data = b['data']
               var name = [];
               var count = [];
+              var name_colour = [];
+              var colour;
 
-              // Separamos los bimestres de la comuna
-              for (var a = 1; a < reg.length; a++) {
-                var bim = reg[a]
+              // Extraemos los datos de las series
+              $.each(data, function(c, d){
 
-                var cantidad = bim[0]
-                var periodo = bim[1]
-                var año = bim[2]
-                var nombre = periodo+'/'+año
+                name.push(d['name'])
+                count.push(d['count'])
 
-                name.push(nombre)
-                count.push(cantidad)
+                // Setea los colores dependiendo del label
+                if (title == 'Uso' || title == 'Vendedor') {
+                  switch (d['name']) {
+                    case 'Propietario':
+                      colour = '#3498DB'
+                      break;
+                    case 'Inmobiliaria':
+                      colour = '#1ABC9C'
+                      break;
+                    case 'Empresa':
+                      colour = '#F5B041'
+                      break;
+                    case 'Banco':
+                      colour = '#8E44AD'
+                      break;
+                    case 'Cooperativa':
+                      colour = '#EC7063'
+                      break;
+                    case 'Municipalidad':
+                      colour = '#27AE60'
+                      break;
+                    case 'Sin informacion':
+                      colour = '#C0392B'
+                      break;
+                    case 'Departamento':
+                      colour = '#3498DB'
+                      break;
+                    case 'Casa':
+                      colour = '#1ABC9C'
+                      break;
+                    case 'Estacionamiento':
+                      colour = '#DC7633'
+                      break;
+                    case 'Bodega':
+                      colour = '#F5B041'
+                      break;
+                    case 'Local comercial':
+                      colour = '#8E44AD'
+                      break;
+                    case 'Oficina':
+                      colour = '#EC7063'
+                      break;
+                    case 'Sitio':
+                      colour = '#7F8C8D'
+                      break;
+                    case 'Industria':
+                      colour = '#ECF0F1'
+                      break;
+                    case 'Otro':
+                      colour = '#Otro'
+                      break;
+                    case 'Parcela':
+                      colour = '#C0392B'
+                      break;
+                  }
+                  name_colour.push(colour)
+                }
 
-              } // Cierra for bimestre
+              })
 
+              // Guardamos "datasets" y "chart_type"
+              if (title == 'Uso') { // Pie
+                chart_type = 'pie';
+                datasets.push({
+                  label: label,
+                  data: count,
+                  backgroundColor: name_colour,
+                })
+              }
+
+              if (title == 'Vendedor') { // Pie
+                chart_type = 'pie';
+                datasets.push({
+                  label: label,
+                  data: count,
+                  backgroundColor: name_colour,
+                })
+              }
+
+              // FIXME: Omite el chart Compraventas hasta que lleguen bien los datos
               if (title == 'Compraventas') { // Line
+                // chart_type = 'line';
+                // datasets.push({
+                //   label: label,
+                //   data: count,
+                //   fill: false,
+                //   borderColor: '#58b9e2',
+                //   borderWidth: 4,
+                //   pointRadius: 0,
+                //   pointStyle: 'line',
+                //   lineTension: 0,
+                // })
+              }
+
+              if (title == 'PxQ | UF') { // Line
                 chart_type = 'line';
                 datasets.push({
                   label: label,
                   data: count,
                   fill: false,
                   borderColor: '#58b9e2',
-                  borderWidth: 3,
+                  borderWidth: 4,
+                  pointRadius: 0,
+                  pointStyle: 'line',
+                  lineTension: 0,
+                })
+              }
+
+              if (title == 'Precio Promedio | UF') { // Line
+                chart_type = 'line';
+                datasets.push({
+                  label: label,
+                  data: count,
+                  fill: false,
+                  borderColor: '#58b9e2',
+                  borderWidth: 4,
+                  pointRadius: 0,
+                  pointStyle: 'line',
+                  lineTension: 0,
+                })
+              }
+
+              if (title == 'Superficie Línea Construcción (útil m²) por Bimestre') { // Line
+                chart_type = 'line';
+                datasets.push({
+                  label: label,
+                  data: count,
+                  fill: false,
+                  borderColor: '#58b9e2',
+                  borderWidth: 4,
+                  pointRadius: 0,
+                  pointStyle: 'line',
+                  lineTension: 0,
+                })
+              }
+
+              if (title == 'Precio UFm² en Base Útil por Bimestre') { // Line
+                chart_type = 'line';
+                datasets.push({
+                  label: label,
+                  data: count,
+                  fill: false,
+                  borderColor: '#58b9e2',
+                  borderWidth: 4,
+                  pointRadius: 0,
+                  pointStyle: 'line',
+                  lineTension: 0,
+                })
+              }
+
+              if (title == 'Superficie Terreno (m²) por Bimestre') { // Line
+                chart_type = 'line';
+                datasets.push({
+                  label: label,
+                  data: count,
+                  fill: false,
+                  borderColor: '#58b9e2',
+                  borderWidth: 4,
+                  pointRadius: 0,
+                  pointStyle: 'line',
+                  lineTension: 0,
+                })
+              }
+
+              if (title == 'Precio UFm² en Base Terreno por Bimestre') { // Line
+                chart_type = 'line';
+                datasets.push({
+                  label: label,
+                  data: count,
+                  fill: false,
+                  borderColor: '#58b9e2',
+                  borderWidth: 4,
                   pointRadius: 0,
                   pointStyle: 'line',
                   lineTension: 0,
@@ -692,362 +967,167 @@ function transactions_report_pdf(){
                 datasets: datasets
               }
 
-            } // Cierra for comunas
+            } // Cierra else
+
+          }) // Cierra each series
+
+          // Guardamos "options"
+          if (chart_type == 'pie') { // Pie
+
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#3d4046',
+                  fontSize: 12,
+                  usePointStyle: true,
+                }
+              },
+              plugins: {
+                datalabels: {
+                  formatter: (value, ctx) => {
+                    // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value*100 / sum).toFixed(2);
+                    if (percentage > 4) {
+                      return percentage+'%';
+                    } else {
+                      return null;
+                    }
+                  },
+                  align: 'end',
+                  anchor: 'center',
+                  color: 'white',
+                  font: {
+                    weight: 'bold'
+                  },
+                  textStrokeColor: '#3d4046',
+                  textStrokeWidth: 1,
+                  textShadowColor: '#000000',
+                  textShadowBlur: 3,
+                }
+              },
+            };
+
+          } else { // Line
+
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: false,
+              },
+              plugins: {
+                datalabels: {
+                  formatter: function(value, context) {
+                    if (value > 0) {
+                      return value.toLocaleString('es-ES')
+                    } else {
+                      return null
+                    }
+                  },
+                  align: 'start',
+                  anchor: 'start',
+                  color: '#3d4046',
+                  font: {
+                    size: 10
+                  },
+                }
+              },
+              scales: {
+                xAxes: [{
+                  stacked: true,
+                  ticks: {
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#3d4046'
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    callback: function(label, index, labels) {
+                      label = label.toLocaleString('es-ES')
+                      return label;
+                    },
+                    beginAtZero: true,
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#3d4046'
+                  },
+                }],
+              }
+            };
+
+          } // Cierra else ("options")
+
+          var chart_settings = {
+            type: chart_type,
+            data: chart_data,
+            options: chart_options
+          }
+
+          // FIXME: Omite el chart Compraventas hasta que lleguen bien los datos
+          if (title != 'Compraventas') {
+
+          // Creamos y adjuntamos el canvas
+          var canvas = document.createElement('canvas');
+          canvas.id = 'report-canvas-'+i;
+          $('#chart-report'+i).append(canvas);
+
+          var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
+          var final_chart = new Chart(chart_canvas, chart_settings);
+
+          var chart = final_chart.toBase64Image();
+
+          if (i % 2 == 1) {
+
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.setFontStyle("bold");
+            doc.text(title, 105, 20, null, null, 'center');
+
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 30);
 
           } else {
 
-            var label = b['label']
-            var data = b['data']
-            var name = [];
-            var count = [];
-            var name_colour = [];
-            var colour;
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.setFontStyle("bold");
+            doc.text(title, 105, 160, null, null, 'center');
 
-            // Extraemos los datos de las series
-            $.each(data, function(c, d){
-              name.push(d['name'])
-              count.push(d['count'])
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 170);
 
-              // Setea los colores dependiendo del label
-              if (title == 'Uso' || title == 'Vendedor') {
-                switch (d['name']) {
-                  case 'Propietario':
-                    colour = '#3498DB'
-                    break;
-                  case 'Inmobiliaria':
-                    colour = '#1ABC9C'
-                    break;
-                  case 'Empresa':
-                    colour = '#F5B041'
-                    break;
-                  case 'Banco':
-                    colour = '#8E44AD'
-                    break;
-                  case 'Cooperativa':
-                    colour = '#EC7063'
-                    break;
-                  case 'Municipalidad':
-                    colour = '#27AE60'
-                    break;
-                  case 'Sin informacion':
-                    colour = '#C0392B'
-                    break;
-                  case 'Departamento':
-                    colour = '#3498DB'
-                    break;
-                  case 'Casa':
-                    colour = '#1ABC9C'
-                    break;
-                  case 'Estacionamiento':
-                    colour = '#DC7633'
-                    break;
-                  case 'Bodega':
-                    colour = '#F5B041'
-                    break;
-                  case 'Local comercial':
-                    colour = '#8E44AD'
-                    break;
-                  case 'Oficina':
-                    colour = '#EC7063'
-                    break;
-                  case 'Sitio':
-                    colour = '#7F8C8D'
-                    break;
-                  case 'Industria':
-                    colour = '#ECF0F1'
-                    break;
-                  case 'Otro':
-                    colour = '#Otro'
-                    break;
-                  case 'Parcela':
-                    colour = '#C0392B'
-                    break;
-                }
-                name_colour.push(colour)
-              }
+            // Agrega nueva página
+            doc.addPage('a4', 'portrait')
 
-            })
+            // Pie de página
+            footer()
 
-            // Guardamos "datasets" y "chart_type"
-            if (title == 'Uso') { // Pie
-              chart_type = 'pie';
-              datasets.push({
-                label: label,
-                data: count,
-                backgroundColor: name_colour,
-              })
-            }
+          } // Cierra else impar
+          }
+        } // Cierra for
 
-            if (title == 'Vendedor') { // Pie
-              chart_type = 'pie';
-              datasets.push({
-                label: label,
-                data: count,
-                backgroundColor: name_colour,
-              })
-            }
+        // Descarga el archivo PDF
+        doc.save("Informe_Compraventas.pdf");
 
-            if (title == 'Compraventas') { // Line
-              chart_type = 'line';
-              datasets.push({
-                label: label,
-                data: count,
-                fill: false,
-                borderColor: '#58b9e2',
-                borderWidth: 4,
-                pointRadius: 0,
-                pointStyle: 'line',
-                lineTension: 0,
-              })
-            }
-
-            if (title == 'PxQ | UF') { // Line
-              chart_type = 'line';
-              datasets.push({
-                label: label,
-                data: count,
-                fill: false,
-                borderColor: '#58b9e2',
-                borderWidth: 4,
-                pointRadius: 0,
-                pointStyle: 'line',
-                lineTension: 0,
-              })
-            }
-
-            if (title == 'Precio Promedio | UF') { // Line
-              chart_type = 'line';
-              datasets.push({
-                label: label,
-                data: count,
-                fill: false,
-                borderColor: '#58b9e2',
-                borderWidth: 4,
-                pointRadius: 0,
-                pointStyle: 'line',
-                lineTension: 0,
-              })
-            }
-
-            if (title == 'Superficie Línea Construcción (útil m²) por Bimestre') { // Line
-              chart_type = 'line';
-              datasets.push({
-                label: label,
-                data: count,
-                fill: false,
-                borderColor: '#58b9e2',
-                borderWidth: 4,
-                pointRadius: 0,
-                pointStyle: 'line',
-                lineTension: 0,
-              })
-            }
-
-            if (title == 'Precio UFm² en Base Útil por Bimestre') { // Line
-              chart_type = 'line';
-              datasets.push({
-                label: label,
-                data: count,
-                fill: false,
-                borderColor: '#58b9e2',
-                borderWidth: 4,
-                pointRadius: 0,
-                pointStyle: 'line',
-                lineTension: 0,
-              })
-            }
-
-            if (title == 'Superficie Terreno (m²) por Bimestre') { // Line
-              chart_type = 'line';
-              datasets.push({
-                label: label,
-                data: count,
-                fill: false,
-                borderColor: '#58b9e2',
-                borderWidth: 4,
-                pointRadius: 0,
-                pointStyle: 'line',
-                lineTension: 0,
-              })
-            }
-
-            if (title == 'Precio UFm² en Base Terreno por Bimestre') { // Line
-              chart_type = 'line';
-              datasets.push({
-                label: label,
-                data: count,
-                fill: false,
-                borderColor: '#58b9e2',
-                borderWidth: 4,
-                pointRadius: 0,
-                pointStyle: 'line',
-                lineTension: 0,
-              })
-            }
-
-            chart_data = {
-              labels: name,
-              datasets: datasets
-            }
-
-          } // Cierra else
-
-        }) // Cierra each series
-
-        // Guardamos "options"
-        if (chart_type == 'pie') { // Pie
-
-          var chart_options = {
-            animation: false,
-            responsive: true,
-            title: {
-              display: false
-            },
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                fontColor: '#3d4046',
-                fontSize: 12,
-                usePointStyle: true,
-              }
-            },
-            plugins: {
-              datalabels: {
-                formatter: (value, ctx) => {
-                  // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
-                  let sum = 0;
-                  let dataArr = ctx.chart.data.datasets[0].data;
-                  dataArr.map(data => {
-                      sum += data;
-                  });
-                  let percentage = (value*100 / sum).toFixed(2);
-                  if (percentage > 4) {
-                    return percentage+'%';
-                  } else {
-                    return null;
-                  }
-                },
-                align: 'end',
-                anchor: 'center',
-                color: 'white',
-                font: {
-                  weight: 'bold'
-                },
-                textStrokeColor: '#3d4046',
-                textStrokeWidth: 1,
-                textShadowColor: '#000000',
-                textShadowBlur: 3,
-              }
-            },
-          };
-
-        } else { // Line
-
-          var chart_options = {
-            animation: false,
-            responsive: true,
-            title: {
-              display: false
-            },
-            legend: {
-              display: false,
-            },
-            plugins: {
-              datalabels: {
-                formatter: function(value, context) {
-                  if (value > 0) {
-                    return value.toLocaleString('es-ES')
-                  } else {
-                    return null
-                  }
-                },
-                align: 'start',
-                anchor: 'start',
-                color: '#3d4046',
-                font: {
-                  size: 10
-                },
-              }
-            },
-            scales: {
-              xAxes: [{
-                stacked: true,
-                ticks: {
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#3d4046'
-                }
-              }],
-              yAxes: [{
-                ticks: {
-                  callback: function(label, index, labels) {
-                    label = label.toLocaleString('es-ES')
-                    return label;
-                  },
-                  beginAtZero: true,
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#3d4046'
-                },
-              }],
-            }
-          };
-
-        } // Cierra else ("options")
-
-        var chart_settings = {
-          type: chart_type,
-          data: chart_data,
-          options: chart_options
-        }
-
-        // Creamos y adjuntamos el canvas
-        var canvas = document.createElement('canvas');
-        canvas.id = 'report-canvas-'+i;
-        $('#chart-report'+i).append(canvas);
-
-        var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
-        var final_chart = new Chart(chart_canvas, chart_settings);
-
-        var chart = final_chart.toBase64Image();
-
-        if (i % 2 == 1) {
-
-          // Título del gráfico
-          doc.setFontSize(16);
-          doc.setFontStyle("bold");
-          doc.text(title, 105, 20, null, null, 'center');
-
-          // Gráfico
-          doc.addImage(chart, 'JPEG', 9, 30);
-
-        } else {
-
-          // Título del gráfico
-          doc.setFontSize(16);
-          doc.setFontStyle("bold");
-          doc.text(title, 105, 160, null, null, 'center');
-
-          // Gráfico
-          doc.addImage(chart, 'JPEG', 9, 170);
-
-          // Agrega nueva página
-          doc.addPage('a4', 'portrait')
-
-          // Pie de página
-          footer()
-
-        } // Cierra else impar
-      } // Cierra for
-
-      // Descarga el archivo PDF
-      doc.save("Informe_Compraventas.pdf");
-
+      }); // Cierra then
     } // Cierra success
-
   }) // Cierra ajax
-
 } // Cierra transactions_report_pdf
 
 Congo.transactions.action_graduated_points = function(){
@@ -1382,7 +1462,8 @@ Congo.transactions.action_dashboards = function(){
                 if (title == 'Compraventas') {
 
                   var data = b['data']
-                  // ACA SEPARAMOS TODAS LAS COMUNAS
+
+                  // Separamos las comunas
                   for (var i = 0; i < data.length; i++) {
 
                     var reg = data[i];

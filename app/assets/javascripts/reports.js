@@ -104,6 +104,13 @@ Congo.reports = function(){
             break;
       }
       break;
+    case 'rent_indicators_info':
+      switch (kind_reports) {
+        case 'pdf':
+          url = rent_indicators_report_pdf();
+          break;
+      }
+    break;
     case 'building_regulations_info':
       switch(kind_reports){
         case 'pdf':

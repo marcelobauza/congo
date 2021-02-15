@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
 
 
-
-
-
+  resources :rent_future_projects
+  resources :rent_transactions
+  resources :bots
+  resources :rent_projects
   resources :expenses
   resources :expense_types
   resources :feedbacks
@@ -22,6 +23,7 @@ Rails.application.routes.draw do
   get 'dashboards/heatmap'
   get 'dashboards/filter_county_for_lon_lat'
   get 'dashboards/filter_period'
+
   get 'future_project_types/legend_points'
   get 'density_types/legend_points'
   get 'counties/find' => 'counties#find'
@@ -38,6 +40,7 @@ Rails.application.routes.draw do
   get 'application_statuses/load' => 'application_statuses#load'
   get 'application_statuses/colleagues' => 'application_statuses#colleagues'
   get 'application_statuses/share_users' => 'application_statuses#share_users'
+  get 'dashboard/enabled_transaction_data'
   get 'counties/counties_enabled_by_users' => 'counties#counties_enabled_by_users'
 
   get 'transactions/dashboards' => 'transactions#dashboards'
@@ -45,6 +48,9 @@ Rails.application.routes.draw do
   get 'future_projects/dashboards' => 'future_projects#dashboards'
   get 'future_projects/graduated_points' => 'future_projects#graduated_points'
   get 'projects/dashboards' => 'projects#dashboards'
+  get 'rent_indicators/dashboards' => 'rent_indicators#dashboards'
+  get 'rent_indicators/search' => 'rent_indicators#search'
+  get 'rent_indicators/rent_indicators_summary' => 'rent_indicators#rent_indicators_summary'
   get 'census/dashboards' => 'census#dashboards'
   get 'demography/calculated_gse' => 'demography#calculated_gse'
   get 'projects/graduated_points' => 'projects#graduated_points'
@@ -52,6 +58,7 @@ Rails.application.routes.draw do
   get 'demography/dashboards' => 'demography#dashboards'
   get 'demography/general' => 'demography#general'
   get 'reports/index' => 'reports#index'
+  get 'reports/rent_indicators_pdf' => 'reports#rent_indicators_pdf'
   get 'reports/future_projects_data' => 'reports#future_projects_data'
   get 'reports/future_projects_data_kml' => 'reports#future_projects_data_kml'
   get 'reports/future_projects_summary' => 'reports#future_projects_summary'
@@ -127,7 +134,6 @@ Rails.application.routes.draw do
   resources :density_types
   resources :building_regulations
   resources :project_statuses
-
   resources :property_types
 
   resources :future_project_types

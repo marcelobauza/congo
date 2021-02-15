@@ -86,532 +86,606 @@ future_projects_report_pdf = function() {
     url: '/future_projects/future_projects_summary.json',
     datatype: 'json',
     data: data,
+    beforeSend: function() {
+
+      // Deshabilita la interacción con el mapa
+      map.dragging.disable();
+      map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
+      document.getElementById('map').style.cursor='default';
+
+      // Muestra el spinner
+      $("#report_spinner").show();
+
+      // Deshabilita los botones
+      $('.btn').addClass('disabled')
+      $('.close').prop('disabled', true);
+      $("#time_slider").data("ionRangeSlider").update({
+        block: true
+      });
+
+    },
     success: function(data) {
 
-      // Creamos el doc
-      var doc = new jsPDF();
+      let build_image_map = new Promise((resolve, reject) => {
+        leafletImage(map, function(err, canvas) {
+          var img = document.createElement('img');
+          var dimensions = map.getSize();
+          img.width = dimensions.x;
+          img.height = dimensions.y;
+          img.src = canvas.toDataURL();
+          resolve(img);
+        });
+      });
 
-      doc.page = 1;
+      build_image_map.then(function(img) {
 
-      // Pie de página
-      function footer() {
+        // Habilitar la interacción con el mapa
+        map.dragging.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        document.getElementById('map').style.cursor='grab';
+
+        // Oculta el spinner
+        $("#report_spinner").hide();
+
+        // Habilita los botones
+        $('.btn').removeClass('disabled')
+        $('.close').prop('disabled', false);
+        $("#time_slider").data("ionRangeSlider").update({
+          block: false,
+        });
+
+        // Creamos el doc
+        var doc = new jsPDF();
+
+        doc.page = 1;
+
+        // Pie de página
+        function footer() {
+          doc.setFontStyle("bold");
+          doc.setFontSize(12);
+          doc.text('Fuente:', 20, 290);
+          doc.setFontStyle("normal");
+          doc.text('Levantamiento Bimestral en Direcciones de Obras Municipales', 37, 290);
+          doc.setFontSize(10);
+          doc.text('p. ' + doc.page, 194, 290);
+          doc.page++;
+        };
+
+        // Título
         doc.setFontStyle("bold");
-        doc.setFontSize(12);
-        doc.text('Fuente:', 20, 290);
-        doc.setFontStyle("normal");
-        doc.text('Levantamiento Bimestral en Direcciones de Obras Municipales', 37, 290);
-        doc.setFontSize(10);
-        doc.text('p. ' + doc.page, 194, 290);
-        doc.page++;
-      };
+        doc.setFontSize(22);
+        doc.text('Informe de Expedientes Municipales', 105, 20, null, null, 'center');
 
-      // Título
-      doc.setFontStyle("bold");
-      doc.setFontSize(22);
-      doc.text('Informe de Expedientes Municipales', 105, 20, null, null, 'center');
+        // Subtítulo
+        doc.setFontSize(16);
+        doc.text('Información General', 105, 35, null, null, 'center');
 
-      // Subtítulo
-      doc.setFontSize(16);
-      doc.text('Información General', 105, 35, null, null, 'center');
+        // Validamos si hay algún filtro aplicado
+        if (periods == '') {
 
-      // Validamos si hay algún filtro aplicado
-      if (periods == '') {
+          // Periodo Actual
+          doc.setFontSize(12);
+          doc.setFontStyle("bold");
+          doc.text('Periodo de tiempo seleccionado:', 10, 49);
+          doc.setFontStyle("normal");
+          doc.text(to_bimester+'° bimestre del '+to_year, 78, 49);
 
-        // Periodo Actual
-        doc.setFontSize(12);
-        doc.setFontStyle("bold");
-        doc.text('Periodo de tiempo seleccionado:', 10, 49);
-        doc.setFontStyle("normal");
-        doc.text(to_bimester+'° bimestre del '+to_year, 78, 49);
+        } else {
 
-      } else {
-
-        // Periodos Filtrados
-        doc.setFontSize(12);
-        doc.setFontStyle("bold");
-        doc.text('Periodos de tiempo seleccionados:', 10, 49);
-        doc.setFontStyle("normal");
-        var tab = 83
-        for (var i = 0; i < periods.length; i++) {
-          doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
-          tab = tab + 16
-        }
-
-      }
-
-      // Pie de página
-      footer()
-
-      // Agregamos un página
-      doc.addPage('a4', 'portrait')
-
-      // Pie de página
-      footer()
-
-      // Separamos la información
-      for (var i = 1; i < data.length; i++) {
-
-        var reg = data[i];
-        var title = reg['title'];
-        var series = reg['series'];
-        var datasets = [];
-        var serie_colour;
-
-        // Extraemos las series
-        $.each(series, function(a, b){
-
-          var label = b['label']
-          var data = b['data']
-
-          // Setea los colores dependiendo de la serie
-          if (title == 'Tipo de Expediente / Destino' || title == 'Cantidad de Unidades / Bimestre' || title == 'Superficie Edificada Por Expediente') {
-
-            switch (label) {
-              case 'Departamento y Local Comercial':
-                serie_colour = '#E74C3C'
-                break;
-              case 'Equipamiento':
-                serie_colour = '#BB8FCE'
-                break;
-              case 'Departamentos':
-                serie_colour = '#85C1E9'
-                break;
-              case 'Local Comercial':
-                serie_colour = '#16A085'
-                break;
-              case 'Oficinas':
-                serie_colour = '#F39C12'
-                break;
-              case 'Oficina y Local Comercial':
-                serie_colour = '#F1C40F'
-                break;
-              case 'Departamento, Oficina y Local Comercial':
-                serie_colour = '#D35400'
-                break;
-              case 'Casas':
-                serie_colour = '#BDC3C7'
-                break;
-              case 'Bodega, Oficina, Comercio':
-                serie_colour = '#34495E'
-                break;
-              case 'Departamento y Oficinas':
-                serie_colour = '#27AE60'
-                break;
-              case 'Industria':
-                serie_colour = '#C0392B'
-                break;
-              case 'Bodega-Oficina':
-                serie_colour = '#9B59B6'
-                break;
-              case 'Bodega':
-                serie_colour = '#2980B9'
-                break;
-              case 'Vivienda-Oficina':
-                serie_colour = '#1ABC9C'
-                break;
-              case 'Vivienda-Comercio':
-                serie_colour = '#F0B27A'
-                break;
-              case 'Hotel & Restaurante':
-                serie_colour = '#ECF0F1'
-                break;
-              case 'Bodega, Comercio':
-                serie_colour = '#7F8C8D'
-                break;
-              case 'Hotel, Oficina':
-                serie_colour = '#82E0AA'
-                break;
-              case 'Anteproyecto':
-                serie_colour = '#42d964'
-                break;
-              case 'Permiso de Edificación':
-                serie_colour = '#58b9e2'
-                break;
-              case 'Recepción Municipal':
-                serie_colour = '#f99c00'
-                break;
-            }
+          // Periodos Filtrados
+          doc.setFontSize(12);
+          doc.setFontStyle("bold");
+          doc.text('Periodos de tiempo seleccionados:', 10, 49);
+          doc.setFontStyle("normal");
+          var tab = 83
+          for (var i = 0; i < periods.length; i++) {
+            doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
+            tab = tab + 16
           }
 
-          var name = [];
-          var count = [];
-          var id = [];
-          var name_colour = [];
-          var colour;
+        }
 
-          // Extraemos los datos de las series
-          $.each(data, function(c, d){
-            name.push(d['name'])
-            count.push(d['count'])
+        // Agrega mapa
+        img_height = (img.height * 190) / img.width
+        doc.addImage(img, 'JPEG', 9, 55, 190, img_height);
 
-            // Setea los colores dependiendo del label
-            if (title == 'Tipo de Expendiente' || title == 'Destino Obra') {
-              switch (d['name']) {
+        // Agrega leyenda
+        map_legends = Congo.future_projects.config.legends
+        console.log(map_legends);
+        rect_begin = img_height + 59
+        for (var i = 0; i < map_legends.length; i++) {
+          var leg = map_legends[i]
+          var name = leg['name']
+          var color = leg['color']
+
+          doc.setDrawColor(0)
+          doc.setFillColor(color)
+          doc.rect(20, rect_begin, 3, 3, 'F')
+
+          text_begin = rect_begin + 3
+          doc.setFontSize(10);
+          doc.setFontStyle("normal");
+          doc.text(name, 25, text_begin);
+
+          rect_begin = rect_begin + 6
+        }
+
+        // Pie de página
+        footer()
+
+        // Agregamos un página
+        doc.addPage('a4', 'portrait')
+
+        // Pie de página
+        footer()
+
+        // Separamos la información
+        for (var i = 1; i < data.length; i++) {
+
+          var reg = data[i];
+          var title = reg['title'];
+          var series = reg['series'];
+          var datasets = [];
+          var serie_colour;
+
+          // Extraemos las series
+          $.each(series, function(a, b){
+
+            var label = b['label']
+            var data = b['data']
+
+            // Setea los colores dependiendo de la serie
+            if (title == 'Tipo de Expediente / Destino' || title == 'Cantidad de Unidades / Bimestre' || title == 'Superficie Edificada Por Expediente') {
+
+              switch (label) {
                 case 'Departamento y Local Comercial':
-                  colour = '#E74C3C'
+                  serie_colour = '#E74C3C'
                   break;
                 case 'Equipamiento':
-                  colour = '#BB8FCE'
+                  serie_colour = '#BB8FCE'
                   break;
                 case 'Departamentos':
-                  colour = '#85C1E9'
+                  serie_colour = '#85C1E9'
                   break;
                 case 'Local Comercial':
-                  colour = '#16A085'
+                  serie_colour = '#16A085'
                   break;
                 case 'Oficinas':
-                  colour = '#F39C12'
+                  serie_colour = '#F39C12'
                   break;
                 case 'Oficina y Local Comercial':
-                  colour = '#F1C40F'
+                  serie_colour = '#F1C40F'
                   break;
                 case 'Departamento, Oficina y Local Comercial':
-                  colour = '#D35400'
+                  serie_colour = '#D35400'
                   break;
                 case 'Casas':
-                  colour = '#BDC3C7'
+                  serie_colour = '#BDC3C7'
                   break;
                 case 'Bodega, Oficina, Comercio':
-                  colour = '#34495E'
+                  serie_colour = '#34495E'
                   break;
                 case 'Departamento y Oficinas':
-                  colour = '#27AE60'
+                  serie_colour = '#27AE60'
                   break;
                 case 'Industria':
-                  colour = '#C0392B'
+                  serie_colour = '#C0392B'
                   break;
                 case 'Bodega-Oficina':
-                  colour = '#9B59B6'
+                  serie_colour = '#9B59B6'
                   break;
                 case 'Bodega':
-                  colour = '#2980B9'
+                  serie_colour = '#2980B9'
                   break;
                 case 'Vivienda-Oficina':
-                  colour = '#1ABC9C'
+                  serie_colour = '#1ABC9C'
                   break;
                 case 'Vivienda-Comercio':
-                  colour = '#F0B27A'
+                  serie_colour = '#F0B27A'
                   break;
                 case 'Hotel & Restaurante':
-                  colour = '#ECF0F1'
+                  serie_colour = '#ECF0F1'
                   break;
                 case 'Bodega, Comercio':
-                  colour = '#7F8C8D'
+                  serie_colour = '#7F8C8D'
                   break;
                 case 'Hotel, Oficina':
-                  colour = '#82E0AA'
+                  serie_colour = '#82E0AA'
                   break;
                 case 'Anteproyecto':
-                  colour = '#42d964'
+                  serie_colour = '#42d964'
                   break;
-                case 'Permiso de edificacion':
-                  colour = '#58b9e2'
+                case 'Permiso de Edificación':
+                  serie_colour = '#58b9e2'
                   break;
-                case 'Recepcion municipal':
-                  colour = '#f99c00'
+                case 'Recepción Municipal':
+                  serie_colour = '#f99c00'
                   break;
               }
+            }
 
-              name_colour.push(colour)
+            var name = [];
+            var count = [];
+            var id = [];
+            var name_colour = [];
+            var colour;
+
+            // Extraemos los datos de las series
+            $.each(data, function(c, d){
+              name.push(d['name'])
+              count.push(d['count'])
+
+              // Setea los colores dependiendo del label
+              if (title == 'Tipo de Expendiente' || title == 'Destino Obra') {
+                switch (d['name']) {
+                  case 'Departamento y Local Comercial':
+                    colour = '#E74C3C'
+                    break;
+                  case 'Equipamiento':
+                    colour = '#BB8FCE'
+                    break;
+                  case 'Departamentos':
+                    colour = '#85C1E9'
+                    break;
+                  case 'Local Comercial':
+                    colour = '#16A085'
+                    break;
+                  case 'Oficinas':
+                    colour = '#F39C12'
+                    break;
+                  case 'Oficina y Local Comercial':
+                    colour = '#F1C40F'
+                    break;
+                  case 'Departamento, Oficina y Local Comercial':
+                    colour = '#D35400'
+                    break;
+                  case 'Casas':
+                    colour = '#BDC3C7'
+                    break;
+                  case 'Bodega, Oficina, Comercio':
+                    colour = '#34495E'
+                    break;
+                  case 'Departamento y Oficinas':
+                    colour = '#27AE60'
+                    break;
+                  case 'Industria':
+                    colour = '#C0392B'
+                    break;
+                  case 'Bodega-Oficina':
+                    colour = '#9B59B6'
+                    break;
+                  case 'Bodega':
+                    colour = '#2980B9'
+                    break;
+                  case 'Vivienda-Oficina':
+                    colour = '#1ABC9C'
+                    break;
+                  case 'Vivienda-Comercio':
+                    colour = '#F0B27A'
+                    break;
+                  case 'Hotel & Restaurante':
+                    colour = '#ECF0F1'
+                    break;
+                  case 'Bodega, Comercio':
+                    colour = '#7F8C8D'
+                    break;
+                  case 'Hotel, Oficina':
+                    colour = '#82E0AA'
+                    break;
+                  case 'Anteproyecto':
+                    colour = '#42d964'
+                    break;
+                  case 'Permiso de edificacion':
+                    colour = '#58b9e2'
+                    break;
+                  case 'Recepcion municipal':
+                    colour = '#f99c00'
+                    break;
+                }
+
+                name_colour.push(colour)
+              }
+
+            })
+
+            // Guardamos "datasets" y "chart_type"
+            if (title == 'Tipo de Expendiente') {
+              chart_type = 'pie';
+              datasets.push({
+                label: label,
+                data: count,
+                backgroundColor: name_colour,
+              })
+            }
+
+            if (title == 'Destino Obra') {
+              chart_type = 'pie';
+              datasets.push({
+                label: label,
+                data: count,
+                id: id,
+                backgroundColor: name_colour,
+              })
+            }
+
+            if (title == 'Tipo de Expediente / Destino') {
+              chart_type = 'bar';
+              datasets.push({
+                label: label,
+                data: count,
+                backgroundColor: serie_colour,
+              })
+              // Renombramos los name para evitar superposición en el chart
+              name = ["Anteproyecto", "Permiso de Edificación", "Recepción Municipal"];
+            }
+
+            if (title == 'Cantidad de Unidades / Bimestre') {
+              chart_type = 'line';
+              datasets.push({
+                label: label,
+                data: count,
+                fill: false,
+                borderColor: serie_colour,
+                borderWidth: 4,
+                pointRadius: 0,
+                pointStyle: 'line',
+                lineTension: 0,
+              })
+            }
+
+            if (title == 'Superficie Edificada Por Expediente') {
+              chart_type = 'line';
+              datasets.push({
+                label: label,
+                data: count,
+                fill: false,
+                borderColor: serie_colour,
+                borderWidth: 4,
+                pointRadius: 0,
+                pointStyle: 'line',
+                lineTension: 0,
+              })
+            }
+
+            chart_data = {
+              labels: name,
+              datasets: datasets
             }
 
           })
 
-          // Guardamos "datasets" y "chart_type"
-          if (title == 'Tipo de Expendiente') {
-            chart_type = 'pie';
-            datasets.push({
-              label: label,
-              data: count,
-              backgroundColor: name_colour,
-            })
-          }
+          // Guardamos "options"
+          if (chart_type == 'bar') { // Bar
 
-          if (title == 'Destino Obra') {
-            chart_type = 'pie';
-            datasets.push({
-              label: label,
-              data: count,
-              id: id,
-              backgroundColor: name_colour,
-            })
-          }
-
-          if (title == 'Tipo de Expediente / Destino') {
-            chart_type = 'bar';
-            datasets.push({
-              label: label,
-              data: count,
-              backgroundColor: serie_colour,
-            })
-            // Renombramos los name para evitar superposición en el chart
-            name = ["Anteproyecto", "Permiso de Edificación", "Recepción Municipal"];
-          }
-
-          if (title == 'Cantidad de Unidades / Bimestre') {
-            chart_type = 'line';
-            datasets.push({
-              label: label,
-              data: count,
-              fill: false,
-              borderColor: serie_colour,
-              borderWidth: 4,
-              pointRadius: 0,
-              pointStyle: 'line',
-              lineTension: 0,
-            })
-          }
-
-          if (title == 'Superficie Edificada Por Expediente') {
-            chart_type = 'line';
-            datasets.push({
-              label: label,
-              data: count,
-              fill: false,
-              borderColor: serie_colour,
-              borderWidth: 4,
-              pointRadius: 0,
-              pointStyle: 'line',
-              lineTension: 0,
-            })
-          }
-
-          chart_data = {
-            labels: name,
-            datasets: datasets
-          }
-
-        })
-
-        // Guardamos "options"
-        if (chart_type == 'bar') { // Bar
-
-          var chart_options = {
-            animation: false,
-            responsive: true,
-            title: {
-              display: false,
-            },
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                fontColor: '#3d4046',
-                fontSize: 12,
-                filter: function(legendItem, chartData) {
-                  // Solo muestra el legend si algunos de sus valores es diferente a 0
-                  if (chartData.datasets[legendItem.datasetIndex].data[0] != 0
-                    || chartData.datasets[legendItem.datasetIndex].data[1] != 0
-                    || chartData.datasets[legendItem.datasetIndex].data[2] != 0) {
-                    return legendItem.text
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false,
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#3d4046',
+                  fontSize: 12,
+                  filter: function(legendItem, chartData) {
+                    // Solo muestra el legend si algunos de sus valores es diferente a 0
+                    if (chartData.datasets[legendItem.datasetIndex].data[0] != 0
+                      || chartData.datasets[legendItem.datasetIndex].data[1] != 0
+                      || chartData.datasets[legendItem.datasetIndex].data[2] != 0) {
+                      return legendItem.text
+                    }
                   }
                 }
-              }
-            },
-            plugins: {
-              datalabels: {
-                align: 'center',
-                anchor: 'center',
-                color: '#3d4046',
-                font: {
-                  size: 10
-                },
-                formatter: (value, ctx) => {
-                  // Mustra sólo los valores que estén por encima del 3%
-                  let sum = 0;
-                  let dataArr = ctx.chart.data.datasets[0].data;
-                  dataArr.map(data => {
-                      sum += data;
-                  });
-                  let percentage = (value*100 / sum).toFixed(2);
-                  if (percentage > 4) {
-                    return value.toLocaleString('es-ES');
-                  } else {
-                    return null;
-                  }
+              },
+              plugins: {
+                datalabels: {
+                  align: 'center',
+                  anchor: 'center',
+                  color: '#3d4046',
+                  font: {
+                    size: 10
+                  },
+                  formatter: (value, ctx) => {
+                    // Mustra sólo los valores que estén por encima del 3%
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value*100 / sum).toFixed(2);
+                    if (percentage > 4) {
+                      return value.toLocaleString('es-ES');
+                    } else {
+                      return null;
+                    }
+                  },
                 },
               },
-            },
-            scales: {
-              xAxes: [{
-                stacked: true,
-                ticks: {
-                  display: true,
+              scales: {
+                xAxes: [{
+                  stacked: true,
+                  ticks: {
+                    display: true,
+                    fontSize: 12,
+                    fontColor: '#3d4046'
+                  }
+                }],
+                yAxes: [{
+                  stacked: true,
+                  ticks: {
+                    callback: function(label, index, labels) {
+                      label = label.toLocaleString('es-ES')
+                      return label;
+                    },
+                    beginAtZero: true,
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#3d4046'
+                  }
+                }],
+              }
+            };
+
+          } else if (chart_type == 'pie') { // Pie
+
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#3d4046',
                   fontSize: 12,
-                  fontColor: '#3d4046'
+                  usePointStyle: true,
                 }
-              }],
-              yAxes: [{
-                stacked: true,
-                ticks: {
-                  callback: function(label, index, labels) {
-                    label = label.toLocaleString('es-ES')
-                    return label;
+              },
+              plugins: {
+                datalabels: {
+                  formatter: (value, ctx) => {
+                    // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value*100 / sum).toFixed(2);
+                    if (percentage > 4) {
+                      return percentage+'%';
+                    } else {
+                      return null;
+                    }
                   },
-                  beginAtZero: true,
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#3d4046'
-                }
-              }],
-            }
-          };
-
-        } else if (chart_type == 'pie') { // Pie
-
-          var chart_options = {
-            animation: false,
-            responsive: true,
-            title: {
-              display: false
-            },
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                fontColor: '#3d4046',
-                fontSize: 12,
-                usePointStyle: true,
-              }
-            },
-            plugins: {
-              datalabels: {
-                formatter: (value, ctx) => {
-                  // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
-                  let sum = 0;
-                  let dataArr = ctx.chart.data.datasets[0].data;
-                  dataArr.map(data => {
-                      sum += data;
-                  });
-                  let percentage = (value*100 / sum).toFixed(2);
-                  if (percentage > 4) {
-                    return percentage+'%';
-                  } else {
-                    return null;
-                  }
-                },
-                align: 'end',
-                anchor: 'center',
-                color: '#FFFFFF',
-                font: {
-                  weight: 'bold'
-                },
-                textStrokeColor: '#3d4046',
-                textStrokeWidth: 1,
-                textShadowColor: '#000000',
-                textShadowBlur: 3,
-              }
-            },
-          };
-
-        } else { // Line
-
-          var chart_options = {
-            animation: false,
-            responsive: true,
-            title: {
-              display: false
-            },
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                fontColor: '#3d4046',
-                fontSize: 12,
-                usePointStyle: true,
-              }
-            },
-            plugins: {
-              datalabels: {
-                formatter: function(value, context) {
-                  if (value > 0) {
-                    return value.toLocaleString('es-ES')
-                  } else {
-                    return null
-                  }
-                },
-                align: 'start',
-                anchor: 'start',
-                color: '#3d4046',
-                font: {
-                  size: 10
-                },
-              }
-            },
-            scales: {
-              xAxes: [{
-                stacked: true,
-                ticks: {
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#3d4046'
-                }
-              }],
-              yAxes: [{
-                ticks: {
-                  callback: function(label, index, labels) {
-                    label = label.toLocaleString('es-ES')
-                    return label;
+                  align: 'end',
+                  anchor: 'center',
+                  color: '#FFFFFF',
+                  font: {
+                    weight: 'bold'
                   },
-                  beginAtZero: true,
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#3d4046'
-                },
-              }],
-            }
-          };
+                  textStrokeColor: '#3d4046',
+                  textStrokeWidth: 1,
+                  textShadowColor: '#000000',
+                  textShadowBlur: 3,
+                }
+              },
+            };
 
-        } // Cierra else ("options")
+          } else { // Line
 
-        var chart_settings = {
-          type: chart_type,
-          data: chart_data,
-          options: chart_options
-        }
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#3d4046',
+                  fontSize: 12,
+                  usePointStyle: true,
+                }
+              },
+              plugins: {
+                datalabels: {
+                  formatter: function(value, context) {
+                    if (value > 0) {
+                      return value.toLocaleString('es-ES')
+                    } else {
+                      return null
+                    }
+                  },
+                  align: 'start',
+                  anchor: 'start',
+                  color: '#3d4046',
+                  font: {
+                    size: 10
+                  },
+                }
+              },
+              scales: {
+                xAxes: [{
+                  stacked: true,
+                  ticks: {
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#3d4046'
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    callback: function(label, index, labels) {
+                      label = label.toLocaleString('es-ES')
+                      return label;
+                    },
+                    beginAtZero: true,
+                    display: true,
+                    fontSize: 10,
+                    fontColor: '#3d4046'
+                  },
+                }],
+              }
+            };
 
-        // Creamos y adjuntamos el canvas
-        var canvas = document.createElement('canvas');
-        canvas.id = 'report-canvas-'+i;
-        $('#chart-report'+i).append(canvas);
+          } // Cierra else ("options")
 
-        var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
-        var final_chart = new Chart(chart_canvas, chart_settings);
+          var chart_settings = {
+            type: chart_type,
+            data: chart_data,
+            options: chart_options
+          }
 
-        var chart = final_chart.toBase64Image();
+          // Creamos y adjuntamos el canvas
+          var canvas = document.createElement('canvas');
+          canvas.id = 'report-canvas-'+i;
+          $('#chart-report'+i).append(canvas);
 
-        if (i % 2 == 1) {
+          var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
+          var final_chart = new Chart(chart_canvas, chart_settings);
 
-          // Título del gráfico
-          doc.setFontSize(16);
-          doc.setFontStyle("bold");
-          doc.text(title, 105, 20, null, null, 'center');
+          var chart = final_chart.toBase64Image();
 
-          // Gráfico
-          doc.addImage(chart, 'JPEG', 9, 30);
+          if (i % 2 == 1) {
 
-        } else {
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.setFontStyle("bold");
+            doc.text(title, 105, 20, null, null, 'center');
 
-          // Título del gráfico
-          doc.setFontSize(16);
-          doc.setFontStyle("bold");
-          doc.text(title, 105, 160, null, null, 'center');
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 30);
 
-          // Gráfico
-          doc.addImage(chart, 'JPEG', 9, 170);
+          } else {
 
-          // Agrega nueva página
-          doc.addPage('a4', 'portrait')
+            // Título del gráfico
+            doc.setFontSize(16);
+            doc.setFontStyle("bold");
+            doc.text(title, 105, 160, null, null, 'center');
 
-          // Pie de página
-          footer()
+            // Gráfico
+            doc.addImage(chart, 'JPEG', 9, 170);
 
-        } // Cierra else impar
-      } // Cierra for
+            // Agrega nueva página
+            doc.addPage('a4', 'portrait')
 
-      // Descarga el archivo PDF
-      doc.save("Informe_ExpedientesMunicipales.pdf");
+            // Pie de página
+            footer()
 
+          } // Cierra else impar
+        } // Cierra for
+
+        // Descarga el archivo PDF
+        doc.save("Informe_ExpedientesMunicipales.pdf");
+
+      }); // Cierra then
     } // Cierra success
   }) // Cierra ajax
 } // Cierra future_projects_report_pdf

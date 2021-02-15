@@ -1,0 +1,2 @@
+module RentFutureProjectsHelper
+end

@@ -1,0 +1,2 @@
+json.extract! rent_future_project, :id, :code, :address, :name, :role_number, :file_number, :file_date, :owner, :legal_agent, :architech, :floors, :undergrounds, :total_units, :total_parking, :total_commercials, :m2_approved, :m2_built, :m2_field, :t_ofi, :cadastral_date, :comments, :bimester, :year, :project_type_id, :future_project_type_id, :county_id, :created_at, :updated_at
+json.url rent_future_project_url(rent_future_project, format: :json)

@@ -1,0 +1,2 @@
+class Concerns::SelectionTypes
+end

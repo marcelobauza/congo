@@ -75,293 +75,367 @@ Congo.demography.action_dashboards = function(){
       url: '/demography/general.json',
       datatype: 'json',
       data: data,
+      beforeSend: function() {
+
+        // Deshabilita la interacción con el mapa
+        map.dragging.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        document.getElementById('map').style.cursor='default';
+
+        // Muestra el spinner
+        $("#report_spinner").show();
+
+        // Deshabilita los botones
+        $('.btn').addClass('disabled')
+        $('.close').prop('disabled', true);
+
+      },
       success: function(data) {
-        // Creamos el doc
-        var doc = new jsPDF();
 
-        doc.page = 1;
+        let build_image_map = new Promise((resolve, reject) => {
+          leafletImage(map, function(err, canvas) {
+            var img = document.createElement('img');
+            var dimensions = map.getSize();
+            img.width = dimensions.x;
+            img.height = dimensions.y;
+            img.src = canvas.toDataURL();
+            resolve(img);
+          });
+        });
 
-        // Pie de página
-        function footer() {
-        
+        build_image_map.then(function(img) {
 
-          doc.setFontSize(10);
-          doc.setFontStyle("bold");
-          doc.text('MILES DE PESOS', 10, 280, null, null, 'left');
-          doc.text('FUENTE: CENSO 2017 | ENCUESTA PRESUPUESTO FAMILIARES', 10, 285, null, null, 'left');
-          doc.text('2017 | ESTIMACIÓN GSE OCUC PUC ', 10, 290, null, null, 'left');
+          // Habilitar la interacción con el mapa
+          map.dragging.enable();
+          map.doubleClickZoom.enable();
+          map.scrollWheelZoom.enable();
+          document.getElementById('map').style.cursor='grab';
 
-          doc.text('p. ' + doc.page, 194, 290);
-          doc.page++;
-        };
+          // Oculta el spinner
+          $("#report_spinner").hide();
 
-        // Título
-        doc.setFontStyle("bold");
-        doc.setFontSize(22);
-        doc.text('Informe de Demografía y Gasto', 105, 20, null, null, 'center');
+          // Habilita los botones
+          $('.btn').removeClass('disabled')
+          $('.close').prop('disabled', false);
 
-        // Agregamos un página
-        doc.addPage('a4', 'portrait')
+          // Creamos el doc
+          var doc = new jsPDF();
 
-        // Pie de página
-        footer()
+          doc.page = 1;
 
-        // Separamos la información
-        for (var i = 2; i < data[0].length; i++) {
+          // Pie de página
+          function footer() {
 
-          var reg = data[0][i];
-          var title = reg['title'];
-          var series = reg['data']
-          var datasets = [];
-          var name = [];
-          var count = [];
 
-          // Extraemos los datos de las series
-          $.each(series, function(c, d) {
-            name.push(d['name'])
-            count.push(d['count'])
-          })
+            doc.setFontSize(10);
+            doc.setFontStyle("bold");
+            doc.text('MILES DE PESOS', 10, 280, null, null, 'left');
+            doc.text('FUENTE: CENSO 2017 | ENCUESTA PRESUPUESTO FAMILIARES', 10, 285, null, null, 'left');
+            doc.text('2017 | ESTIMACIÓN GSE OCUC PUC ', 10, 290, null, null, 'left');
 
-          // Guardamos "datasets" y "chart_type"
-          chart_type = 'pie';
-          datasets.push({
-            data: count,
-            backgroundColor: [
-              'rgb(39,174,96)',
-              'rgb(231,76,60)',
-              'rgb(211,84,0)',
-              'rgb(41,128,185)',
-              'rgb(241,196,15)',
-              'rgb(142,68,173)',
-              'rgb(192,57,43)',
-              'rgb(243,156,18)',
-            ],
-          })
-
-          chart_data = {
-            labels: name,
-            datasets: datasets
-          }
-
-          // Guardamos "options"
-          var chart_options = {
-            animation: false,
-            responsive: true,
-            title: {
-              display: false
-            },
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                fontColor: '#3d4046',
-                fontSize: 12,
-                usePointStyle: true,
-              }
-            },
-            plugins: {
-              datalabels: {
-                formatter: (value, ctx) => {
-                  // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
-                  let sum = 0;
-                  let dataArr = ctx.chart.data.datasets[0].data;
-                  dataArr.map(data => {
-                    sum += data;
-                  });
-                  let percentage = (value*100 / sum).toFixed(2);
-                  if (percentage > 4) {
-                    return percentage+'%';
-                  } else {
-                    return null;
-                  }
-                },
-                align: 'end',
-                anchor: 'center',
-                color: '#FFFFFF',
-                font: {
-                  weight: 'bold'
-                },
-                textStrokeColor: '#3d4046',
-                textStrokeWidth: 1,
-                textShadowColor: '#000000',
-                textShadowBlur: 3,
-              }
-            },
+            doc.text('p. ' + doc.page, 194, 290);
+            doc.page++;
           };
 
-          var chart_settings = {
-            type: chart_type,
-            data: chart_data,
-            options: chart_options
+          // Título
+          doc.setFontStyle("bold");
+          doc.setFontSize(22);
+          doc.text('Informe de Demografía y Gasto', 105, 20, null, null, 'center');
+
+          // Subtítulo
+          doc.setFontSize(16);
+          doc.text('Información General', 105, 35, null, null, 'center');
+
+          // Agrega mapa
+          img_height = (img.height * 190) / img.width
+          doc.addImage(img, 'JPEG', 9, 55, 190, img_height);
+
+          // Agrega leyenda
+          map_legends = Congo.demography.config.legends
+          rect_begin = img_height + 59
+          for (var i = 0; i < map_legends.length; i++) {
+            var leg = map_legends[i]
+            var name = leg['name']
+            var color = leg['color']
+
+            doc.setDrawColor(0)
+            doc.setFillColor(color)
+            doc.rect(20, rect_begin, 3, 3, 'F')
+
+            text_begin = rect_begin + 3
+            doc.setFontSize(10);
+            doc.setFontStyle("normal");
+            doc.text(name, 25, text_begin);
+
+            rect_begin = rect_begin + 6
           }
 
-          // Creamos y adjuntamos el canvas
-          var canvas = document.createElement('canvas');
-          canvas.id = 'report-canvas-'+i;
-          $('#chart-report'+i).append(canvas);
+          // Agregamos un página
+          doc.addPage('a4', 'portrait')
 
-          var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
-          var final_chart = new Chart(chart_canvas, chart_settings);
+          // Pie de página
+          footer()
 
-          var chart = final_chart.toBase64Image();
+          // Gráficos
+          for (var i = 2; i < data[0].length; i++) {
 
-          if (i % 2 == 1) {
+            var reg = data[0][i];
+            var title = reg['title'];
+            var series = reg['data']
+            var datasets = [];
+            var name = [];
+            var count = [];
 
-            // Título del gráfico
-            doc.setFontSize(16);
-            doc.setFontStyle("bold");
-            doc.text(title, 105, 150, null, null, 'center');
+            // Extraemos los datos de las series
+            $.each(series, function(c, d) {
+              name.push(d['name'])
+              count.push(d['count'])
+            })
 
-            // Gráfico
-            doc.addImage(chart, 'JPEG', 9, 160);
+            // Guardamos "datasets" y "chart_type"
+            chart_type = 'pie';
+            datasets.push({
+              data: count,
+              backgroundColor: [
+                'rgb(39,174,96)',
+                'rgb(231,76,60)',
+                'rgb(211,84,0)',
+                'rgb(41,128,185)',
+                'rgb(241,196,15)',
+                'rgb(142,68,173)',
+                'rgb(192,57,43)',
+                'rgb(243,156,18)',
+              ],
+            })
 
-            // Agrega nueva página
-            doc.addPage('a4', 'portrait')
+            chart_data = {
+              labels: name,
+              datasets: datasets
+            }
 
-            // Pie de página
-            footer()
+            // Guardamos "options"
+            var chart_options = {
+              animation: false,
+              responsive: true,
+              title: {
+                display: false
+              },
+              legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                  fontColor: '#3d4046',
+                  fontSize: 12,
+                  usePointStyle: true,
+                }
+              },
+              plugins: {
+                datalabels: {
+                  formatter: (value, ctx) => {
+                    // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                      sum += data;
+                    });
+                    let percentage = (value*100 / sum).toFixed(2);
+                    if (percentage > 4) {
+                      return percentage+'%';
+                    } else {
+                      return null;
+                    }
+                  },
+                  align: 'end',
+                  anchor: 'center',
+                  color: '#FFFFFF',
+                  font: {
+                    weight: 'bold'
+                  },
+                  textStrokeColor: '#3d4046',
+                  textStrokeWidth: 1,
+                  textShadowColor: '#000000',
+                  textShadowBlur: 3,
+                }
+              },
+            };
 
-          } else {
+            var chart_settings = {
+              type: chart_type,
+              data: chart_data,
+              options: chart_options
+            }
 
-            // Título del gráfico
-            doc.setFontSize(16);
-            doc.setFontStyle("bold");
-            doc.text(title, 105, 20, null, null, 'center');
+            // Creamos y adjuntamos el canvas
+            var canvas = document.createElement('canvas');
+            canvas.id = 'report-canvas-'+i;
+            $('#chart-report'+i).append(canvas);
 
-            // Gráfico
-            doc.addImage(chart, 'JPEG', 9, 30);
+            var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
+            var final_chart = new Chart(chart_canvas, chart_settings);
 
-          } // Cierra else impar
-        } // Cierra for
+            var chart = final_chart.toBase64Image();
 
-        doc.addPage('a4', 'portrait')
-        // Cantidad
-        doc.setFontSize(16);
-        doc.setFontStyle("bold");
-        doc.text('GASTO MENSUAL E INGRESO PROMEDIO', 10, 25, null, null, 'left');
-        doc.setFontSize(10);
-        doc.setFontStyle("normal");
-        gse = data[1];
-        sum_expenses = data[2][0];
-        houses = data[3][0];
-        incomes = data[4][0];
-        // Líneas Tabla
-        doc.line(10, 45, 200, 45);
-        doc.line(10, 55, 200, 55);
-        doc.line(10, 65, 200, 65);
-        doc.line(10, 75, 200, 75);
-        doc.line(10, 85, 200, 85);
-        doc.line(10, 95, 200, 95);
-        doc.line(10, 105, 200, 105);
-        doc.line(10, 115, 200, 115);
-        doc.line(10, 125, 200, 125);
-        doc.line(10, 135, 200, 135);
-        doc.line(10, 145, 200, 145);
-        doc.line(10, 155, 200, 155);
-        doc.line(10, 165, 200, 165);
-        doc.line(10, 175, 200, 175);
-        doc.line(10, 185, 200, 185);
-        doc.line(10, 195, 200, 195);
-        doc.line(10, 205, 200, 205);
-        doc.line(180, 45, 180, 205);
+            if (i % 2 == 1) {
 
-        // Columna Ítem
-        doc.setFontType('bold');
-        var spos = 18
-        var epos = 52
-        doc.text('ÍTEM', spos, epos, null, null, 'center');
-        spos = spos + 85
-        doc.text('ABC1', spos, epos, null, null, 'center');
-        spos = spos + 18
-        doc.text('C2', spos, epos, null, null, 'center');
-        spos = spos + 18
-        doc.text('C3', spos, epos, null, null, 'center');
-        spos = spos + 18
-        doc.text('D', spos, epos, null, null, 'center');
-        spos = spos + 18
-        doc.text('E', spos, epos, null, null, 'center');
-        spos = spos + 18
-        doc.text('TOTAL',spos, epos, null, null, 'center');
-        spos = 12
-        epos = 62
-        doc.setFontType('normal');
-        for (var i = 0, len = gse.length; i < len; i++) {
+              // Título del gráfico
+              doc.setFontSize(16);
+              doc.setFontStyle("bold");
+              doc.text(title, 105, 150, null, null, 'center');
 
-          doc.text(gse[i]['name'], spos, epos);
-          spos = spos + 90  
-          doc.text(gse[i]['abc1'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
-          spos = spos + 18  
-          doc.text(gse[i]['c2'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
-          spos = spos + 18  
-          doc.text(gse[i]['c3'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
-          spos = spos + 18  
-          doc.text(gse[i]['d'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
-          spos = spos + 18  
-          doc.text(gse[i]['e'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
-          spos = spos + 18 
-        doc.setFontType('bold');
-          doc.text(gse[i]['total_expenses'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
-        doc.setFontType('normal');
-          spos = 12 
+              // Gráfico
+              doc.addImage(chart, 'JPEG', 9, 160);
+
+              // Agrega nueva página
+              doc.addPage('a4', 'portrait')
+
+              // Pie de página
+              footer()
+
+            } else {
+
+              // Título del gráfico
+              doc.setFontSize(16);
+              doc.setFontStyle("bold");
+              doc.text(title, 105, 20, null, null, 'center');
+
+              // Gráfico
+              doc.addImage(chart, 'JPEG', 9, 30);
+
+            } // Cierra else impar
+          } // Cierra for
+
+          doc.addPage('a4', 'portrait')
+
+          // Cantidad
+          doc.setFontSize(16);
+          doc.setFontStyle("bold");
+          doc.text('GASTO MENSUAL E INGRESO PROMEDIO', 10, 25, null, null, 'left');
+          doc.setFontSize(10);
+          doc.setFontStyle("normal");
+
+          gse = data[1];
+          sum_expenses = data[2][0];
+          houses = data[3][0];
+          incomes = data[4][0];
+
+          // Líneas Tabla
+          doc.line(10, 45, 200, 45);
+          doc.line(10, 55, 200, 55);
+          doc.line(10, 65, 200, 65);
+          doc.line(10, 75, 200, 75);
+          doc.line(10, 85, 200, 85);
+          doc.line(10, 95, 200, 95);
+          doc.line(10, 105, 200, 105);
+          doc.line(10, 115, 200, 115);
+          doc.line(10, 125, 200, 125);
+          doc.line(10, 135, 200, 135);
+          doc.line(10, 145, 200, 145);
+          doc.line(10, 155, 200, 155);
+          doc.line(10, 165, 200, 165);
+          doc.line(10, 175, 200, 175);
+          doc.line(10, 185, 200, 185);
+          doc.line(10, 195, 200, 195);
+          doc.line(10, 205, 200, 205);
+          doc.line(180, 45, 180, 205);
+
+          // Columna Ítem
+          doc.setFontType('bold');
+          var spos = 18
+          var epos = 52
+          doc.text('ÍTEM', spos, epos, null, null, 'center');
+          spos = spos + 85
+          doc.text('ABC1', spos, epos, null, null, 'center');
+          spos = spos + 18
+          doc.text('C2', spos, epos, null, null, 'center');
+          spos = spos + 18
+          doc.text('C3', spos, epos, null, null, 'center');
+          spos = spos + 18
+          doc.text('D', spos, epos, null, null, 'center');
+          spos = spos + 18
+          doc.text('E', spos, epos, null, null, 'center');
+          spos = spos + 18
+          doc.text('TOTAL',spos, epos, null, null, 'center');
+          spos = 12
+          epos = 62
+          doc.setFontType('normal');
+
+          for (var i = 0, len = gse.length; i < len; i++) {
+            doc.text(gse[i]['name'], spos, epos);
+            spos = spos + 90
+            doc.text(gse[i]['abc1'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
+            spos = spos + 18
+            doc.text(gse[i]['c2'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
+            spos = spos + 18
+            doc.text(gse[i]['c3'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
+            spos = spos + 18
+            doc.text(gse[i]['d'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
+            spos = spos + 18
+            doc.text(gse[i]['e'].format(0,3,'.').toString(), spos, epos, null, null, 'right');
+            spos = spos + 18
+            doc.setFontType('bold');
+            doc.text(parseFloat(gse[i]['total_expenses']).format(0,3,'.').toString(), spos, epos, null, null, 'right');
+            doc.setFontType('normal');
+            spos = 12
+            epos = epos + 10
+          }
+
+          // Totales
+          spos = 18
           epos = epos + 10
-        }
+          doc.setFontType('bold');
+          doc.text('Totales', spos, 182, null, null, 'center');
+          spos = spos + 85
+          doc.text(parseFloat(sum_expenses['abc1']).format(0,3,'.').toString(), spos, 182, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(sum_expenses['c2']).format(0,3,'.').toString(), spos, 182, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(sum_expenses['c3']).format(0,3,'.').toString(), spos, 182, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(sum_expenses['d']).format(0,3,'.').toString(), spos, 182, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(sum_expenses['e']).format(0,3,'.').toString(), spos, 182, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(sum_expenses['total_sum_expenses']).format(0,3,'.').toString(), spos, 182, null, null, 'right');
 
-        // Totales
-        //
-        spos = 18 
-        epos = epos + 10
-        doc.setFontType('bold');
-        doc.text('Totales', spos, 182, null, null, 'center');
-        spos = spos + 85 
-        doc.text(sum_expenses['abc1'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
-        spos = spos + 18 
-        doc.text(sum_expenses['c2'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
-        spos = spos + 18 
-        doc.text(sum_expenses['c3'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
-        spos = spos + 18 
-        doc.text(sum_expenses['d'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
-        spos = spos + 18 
-        doc.text(sum_expenses['e'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
-        spos = spos + 18 
-        doc.text(sum_expenses['total_sum_expenses'].format(0,3,'.').toString(), spos, 182, null, null, 'right');
+          spos = 18
+          epos = epos + 10
+          // Hogares
+          doc.text('Hogares', spos, 192, null, null, 'center');
+          spos = spos + 85
+          doc.text(parseFloat(houses['total_house_abc1']).format(0,3,'.').toString(), spos, 192, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(houses['total_house_c2']).format(0,3,'.').toString(), spos, 192, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(houses['total_house_c3']).format(0,3,'.').toString(), spos, 192, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(houses['total_house_d']).format(0,3,'.').toString(), spos, 192, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(houses['total_house_e']).format(0,3,'.').toString(), spos, 192, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(houses['total_houses']).format(0,3,'.').toString(), spos, 192, null, null, 'right');
+          spos = 18
+          epos = epos + 10
+          // Ingresos
+          doc.text('Ingresos', spos, 202, null, null, 'center');
+          spos = spos + 85
+          doc.text(parseFloat(incomes['abc1']).format(0,3,'.').toString(), spos, 202, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(incomes['c2']).format(0,3,'.').toString(), spos, 202, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(incomes['c3']).format(0,3,'.').toString(), spos, 202, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(incomes['d']).format(0,3,'.').toString(), spos, 202, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(incomes['e']).format(0,3,'.').toString(), spos, 202, null, null, 'right');
+          spos = spos + 18
+          doc.text(parseFloat(incomes['weighted_average']).format(0,3,'.').toString(), spos, 202, null, null, 'right');
 
-        spos = 18 
-        epos = epos + 10
-        // Hogares
-        doc.text('Hogares', spos, 192, null, null, 'center');
-        spos = spos + 85 
-        doc.text(houses['total_house_abc1'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
-        spos = spos + 18 
-        doc.text(houses['total_house_c2'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
-        spos = spos + 18 
-        doc.text(houses['total_house_c3'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
-        spos = spos + 18 
-        doc.text(houses['total_house_d'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
-        spos = spos + 18 
-        doc.text(houses['total_house_e'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
-        spos = spos + 18 
-        doc.text(houses['total_houses'].format(0,3,'.').toString(), spos, 192, null, null, 'right');
-        spos = 18
-        epos = epos + 10
-        // Ingresos
-        doc.text('Ingresos', spos, 202, null, null, 'center');
-        spos = spos + 85
-        doc.text(incomes['abc1'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
-        spos = spos + 18 
-        doc.text(incomes['c2'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
-        spos = spos + 18 
-        doc.text(incomes['c3'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
-        spos = spos + 18 
-        doc.text(incomes['d'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
-        spos = spos + 18 
-        doc.text(incomes['e'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
-        spos = spos + 18 
-        doc.text(incomes['weighted_average'].format(0,3,'.').toString(), spos, 202, null, null, 'right');
-        
-        footer()
-        // Descarga el archivo PDF
-        doc.save("Informe_Demografía&Gastos.pdf");
+          footer()
+          // Descarga el archivo PDF
+          doc.save("Informe_Demografía&Gastos.pdf");
 
+        }); // Cierra then
       } // Cierra success
     }) // Cierra ajax
   } // Cierra demography_report_pdf
