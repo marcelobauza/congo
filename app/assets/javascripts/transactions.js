@@ -421,6 +421,30 @@ function itemClick(e, info) {
           'text': info.role
         }),
       ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Rol 1:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.role_1
+        }),
+      ),
+      $('<div>', {
+        'class': 'row'
+      }).append(
+        $('<div>', {
+          'class': 'col-md-6 text-right',
+          'text': 'Rol 2:'
+        }),
+        $('<div>', {
+          'class': 'col-md-6',
+          'text': info.role_2
+        }),
+      ),
     )
   )
 
