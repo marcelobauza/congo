@@ -45,7 +45,7 @@
             <td><%=h user.email %></td>
             <td><%=h user.company %></td>
             <td><%=h user.disabled  ? t(:YES) : t(:NO) %></td>
-            <td><%=h user.role_id unless user.role_id.nil? %></td>
+            <td><%=h user.role.name unless user.role_id.nil? %></td>
             <td><%=h download_by_user user.id, :transactions %></td>
             <td><%=h accumulated_download_by_user user.id, :transactions %></td>
             <td><%=h download_by_user user.id, :projects %></td>
