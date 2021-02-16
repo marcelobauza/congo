@@ -7,6 +7,7 @@ module ImportProcess::ParseFile
       import_process = ImportProcess.find import.id
       import_logger = Ibiza::ImportLogger.new(import_process)
       import_process.update_attributes status: 'working'
+      @user_id = import_process.user_id
 
       ActiveRecord::Base.transaction do
         if load_type == 'Building Regulation' || load_type == 'Lot' || load_type == 'Neighborhood'
@@ -174,7 +175,7 @@ module ImportProcess::ParseFile
             tran    = Transaction.where(number: number, bimester: bimester, year: year, county_id: county.id).first_or_initialize
             was_new = tran.new_record?
 
-            if tran.save_transaction_data(geom, data, county.id, user.id)
+            if tran.save_transaction_data(geom, data, county.id, @user_id)
               if was_new
                 import_logger.inserted +=1
               else
