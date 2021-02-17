@@ -43,7 +43,7 @@ module RentIndicators::Summary
         avg_cbr         = transactions.average(:calculated_value).to_i
         avg_price_uf    = bots.average(:price_uf).to_i
         avg_price_uf_m2 = average_price_uf_m2( bots.average(:price_uf).to_f, avg_u_rent.to_f).to_f
-        gross_profitability = (((12 * avg_price_uf) - (total_vacancy * 12 * avg_price_uf)) / avg_cbr)* 100).to_f
+        gross_profitability = ((((12 * avg_price_uf) - (total_vacancy * 12 * avg_price_uf)) / avg_cbr)* 100).to_f
 
         data.push("name": "Barrio", "count": neighborhood.name)
         data.push("name": "Total Viviendas", "count": total_households )
