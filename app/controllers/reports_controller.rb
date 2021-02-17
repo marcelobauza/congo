@@ -88,6 +88,8 @@ class ReportsController < ApplicationController
       result.push([(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), value_1, value_2, value_3])
     end
     @ubc = result
+
+    result =[]
     @built_bimester = FutureProject.future_projects_by_period("SUM", "m2_built_bimester", filters)
     result.push(["Bimestre", "Anteproyecto", "Permiso edificacion", "Recepcion Municipal"])
     @built_bimester.last.each do |item|
