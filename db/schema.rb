@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 2021_01_27_234859) do
   enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "postgis"
-  enable_extension "postgis_topology"
 
   create_table "agencies", force: :cascade do |t|
     t.string "name"
@@ -2602,10 +2601,6 @@ ActiveRecord::Schema.define(version: 2021_01_27_234859) do
         ELSE (total_units - stock_units) / m::numeric END) as vhmu;
         END;
       $function$
-  SQL
-
-  create_trigger :layer_integrity_checks, sql_definition: <<-SQL
-      CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE FUNCTION topology.layertrigger()
   SQL
 
   create_view "building_regulations_info", sql_definition: <<-SQL
