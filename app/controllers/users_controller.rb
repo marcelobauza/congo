@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   def update
     @errorMessage = []
 
+
     respond_to do |format|
      if @user.update(user_params)
       bypass_sign_in(@user)
@@ -38,6 +39,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:complete_name, :password, :password_confirmation, :name, :email, :company, :city)
+      params.require(:user).permit(:complete_name, :password, :password_confirmation, :name, :city)
     end
 end
