@@ -128,13 +128,13 @@ module RentIndicators::Summary
         periods.each do |p|
           bots = bots_offer(neighborhood, p[:period], p[:year]).average(:surface)
 
-          data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.to_f )
+          data.push("name": "#{p[:period]}/#{p[:year]}", "count": ("%.1f" % bots).to_f )
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
           ).where(bimester: p[:period], year: p[:year]).average(:total_surface_building)
-          data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": transactions.to_f)
+          data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": ("%.1f" % transactions).to_f)
         end
 
         series = [{
@@ -154,7 +154,7 @@ module RentIndicators::Summary
         periods.each do |p|
           bots = bots_offer(neighborhood, p[:period], p[:year]).average(:price_uf)
 
-          data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.to_f )
+          data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.to_i )
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
@@ -162,7 +162,7 @@ module RentIndicators::Summary
           ).
           where(bimester: p[:period], year: p[:year]).average(:calculated_value)
 
-          data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": transactions.to_f)
+          data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": transactions.to_i)
         end
 
         series = [{
@@ -182,7 +182,7 @@ module RentIndicators::Summary
         periods.each do |p|
           bots = bots_offer(neighborhood, p[:period], p[:year]).select('avg(price_uf) / avg(surface) as avg_uf_m2').take
 
-          data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.avg_uf_m2.to_f )
+          data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.avg_uf_m2.to_f)
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
@@ -210,15 +210,39 @@ module RentIndicators::Summary
       def relation_price_by_vacancy neighborhood, bimester,year
         periods = Period.get_periods(bimester, year, 6, 1).reverse
         data = []
+        data_profitability = []
+
+        transactions = RentTransaction.where(
+          "ST_CONTAINS(
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+        ).where(conditions(bimester, year))
+
+
+        bots = bots_offer(neighborhood, bimester, year)
+
+        avg_price_uf    = bots.average(:price_uf).to_i
+        avg_cbr         = transactions.average(:calculated_value).to_i
+
 
         periods.each do |p|
           result = total_vacancy(neighborhood, p[:period], p[:year])
           data.push("name": "#{p[:period]}/#{p[:year]}", "count": result.to_f )
+
+
+          gross_profitability = (((((12 * avg_price_uf) - (result * 12 * avg_price_uf)) / avg_cbr)) * 100).to_i
+          data_profitability.push("name": "#{p[:period]}/#{p[:year]}", "count": gross_profitability)
         end
-        series = [{
-          "label": "Arriendo/Venta",
-          "data": data
-        }]
+
+        series = [
+          {
+            "label": "Vacancia",
+            "data": data
+          },
+          {
+            "label": "Arriendo/Venta",
+            "data": data_profitability
+          },
+        ]
       end
 
       def conditions bimester, year
