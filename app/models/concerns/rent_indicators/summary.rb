@@ -128,13 +128,14 @@ module RentIndicators::Summary
         periods.each do |p|
           bots = bots_offer(neighborhood, p[:period], p[:year]).average(:surface)
 
-          data.push("name": "#{p[:period]}/#{p[:year]}", "count": ("%.1f" % bots).to_f )
+          data.push("name": "#{p[:period]}/#{p[:year]}", "count": ("%.1f" % bots.to_f).to_f )
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
           ).where(bimester: p[:period], year: p[:year]).average(:total_surface_building)
-          data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": ("%.1f" % transactions).to_f)
+
+          data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": ("%.1f" % transactions.to_f).to_f)
         end
 
         series = [{
