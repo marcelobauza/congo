@@ -21,7 +21,8 @@ module GeometryOptions
         @conditions = marker_condition filters
       when 'polygon'
         @conditions = polygon_condition filters
-      when 'list'
+      else
+        @conditions = marker_condition filters
       end
       @conditions
     end
