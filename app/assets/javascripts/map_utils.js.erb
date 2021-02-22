@@ -773,11 +773,18 @@ Congo.map_utils = function(){
           zIndex: 1
         }
         );
-        map.fitBounds(geojson.getBounds());
-        groupLayer.addLayer(geojson);
-        layerControl.addOverlay(groupLayer, "Datos");
-        groupLayer.addTo(map);
-        Congo.dashboards.config.groupLayer = groupLayer;
+        if (geojson.getLayers().length > 0 ){
+          map.fitBounds(geojson.getBounds());
+          groupLayer.addLayer(geojson);
+          layerControl.addOverlay(groupLayer, "Datos");
+          groupLayer.addTo(map);
+          Congo.dashboards.config.groupLayer = groupLayer;
+        }else{
+          let alert = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">No se encontraron datos para esta selección.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
+          $('#alerts').append(alert);
+
+          setTimeout(()=>{ $('#alerts').remove(); }, 5000)
+        }
       }
     });
 
