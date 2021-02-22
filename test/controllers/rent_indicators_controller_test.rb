@@ -2,8 +2,9 @@ require 'test_helper'
 
 class RentIndicatorsControllerTest < ActionDispatch::IntegrationTest
   test "should get dashboards" do
-    get rent_indicators_dashboards_url
+    log_in
+
+    get rent_indicators_dashboards_path
     assert_response :success
   end
-
 end

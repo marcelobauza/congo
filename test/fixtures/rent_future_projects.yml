@@ -1,0 +1,26 @@
+project:
+  code: 13134
+  address: Cordon del plata 157
+  name: Barrio nuevo
+  role_number: 1334-1
+  file_number:
+  file_date: 2021-01-27
+  owner: Propietarios
+  legal_agent: legal
+  architech: arquitecto
+  floors: 1
+  undergrounds: 1
+  total_units: 10
+  total_parking: 10
+  total_commercials: 10
+  m2_approved: 50.00
+  m2_built: 50.00
+  m2_field: 50.00
+  t_ofi: 1
+  cadastral_date: 2021-01-27
+  comments: Comentarios
+  bimester: 1
+  year: 1
+  project_type_id: 1
+  future_project_type_id: 1
+  county_id: 1

@@ -1,7 +1,7 @@
 department_one:
   publish: 2021-01-05
   code: code01
-  type: Usado
+  property_status: Usado
   modality: Arriendo
   properties: Departamento
   region: Metropolitana
@@ -14,7 +14,7 @@ department_one:
   floor: 1
   bedroom: 1
   bathroom: 1
-  parkink_lo: 1
+  parking_lo: 1
   cellar: 1
   surface: 60.5
   surface_t: 108.5

@@ -1,7 +1,5 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+euro:
+  name: EURO
 
-one:
-  name: MyString
-
-two:
-  name: MyString
+nova:
+  name: NOVA

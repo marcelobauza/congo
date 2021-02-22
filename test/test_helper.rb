@@ -9,13 +9,10 @@ class ActiveSupport::TestCase
   include Devise::Test::IntegrationHelpers
   include Warden::Test::Helpers
 
-  def log_in( user)
-    if integration_test?
-      login_as(user, :scope => :user)
-    else
-      sign_in(user)
-    end
+  def log_in user: users(:user_admin)
+    sign_in(user)
   end
+
   def assert_error model, attribute, type, options = {}
     error = model.errors.generate_message attribute, type, options
 
