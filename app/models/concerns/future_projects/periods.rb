@@ -14,8 +14,8 @@ module FutureProjects::Periods
     def method_selections filters
       if !filters[:county_id].nil?
         where(WhereBuilder.build_in_condition("county_id",filters[:county_id]))
-      elsif !filters[:wkt].nil?
-        where(WhereBuilder.build_within_condition(filters[:wkt]))
+      elsif (wkt = JSON.parse(filters[:wkt]).present?)
+        where(WhereBuilder.build_within_condition(wkt))
       elsif !filters[:centerpt].empty? && !filters[:radius].empty?
         where(WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius]))
       else
