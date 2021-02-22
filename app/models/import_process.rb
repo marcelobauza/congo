@@ -11,6 +11,6 @@ class ImportProcess < ApplicationRecord
   after_create_commit :import_job
 
   def import_job
-    ImportProcessJob.perform_later(self)
+    ImportProcessJob.perform_now(self)
   end
 end

@@ -91,6 +91,9 @@ module ImportProcess::ParseFile
           factory = RGeo::Geos.factory(srid: 4326)
           neighborhood.the_geom = factory.parse_wkt(a.geometry.as_text)
           neighborhood.name = a.properties['name']
+          neighborhood.geocode = a.properties['concat_geo']
+          neighborhood.total_houses = a.properties['sum_casas']
+          neighborhood.total_departments = a.properties['sum_dptos']
 
           neighborhood.save!
 
