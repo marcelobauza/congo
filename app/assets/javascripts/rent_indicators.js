@@ -757,6 +757,7 @@ Congo.rent_indicators.action_dashboards = function() {
                     label: label,
                     data: count,
                     fill: false,
+                    backgroundColor: serie_colour,
                     borderColor: serie_colour,
                     borderWidth: 4,
                     pointRadius: 1,
@@ -775,6 +776,7 @@ Congo.rent_indicators.action_dashboards = function() {
                     yAxisID: position_y_axis,
                     fill: false,
                     borderColor: serie_colour,
+                    backgroundColor: serie_colour,
                     borderWidth: 4,
                     pointRadius: 1,
                     lineTension: 0,
@@ -1030,7 +1032,13 @@ Congo.rent_indicators.action_dashboards = function() {
                     text: title
                   },
                   legend: {
-                    display: false,
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      fontColor: '#e8ebef',
+                      boxWidth: 12,
+                      padding: 8,
+                    }
                   },
                   plugins: {
                     datalabels: {
