@@ -802,8 +802,11 @@ Congo.map_utils = function(){
 
   styleGeojson = function(feature){
     if(Congo.dashboards.config.widget == 'col_ica_vacancy'){
-      let vacancy = parseFloat(feature.properties.vacancy);
 
+      Congo.rent_indicators.config.selection_type = 'Vacancia'
+      $('#layer-name').text('Indicadores Clave de Arriendo - Vacancia');
+
+      let vacancy = parseFloat(feature.properties.vacancy);
       switch (true){
         case (vacancy < 4):
           return {"fillColor":  "#8CC63F", "color": "#8CC63F", "fillOpacity": "0.6", "weight": 1, "color": "#888" };
@@ -819,8 +822,11 @@ Congo.map_utils = function(){
     }
 
     if(Congo.dashboards.config.widget == 'col_ica_price'){
-      let price = parseFloat(feature.properties.price);
 
+      Congo.rent_indicators.config.selection_type = 'Precio'
+      $('#layer-name').text('Indicadores Clave de Arriendo - Precio');
+
+      let price = parseFloat(feature.properties.price);
       switch (true){
         case (price < 400000):
           return {"fillColor":  "#8CC63F", "color": "#8CC63F", "fillOpacity": "0.6", "weight": 1, "color": "#888"};

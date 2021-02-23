@@ -15,15 +15,18 @@ Congo.rent_indicators.config = {
   from_uf_value: [],
   to_uf_value: [],
   project_agency_ids: [],
-  legends: []
+  legends: [],
+  selection_type: ''
 }
 
 var ica_pdf_ajax;
 
 function rent_indicators_report_pdf() {
 
+  selection_type = Congo.rent_indicators.config.selection_type
   to_year = Congo.dashboards.config.year;
   to_bimester = Congo.dashboards.config.bimester;
+  map_legends = Congo.rent_indicators.config.legends
   nId = Congo.rent_indicators.config.nId;
 
   var data = {
@@ -127,12 +130,16 @@ function rent_indicators_report_pdf() {
 
         // Agrega mapa
         x_pos += 5
+        doc.setFontSize(12);
+        doc.setFontStyle("bold");
+        doc.text(20, x_pos, selection_type)
+
+        x_pos += 5
         img_height = (img.height * 190) / img.width
         doc.addImage(img, 'JPEG', 9, x_pos, 190, img_height);
 
         // Agrega leyenda
-        rect_begin = x_pos + img_height + 10
-        map_legends = Congo.rent_indicators.config.legends
+        rect_begin = x_pos + img_height + 5
         for (var i = 0; i < map_legends.length; i++) {
           var leg = map_legends[i]
           var name = leg['name']
@@ -147,7 +154,7 @@ function rent_indicators_report_pdf() {
           doc.setFontStyle("normal");
           doc.text(name, 25, text_begin);
 
-          rect_begin = rect_begin + 6
+          rect_begin += 6
         }
 
         // // Validamos si hay algún filtro aplicado
@@ -526,9 +533,6 @@ Congo.rent_indicators.action_dashboards = function() {
     Congo.dashboards.action_index.add_county_filter_item()
 
     $("#spinner").hide();
-
-    // Establece el nombre de la capa en el navbar
-    $('#layer-name').text('Indicadores Clave de Arriendo');
 
     // Mostramos los iconos de Útiles correspondientes
     $("#boost").hide();
