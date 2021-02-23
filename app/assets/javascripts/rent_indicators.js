@@ -110,14 +110,29 @@ function rent_indicators_report_pdf() {
         doc.setFontSize(16);
         doc.text('Información General', 105, 35, null, null, 'center');
 
+        // Agrega resumen
+        var summary = data[0]['data']
+
+        doc.setFontSize(12);
+        doc.text(20, 45, 'Resumen')
+
+        doc.setFontSize(10);
+        doc.setFontStyle("normal");
+        var x_pos = 55
+        for (var i = 0; i < summary.length; i++) {
+          var item = summary[i]
+          doc.text(20, x_pos, item['name'] + ': ' + item['count'])
+          x_pos += 5
+        }
+
         // Agrega mapa
+        x_pos += 5
         img_height = (img.height * 190) / img.width
-        doc.addImage(img, 'JPEG', 9, 55, 190, img_height);
+        doc.addImage(img, 'JPEG', 9, x_pos, 190, img_height);
 
         // Agrega leyenda
+        rect_begin = x_pos + img_height + 10
         map_legends = Congo.rent_indicators.config.legends
-        console.log(map_legends);
-        rect_begin = img_height + 59
         for (var i = 0; i < map_legends.length; i++) {
           var leg = map_legends[i]
           var name = leg['name']
