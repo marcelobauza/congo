@@ -25,12 +25,12 @@ module RentIndicators::Summary
         periods = Period.get_periods(bimester, year, 6, 1).reverse
         projects = RentProject.where(
           "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where(bimester: bimester, year: year)
 
         transactions = RentTransaction.where(
           "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where(conditions(bimester, year))
 
         bots = bots_offer(neighborhood, bimester, year)
@@ -39,27 +39,29 @@ module RentIndicators::Summary
         total_vacancy   = total_vacancy(neighborhood, bimester, year)
         total_households = neighborhood.total_houses + neighborhood.total_departments
         avg_u_rent      = bots.average(:surface).to_f
+        avg_t_rent      = bots.average(:surface_t).to_f
         avg_u_sale      = transactions.average(:total_surface_building).to_f
         avg_cbr         = transactions.average(:calculated_value).to_i
         avg_price_uf    = bots.average(:price_uf).to_i
         avg_price_uf_m2 = average_price_uf_m2( bots.average(:price_uf).to_f, avg_u_rent.to_f).to_f
-        gross_profitability = ((((12 * avg_price_uf) - (total_vacancy * 12 * avg_price_uf)) / avg_cbr)* 100).to_f
+        gross_profitability = ((((12 * avg_price_uf) - (total_vacancy * 12 * avg_price_uf)) / avg_cbr.to_i) * 100).to_f
+        pxq = ((avg_price_uf * ((total_households * neighborhood.tenure) - rent_offer)) / 1000).to_f
 
         data.push("name": "Barrio", "count": neighborhood.name)
         data.push("name": "Total Viviendas", "count": total_households )
         data.push("name": "Total Departamentos", "count": neighborhood.total_departments)
         data.push("name": "Tenencia Arriedo", "count": total_households * neighborhood.tenure)
-        data.push("name": "Porcentaje de Arriedo", "count": neighborhood.tenure)
+        data.push("name": "Porcentaje de Arriedo", "count": "%.1f" % (neighborhood.tenure * 100).to_f)
         data.push("name": "Oferta de Arriendo" , "count": rent_offer.to_i )
         data.push("name": "Tasa de Vacancia", "count": total_vacancy)
         data.push("name": "Rentabilidad Bruta Anual", "count": ("%.1f" % gross_profitability).to_f)
         data.push("name": "Superficie Útil Oferta Arriendo", "count": ("%.1f" % avg_u_rent).to_f)
         data.push("name": "Superficie Útil Compraventas ", "count": ("%.1f" % avg_u_sale).to_f)
-        data.push("name": "Superficie Terraza Oferta Arriendo", "count": 4)
+        data.push("name": "Superficie Terraza Oferta Arriendo", "count": ("%.1f" % (avg_t_rent - avg_u_rent).to_f))
         data.push("name": "Precio Compraventas | UF", "count": avg_cbr.to_i)
         data.push("name": "Precio Oferta Arriendo | UF mensual", "count":("%.1f" % avg_price_uf).to_f)
         data.push("name": "Precio Oferta Arriendo | UFm2 mensual", "count":("%.2f" % avg_price_uf_m2).to_f)
-        data.push("name": "PxQ Mensual | UF miles", "count": 4)
+        data.push("name": "PxQ Mensual | UF miles", "count": pxq)
 
         data
       end
@@ -67,17 +69,17 @@ module RentIndicators::Summary
       def bots_offer neighborhood, bimester, year
         Bot.where(
           "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where(bimester: bimester, year: year, properties: 'Departamento')
       end
 
       def total_vacancy neighborhood, bimester, year
         future_projects = RentFutureProject.where(
           "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where('year >= ?', 2017).sum(:total_units)
 
-        rent_department = (neighborhood.total_departments.to_i + future_projects.to_i) * neighborhood.tenure
+        rent_department = (neighborhood.total_departments.to_i + future_projects.to_i) * neighborhood.tenure.to_f
         bots            = bots_offer(neighborhood, bimester, year)
         rent_offer      = (bots.count / 0.9)
 
@@ -93,7 +95,7 @@ module RentIndicators::Summary
       def distribution_by_mix_types neighborhood, bimester, year
         projects = RentProject.where(
           "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where(bimester: bimester, year: year)
 
         mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}|#{s.bathroom}"}
@@ -132,7 +134,7 @@ module RentIndicators::Summary
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom,4326))"
           ).where(bimester: p[:period], year: p[:year]).average(:total_surface_building)
 
           data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": ("%.1f" % transactions.to_f).to_f)
@@ -159,7 +161,7 @@ module RentIndicators::Summary
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
           ).
           where(bimester: p[:period], year: p[:year]).average(:calculated_value)
 
@@ -187,15 +189,16 @@ module RentIndicators::Summary
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
           ).
           where(
             bimester: p[:period], year: p[:year]
-          ).select(
-            'avg(calculated_value) / avg(total_surface_building) as avg_uf_m2'
-          ).take
+          )
 
-          data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": transactions.avg_uf_m2.to_f)
+          avg_t_surface_building = transactions.average(:total_surface_building).to_f
+          t_avg_uf_m2            =  avg_t_surface_building > 0 ? (transactions.average(:calculated_value) / avg_t_surface_building).to_f : 0
+
+         avg_uf_m2 = data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": t_avg_uf_m2.to_f)
         end
 
         series = [{
@@ -215,7 +218,7 @@ module RentIndicators::Summary
 
         transactions = RentTransaction.where(
           "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}',4326), the_geom)"
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where(conditions(bimester, year))
 
 
@@ -230,7 +233,7 @@ module RentIndicators::Summary
           data.push("name": "#{p[:period]}/#{p[:year]}", "count": result.to_f )
 
 
-          gross_profitability = (((((12 * avg_price_uf) - (result * 12 * avg_price_uf)) / avg_cbr)) * 100).to_i
+          gross_profitability = (((((12 * avg_price_uf) - (result * 12 * avg_price_uf)) / avg_cbr.to_i)) * 100).to_i
           data_profitability.push("name": "#{p[:period]}/#{p[:year]}", "count": gross_profitability)
         end
 
