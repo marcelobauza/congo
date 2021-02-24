@@ -21,6 +21,16 @@ Congo.rent_indicators.config = {
 
 var ica_pdf_ajax;
 
+function containsObject(obj, list) {
+  var i;
+  for (i = 0; i < list.length; i++) {
+    if (list[i].label == obj.label) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function rent_indicators_report_pdf() {
 
   selection_type = Congo.rent_indicators.config.selection_type
@@ -205,7 +215,6 @@ function rent_indicators_report_pdf() {
 
               switch (label) {
                 case 'Arriendo':
-                case 'Arriendo':
                   serie_colour = '#ff0000'
                   break;
                 case 'Promedio':
@@ -249,6 +258,8 @@ function rent_indicators_report_pdf() {
                   case '4+':
                     colour = '#f14124'
                     break;
+                  default:
+                    colour = "#" + ((1<<24)*Math.random() | 0).toString(16)
                 }
 
                 name_colour.push(colour)
@@ -262,6 +273,7 @@ function rent_indicators_report_pdf() {
               datasets.push({
                 label: label,
                 data: count,
+                labels: name,
                 id: id,
                 backgroundColor: name_colour,
               })
@@ -316,8 +328,24 @@ function rent_indicators_report_pdf() {
               title: {
                 display: false
               },
+              legendCallback: function(chart) {
+                var text = [];
+                var legs = [];
+                for (var j = 0; j < chart.data.datasets.length; j++) {
+                  for (var i = 0; i < chart.data.datasets[j].data.length; i++) {
+                    var newd = {
+                      label: chart.data.datasets[j].labels[i],
+                      color: chart.data.datasets[j].backgroundColor[i]
+                    };
+                    if (!containsObject(newd, legs)) {
+                      legs.push(newd);
+                    }
+                  }
+                }
+                return legs;
+              },
               legend: {
-                display: true,
+                display: false,
                 position: 'bottom',
                 labels: {
                   fontColor: '#3d4046',
@@ -477,6 +505,26 @@ function rent_indicators_report_pdf() {
 
             // Gráfico
             doc.addImage(chart, 'JPEG', 9, 30);
+
+            if (title == 'Distribución Programas') {
+              var leyendas_dona = final_chart.generateLegend();
+              console.log(leyendas_dona);
+              var rect_x_pos = 60
+              var text_x_pos = 65
+              for (var a = 0; a < leyendas_dona.length; a++) {
+                var leg = leyendas_dona[a]
+                var label = leg['label']
+                var color = leg['color']
+                doc.setFontSize(10);
+                doc.setFontStyle("normal");
+                doc.text(label, text_x_pos, 133);
+                doc.setDrawColor(0)
+                doc.setFillColor(color)
+                doc.rect(rect_x_pos, 130, 3, 3, 'F')
+                rect_x_pos += 12
+                text_x_pos += 12
+              }
+            }
 
           } else {
 
@@ -680,7 +728,6 @@ Congo.rent_indicators.action_dashboards = function() {
 
                   switch (label) {
                     case 'Arriendo':
-                    case 'Arriendo':
                       serie_colour = '#ff0000'
                       break;
                     case 'Promedio':
@@ -732,6 +779,8 @@ Congo.rent_indicators.action_dashboards = function() {
                       case '4+':
                         colour = '#f14124'
                         break;
+                      default:
+                        colour = "#" + ((1<<24)*Math.random() | 0).toString(16)
                     }
 
                     name_colour.push(colour)
