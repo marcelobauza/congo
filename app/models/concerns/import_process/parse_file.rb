@@ -94,6 +94,7 @@ module ImportProcess::ParseFile
           neighborhood.geocode = a.properties['concat_geo']
           neighborhood.total_houses = a.properties['sum_casas']
           neighborhood.total_departments = a.properties['sum_dptos']
+          neighborhood.tenure = a.properties['tenencia']
 
           neighborhood.save!
 
