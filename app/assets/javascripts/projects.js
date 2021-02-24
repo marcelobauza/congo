@@ -1444,6 +1444,7 @@ Congo.projects.action_dashboards = function(){
           $("#type_point").show();
           $("#poly_build").hide();
           $("#vor_dem").hide();
+          $("#col-ica").hide();
 
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").show();

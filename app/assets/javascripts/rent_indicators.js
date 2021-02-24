@@ -539,6 +539,7 @@ Congo.rent_indicators.action_dashboards = function() {
     $("#prop-prv").hide();
     $("#prop-cbr").hide();
     $("#prop-em").hide();
+    $("#col-ica").show();
 
     // Mostramos el icono de Heatmap correspondiente
     $("#heat-prv").hide();
