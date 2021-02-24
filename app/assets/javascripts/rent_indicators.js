@@ -216,7 +216,7 @@ function rent_indicators_report_pdf() {
 
               switch (label) {
                 case 'Arriendo':
-                case 'Arriendo/Venta':
+                case 'Arriendo':
                   serie_colour = '#ff0000'
                   break;
                 case 'Promedio':
@@ -700,7 +700,7 @@ Congo.rent_indicators.action_dashboards = function() {
 
                   switch (label) {
                     case 'Arriendo':
-                    case 'Arriendo/Venta':
+                    case 'Arriendo':
                       serie_colour = '#ff0000'
                       break;
                     case 'Promedio':

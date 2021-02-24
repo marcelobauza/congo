@@ -239,12 +239,12 @@ module RentIndicators::Summary
 
         series = [
           {
-            "label": "Vacancia",
-            "data": data
+            "label": "Arriendo",
+            "data": data_profitability
           },
           {
-            "label": "Arriendo/Venta",
-            "data": data_profitability
+            "label": "Vacancia",
+            "data": data
           },
         ]
       end
