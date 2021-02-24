@@ -45,12 +45,12 @@ module RentIndicators::Summary
         avg_price_uf    = bots.average(:price_uf).to_i
         avg_price_uf_m2 = average_price_uf_m2( bots.average(:price_uf).to_f, avg_u_rent.to_f).to_f
         gross_profitability = ((((12 * avg_price_uf) - (total_vacancy * 12 * avg_price_uf)) / avg_cbr.to_i) * 100).to_f
-        pxq = ((avg_price_uf * ((total_departments * neighborhood.tenure) - rent_offer)) / 1000).to_f
+        pxq = ((avg_price_uf * ((neighborhood.total_departments * neighborhood.tenure) - rent_offer)) / 1000).to_f
 
         data.push("name": "Barrio", "count": neighborhood.name)
         data.push("name": "Total Viviendas", "count": total_households )
         data.push("name": "Total Departamentos", "count": neighborhood.total_departments)
-        data.push("name": "Tenencia Arriendo", "count": "%1.f" % (total_departments * neighborhood.tenure).to_f)
+        data.push("name": "Tenencia Arriendo", "count": "%1.f" % (neighborhood.total_departments * neighborhood.tenure).to_f)
         data.push("name": "Porcentaje de Arriendo", "count": "%.1f" % (neighborhood.tenure * 100).to_f)
         data.push("name": "Oferta de Arriendo" , "count": rent_offer.to_i )
         data.push("name": "Tasa de Vacancia", "count": total_vacancy)
