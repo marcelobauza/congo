@@ -193,7 +193,6 @@ future_projects_report_pdf = function() {
 
         // Agrega leyenda
         map_legends = Congo.future_projects.config.legends
-        console.log(map_legends);
         rect_begin = img_height + 59
         for (var i = 0; i < map_legends.length; i++) {
           var leg = map_legends[i]

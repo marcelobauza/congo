@@ -207,8 +207,6 @@ function building_regulations_report_pdf() {
     },
     success: function(data) {
 
-      console.log(data);
-
       let build_image_map = new Promise((resolve, reject) => {
         leafletImage(map, function(err, canvas) {
           var img = document.createElement('img');
