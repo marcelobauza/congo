@@ -211,16 +211,22 @@ function rent_indicators_report_pdf() {
             }
 
             // Setea los colores dependiendo de la serie
-            if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Arriendo | Vacancia') {
-
+            if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2') {
               switch (label) {
                 case 'Arriendo':
                   serie_colour = '#ff0000'
                   break;
-                case 'Promedio':
                 case 'Venta':
-                case 'Vacancia':
                   serie_colour = '#5dceaf'
+                  break;
+              }
+            } else if (title == 'Relación Arriendo | Vacancia') {
+              switch (label) {
+                case 'Arriendo':
+                  serie_colour = '#5dceaf'
+                  break;
+                case 'Vacancia':
+                  serie_colour = '#ff0000'
                   break;
               }
             }
@@ -724,16 +730,22 @@ Congo.rent_indicators.action_dashboards = function() {
                 }
 
                 // Setea los colores dependiendo de la serie
-                if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Arriendo | Vacancia') {
-
+                if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2') {
                   switch (label) {
                     case 'Arriendo':
                       serie_colour = '#ff0000'
                       break;
-                    case 'Promedio':
                     case 'Venta':
-                    case 'Vacancia':
                       serie_colour = '#5dceaf'
+                      break;
+                  }
+                } else if (title == 'Relación Arriendo | Vacancia') {
+                  switch (label) {
+                    case 'Arriendo':
+                      serie_colour = '#5dceaf'
+                      break;
+                    case 'Vacancia':
+                      serie_colour = '#ff0000'
                       break;
                   }
                 }
