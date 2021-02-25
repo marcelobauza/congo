@@ -868,7 +868,7 @@ Congo.rent_indicators.action_dashboards = function() {
                   tooltips: {
                     callbacks: {
                       title: function(tooltipItem, data) {
-                        return data.labels[tooltipItem[0].index];
+                        return data.datasets[tooltipItem[0].datasetIndex].label;
                       },
                       label: function(tooltipItem, data) {
                         // Obtenemos los datos
@@ -910,7 +910,7 @@ Congo.rent_indicators.action_dashboards = function() {
                       textStrokeWidth: 1,
                       textShadowColor: '#000000',
                       textShadowBlur: 2,
-                      align: 'end',
+                      align: 'center',
                     }
                   },
                 };
