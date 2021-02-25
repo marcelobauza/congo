@@ -513,15 +513,27 @@ function rent_indicators_report_pdf() {
             doc.addImage(chart, 'JPEG', 9, 30);
 
             if (title == 'Distribución Programas') {
-              var leyendas_dona = final_chart.generateLegend();
-              console.log(leyendas_dona);
+
+              // agrega nombre de serie al chart
+              var dataset_label = chart_data.datasets
+              var lab_y_pos = 28;
+              for (var e = 0; e < dataset_label.length; e++) {
+                var lab = dataset_label[e]['label']
+                doc.setFontSize(10);
+                doc.setFontStyle("bold");
+                doc.text(lab, 105, lab_y_pos, null, null, 'center');
+                lab_y_pos += 32
+              }
+
+              // agrega leyendas debajo del chart
+              var doughnut_legends = final_chart.generateLegend();
+              console.log(doughnut_legends);
               var rect_x_pos = 60
               var text_x_pos = 65
-              for (var a = 0; a < leyendas_dona.length; a++) {
-                var leg = leyendas_dona[a]
+              for (var a = 0; a < doughnut_legends.length; a++) {
+                var leg = doughnut_legends[a]
                 var label = leg['label']
                 var color = leg['color']
-                doc.setFontSize(10);
                 doc.setFontStyle("normal");
                 doc.text(label, text_x_pos, 133);
                 doc.setDrawColor(0)
@@ -549,7 +561,7 @@ function rent_indicators_report_pdf() {
             footer()
 
           } // Cierra if impar
-        }
+        } // Cierra for
 
         // Descarga el archivo PDF
         doc.save("Informe_ICA.pdf");
