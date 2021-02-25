@@ -573,8 +573,8 @@ Congo.rent_indicators.action_dashboards = function() {
 
     Congo.dashboards.action_index.create_overlay_and_filter_card();
     Congo.dashboards.action_index.add_time_slider();
-    Congo.dashboards.action_index.add_county_filter_item()
 
+    $('#item-comuna').remove();
     $("#spinner").hide();
 
     // Mostramos los iconos de Útiles correspondientes
