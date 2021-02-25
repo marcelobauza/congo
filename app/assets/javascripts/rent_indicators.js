@@ -211,7 +211,7 @@ function rent_indicators_report_pdf() {
             }
 
             // Setea los colores dependiendo de la serie
-            if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Precios | Vacancia') {
+            if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Arriendo | Vacancia') {
 
               switch (label) {
                 case 'Arriendo':
@@ -295,7 +295,7 @@ function rent_indicators_report_pdf() {
               })
             }
 
-            if (title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Precios | Vacancia') {
+            if (title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Arriendo | Vacancia') {
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -724,7 +724,7 @@ Congo.rent_indicators.action_dashboards = function() {
                 }
 
                 // Setea los colores dependiendo de la serie
-                if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Precios | Vacancia') {
+                if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Arriendo | Vacancia') {
 
                   switch (label) {
                     case 'Arriendo':
@@ -816,7 +816,7 @@ Congo.rent_indicators.action_dashboards = function() {
                   })
                 }
 
-                if (title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Precios | Vacancia') {
+                if (title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Arriendo | Vacancia') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
