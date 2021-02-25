@@ -285,7 +285,7 @@ function rent_indicators_report_pdf() {
               })
             }
 
-            if (title == 'Superficie') {
+            if (title == 'Superficie' || title == 'Relación Arriendo | Vacancia') {
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -301,7 +301,7 @@ function rent_indicators_report_pdf() {
               })
             }
 
-            if (title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Arriendo | Vacancia') {
+            if (title == 'Precio UF' || title == 'Precio UFm2') {
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -391,7 +391,22 @@ function rent_indicators_report_pdf() {
 
           } else { // Line
 
-            if (title != 'Superficie') {
+            if (title == 'Superficie' || title == 'Relación Arriendo | Vacancia') {
+
+              y_axes = [{
+                ticks: {
+                  callback: function(label, index, labels) {
+                    label = label.toLocaleString('es-ES')
+                    return label;
+                  },
+                  beginAtZero: true,
+                  display: true,
+                  fontSize: 10,
+                  fontColor: '#3d4046'
+                },
+              }]
+
+            } else {
 
               y_axes = [{
                 id: 'left-y-axis',
@@ -409,21 +424,6 @@ function rent_indicators_report_pdf() {
               }, {
                 id: 'right-y-axis',
                 position: 'right',
-                ticks: {
-                  callback: function(label, index, labels) {
-                    label = label.toLocaleString('es-ES')
-                    return label;
-                  },
-                  beginAtZero: true,
-                  display: true,
-                  fontSize: 10,
-                  fontColor: '#3d4046'
-                },
-              }]
-
-            } else {
-
-              y_axes = [{
                 ticks: {
                   callback: function(label, index, labels) {
                     label = label.toLocaleString('es-ES')
@@ -811,7 +811,7 @@ Congo.rent_indicators.action_dashboards = function() {
                   })
                 }
 
-                if (title == 'Superficie') {
+                if (title == 'Superficie' || title == 'Relación Arriendo | Vacancia') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -828,7 +828,7 @@ Congo.rent_indicators.action_dashboards = function() {
                   })
                 }
 
-                if (title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Arriendo | Vacancia') {
+                if (title == 'Precio UF' || title == 'Precio UFm2') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -917,7 +917,28 @@ Congo.rent_indicators.action_dashboards = function() {
 
               } else { // Line
 
-                if (title != 'Superficie') {
+                if (title == 'Superficie' || title == 'Relación Arriendo | Vacancia') {
+
+                  var y_axes;
+
+                  console.log(title);
+                  console.log(y_axes);
+
+                  y_axes = [{
+                    ticks: {
+                      callback: function(label, index, labels) {
+                        label = label.toLocaleString('es-ES')
+                        return label;
+                      },
+                      beginAtZero: true,
+                      fontColor: '#e8ebef'
+                    },
+                    gridLines: {
+                      color: "#2c2e34"
+                    },
+                  }]
+
+                } else {
 
                   y_axes = [{
                     id: 'left-y-axis',
@@ -949,24 +970,7 @@ Congo.rent_indicators.action_dashboards = function() {
                     },
                   }]
 
-                } else {
-
-                  y_axes = [{
-                    ticks: {
-                      callback: function(label, index, labels) {
-                        label = label.toLocaleString('es-ES')
-                        return label;
-                      },
-                      beginAtZero: true,
-                      fontColor: '#e8ebef'
-                    },
-                    gridLines: {
-                      color: "#2c2e34"
-                    },
-                  }]
-
                 }
-
 
                 var chart_options = {
                   responsive: true,
