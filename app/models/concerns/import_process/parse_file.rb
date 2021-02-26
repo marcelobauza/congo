@@ -10,7 +10,7 @@ module ImportProcess::ParseFile
       @user_id = import_process.user_id
 
       ActiveRecord::Base.transaction do
-        if load_type == 'Building Regulation' || load_type == 'Lot' || load_type == 'Neighborhood'
+        if load_type == 'Building Regulation' || load_type == 'Lot' || load_type == 'Neighborhood' || load_type == 'Bot'
           shps, dir_path = Util::get_geojson_files_from_zip(import.file_path)
         else
           shps, dir_path = Util::get_shape_files_from_zip(import.file_path)
@@ -64,6 +64,73 @@ module ImportProcess::ParseFile
           parse_counties(shp_file, import_logger)
         when "Neighborhood"
           parse_neighborhoods(shp_file, import_logger)
+        when "Bot"
+          parse_bot(shp_file, import_logger)
+        end
+      end
+
+      def parse_bot(shp_file, import_logger)
+        st1 = JSON.parse(File.read(shp_file))
+        json_data = RGeo::GeoJSON.decode(st1, :json_parser => :json)
+        json_data.each_with_index do |a, index|
+          import_logger.current_row_index =index
+
+          if a.geometry.nil?
+            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+            next
+          end
+          unless a.geometry.geometry_type.to_s == 'Point'
+            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+            next
+          end
+
+          unless a.geometry.valid?
+            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+            next
+          end
+          bot = Bot.new
+          factory = RGeo::Geos.factory(srid: 4326)
+          properties = a.properties
+   #       county = County.find_by(name: properties[:comune])
+
+          bot.the_geom        = factory.parse_wkt(a.geometry.as_text)
+          bot.publish         = properties['publish']
+          bot.code            = properties['code']
+          bot.property_status = properties['type']
+          bot.modality        = properties['modality']
+          bot.properties      = properties['properties']
+          bot.region          = properties['region']
+    #      bot.county_id       = county.id
+          bot.comune          = properties['comune']
+          bot.street          = properties['street']
+          bot.number          = properties['number']
+          bot.furnished       = properties['furnished']
+          bot.apt             = properties['apt']
+          bot.floor           = properties['floor']
+          bot.bedroom         = properties['bedroom']
+          bot.bathroom        = properties['bathroom']
+          bot.parking_lo      = properties['parking_lo']
+          bot.cellar          = properties['cellar']
+          bot.surface         = properties['surface']
+          bot.surface_t       = properties['surface_t']
+          bot.price           = properties['price']
+          bot.price_uf        = properties['price_uf']
+          bot.price_usd       = properties['price_usd']
+          bot.real_state      = properties['real_state']
+          bot.phone           = properties['phone']
+          bot.email           = properties['email']
+          bot.bimester        = properties['bimestre']
+          bot.year            = properties['year']
+
+          bot.save!
+
+          if bot.errors.any?
+            bot.errors.full_messages.each do |error_message|
+              import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
+            end
+          else
+            bot.new_record? ? import_logger.inserted += 1 : import_logger.updated += 1
+          end
         end
       end
 

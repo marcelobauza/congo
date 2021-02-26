@@ -100,12 +100,16 @@ module RentIndicators::Summary
 
         mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}|#{s.bathroom}"}
         data      = []
+        series    = []
 
         mix_types.map do |key, mix|
           data.push("name": key, "count": mix.size)
         end
+
+        series << { label: "Parque", data: data } if data.any?
+
         data_bots = []
-        bots = bots_offer(neighborhood, bimester, year)
+        bots      = bots_offer(neighborhood, bimester, year)
 
         bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}|#{mt.bathroom}" }
 
@@ -113,14 +117,7 @@ module RentIndicators::Summary
           data_bots.push("name": key, "count": mix.size)
         end
 
-        series = [{
-          "label": "Parque",
-          "data": data
-        },{
-          "label": "Oferta",
-          "data": data_bots
-        }
-        ]
+        series << { label: "Oferta", data: data_bots } if data_bots.any?
       end
 
       def surface neighborhood, bimester, year
