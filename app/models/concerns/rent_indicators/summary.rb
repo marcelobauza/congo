@@ -15,7 +15,7 @@ module RentIndicators::Summary
       result.push({"title": "Superficie", "series": surface(neighborhood, bimester, year)})
       result.push({"title": "Precio UF", "series": price_uf_by_bimester(neighborhood, bimester, year)})
       result.push({"title": "Precio UFm2", "series": price_ufm2_by_bimester(neighborhood, bimester, year)})
-      result.push({"title": "Relación Arriendo | Vacancia", "series": relation_price_by_vacancy(neighborhood, bimester, year)})
+      result.push({"title": "Relación Vacancia | Rentabilidad", "series": relation_price_by_vacancy(neighborhood, bimester, year)})
     end
 
     private
@@ -241,12 +241,12 @@ module RentIndicators::Summary
 
         series = [
           {
-            "label": "Arriendo",
-            "data": data_profitability
-          },
-          {
             "label": "Vacancia",
             "data": data
+          },
+          {
+            "label": "Rentabilidad",
+            "data": data_profitability
           },
         ]
       end
