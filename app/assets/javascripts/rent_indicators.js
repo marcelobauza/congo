@@ -214,7 +214,7 @@ function rent_indicators_report_pdf() {
             }
 
             // Setea los colores dependiendo de la serie
-            if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Vacancia | Rentabilidad') {
+            if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Vacancia | Rentabilidad') {
               switch (label) {
                 case 'Arriendo':
                 case 'Vacancia':
@@ -281,7 +281,7 @@ function rent_indicators_report_pdf() {
               })
             }
 
-            if (title == 'Superficie' || title == 'Relación Vacancia | Rentabilidad') {
+            if (title == 'Superficie' || title == 'Vacancia | Rentabilidad') {
               chart_type = 'line';
               datasets.push({
                 label: label,
@@ -387,7 +387,7 @@ function rent_indicators_report_pdf() {
 
           } else { // Line
 
-            if (title == 'Superficie' || title == 'Relación Vacancia | Rentabilidad') {
+            if (title == 'Superficie' || title == 'Vacancia | Rentabilidad') {
 
               y_axes = [{
                 ticks: {
@@ -740,7 +740,7 @@ Congo.rent_indicators.action_dashboards = function() {
                 }
 
                 // Setea los colores dependiendo de la serie
-                if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Relación Vacancia | Rentabilidad') {
+                if (title == 'Superficie' || title == 'Precio UF' || title == 'Precio UFm2' || title == 'Vacancia | Rentabilidad') {
                   switch (label) {
                     case 'Arriendo':
                     case 'Vacancia':
@@ -814,7 +814,7 @@ Congo.rent_indicators.action_dashboards = function() {
                   })
                 }
 
-                if (title == 'Superficie' || title == 'Relación Vacancia | Rentabilidad') {
+                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -920,7 +920,7 @@ Congo.rent_indicators.action_dashboards = function() {
 
               } else { // Line
 
-                if (title == 'Superficie' || title == 'Relación Vacancia | Rentabilidad') {
+                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad') {
 
                   var y_axes;
 
