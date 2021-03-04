@@ -55,7 +55,7 @@ module RentIndicators::Summary
         data.push("name": "Barrio", "count": neighborhood.name)
         data.push("name": "Total Viviendas", "count": total_households )
         data.push("name": "Total Departamentos", "count": neighborhood.total_departments)
-        data.push("name": "Tenencia Arriendo", "count": "%.1f" % (neighborhood.total_departments * neighborhood.tenure).to_f)
+        data.push("name": "Total Departamentos Arrendados", "count": (neighborhood.total_departments * neighborhood.tenure).to_i)
         data.push("name": "Porcentaje de Arriendo", "count": "%.1f" % (neighborhood.tenure * 100).to_f)
         data.push("name": "Oferta de Arriendo" , "count": rent_offer.to_i )
         data.push("name": "Tasa de Vacancia", "count": ("%.1f" % (total_vacancy * 100)).to_f)
