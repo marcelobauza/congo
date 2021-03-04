@@ -33,11 +33,16 @@ module RentIndicators::Summary
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where(conditions(bimester, year))
 
+        future_projects = RentFutureProject.where(
+          "ST_CONTAINS(
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
+        ).where(bimester: bimester, year: year).sum(:total_units)
+
         bots = bots_offer(neighborhood, bimester, year)
 
         rent_offer      = (bots.count / 0.9)
         total_vacancy   = total_vacancy(neighborhood, bimester, year)
-        total_households = neighborhood.total_houses + neighborhood.total_departments
+        total_households = neighborhood.total_houses + neighborhood.total_departments + future_projects.to_i
         avg_u_rent      = bots.average(:surface).to_f
         avg_t_rent      = bots.average(:surface_t).to_f
         avg_u_sale      = transactions.average(:total_surface_building).to_f
@@ -50,10 +55,10 @@ module RentIndicators::Summary
         data.push("name": "Barrio", "count": neighborhood.name)
         data.push("name": "Total Viviendas", "count": total_households )
         data.push("name": "Total Departamentos", "count": neighborhood.total_departments)
-        data.push("name": "Tenencia Arriendo", "count": "%1.f" % (neighborhood.total_departments * neighborhood.tenure).to_f)
+        data.push("name": "Tenencia Arriendo", "count": "%.1f" % (neighborhood.total_departments * neighborhood.tenure).to_f)
         data.push("name": "Porcentaje de Arriendo", "count": "%.1f" % (neighborhood.tenure * 100).to_f)
         data.push("name": "Oferta de Arriendo" , "count": rent_offer.to_i )
-        data.push("name": "Tasa de Vacancia", "count": total_vacancy)
+        data.push("name": "Tasa de Vacancia", "count": ("%.1f" % (total_vacancy * 100)).to_f)
         data.push("name": "Rentabilidad Bruta Anual", "count": ("%.1f" % gross_profitability).to_f)
         data.push("name": "Superficie Útil Oferta Arriendo", "count": ("%.1f" % avg_u_rent).to_f)
         data.push("name": "Superficie Útil Compraventas ", "count": ("%.1f" % avg_u_sale).to_f)
@@ -61,7 +66,7 @@ module RentIndicators::Summary
         data.push("name": "Precio Compraventas | UF", "count": avg_cbr.to_i)
         data.push("name": "Precio Oferta Arriendo | UF mensual", "count":("%.1f" % avg_price_uf).to_f)
         data.push("name": "Precio Oferta Arriendo | UFm2 mensual", "count":("%.2f" % avg_price_uf_m2).to_f)
-        data.push("name": "PxQ Mensual | UF miles", "count": pxq)
+        data.push("name": "PxQ Mensual | UF miles", "count": ("%.2f" % pxq).to_f)
 
         data
       end
@@ -182,7 +187,7 @@ module RentIndicators::Summary
         periods.each do |p|
           bots = bots_offer(neighborhood, p[:period], p[:year]).select('avg(price_uf) / avg(surface) as avg_uf_m2').take
 
-          data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.avg_uf_m2.to_f)
+          data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.avg_uf_m2.to_i)
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
@@ -227,11 +232,11 @@ module RentIndicators::Summary
 
         periods.each do |p|
           result = total_vacancy(neighborhood, p[:period], p[:year])
-          data.push("name": "#{p[:period]}/#{p[:year]}", "count": result.to_f )
+          data.push("name": "#{p[:period]}/#{p[:year]}", "count": ("%.1f" % (result * 100)).to_f )
 
 
-          gross_profitability = (((((12 * avg_price_uf) - (result * 12 * avg_price_uf)) / avg_cbr.to_i)) * 100).to_i
-          data_profitability.push("name": "#{p[:period]}/#{p[:year]}", "count": gross_profitability)
+          gross_profitability = (((((12 * avg_price_uf) - (result * 12 * avg_price_uf)) / avg_cbr.to_i)) * 100).to_f
+          data_profitability.push("name": "#{p[:period]}/#{p[:year]}", "count": ("%.1f" % gross_profitability).to_f)
         end
 
         series = [
