@@ -98,10 +98,15 @@ module RentIndicators::Summary
       end
 
       def distribution_by_mix_types neighborhood, bimester, year
+        project_last = RentProject.where(
+          "ST_CONTAINS(
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
+        ).order(year: :desc, bimester: :desc).first
+
         projects = RentProject.where(
           "ST_CONTAINS(
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
-        ).where(bimester: bimester, year: year)
+        ).where(bimester: project_last.bimester, year: project_last.year)
 
         mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}|#{s.bathroom}"}
         data      = []
