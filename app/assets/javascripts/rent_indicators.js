@@ -66,6 +66,9 @@ function rent_indicators_report_pdf() {
     },
     success: function(data) {
 
+      console.log('Datos PDF:');
+      console.log(data);
+
       let build_image_map = new Promise((resolve, reject) => {
         leafletImage(map, function(err, canvas) {
           var img = document.createElement('img');
@@ -520,7 +523,6 @@ function rent_indicators_report_pdf() {
 
               // agrega leyendas debajo del chart
               var doughnut_legends = final_chart.generateLegend();
-              console.log(doughnut_legends);
               var rect_x_pos = 60
               var text_x_pos = 65
               for (var a = 0; a < doughnut_legends.length; a++) {
@@ -647,6 +649,9 @@ Congo.rent_indicators.action_dashboards = function() {
           $("#spinner").show();
         },
         success: function(data) {
+
+          console.log('Datos Dashboard:');
+          console.log(data);
 
           $("#spinner").hide();
 
@@ -918,9 +923,6 @@ Congo.rent_indicators.action_dashboards = function() {
                 if (title == 'Superficie' || title == 'Relación Vacancia | Rentabilidad') {
 
                   var y_axes;
-
-                  console.log(title);
-                  console.log(y_axes);
 
                   y_axes = [{
                     ticks: {
