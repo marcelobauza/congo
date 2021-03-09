@@ -75,7 +75,8 @@ module RentIndicators::Summary
         Bot.where(
           "ST_CONTAINS(
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
-        ).where(bimester: bimester, year: year, properties: 'Departamento')
+        ).where(bimester: bimester, year: year, properties: 'Departamento').
+        where('bedroom > ? AND bathroom > ?', 0, 0)
       end
 
       def total_vacancy neighborhood, bimester, year
