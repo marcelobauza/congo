@@ -2,8 +2,10 @@ casa:
   name: 'Casa'
   color: blue
   is_active: true
+  abbreviation: 'C'
 
 departamento:
   name: 'Departamento'
   color: red
-  is_active:
+  is_active: false
+  abbreviation: 'D'

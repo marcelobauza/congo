@@ -69,6 +69,6 @@ class ProjectTypesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_type_params
-      params.require(:project_type).permit(:name, :color, :is_active)
+      params.require(:project_type).permit(:name, :color, :is_active, :abbreviation)
     end
 end
