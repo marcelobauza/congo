@@ -1,0 +1,26 @@
+wb       = xlsx_package.workbook
+title    = wb.styles.add_style(bg_color: "CCCCCCCC", sz: 14)
+subtitle = wb.styles.add_style(fg_color: "FF000000", sz: 12, b: true )
+
+wb.add_worksheet(name: "Arriendos") do |sheet|
+  sheet.add_row ["Resumen"]
+
+  @rent_indicators.each do |r|
+    sheet.add_row([])
+    sheet.add_row [r[:title]], style: title
+
+    if r[:title] == 'Resumen Bimestre'
+      r[:data].each do |d|
+        sheet.add_row [d[:name], d[:count]]
+      end
+    else
+      r[:series].each do |s|
+        sheet.add_row [s[:label]], style: subtitle
+
+        s[:data].each do |di|
+          sheet.add_row [di[:name], di[:count]]
+        end
+      end
+    end
+  end
+end

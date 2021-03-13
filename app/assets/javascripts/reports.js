@@ -1,17 +1,18 @@
 Congo.namespace("reports");
 Congo.reports = function(){
 
-  layer_type = Congo.dashboards.config.layer_type;
-  kind_reports = Congo.dashboards.config.kind_reports;
-  let url;
-  var area              = Congo.dashboards.config.area;
-  var radius            = Congo.dashboards.config.radius;
-  var smdProjects       = Congo.dashboards.config.square_meters_download_projects;
-  var mdrProjects       = Congo.dashboards.config.meters_download_radius_projects;
-  var smdFutureProjects = Congo.dashboards.config.square_meters_download_future_projects;
-  var mdrFutureProjects = Congo.dashboards.config.meters_download_radius_future_projects;
-  var smdTransactions   = Congo.dashboards.config.square_meters_download_transactions;
-  var mdrTransactions   = Congo.dashboards.config.meters_download_radius_transactions;
+let url;
+
+let layer_type        = Congo.dashboards.config.layer_type;
+let kind_reports     = Congo.dashboards.config.kind_reports;
+var area              = Congo.dashboards.config.area;
+var radius            = Congo.dashboards.config.radius;
+var smdProjects       = Congo.dashboards.config.square_meters_download_projects;
+var mdrProjects       = Congo.dashboards.config.meters_download_radius_projects;
+var smdFutureProjects = Congo.dashboards.config.square_meters_download_future_projects;
+var mdrFutureProjects = Congo.dashboards.config.meters_download_radius_future_projects;
+var smdTransactions   = Congo.dashboards.config.square_meters_download_transactions;
+var mdrTransactions   = Congo.dashboards.config.meters_download_radius_transactions;
 
   switch (layer_type) {
     case 'future_projects_info':
@@ -109,6 +110,10 @@ Congo.reports = function(){
         case 'pdf':
           url = rent_indicators_report_pdf();
           break;
+        case 'graph':
+            url = '/reports/rent_indicators_summary.xlsx';
+            window.open(url, '_blank');
+      break;
       }
     break;
     case 'building_regulations_info':

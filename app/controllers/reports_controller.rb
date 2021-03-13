@@ -416,4 +416,13 @@ class ReportsController < ApplicationController
           :type => 'text/xml; charset=UTF-8;',
           :disposition => "attachment; filename=Normativas.kml"
   end
+
+  def rent_indicators_summary
+    filters          = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @rent_indicators = RentIndicator.summary filters
+
+    respond_to do |format|
+      format.xlsx
+    end
+  end
 end

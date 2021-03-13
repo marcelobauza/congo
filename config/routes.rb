@@ -72,6 +72,7 @@ Rails.application.routes.draw do
   get 'reports/projects_pdf' => 'reports#projects_pdf'
   get 'reports/building_regulations_pdf' => 'reports#building_regulations_pdf'
   get 'reports/building_regulations_kml' => 'reports#building_regulations_kml'
+  get 'reports/rent_indicators_summary' => 'reports#rent_indicators_summary'
   get 'downloads/index' => 'downloads#index'
   get 'downloads/transactions_csv' => 'downloads#transactions_csv'
   get 'downloads/projects_csv' => 'downloads#projects_csv'

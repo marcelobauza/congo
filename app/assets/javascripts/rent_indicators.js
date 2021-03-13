@@ -589,7 +589,7 @@ Congo.rent_indicators.action_dashboards = function() {
     // Mostramos los iconos de Útiles correspondientes
     $("#boost").hide();
     $("#base").hide();
-    $("#graph").hide();
+    $("#graph").show();
     $("#census").hide();
     $("#kml").hide();
 
