@@ -211,7 +211,7 @@ module RentIndicators::Summary
           avg_t_surface_building = transactions.average(:total_surface_building).to_f
           t_avg_uf_m2            =  avg_t_surface_building > 0 ? (transactions.average(:calculated_value) / avg_t_surface_building).to_f : 0
 
-         avg_uf_m2 = data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": t_avg_uf_m2.to_f)
+          avg_uf_m2 = data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": ("%.2f" % t_avg_uf_m2.to_f))
         end
 
         series = [{
