@@ -273,10 +273,10 @@ Congo.map_utils = function(){
         groupLayer.removeLayer(layer);
       });
 
-      if(JSON.stringify(srcPois)!=JSON.stringify({})){
+    if(layer_type == 'rent_indicators_info' && (JSON.stringify(srcPois)!=JSON.stringify({}))){
         layerControl.removeLayer(srcPois);
         layerControl.removeLayer(srcLots);
-      }
+     }
 
       layerControl.removeLayer(groupLayer);
       remove_legend();
