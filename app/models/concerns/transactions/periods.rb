@@ -15,7 +15,7 @@ module Transactions::Periods
       period             = Transaction.select(:year, :bimester).
                              where(active: 'true').
                              where(conditions).
-                             where('year <= ? and bimester <= ?', last_period_active.year, last_period_active.bimester).
+                             where('year <= ?', last_period_active.year).
                              order(year: :desc, bimester: :desc).first
     end
 

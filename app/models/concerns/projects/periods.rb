@@ -15,7 +15,7 @@ module Projects::Periods
       last_period_active = Period.where(active: true).order(year: :desc, bimester: :desc).first
       period             = Project.joins(:project_instances).
                              where(conditions).
-                             where('project_instances.year <= ? and bimester <= ?', last_period_active.year, last_period_active.bimester ).
+                             where('project_instances.year <= ?', last_period_active.year).
                              order('project_instances.year desc', 'project_instances.bimester desc').
                              select('project_instances.year', 'project_instances.bimester').first
     end

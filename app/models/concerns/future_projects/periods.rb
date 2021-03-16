@@ -7,7 +7,7 @@ module FutureProjects::Periods
       period             = FutureProject.select(:year, :bimester).
                              where(active: 'true').
                              method_selections(filters).
-                             where('year <= ? and bimester <= ?', last_period_active.year, last_period_active.bimester).
+                             where('year <= ? ', last_period_active.year).
                              order(year: :desc, bimester: :desc).first
     end
 
