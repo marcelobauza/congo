@@ -1,6 +1,6 @@
+const load_lots = function(url){
 
-const load_lots = function(map, layerControl, url){
-  var options_lots = {
+  let options_lots = {
     layers: "inciti_v2:view_lots",//nombre de la capa (ver get capabilities)
     format: 'image/png',
     transparent: 'true',
@@ -9,10 +9,8 @@ const load_lots = function(map, layerControl, url){
     tiled: true,
     styles: 'lots',
     INFO_FORMAT: 'application/json',
-    format_options: 'callback:getJson',
-    CQL_FILTER: cql_filter_pois
+    format_options: 'callback:getJson'
   };
-  sourceLots = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_lots);
-  Congo.dashboards.config.sourceLots = sourceLots,
-  layerControl.addOverlay(sourceLots, "Plancheta Predial");
+
+  return  new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_lots);
 }
