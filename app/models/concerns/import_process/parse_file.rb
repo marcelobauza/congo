@@ -76,25 +76,27 @@ module ImportProcess::ParseFile
           import_logger.current_row_index =index
 
           if a.geometry.nil?
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_BLANK) }
             next
           end
+
           unless a.geometry.geometry_type.to_s == 'Point'
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_POINT) }
             next
           end
 
           unless a.geometry.valid?
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_INVALID) }
             next
           end
+
           bot = Bot.new
           factory = RGeo::Geos.factory(srid: 4326)
           properties = a.properties
    #       county = County.find_by(name: properties[:comune])
 
           bot.the_geom        = factory.parse_wkt(a.geometry.as_text)
-          bot.publish         = properties['publish']
+          bot.publish         = properties['date']
           bot.code            = properties['code']
           bot.property_status = properties['type']
           bot.modality        = properties['modality']
@@ -110,13 +112,13 @@ module ImportProcess::ParseFile
           bot.bedroom         = properties['bedroom']
           bot.bathroom        = properties['bathroom']
           bot.parking_lo      = properties['parking_lo']
-          bot.cellar          = properties['cellar']
-          bot.surface         = properties['surface']
-          bot.surface_t       = properties['surface_t']
-          bot.price           = properties['price']
+          bot.cellar          = properties['bodega']
+          bot.surface         = properties['surface_us']
+          bot.surface_t       = properties['surface_to']
+          bot.price           = properties['price_clp']
           bot.price_uf        = properties['price_uf']
           bot.price_usd       = properties['price_usd']
-          bot.real_state      = properties['real_state']
+          bot.real_state      = properties['real_estat']
           bot.phone           = properties['phone']
           bot.email           = properties['email']
           bot.bimester        = properties['bimestre']
