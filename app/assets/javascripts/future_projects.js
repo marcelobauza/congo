@@ -660,7 +660,8 @@ future_projects_report_pdf = function() {
             doc.text(title, 105, 20, null, null, 'center');
 
             // Gráfico
-            doc.addImage(chart, 'JPEG', 9, 30);
+            img_height = (final_chart.height * 190) / final_chart.width
+            doc.addImage(chart, 'JPEG', 9, 30, 190, img_height);
 
           } else {
 
@@ -670,7 +671,8 @@ future_projects_report_pdf = function() {
             doc.text(title, 105, 160, null, null, 'center');
 
             // Gráfico
-            doc.addImage(chart, 'JPEG', 9, 170);
+            img_height = (final_chart.height * 190) / final_chart.width
+            doc.addImage(chart, 'JPEG', 9, 170, 190, img_height);
 
             // Agrega nueva página
             doc.addPage('a4', 'portrait')
