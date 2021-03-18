@@ -281,10 +281,11 @@ Congo.demography.action_dashboards = function(){
               // Título del gráfico
               doc.setFontSize(16);
               doc.setFontStyle("bold");
-              doc.text(title, 105, 150, null, null, 'center');
+              doc.text(title, 105, 160, null, null, 'center');
 
               // Gráfico
-              doc.addImage(chart, 'JPEG', 9, 160);
+              img_height = (final_chart.height * 190) / final_chart.width
+              doc.addImage(chart, 'JPEG', 9, 170, 190, img_height);
 
               // Agrega nueva página
               doc.addPage('a4', 'portrait')
@@ -300,7 +301,8 @@ Congo.demography.action_dashboards = function(){
               doc.text(title, 105, 20, null, null, 'center');
 
               // Gráfico
-              doc.addImage(chart, 'JPEG', 9, 30);
+              img_height = (final_chart.height * 190) / final_chart.width
+              doc.addImage(chart, 'JPEG', 9, 30, 190, img_height);
 
             } // Cierra else impar
           } // Cierra for
