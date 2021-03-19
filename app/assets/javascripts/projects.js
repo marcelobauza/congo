@@ -550,6 +550,11 @@ function projects_report_pdf(){
         doc.setFontSize(16);
         doc.text('Información General', 105, 35, null, null, 'center');
 
+        periods = Congo.projects.config.periods;
+        years = Congo.projects.config.years;
+        to_year = Congo.dashboards.config.year;
+        to_bimester = Congo.dashboards.config.bimester;
+
         // Validamos si hay algún filtro aplicado
         if (periods == '') {
 
