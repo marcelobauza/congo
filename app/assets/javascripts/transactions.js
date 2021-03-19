@@ -1420,10 +1420,10 @@ Congo.transactions.action_dashboards = function(){
           $('.close').prop('disabled', false);
           bimester = Congo.dashboards.config.bimester;
           year = Congo.dashboards.config.year;
-          periods = `${bimester}/${year}`;
+          ts_period = `${bimester}/${year}`;
           slider_periods = Congo.dashboards.config.slider_periods
-          from = slider_periods.indexOf(periods) - 5 || slider_periods - 6;
-          to = slider_periods.indexOf(periods) || slider_periods - 1;
+          from = slider_periods.indexOf(ts_period) - 5 || slider_periods - 6;
+          to = slider_periods.indexOf(ts_period) || slider_periods - 1;
           $("#time_slider_cbr").data("ionRangeSlider").update({
             block: false,
             from: from,
