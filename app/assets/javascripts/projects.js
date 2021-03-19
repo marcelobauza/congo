@@ -1478,15 +1478,16 @@ Congo.projects.action_dashboards = function(){
 
         },
         success: function(data){
+
           // Ocultamos el spinner y habilitamos los botones
           $("#spinner").hide();
           $('.btn').removeClass('disabled')
           $('.close').prop('disabled', false);
           bimester = Congo.dashboards.config.bimester;
           year = Congo.dashboards.config.year;
-          periods = `${bimester}/${year}`;
+          ts_period = `${bimester}/${year}`;
           slider_periods = Congo.dashboards.config.slider_periods
-          from = slider_periods.indexOf(periods) || slider_periods - 1;
+          from = slider_periods.indexOf(ts_period) || slider_periods - 1;
           $("#time_slider").data("ionRangeSlider").update({
             block: false,
             from: from
