@@ -139,14 +139,14 @@ Congo.dashboards.pois =function(){
               )
             ),
             $('<tbody>', {
-              'id': 'tbody-equip',
+              'id': 'tbody-equip_'+model,
             })
           )
         );
 
         $.each(result, function(key, rows){
           $.each(rows, function(i, value){
-            $('#tbody-equip').append(
+            $('#tbody-equip_'+model).append(
               $('<tr>').append(
                 $('<td>', {
                   'text': value.sub_category_name,
