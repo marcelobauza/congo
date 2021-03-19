@@ -409,7 +409,15 @@ module ImportProcess::ParseFile
 
             future_type = FutureProjectType.find_by(abbrev: data["FUENTE"])
 
-            fut_proj = FutureProject.find_or_initialize_by(address: data["DIRECCION"], future_project_type_id: future_type.id, year: year, bimester: bimester)
+            fut_proj = FutureProject.find_or_initialize_by(
+              address: data["DIRECCION"],
+              future_project_type_id: future_type.id,
+              year: year,
+              bimester: bimester,
+              file_number: data["N_PE"].to_i.to_s,
+              file_date: data["F_PE"]
+            )
+
             fut_proj.new_record? ? was_new = true : was_new = false
 
             if fut_proj.save_future_project_data(geom, data, year, bimester, future_type)
