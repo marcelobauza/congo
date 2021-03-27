@@ -98,7 +98,10 @@ module RentIndicators::Summary
         avg_price_uf / avg_u_rent
       end
 
+
+      # Distribución Programa
       def distribution_by_mix_types neighborhood, bimester, year
+
         project_last = RentProject.where(
           "ST_CONTAINS(
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
@@ -112,8 +115,6 @@ module RentIndicators::Summary
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where(bimester: bimester_last, year: year_last)
 
-
-
         mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}|#{s.bathroom}"}
         data      = []
         series    = []
@@ -122,18 +123,96 @@ module RentIndicators::Summary
           data.push("name": key, "count": mix.size)
         end
 
-        series << { label: "Parque", data: data } if data.any?
+        data_final = [
+          {name: '1|1', count: 0},
+          {name: '1|2', count: 0},
+          {name: '1|3', count: 0},
+          {name: '2|1', count: 0},
+          {name: '2|2', count: 0},
+          {name: '2|3', count: 0},
+          {name: '3|1', count: 0},
+          {name: '3|2', count: 0},
+          {name: '3|3', count: 0},
+          {name: '4+', count: 0},
+        ]
+
+        data.each do |row|
+          case row[:name]
+          when '1|1'
+            data_final[0][:count] = row[:count]
+          when '1|2'
+            data_final[1][:count] = row[:count]
+          when '1|3'
+            data_final[2][:count] = row[:count]
+          when '2|1'
+            data_final[3][:count] = row[:count]
+          when '2|2'
+            data_final[4][:count] = row[:count]
+          when '2|3'
+            data_final[5][:count] = row[:count]
+          when '3|1'
+            data_final[6][:count] = row[:count]
+          when '3|2'
+            data_final[7][:count] = row[:count]
+          when '3|3'
+            data_final[8][:count] = row[:count]
+          else
+            suma = data_final[9][:count] + row[:count]
+            data_final[9][:count] = suma
+          end
+        end
+
+        series << { label: "Parque", data: data_final } if data_final.any?
 
         data_bots = []
         bots      = bots_offer(neighborhood, bimester, year)
-
         bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}|#{mt.bathroom}" }
 
         bots_mix_types.map do |key, mix|
           data_bots.push("name": key, "count": mix.size)
         end
 
-        series << { label: "Oferta", data: data_bots } if data_bots.any?
+        data_bots_final = [
+          {name: '1|1', count: 0},
+          {name: '1|2', count: 0},
+          {name: '1|3', count: 0},
+          {name: '2|1', count: 0},
+          {name: '2|2', count: 0},
+          {name: '2|3', count: 0},
+          {name: '3|1', count: 0},
+          {name: '3|2', count: 0},
+          {name: '3|3', count: 0},
+          {name: '4+', count: 0},
+        ]
+
+        data_bots.each do |row|
+          case row[:name]
+          when '1|1'
+            data_bots_final[0][:count] = row[:count]
+          when '1|2'
+            data_bots_final[1][:count] = row[:count]
+          when '1|3'
+            data_bots_final[2][:count] = row[:count]
+          when '2|1'
+            data_bots_final[3][:count] = row[:count]
+          when '2|2'
+            data_bots_final[4][:count] = row[:count]
+          when '2|3'
+            data_bots_final[5][:count] = row[:count]
+          when '3|1'
+            data_bots_final[6][:count] = row[:count]
+          when '3|2'
+            data_bots_final[7][:count] = row[:count]
+          when '3|3'
+            data_bots_final[8][:count] = row[:count]
+          else
+            suma = data_bots_final[9][:count] + row[:count]
+            data_bots_final[9][:count] = suma
+          end
+        end
+
+        series << { label: "Oferta", data: data_bots_final } if data_bots_final.any?
+
       end
 
       def surface neighborhood, bimester, year

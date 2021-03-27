@@ -252,25 +252,35 @@ function rent_indicators_report_pdf() {
               if (title == 'Distribución Programas') {
                 switch (d['name']) {
                   case '1|1':
-                    colour = '#4e67c8'
+                    colour = '#8E44AD'
+                    break;
+                  case '1|2':
+                    colour = '#3498DB'
+                    break;
+                  case '1|3':
+                    colour = '#1ABC9C'
                     break;
                   case '2|1':
-                    colour = '#5eccf3'
+                    colour = '#16A085'
                     break;
                   case '2|2':
-                    colour = '#a7ea52'
+                    colour = '#27AE60'
+                    break;
+                  case '2|3':
+                    colour = '#2ECC71'
                     break;
                   case '3|1':
-                    colour = '#5dceaf'
+                    colour = '#F1C40F'
                     break;
                   case '3|2':
-                    colour = '#ff8021'
+                    colour = '#E67E22'
+                    break;
+                  case '3|3':
+                    colour = '#D35400'
                     break;
                   case '4+':
-                    colour = '#f14124'
+                    colour = '#E74C3C'
                     break;
-                  default:
-                    colour = "#" + ((1<<24)*Math.random() | 0).toString(16)
                 }
 
                 name_colour.push(colour)
@@ -356,7 +366,7 @@ function rent_indicators_report_pdf() {
                 return legs;
               },
               legend: {
-                display: false,
+                display: true,
                 position: 'bottom',
                 labels: {
                   fontColor: '#3d4046',
@@ -518,36 +528,36 @@ function rent_indicators_report_pdf() {
             img_height = (final_chart.height * 190) / final_chart.width
             doc.addImage(chart, 'JPEG', 9, 30, 190, img_height);
 
-            if (title == 'Distribución Programas') {
-
-              // agrega nombre de serie al chart
-              var dataset_label = chart_data.datasets
-              var lab_y_pos = 28;
-              for (var e = 0; e < dataset_label.length; e++) {
-                var lab = dataset_label[e]['label']
-                doc.setFontSize(10);
-                doc.setFontStyle("bold");
-                doc.text(lab, 105, lab_y_pos, null, null, 'center');
-                lab_y_pos += 32
-              }
-
-              // agrega leyendas debajo del chart
-              var doughnut_legends = final_chart.generateLegend();
-              var rect_x_pos = 60
-              var text_x_pos = 65
-              for (var a = 0; a < doughnut_legends.length; a++) {
-                var leg = doughnut_legends[a]
-                var label = leg['label']
-                var color = leg['color']
-                doc.setFontStyle("normal");
-                doc.text(label, text_x_pos, 133);
-                doc.setDrawColor(0)
-                doc.setFillColor(color)
-                doc.rect(rect_x_pos, 130, 3, 3, 'F')
-                rect_x_pos += 12
-                text_x_pos += 12
-              }
-            }
+            // if (title == 'Distribución Programas') {
+            //
+            //   // agrega nombre de serie al chart
+            //   var dataset_label = chart_data.datasets
+            //   var lab_y_pos = 28;
+            //   for (var e = 0; e < dataset_label.length; e++) {
+            //     var lab = dataset_label[e]['label']
+            //     doc.setFontSize(10);
+            //     doc.setFontStyle("bold");
+            //     doc.text(lab, 105, lab_y_pos, null, null, 'center');
+            //     lab_y_pos += 32
+            //   }
+            //
+            //   // agrega leyendas debajo del chart
+            //   var doughnut_legends = final_chart.generateLegend();
+            //   var rect_x_pos = 60
+            //   var text_x_pos = 65
+            //   for (var a = 0; a < doughnut_legends.length; a++) {
+            //     var leg = doughnut_legends[a]
+            //     var label = leg['label']
+            //     var color = leg['color']
+            //     doc.setFontStyle("normal");
+            //     doc.text(label, text_x_pos, 133);
+            //     doc.setDrawColor(0)
+            //     doc.setFillColor(color)
+            //     doc.rect(rect_x_pos, 130, 3, 3, 'F')
+            //     rect_x_pos += 12
+            //     text_x_pos += 12
+            //   }
+            // }
 
           } else {
 
@@ -661,8 +671,8 @@ Congo.rent_indicators.action_dashboards = function() {
         },
         success: function(data) {
 
-          console.log('Datos Dashboard:');
-          console.log(data);
+          console.log('Datos Distribución:');
+          console.log(data[1]);
 
           $("#spinner").hide();
 
@@ -788,25 +798,35 @@ Congo.rent_indicators.action_dashboards = function() {
                   if (title == 'Distribución Programas') {
                     switch (d['name']) {
                       case '1|1':
-                        colour = '#4e67c8'
+                        colour = '#8E44AD'
+                        break;
+                      case '1|2':
+                        colour = '#3498DB'
+                        break;
+                      case '1|3':
+                        colour = '#1ABC9C'
                         break;
                       case '2|1':
-                        colour = '#5eccf3'
+                        colour = '#16A085'
                         break;
                       case '2|2':
-                        colour = '#a7ea52'
+                        colour = '#27AE60'
+                        break;
+                      case '2|3':
+                        colour = '#2ECC71'
                         break;
                       case '3|1':
-                        colour = '#5dceaf'
+                        colour = '#F1C40F'
                         break;
                       case '3|2':
-                        colour = '#ff8021'
+                        colour = '#E67E22'
+                        break;
+                      case '3|3':
+                        colour = '#D35400'
                         break;
                       case '4+':
-                        colour = '#f14124'
+                        colour = '#E74C3C'
                         break;
-                      default:
-                        colour = "#" + ((1<<24)*Math.random() | 0).toString(16)
                     }
 
                     name_colour.push(colour)
