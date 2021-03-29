@@ -274,10 +274,10 @@ module RentIndicators::Summary
         periods = Period.get_periods(bimester, year, 6, 1).reverse
         data     = []
         data_cbr = []
+
         periods.each do |p|
           bots = bots_offer(neighborhood, p[:period], p[:year]).select('avg(price_uf) / avg(surface) as avg_uf_m2').take
-
-          data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.avg_uf_m2.to_i)
+          data.push("name": "#{p[:period]}/#{p[:year]}", "count": "%.1f" % (bots.avg_uf_m2.to_f).to_f)
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
