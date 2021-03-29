@@ -42,7 +42,7 @@ module RentIndicators::Summary
 
         rent_offer      = (bots.count / 0.9)
         total_vacancy   = total_vacancy(neighborhood, bimester, year)
-        total_households = neighborhood.total_houses + neighborhood.total_departments + future_projects.to_i
+        total_households = neighborhood.total_houses.to_i + neighborhood.total_departments.to_i + future_projects.to_i
         avg_u_rent      = bots.average(:surface).to_f
         avg_t_rent      = bots.average(:surface_t).to_f
         avg_u_sale      = transactions.average(:total_surface_building).to_f
