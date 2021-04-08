@@ -202,44 +202,22 @@ class ReportsController < ApplicationController
     filters                              = JSON.parse(session[:data].to_json, {:symbolize_names => true})
     @project_homes, @project_departments = Project.reports(filters)
     u                                    = User.find(current_user.id)
-    total_downloads_allowed              = u.role.total_download_projects
-    total_accumulated_downloads          = u.downloads_users.where('created_at::date = ?', Date.today).sum(:projects)
-    total_downloads                      = total_downloads_allowed - total_accumulated_downloads
 
     respond_to do |format|
-      if total_downloads > 0
-        @code_departments = @project_departments.map { |p| p.code }.uniq
+      @code_departments = @project_departments.map { |p| p.code }.uniq
 
-        if @code_departments.any?
-          if total_downloads >= @code_departments.count
-            @project_departments = @project_departments.where(code: @code_departments).order(:code)
-            total_downloads -= @code_departments.count
+      if @code_departments.any?
+        @project_departments = @project_departments.where(code: @code_departments).order(:code)
 
-            u.downloads_users.create! projects: @code_departments.count
-          else
-            @project_departments = @project_departments.where(code: @code_departments.take(total_downloads)).order(:code)
+        u.downloads_users.create! projects: @code_departments.count
+      end
 
-            u.downloads_users.create! projects: total_downloads
+      @code_homes = @project_homes.map { |p| p.code }.uniq
 
-            total_downloads = 0
-          end
-        end
+      if @code_homes.any?
+        @project_homes = @project_homes.where(code: @code_homes).order(:code)
 
-        @code_homes = @project_homes.map { |p| p.code }.uniq
-
-        if @code_homes.any?
-          if total_downloads >= @code_homes.count
-            @project_homes = @project_homes.where(code: @code_homes).order(:code)
-
-            u.downloads_users.create! projects: @code_homes.count
-          else
-            @project_homes = @project_homes.where(code: @code_homes.take(total_downloads)).order(:code)
-
-            u.downloads_users.create! projects: total_downloads
-          end
-        end
-      else
-        @message = "Ha superado el límite de descarga"
+        u.downloads_users.create! projects: @code_homes.count
       end
       format.xlsx
     end
@@ -392,16 +370,16 @@ class ReportsController < ApplicationController
 
   def rent_indicators_pdf
     filters = JSON.parse(session[:data].to_json, {:symbolize_names => true})
-    @pdf = RentIndicator.reports_pdf filters
+    @pdf    = RentIndicator.reports_pdf filters
+
     render json: @pdf
   end
 
   def transactions_pdf
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
-    @pdf = Transaction.reports_pdf filters
+    filters = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @pdf    = Transaction.reports_pdf filters
 
-    render json: {"data":@pdf}
-
+    render json: { "data":@pdf }
   end
 
   def building_regulations_pdf
