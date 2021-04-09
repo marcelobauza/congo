@@ -593,6 +593,11 @@ future_projects_report_pdf = function() {
                   usePointStyle: true,
                 }
               },
+              layout: {
+                padding: {
+                  right: 40
+                }
+              },
               plugins: {
                 datalabels: {
                   formatter: function(value, context) {

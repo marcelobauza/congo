@@ -1153,6 +1153,11 @@ function projects_report_pdf(){
                     usePointStyle: true,
                   }
                 },
+                layout: {
+                  padding: {
+                    right: 40
+                  }
+                },
                 plugins: {
                   datalabels: {
                     formatter: function(value, context) {
