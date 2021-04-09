@@ -598,6 +598,7 @@ Congo.building_regulations.action_dashboards = function(){
           $("#type_point").hide();
           $("#poly_build").show();
           $("#vor_dem").hide();
+          $("#col-ica").hide();
 
           // Mostramos el icono de Puntos Proporcionales correspondiente
           $("#prop-prv").hide();
