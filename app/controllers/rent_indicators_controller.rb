@@ -4,6 +4,7 @@ class RentIndicatorsController < ApplicationController
   end
 
   def search
+    session[:data] = params
     @r = RentIndicator.rent_geo params
     render json: @r
   end
