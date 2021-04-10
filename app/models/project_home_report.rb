@@ -6,4 +6,12 @@ class ProjectHomeReport < ApplicationRecord
       all
     end
   end
+
+  def self.filters_status_projects filters
+    if filters[:project_status_ids].present?
+      where(project_status_id: filters[:project_status_ids])
+    else
+      all
+    end
+  end
 end
