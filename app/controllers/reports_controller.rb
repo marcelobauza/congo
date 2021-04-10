@@ -322,15 +322,17 @@ class ReportsController < ApplicationController
     result =[]
    ground_area = Project.projects_by_ground_area('ground_area',filters)
 
-   ground_area.each do |st|
-      max = st[:max].to_i rescue 0
-      min = st[:min].to_i rescue 0
-      avg = st[:avg].to_i rescue 0
-      bimester = st[:bimester].to_s + "/" + st[:year].to_s[2,3]
-      result.push({"bimester":bimester,"max":max, "min":min,"avg":avg})
-   end
-@ground_area=result
+   if ground_area
+     ground_area.each do |st|
+       max = st[:max].to_i rescue 0
+       min = st[:min].to_i rescue 0
+       avg = st[:avg].to_i rescue 0
+       bimester = st[:bimester].to_s + "/" + st[:year].to_s[2,3]
+       result.push({"bimester":bimester,"max":max, "min":min,"avg":avg})
+     end
 
+     @ground_area=result
+   end
       result =[]
       sbim = Project.projects_count_by_period('sale_bimester', filters)
     sbim.each do |sb|

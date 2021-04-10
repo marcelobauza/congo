@@ -60,12 +60,13 @@ end
 @sup_u_m2.each do |su|
   sheet.add_row [su[:bimester],su[:min], su[:max], su[:avg]]
 end
-
+if @ground_area
   sheet.add_row([])
   sheet.add_row ["Superficie Terreno/Terraza(m2) por Bimestre"], :style=> title
   sheet.add_row ["Bimestre", "Minimo", "Maximo", "Promedio"], :style=> title
-@ground_area.each do |g|
-  sheet.add_row [g[:bimester],g[:min], g[:max], g[:avg]]
+    @ground_area.each do |g|
+      sheet.add_row [g[:bimester],g[:min], g[:max], g[:avg]]
+    end
 end
 
   sheet.add_row([])
