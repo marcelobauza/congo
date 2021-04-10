@@ -354,19 +354,25 @@ class Project < ApplicationRecord
 
 
   def self.projects_by_ground_area(widget, filters)
-    if (filters['project_type_ids'] == 1)
+    projects = Project.joins(:project_instances).method_selection(filters).
+      where(build_conditions_new(filters, nil, true, range=false))
 
-      select = "min(ps_terreno) as min, "
-      select += "max(ps_terreno) as max, "
-      select += "avg(ps_terreno) as avg, "
-    else
-      select = "min(mix_terrace_square_meters) as min, "
-      select += "max(mix_terrace_square_meters) as max, "
-      select += "avg(mix_terrace_square_meters) as avg, "
-    end
+    houses, departments = projects.partition {|project| project.project_type_id == 1}
 
-    select += "year, bimester "
-    values_by_period3(widget, select, filters, load_min_avg_max_values)
+    return if houses.present? && departments.present?
+
+    if houses.any?
+        select = "min(ps_terreno) as min, "
+        select += "max(ps_terreno) as max,"
+        select += "avg(ps_terreno) as avg, "
+      else
+        select = "min(mix_terrace_square_meters) as min, "
+        select += "max(mix_terrace_square_meters) as max, "
+        select += "avg(mix_terrace_square_meters) as avg "
+      end
+
+      select += "year, bimester "
+      values_by_period3(widget, select, filters, load_min_avg_max_values)
   end
 
   #FIND PROJECTS BY MIX TYPE
@@ -746,11 +752,12 @@ end
   def self.summary f
 
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
+
     UserPolygon.save_polygons_for_user f
+
     begin
       global_information = Project.find_globals(filters, false)
       house_information = Project.house_general_information(filters, false)
-      #department_information = department_general_information(filters, false)
 
       general_data = [
         {label: I18n.t(:TOTAL_PROJECTS_COUNT), value: global_information[:project_count]},
@@ -882,22 +889,25 @@ end
 
       result.push({"title":"Superficie Útil | m²", "series":categories})
 
-      ##SUP TERR BIMESTRE
-      min =[]
-      max =[]
-      avg =[]
-      categories=[]
+      if garea
+        ##SUP TERR BIMESTRE
+        min =[]
+        max =[]
+        avg =[]
+        categories=[]
 
-      garea.each do |item|
-        min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
-        max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
-        avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+        garea.each do |item|
+          min.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:min].to_i)
+          max.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:max].to_i)
+          avg.push("name":(item[:bimester].to_s + "/" + item[:year].to_s[2,3]), "count":  item[:avg].to_i)
+        end
+
+        categories.push({"label":"Mínimo", "data": min});
+        categories.push({"label":"Máximo", "data": max});
+        categories.push({"label":"Promedio", "data": avg});
+
+        result.push({"title":"Superficie T | m²", "series":categories})
       end
-      categories.push({"label":"Mínimo", "data": min});
-      categories.push({"label":"Máximo", "data": max});
-      categories.push({"label":"Promedio", "data": avg});
-
-      result.push({"title":"Superficie T | m²", "series":categories})
 
       ##CANT PROYECTOS BIMESTER
       data =[]
