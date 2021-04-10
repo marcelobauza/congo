@@ -55,7 +55,7 @@ module RentIndicators::Summary
         data.push("name": "Barrio", "count": neighborhood.name)
         data.push("name": "Total Viviendas", "count": total_households )
         data.push("name": "Total Departamentos", "count": neighborhood.total_departments)
-        data.push("name": "Total Departamentos Arrendados", "count": (neighborhood.total_departments * neighborhood.tenure).to_i)
+        data.push("name": "Parque Arrendados", "count": (neighborhood.total_departments * neighborhood.tenure).to_i)
         data.push("name": "Porcentaje de Arriendo", "count": "%.1f" % (neighborhood.tenure * 100).to_f)
         data.push("name": "Oferta de Arriendo" , "count": rent_offer.to_i )
         data.push("name": "Tasa de Vacancia", "count": ("%.1f" % (total_vacancy * 100)).to_f)
@@ -115,12 +115,15 @@ module RentIndicators::Summary
         )
 
         mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}|#{s.bathroom}"}
-        data      = []
-        series    = []
+
+        data        = []
+        series      = []
+        rented_park = (neighborhood.total_departments * neighborhood.tenure).to_i
 
         mix_types.map do |key, mix|
-          percentaje = (mix.size.to_f / projects.count).to_f
-          count = neighborhood.total_departments * percentaje
+          percentage_by_distribution = (mix.size.to_f / projects.count).to_f
+          count                      = rented_park * percentage_by_distribution
+
           data.push("name": key, "count": count.to_i)
         end
 
