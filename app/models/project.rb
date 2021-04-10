@@ -943,8 +943,19 @@ end
     else
       conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
     end
-    @project_departments = ProjectDepartmentReport.where(conditions).where( year: filters[:to_year], bimester: filters[:to_period]).filters_project_types(filters)
-    @project_homes = ProjectHomeReport.where(conditions).where(year: filters[:to_year], bimester: filters[:to_period]).filters_project_types(filters)
+
+    @project_departments = ProjectDepartmentReport.
+      where(conditions).
+      where( year: filters[:to_year], bimester: filters[:to_period]).
+      filters_project_types(filters).
+      filters_status_projects(filters)
+
+    @project_homes = ProjectHomeReport.
+      where(conditions).
+      where(year: filters[:to_year], bimester: filters[:to_period]).
+      filters_project_types(filters).
+      filters_status_projects(filters)
+
     return @project_homes, @project_departments
   end
 
@@ -1174,6 +1185,4 @@ end
     kml.objects << document
     kml.render
   end
-
-
 end
