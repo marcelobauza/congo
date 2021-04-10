@@ -98,7 +98,6 @@ module RentIndicators::Summary
         avg_price_uf / avg_u_rent
       end
 
-
       # Distribución Programa
       def distribution_by_mix_types neighborhood, bimester, year
 
@@ -112,15 +111,17 @@ module RentIndicators::Summary
 
         projects = RentProject.where(
           "ST_CONTAINS(
-            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
-        ).where(bimester: bimester_last, year: year_last)
+          ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
+        )
 
         mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}|#{s.bathroom}"}
         data      = []
         series    = []
 
         mix_types.map do |key, mix|
-          data.push("name": key, "count": mix.size)
+          percentaje = (mix.size.to_f / projects.count).to_f
+          count = neighborhood.total_departments * percentaje
+          data.push("name": key, "count": count.to_i)
         end
 
         data_final = [
@@ -249,7 +250,7 @@ module RentIndicators::Summary
         periods.each do |p|
           bots = bots_offer(neighborhood, p[:period], p[:year]).average(:price_uf)
 
-          data.push("name": "#{p[:period]}/#{p[:year]}", "count": bots.to_i )
+          data.push("name": "#{p[:period]}/#{p[:year]}", "count": "%.1f" % (bots.to_f).to_f )
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
@@ -277,7 +278,7 @@ module RentIndicators::Summary
 
         periods.each do |p|
           bots = bots_offer(neighborhood, p[:period], p[:year]).select('avg(price_uf) / avg(surface) as avg_uf_m2').take
-          data.push("name": "#{p[:period]}/#{p[:year]}", "count": "%.1f" % (bots.avg_uf_m2.to_f).to_f)
+          data.push("name": "#{p[:period]}/#{p[:year]}", "count": "%.2f" % (bots.avg_uf_m2.to_f).to_f)
 
           transactions = RentTransaction.where(
             "ST_CONTAINS(
@@ -290,7 +291,7 @@ module RentIndicators::Summary
           avg_t_surface_building = transactions.average(:total_surface_building).to_f
           t_avg_uf_m2            =  avg_t_surface_building > 0 ? (transactions.average(:calculated_value) / avg_t_surface_building).to_f : 0
 
-          avg_uf_m2 = data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": ("%.2f" % t_avg_uf_m2.to_f))
+          avg_uf_m2 = data_cbr.push("name":"#{p[:period]}/#{p[:year]}", "count": ("%.1f" % t_avg_uf_m2.to_f))
         end
 
         series = [{

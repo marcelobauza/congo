@@ -12,7 +12,7 @@ class RentIndicator < ApplicationRecord
     rent.each do |c|
       vacancy = total_vacancy(c, filters[:bimester], filters[:year])
       price = bots_offer(c, filters[:bimester], filters[:year]).average(:price)
-      feature << factory.feature(c.the_geom,nil,{name: c.name, id: c.id, vacancy: (vacancy * 100).to_i, price: price })
+      feature << factory.feature(c.the_geom,nil,{name: c.name, id: c.id, vacancy: (vacancy * 100).to_i, price: "%.1f" % (price.to_f).to_f })
     end
 
     output_geojson_collection =  RGeo::GeoJSON.encode factory.feature_collection(feature)
