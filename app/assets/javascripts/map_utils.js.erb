@@ -602,6 +602,22 @@ Congo.map_utils = function(){
         }else{
           cql_filter = "county_id='"+ county_id + "'"+   filter_layer;
         }
+
+        if (layer_type == 'building_regulations_info'){
+          switch (widget) {
+            case 'building_regulations_max_density':
+              Congo.dashboards.config.style_layer= 'building_regulations_max_density';
+              break;
+            case 'building_regulations_floors':
+              Congo.dashboards.config.style_layer = 'building_regulations_floors';
+              break;
+            default:
+              Congo.dashboards.config.style_layer= 'building_regulations_max_density';
+              break;
+
+          }
+        }
+
         cql_filter_pois = "county_id='"+ county_id + "'";
         break;
       default:
@@ -623,6 +639,21 @@ Congo.map_utils = function(){
             layer_type = 'demography_info_census_2012'
           }
           Congo.dashboards.config.style_layer = 'census_voronoi_gse_zn';
+        }
+
+        if (layer_type == 'building_regulations_info'){
+          switch (widget) {
+            case 'building_regulations_max_density':
+              Congo.dashboards.config.style_layer= 'building_regulations_max_density';
+              break;
+            case 'building_regulations_floors':
+              Congo.dashboards.config.style_layer = 'building_regulations_floors';
+              break;
+            default:
+              Congo.dashboards.config.style_layer= 'building_regulations_max_density';
+              break;
+
+          }
         }
         cql_filter = "county_id IN ("+ county_id +") "+ filter_layer;
         cql_filter_pois = "county_id IN ("+ county_id + ")";
