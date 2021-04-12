@@ -133,9 +133,6 @@ class ReportsController < ApplicationController
 
       format.xlsx
     end
-    respond_to do |format|
-      format.xlsx
-    end
   end
 
   def transactions_summary
