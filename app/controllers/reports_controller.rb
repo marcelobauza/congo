@@ -28,7 +28,7 @@ class ReportsController < ApplicationController
     @xl = FutureProject.kml_data(filters)
     send_data @xl,
           :type => 'text/xml; charset=UTF-8;',
-              :disposition => "attachment; filename=Expedientes_Municipales.kml"
+              :disposition => "attachment; filename=Datos_ExpedientesMunicipales.kml"
   end
 
   def transactions_data_kml
@@ -36,7 +36,7 @@ class ReportsController < ApplicationController
     @xl = Transaction.kml_data(filters)
     send_data @xl,
           :type => 'text/xml; charset=UTF-8;',
-              :disposition => "attachment; filename=CBR.kml"
+              :disposition => "attachment; filename=Datos_Compraventas.kml"
   end
 
   def future_projects_summary
@@ -228,7 +228,7 @@ class ReportsController < ApplicationController
     @xl = Project.kml_data(filters)
     send_data @xl,
           :type => 'text/xml; charset=UTF-8;',
-          :disposition => "attachment; filename=PRV.kml"
+          :disposition => "attachment; filename=Datos_ProyectosEnVenta.kml"
   end
 
   def projects_summary
@@ -394,7 +394,7 @@ class ReportsController < ApplicationController
     @data = BuildingRegulation.kml_data filters
     send_data @data,
           :type => 'text/xml; charset=UTF-8;',
-          :disposition => "attachment; filename=Normativas.kml"
+          :disposition => "attachment; filename=Datos_Normativa.kml"
   end
 
   def rent_indicators_summary
