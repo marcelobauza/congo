@@ -385,10 +385,10 @@ class ReportsController < ApplicationController
   end
 
   def building_regulations_pdf
-
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
-    @data = BuildingRegulation.reports_pdf filters
+    filters = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @data   = BuildingRegulation.reports_pdf filters
   end
+
   def building_regulations_kml
     filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
     @data = BuildingRegulation.kml_data filters

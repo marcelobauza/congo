@@ -14,6 +14,7 @@ class BuildingRegulationsController < ApplicationController
 
   def index
     @data = BuildingRegulation.info_popup(params[:id])
+
     respond_to do |f|
       f.json
     end
@@ -22,48 +23,51 @@ class BuildingRegulationsController < ApplicationController
   def building_regulations_filters
     result = []
 
+    session[:data] = params
+
     params[:user_id] = current_user.id
     BuildingRegulation.save_filter_polygon params
 
-    @a = allowed_use_list
-    result.push({"label":"Uso", "data":@a})
-    @c = constructivity
-    result.push({"label":"Constructibilidad", "min": @c[:min], "max": @c[:max]})
-    @l = land_ocupation
-    result.push({"label":"Ocupación de Suelo", "min": @l[:min], "max": @l[:max]})
-    @mh = maximum_height
-    result.push({"label":"Altura Máxima", "min": @mh[:min], "max": @mh[:max]})
+    a = allowed_use_list
+    result.push({"label": "Uso", "data": a})
+    c = constructivity
+    result.push({"label": "Constructibilidad", "min": c[:min], "max": c[:max]})
+    l = land_ocupation
+    result.push({"label": "Ocupación de Suelo", "min": l[:min], "max": l[:max] })
+    mh = maximum_height
+    result.push({"label": "Altura Máxima", "min": mh[:min], "max": mh[:max]})
 
-    @hh = hectarea_inhabitants
-    result.push({"label":"Habitantes por Hectárea", "min": @hh[:min], "max": @hh[:max]})
+    hh = hectarea_inhabitants
+    result.push({"label": "Habitantes por Hectárea", "min": hh[:min], "max": hh[:max]})
     render json: result
   end
 
   def constructivity
-    @construct = BuildingRegulation.group_by_constructivity(params)
+    BuildingRegulation.group_by_constructivity(params)
   end
 
   def land_ocupation
-    @land_ocupation = BuildingRegulation.group_by_land_ocupation(params)
+    BuildingRegulation.group_by_land_ocupation(params)
   end
 
   def maximum_height
-    @maximum_height = BuildingRegulation.group_by_maximum_height(params)
+    BuildingRegulation.group_by_maximum_height(params)
   end
+
   def hectarea_inhabitants
-    @hectarea_inhabitants = BuildingRegulation.group_by_hectarea_inhabitants(params)
+    BuildingRegulation.group_by_hectarea_inhabitants(params)
   end
+
   def constructivity_limits
-    @list = BuildingRegulation.get_construct_limits
+    BuildingRegulation.get_construct_limits
   end
 
   def land_ocupation_limits
-    @list = BuildingRegulation.get_land_ocupation_limits
+    BuildingRegulation.get_land_ocupation_limits
   end
 
   def allowed_use_list
-    @list = LandUseType.get_allowed_use_list(params[:county_id], params[:wkt], params[:centerpt], params[:radius])
-    @list
+    LandUseType.get_allowed_use_list(params[:county_id], params[:wkt], params[:centerpt], params[:radius])
   end
 
   def dashboards
