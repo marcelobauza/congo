@@ -512,7 +512,7 @@ Congo.demography.action_dashboards = function(){
         $('.close').prop('disabled', true);
 
         // Establece el nombre de la capa en el navbar
-        $('#layer-name').text('Demografía & Gasto');
+        $('#layer-name').text('DEMOGRAFÍA Y GASTO');
 
         // Mostramos los iconos de Útiles correspondientes
         $("#boost").hide();

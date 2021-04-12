@@ -1131,7 +1131,7 @@ Congo.future_projects.action_dashboards = function(){
           });
 
           // Establece el nombre de la capa en el navbar
-          $('#layer-name').text('Expedientes Municipales');
+          $('#layer-name').text('EXPEDIENTES MUNICIPALES');
 
           // Mostramos los iconos de Útiles correspondientes
           $("#boost").show();

@@ -586,7 +586,7 @@ Congo.building_regulations.action_dashboards = function(){
           $('.close').prop('disabled', true);
 
           // Establece el nombre de la capa en el navbar
-          $('#layer-name').text('Normativa');
+          $('#layer-name').text('NORMATIVA');
 
           // Mostramos los iconos de Útiles correspondientes
           $("#boost").hide();
