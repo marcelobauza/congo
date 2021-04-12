@@ -109,7 +109,7 @@ function rent_indicators_report_pdf() {
         // Título
         doc.setFontStyle("bold");
         doc.setFontSize(22);
-        doc.text('Informe de Indicadores Claves de Arriendo', 105, 20, null, null, 'center');
+        doc.text('Informe de Arriendo Residencial', 105, 20, null, null, 'center');
 
         // Subtítulo
         doc.setFontSize(16);

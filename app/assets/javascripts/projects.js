@@ -544,7 +544,7 @@ function projects_report_pdf(){
         // Título
         doc.setFontStyle("bold");
         doc.setFontSize(22);
-        doc.text('Informe de Proyectos Residenciales en Venta', 105, 20, null, null, 'center');
+        doc.text('Informe de Proyectos en Venta', 105, 20, null, null, 'center');
 
         // Subtítulo
         doc.setFontSize(16);
