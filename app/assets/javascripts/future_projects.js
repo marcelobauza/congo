@@ -294,13 +294,13 @@ future_projects_report_pdf = function() {
                   serie_colour = '#82E0AA'
                   break;
                 case 'Anteproyecto':
-                  serie_colour = '#42d964'
+                  serie_colour = '#ffab00'
                   break;
                 case 'Permiso de Edificación':
-                  serie_colour = '#58b9e2'
+                  serie_colour = '#e81900'
                   break;
                 case 'Recepción Municipal':
-                  serie_colour = '#f99c00'
+                  serie_colour = '#2619d1'
                   break;
               }
             }
@@ -374,13 +374,13 @@ future_projects_report_pdf = function() {
                     colour = '#82E0AA'
                     break;
                   case 'Anteproyecto':
-                    colour = '#42d964'
+                    colour = '#ffab00'
                     break;
                   case 'Permiso de edificacion':
-                    colour = '#58b9e2'
+                    colour = '#e81900'
                     break;
                   case 'Recepcion municipal':
-                    colour = '#f99c00'
+                    colour = '#2619d1'
                     break;
                 }
 
@@ -1309,13 +1309,13 @@ Congo.future_projects.action_dashboards = function(){
                       serie_colour = '#82E0AA'
                       break;
                     case 'Anteproyecto':
-                      serie_colour = '#42d964'
+                      serie_colour = '#ffab00'
                       break;
                     case 'Permiso de Edificación':
-                      serie_colour = '#58b9e2'
+                      serie_colour = '#e81900'
                       break;
                     case 'Recepción Municipal':
-                      serie_colour = '#f99c00'
+                      serie_colour = '#2619d1'
                       break;
                   }
                 }
@@ -1390,13 +1390,13 @@ Congo.future_projects.action_dashboards = function(){
                         colour = '#82E0AA'
                         break;
                       case 'Anteproyecto':
-                        colour = '#42d964'
+                        colour = '#ffab00'
                         break;
                       case 'Permiso de edificacion':
-                        colour = '#58b9e2'
+                        colour = '#e81900'
                         break;
                       case 'Recepcion municipal':
-                        colour = '#f99c00'
+                        colour = '#2619d1'
                         break;
                     }
 
