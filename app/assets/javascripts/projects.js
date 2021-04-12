@@ -1252,7 +1252,7 @@ function projects_report_pdf(){
         } // Cierra for
 
         // Descarga el archivo PDF
-        doc.save("Informe_ProyectosResidencialesVenta.pdf");
+        doc.save("Informe_ProyectosEnVenta.pdf");
 
       }); // Cierra then
     } // Cierra success

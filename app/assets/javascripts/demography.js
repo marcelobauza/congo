@@ -435,7 +435,7 @@ Congo.demography.action_dashboards = function(){
 
           footer()
           // Descarga el archivo PDF
-          doc.save("Informe_Demografía&Gastos.pdf");
+          doc.save("Informe_DemografíaYGasto.pdf");
 
         }); // Cierra then
       } // Cierra success

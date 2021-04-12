@@ -585,7 +585,7 @@ function rent_indicators_report_pdf() {
         } // Cierra for
 
         // Descarga el archivo PDF
-        doc.save("Informe_ICA.pdf");
+        doc.save("Informe_ArriendoResidencial.pdf");
 
       }); // Cierra then
     } // Cierra success
