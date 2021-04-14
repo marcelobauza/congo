@@ -19,7 +19,9 @@ class ReportsController < ApplicationController
         @message = "Ha superado el límite de descarga"
       end
 
-      format.xlsx
+      format.xlsx {
+        response.headers['Content-Disposition'] = 'attachment; filename="Datos_ExpedientesMunicipales.xlsx"'
+      }
     end
   end
 
@@ -108,7 +110,9 @@ class ReportsController < ApplicationController
     end
     @rates = result
     respond_to do |format|
-      format.xlsx
+      format.xlsx {
+        response.headers['Content-Disposition'] = 'attachment; filename="Resumen_ExpedientesMunicipales.xlsx"'
+      }
     end
   end
 
@@ -131,7 +135,9 @@ class ReportsController < ApplicationController
         @message = "Ha superado el límite de descarga"
       end
 
-      format.xlsx
+      format.xlsx {
+        response.headers['Content-Disposition'] = 'attachment; filename="Datos_Compraventas.xlsx"'
+      }
     end
   end
 
@@ -191,7 +197,9 @@ class ReportsController < ApplicationController
 
     end
     respond_to do |format|
-      format.xlsx
+      format.xlsx {
+        response.headers['Content-Disposition'] = 'attachment; filename="Resumen_Compraventas.xlsx"'
+      }
     end
   end
 
@@ -216,7 +224,9 @@ class ReportsController < ApplicationController
 
         u.downloads_users.create! projects: @code_homes.count
       end
-      format.xlsx
+      format.xlsx {
+        response.headers['Content-Disposition'] = 'attachment; filename="Datos_ProyectosEnVenta.xlsx"'
+      }
     end
   end
 
@@ -358,6 +368,12 @@ class ReportsController < ApplicationController
     end
     @range = result
 
+    respond_to do |format|
+      format.xlsx {
+        response.headers['Content-Disposition'] = 'attachment; filename="Resumen_ProyectosEnVenta.xlsx"'
+      }
+    end
+
   end
 
   def projects_pdf
@@ -399,7 +415,9 @@ class ReportsController < ApplicationController
     @rent_indicators = RentIndicator.summary filters
 
     respond_to do |format|
-      format.xlsx
+      format.xlsx {
+        response.headers['Content-Disposition'] = 'attachment; filename="Resumen_ArriendoResidencial.xlsx"'
+      }
     end
   end
 end
