@@ -359,7 +359,7 @@ class Project < ApplicationRecord
 
     houses, departments = projects.partition {|project| project.project_type_id == 1}
 
-    return if houses.present? && departments.present?
+    return nil if houses.present? && departments.present?
 
     if houses.any?
         select = "min(ps_terreno) as min, "
@@ -368,7 +368,7 @@ class Project < ApplicationRecord
       else
         select = "min(mix_terrace_square_meters) as min, "
         select += "max(mix_terrace_square_meters) as max, "
-        select += "avg(mix_terrace_square_meters) as avg "
+        select += "avg(mix_terrace_square_meters) as avg, "
       end
 
       select += "year, bimester "
