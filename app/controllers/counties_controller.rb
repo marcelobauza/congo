@@ -1,16 +1,29 @@
 class CountiesController < ApplicationController
   before_action :set_county, only: [:show, :edit, :update, :destroy]
 
-    def index
+  def search_county_geojson
+    if !params[:county_id].nil?
+      county  = JSON.parse(params[:county_id]).flatten
+      @county = County.where(
+        id: county
+      ).select(
+        'st_asgeojson(the_geom) as geo'
+      ).first
+    end
 
+    render json:  @county
+  end
+
+  def index
     respond_to do |format|
       format.js
     end
-    end
+  end
 
   def find
-    @id = params[:search][:name]
+    @id     = params[:search][:name]
     @county = County.where(id: @id)
+
     respond_to do |format|
       format.js
     end

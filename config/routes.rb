@@ -79,7 +79,7 @@ Rails.application.routes.draw do
   get 'pois/get_around_pois' => 'pois#get_around_pois'
   get 'building_regulations/building_regulation_download' => 'building_regulations#building_regulation_download'
   get 'users/export_csv_downloads_by_company' => 'users#export_csv_downloads_by_company'
-
+  get 'counties/search_county_geojson' => 'counties#search_county_geojson'
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
     get 'user_polygons/export_data' => 'user_polygons#export_data'

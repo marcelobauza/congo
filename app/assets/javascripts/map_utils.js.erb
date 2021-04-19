@@ -570,7 +570,7 @@ Congo.map_utils = function(){
         county_id = Congo.dashboards.config.county_id;
 
         if (layer_type == 'demography_info'){
-          filter_layer  = " AND 1=1";
+          filter_layer  = "1=1";
           if (census_source_id == '1'){
             layer_type = 'demography_info_census_2017'
           }else{
@@ -578,17 +578,19 @@ Congo.map_utils = function(){
             layer_type = 'demography_info_census_2012'
           }
           var geo;
+          data ={ county_id: JSON.stringify(county_id) };
       $.ajax({
         async: false,
-        type: 'get',
-        data: { county_id: county_id},
-        url: '/admin/counties/search_geojson.json',
+        type: 'Get',
+        data: data ,
+        url: '/counties/search_county_geojson.json',
         datatype: 'json',
         success: function(data){
+          console.log(data);
           geo = JSON.parse(data['geo'])
         }
       })
-          var options = {tolerance: 0.01, highQuality: false};
+          var options = {tolerance: 0.0001, highQuality: false};
           var simplified = turf.simplify(geo, options);
         $.each(simplified['coordinates'][0], function(a, b){
           $.each(b, function(c,d){
