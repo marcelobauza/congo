@@ -3,21 +3,31 @@ module Projects::Periods
 
   module ClassMethods
     def get_last_period filters
+      periods_active = Period.where(active: true).order(year: :desc, bimester: :desc)
+      period = periods_active.last
 
-      if !filters[:county_id].nil?
-        conditions = WhereBuilder.build_in_condition("county_id",filters[:county_id])
-      elsif !filters[:wkt].nil?
-        conditions = WhereBuilder.build_within_condition(filters[:wkt])
-      else
-        conditions = WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] )
+      periods_active.each do |p|
+        period = Project.joins(:project_instances).
+          method_selections(filters).
+          where(project_instances: {bimester: p.bimester, year: p.year}).
+          select('project_instances.year', 'project_instances.bimester')
+
+        break unless period.empty?
       end
 
-      last_period_active = Period.where(active: true).order(year: :desc, bimester: :desc).first
-      period             = Project.joins(:project_instances).
-                             where(conditions).
-                             where('project_instances.year <= ?', last_period_active.year).
-                             order('project_instances.year desc', 'project_instances.bimester desc').
-                             select('project_instances.year', 'project_instances.bimester').first
+      period
+    end
+
+    def method_selections filters
+      if !filters[:county_id].nil?
+        where(WhereBuilder.build_in_condition("county_id",filters[:county_id]))
+      elsif (wkt = JSON.parse(filters[:wkt]).present?)
+        where(WhereBuilder.build_within_condition(wkt))
+      elsif !filters[:centerpt].empty? && !filters[:radius].empty?
+        where(WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius]))
+      else
+        all
+      end
     end
   end
 end
