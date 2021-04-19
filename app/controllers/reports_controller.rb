@@ -155,9 +155,11 @@ class ReportsController < ApplicationController
 
     @transactions_by_periods = Transaction.group_transaction_bimester(filters)
 
-     @transactions_by_periods.each do |tt|
-       @transaction_bimester.push([tt[0][:periods],tt[0][:value]])
-     end
+      @transactions_by_periods.map do |tt|
+        if tt.any?
+          @transaction_bimester.push([tt[0][:periods],tt[0][:value]])
+        end
+      end
 
     @transaction.each do |data|
       @ddy = data[:title]
