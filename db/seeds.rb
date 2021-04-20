@@ -25,14 +25,29 @@ role = Role.where(
   }
 ).first_or_create!
 
-User.where(
-  {
-    name: 'admin_r',
-    complete_name: 'Admin',
-    rut: '7240035-6',
-    role: role,
-    company: company,
-    email: 'admin_r@inciti.com',
-    encrypted_password: User.new.send(:password_digest, '12345678')
-  }
-).first_or_create!
+# User.where(
+#   {
+#     name: 'admin_r',
+#     complete_name: 'Admin',
+#     rut: '7240035-6',
+#     role: role,
+#     company: company,
+#     email: 'admin_r@inciti.com',
+#     encrypted_password: User.new.send(:password_digest, '12345678')
+#   }
+# ).first_or_create!
+
+
+layer_types = [
+  { name: 'future_projects_info', title: 'EM'},
+  { name: 'projects_feature_info', title: 'PRV'},
+  { name: 'demography_info', title: 'Demografia'},
+  { name: 'building_regulations_info', title: 'Normativa'},
+  { name: 'transactions_info', title: 'CBR'},
+  { name: 'rent_indenticatos', title: 'ICA'}
+]
+
+layer_types.map do |layer|
+  LayerType.where(layer).first_or_create!
+end
+
