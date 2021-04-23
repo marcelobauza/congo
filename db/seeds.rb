@@ -25,17 +25,23 @@ role = Role.where(
   }
 ).first_or_create!
 
-# User.where(
-#   {
-#     name: 'admin_r',
-#     complete_name: 'Admin',
-#     rut: '7240035-6',
-#     role: role,
-#     company: company,
-#     email: 'admin_r@inciti.com',
-#     encrypted_password: User.new.send(:password_digest, '12345678')
-#   }
-# ).first_or_create!
+User.where(
+  {
+    name: 'admin_r',
+    email: 'admin_r@inciti.com'
+  }
+).first_or_create(
+  {
+    name: 'admin_r',
+    complete_name: 'Admin',
+    rut: '7240035-6',
+    role: role,
+    company: company,
+    email: 'admin_r@inciti.com',
+    layer_types: [1],
+    encrypted_password: User.new.send(:password_digest, '12345678')
+  }
+)
 
 
 layer_types = [
