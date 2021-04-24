@@ -258,13 +258,13 @@ class Transaction < ApplicationRecord
     ranges = get_valid_ranges(values)
     ranges.each do |qua|
       trans_group = {:from => qua["min"], :to => qua["max"], :value => "0"}
-
-      filters[:from_calculated_value] = [qua["min"]]
-      filters[:to_calculated_value] = [qua["max"]]
+      params = filters.dup
+      params[:from_calculated_value] = [qua["min"]]
+      params[:to_calculated_value] = [qua["max"]]
 
       t = Transaction.select("ROUND(SUM(1/ sample_factor)) as value").
         joins(build_joins.join(" ")).
-        where(build_conditions(filters)).
+        where(build_conditions(params)).
         order("value").first
 
       trans_group[:value] = t.value unless t.nil?
