@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <!-- Logo -->
+  <%= link_to flex_dashboards_index_path(), class: "pr-3" do  %> <%=image_tag "round_inciti.png", width:"40", height:"40" %> <% end %>
+
+  <!-- Barra (Elementos Derecha)-->
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <!-- Barra (Elementos Izquierda)-->
+    <ul class="navbar-nav mr-auto">
+    </ul>
+
+    <!-- Cuenta Dropdown -->
+    <div class="nav-item dropdown">
+      <button class="btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-user" title="Usuario"></i>
+      </button>
+      <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
+        <%= link_to users_account_path(), class: "dropdown-item custom-item reports", remote: true,  id:"user_data"  do  %> <i class=" fas fa-user" title="Mi Cuenta" style="font-size: 26px"></i><% end %>
+        <%= link_to application_statuses_path(), class: "dropdown-item custom-item reports", remote: true,  id:"sessions"  do  %> <i class=" fas fa-save" title="Administrador Sesiones" style="font-size: 26px"></i><% end %>
+        <%= link_to destroy_user_session_path, method: :delete, 'class' => 'dropdown-item custom-item' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
+      </div>
+    </div>
+
+  </div>
+
+</nav>
+
+<%= yield %>
