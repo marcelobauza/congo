@@ -126,6 +126,12 @@ Rails.application.routes.draw do
     get 'dashboards/index'
   root 'dashboards#index'
   end
+
+  namespace :flex do
+    get 'dashboards/index'
+    root 'dashboards#index'
+  end
+
   resources :application_statuses
   resources :pois
   resources :poi_subcategories
