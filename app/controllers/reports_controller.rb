@@ -241,7 +241,7 @@ class ReportsController < ApplicationController
   end
 
   def projects_summary
-    filters   = JSON.parse(session[:data].to_json, {:symbolize_names = > true})
+    filters   = JSON.parse(session[:data].to_json, {:symbolize_names => true})
     @summary  = Project.summary filters
     @info     = []
     @pstatus  = []
