@@ -736,6 +736,7 @@ end
       joins(joins).
       where(build_conditions_new(filters, 'agencies', false, false, true)).
       method_selection(filters).
+      where(agency_rols: {rol: 'INMOBILIARIA'}).
       group(select).
       order("#{count}")
 
