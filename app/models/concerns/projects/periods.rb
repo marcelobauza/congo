@@ -4,15 +4,15 @@ module Projects::Periods
   module ClassMethods
     def get_last_period filters
       periods_active = Period.where(active: true).order(year: :desc, bimester: :desc)
-      period = periods_active.last
+      period = periods_active.first
 
       periods_active.each do |p|
         period = Project.joins(:project_instances).
           method_selections(filters).
           where(project_instances: {bimester: p.bimester, year: p.year}).
-          select('project_instances.year', 'project_instances.bimester')
+          select('project_instances.year', 'project_instances.bimester').first
 
-        break unless period.empty?
+        break if period
       end
 
       period
