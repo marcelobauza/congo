@@ -72,23 +72,33 @@ end
   sheet.add_row([])
   sheet.add_row ["Cantidad de proyectos por bimestre"], :style=> title
   sheet.add_row ["Bimestre", "Cantidad Proyectos"], :style=> title
-@total_projects_bimester.each do |t|
-  sheet.add_row [t[:bimester],t[:total_units]]
-end
+
+  @total_projects_bimester.each do |t|
+    sheet.add_row [t[:bimester],t[:total_units]]
+  end
 
 
   sheet.add_row([])
   sheet.add_row ["Proyectos por Altura"], :style=> title
   sheet.add_row ["Cantidad de Pisos", "Cantidad Proyectos"], :style=> title
-@floor.each do |f|
-  sheet.add_row [f[:name],f[:value]]
-end
+
+  @floor.each do |f|
+    sheet.add_row [f[:name],f[:value]]
+  end
 
   sheet.add_row([])
   sheet.add_row ["Unidades de proyecto por rango UF"], :style=> title
   sheet.add_row ["Rango", "Cantidad de Unidades"], :style=> title
-@range.each do |r|
-  sheet.add_row [r[:name],r[:value]]
+
+  @range.each do |r|
+    sheet.add_row [r[:name],r[:value]]
+  end
+
+  sheet.add_row([])
+  sheet.add_row ["Proyectos por Inmobiliaria"], :style=> title
+  sheet.add_row ["Inmobiliarias"], :style=> title
+  @agencies.each do |a|
+    sheet.add_row [a[0]]
+  end
 end
-  end
-  end
+end
