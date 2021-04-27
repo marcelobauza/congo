@@ -570,7 +570,7 @@ class Project < ApplicationRecord
     end
 
     #PROJECT TYPES
-    if filters.has_key? :project_type_ids and self_not_filter != 'project_types'
+    if filters.has_key? :project_type_ids
       query_field = useView ? "project_type_id" : "project_type_id"
       conditions += WhereBuilder.build_in_condition("project_type_id", filters[:project_type_ids])
       conditions += Util.and
@@ -736,6 +736,7 @@ end
       joins(joins).
       where(build_conditions_new(filters, 'agencies', false, false, true)).
       method_selection(filters).
+      where(agency_rols: {rol: 'INMOBILIARIA'}).
       group(select).
       order("#{count}")
 

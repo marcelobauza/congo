@@ -241,14 +241,14 @@ class ReportsController < ApplicationController
   end
 
   def projects_summary
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
-    @summary = Project.summary filters
-    @info=[]
-    @pstatus=[]
-    @ptypes=[]
+    filters   = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+    @summary  = Project.summary filters
+    @info     = []
+    @pstatus  = []
+    @ptypes   = []
+    @agencies = []
 
     @summary.each do |data|
-
       if (data[:title] == 'Resumen')
         data[:data].each do |v|
           @info.push([v[:name], v[:count]])
@@ -266,7 +266,14 @@ class ReportsController < ApplicationController
           @ptypes.push([v[:name], v[:count]])
         end
       end
+
+      if data[:title] == 'Proyectos por Inmobiliaria'
+        data[:data].map do |v|
+          @agencies.push([v[:name]])
+        end
+      end
     end
+
       result=[]
       pmixes = Project.projects_group_by_mix('mix', filters, false)
 
