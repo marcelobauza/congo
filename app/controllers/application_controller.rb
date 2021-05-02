@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
         action_name == 'new'
       "login"
     else
-      "application"
+      "flex"
     end
   end
 
