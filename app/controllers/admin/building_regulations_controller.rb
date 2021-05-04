@@ -65,6 +65,6 @@ class Admin::BuildingRegulationsController < Admin::DashboardsController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def building_regulation_params
-    params.require(:building_regulation).permit(:building_zone, :construct, :land_ocupation, :site, :the_geom, :identifier, :density_type_id, :county_id, :comments, :hectarea_inhabitants, :grouping, :parkings, :am_cc, :aminciti, :icinciti, :osinciti)
+    params.require(:building_regulation).permit(:building_zone, :construct, :land_ocupation, :site, :the_geom, :identifier, :density_type_id, :county_id, :comments, :hectarea_inhabitants, :grouping, :parkings, :am_cc, :aminciti, :icinciti, :osinciti, :freezed, :freezed_observations)
   end
 end

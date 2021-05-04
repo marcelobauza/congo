@@ -7,6 +7,7 @@ class ImportProcess < ApplicationRecord
 
   include Ibiza
   include ImportProcess::ParseFile
+  include ImportProcess::BuildingRegulations
 
   after_create_commit :import_job
 
