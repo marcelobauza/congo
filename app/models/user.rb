@@ -89,6 +89,6 @@ class User < ApplicationRecord
   end
 protected
 def password_required?
-   !persisted? || !password.blank? || !password_confirmation.blank?
+  !persisted? || !password.blank? || !password_confirmation.blank?
 end
 end

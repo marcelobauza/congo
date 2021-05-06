@@ -254,3 +254,54 @@ div.custom-menu.show {
   left: 17% !important;
   bottom: auto !important;
 }
+
+// Estilos para flex
+.bg-blue {
+  background: #00a2ff;
+}
+.bg-1 {
+  background-color: #373c40;
+}
+
+.bg-table-head {
+  background-color: #0076ba;
+}
+
+.table {
+  color: #fff !important;
+}
+
+.flex-dashboard {
+  .form-check-input {
+    position: unset;
+    margin-left: unset;
+  }
+  .table-bg1 {
+    background-color: #a6dfff;
+  }
+  .table-bg2 {
+    background-color: #5eb3e3;
+  }
+
+  .overflow-scroll {
+    overflow: scroll;
+  }
+
+  .h-330 {
+    height: 330px;
+  }
+
+  .mh-330 {
+    max-height: 330px;
+  }
+
+  .mh-350 {
+    max-height: 350px;
+  }
+  .carousel-control-next, .carousel-control-prev {
+    height: 22px;
+    width: 23px;
+    background-color: #5eb3e3;
+    border: 1px solid #000;
+  }
+}
