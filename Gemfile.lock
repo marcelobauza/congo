@@ -74,6 +74,7 @@ GEM
       axlsx
       rails (>= 3.1)
     bcrypt (3.1.12)
+    bcrypt_pbkdf (1.1.0)
     bindex (0.7.0)
     bootsnap (1.4.4)
       msgpack (~> 1.0)
@@ -139,6 +140,7 @@ GEM
       rails (>= 4.2.0, < 7.0)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
+    ed25519 (1.2.4)
     erubi (1.8.0)
     execjs (2.7.0)
     ffi (1.10.0)
@@ -399,6 +401,7 @@ DEPENDENCIES
   acts_as_xlsx
   axlsx!
   axlsx_rails
+  bcrypt_pbkdf
   bootsnap (>= 1.1.0)
   bootstrap (~> 4.3.1)
   bootstrap-datepicker-rails
@@ -414,6 +417,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   devise
   devise-security
+  ed25519 (~> 1.2, >= 1.2.4)
   figaro
   fx
   iconv
@@ -458,4 +462,4 @@ RUBY VERSION
    ruby 2.4.1p111
 
 BUNDLED WITH
-   2.1.4
+   2.2.16
