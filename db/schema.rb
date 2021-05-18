@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_000550) do
+ActiveRecord::Schema.define(version: 2021_05_18_225332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -452,6 +452,7 @@ ActiveRecord::Schema.define(version: 2021_05_04_000550) do
     t.integer "total_houses"
     t.integer "total_departments"
     t.string "geocode"
+    t.boolean "active", default: true
     t.index ["the_geom"], name: "index_neighborhoods_on_the_geom", using: :gist
     t.index ["the_geom"], name: "neighborhood_geom_idx", using: :gist
   end
