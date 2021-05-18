@@ -21,6 +21,11 @@
 //= require rails-ujs
 //= require activestorage
 //= require congo
+//= require legend
+//= require lots
+//= require pois
+//= require map_utils
+//= require flex/dashboards
 //= require_tree .
 
 $.fn.datepicker.defaults.format = "yyyy/mm/dd";
