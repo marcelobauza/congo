@@ -312,4 +312,53 @@ div.custom-menu.show {
     background-color: #5eb3e3;
     border: 1px solid #000;
   }
+
+  .table-box {
+    flex: 0 0 50%;
+  }
 }
+
+@media screen and (max-width: 1794px) {
+  .flex-dashboard {
+    .map-box {
+      max-width: 100%;
+      flex: 0 0 100%;
+    }
+
+    .table-box {
+      flex: 0 0 75%;
+      .container {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1556px) {
+  .flex-dashboard {
+    .select-box {
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1199px) {
+  .flex-dashboard {
+    .map-box {
+      flex: 0 0 75%;
+    }
+    .table-box {
+      flex: 0 0 100%;
+      max-width: 100%;
+      .container {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+
+
+
