@@ -73,12 +73,13 @@ class BuildingRegulation < ApplicationRecord
 
   def save_building_regulation_data(data)
     ic = Iconv.new('UTF-8', 'ISO-8859-1')
+    county = County.find_by_code(data["cod_com"].to_i.to_s)
 
     self.building_zone        = ic.iconv(data["zona"])
     self.construct            = data["ic"]
     self.land_ocupation       = data["os"]
     self.density_type_id      = data["am_cc"]
-    self.county_id            = data['county_id']
+    self.county_id            = county.id
     self.site                 = ic.iconv(data["url"])
     self.identifier           = data["id"]
     self.comments             = ic.iconv(data["nota"])
@@ -90,6 +91,8 @@ class BuildingRegulation < ApplicationRecord
     self.aminciti             = data["aminciti"]
     self.icinciti             = data["icinciti"]
     self.osinciti             = data["osinciti"]
+    self.freezed              = data["congelado"]
+    self.freezed_observations = data["obs_cong"]
 
     if self.save!
       save_land_use_types(data["usos"], self.id)

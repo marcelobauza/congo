@@ -21,6 +21,14 @@ body {
   height: 93vh;
 }
 
+#map_flex {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 53vh;
+}
+
 .admin_map_transactions {
   position: relative;
   height: 35vh;

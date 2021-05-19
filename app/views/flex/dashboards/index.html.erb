@@ -1,0 +1,169 @@
+<div class="bg-blue flex-dashboard">
+  <div class="container-fluid">
+    <div class="row pt-1">
+      <div class="col-lg-4 p-0">
+        <div class="m-1">
+          <div id="map_flex"></div>
+        </div>
+      </div>
+      <div class="col-lg-2 p-0">
+        <div class="bg-1 m-1">
+          <div class="container mh-330">
+            <div class="row pt-3">
+              <div class="col-4 text-center">
+                <input class="form-check-input" type="checkbox" value="" id="prop_type1">
+                <input class="form-check-input ml-2" type="checkbox" value="" id="prop_type2">
+              </div>
+              <div class="col-8 text-center">
+                <p>Tipo de propiedad</p>
+              </div>
+              <div class="col-4 text-center">
+                <input type="range" class="js-range-slider w-100" id="reg_date">
+              </div>
+              <div class="col-8 text-center">
+                <p>Fecha de inscripción</p>
+              </div>
+              <div class="col-4 text-center">
+                <input class="form-check-input" type="checkbox" value="" id="vendor1">
+                <input class="form-check-input ml-2" type="checkbox" value="" id="vendor2">
+              </div>
+              <div class="col-8 text-center">
+                <p>Vendedor</p>
+              </div>
+              <div class="col-4 text-center">
+                <input type="range" class="js-range-slider w-100" id="zone">
+              </div>
+              <div class="col-8 text-center">
+                <p>Zona normativa</p>
+              </div>
+              <div class="col-4 text-center">
+                <input type="range" class="js-range-slider w-100" id="surface">
+              </div>
+              <div class="col-8 text-center">
+                <p>Superficie</p>
+              </div>
+              <div class="col-4 text-center">
+                <input type="range" class="js-range-slider w-100" id="t_surface">
+              </div>
+              <div class="col-8 text-center">
+                <p>Superficie terreno</p>
+              </div>
+              <div class="col-4 text-center">
+                <input type="range" class="form-control-range" id="price">
+              </div>
+              <div class="col-8 text-center">
+                <p>Precio</p>
+              </div>
+              <div class="col-4 text-center">
+                <input type="range" class="js-range-slider w-100" id="u_price">
+              </div>
+              <div class="col-8 text-center">
+                <p>Precio unitario</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="mt-1">
+          <div class="container p-0">
+            <form action="" id="form">
+              <table class="table table-bordered">
+                <thead class="bg-table-head">
+                <tr>
+                  <th scope="col"><small>N</small></th>
+                  <th scope="col"><small>Tipo</small></th>
+                  <th scope="col"><small>Dirección</small></th>
+                  <th scope="col"><small>Comuna</small></th>
+                  <th scope="col"><small>Rol</small></th>
+                  <th scope="col"><small>Foja</small></th>
+                  <th scope="col"><small>#</small></th>
+                  <th scope="col"><small>Fecha</small></th>
+                  <th scope="col"><small>Vendedor</small></th>
+                  <th scope="col"><small>Util(m2)</small></th>
+                  <th scope="col"><small>Terreno</small></th>
+                  <th scope="col"><small>#E</small></th>
+                  <th scope="col"><small>#B</small></th>
+                  <th scope="col"><small>UF</small></th>
+                  <th scope="col"><small>UF(m2)</small></th>
+                  <th scope="col"><small>Año</small></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td colspan="16" class="w-100 text-center"><small><b>DATOS DE MI PROPIEDAD</b></small></td>
+                </tr>
+                <tr class="table-bg1">
+                  <td><input class="form-check-input" type="checkbox" value="" id="prop_type"></td>
+                  <td><input type="text" class="form-control"></td>
+                  <td><input type="text" class="form-control"></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                </tbody>
+              </table>
+              <button class="btn btn-secondary">Generar</button>
+              <button class="btn btn-success">Descargar</button>
+              <button onclick="clearFields()" class="btn btn-danger">Limpiar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row pt-1">
+      <div class="col-12">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="false" data-interval="false">
+          <div class="carousel-inner">
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+            <div class="carousel-item active">
+              <div class="row">
+                <div class="col-4">
+                  <p class="text-center bg-dark text-white">Cantidad</p>
+                </div>
+                <div class="col-4">
+                  <p class="text-center bg-dark text-white">Superficie</p>
+                </div>
+                <div class="col-4">
+                  <p class="text-center bg-dark text-white">Precio</p>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="row">
+                <div class="col-4">
+                  <p class="text-center bg-dark text-white">Precio unitario</p>
+                </div>
+                <div class="col-8">
+                  <p class="text-center bg-dark text-white">Volumen mercado</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    function clearFields() {
+        $("input").val("");
+      }
+</script>

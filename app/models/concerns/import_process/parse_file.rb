@@ -177,43 +177,6 @@ module ImportProcess::ParseFile
         end
       end
 
-      def parse_building_regulations(shp_file, import_logger)
-
-        st1 = JSON.parse(File.read(shp_file))
-        json_data = RGeo::GeoJSON.decode(st1, :json_parser => :json)
-        json_data.each_with_index do |a, index|
-          import_logger.current_row_index =index
-          import_logger.processed += 1
-
-          if a.geometry.nil?
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
-            next
-          end
-          unless a.geometry.geometry_type.to_s == 'MultiPolygon' || a.geometry.geometry_type.to_s == 'Polygon'
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
-            next
-          end
-
-          unless a.geometry.valid?
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
-            next
-          end
-          geom = a.geometry.as_text
-          da = a.properties
-          data = {}
-          da.each do |a| data[a[0].downcase] = a[1] end
-          building = BuildingRegulation.find_or_initialize_by(identifier: data["id"])
-          building.new_record? ? import_logger.inserted +=1 : import_logger.updated += 1
-          building.save_building_regulation_data(geom, data)
-
-          if building.errors.any?
-            building.errors.full_messages.each do |error_message|
-              import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
-            end
-          end
-        end
-      end
-
       def parse_transactions(shp_file, import_logger)
         RGeo::Shapefile::Reader.open(shp_file) do |shp|
           field = []

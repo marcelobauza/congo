@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_10_195239) do
+ActiveRecord::Schema.define(version: 2021_05_04_000550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -111,6 +111,8 @@ ActiveRecord::Schema.define(version: 2021_03_10_195239) do
     t.decimal "osinciti"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "freezed", default: false
+    t.string "freezed_observations"
     t.index ["county_id"], name: "index_building_regulations_on_county_id"
     t.index ["density_type_id"], name: "index_building_regulations_on_density_type_id"
   end
