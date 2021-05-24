@@ -5,6 +5,7 @@ class RentIndicator < ApplicationRecord
   def self.rent_geo filters
     rent =  Neighborhood.where(
       conditions_by(filters)).
+      where(active: true).
       order(id: :desc)
 
     factory = RGeo::GeoJSON::EntityFactory.instance
