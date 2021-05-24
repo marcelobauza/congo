@@ -27,11 +27,7 @@
 /config/master.key
 config/application.yml
 .rvmrc
-<<<<<<< HEAD
-.idea
-=======
 
 # Ignore JetBrains IDE stuff
 .idea
 .generators
->>>>>>> 8c34ee81bc2fcb6cfd79c37e1614de4736769b32
