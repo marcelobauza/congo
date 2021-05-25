@@ -158,6 +158,30 @@ building_regulations_popup = function(id) {
               'text': data.comments
             }),
           ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Zona Congelada:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': (data.freezed == false) ? 'No' : 'Si'
+            }),
+          ),
+          $('<div>', {
+            'class': 'row'
+          }).append(
+            $('<div>', {
+              'class': 'col-md-6 text-right',
+              'text': 'Zona Congelada Obs.:'
+            }),
+            $('<div>', {
+              'class': 'col-md-6',
+              'text': data.frezeed_observations
+            }),
+          ),
         ),
         $('<div>', {
           'class': 'text-center'
