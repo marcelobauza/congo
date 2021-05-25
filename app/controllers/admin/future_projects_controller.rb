@@ -83,6 +83,6 @@ class Admin::FutureProjectsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def future_project_params
-    params.require(:future_project).permit(:code, :address, :name, :role_number, :file_number, :file_date, :owner, :legal_agent, :architect, :floors, :undergrounds, :total_units, :total_parking, :total_commercials, :m2_approved, :m2_built, :m2_field, :cadastral_date, :comments, :bimester, :year, :cadastre, :active, :project_type_id, :future_project_type_id, :future_project_sub_type_id, :county_id, :the_geom, :t_ofi)
+    params.require(:future_project).permit(:code, :address, :name, :role_number, :file_number, :file_date, :owner, :legal_agent, :architect, :floors, :undergrounds, :total_units, :total_parking, :total_commercials, :m2_approved, :m2_built, :m2_field, :cadastral_date, :comments, :bimester, :year, :cadastre, :active, :project_type_id, :future_project_type_id, :future_project_sub_type_id, :county_id, :the_geom, :t_ofi, :reference)
   end
 end
