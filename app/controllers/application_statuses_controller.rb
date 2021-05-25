@@ -1,5 +1,6 @@
 class ApplicationStatusesController < ApplicationController
   before_action :set_application_status, only: [:show, :edit, :update, :destroy]
+  helper_method :sort_column, :sort_direction
 
   # GET /application_statuses
   # GET /application_statuses.json
@@ -30,7 +31,7 @@ class ApplicationStatusesController < ApplicationController
 
 
   def index
-    @application_statuses = ApplicationStatus.where(user_id: current_user.id)
+    @application_statuses = ApplicationStatus.where(user_id: current_user.id).order(sort_column + ' ' + sort_direction)
   end
 
   # GET /application_statuses/1
@@ -82,6 +83,15 @@ class ApplicationStatusesController < ApplicationController
   end
 
   private
+
+  def sort_column
+    ApplicationStatus.column_names.include?(params[:sort]) ? params[:sort] : "name"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ?  params[:direction] : "asc"
+  end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_application_status
       @application_status = ApplicationStatus.find(params[:id])
