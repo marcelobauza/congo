@@ -33,6 +33,8 @@ class Flex::DashboardsController < ApplicationController
       .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
       .where("ST_Contains(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"Polygon\", \"coordinates\": #{polygon}}'), 4326), transactions.the_geom)")
       .where("ST_Intersects(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"Polygon\", \"coordinates\": #{polygon}}'), 4326), building_regulations.the_geom)")
+      .order(id: :desc)
+      .limit(500)
 
     data.each do |tr|
       property_type_id << tr.property_type_id unless property_type_id.include? tr.property_type_id
