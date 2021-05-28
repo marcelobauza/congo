@@ -50,22 +50,24 @@ Congo.flex_dashboards.action_index = function(){
         arr1    = []
 
         polygon.forEach(function(entry){
-          size_box = Congo.map_utils.LatLngsToCoords(entry);
+          arr1 = Congo.map_utils.LatLngsToCoords(entry)
+          arr1.push(arr1[0])
+          size_box = [arr1];
         })
       }
+      data = {polygon: JSON.stringify(size_box)}
 
-      // $.ajax({
-      //   async: false,
-      //   type: 'get',
-      //   url: '/dashboards/filter_county_for_lon_lat.json',
-      //   datatype: 'json',
-      //   data: {lon: centerpt.lng, lat: centerpt.lat },
-      //   success: function(data){
-      //     Congo.dashboards.config.county_id.push([data['county_id']]);
-      //     Congo.dashboards.config.county_name = data['county_name'];
-      //   },
-      //   error: function (jqxhr, textstatus, errorthrown) { console.log("algo malo paso"); }
-      // })
+      $.ajax({
+        async: false,
+        type: 'get',
+        url: 'flex/dashboards/search_data_for_filters.json',
+        datatype: 'json',
+        data: data,
+        success: function(data){
+
+        },
+        error: function (jqxhr, textstatus, errorthrown) { console.log("algo malo paso"); }
+      })
     })
   }
   return{
