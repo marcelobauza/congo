@@ -130,6 +130,7 @@ Rails.application.routes.draw do
   namespace :flex do
     get 'dashboards/index'
     get 'dashboards/search_data_for_filters'
+    get 'dashboards/search_data_for_table'
     root 'dashboards#index'
   end
 

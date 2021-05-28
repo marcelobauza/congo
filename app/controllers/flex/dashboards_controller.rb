@@ -84,4 +84,73 @@ class Flex::DashboardsController < ApplicationController
     render json: result
   end
 
+  def search_data_for_table
+
+    property_type = params[:property_types]
+    inscription_date = params[:inscription_date]
+    seller_types = params[:seller_types]
+    land_use = params[:land_use]
+    max_height = params[:max_height]
+    building_surfaces = params[:building_surfaces]
+    terrain_surfaces = params[:terrain_surfaces]
+    prices = params[:prices]
+    unit_prices = params[:unit_prices]
+
+    @data = Transaction
+      .select("
+        transactions.property_type_id,
+        transactions.inscription_date,
+        transactions.address,
+        transactions.county_id,
+        transactions.seller_type_id,
+        transactions.total_surface_building,
+        transactions.total_surface_terrain,
+        transactions.parkingi,
+        transactions.cellar,
+        transactions.calculated_value
+      ")
+      .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
+      .where("ST_Contains(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"Polygon\", \"coordinates\":[[[\"-70.74010848999025\", \"-33.43007977475543\"], [\"-70.74010848999025\", \"-33.46796263238644\"], [\"-70.67994117736818\", \"-33.44461900927522\"], [\"-70.74010848999025\", \"-33.43007977475543\"]]]}'), 4326), transactions.the_geom)")
+      .where("ST_Intersects(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"Polygon\", \"coordinates\":[[[\"-70.74010848999025\", \"-33.43007977475543\"], [\"-70.74010848999025\", \"-33.46796263238644\"], [\"-70.67994117736818\", \"-33.44461900927522\"], [\"-70.74010848999025\", \"-33.43007977475543\"]]]}'), 4326), building_regulations.the_geom)")
+      .limit(100)
+
+      unless property_type.nil?
+        @data = @data.where(property_type_id: property_type)
+      end
+
+      unless inscription_date.nil?
+        @data = @data.where(inscription_date: inscription_date)
+      end
+
+      unless seller_types.nil?
+        @data = @data.where(seller_type_id: seller_types)
+      end
+
+      unless land_use.nil?
+        @data = @data.where(building_regulations: { osinciti: land_use })
+      end
+
+      unless max_height.nil?
+        @data = @data.where(building_regulations: { aminciti: max_height })
+      end
+
+      unless building_surfaces.nil?
+        @data = @data.where(total_surface_building: building_surfaces)
+      end
+
+      unless terrain_surfaces.nil?
+        @data = @data.where(total_surface_terrain: terrain_surfaces)
+      end
+
+      unless prices.nil?
+        @data = @data.where(calculated_value: prices)
+      end
+
+      unless unit_prices.nil?
+        @data = @data.where(uf_m2_u: unit_prices)
+      end
+
+    render :json => @data
+
+  end
 end
