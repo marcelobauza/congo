@@ -534,7 +534,7 @@ Congo.demography.action_dashboards = function(){
         // Mostramos el icono de Heatmap correspondiente
         $("#heat-prv").hide();
         $("#heat-cbr").hide();
-        $("#heat-em-dem").show();
+        $("#heat-em-dem").hide();
 
         //Ocultamos KML
         $("#kml").hide();
