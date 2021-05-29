@@ -1,1 +1,5 @@
-  $('<%= j render "index", title: "Session" %>').modal();
+if ($("#modal-load").length > 0) {
+  $("#modal-load").remove();
+  $('.modal-backdrop').remove();
+}
+$('<%= j render "index", title: "Session" %>').modal();

@@ -1,6 +1,6 @@
-json.extract! @data[0], :building_zone, :construct, :osinciti, :aminciti, :hectarea_inhabitants, :grouping, :area, :parkings, :comments, :identifier, :id
+json.extract! @data[0], :building_zone, :construct, :osinciti, :aminciti, :hectarea_inhabitants, :grouping, :area, :parkings, :comments, :identifier, :id, :freezed, :freezed_observations
 
-json.density_types do 
+json.density_types do
   json.name @data[0].density_type.name
 end
 
