@@ -1,81 +1,107 @@
 Congo.namespace('flex_dashboards.action_index');
 
-Congo.flex_dashboards.action_index = function(){
-  var map_admin, marker, flexMap;
-
-  var init = function() {
-    var streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-      attribution: '',
-      id: 'streets-v11',
-      accessToken: 'pk.eyJ1IjoiZmxhdmlhYXJpYXMiLCJhIjoiY2ppY2NzMm55MTN6OTNsczZrcGFkNHpoOSJ9.cL-mifEoJa6szBQUGnLmrA',
-      updateWhenIdle: true,
-      reuseTiles: true
+//filters
+var parsed_data = ""
+///
+//filters
+function update_filters(){
+    $(parsed_data['property_types']).each(function(index){
+        $("#prop_type").removeClass("d-none").append($('<option>').val(index).text($(this)[0]));
     });
-
-  flexMap = L.map('map_flex', {
-      fadeAnimation: true,
-      markerZoomAnimation: false,
-      zoom: 11,
-      center: [-33.4372, -70.6506],
-      zoomControl: false,
-      zoomAnimation: true,
-      layers: [streets]
+    $(parsed_data['seller_types']).each(function(index){
+        $("#seller_type").removeClass("d-none").append($('<option>').val(index).text($(this)[0]));
     });
+    $(document).ready(function(){
+        $('#prop_type').multiselect({
+            includeSelectAllOption: true
+        });
+        $('#seller_type').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+}
+///
 
-    fgr = L.featureGroup().addTo(flexMap);
+Congo.flex_dashboards.action_index = function () {
+    var map_admin, marker, flexMap;
 
-    var drawControl = new L.Control.Draw({
-      draw: {
-        marker: false,
-        polyline: false,
-        rectangle: false,
-        circlemarker: false,
-      },
-      edit: {
-        featureGroup: fgr
-      }
-    }).addTo(flexMap);
+    var init = function () {
+        var streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: '',
+            id: 'streets-v11',
+            accessToken: 'pk.eyJ1IjoiZmxhdmlhYXJpYXMiLCJhIjoiY2ppY2NzMm55MTN6OTNsczZrcGFkNHpoOSJ9.cL-mifEoJa6szBQUGnLmrA',
+            updateWhenIdle: true,
+            reuseTiles: true
+        });
 
-    flexMap.on('draw:created', function(e) {
-      size_box         = [];
-      fgr.eachLayer(function(layer){
-        fgr.removeLayer(layer);
-      });
+        flexMap = L.map('map_flex', {
+            fadeAnimation: true,
+            markerZoomAnimation: false,
+            zoom: 11,
+            center: [-33.4372, -70.6506],
+            zoomControl: false,
+            zoomAnimation: true,
+            layers: [streets]
+        });
 
-      fgr.addLayer(e.layer);
-      layerType = e.layerType;
+        fgr = L.featureGroup().addTo(flexMap);
 
-      if (layerType == 'polygon'){
-        polygon = e.layer.getLatLngs();
-        arr1    = []
+        var drawControl = new L.Control.Draw({
+            draw: {
+                marker: false,
+                polyline: false,
+                rectangle: false,
+                circlemarker: false,
+            },
+            edit: {
+                featureGroup: fgr
+            }
+        }).addTo(flexMap);
 
-        polygon.forEach(function(entry){
-          arr1 = Congo.map_utils.LatLngsToCoords(entry)
-          arr1.push(arr1[0])
-          size_box = [arr1];
+        flexMap.on('draw:created', function (e) {
+            size_box = [];
+            fgr.eachLayer(function (layer) {
+                fgr.removeLayer(layer);
+            });
+
+            fgr.addLayer(e.layer);
+            layerType = e.layerType;
+
+            if (layerType == 'polygon') {
+                polygon = e.layer.getLatLngs();
+                arr1 = []
+
+                polygon.forEach(function (entry) {
+                    arr1 = Congo.map_utils.LatLngsToCoords(entry)
+                    arr1.push(arr1[0])
+                    size_box = [arr1];
+                })
+            }
+            data = {polygon: JSON.stringify(size_box)}
+
+            $.ajax({
+                async: false,
+                type: 'get',
+                url: 'flex/dashboards/search_data_for_filters.json',
+                datatype: 'json',
+                data: data,
+                success: function (data) {
+
+                    parsed_data = JSON.parse("{\"property_types\":[[\"Casas\",1],[\"Departamentos\",2],[\"Oficinas\",3],[\"Local Comercial\",4],[\"Oficina y Local Comercial\",5],[\"Equipamiento\",6],[\"Departamento y Local Comercial\",10]],\"inscription_dates\":{\"from\":\"2008-01-02\",\"to\":\"2020-12-03\"},\"seller_types\":[[\"PROPIETARIO\",1],[\"INMOBILIARIA\",2],[\"EMPRESA\",3],[\"BANCO\",4]],\"land_use\":{\"from\":0,\"to\":0.8},\"max_height\":{\"from\":0,\"to\":99},\"building_surfaces\":{\"from\":0,\"to\":699},\"terrain_surfaces\":{\"from\":0,\"to\":2071},\"prices\":{\"from\":60,\"to\":131681},\"unit_prices\":{\"from\":0,\"to\":741.17}}")
+
+                    console.log('Data hacodeada');
+                    console.log(parsed_data);
+
+                },
+                error: function (jqxhr, textstatus, errorthrown) {
+                    console.log("algo malo paso");
+                }
+            })
+            update_filters();
         })
-      }
-      data = {polygon: JSON.stringify(size_box)}
-
-      $.ajax({
-        async: false,
-        type: 'get',
-        url: 'flex/dashboards/search_data_for_filters.json',
-        datatype: 'json',
-        data: data,
-        success: function(data){
-
-          data = JSON.parse("{\"property_types\":[[\"Casas\",1],[\"Departamentos\",2],[\"Oficinas\",3],[\"Local Comercial\",4],[\"Oficina y Local Comercial\",5],[\"Equipamiento\",6],[\"Departamento y Local Comercial\",10]],\"inscription_dates\":{\"from\":\"2008-01-02\",\"to\":\"2020-12-03\"},\"seller_types\":[[\"PROPIETARIO\",1],[\"INMOBILIARIA\",2],[\"EMPRESA\",3],[\"BANCO\",4]],\"land_use\":{\"from\":0,\"to\":0.8},\"max_height\":{\"from\":0,\"to\":99},\"building_surfaces\":{\"from\":0,\"to\":699},\"terrain_surfaces\":{\"from\":0,\"to\":2071},\"prices\":{\"from\":60,\"to\":131681},\"unit_prices\":{\"from\":0,\"to\":741.17}}")
-
-          console.log('Data hacodeada');
-          console.log(data);
-
-        },
-        error: function (jqxhr, textstatus, errorthrown) { console.log("algo malo paso"); }
-      })
-    })
-  }
-  return{
-    init:init,
-  }
+    }
+    return {
+        init: init,
+    }
 }();
+
