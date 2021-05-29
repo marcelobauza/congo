@@ -179,7 +179,7 @@ building_regulations_popup = function(id) {
             }),
             $('<div>', {
               'class': 'col-md-6',
-              'text': data.frezeed_observations
+              'text': data.freezed_observations
             }),
           ),
         ),
