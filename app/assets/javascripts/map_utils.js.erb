@@ -489,24 +489,24 @@ Congo.map_utils = function(){
 
           if (layer_type == 'building_regulations_info'){
 
-          widget =  Congo.dashboards.config.widget;
-          switch (widget) {
-            case 'building_regulations_max_density':
+            widget =  Congo.dashboards.config.widget;
+            switch (widget) {
+              case 'building_regulations_max_density':
                 Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
-            break;
-            case 'building_regulations_floors':
-              Congo.dashboards.config.style_layer = 'building_regulations_floors_clip';
-            break;
-            default:
+                break;
+              case 'building_regulations_floors':
+                Congo.dashboards.config.style_layer = 'building_regulations_floors_clip';
+                break;
+              default:
                 Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
-            break;
+                break;
             }
             geometry = centerpt.split(' ');
             var center = [geometry[0],geometry[1]];
             var radius = radius;
             var options = {steps: 50, units: 'meters', properties: {foo: 'bar'}};
             var circle = turf.circle(center, radius, options);
-              var pol = circle['geometry']['coordinates'];
+            var pol = circle['geometry']['coordinates'];
             $.each(pol, function(a, b){
               $.each(b, function(c,d){
                 coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
@@ -519,7 +519,7 @@ Congo.map_utils = function(){
           cql_filter ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)"+ filter_layer;
         }
 
-      cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)";
+        cql_filter_pois ="DWITHIN(the_geom,Point("+centerpt+"),"+radius+",meters)";
 
         break;
       case 'polygon':
@@ -537,27 +537,27 @@ Congo.map_utils = function(){
           widget =  Congo.dashboards.config.widget;
           switch (widget) {
             case 'building_regulations_max_density':
-                Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
-            break;
+              Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
+              break;
             case 'building_regulations_floors':
               Congo.dashboards.config.style_layer = 'building_regulations_floors_clip';
-            break;
+              break;
             default:
-                Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
-            break;
+              Congo.dashboards.config.style_layer= 'building_regulations_max_density_clip';
+              break;
 
-            }
+          }
           env = "polygon: Polygon(("+coord_geoserver+"))";
         }else{
           if (layer_type == 'demography_info'){
             cql_filter = "1=1";
             filter_layer = ''
             Congo.dashboards.config.style_layer = 'census_voronoi_clip';
-          if (census_source_id == '1'){
-            layer_type = 'demography_info_census_2017'
-          }else{
-            layer_type = 'demography_info_census_2012'
-          }
+            if (census_source_id == '1'){
+              layer_type = 'demography_info_census_2017'
+            }else{
+              layer_type = 'demography_info_census_2012'
+            }
 
             env = "polygon: Polygon(("+coord_geoserver+"))";
           }else{
@@ -579,24 +579,23 @@ Congo.map_utils = function(){
           }
           var geo;
           data ={ county_id: JSON.stringify(county_id) };
-      $.ajax({
-        async: false,
-        type: 'Get',
-        data: data ,
-        url: '/counties/search_county_geojson.json',
-        datatype: 'json',
-        success: function(data){
-          console.log(data);
-          geo = JSON.parse(data['geo'])
-        }
-      })
+          $.ajax({
+            async: false,
+            type: 'Get',
+            data: data ,
+            url: '/counties/search_county_geojson.json',
+            datatype: 'json',
+            success: function(data){
+              geo = JSON.parse(data['geo'])
+            }
+          })
           var options = {tolerance: 0.0001, highQuality: false};
           var simplified = turf.simplify(geo, options);
-        $.each(simplified['coordinates'][0], function(a, b){
-          $.each(b, function(c,d){
-            coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
-          })
-        });
+          $.each(simplified['coordinates'][0], function(a, b){
+            $.each(b, function(c,d){
+              coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
+            })
+          });
 
           env = "polygon: Polygon(("+coord_geoserver+"))";
           Congo.dashboards.config.style_layer = 'census_voronoi_clip';
@@ -633,32 +632,53 @@ Congo.map_utils = function(){
         Congo.dashboards.config.size_box = [];
         county_id = Congo.dashboards.config.county_id;
         if (layer_type == 'demography_info'){
-          filter_layer  = " AND 1=1";
           if (census_source_id == '1'){
             layer_type = 'demography_info_census_2017'
           }else{
 
             layer_type = 'demography_info_census_2012'
           }
-          Congo.dashboards.config.style_layer = 'census_voronoi_gse_zn';
-        }
+          Congo.dashboards.config.style_layer = 'census_voronoi_clip';
+          var geo;
+          data ={ county_id: JSON.stringify(county_id) };
+          $.ajax({
+            async: false,
+            type: 'Get',
+            data: data ,
+            url: '/counties/search_county_geojson.json',
+            datatype: 'json',
+            success: function(data){
+              geo = JSON.parse(data['geo'])
+            }
+          })
+          var options = {tolerance: 0.0001, highQuality: false};
+          var simplified = turf.simplify(geo, options);
+          $.each(simplified['coordinates'][0], function(a, b){
+            $.each(b, function(c,d){
+              coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
+            })
+          });
 
-        if (layer_type == 'building_regulations_info'){
-          switch (widget) {
-            case 'building_regulations_max_density':
-              Congo.dashboards.config.style_layer= 'building_regulations_max_density';
-              break;
-            case 'building_regulations_floors':
-              Congo.dashboards.config.style_layer = 'building_regulations_floors';
-              break;
-            default:
-              Congo.dashboards.config.style_layer= 'building_regulations_max_density';
-              break;
-
+          env = "polygon: Polygon(("+coord_geoserver+"))";
+          Congo.dashboards.config.style_layer = 'census_voronoi_clip';
+          cql_filter = filter_layer;
+        }else{
+          if (layer_type == 'building_regulations_info'){
+            switch (widget) {
+              case 'building_regulations_max_density':
+                Congo.dashboards.config.style_layer= 'building_regulations_max_density';
+                break;
+              case 'building_regulations_floors':
+                Congo.dashboards.config.style_layer = 'building_regulations_floors';
+                break;
+              default:
+                Congo.dashboards.config.style_layer= 'building_regulations_max_density';
+                break;
+            }
           }
+          cql_filter = "county_id IN ("+ county_id +") "+ filter_layer;
+          cql_filter_pois = "county_id IN ("+ county_id + ")";
         }
-        cql_filter = "county_id IN ("+ county_id +") "+ filter_layer;
-        cql_filter_pois = "county_id IN ("+ county_id + ")";
         break;
     }
 
