@@ -19,15 +19,15 @@
   </div>
   <div class="span4">
     <span class="label success"><%= t('activerecord.attributes.kpi.bimester')%></span>
-  <%= select "",  'bimester_id', options_for_select([0,1,2,3,4,5,6], {:include_blank => true}), {:include_blank => true} %>
+  <%= select "",  'bimester_id', options_for_select((0..6).to_a, {:include_blank => true}), {:include_blank => true} %>
   </div>
   <div class="span4">
     <span class="label success"><%= t('activerecord.attributes.kpi.year_from')%></span>
-  <%= select "",  'year_from', options_for_select([2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020]), {:include_blank => true} %>
+  <%= select "",  'year_from', options_for_select((2010..Date.today.year).to_a), {:include_blank => true} %>
   </div>
   <div class="span4">
     <span class="label success"><%= t('activerecord.attributes.kpi.year_to')%></span>
-  <%= select "",  'year_to', options_for_select([2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020]), {:include_blank => true} %>
+  <%= select "",  'year_to', options_for_select((2010..Date.today.year).to_a), {:include_blank => true} %>
   </div>
 
 </div>
