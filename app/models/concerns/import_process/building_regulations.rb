@@ -2,11 +2,13 @@ module ImportProcess::BuildingRegulations
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def parse_building_regulations(geojson_file, import_logger)
+    def parse_building_regulations(geojson_file, import_logger, dir_path)
       file_parsed = JSON.parse(File.read(geojson_file))
       json_data   = RGeo::GeoJSON.decode(file_parsed, json_parser: :json)
       rows        = []
       counties    = []
+
+      copy_pdf_to_data dir_path
 
       json_data.each_with_index do |a, index|
         import_logger.current_row_index = index
@@ -14,18 +16,24 @@ module ImportProcess::BuildingRegulations
 
         if a.geometry.nil?
           import_logger.details << {
-            :row_index => import_logger.current_row_index,
-            :message => I18n.translate(:ERROR_GEOMETRY_BLANK)
+            row_index: import_logger.current_row_index,
+            message: I18n.translate(:ERROR_GEOMETRY_BLANK)
           }
           next
         end
         unless a.geometry.geometry_type.to_s == 'MultiPolygon' || a.geometry.geometry_type.to_s == 'Polygon'
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON) }
+          import_logger.details << {
+            row_index: import_logger.current_row_index,
+            message: I18n.translate(:ERROR_GEOMETRY_MULTIPOLYGON)
+          }
           next
         end
 
         unless a.geometry.valid?
-          import_logger.details << { :row_index => import_logger.current_row_index, :message => I18n.translate(:ERROR_GEOMETRY_INVALID) }
+          import_logger.details << {
+            row_index: import_logger.current_row_index,
+            message: I18n.translate(:ERROR_GEOMETRY_INVALID)
+          }
           next
         end
 
@@ -47,12 +55,20 @@ module ImportProcess::BuildingRegulations
 
         if building.errors.any?
           building.errors.full_messages.each do |error_message|
-            import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
+            import_logger.details << {
+              row_index: import_logger.current_row_index,
+              message: error_message
+            }
           end
         else
-          import_logger.inserted +=1
+          building.new_record? ? import_logger.inserted +=1 : import_logger.updated +=1
         end
       end
+    end
+
+    def copy_pdf_to_data dir_path
+      dst = 'db/data/pdf/'
+      FileUtils.cp(Dir.glob("#{dir_path}/*.zip"), dst)
     end
   end
 end
