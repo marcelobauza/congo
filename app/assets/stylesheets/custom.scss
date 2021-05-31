@@ -316,6 +316,9 @@ div.custom-menu.show {
   .table-box {
     flex: 0 0 50%;
   }
+  .irs-with-grid .irs-grid {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 1794px) {

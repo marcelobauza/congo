@@ -6,64 +6,77 @@
           <div id="map_flex"></div>
         </div>
       </div>
-      <div class="col-md-3 p-0 select-box">
+      <div class="col-md-3 p-0 bg-1 d-flex justify-content-center align-items-center" id="intro">
         <div class="bg-1 m-1">
           <div class="container">
-            <div class="row pt-3">
-              <div class="col-4 text-center">
+            <p>Seleccione en el mapa</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 p-0 d-none" id="select-box">
+        <div class="bg-1 m-1">
+          <div class="container">
+            <div class="row pt-3 d-flex align-items-center">
+              <div class="col-4 my-2 text-center">
                 <div class="form-group">
-                  <select class="form-control d-none" id="prop_type" multiple></select>
+                  <select class="form-control" id="prop_type" multiple></select>
                 </div>
               </div>
-              <div class="col-8 text-center">
+              <div class="col-8 my-2 text-center">
                 <div class="form-group">
                   <p>Tipo de propiedad</p>
                 </div>
               </div>
-              <div class="col-4 text-center">
-                <input type="range" class="js-range-slider w-100" id="reg_date">
+              <div class="col-12 my-2 text-center">
+                <p class="mb-0">Fecha de inscripción</p>
+                <input type="range" class="js-range-slider w-100" id="insc_date">
               </div>
-              <div class="col-8 text-center">
+              <!--<div class="col-8 my-2 text-center">
                 <p>Fecha de inscripción</p>
-              </div>
-              <div class="col-4 text-center">
+              </div>-->
+              <div class="col-4 my-2 text-center">
                 <div class="form-group">
-                  <select class="form-control d-none" id="seller_type" multiple></select>
+                  <select class="form-control" id="seller_type" multiple></select>
                 </div>
               </div>
-              <div class="col-8 text-center">
+              <div class="col-8 my-2 text-center">
                 <p>Vendedor</p>
               </div>
-              <div class="col-4 text-center">
+              <div class="col-12 my-2 text-center">
+                <p class="mb-0">Zona normativa</p>
                 <input type="range" class="js-range-slider w-100" id="zone">
               </div>
-              <div class="col-8 text-center">
+              <!--<div class="col-8 my-2 text-center">
                 <p>Zona normativa</p>
-              </div>
-              <div class="col-4 text-center">
+              </div>-->
+              <div class="col-12 my-2 text-center">
+                <p class="mb-0">Superficie</p>
                 <input type="range" class="js-range-slider w-100" id="surface">
               </div>
-              <div class="col-8 text-center">
+              <!--<div class="col-8 my-2 text-center">
                 <p>Superficie</p>
-              </div>
-              <div class="col-4 text-center">
+              </div>-->
+              <div class="col-12 my-2 text-center">
+                <p class="mb-0">Superficie terreno</p>
                 <input type="range" class="js-range-slider w-100" id="t_surface">
               </div>
-              <div class="col-8 text-center">
+              <!--<div class="col-8 my-2 text-center">
                 <p>Superficie terreno</p>
+              </div>-->
+              <div class="col-12 my-2 text-center">
+                <p class="mb-0">Precio</p>
+                <input type="range" class="js-range-slider w-100" id="price">
               </div>
-              <div class="col-4 text-center">
-                <input type="range" class="form-control-range" id="price">
-              </div>
-              <div class="col-8 text-center">
+              <!--<div class="col-8 my-2 text-center">
                 <p>Precio</p>
-              </div>
-              <div class="col-4 text-center">
+              </div>-->
+              <div class="col-12 my-2 text-center">
+                <p class="mb-0">Precio unitario</p>
                 <input type="range" class="js-range-slider w-100" id="u_price">
               </div>
-              <div class="col-8 text-center">
+              <!--<div class="col-8 my-2 text-center">
                 <p>Precio unitario</p>
-              </div>
+              </div>-->
             </div>
           </div>
         </div>

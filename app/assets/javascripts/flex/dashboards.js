@@ -2,16 +2,118 @@ Congo.namespace('flex_dashboards.action_index');
 
 //filters
 var parsed_data = ""
-///
-//filters
-function update_filters(){
-    $(parsed_data['property_types']).each(function(index){
-        $("#prop_type").removeClass("d-none").append($('<option>').val(index).text($(this)[0]));
+
+function update_filters() {
+    $(parsed_data['property_types']).each(function (index) {
+        $("#prop_type").append($('<option>').val(index).text($(this)[0]));
     });
-    $(parsed_data['seller_types']).each(function(index){
+    $(parsed_data['seller_types']).each(function (index) {
         $("#seller_type").removeClass("d-none").append($('<option>').val(index).text($(this)[0]));
     });
-    $(document).ready(function(){
+    $(parsed_data['inscription_dates']).each(function () {
+        var lang = "es-ES";
+        var yearBegin = parseInt($(parsed_data['inscription_dates'])[0]['from'].split("-")[0]);
+        var yearTo = parseInt($(parsed_data['inscription_dates'])[0]['to'].split("-")[0]);
+
+        //var year = 2018;
+
+        function dateToTS(date) {
+            return date.valueOf();
+        }
+
+        function tsToDate(ts) {
+            var d = new Date(ts);
+
+            return d.toLocaleDateString(lang, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        $("#insc_date").ionRangeSlider({
+            skin: "flat",
+            type: "double",
+            grid: true,
+            min: dateToTS(new Date(yearBegin, 10, 1)),
+            max: dateToTS(new Date(yearTo, 11, 1)),
+            from: dateToTS(new Date($(this['from']))),
+            to: dateToTS(new Date($(this['to']))),
+            prettify: tsToDate
+        });
+    });
+    $(parsed_data['prices']).each(function () {
+        var from = parseFloat($(this)[0]['from']);
+        var to = parseFloat($(this)[0]['to']);
+        $("#price").ionRangeSlider({
+            type: "double",
+            min: from,
+            max: to,
+            from: from,
+            to: to,
+            drag_interval: true,
+            min_interval: null,
+            max_interval: null
+        });
+    });
+    $(parsed_data['unit_prices']).each(function () {
+        var from = parseFloat($(this)[0]['from']);
+        var to = parseFloat($(this)[0]['to']);
+        $("#u_price").ionRangeSlider({
+            type: "double",
+            min: from,
+            max: to,
+            from: from,
+            to: to,
+            drag_interval: true,
+            min_interval: null,
+            max_interval: null
+        });
+    });
+    $(parsed_data['terrain_surfaces']).each(function () {
+        var from = parseFloat($(this)[0]['from']);
+        var to = parseFloat($(this)[0]['to']);
+        $("#t_surface").ionRangeSlider({
+            type: "double",
+            min: from,
+            max: to,
+            from: from,
+            to: to,
+            drag_interval: true,
+            min_interval: null,
+            max_interval: null
+        });
+    });
+    $(parsed_data['building_surfaces']).each(function () {
+        var from = parseFloat($(this)[0]['from']);
+        var to = parseFloat($(this)[0]['to']);
+        $("#zone").ionRangeSlider({
+            type: "double",
+            min: from,
+            max: to,
+            from: from,
+            to: to,
+            drag_interval: true,
+            min_interval: null,
+            max_interval: null
+        });
+    });
+    $(parsed_data['land_use']).each(function () {
+        var from = parseFloat($(this)[0]['from']);
+        var to = parseFloat($(this)[0]['to']);
+        $("#surface").ionRangeSlider({
+            type: "double",
+            min: from,
+            max: to,
+            from: from,
+            to: to,
+            drag_interval: true,
+            min_interval: null,
+            max_interval: null
+        });
+    });
+
+    $(document).ready(function () {
         $('#prop_type').multiselect({
             includeSelectAllOption: true
         });
@@ -19,6 +121,8 @@ function update_filters(){
             includeSelectAllOption: true
         });
     });
+    $("#intro").remove();
+    $("#select-box").removeClass("d-none");
 }
 ///
 
