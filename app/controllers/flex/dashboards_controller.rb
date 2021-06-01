@@ -121,43 +121,25 @@ class Flex::DashboardsController < ApplicationController
       .order(id: :desc)
       .limit(500)
 
-      unless property_type.nil?
-        @data = @data.where(property_type_id: property_type)
-      end
-
-      unless inscription_date.nil?
-        @data = @data.where(inscription_date: inscription_date)
-      end
-
-      unless seller_types.nil?
-        @data = @data.where(seller_type_id: seller_types)
-      end
-
-      unless land_use.nil?
-        @data = @data.where(building_regulations: { osinciti: land_use })
-      end
-
-      unless max_height.nil?
-        @data = @data.where(building_regulations: { aminciti: max_height })
-      end
-
-      unless building_surfaces.nil?
-        @data = @data.where(total_surface_building: building_surfaces)
-      end
-
-      unless terrain_surfaces.nil?
-        @data = @data.where(total_surface_terrain: terrain_surfaces)
-      end
-
-      unless prices.nil?
-        @data = @data.where(calculated_value: prices)
-      end
-
-      unless unit_prices.nil?
-        @data = @data.where(uf_m2_u: unit_prices)
-      end
+    @data = @data.where(:property_type_id => property_type) unless property_type.nil?
+    @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_date[:from], inscription_date[:to]) unless inscription_date.nil?
+    @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
+    @data = @data.where('building_regulations.osinciti BETWEEN ? AND ?', land_use[:from], land_use[:to]) unless land_use.nil?
+    @data = @data.where('building_regulations.aminciti BETWEEN ? AND ?', max_height[:from], max_height[:to]) unless max_height.nil?
+    @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
+    @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
+    @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
+    @data = @data.where('transactions.calculated_value BETWEEN ? AND ?', prices[:from], prices[:to]) unless prices.nil?
+    @data = @data.where('transactions.uf_m2_u BETWEEN ? AND ?', unit_prices[:from], unit_prices[:to]) unless unit_prices.nil?
 
     render :json => @data
+
+
+
+
+
+
+
 
   end
 end
