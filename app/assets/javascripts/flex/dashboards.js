@@ -2,13 +2,36 @@ Congo.namespace('flex_dashboards.action_index');
 
 //filters
 var parsed_data = ""
+dataInsc_date = {}; dataPrices = {}; dataUnit_prices = {}; dataTerrain_surfaces = {}; dataBuilding_surfaces = {}; dataLand_use = {};
+
+var filteredData = {} ;
+
+function getFilteredData() {
+    propertyTypes = $("#prop_type").val();
+    sellerTypes = $("#seller_type").val();
+
+    filteredData = {
+        property_types : propertyTypes,
+        seller_types : sellerTypes,
+        inscription_dates : dataInsc_date,
+        prices : dataPrices,
+        unit_prices : dataUnit_prices,
+        terrain_surfaces : dataTerrain_surfaces,
+        building_surfaces : dataBuilding_surfaces,
+        land_use : dataLand_use
+    }
+    ////// DESPUES BORRA ESTO SI NO NECESITAS QUE SALGA EN CONSOLA
+    console.log(filteredData);
+}
 
 function update_filters() {
-    $(parsed_data['property_types']).each(function (index) {
-        $("#prop_type").append($('<option>').val(index).text($(this)[0]));
+
+
+    $(parsed_data['property_types']).each(function () {
+        $("#prop_type").append($('<option>').val($(this)[0]).text($(this)[0]));
     });
-    $(parsed_data['seller_types']).each(function (index) {
-        $("#seller_type").removeClass("d-none").append($('<option>').val(index).text($(this)[0]));
+    $(parsed_data['seller_types']).each(function () {
+        $("#seller_type").append($('<option>').val($(this)[0]).text($(this)[0]));
     });
     $(parsed_data['inscription_dates']).each(function () {
         var lang = "es-ES";
@@ -39,7 +62,10 @@ function update_filters() {
             max: dateToTS(new Date(yearTo, 11, 1)),
             from: dateToTS(new Date($(this['from']))),
             to: dateToTS(new Date($(this['to']))),
-            prettify: tsToDate
+            prettify: tsToDate,
+            onFinish: function (data) {
+                dataInsc_date = {"from: ": (data.from_pretty), "to: ": (data.to_pretty)}
+            }
         });
     });
     $(parsed_data['prices']).each(function () {
@@ -53,7 +79,10 @@ function update_filters() {
             to: to,
             drag_interval: true,
             min_interval: null,
-            max_interval: null
+            max_interval: null,
+            onFinish: function (data) {
+                dataPrices = {"from: ": (data.from), "to: ": (data.to)}
+            }
         });
     });
     $(parsed_data['unit_prices']).each(function () {
@@ -67,7 +96,10 @@ function update_filters() {
             to: to,
             drag_interval: true,
             min_interval: null,
-            max_interval: null
+            max_interval: null,
+            onFinish: function (data) {
+                dataUnit_prices = {"from: ": (data.from), "to: ": (data.to)}
+            }
         });
     });
     $(parsed_data['terrain_surfaces']).each(function () {
@@ -81,7 +113,10 @@ function update_filters() {
             to: to,
             drag_interval: true,
             min_interval: null,
-            max_interval: null
+            max_interval: null,
+            onFinish: function (data) {
+                dataTerrain_surfaces = {"from: ": (data.from), "to: ": (data.to)}
+            }
         });
     });
     $(parsed_data['building_surfaces']).each(function () {
@@ -95,7 +130,10 @@ function update_filters() {
             to: to,
             drag_interval: true,
             min_interval: null,
-            max_interval: null
+            max_interval: null,
+            onFinish: function (data) {
+                dataBuilding_surfaces = {"from: ": (data.from), "to: ": (data.to)}
+            }
         });
     });
     $(parsed_data['land_use']).each(function () {
@@ -109,7 +147,10 @@ function update_filters() {
             to: to,
             drag_interval: true,
             min_interval: null,
-            max_interval: null
+            max_interval: null,
+            onFinish: function (data) {
+                dataLand_use = {"from: ": (data.from), "to: ": (data.to)}
+            }
         });
     });
 
@@ -124,7 +165,8 @@ function update_filters() {
     $("#intro").remove();
     $("#select-box").removeClass("d-none");
 }
-///
+
+////////////////////////////////////////////////////////
 
 Congo.flex_dashboards.action_index = function () {
     var map_admin, marker, flexMap;
