@@ -131,6 +131,7 @@ Rails.application.routes.draw do
     get 'dashboards/index'
     get 'dashboards/search_data_for_filters'
     get 'dashboards/search_data_for_table'
+    get 'dashboards/search_data_for_charts'
     root 'dashboards#index'
   end
 
