@@ -53,7 +53,7 @@ module ImportProcess::ParseFile
         when "Building Regulation"
           parse_building_regulations(shp_file, import_logger, dir_path)
         when "Transactions"
-          parse_transactions(shp_file, import_logger)
+          parse_transactions(shp_file, import_logger, 'Transaction')
         when "Departments"
           parse_projects(shp_file, "Departamentos", import_logger)
         when "Homes"
@@ -70,6 +70,8 @@ module ImportProcess::ParseFile
           parse_neighborhoods(shp_file, import_logger)
         when "Bot"
           parse_bot(shp_file, import_logger)
+        when "RentTransaction"
+          parse_transactions(shp_file, import_logger, 'RentTransaction')
         end
       end
 
@@ -181,7 +183,7 @@ module ImportProcess::ParseFile
         end
       end
 
-      def parse_transactions(shp_file, import_logger)
+      def parse_transactions(shp_file, import_logger, model)
         RGeo::Shapefile::Reader.open(shp_file) do |shp|
           field = []
           shp.each do |shape|
@@ -212,7 +214,7 @@ module ImportProcess::ParseFile
               import_logger.details << { :row_index => import_logger.current_row_index, :message => "No se pudo encontrar el county con codigo #{data["CODCOM"]}" }
               next
             end
-            tran    = Transaction.where(number: number, bimester: bimester, year: year, county_id: county.id).first_or_initialize
+            tran    = model.constantize.where(number: number, bimester: bimester, year: year, county_id: county.id).first_or_initialize
             was_new = tran.new_record?
 
             if tran.save_transaction_data(geom, data, county.id, @user_id)
