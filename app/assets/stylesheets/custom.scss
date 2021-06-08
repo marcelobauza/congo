@@ -324,7 +324,24 @@ div.custom-menu.show {
       top: 0;
       z-index: 1;
     }
+    td {
+      font-size: 12px;
+    }
   }
+
+  .select-box {
+    p, .multiselect.dropdown-toggle.custom-select {
+      font-size: 12px;
+    }
+    .multiselect.dropdown-toggle.custom-select {
+      .multiselect-selected-text {
+        max-width: 160px;
+        display: inline-block;
+        overflow-x: hidden;
+      }
+    }
+  }
+
   .irs-with-grid .irs-grid {
     display: none;
   }

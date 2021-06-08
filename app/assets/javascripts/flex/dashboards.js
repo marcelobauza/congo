@@ -3,14 +3,179 @@ Congo.namespace('flex_dashboards.action_index');
 //filters
 var parsed_data = ""
 var table_data = ""
+var isChecked = {};
 dataInsc_date = {}; dataPrices = {}; dataUnit_prices = {}; dataTerrain_surfaces = {}; dataBuilding_surfaces = {}; dataLand_use = {};
-
 var filteredData = {} ;
+
+$("#exportToExcel").click(function(){
+   $("#table").table2excel({
+       // exclude CSS class
+       exclude: ".noExl",
+       name: "Datos descargados",
+       filename: "planilla de resultados", //do not include extension
+       fileext: ".xls" // file extension
+   });
+});
+
+function genCharts() {
+    $.ajax({
+        async: false,
+        type: 'get',
+        url: 'flex/dashboards/search_data_for_charts.json',
+        datatype: 'json',
+        data: data,
+        success: function (data) {
+
+            charts = JSON.parse('[{"title":"Cantidad","series":[{"data":[{"name":"1/2020","count":4663},{"name":"1/2020","count":3484},{"name":"4/2020","count":2533},{"name":"5/2020","count":3173},{"name":"6/2020","count":31679},{"name":"1/2021","count":8480}]}]},{"title":"Superficie útil","series":[{"data":[{"name":"1/2020","count":70.3},{"name":"1/2020","count":70.3},{"name":"4/2020","count":122.2},{"name":"5/2020","count":120.3},{"name":"6/2020","count":150.3},{"name":"1/2021","count":55.3}]}]},{"title":"Precio","series":[{"data":[{"name":"1/2020","count":4663},{"name":"1/2020","count":3484},{"name":"4/2020","count":2533},{"name":"5/2020","count":3173},{"name":"6/2020","count":31679},{"name":"1/2021","count":8480}]}]},{"title":"Precio unitario","series":[{"data":[{"name":"1/2020","count":4663},{"name":"1/2020","count":3484},{"name":"4/2020","count":2533},{"name":"5/2020","count":3173},{"name":"6/2020","count":31679},{"name":"1/2021","count":8480}]}]},{"title":"Volumen Mercado","series":[{"data":[{"name":"1/2020","count":4663},{"name":"1/2020","count":3484},{"name":"4/2020","count":2533},{"name":"5/2020","count":3173},{"name":"6/2020","count":31679},{"name":"1/2021","count":8480}]}]}]');
+            console.log(charts);
+
+        },
+        error: function (jqxhr, textstatus, errorthrown) {
+            console.log("algo malo paso");
+        }
+    });
+    var cantidadChart = $("#chartCantidad");
+    var supUtilChart = $("#chartSupUtil");
+    var precioChart = $("#chartPrecio");
+    var precioUnitarioChart = $("#chartPrecioUnitario");
+    var volMercadoChart = $("#chartVolMercado");
+    labelsChart = [];
+    dataChart = [];
+    $(charts).each(function(){
+       if($(this)[0]['title'] == 'Cantidad'){
+           for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+               labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
+               dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
+           }
+           console.dir(labelsChart);
+           console.dir(dataChart);
+           var chartCantidad = new Chart(cantidadChart, {
+              type: 'line',
+              data: {
+                  labels: labelsChart,
+                  datasets: [{
+                      data: dataChart,
+                      label: "",
+                      fill: false,
+                      borderColor: 'rgb(0,0,0)',
+                      tension: 0.1,
+                      backgroundColor: '#fff',
+                      borderWidth: 2
+                  }]
+              }
+           });
+           labelsChart = [];
+           dataChart = [];
+       }
+        if($(this)[0]['title'] == 'Superficie útil'){
+            for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+                labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
+                dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
+            }
+            var chartSupUtil = new Chart(supUtilChart, {
+                type: 'line',
+                data: {
+                    labels: labelsChart,
+                    datasets: [{
+                        data: dataChart,
+                        label: "",
+                        fill: false,
+                        borderColor: 'rgb(0,0,0)',
+                        tension: 0.1,
+                        backgroundColor: '#fff',
+                        borderWidth: 2
+                    }]
+                }
+            });
+            labelsChart = [];
+            dataChart = [];
+        }
+        if($(this)[0]['title'] == 'Precio'){
+            for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+                labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
+                dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
+            }
+            var chartPrecio = new Chart(precioChart, {
+                type: 'line',
+                data: {
+                    labels: labelsChart,
+                    datasets: [{
+                        data: dataChart,
+                        label: "",
+                        fill: false,
+                        borderColor: 'rgb(0,0,0)',
+                        tension: 0.1,
+                        backgroundColor: '#fff',
+                        borderWidth: 2
+                    }]
+                }
+            });
+            labelsChart = [];
+            dataChart = [];
+        }
+        if($(this)[0]['title'] == 'Precio unitario'){
+            for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+                labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
+                dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
+            }
+            var chartPrecioUnitario = new Chart(precioUnitarioChart, {
+                type: 'line',
+                data: {
+                    labels: labelsChart,
+                    datasets: [{
+                        data: dataChart,
+                        label: "",
+                        fill: false,
+                        borderColor: 'rgb(0,0,0)',
+                        tension: 0.1,
+                        backgroundColor: '#fff',
+                        borderWidth: 2
+                    }]
+                }
+            });
+            labelsChart = [];
+            dataChart = [];
+        }
+        if($(this)[0]['title'] == 'Volumen Mercado'){
+            for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+                labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
+                dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
+            }
+            var chartVolMercado = new Chart(volMercadoChart, {
+                type: 'line',
+                data: {
+                    labels: labelsChart,
+                    datasets: [{
+                        data: dataChart,
+                        label: "",
+                        fill: false,
+                        borderColor: 'rgb(0,0,0)',
+                        tension: 0.1,
+                        backgroundColor: '#fff',
+                        borderWidth: 2
+                    }]
+                }
+            });
+            labelsChart = [];
+            dataChart = [];
+        }
+    });
+    /*$("#table .form-check-input").each(function(){
+        if($(this).is(":checked")){
+            isChecked.push($(this).val());
+        }
+    });*/
+
+}
+
+function clearTable() {
+    $('tr.genTable').remove();
+}
 
 function update_table() {
     $(table_data).each(function(index){
         $('#table tr:last').after(
-            '<tr class="table-bg1">' +
+            '<tr class="genTable' + index + '">' +
             '<td><input class="form-check-input" type="checkbox" value="' + index + '"></td>' +
             '<td>' + ($(this)[0]["property_typee"]) + '</td>' +
             '<td>' + ($(this)[0]["address"]) + '</td>' +

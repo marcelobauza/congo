@@ -1235,7 +1235,7 @@ ActiveRecord::Schema.define(version: 2021_05_18_225332) do
   SQL
 
   create_trigger :layer_integrity_checks, sql_definition: <<-SQL
-      CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE FUNCTION topology.layertrigger()
+      CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE FUNCTION layertrigger()
   SQL
 
   create_view "project_instance_mix_views", sql_definition: <<-SQL

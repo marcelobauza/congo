@@ -13,18 +13,20 @@
           </div>
         </div>
       </div>
-      <div class="col-md-3 p-0 d-none" id="select-box">
+      <div class="col-md-3 p-0 d-none select-box" id="select-box">
         <div class="bg-1 m-1">
           <div class="container">
             <div class="row pt-3 d-flex align-items-center">
-              <div class="col-4 my-2 text-center">
+              <div class="col-6 my-2 text-center">
                 <div class="form-group">
+                  <p>Tipo de propiedad</p>
                   <select class="form-control" id="prop_type" multiple></select>
                 </div>
               </div>
-              <div class="col-8 my-2 text-center">
+              <div class="col-6 my-2 text-center">
                 <div class="form-group">
-                  <p>Tipo de propiedad</p>
+                  <p>Vendedor</p>
+                  <select class="form-control" id="seller_type" multiple></select>
                 </div>
               </div>
               <div class="col-12 my-2 text-center">
@@ -34,14 +36,7 @@
               <!--<div class="col-8 my-2 text-center">
                 <p>Fecha de inscripción</p>
               </div>-->
-              <div class="col-4 my-2 text-center">
-                <div class="form-group">
-                  <select class="form-control" id="seller_type" multiple></select>
-                </div>
-              </div>
-              <div class="col-8 my-2 text-center">
-                <p>Vendedor</p>
-              </div>
+
               <div class="col-12 my-2 text-center">
                 <p class="mb-0">Zona normativa</p>
                 <input type="range" class="js-range-slider w-100" id="zone">
@@ -87,43 +82,41 @@
       <div class="col-md-9 table-box">
         <div class="mt-1">
           <div class="container p-0">
-            <form action="" id="form">
-              <table id="table" class="table table-bordered">
-                <thead class="bg-table-head">
-                <tr>
-                  <th scope="col"><small>N</small></th>
-                  <th scope="col"><small>Tipo</small></th>
-                  <th scope="col"><small>Dirección</small></th>
-                  <th scope="col"><small>Comuna</small></th>
-                  <th scope="col"><small>Rol</small></th>
-                  <th scope="col"><small>Foja</small></th>
-                  <th scope="col"><small>#</small></th>
-                  <th scope="col"><small>Fecha</small></th>
-                  <th scope="col"><small>Vendedor</small></th>
-                  <th scope="col"><small>Util(m2)</small></th>
-                  <th scope="col"><small>Terreno</small></th>
-                  <th scope="col"><small>#E</small></th>
-                  <th scope="col"><small>#B</small></th>
-                  <th scope="col"><small>UF</small></th>
-                  <th scope="col"><small>UF(m2)</small></th>
-                  <th scope="col"><small>Año</small></th>
-                </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td colspan="16" class="w-100 text-center"><small><b>DATOS DE MI PROPIEDAD</b></small></td>
-                  </tr>
-                </tbody>
-              </table>
-              <button class="btn btn-secondary">Generar</button>
-              <button class="btn btn-success">Descargar</button>
-              <button onclick="clearFields()" class="btn btn-danger">Limpiar</button>
-            </form>
+            <table id="table" class="table table-bordered">
+              <thead class="bg-table-head">
+              <tr>
+                <th scope="col"><small>N</small></th>
+                <th scope="col"><small>Tipo</small></th>
+                <th scope="col"><small>Dirección</small></th>
+                <th scope="col"><small>Comuna</small></th>
+                <th scope="col"><small>Rol</small></th>
+                <th scope="col"><small>Foja</small></th>
+                <th scope="col"><small>#</small></th>
+                <th scope="col"><small>Fecha</small></th>
+                <th scope="col"><small>Vendedor</small></th>
+                <th scope="col"><small>Util(m2)</small></th>
+                <th scope="col"><small>Terreno</small></th>
+                <th scope="col"><small>#E</small></th>
+                <th scope="col"><small>#B</small></th>
+                <th scope="col"><small>UF</small></th>
+                <th scope="col"><small>UF(m2)</small></th>
+                <th scope="col"><small>Año</small></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td colspan="16" class="w-100 text-center"><b>DATOS DE MI PROPIEDAD</b></td>
+              </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-secondary" onclick="genCharts();">Generar</button>
+            <button class="btn btn-success" id="exportToExcel">Descargar</button>
+            <button onclick="clearTable();" class="btn btn-danger">Limpiar</button>
           </div>
         </div>
       </div>
     </div>
-    <div class="row pt-1">
+    <div class="row pt-1 bg-white">
       <div class="col-12">
         <div id="carouselExampleControls" class="carousel slide" data-ride="false" data-interval="false">
           <div class="carousel-inner">
@@ -139,12 +132,15 @@
               <div class="row">
                 <div class="col-4">
                   <p class="text-center bg-dark text-white">Cantidad</p>
+                  <canvas id="chartCantidad"></canvas>
                 </div>
                 <div class="col-4">
                   <p class="text-center bg-dark text-white">Superficie</p>
+                  <canvas id="chartSupUtil"></canvas>
                 </div>
                 <div class="col-4">
                   <p class="text-center bg-dark text-white">Precio</p>
+                  <canvas id="chartPrecio"></canvas>
                 </div>
               </div>
             </div>
@@ -152,9 +148,11 @@
               <div class="row">
                 <div class="col-4">
                   <p class="text-center bg-dark text-white">Precio unitario</p>
+                  <canvas id="chartPrecioUnitario"></canvas>
                 </div>
-                <div class="col-8">
+                <div class="col-4">
                   <p class="text-center bg-dark text-white">Volumen mercado</p>
+                  <canvas id="chartVolMercado"></canvas>
                 </div>
               </div>
             </div>
@@ -164,9 +162,4 @@
     </div>
   </div>
 </div>
-<script>
-    function clearFields() {
-        $("input").val("");
-    }
 
-</script>
