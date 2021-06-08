@@ -3,11 +3,12 @@ module ImportProcess::ParseFile
 
   module ClassMethods
     def load_from_zip import
-      load_type = import.data_source
+      load_type      = import.data_source
       import_process = ImportProcess.find import.id
-      import_logger = Ibiza::ImportLogger.new(import_process)
+      import_logger  = Ibiza::ImportLogger.new(import_process)
+      @user_id       = import_process.user_id
+
       import_process.update_attributes status: 'working'
-      @user_id = import_process.user_id
 
       ActiveRecord::Base.transaction do
         if load_type == 'Building Regulation' || load_type == 'Lot' || load_type == 'Neighborhood' || load_type == 'Bot'
@@ -18,7 +19,7 @@ module ImportProcess::ParseFile
         dir = []
         shps.each do |shp|
           begin
-            parse_shp(shp, load_type, import_logger)
+            parse_shp(shp, load_type, import_logger, dir_path)
 
             if import_logger.details.any?
               import_logger.inserted = 0
@@ -29,7 +30,10 @@ module ImportProcess::ParseFile
             end
           rescue Exception => e
 
-            import_logger.details << {:message => "#{e.to_s}\n#{e.backtrace.join("\n")}"} unless e.instance_of?(ActiveRecord::Rollback)
+            import_logger.details << {
+              message: "#{e.to_s}\n#{e.backtrace.join("\n")}"
+            } unless e.instance_of?(ActiveRecord::Rollback)
+
             import_logger.inserted = 0
             import_logger.updated = 0
             raise ActiveRecord::Rollback, "Algo horrible sucedio, vamos para atras con todo"
@@ -44,10 +48,10 @@ module ImportProcess::ParseFile
 
     private
 
-      def parse_shp(shp_file, load_type, import_logger)
+      def parse_shp(shp_file, load_type, import_logger, dir_path)
         case load_type
         when "Building Regulation"
-          parse_building_regulations(shp_file, import_logger)
+          parse_building_regulations(shp_file, import_logger, dir_path)
         when "Transactions"
           parse_transactions(shp_file, import_logger)
         when "Departments"

@@ -101,6 +101,7 @@ class FutureProject < ApplicationRecord
     self.project_type_id        = p_type.id
     self.county_id              = county.id unless county.nil?
     self.the_geom               = geom
+    self.reference              = data["referencia"]
 
     if self.save
       County.update(county.id, :future_project_data => true, :number_last_project_future => number_next_project) unless county.nil?

@@ -131,7 +131,7 @@ class BuildingRegulation < ApplicationRecord
     end
 
     def self.info_popup id
-      select = "building_zone, construct, osinciti, aminciti, hectarea_inhabitants, grouping, density_type_id, id, "
+      select = "building_zone, construct, osinciti, aminciti, hectarea_inhabitants, grouping, density_type_id, id, freezed, freezed_observations, "
       select += "round((St_area(the_geom, false))::numeric,2) as area, county_id, comments, parkings, identifier "
       data = BuildingRegulation.includes(:county).where(id: id).select(select).first
       building = BuildingRegulationLandUseType.joins(:land_use_type).where(building_regulation_id: id).select(:name)
