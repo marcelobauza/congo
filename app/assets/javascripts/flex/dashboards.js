@@ -3,7 +3,8 @@ Congo.namespace('flex_dashboards.action_index');
 //filters
 var parsed_data = ""
 var table_data = ""
-var isChecked = {};
+var dataFromTable = [];
+var userData = [];
 dataInsc_date = {}; dataPrices = {}; dataUnit_prices = {}; dataTerrain_surfaces = {}; dataBuilding_surfaces = {}; dataLand_use = {};
 var filteredData = {} ;
 
@@ -34,6 +35,15 @@ function genCharts() {
             console.log("algo malo paso");
         }
     });
+    $("#table .form-check-input").each(function(){
+        if(!$(this).is(":checked")){
+            dataFromTable.push($(this).val()); //variable que captura los datos de la tabla
+        }
+    });
+    $(".user_data").each(function(){
+        userData.push( [$(this).attr('name') , $(this).val()] ); //variable que captura los datos ingresados por el usuario
+    })
+
     var cantidadChart = $("#chartCantidad");
     var supUtilChart = $("#chartSupUtil");
     var precioChart = $("#chartPrecio");
@@ -160,12 +170,6 @@ function genCharts() {
             dataChart = [];
         }
     });
-    /*$("#table .form-check-input").each(function(){
-        if($(this).is(":checked")){
-            isChecked.push($(this).val());
-        }
-    });*/
-
 }
 
 function clearTable() {
@@ -175,8 +179,8 @@ function clearTable() {
 function update_table() {
     $(table_data).each(function(index){
         $('#table tr:last').after(
-            '<tr class="genTable' + index + '">' +
-            '<td><input class="form-check-input" type="checkbox" value="' + index + '"></td>' +
+            '<tr>' +
+            '<td><input class="form-check-input" type="checkbox" value="' + ($(this)[0]['id']) + '"></td>' +
             '<td>' + ($(this)[0]["property_typee"]) + '</td>' +
             '<td>' + ($(this)[0]["address"]) + '</td>' +
             '<td>' + ($(this)[0]['c_name']) + '</td>' +

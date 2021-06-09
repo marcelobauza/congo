@@ -109,9 +109,27 @@
               </tr>
               </tbody>
             </table>
-            <button class="btn btn-secondary" onclick="genCharts();">Generar</button>
-            <button class="btn btn-success" id="exportToExcel">Descargar</button>
-            <button onclick="clearTable();" class="btn btn-danger">Limpiar</button>
+            <div class="my-4">
+              <input type="text" class="user_data" placeholder="Tipo" name="tipo">
+              <input type="text" class="user_data" placeholder="Dirección" name="direccion">
+              <input type="text" class="user_data" placeholder="Comuna" name="comuna">
+              <input type="text" class="user_data" placeholder="Rol" name="rol">
+              <input type="text" class="user_data" placeholder="Foja" name="foja">
+              <input type="text" class="user_data" placeholder="Fecha" name="fecha">
+              <input type="text" class="user_data" placeholder="Vendedor" name="vendedor">
+              <input type="text" class="user_data" placeholder="Util(m2)" name="util(m2)">
+              <input type="text" class="user_data" placeholder="Terreno" name="terreno">
+              <input type="text" class="user_data" placeholder="#E" name="#e">
+              <input type="text" class="user_data" placeholder="#B" name="#b">
+              <input type="text" class="user_data" placeholder="UF" name="uf">
+              <input type="text" class="user_data" placeholder="UF(m2)" name="uf(m2)">
+              <input type="text" class="user_data" placeholder="Año" name="año"> <br>
+            </div>
+            <div class="mb-5">
+              <button class="btn btn-secondary" onclick="genCharts();">Generar</button>
+              <button class="btn btn-success" id="exportToExcel">Descargar</button>
+              <button onclick="clearTable();" class="btn btn-danger">Limpiar</button>
+            </div>
           </div>
         </div>
       </div>

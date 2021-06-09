@@ -338,6 +338,7 @@ ActiveRecord::Schema.define(version: 2021_05_18_225332) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "future_project_sub_type_id"
+    t.string "reference"
     t.index ["county_id"], name: "index_future_projects_on_county_id"
     t.index ["future_project_sub_type_id"], name: "index_future_projects_on_future_project_sub_type_id"
     t.index ["future_project_type_id"], name: "index_future_projects_on_future_project_type_id"
@@ -1235,7 +1236,7 @@ ActiveRecord::Schema.define(version: 2021_05_18_225332) do
   SQL
 
   create_trigger :layer_integrity_checks, sql_definition: <<-SQL
-      CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE FUNCTION layertrigger()
+      CREATE TRIGGER layer_integrity_checks BEFORE DELETE OR UPDATE ON topology.layer FOR EACH ROW EXECUTE FUNCTION topology.layertrigger()
   SQL
 
   create_view "project_instance_mix_views", sql_definition: <<-SQL
