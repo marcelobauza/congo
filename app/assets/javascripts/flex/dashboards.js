@@ -202,10 +202,12 @@ function update_table() {
 }
 
 function getFilteredData() {
+
+    // TODO: seller y property_type deben enviar id seleccionado, no el name
     propertyTypes = $("#prop_type").val();
     sellerTypes = $("#seller_type").val();
 
-    filteredData = {
+    data = {
         property_types : propertyTypes,
         seller_types : sellerTypes,
         inscription_dates : dataInsc_date,
@@ -215,8 +217,9 @@ function getFilteredData() {
         building_surfaces : dataBuilding_surfaces,
         land_use : dataLand_use
     }
-    ////// DESPUES BORRA ESTO SI NO NECESITAS QUE SALGA EN CONSOLA
-    console.log(filteredData);
+
+    console.log('Filtros para armar la tabla');
+    console.log(data);
 
     $.ajax({
         async: false,
