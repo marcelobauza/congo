@@ -444,10 +444,10 @@ Congo.flex_dashboards.action_index = function () {
                 data: data,
                 success: function (data) {
 
-                    parsed_data = JSON.parse("{\"property_types\":[[\"Casas\",1],[\"Departamentos\",2],[\"Oficinas\",3],[\"Local Comercial\",4],[\"Oficina y Local Comercial\",5],[\"Equipamiento\",6],[\"Departamento y Local Comercial\",10]],\"inscription_dates\":{\"from\":\"2008-01-02\",\"to\":\"2020-12-03\"},\"seller_types\":[[\"PROPIETARIO\",1],[\"INMOBILIARIA\",2],[\"EMPRESA\",3],[\"BANCO\",4]],\"land_use\":{\"from\":0,\"to\":0.8},\"max_height\":{\"from\":0,\"to\":99},\"building_surfaces\":{\"from\":0,\"to\":699},\"terrain_surfaces\":{\"from\":0,\"to\":2071},\"prices\":{\"from\":60,\"to\":131681},\"unit_prices\":{\"from\":0,\"to\":741.17}}")
+                  console.log('Data para armar filtros');
+                  console.log(data);
 
-                    console.log('Data hacodeada');
-                    console.log(parsed_data);
+                  parsed_data = data
 
                 },
                 error: function (jqxhr, textstatus, errorthrown) {
@@ -461,4 +461,3 @@ Congo.flex_dashboards.action_index = function () {
         init: init,
     }
 }();
-
