@@ -138,17 +138,72 @@ class Flex::DashboardsController < ApplicationController
 
     render :json => @data
 
-
-
-
-
-
-
-
   end
 
   def search_data_for_charts
-    render :json => charts
+
+    transactions = params[:transactions]
+    data = []
+    result = []
+    data = Transaction.where(:id => transactions)
+
+
+    # Cantidad
+
+    quantity = data
+      .select("CONCAT(bimester,'/',year) as name, COUNT(*)")
+      .group("CONCAT(bimester,'/',year)")
+      .order("CONCAT(bimester,'/',year)")
+
+    quantity = quantity.as_json(:except => :id)
+    result.push({"title": "Cantidad", "series": [{"data": quantity}] })
+
+
+    # Superficie Útil
+
+    building_surface = data
+      .select("CONCAT(bimester,'/',year) as name, AVG(total_surface_building) as count")
+      .group("CONCAT(bimester,'/',year)")
+      .order("CONCAT(bimester,'/',year)")
+
+    building_surface = building_surface.as_json(:except => :id)
+    result.push({"title": "Superficie Útil", "series": [{"data": building_surface}] })
+
+
+    # Precio
+
+    price = data
+      .select("CONCAT(bimester,'/',year) as name, AVG(calculated_value) as count")
+      .group("CONCAT(bimester,'/',year)")
+      .order("CONCAT(bimester,'/',year)")
+
+    price = price.as_json(:except => :id)
+    result.push({"title": "Precio", "series": [{"data": price}] })
+
+
+    # Precio Unitario
+
+    unit_price = data
+      .select("CONCAT(bimester,'/',year) as name, AVG(uf_m2_u) as count")
+      .group("CONCAT(bimester,'/',year)")
+      .order("CONCAT(bimester,'/',year)")
+
+    unit_price = unit_price.as_json(:except => :id)
+    result.push({"title": "Precio Unitario", "series": [{"data": unit_price}] })
+
+
+    # Volúmen Mercado
+
+    market_volume = data
+      .select("CONCAT(bimester,'/',year) as name, (AVG(calculated_value) * COUNT(*)) as count")
+      .group("CONCAT(bimester,'/',year)")
+      .order("CONCAT(bimester,'/',year)")
+
+    market_volume = market_volume.as_json(:except => :id)
+    result.push({"title": "Volúmen Mercado", "series": [{"data": market_volume}] })
+
+    render :json => result
+
   end
-  
+
 end
