@@ -216,22 +216,23 @@ function update_table() {
 
 function getFilteredData() {
 
-    // TODO: seller y property_type deben enviar id seleccionado, no el name
+    // TODO: seller_types y property_types se deben enviar en un array con los ids seleccionados
     propertyTypes = $("#prop_type").val();
     sellerTypes = $("#seller_type").val();
 
+    // TODO: agregar density_types (array con ids) y max_height (min y max)
     data = {
         property_types : propertyTypes,
         seller_types : sellerTypes,
         inscription_dates : dataInsc_date,
-        prices : dataPrices,
-        unit_prices : dataUnit_prices,
-        terrain_surfaces : dataTerrain_surfaces,
+        land_use : dataLand_use,
         building_surfaces : dataBuilding_surfaces,
-        land_use : dataLand_use
+        terrain_surfaces : dataTerrain_surfaces,
+        prices : dataPrices,
+        unit_prices : dataUnit_prices
     }
 
-    console.log('Filtros para armar la tabla');
+    console.log('Parámetros tabla');
     console.log(data);
 
     $.ajax({
@@ -465,7 +466,7 @@ Congo.flex_dashboards.action_index = function () {
                 data: data,
                 success: function (data) {
 
-                  console.log('Data para armar filtros');
+                  console.log('Data filtros');
                   console.log(data);
 
                   parsed_data = data
