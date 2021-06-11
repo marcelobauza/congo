@@ -17,6 +17,7 @@ class Flex::DashboardsController < ApplicationController
     uf_m2_u = []
     osinciti = []
     aminciti = []
+    density_type_id = []
 
     data = Transaction
       .select("
@@ -28,7 +29,8 @@ class Flex::DashboardsController < ApplicationController
         transactions.calculated_value,
         transactions.uf_m2_u,
         building_regulations.osinciti,
-        building_regulations.aminciti
+        building_regulations.aminciti,
+        building_regulations.density_type_id
       ")
       .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
       .where("ST_Contains(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"Polygon\", \"coordinates\": #{polygon}}'), 4326), transactions.the_geom)")
@@ -46,10 +48,12 @@ class Flex::DashboardsController < ApplicationController
       uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
       osinciti << tr.osinciti.to_f unless osinciti.include? tr.osinciti
       aminciti << tr.aminciti.to_f unless aminciti.include? tr.aminciti
+      density_type_id << tr.density_type_id unless density_type_id.include? tr.density_type_id
     end
 
     project_types = ProjectType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
     seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
+    density_types = DensityType.where(:id => density_type_id).map { |density| [density.name, density.id] }
 
     result = {
       'property_types': project_types,
@@ -66,6 +70,7 @@ class Flex::DashboardsController < ApplicationController
         'from': aminciti.min,
         'to': aminciti.max
       },
+      'density_types': density_types,
       'building_surfaces': {
         'from': total_surface_building.min,
         'to': total_surface_building.max
@@ -93,6 +98,7 @@ class Flex::DashboardsController < ApplicationController
     seller_types = params[:seller_types]
     land_use = params[:land_use]
     max_height = params[:max_height]
+    density_types = params[:density_types]
     building_surfaces = params[:building_surfaces]
     terrain_surfaces = params[:terrain_surfaces]
     prices = params[:prices]
@@ -126,6 +132,7 @@ class Flex::DashboardsController < ApplicationController
     @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
     @data = @data.where('building_regulations.osinciti BETWEEN ? AND ?', land_use[:from], land_use[:to]) unless land_use.nil?
     @data = @data.where('building_regulations.aminciti BETWEEN ? AND ?', max_height[:from], max_height[:to]) unless max_height.nil?
+    @data = @data.where(building_regulations: {:density_type_id => density_types}) unless density_types.nil?
     @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
     @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
     @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
