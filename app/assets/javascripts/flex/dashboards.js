@@ -452,6 +452,9 @@ Congo.flex_dashboards.action_index = function () {
 
                   parsed_data = data
 
+                  // Ejemplo
+                  // parsed_data = JSON.parse('{"property_types":[["Casas",1],["Departamentos",2],["Oficinas",3],["Local Comercial",4],["Equipamiento",6]],"inscription_dates":{"from":"2020-11-05","to":"2020-12-30"},"seller_types":[["PROPIETARIO",1],["INMOBILIARIA",2],["EMPRESA",3],["BANCO",4]],"land_use":{"from":0,"to":0.6},"max_height":{"from":0,"to":100},"density_types":{"from":1,"to":5},"building_surfaces":{"from":0,"to":1700},"terrain_surfaces":{"from":0,"to":598},"prices":{"from":35,"to":29971},"unit_prices":{"from":0,"to":75.45}}')
+
                 },
                 error: function (jqxhr, textstatus, errorthrown) {
                     console.log("algo malo paso");
