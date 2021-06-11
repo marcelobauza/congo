@@ -149,7 +149,6 @@ class Flex::DashboardsController < ApplicationController
   end
 
   def search_data_for_charts
-    charts = '[{"title":"Cantidad","series":[{"data":[{"name":"1/2020","count":4663},{"name":"1/2020","count":3484},{"name":"4/2020","count":2533},{"name":"5/2020","count":3173},{"name":"6/2020","count":31679},{"name":"1/2021","count":8480}]}]},{"title":"Superficie útil","series":[{"data":[{"name":"1/2020","count":70.3},{"name":"1/2020","count":70.3},{"name":"4/2020","count":122.2},{"name":"5/2020","count":120.3},{"name":"6/2020","count":150.3},{"name":"1/2021","count":55.3}]}]},{"title":"Precio","series":[{"data":[{"name":"1/2020","count":4663},{"name":"1/2020","count":3484},{"name":"4/2020","count":2533},{"name":"5/2020","count":3173},{"name":"6/2020","count":31679},{"name":"1/2021","count":8480}]}]},{"title":"Precio unitario","series":[{"data":[{"name":"1/2020","count":4663},{"name":"1/2020","count":3484},{"name":"4/2020","count":2533},{"name":"5/2020","count":3173},{"name":"6/2020","count":31679},{"name":"1/2021","count":8480}]}]},{"title":"Volumen Mercado","series":[{"data":[{"name":"1/2020","count":4663},{"name":"1/2020","count":3484},{"name":"4/2020","count":2533},{"name":"5/2020","count":3173},{"name":"6/2020","count":31679},{"name":"1/2021","count":8480}]}]}]'
     render :json => charts
   end
   
