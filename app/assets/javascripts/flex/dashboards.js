@@ -3,9 +3,10 @@ Congo.namespace('flex_dashboards.action_index');
 //filters
 var parsed_data = ""
 var table_data = ""
-var dataFromTable = [];
+var dataFromTable = []; // variable que captura ids de la tabla
+var dataForCharts = {transactions: dataFromTable}; // variable para los charts
 var userData = [];
-dataInsc_date = {}; dataPrices = {}; dataUnit_prices = {}; dataTerrain_surfaces = {}; dataBuilding_surfaces = {}; dataLand_use = {};
+dataInsc_date = {}; dataPrices = {}; dataUnit_prices = {}; dataTerrain_surfaces = {}; dataBuilding_surfaces = {}; dataLand_use = {}; dataMaxHeight = {};  dataDensityType = {};
 var filteredData = {} ;
 
 $("#exportToExcel").click(function(){
@@ -225,6 +226,8 @@ function getFilteredData() {
         property_types : propertyTypes,
         seller_types : sellerTypes,
         inscription_dates : dataInsc_date,
+        max_height : dataMaxHeight,
+        density_types : dataDensityType,
         land_use : dataLand_use,
         building_surfaces : dataBuilding_surfaces,
         terrain_surfaces : dataTerrain_surfaces,
@@ -261,10 +264,10 @@ function getFilteredData() {
 
 function update_filters() {
     $(parsed_data['property_types']).each(function () {
-        $("#prop_type").append($('<option>').val($(this)[0]).text($(this)[0]));
+        $("#prop_type").append($('<option>').val($(this)[1]).text($(this)[0]));
     });
     $(parsed_data['seller_types']).each(function () {
-        $("#seller_type").append($('<option>').val($(this)[0]).text($(this)[0]));
+        $("#seller_type").append($('<option>').val($(this)[1]).text($(this)[0]));
     });
     $(parsed_data['inscription_dates']).each(function () {
         var lang = "es-ES";
@@ -298,6 +301,40 @@ function update_filters() {
             prettify: tsToDate,
             onFinish: function (data) {
                 dataInsc_date = {"from: ": (data.from_pretty), "to: ": (data.to_pretty)}
+            }
+        });
+    });
+    $(parsed_data['density_types']).each(function () {
+        var from = parseFloat($(this)[0]['from']);
+        var to = parseFloat($(this)[0]['to']);
+        $("#density_type").ionRangeSlider({
+            type: "double",
+            min: from,
+            max: to,
+            from: from,
+            to: to,
+            drag_interval: true,
+            min_interval: null,
+            max_interval: null,
+            onFinish: function (data) {
+                dataDensityTypes = {"from: ": (data.from), "to: ": (data.to)}
+            }
+        });
+    });
+    $(parsed_data['max_height']).each(function () {
+        var from = parseFloat($(this)[0]['from']);
+        var to = parseFloat($(this)[0]['to']);
+        $("#max_height").ionRangeSlider({
+            type: "double",
+            min: from,
+            max: to,
+            from: from,
+            to: to,
+            drag_interval: true,
+            min_interval: null,
+            max_interval: null,
+            onFinish: function (data) {
+                dataMaxHeight = {"from: ": (data.from), "to: ": (data.to)}
             }
         });
     });
@@ -472,9 +509,10 @@ Congo.flex_dashboards.action_index = function () {
                   parsed_data = data
 
                   // Ejemplo
-                  // parsed_data = JSON.parse('{"property_types":[["Casas",1],["Departamentos",2],["Oficinas",3],["Local Comercial",4],["Equipamiento",6]],"inscription_dates":{"from":"2020-11-05","to":"2020-12-30"},"seller_types":[["PROPIETARIO",1],["INMOBILIARIA",2],["EMPRESA",3],["BANCO",4]],"land_use":{"from":0,"to":0.6},"max_height":{"from":0,"to":100},"density_types":{"from":1,"to":5},"building_surfaces":{"from":0,"to":1700},"terrain_surfaces":{"from":0,"to":598},"prices":{"from":35,"to":29971},"unit_prices":{"from":0,"to":75.45}}')
-
+                  // parsed_data = JSON.parse('{"property_types":[["Casas",1],["Departamentos",2],["Oficinas",3],["Local Comercial",4],["Equipamiento",6]],"inscription_dates":{"from":"2020-11-05","to":"2020-12-30"},"seller_types":[["PROPIETARIO",1],["INMOBILIARIA",2],["EMPRESA",3],["BANCO",4]],"land_use":{"from":0,"to":0.6},"max_height":{"from":0,"to":100},"density_types":{"from":1,"to":5},"building_surfaces":{"from":0,"to":1700},"terrain_surfaces":{"from":0,"to":598},"prices":{"from":35,"to":29971},"unit_prices":{"from":0,"to":75.45}}');
+                  // console.log(parsed_data);
                 },
+
                 error: function (jqxhr, textstatus, errorthrown) {
                     console.log("algo malo paso");
                 }
