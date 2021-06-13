@@ -59,7 +59,7 @@ module ImportProcess::ParseFile
         when "Homes"
           parse_projects(shp_file, "Casas", import_logger)
         when "Future Projects"
-          parse_future_projects(shp_file, import_logger)
+          parse_future_projects(shp_file, import_logger, 'FutureProject')
         when "Lot"
           parse_lots(shp_file, import_logger)
         when "POI"
@@ -72,6 +72,8 @@ module ImportProcess::ParseFile
           parse_bot(shp_file, import_logger)
         when "RentTransaction"
           parse_transactions(shp_file, import_logger, 'RentTransaction')
+        when "RentFutureProject"
+          parse_future_projects(shp_file, import_logger, 'RentFutureProject')
         end
       end
 
@@ -350,7 +352,7 @@ module ImportProcess::ParseFile
         #is_new_record ? import_logger.inserted += processed_rows : import_logger.updated += processed_rows
       end
 
-      def parse_future_projects(shp_file, import_logger)
+      def parse_future_projects(shp_file, import_logger, model)
         RGeo::Shapefile::Reader.open(shp_file) do |shp|
           field = []
           shp.each do |shape|
@@ -378,7 +380,7 @@ module ImportProcess::ParseFile
 
             future_type = FutureProjectType.find_by(abbrev: data["FUENTE"])
 
-            fut_proj = FutureProject.find_or_initialize_by(
+            fut_proj = model.constantize.find_or_initialize_by(
               address: data["DIRECCION"],
               future_project_type_id: future_type.id,
               year: year,
