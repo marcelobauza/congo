@@ -439,88 +439,46 @@ function update_filters() {
 ////////////////////////////////////////////////////////
 
 Congo.flex_dashboards.action_index = function () {
-    var map_admin, marker, flexMap;
+  let map_admin, marker, flexMap;
 
-    var init = function () {
-        var streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: '',
-            id: 'streets-v11',
-            accessToken: 'pk.eyJ1IjoiZmxhdmlhYXJpYXMiLCJhIjoiY2ppY2NzMm55MTN6OTNsczZrcGFkNHpoOSJ9.cL-mifEoJa6szBQUGnLmrA',
-            updateWhenIdle: true,
-            reuseTiles: true
-        });
+  let init = function () {
+    let flexMap = create_map();
+    let fgr     = L.featureGroup().addTo(flexMap);
 
-        flexMap = L.map('map_flex', {
-            fadeAnimation: true,
-            markerZoomAnimation: false,
-            zoom: 11,
-            center: [-33.4372, -70.6506],
-            zoomControl: false,
-            zoomAnimation: true,
-            layers: [streets]
-        });
+    add_control(flexMap, fgr);
 
-        fgr = L.featureGroup().addTo(flexMap);
+    flexMap.on('draw:created', function (e) {
+      let data = draw_geometry(e, fgr);
 
-        var drawControl = new L.Control.Draw({
-            draw: {
-                marker: false,
-                polyline: false,
-                rectangle: false,
-                circlemarker: false,
-            },
-            edit: {
-                featureGroup: fgr
-            }
-        }).addTo(flexMap);
+      if('error' in data){
+        $('#alerts').append(data['error']);
 
-        flexMap.on('draw:created', function (e) {
-            size_box = [];
-            fgr.eachLayer(function (layer) {
-                fgr.removeLayer(layer);
-            });
-
-            fgr.addLayer(e.layer);
-            layerType = e.layerType;
-
-            if (layerType == 'polygon') {
-                polygon = e.layer.getLatLngs();
-                arr1 = []
-
-                polygon.forEach(function (entry) {
-                    arr1 = Congo.map_utils.LatLngsToCoords(entry)
-                    arr1.push(arr1[0])
-                    size_box = [arr1];
-                })
-            }
-            data = {polygon: JSON.stringify(size_box)}
-
-            $.ajax({
-                async: false,
-                type: 'get',
-                url: 'flex/dashboards/search_data_for_filters.json',
-                datatype: 'json',
-                data: data,
-                success: function (data) {
-
-                  console.log('Data filtros');
-                  console.log(data);
-
-                  parsed_data = data
-
-                  // Ejemplo
-                  // parsed_data = JSON.parse('{"property_types":[["Casas",1],["Departamentos",2],["Oficinas",3],["Local Comercial",4],["Equipamiento",6]],"inscription_dates":{"from":"2020-11-05","to":"2020-12-30"},"seller_types":[["PROPIETARIO",1],["INMOBILIARIA",2],["EMPRESA",3],["BANCO",4]],"land_use":{"from":0,"to":0.6},"max_height":{"from":0,"to":100},"density_types":{"from":1,"to":5},"building_surfaces":{"from":0,"to":1700},"terrain_surfaces":{"from":0,"to":598},"prices":{"from":35,"to":29971},"unit_prices":{"from":0,"to":75.45}}');
-                  // console.log(parsed_data);
-                },
-
-                error: function (jqxhr, textstatus, errorthrown) {
-                    console.log("algo malo paso");
-                }
-            })
+        setTimeout(()=>{ $('#alerts').empty(); }, 5000)
+      }else{
+        geoserver_data(data, flexMap, fgr);
+        console.log(data);
+        $.ajax({
+          async: false,
+          type: 'get',
+          url: 'flex/dashboards/search_data_for_filters.json',
+          datatype: 'json',
+          data: data,
+          success: function (data) {
+            parsed_data = data
+            // Ejemplo
+            // parsed_data = JSON.parse('{"property_types":[["Casas",1],["Departamentos",2],["Oficinas",3],["Local Comercial",4],["Equipamiento",6]],"inscription_dates":{"from":"2020-11-05","to":"2020-12-30"},"seller_types":[["PROPIETARIO",1],["INMOBILIARIA",2],["EMPRESA",3],["BANCO",4]],"land_use":{"from":0,"to":0.6},"max_height":{"from":0,"to":100},"density_types":{"from":1,"to":5},"building_surfaces":{"from":0,"to":1700},"terrain_surfaces":{"from":0,"to":598},"prices":{"from":35,"to":29971},"unit_prices":{"from":0,"to":75.45}}')
+            //
             update_filters();
+          },
+          error: function (jqxhr, textstatus, errorthrown) {
+            console.log("algo malo paso");
+          }
         })
-    }
-    return {
-        init: init,
-    }
+      }
+    })
+  }
+
+  return {
+    init: init,
+  }
 }();
