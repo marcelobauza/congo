@@ -1,19 +1,17 @@
 <div class="bg-blue flex-dashboard">
   <div class="container-fluid">
     <div class="row pt-1">
-      <div class="col-md-3 p-0 map-box">
-        <div class="m-1">
-          <div id="map_flex"></div>
-        </div>
+      <div class="col-md-6 map-box">
+        <div id="map_flex"></div>
       </div>
-      <div class="col-md-3 p-0 bg-1 d-flex justify-content-center align-items-center" id="intro">
-        <div class="bg-1 m-1">
+      <div class="col-md-6" id="intro">
+        <div class="d-flex justify-content-center align-items-center bg-1 h-100">
           <div class="container">
-            <p>Seleccione en el mapa</p>
+            <p class="text-center">Seleccione en el mapa</p>
           </div>
         </div>
       </div>
-      <div class="col-md-3 p-0 d-none select-box" id="select-box">
+      <div class="col-md-6 d-none select-box" id="select-box">
         <div class="bg-1 m-1">
           <div class="container">
             <div class="row pt-3 d-flex align-items-center">
@@ -89,9 +87,9 @@
           </div>
         </div>
       </div>
-      <div class="col-md-9 table-box">
+      <div class="col-md-12 table-box">
         <div class="mt-1">
-          <div class="container p-0">
+          <div class="container-fluid p-0">
             <table id="table" class="table table-bordered">
               <thead class="bg-table-head">
               <tr>
@@ -122,20 +120,34 @@
             <div class="my-4">
               <div class="form-group">
                 <div class="row">
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Tipo" name="tipo"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Dirección" name="direccion"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Comuna" name="comuna"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Rol" name="rol"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Foja" name="foja"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Fecha" name="fecha"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Vendedor" name="vendedor"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Util(m2)" name="util(m2)"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Terreno" name="terreno"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="#E" name="#e"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="#B" name="#b"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="UF" name="uf"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="UF(m2)" name="uf(m2)"></div>
-                  <div class="col-md-4 mb-2"><input type="text" class="user_data form-control" placeholder="Año" name="año"> <br></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Tipo" name="tipo"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Dirección" name="direccion"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Comuna" name="comuna"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Rol" name="rol"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Foja" name="foja"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Fecha" name="fecha"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Vendedor" name="vendedor"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Util(m2)" name="util(m2)"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Terreno" name="terreno"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="#E" name="#e"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="#B" name="#b"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="UF" name="uf"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="UF(m2)" name="uf(m2)"></div>
+                  <div class="col-md-4 mb-2">
+                    <input type="text" class="user_data form-control" placeholder="Año" name="año"> <br></div>
                 </div>
               </div>
             </div>
