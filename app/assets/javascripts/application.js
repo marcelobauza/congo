@@ -25,6 +25,7 @@
 //= require lots
 //= require pois
 //= require map_utils
+//= require flex/maps
 //= require flex/dashboards
 //= require_tree .
 
