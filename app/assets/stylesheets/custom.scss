@@ -314,8 +314,13 @@ div.custom-menu.show {
   }
 
   .table-box {
-    max-height: 730px;
+    padding: 0 16px 15px 15px;
 
+    .mh-726 {
+      max-height: 726px;
+      overflow-y: scroll;
+      padding: 0 15px 0 0;
+    }
     thead {
       position: -webkit-sticky;
       position: sticky;
@@ -325,6 +330,10 @@ div.custom-menu.show {
     td {
       font-size: 12px;
     }
+  }
+
+  .map-box {
+    padding: 0 15px;
   }
 
   .select-box {
@@ -342,47 +351,6 @@ div.custom-menu.show {
 
   .irs-with-grid .irs-grid {
     display: none;
-  }
-}
-
-@media screen and (max-width: 1794px) {
-  .flex-dashboard {
-    .map-box {
-      max-width: 100%;
-      flex: 0 0 100%;
-    }
-
-    .table-box {
-      flex: 0 0 75%;
-      .container {
-        max-width: 100%;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1556px) {
-  .flex-dashboard {
-    .select-box {
-      p {
-        font-size: 12px;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1199px) {
-  .flex-dashboard {
-    .map-box {
-      flex: 0 0 75%;
-    }
-    .table-box {
-      flex: 0 0 100%;
-      max-width: 100%;
-      .container {
-        max-width: 100%;
-      }
-    }
   }
 }
 
