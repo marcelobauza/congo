@@ -5,6 +5,7 @@ class Transaction < ApplicationRecord
   include WhereBuilder
   include Transactions::Exports
   include Transactions::Imports
+  include Transactions::Geometry
   include Transactions::Periods
   include Transactions::Popup
   include Transactions::Scopes
