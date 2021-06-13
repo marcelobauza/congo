@@ -456,7 +456,10 @@ Congo.flex_dashboards.action_index = function () {
         setTimeout(()=>{ $('#alerts').empty(); }, 5000)
       }else{
         geoserver_data(data, flexMap, fgr);
+
+        console.log('Parámetros filtros');
         console.log(data);
+
         $.ajax({
           async: false,
           type: 'get',
@@ -464,10 +467,15 @@ Congo.flex_dashboards.action_index = function () {
           datatype: 'json',
           data: data,
           success: function (data) {
+
+            console.log('Datos filtros');
+            console.log(data);
+
             parsed_data = data
+
             // Ejemplo
-            // parsed_data = JSON.parse('{"property_types":[["Casas",1],["Departamentos",2],["Oficinas",3],["Local Comercial",4],["Equipamiento",6]],"inscription_dates":{"from":"2020-11-05","to":"2020-12-30"},"seller_types":[["PROPIETARIO",1],["INMOBILIARIA",2],["EMPRESA",3],["BANCO",4]],"land_use":{"from":0,"to":0.6},"max_height":{"from":0,"to":100},"density_types":{"from":1,"to":5},"building_surfaces":{"from":0,"to":1700},"terrain_surfaces":{"from":0,"to":598},"prices":{"from":35,"to":29971},"unit_prices":{"from":0,"to":75.45}}')
-            //
+            // parsed_data = JSON.parse('{"property_types":[["Casas",1],["Departamentos",2],["Oficinas",3],["Local Comercial",4],["Oficina y Local Comercial",5]],"inscription_dates":{"from":"2020-12-23","to":"2020-12-30"},"seller_types":[["PROPIETARIO",1],["INMOBILIARIA",2],["EMPRESA",3],["BANCO",4],["MUNICIPALIDAD",7]],"land_use":{"from":0,"to":0.8},"max_height":{"from":0,"to":100},"density_types":[["Edificacion libre segun rasante",11],["Edificacion Alta > 8 pisos",12],["Edificacion Media 4 a 7 pisos",13],["Edificacion Baja < 3 pisos",14],["Equipamiento Comunal",15],["3 o Menos Pisos",1],["4 Pisos",2],["5 a 7 Pisos",3],["8 a 14 Pisos",4],["15 o Mas Pisos",5],["Sobre 4 Pisos Sin Uso Vivienda",6],["En Revision, Congelado u Otro",7],["Zona Industrial",17],["Area Verde",16]],"building_surfaces":{"from":0,"to":5088},"terrain_surfaces":{"from":0,"to":6906},"prices":{"from":30,"to":44970},"unit_prices":{"from":0,"to":140.85}}')
+
             update_filters();
           },
           error: function (jqxhr, textstatus, errorthrown) {
