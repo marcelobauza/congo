@@ -144,7 +144,9 @@
       <div class="text-center">
         <%= link_to 'Cancelar', admin_future_projects_path, :class => 'btn btn-secondary' %>
         <%= f.button :submit, class: 'btn btn-primary', value: "Guardar" %>
-        <%= link_to 'Eliminar', admin_future_project_path(f.object.id), method: :delete, data: { confirm: 'Esta seguro que desea eliminar' }, :class => 'btn btn-danger' %>
+        <% unless f.object.new_record? %>
+          <%= link_to 'Eliminar', admin_future_project_path(f.object.id), method: :delete, data: { confirm: 'Esta seguro que desea eliminar' }, :class => 'btn btn-danger' %>
+        <% end %>
       </div>
 
     <% end %>

@@ -6,8 +6,9 @@ class ImportProcess < ApplicationRecord
   delegate :complete_name, :to => :user, :prefix => true, :allow_nil => true
 
   include Ibiza
-  include ImportProcess::ParseFile
   include ImportProcess::BuildingRegulations
+  include ImportProcess::ParseFile
+  include ImportProcess::RentProjects
 
   after_create_commit :import_job
 

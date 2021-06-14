@@ -11,7 +11,7 @@ module ImportProcess::ParseFile
       import_process.update_attributes status: 'working'
 
       ActiveRecord::Base.transaction do
-        if load_type == 'Building Regulation' || load_type == 'Lot' || load_type == 'Neighborhood' || load_type == 'Bot'
+        if load_type == 'Building Regulation' || load_type == 'Lot' || load_type == 'Neighborhood' || load_type == 'Bot' || load_type == 'RentProject'
           shps, dir_path = Util::get_geojson_files_from_zip(import.file_path)
         else
           shps, dir_path = Util::get_shape_files_from_zip(import.file_path)
@@ -53,13 +53,13 @@ module ImportProcess::ParseFile
         when "Building Regulation"
           parse_building_regulations(shp_file, import_logger, dir_path)
         when "Transactions"
-          parse_transactions(shp_file, import_logger)
+          parse_transactions(shp_file, import_logger, 'Transaction')
         when "Departments"
           parse_projects(shp_file, "Departamentos", import_logger)
         when "Homes"
           parse_projects(shp_file, "Casas", import_logger)
         when "Future Projects"
-          parse_future_projects(shp_file, import_logger)
+          parse_future_projects(shp_file, import_logger, 'FutureProject')
         when "Lot"
           parse_lots(shp_file, import_logger)
         when "POI"
@@ -70,6 +70,12 @@ module ImportProcess::ParseFile
           parse_neighborhoods(shp_file, import_logger)
         when "Bot"
           parse_bot(shp_file, import_logger)
+        when "RentTransaction"
+          parse_transactions(shp_file, import_logger, 'RentTransaction')
+        when "RentFutureProject"
+          parse_future_projects(shp_file, import_logger, 'RentFutureProject')
+        when "RentProject"
+          parse_rent_projects(shp_file, import_logger, dir_path)
         end
       end
 
@@ -181,7 +187,7 @@ module ImportProcess::ParseFile
         end
       end
 
-      def parse_transactions(shp_file, import_logger)
+      def parse_transactions(shp_file, import_logger, model)
         RGeo::Shapefile::Reader.open(shp_file) do |shp|
           field = []
           shp.each do |shape|
@@ -212,7 +218,7 @@ module ImportProcess::ParseFile
               import_logger.details << { :row_index => import_logger.current_row_index, :message => "No se pudo encontrar el county con codigo #{data["CODCOM"]}" }
               next
             end
-            tran    = Transaction.where(number: number, bimester: bimester, year: year, county_id: county.id).first_or_initialize
+            tran    = model.constantize.where(number: number, bimester: bimester, year: year, county_id: county.id).first_or_initialize
             was_new = tran.new_record?
 
             if tran.save_transaction_data(geom, data, county.id, @user_id)
@@ -348,7 +354,7 @@ module ImportProcess::ParseFile
         #is_new_record ? import_logger.inserted += processed_rows : import_logger.updated += processed_rows
       end
 
-      def parse_future_projects(shp_file, import_logger)
+      def parse_future_projects(shp_file, import_logger, model)
         RGeo::Shapefile::Reader.open(shp_file) do |shp|
           field = []
           shp.each do |shape|
@@ -376,7 +382,7 @@ module ImportProcess::ParseFile
 
             future_type = FutureProjectType.find_by(abbrev: data["FUENTE"])
 
-            fut_proj = FutureProject.find_or_initialize_by(
+            fut_proj = model.constantize.find_or_initialize_by(
               address: data["DIRECCION"],
               future_project_type_id: future_type.id,
               year: year,
