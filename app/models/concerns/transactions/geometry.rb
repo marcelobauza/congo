@@ -19,9 +19,7 @@ module Transactions::Geometry
       when 'circle'
         condition = where(
           "ST_DWithin(transactions.the_geom, ST_GeomFromText('POINT(#{filters[:point]})',
-          #{Util::WGS84_SRID}), #{filters[:radius]})"
-          ).where("ST_Intersects(ST_buffer(ST_GeomFromText('POINT(#{filters[:point]})',
-                  #{Util::WGS84_SRID}), #{filters[:radius]}), building_regulations.the_geom)"
+          #{Util::WGS84_SRID}), #{filters[:radius]}, false)"
           )
       end
 
