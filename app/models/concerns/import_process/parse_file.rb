@@ -11,7 +11,7 @@ module ImportProcess::ParseFile
       import_process.update_attributes status: 'working'
 
       ActiveRecord::Base.transaction do
-        if load_type == 'Building Regulation' || load_type == 'Lot' || load_type == 'Neighborhood' || load_type == 'Bot'
+        if load_type == 'Building Regulation' || load_type == 'Lot' || load_type == 'Neighborhood' || load_type == 'Bot' || load_type == 'RentProject'
           shps, dir_path = Util::get_geojson_files_from_zip(import.file_path)
         else
           shps, dir_path = Util::get_shape_files_from_zip(import.file_path)
@@ -74,6 +74,8 @@ module ImportProcess::ParseFile
           parse_transactions(shp_file, import_logger, 'RentTransaction')
         when "RentFutureProject"
           parse_future_projects(shp_file, import_logger, 'RentFutureProject')
+        when "RentProject"
+          parse_rent_projects(shp_file, import_logger, dir_path)
         end
       end
 
