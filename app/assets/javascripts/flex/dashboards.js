@@ -6,17 +6,23 @@ var table_data = "";
 var dataFromTable = []; // variable que captura ids de la tabla
 var dataForCharts = {transactions: dataFromTable}; // variable para los charts
 var userData = [];
-dataInsc_date = {}; dataPrices = {}; dataUnit_prices = {}; dataTerrain_surfaces = {}; dataBuilding_surfaces = {}; dataLand_use = {}; dataMaxHeight = {};
-var filteredData = {} ;
+dataInsc_date = {};
+dataPrices = {};
+dataUnit_prices = {};
+dataTerrain_surfaces = {};
+dataBuilding_surfaces = {};
+dataLand_use = {};
+dataMaxHeight = {};
+var filteredData = {};
 
-$("#exportToExcel").click(function(){
-   $("#table").table2excel({
-       // exclude CSS class
-       exclude: ".noExl",
-       name: "Datos descargados",
-       filename: "planilla de resultados", //do not include extension
-       fileext: ".xls" // file extension
-   });
+$("#exportToExcel").click(function () {
+    $("#table").table2excel({
+        // exclude CSS class
+        exclude: ".noExl",
+        name: "Datos descargados",
+        filename: "planilla de resultados", //do not include extension
+        fileext: ".xls" // file extension
+    });
 });
 
 function genCharts() {
@@ -37,13 +43,13 @@ function genCharts() {
         data: data,
         success: function (data) {
 
-          console.log('Datos charts');
-          console.log(data);
+            console.log('Datos charts');
+            console.log(data);
 
-          charts = data
+            charts = data
 
-          // Ejemplo:
-          // charts = JSON.parse('[{"title":"Cantidad","series":[{"data":[{"name":"1/2018","count":1},{"name":"1/2019","count":6},{"name":"1/2020","count":2},{"name":"2/2018","count":4},{"name":"2/2019","count":4},{"name":"2/2020","count":6},{"name":"3/2018","count":5},{"name":"3/2019","count":7},{"name":"3/2020","count":1},{"name":"4/2018","count":4},{"name":"4/2019","count":1},{"name":"4/2020","count":1},{"name":"5/2018","count":2},{"name":"5/2019","count":1},{"name":"6/2018","count":3},{"name":"6/2019","count":1},{"name":"6/2020","count":2}]}]},{"title":"Superficie Útil","series":[{"data":[{"name":"1/2018","count":"126.0"},{"name":"1/2019","count":"129.3333333333333333"},{"name":"1/2020","count":"119.5"},{"name":"2/2018","count":"131.75"},{"name":"2/2019","count":"129.0"},{"name":"2/2020","count":"125.8333333333333333"},{"name":"3/2018","count":"133.2"},{"name":"3/2019","count":"123.1428571428571429"},{"name":"3/2020","count":"112.0"},{"name":"4/2018","count":"131.25"},{"name":"4/2019","count":"100.0"},{"name":"4/2020","count":"131.0"},{"name":"5/2018","count":"127.0"},{"name":"5/2019","count":"176.0"},{"name":"6/2018","count":"110.3333333333333333"},{"name":"6/2019","count":"132.0"},{"name":"6/2020","count":"141.0"}]}]},{"title":"Precio","series":[{"data":[{"name":"1/2018","count":"3165.0"},{"name":"1/2019","count":"1836.5"},{"name":"1/2020","count":"2034.0"},{"name":"2/2018","count":"1956.75"},{"name":"2/2019","count":"2149.75"},{"name":"2/2020","count":"2334.3333333333333333"},{"name":"3/2018","count":"1487.4"},{"name":"3/2019","count":"1213.2857142857142857"},{"name":"3/2020","count":"4703.0"},{"name":"4/2018","count":"3113.75"},{"name":"4/2019","count":"2162.0"},{"name":"4/2020","count":"1953.0"},{"name":"5/2018","count":"1308.5"},{"name":"5/2019","count":"731.0"},{"name":"6/2018","count":"1405.0"},{"name":"6/2019","count":"2504.0"},{"name":"6/2020","count":"2431.5"}]}]},{"title":"Precio Unitario","series":[{"data":[{"name":"1/2018","count":"25.1"},{"name":"1/2019","count":"13.9833333333333333"},{"name":"1/2020","count":"17.45"},{"name":"2/2018","count":"15.65"},{"name":"2/2019","count":"17.475"},{"name":"2/2020","count":"19.45"},{"name":"3/2018","count":"10.86"},{"name":"3/2019","count":"10.5857142857142857"},{"name":"3/2020","count":"42.0"},{"name":"4/2018","count":"25.425"},{"name":"4/2019","count":"21.6"},{"name":"4/2020","count":"14.9"},{"name":"5/2018","count":"10.1"},{"name":"5/2019","count":"4.2"},{"name":"6/2018","count":"13.0333333333333333"},{"name":"6/2019","count":"19.0"},{"name":"6/2020","count":"20.4"}]}]},{"title":"Volúmen Mercado","series":[{"data":[{"name":"1/2018","count":"3165.0"},{"name":"1/2019","count":"11019.0"},{"name":"1/2020","count":"4068.0"},{"name":"2/2018","count":"7827.0"},{"name":"2/2019","count":"8599.0"},{"name":"2/2020","count":"14005.9999999999999998"},{"name":"3/2018","count":"7437.0"},{"name":"3/2019","count":"8492.9999999999999999"},{"name":"3/2020","count":"4703.0"},{"name":"4/2018","count":"12455.0"},{"name":"4/2019","count":"2162.0"},{"name":"4/2020","count":"1953.0"},{"name":"5/2018","count":"2617.0"},{"name":"5/2019","count":"731.0"},{"name":"6/2018","count":"4215.0"},{"name":"6/2019","count":"2504.0"},{"name":"6/2020","count":"4863.0"}]}]},{"title":"Superficie Útil (barras)","series":[{"data":[{"name":"1","count":"122.1"},{"name":"2","count":"131.2"},{"name":"3","count":"125.2"},{"name":"4","count":"136.1"},{"name":"5","count":"124.0"},{"name":"6","count":"111.1"}]}]},{"title":"Precio (barras)","series":[{"data":[{"name":"1","count":"2165.0"},{"name":"2","count":"1336.5"},{"name":"3","count":"2134.0"},{"name":"4","count":"1356.75"},{"name":"5","count":"2449.75"},{"name":"6","count":"2134.3333333333333333"}]}]},{"title":"Precio Unitario (barras)","series":[{"data":[{"name":"1","count":"23.1"},{"name":"2","count":"23.9833333333333333"},{"name":"3","count":"19.45"},{"name":"4","count":"25.65"},{"name":"5","count":"13.475"},{"name":"6","count":"29.45"}]}]},{"title":"Superficie por UF","series":[{"data":[{"name":"29.5","count":"23.1","radius":"23.1"},{"name":"32.5","count":"132.9833333333333333","radius":"23.1"},{"name":"33.6","count":"123.45","radius":"23.1"},{"name":"44.1","count":"121.65","radius":"23.1"},{"name":"20.5","count":"110.475","radius":"23.1"},{"name":"15.5","count":"123.45","radius":"23.1"}]}]}]')
+            // Ejemplo:
+            // charts = JSON.parse('[{"title":"Cantidad","series":[{"data":[{"name":"1/2018","count":1},{"name":"1/2019","count":6},{"name":"1/2020","count":2},{"name":"2/2018","count":4},{"name":"2/2019","count":4},{"name":"2/2020","count":6},{"name":"3/2018","count":5},{"name":"3/2019","count":7},{"name":"3/2020","count":1},{"name":"4/2018","count":4},{"name":"4/2019","count":1},{"name":"4/2020","count":1},{"name":"5/2018","count":2},{"name":"5/2019","count":1},{"name":"6/2018","count":3},{"name":"6/2019","count":1},{"name":"6/2020","count":2}]}]},{"title":"Superficie Útil","series":[{"data":[{"name":"1/2018","count":"126.0"},{"name":"1/2019","count":"129.3333333333333333"},{"name":"1/2020","count":"119.5"},{"name":"2/2018","count":"131.75"},{"name":"2/2019","count":"129.0"},{"name":"2/2020","count":"125.8333333333333333"},{"name":"3/2018","count":"133.2"},{"name":"3/2019","count":"123.1428571428571429"},{"name":"3/2020","count":"112.0"},{"name":"4/2018","count":"131.25"},{"name":"4/2019","count":"100.0"},{"name":"4/2020","count":"131.0"},{"name":"5/2018","count":"127.0"},{"name":"5/2019","count":"176.0"},{"name":"6/2018","count":"110.3333333333333333"},{"name":"6/2019","count":"132.0"},{"name":"6/2020","count":"141.0"}]}]},{"title":"Precio","series":[{"data":[{"name":"1/2018","count":"3165.0"},{"name":"1/2019","count":"1836.5"},{"name":"1/2020","count":"2034.0"},{"name":"2/2018","count":"1956.75"},{"name":"2/2019","count":"2149.75"},{"name":"2/2020","count":"2334.3333333333333333"},{"name":"3/2018","count":"1487.4"},{"name":"3/2019","count":"1213.2857142857142857"},{"name":"3/2020","count":"4703.0"},{"name":"4/2018","count":"3113.75"},{"name":"4/2019","count":"2162.0"},{"name":"4/2020","count":"1953.0"},{"name":"5/2018","count":"1308.5"},{"name":"5/2019","count":"731.0"},{"name":"6/2018","count":"1405.0"},{"name":"6/2019","count":"2504.0"},{"name":"6/2020","count":"2431.5"}]}]},{"title":"Precio Unitario","series":[{"data":[{"name":"1/2018","count":"25.1"},{"name":"1/2019","count":"13.9833333333333333"},{"name":"1/2020","count":"17.45"},{"name":"2/2018","count":"15.65"},{"name":"2/2019","count":"17.475"},{"name":"2/2020","count":"19.45"},{"name":"3/2018","count":"10.86"},{"name":"3/2019","count":"10.5857142857142857"},{"name":"3/2020","count":"42.0"},{"name":"4/2018","count":"25.425"},{"name":"4/2019","count":"21.6"},{"name":"4/2020","count":"14.9"},{"name":"5/2018","count":"10.1"},{"name":"5/2019","count":"4.2"},{"name":"6/2018","count":"13.0333333333333333"},{"name":"6/2019","count":"19.0"},{"name":"6/2020","count":"20.4"}]}]},{"title":"Volúmen Mercado","series":[{"data":[{"name":"1/2018","count":"3165.0"},{"name":"1/2019","count":"11019.0"},{"name":"1/2020","count":"4068.0"},{"name":"2/2018","count":"7827.0"},{"name":"2/2019","count":"8599.0"},{"name":"2/2020","count":"14005.9999999999999998"},{"name":"3/2018","count":"7437.0"},{"name":"3/2019","count":"8492.9999999999999999"},{"name":"3/2020","count":"4703.0"},{"name":"4/2018","count":"12455.0"},{"name":"4/2019","count":"2162.0"},{"name":"4/2020","count":"1953.0"},{"name":"5/2018","count":"2617.0"},{"name":"5/2019","count":"731.0"},{"name":"6/2018","count":"4215.0"},{"name":"6/2019","count":"2504.0"},{"name":"6/2020","count":"4863.0"}]}]},{"title":"Superficie Útil (barras)","series":[{"data":[{"name":"1","count":"122.1"},{"name":"2","count":"131.2"},{"name":"3","count":"125.2"},{"name":"4","count":"136.1"},{"name":"5","count":"124.0"},{"name":"6","count":"111.1"}]}]},{"title":"Precio (barras)","series":[{"data":[{"name":"1","count":"2165.0"},{"name":"2","count":"1336.5"},{"name":"3","count":"2134.0"},{"name":"4","count":"1356.75"},{"name":"5","count":"2449.75"},{"name":"6","count":"2134.3333333333333333"}]}]},{"title":"Precio Unitario (barras)","series":[{"data":[{"name":"1","count":"23.1"},{"name":"2","count":"23.9833333333333333"},{"name":"3","count":"19.45"},{"name":"4","count":"25.65"},{"name":"5","count":"13.475"},{"name":"6","count":"29.45"}]}]},{"title":"Superficie por UF","series":[{"data":[{"name":"29.5","count":"23.1","radius":"23.1"},{"name":"32.5","count":"132.9833333333333333","radius":"23.1"},{"name":"33.6","count":"123.45","radius":"23.1"},{"name":"44.1","count":"121.65","radius":"23.1"},{"name":"20.5","count":"110.475","radius":"23.1"},{"name":"15.5","count":"123.45","radius":"23.1"}]}]}]')
 
 
         },
@@ -51,13 +57,13 @@ function genCharts() {
             console.log("algo malo paso");
         }
     });
-    $("#table .form-check-input").each(function(){
-        if(!$(this).is(":checked")){
+    $("#table .form-check-input").each(function () {
+        if (!$(this).is(":checked")) {
             dataFromTable.push($(this).val()); //variable que captura los datos de la tabla
         }
     });
-    $(".user_data").each(function(){
-        userData.push( [$(this).attr('name') , $(this).val()] ); //variable que captura los datos ingresados por el usuario
+    $(".user_data").each(function () {
+        userData.push([$(this).attr('name'), $(this).val()]); //variable que captura los datos ingresados por el usuario
     })
 
     var cantidadChart = $("#chartCantidad");
@@ -65,33 +71,38 @@ function genCharts() {
     var precioChart = $("#chartPrecio");
     var precioUnitarioChart = $("#chartPrecioUnitario");
     var volMercadoChart = $("#chartVolMercado");
+    var supUtilBarrasChart = $("#chartSupUtil-barras");
+    var precioBarrasChart = $("#chartPrecio-barras");
+    var precioUnitarioBarrasChart = $("#chartPrecioUnitario-barras");
+    var supUFChart = $("#chartSupUF");
     labelsChart = [];
     dataChart = [];
-    $(charts).each(function(){
-       if($(this)[0]['title'] == 'Cantidad'){
-           for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
-               labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
-               dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
-           }
-           var chartCantidad = new Chart(cantidadChart, {
-              type: 'line',
-              data: {
-                  labels: labelsChart,
-                  datasets: [{
-                      data: dataChart,
-                      label: "",
-                      fill: false,
-                      borderColor: 'rgb(0,0,0)',
-                      tension: 0.1,
-                      backgroundColor: '#fff',
-                      borderWidth: 2
-                  }]
-              }
-           });
-           labelsChart = [];
-           dataChart = [];
-       }
-        if($(this)[0]['title'] == 'Superficie útil'){
+    radioChart = [];
+    $(charts).each(function () {
+        if ($(this)[0]['title'] == 'Cantidad') {
+            for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+                labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
+                dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
+            }
+            var chartCantidad = new Chart(cantidadChart, {
+                type: 'line',
+                data: {
+                    labels: labelsChart,
+                    datasets: [{
+                        data: dataChart,
+                        label: "",
+                        fill: false,
+                        borderColor: 'rgb(0,0,0)',
+                        tension: 0.1,
+                        backgroundColor: '#fff',
+                        borderWidth: 2
+                    }]
+                }
+            });
+            labelsChart = [];
+            dataChart = [];
+        }
+        if ($(this)[0]['title'] == 'Superficie Útil') {
             for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
                 labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
                 dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
@@ -114,7 +125,7 @@ function genCharts() {
             labelsChart = [];
             dataChart = [];
         }
-        if($(this)[0]['title'] == 'Precio'){
+        if ($(this)[0]['title'] == 'Precio') {
             for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
                 labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
                 dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
@@ -137,7 +148,7 @@ function genCharts() {
             labelsChart = [];
             dataChart = [];
         }
-        if($(this)[0]['title'] == 'Precio unitario'){
+        if ($(this)[0]['title'] == 'Precio Unitario') {
             for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
                 labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
                 dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
@@ -160,7 +171,7 @@ function genCharts() {
             labelsChart = [];
             dataChart = [];
         }
-        if($(this)[0]['title'] == 'Volumen Mercado'){
+        if ($(this)[0]['title'] == 'Volúmen Mercado') {
             for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
                 labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
                 dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
@@ -183,6 +194,101 @@ function genCharts() {
             labelsChart = [];
             dataChart = [];
         }
+        if ($(this)[0]['title'] == 'Superficie Útil (barras)') {
+            for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+                labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
+                dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
+            }
+            var chartSupUtilBarras = new Chart(supUtilBarrasChart, {
+                type: 'bar',
+                data: {
+                    labels: labelsChart,
+                    datasets: [{
+                        data: dataChart,
+                        label: "",
+                        fill: false,
+                        borderColor: 'rgb(0,0,0)',
+                        tension: 0.1,
+                        backgroundColor: '#fff',
+                        borderWidth: 2
+                    }]
+                }
+            });
+            labelsChart = [];
+            dataChart = [];
+        }
+        if ($(this)[0]['title'] == 'Precio (barras)') {
+            for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+                labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
+                dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
+            }
+            var chartPrecioBarras = new Chart(precioBarrasChart, {
+                type: 'bar',
+                data: {
+                    labels: labelsChart,
+                    datasets: [{
+                        data: dataChart,
+                        label: "",
+                        fill: false,
+                        borderColor: 'rgb(0,0,0)',
+                        tension: 0.1,
+                        backgroundColor: '#fff',
+                        borderWidth: 2
+                    }]
+                }
+            });
+            labelsChart = [];
+            dataChart = [];
+        }
+        if ($(this)[0]['title'] == 'Precio Unitario (barras)') {
+            for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+                labelsChart.push($(this)[0]['series'][0]['data'][i]['name'])
+                dataChart.push($(this)[0]['series'][0]['data'][i]['count'])
+            }
+            var chartPrecioUnitarioBarras = new Chart(precioUnitarioBarrasChart, {
+                type: 'bar',
+                data: {
+                    labels: labelsChart,
+                    datasets: [{
+                        data: dataChart,
+                        label: "",
+                        fill: false,
+                        borderColor: 'rgb(0,0,0)',
+                        tension: 0.1,
+                        backgroundColor: '#fff',
+                        borderWidth: 2
+                    }]
+                }
+            });
+            labelsChart = [];
+            dataChart = [];
+        }
+        if ($(this)[0]['title'] == 'Superficie por UF') {
+            for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
+                radioChart.push
+                (
+                    {
+                        x: $(this)[0]['series'][0]['data'][i]['name'],
+                        y: $(this)[0]['series'][0]['data'][i]['count'],
+                        r: $(this)[0]['series'][0]['data'][i]['radius']
+                    }
+                );
+            }
+            console.log(radioChart);
+            var chartSupUF = new Chart(supUFChart, {
+                type: 'bubble',
+                data: {
+                    labels: labelsChart,
+                    datasets: [{
+                        data: radioChart,
+                        label: "",
+                        backgroundColor: '#000',
+                        borderWidth: 2
+                    }]
+                }
+            });
+            radioChart = [];
+        }
     });
 }
 
@@ -191,9 +297,9 @@ function clearTable() {
 }
 
 function update_table() {
-    $(table_data).each(function(index){
+    $(table_data).each(function (index) {
         $('#table tr:last').after(
-            '<tr>' +
+            '<tr class="genTable">' +
             '<td><input class="form-check-input" type="checkbox" value="' + ($(this)[0]['id']) + '"></td>' +
             '<td>' + ($(this)[0]["property_typee"]) + '</td>' +
             '<td>' + ($(this)[0]["address"]) + '</td>' +
@@ -224,16 +330,16 @@ function getFilteredData() {
 
     // TODO: agregar density_types (array con ids) y max_height (min y max)
     data = {
-        property_types : propertyTypes,
-        seller_types : sellerTypes,
-        inscription_dates : dataInsc_date,
-        max_height : dataMaxHeight,
-        density_types : densityType,
-        land_use : dataLand_use,
-        building_surfaces : dataBuilding_surfaces,
-        terrain_surfaces : dataTerrain_surfaces,
-        prices : dataPrices,
-        unit_prices : dataUnit_prices
+        property_types: propertyTypes,
+        seller_types: sellerTypes,
+        inscription_dates: dataInsc_date,
+        max_height: dataMaxHeight,
+        density_types: densityType,
+        land_use: dataLand_use,
+        building_surfaces: dataBuilding_surfaces,
+        terrain_surfaces: dataTerrain_surfaces,
+        prices: dataPrices,
+        unit_prices: dataUnit_prices
     }
 
     console.log('Parámetros tabla');
@@ -264,6 +370,9 @@ function getFilteredData() {
 }
 
 function update_filters() {
+    $('tr.genTable').remove();
+    $(".chartjs-render-monitor").removeAttr('class').removeAttr('style').removeAttr('width').removeAttr('height');
+
     $(parsed_data['property_types']).each(function () {
         $("#prop_type").append($('<option>').val($(this)[1]).text($(this)[0]));
     });
@@ -429,53 +538,55 @@ function update_filters() {
 ////////////////////////////////////////////////////////
 
 Congo.flex_dashboards.action_index = function () {
-  let map_admin, marker, flexMap;
+    let map_admin, marker, flexMap;
 
-  let init = function () {
-    let flexMap = create_map();
-    let fgr     = L.featureGroup().addTo(flexMap);
+    let init = function () {
+        let flexMap = create_map();
+        let fgr = L.featureGroup().addTo(flexMap);
 
-    add_control(flexMap, fgr);
+        add_control(flexMap, fgr);
 
-    flexMap.on('draw:created', function (e) {
-      let data = draw_geometry(e, fgr);
+        flexMap.on('draw:created', function (e) {
+            let data = draw_geometry(e, fgr);
 
-      if('error' in data){
-        $('#alerts').append(data['error']);
+            if ('error' in data) {
+                $('#alerts').append(data['error']);
 
-        setTimeout(()=>{ $('#alerts').empty(); }, 5000)
-      }else{
-        geoserver_data(data, flexMap, fgr);
+                setTimeout(() => {
+                    $('#alerts').empty();
+                }, 5000)
+            } else {
+                geoserver_data(data, flexMap, fgr);
 
-        console.log('Parámetros filtros');
-        console.log(data);
+                console.log('Parámetros filtros');
+                console.log(data);
 
-        $.ajax({
-          async: false,
-          type: 'get',
-          url: 'flex/dashboards/search_data_for_filters.json',
-          datatype: 'json',
-          data: data,
-          success: function (data) {
+                $.ajax({
+                    async: false,
+                    type: 'get',
+                    url: 'flex/dashboards/search_data_for_filters.json',
+                    datatype: 'json',
+                    data: data,
+                    success: function (data) {
 
-            console.log('Datos filtros');
-            console.log(data);
+                        console.log('Datos filtros');
+                        console.log(data);
 
-            parsed_data = data;
+                        parsed_data = data;
 
-            // Ejemplo
-            // parsed_data = JSON.parse('{"property_types":[["Casas",1],["Departamentos",2],["Oficinas",3],["Local Comercial",4],["Oficina y Local Comercial",5]],"inscription_dates":{"from":"2020-12-23","to":"2020-12-30"},"seller_types":[["PROPIETARIO",1],["INMOBILIARIA",2],["EMPRESA",3],["BANCO",4],["MUNICIPALIDAD",7]],"land_use":{"from":0,"to":0.8},"max_height":{"from":0,"to":100},"density_types":[["Edificacion libre segun rasante",11],["Edificacion Alta > 8 pisos",12],["Edificacion Media 4 a 7 pisos",13],["Edificacion Baja < 3 pisos",14],["Equipamiento Comunal",15],["3 o Menos Pisos",1],["4 Pisos",2],["5 a 7 Pisos",3],["8 a 14 Pisos",4],["15 o Mas Pisos",5],["Sobre 4 Pisos Sin Uso Vivienda",6],["En Revision, Congelado u Otro",7],["Zona Industrial",17],["Area Verde",16]],"building_surfaces":{"from":0,"to":5088},"terrain_surfaces":{"from":0,"to":6906},"prices":{"from":30,"to":44970},"unit_prices":{"from":0,"to":140.85}}');
-          },
-          error: function (jqxhr, textstatus, errorthrown) {
-            console.log("algo malo paso");
-          }
+                        // Ejemplo
+                        // parsed_data = JSON.parse('{"property_types":[["Casas",1],["Departamentos",2],["Oficinas",3],["Local Comercial",4],["Oficina y Local Comercial",5]],"inscription_dates":{"from":"2020-12-23","to":"2020-12-30"},"seller_types":[["PROPIETARIO",1],["INMOBILIARIA",2],["EMPRESA",3],["BANCO",4],["MUNICIPALIDAD",7]],"land_use":{"from":0,"to":0.8},"max_height":{"from":0,"to":100},"density_types":[["Edificacion libre segun rasante",11],["Edificacion Alta > 8 pisos",12],["Edificacion Media 4 a 7 pisos",13],["Edificacion Baja < 3 pisos",14],["Equipamiento Comunal",15],["3 o Menos Pisos",1],["4 Pisos",2],["5 a 7 Pisos",3],["8 a 14 Pisos",4],["15 o Mas Pisos",5],["Sobre 4 Pisos Sin Uso Vivienda",6],["En Revision, Congelado u Otro",7],["Zona Industrial",17],["Area Verde",16]],"building_surfaces":{"from":0,"to":5088},"terrain_surfaces":{"from":0,"to":6906},"prices":{"from":30,"to":44970},"unit_prices":{"from":0,"to":140.85}}');
+                    },
+                    error: function (jqxhr, textstatus, errorthrown) {
+                        console.log("algo malo paso");
+                    }
+                });
+            }
+            update_filters();
         });
-      }
-      update_filters();
-    })
-  }
+    }
 
-  return {
-    init: init,
-  }
+    return {
+        init: init,
+    }
 }();
