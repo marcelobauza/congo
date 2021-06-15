@@ -26,7 +26,16 @@ $("#exportToExcel").click(function () {
 });
 
 function genCharts() {
+    $("#table .form-check-input").each(function () {
+        if (!$(this).is(":checked")) {
+            dataFromTable.push($(this).val()); //variable que captura los datos de la tabla
+        }
+    });
+    $(".user_data").each(function () {
+        userData.push([$(this).attr('name'), $(this).val()]); //variable que captura los datos ingresados por el usuario
+    })
 
+    data = {transactions: dataFromTable};
     // TODO: Agregar a data un array con los ids de los registros a graficar
 
     // Ejemplo:
@@ -57,14 +66,6 @@ function genCharts() {
             console.log("algo malo paso");
         }
     });
-    $("#table .form-check-input").each(function () {
-        if (!$(this).is(":checked")) {
-            dataFromTable.push($(this).val()); //variable que captura los datos de la tabla
-        }
-    });
-    $(".user_data").each(function () {
-        userData.push([$(this).attr('name'), $(this).val()]); //variable que captura los datos ingresados por el usuario
-    })
 
     var cantidadChart = $("#chartCantidad");
     var supUtilChart = $("#chartSupUtil");
