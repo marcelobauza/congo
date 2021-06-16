@@ -582,11 +582,11 @@ Congo.flex_dashboards.action_index = function () {
                         console.log("algo malo paso");
                     }
                 });
-            }
+
             update_filters();
+            }
         });
     }
-
     return {
         init: init,
     }

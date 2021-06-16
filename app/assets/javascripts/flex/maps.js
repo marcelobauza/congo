@@ -69,7 +69,7 @@ function draw_geometry(e, fgr){
     let radius   = e.layer.getRadius();
     let center   = centerpt.lng +" " + centerpt.lat;
 
-    if (radius > '50000') {
+    if (radius > '500') {
       let error = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El área debe ser menor a 500 m.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
 
       data = { error: error }
