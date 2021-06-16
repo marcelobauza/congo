@@ -303,20 +303,20 @@ function update_table() {
             '<tr class="genTable">' +
             '<td><input class="form-check-input" type="checkbox" value="' + ($(this)[0]['id']) + '"></td>' +
             '<td>' + ($(this)[0]["property_typee"]) + '</td>' +
+            '<td>' + ($(this)[0]['inscription_date']) + '</td>' +
             '<td>' + ($(this)[0]["address"]) + '</td>' +
             '<td>' + ($(this)[0]['c_name']) + '</td>' +
-            '<td>' + '' + '</td>' +
-            '<td>' + ($(this)[0]['cellar']) + '</td>' +
-            '<td>' + ($(this)[0]['id']) + '</td>' +
-            '<td>' + ($(this)[0]['inscription_date']) + '</td>' +
             '<td>' + ($(this)[0]['seller']) + '</td>' +
             '<td>' + ($(this)[0]['building_surface']) + '</td>' +
             '<td>' + ($(this)[0]['terrain_surface']) + '</td>' +
             '<td>' + '' + '</td>' +
+            '<td>' + ($(this)[0]['cellar']) + '</td>' +
             '<td>' + '' + '</td>' +
-            '<td>' + '' + '</td>' +
-            '<td>' + '' + '</td>' +
-            '<td>' + '' + '</td>' +
+            '<td class="hidden">' + '' + '</td>' +
+            '<td class="hidden">' + '' + '</td>' +
+            '<td class="hidden">' + ($(this)[0]['id']) + '</td>' +
+            '<td class="hidden">' + '' + '</td>' +
+            '<td class="hidden">' + '' + '</td>' +
             '</tr>'
         );
     });
