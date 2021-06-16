@@ -149,7 +149,7 @@ Rails.application.routes.draw do
   resources :future_project_types
   resources :project_types
   resources :seller_types
-  devise_for :users
+  devise_for :users, :controllers => { registrations: 'flex/registrations' }
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'dashboards#index'
