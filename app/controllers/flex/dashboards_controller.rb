@@ -34,8 +34,7 @@ class Flex::DashboardsController < ApplicationController
       ")
       .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
       .method_selection(params)
-      .order(id: :desc)
-      .limit(500)
+      .where("transactions.inscription_date > ?", Date.today - 3.years)
 
     data.each do |tr|
       property_type_id << tr.property_type_id unless property_type_id.include? tr.property_type_id
