@@ -15,9 +15,9 @@ class Flex::DashboardsController < ApplicationController
     total_surface_terrain = []
     calculated_value = []
     uf_m2_u = []
-    osinciti = []
+    building_zone = []
     aminciti = []
-    density_type_id = []
+    hectarea_inhabitants = []
 
     data = Transaction
       .select("
@@ -28,9 +28,9 @@ class Flex::DashboardsController < ApplicationController
         transactions.total_surface_terrain,
         transactions.calculated_value,
         transactions.uf_m2_u,
-        building_regulations.osinciti,
+        building_regulations.building_zone,
         building_regulations.aminciti,
-        building_regulations.density_type_id
+        building_regulations.hectarea_inhabitants
       ")
       .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
       .method_selection(params)
@@ -45,14 +45,13 @@ class Flex::DashboardsController < ApplicationController
       total_surface_terrain << tr.total_surface_terrain.to_f unless total_surface_terrain.include? tr.total_surface_terrain
       calculated_value << tr.calculated_value.to_f unless calculated_value.include? tr.calculated_value
       uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
-      osinciti << tr.osinciti.to_f unless osinciti.include? tr.osinciti
+      building_zone << tr.building_zone unless building_zone.include? tr.building_zone
       aminciti << tr.aminciti.to_f unless aminciti.include? tr.aminciti
-      density_type_id << tr.density_type_id unless density_type_id.include? tr.density_type_id
+      hectarea_inhabitants << tr.hectarea_inhabitants.to_f unless hectarea_inhabitants.include? tr.hectarea_inhabitants
     end
 
     project_types = ProjectType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
     seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
-    density_types = DensityType.where(:id => density_type_id).map { |density| [density.name, density.id] }
 
     result = {
       'property_types': project_types,
@@ -61,15 +60,15 @@ class Flex::DashboardsController < ApplicationController
         'to': inscription_date.max
       },
       'seller_types': seller_types,
-      'land_use': {
-        'from': osinciti.min,
-        'to': osinciti.max
-      },
+      'land_use': building_zone,
       'max_height': {
         'from': aminciti.min,
         'to': aminciti.max
       },
-      'density_types': density_types,
+      'density': {
+        'from': hectarea_inhabitants.min,
+        'to': hectarea_inhabitants.max
+      },
       'building_surfaces': {
         'from': total_surface_building.min,
         'to': total_surface_building.max
