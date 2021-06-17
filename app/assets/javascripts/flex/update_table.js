@@ -7,16 +7,16 @@ function update_table() {
         $('#table tr:last').after(
             '<tr class="genTable">' +
             '<td><input class="form-check-input" type="checkbox" value="' + ($(this)[0]['id']) + '" checked></td>' +
-            '<td>' + ($(this)[0]["property_type_id"]) + '</td>' +
+            '<td>' + ($(this)[0]["property_typee"]) + '</td>' +
             '<td>' + ($(this)[0]['inscription_date']) + '</td>' +
             '<td>' + ($(this)[0]["address"]) + '</td>' +
-            '<td>' + ($(this)[0]['county_id']) + '</td>' +
-            '<td>' + ($(this)[0]['seller_type_id']) + '</td>' +
+            '<td>' + ($(this)[0]['c_name']) + '</td>' +
+            '<td>' + ($(this)[0]['seller']) + '</td>' +
             '<td>' + ($(this)[0]['building_surface']) + '</td>' +
             '<td>' + ($(this)[0]['terrain_surface']) + '</td>' +
             '<td>' + ($(this)[0]['parking_lot']) + '</td>' +
+            '<td>' + ($(this)[0]['cellar']) + '</td>' +
             '<td>' + ($(this)[0]['price']) + '</td>' +
-            '<td>' + '' + '</td>' +
             '<td class="hidden">' + '' + '</td>' +
             '<td class="hidden">' + '' + '</td>' +
             '<td class="hidden">' + ($(this)[0]['id']) + '</td>' +
