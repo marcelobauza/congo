@@ -26,7 +26,7 @@ function getFilteredData() {
     $.ajax({
         async: false,
         type: 'get',
-        url: 'dashboards/search_data_for_table.json',
+        url: 'flex/dashboards/search_data_for_table.json',
         datatype: 'json',
         data: data,
         success: function (data) {
