@@ -63,4 +63,8 @@ function update_table() {
             });
 
         });
+    // check - uncheck for excel
+    $('.genTable .form-check-input').change(function(){
+        $(this).closest('tr').toggleClass('noExl');
+    });
 }
