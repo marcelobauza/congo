@@ -328,17 +328,15 @@ div.custom-menu.show {
       z-index: 1;
     }
     td {
-      font-size: 12px;
+      font-size: 14px;
     }
     .hidden {
       display: none;
     }
     #address_sort, #utilm2_sort, #e_sort, #uf_sort {
       &:hover {
-        small {
-          font-weight: 900 !important;
-          cursor: pointer;
-        }
+        font-size: 16px !important;
+        cursor: pointer;
       }
     }
   }
@@ -349,7 +347,7 @@ div.custom-menu.show {
 
   .select-box {
     p, .multiselect.dropdown-toggle.custom-select {
-      font-size: 12px;
+      font-size: 14px;
     }
     .multiselect.dropdown-toggle.custom-select {
       .multiselect-selected-text {
