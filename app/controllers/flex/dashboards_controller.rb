@@ -7,7 +7,6 @@ class Flex::DashboardsController < ApplicationController
 
   def search_data_for_filters
 
-    polygon = params[:polygon]
     property_type_id = []
     inscription_date = []
     seller_type_id = []
@@ -90,6 +89,7 @@ class Flex::DashboardsController < ApplicationController
 
   def search_data_for_table
 
+    geom = params[:geom]
     property_types = params[:property_types]
     seller_types = params[:seller_types]
     inscription_dates = params[:inscription_dates]
@@ -104,11 +104,11 @@ class Flex::DashboardsController < ApplicationController
     @data = Transaction
       .select("
         transactions.id,
-        transactions.property_type_id,
+        property_types.name AS property_typee,
         transactions.inscription_date,
         transactions.address,
-        transactions.county_id,
-        transactions.seller_type_id,
+        counties.name AS c_name,
+        seller_types.name AS seller,
         transactions.total_surface_building AS building_surface,
         transactions.total_surface_terrain AS terrain_surface,
         transactions.parkingi AS parking_lot,
@@ -116,10 +116,11 @@ class Flex::DashboardsController < ApplicationController
         transactions.calculated_value AS price
       ")
       .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
-      .where("ST_Contains(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"Polygon\", \"coordinates\":[[[\"-70.74010848999025\", \"-33.43007977475543\"], [\"-70.74010848999025\", \"-33.46796263238644\"], [\"-70.67994117736818\", \"-33.44461900927522\"], [\"-70.74010848999025\", \"-33.43007977475543\"]]]}'), 4326), transactions.the_geom)")
-      .where("ST_Intersects(ST_SetSRID(ST_GeomFromGeoJSON('{\"type\":\"Polygon\", \"coordinates\":[[[\"-70.74010848999025\", \"-33.43007977475543\"], [\"-70.74010848999025\", \"-33.46796263238644\"], [\"-70.67994117736818\", \"-33.44461900927522\"], [\"-70.74010848999025\", \"-33.43007977475543\"]]]}'), 4326), building_regulations.the_geom)")
-      .order(id: :desc)
-      .limit(500)
+      .joins("INNER JOIN property_types ON (property_types.id = transactions.property_type_id)")
+      .joins("INNER JOIN seller_types ON (seller_types.id = transactions.seller_type_id)")
+      .joins("INNER JOIN counties ON (counties.id = transactions.county_id)")
+      .method_selection(geom)
+      .where("transactions.inscription_date > ?", Date.today - 3.years)
 
     @data = @data.where(:property_type_id => property_types) unless property_types.nil?
     @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from], inscription_dates[:to]) unless inscription_dates.nil?
