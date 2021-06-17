@@ -15,7 +15,7 @@ dataPrices = {};
 dataUnit_prices = {};
 dataTerrain_surfaces = {};
 dataBuilding_surfaces = {};
-dataLand_use = {};
+dataDensity = {};
 dataMaxHeight = {};
 var filteredData = {};
 
@@ -97,11 +97,24 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,0,0)',
+                        borderColor: 'rgb(0,162,255)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
                     }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: false
+                        }
+                    }
                 }
             });
             labelsChart = [];
@@ -120,11 +133,24 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,0,0)',
+                        borderColor: 'rgb(0,162,255)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
                     }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: false
+                        }
+                    }
                 }
             });
             labelsChart = [];
@@ -143,11 +169,24 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,0,0)',
+                        borderColor: 'rgb(0,162,255)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
                     }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: false
+                        }
+                    }
                 }
             });
             labelsChart = [];
@@ -166,11 +205,24 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,0,0)',
+                        borderColor: 'rgb(0,162,255)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
                     }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: false
+                        }
+                    }
                 }
             });
             labelsChart = [];
@@ -189,11 +241,24 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,0,0)',
+                        borderColor: 'rgb(0,162,255)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
                     }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: false
+                        }
+                    }
                 }
             });
             labelsChart = [];
@@ -211,12 +276,23 @@ function genCharts() {
                     datasets: [{
                         data: dataChart,
                         label: "",
-                        fill: false,
-                        borderColor: 'rgb(0,0,0)',
+                        backgroundColor: 'rgb(0,162,255)',
                         tension: 0.1,
-                        backgroundColor: '#fff',
                         borderWidth: 2
                     }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: false
+                        }
+                    }
                 }
             });
             labelsChart = [];
@@ -234,12 +310,23 @@ function genCharts() {
                     datasets: [{
                         data: dataChart,
                         label: "",
-                        fill: false,
-                        borderColor: 'rgb(0,0,0)',
+                        backgroundColor: 'rgb(0,162,255)',
                         tension: 0.1,
-                        backgroundColor: '#fff',
                         borderWidth: 2
                     }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: false
+                        }
+                    }
                 }
             });
             labelsChart = [];
@@ -257,12 +344,23 @@ function genCharts() {
                     datasets: [{
                         data: dataChart,
                         label: "",
-                        fill: false,
-                        borderColor: 'rgb(0,0,0)',
+                        backgroundColor: 'rgb(0,162,255)',
                         tension: 0.1,
-                        backgroundColor: '#fff',
                         borderWidth: 2
                     }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: false
+                        }
+                    }
                 }
             });
             labelsChart = [];
@@ -287,9 +385,22 @@ function genCharts() {
                     datasets: [{
                         data: radioChart,
                         label: "",
-                        backgroundColor: '#000',
+                        backgroundColor: 'rgb(0,162,255)',
                         borderWidth: 2
                     }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    plugins: {
+                        datalabels: {
+                            display: false
+                        }
+                    }
                 }
             });
             radioChart = [];
@@ -305,16 +416,16 @@ function update_table() {
     $(table_data).each(function (index) {
         $('#table tr:last').after(
             '<tr class="genTable">' +
-            '<td><input class="form-check-input" type="checkbox" value="' + ($(this)[0]['id']) + '"></td>' +
-            '<td>' + ($(this)[0]["property_typee"]) + '</td>' +
+            '<td><input class="form-check-input" type="checkbox" value="' + ($(this)[0]['id']) + '" checked></td>' +
+            '<td>' + ($(this)[0]["property_type_id"]) + '</td>' +
             '<td>' + ($(this)[0]['inscription_date']) + '</td>' +
             '<td>' + ($(this)[0]["address"]) + '</td>' +
-            '<td>' + ($(this)[0]['c_name']) + '</td>' +
-            '<td>' + ($(this)[0]['seller']) + '</td>' +
+            '<td>' + ($(this)[0]['county_id']) + '</td>' +
+            '<td>' + ($(this)[0]['seller_type_id']) + '</td>' +
             '<td>' + ($(this)[0]['building_surface']) + '</td>' +
             '<td>' + ($(this)[0]['terrain_surface']) + '</td>' +
-            '<td>' + '' + '</td>' +
-            '<td>' + ($(this)[0]['cellar']) + '</td>' +
+            '<td>' + ($(this)[0]['parking_lot']) + '</td>' +
+            '<td>' + ($(this)[0]['price']) + '</td>' +
             '<td>' + '' + '</td>' +
             '<td class="hidden">' + '' + '</td>' +
             '<td class="hidden">' + '' + '</td>' +
@@ -324,6 +435,44 @@ function update_table() {
             '</tr>'
         );
     });
+    // sort table
+    var table = $('table');
+
+    $('#address_sort, #utilm2_sort, #e_sort, #uf_sort')
+        .wrapInner('<span title="ordenar esta columna"/>')
+        .each(function(){
+
+            var th = $(this),
+                thIndex = th.index(),
+                inverse = false;
+
+            th.click(function(){
+
+                table.find('td').filter(function(){
+
+                    return $(this).index() === thIndex;
+
+                }).sortElements(function(a, b){
+
+                    if( $.text([a]) == $.text([b]) )
+                        return 0;
+
+                    return $.text([a]) > $.text([b]) ?
+                        inverse ? -1 : 1
+                        : inverse ? 1 : -1;
+
+                }, function(){
+
+                    // parentNode is the element we want to move
+                    return this.parentNode;
+
+                });
+
+                inverse = !inverse;
+
+            });
+
+        });
 }
 
 function getFilteredData() {
@@ -331,7 +480,7 @@ function getFilteredData() {
     // TODO: seller_types y property_types se deben enviar en un array con los ids seleccionados
     propertyTypes = $("#prop_type").val();
     sellerTypes = $("#seller_type").val();
-    densityType = $("#density_type").val();
+    land_useType = $("#land_use").val();
 
     geom = Congo.flex_dashboards.config.geo_selection
 
@@ -342,8 +491,8 @@ function getFilteredData() {
         seller_types: sellerTypes,
         inscription_dates: dataInsc_date,
         max_height: dataMaxHeight,
-        density_types: densityType,
-        land_use: dataLand_use,
+        density_types: dataDensity,
+        land_use: land_useType,
         building_surfaces: dataBuilding_surfaces,
         terrain_surfaces: dataTerrain_surfaces,
         prices: dataPrices,
@@ -387,9 +536,9 @@ function update_filters() {
     $(parsed_data['seller_types']).each(function () {
         $("#seller_type").append($('<option>').val($(this)[1]).text($(this)[0]));
     });
-    $(parsed_data['density_types']).each(function () {
-        $("#density_type").append($('<option>').val($(this)[1]).text($(this)[0]));
-    });
+    for (i = 0; i < $(parsed_data['land_use']).length; i++) {
+        $("#land_use").append($('<option>').val($(parsed_data['land_use'])[i]).text($(parsed_data['land_use'])[i]));
+    }
     $(parsed_data['inscription_dates']).each(function () {
         var lang = "es-ES";
         var yearBegin = parseInt($(parsed_data['inscription_dates'])[0]['from'].split("-")[0]);
@@ -415,10 +564,10 @@ function update_filters() {
             skin: "flat",
             type: "double",
             grid: true,
-            min: dateToTS(new Date(yearBegin, 10, 1)),
-            max: dateToTS(new Date(yearTo, 11, 1)),
-            from: dateToTS(new Date($(this['from']))),
-            to: dateToTS(new Date($(this['to']))),
+            min: dateToTS(new Date($(this)[0]['from'])),
+            max: dateToTS(new Date($(this)[0]['to'])),
+            from: dateToTS(new Date($(this)[0]['from'])),
+            to: dateToTS(new Date($(this)[0]['to'])),
             prettify: tsToDate,
             onFinish: function (data) {
                 dataInsc_date = {"from: ": (data.from_pretty), "to: ": (data.to_pretty)}
@@ -496,7 +645,7 @@ function update_filters() {
     $(parsed_data['building_surfaces']).each(function () {
         var from = parseFloat($(this)[0]['from']);
         var to = parseFloat($(this)[0]['to']);
-        $("#zone").ionRangeSlider({
+        $("#building_surfaces").ionRangeSlider({
             type: "double",
             min: from,
             max: to,
@@ -510,10 +659,10 @@ function update_filters() {
             }
         });
     });
-    $(parsed_data['land_use']).each(function () {
+    $(parsed_data['density']).each(function () {
         var from = parseFloat($(this)[0]['from']);
         var to = parseFloat($(this)[0]['to']);
-        $("#surface").ionRangeSlider({
+        $("#density").ionRangeSlider({
             type: "double",
             min: from,
             max: to,
@@ -523,7 +672,7 @@ function update_filters() {
             min_interval: null,
             max_interval: null,
             onFinish: function (data) {
-                dataLand_use = {"from: ": (data.from), "to: ": (data.to)}
+                dataDensity = {"from: ": (data.from), "to: ": (data.to)}
             }
         });
     });
@@ -534,7 +683,7 @@ function update_filters() {
         $('#seller_type').multiselect({
             includeSelectAllOption: true
         });
-        $('#density_type').multiselect({
+        $('#land_use').multiselect({
             includeSelectAllOption: true
         });
     });
