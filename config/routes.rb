@@ -131,7 +131,7 @@ Rails.application.routes.draw do
     resources :dashboards, only: [:index, :new, :create]
     get 'dashboards/search_data_for_filters'
     get 'dashboards/search_data_for_table'
-    get 'dashboards/search_data_for_charts'
+    post 'dashboards/search_data_for_charts'
     root 'dashboards#index'
   end
 
