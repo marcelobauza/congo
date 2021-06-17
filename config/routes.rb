@@ -128,7 +128,7 @@ Rails.application.routes.draw do
   end
 
   namespace :flex do
-    get 'dashboards/index'
+    resources :dashboards, only: [:index, :new, :create]
     get 'dashboards/search_data_for_filters'
     get 'dashboards/search_data_for_table'
     get 'dashboards/search_data_for_charts'
