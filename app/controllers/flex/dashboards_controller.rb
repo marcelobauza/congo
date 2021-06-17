@@ -104,11 +104,11 @@ class Flex::DashboardsController < ApplicationController
     @data = Transaction
       .select("
         transactions.id,
-        transactions.property_type_id,
+        property_types.name AS property_typee,
         transactions.inscription_date,
         transactions.address,
-        transactions.county_id,
-        transactions.seller_type_id,
+        counties.name AS c_name,
+        seller_types.name AS seller,
         transactions.total_surface_building AS building_surface,
         transactions.total_surface_terrain AS terrain_surface,
         transactions.parkingi AS parking_lot,
@@ -118,6 +118,9 @@ class Flex::DashboardsController < ApplicationController
       .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
       .order(id: :desc)
       .limit(500)
+      .joins("INNER JOIN property_types ON (property_types.id = transactions.property_type_id)")
+      .joins("INNER JOIN seller_types ON (seller_types.id = transactions.seller_type_id)")
+      .joins("INNER JOIN counties ON (counties.id = transactions.county_id)")
       .method_selection(geom)
 
     @data = @data.where(:property_type_id => property_types) unless property_types.nil?
