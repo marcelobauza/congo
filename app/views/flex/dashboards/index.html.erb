@@ -17,8 +17,8 @@
         <div class="mt-1">
           <div class="container-fluid mh-726">
             <%= render 'flex/dashboards/table' %>
-            <%= render "flex/dashboards/new" %>
             <div class="mb-5">
+              <%= link_to "Nuevo", new_flex_dashboard_path(), remote: true, class: "btn btn-warning" %>
               <button class="btn btn-secondary" onclick="genCharts();">Generar</button>
               <button class="btn btn-success" onclick="exportToExcel();">Descargar</button>
               <button onclick="clearTable();" class="btn btn-danger">Limpiar</button>

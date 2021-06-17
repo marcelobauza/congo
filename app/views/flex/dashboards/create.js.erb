@@ -1,0 +1,25 @@
+var errors = <%= @transaction.errors.any? %>
+
+if (errors){
+  let error = '<div class="alert alert-danger">"<%= @transaction.errors.full_messages.join(',') %>"</div>'
+  $('#errors').empty()
+  $('#errors').append(error);
+}else{
+
+  $('#table tr:last').after(
+    '<tr class="genTable">' +
+    '<td><input class="form-check-input" type="checkbox" value="' + '<%= @transaction.id %>' + '"></td>' +
+    '<td>' + '<%= @transaction.property_type.name %>' + '</td>' +
+    '<td>' + '<%= @transaction.inscription_date %>' + '</td>' +
+    '<td>' + '<%= @transaction.address %>' + '</td>' +
+    '<td>' + '<%= @transaction.county.name %>' + '</td>' +
+    '<td>' + '<%= @transaction.seller_name %>' + '</td>' +
+    '<td>' + '<%= @transaction.total_surface_building %>' + '</td>' +
+    '<td>' + '<%= @transaction.total_surface_terrain %>' + '</td>' +
+    '<td>' + '' + '</td>' +
+    '<td>' + '<%= @transaction.cellar %>' + '</td>' +
+    '<td>' + '<%= @transaction.calculated_value %>' + '</td>' +
+    '</tr>'
+  );
+}
+

@@ -204,4 +204,21 @@ class Flex::DashboardsController < ApplicationController
 
   end
 
+  def new
+    @transaction = Transaction.new
+  end
+
+  def create
+    @transaction = Transaction.new(transaction_params)
+
+    respond_to do |format|
+      @transaction.save
+      format.js
+
+    end
+  end
+
+  def transaction_params
+    params.require(:transaction).permit(:property_type_id, :address, :sheet, :number, :inscription_date, :buyer_name, :buyer_rut, :seller_type_id, :department, :blueprint, :uf_value, :real_value, :calculated_value, :quarter,:year, :sample_factor, :county_id, :the_geom, :cellar, :parkingi, :role, :seller_name, :buller_rut, :uf_m2, :tome, :lot, :block, :village, :surface, :requiring_entity, :comments, :user_id, :surveyor_id, :active, :bimester, :code_sii, :total_surface_building, :total_surface_terrain, :uf_m2_u, :uf_m2_t, :building_regulation, :role_1, :role_2, :code_destination, :code_material, :year_sii, :latitude, :longitude, :additional_roles).merge(user_id: current_user.id)
+  end
 end
