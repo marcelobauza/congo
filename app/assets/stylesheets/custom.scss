@@ -333,6 +333,14 @@ div.custom-menu.show {
     .hidden {
       display: none;
     }
+    #address_sort, #utilm2_sort, #e_sort, #uf_sort {
+      &:hover {
+        small {
+          font-weight: 900 !important;
+          cursor: pointer;
+        }
+      }
+    }
   }
 
   .map-box {
