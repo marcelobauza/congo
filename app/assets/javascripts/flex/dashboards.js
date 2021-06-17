@@ -1,5 +1,9 @@
 Congo.namespace('flex_dashboards.action_index');
 
+Congo.flex_dashboards.config = {
+  geo_selection: ''
+}
+
 //filters
 var parsed_data = "";
 var table_data = "";
@@ -329,8 +333,11 @@ function getFilteredData() {
     sellerTypes = $("#seller_type").val();
     densityType = $("#density_type").val();
 
+    geom = Congo.flex_dashboards.config.geo_selection
+
     // TODO: agregar density_types (array con ids) y max_height (min y max)
     data = {
+        geom: geom,
         property_types: propertyTypes,
         seller_types: sellerTypes,
         inscription_dates: dataInsc_date,
@@ -550,6 +557,7 @@ Congo.flex_dashboards.action_index = function () {
         flexMap.on('draw:created', function (e) {
             let data = draw_geometry(e, fgr);
 
+            Congo.flex_dashboards.config.geo_selection = data
             if ('error' in data) {
                 $('#alerts').append(data['error']);
 
