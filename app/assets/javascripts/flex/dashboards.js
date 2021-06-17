@@ -49,7 +49,7 @@ Congo.flex_dashboards.action_index = function () {
                 $.ajax({
                     async: false,
                     type: 'get',
-                    url: 'flex/dashboards/search_data_for_filters.json',
+                    url: 'dashboards/search_data_for_filters.json',
                     datatype: 'json',
                     data: data,
                     success: function (data) {
