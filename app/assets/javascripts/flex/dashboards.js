@@ -40,10 +40,6 @@ function genCharts() {
     })
 
     data = {transactions: dataFromTable};
-    // TODO: Agregar a data un array con los ids de los registros a graficar
-
-    // Ejemplo:
-    // data = { transactions: [3929666,3898209,2615973,2597245,2594402,2506068,2503657,2503587,2482173,2464137,2307090,2303584,2261290,2261019,2255696,2254176,2189686,2189029,2186890,2186605,2185362,2165865,2165542,2163594,2163184,2156936,2155103,2122455,2095374,2095232,2091701,2066314,2019829,2010087,2003976,1990372,1968867,1968673,1968366,1909958,1904943,1902446,1901418,1887898,20611,20493,20264,19586,16595,16173,15621] }
 
     console.log('Parámetros charts');
     console.log(data);
@@ -477,14 +473,12 @@ function update_table() {
 
 function getFilteredData() {
 
-    // TODO: seller_types y property_types se deben enviar en un array con los ids seleccionados
     propertyTypes = $("#prop_type").val();
     sellerTypes = $("#seller_type").val();
     land_useType = $("#land_use").val();
 
     geom = Congo.flex_dashboards.config.geo_selection
 
-    // TODO: agregar density_types (array con ids) y max_height (min y max)
     data = {
         geom: geom,
         property_types: propertyTypes,
