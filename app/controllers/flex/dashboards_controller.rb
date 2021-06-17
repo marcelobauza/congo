@@ -7,7 +7,6 @@ class Flex::DashboardsController < ApplicationController
 
   def search_data_for_filters
 
-    polygon = params[:polygon]
     property_type_id = []
     inscription_date = []
     seller_type_id = []
