@@ -28,7 +28,7 @@ function update_table() {
     // sort table
     var table = $('table');
 
-    $('#address_sort, #utilm2_sort, #e_sort, #uf_sort')
+    $('#utilm2_sort, #e_sort, #uf_sort')
         .wrapInner('<span title="ordenar esta columna"/>')
         .each(function(){
 
@@ -50,6 +50,41 @@ function update_table() {
                     return $.text([a]) > $.text([b]) ?
                         inverse ? -1 : 1
                         : inverse ? 1 : -1;
+
+                }, function(){
+
+                    // parentNode is the element we want to move
+                    return this.parentNode;
+
+                });
+
+                inverse = !inverse;
+
+            });
+
+        });
+    $('#address_sort')
+        .wrapInner('<span title="ordenar esta columna"/>')
+        .each(function(){
+
+            var th = $(this),
+                thIndex = th.index(),
+                inverse = false;
+
+            th.click(function(){
+
+                table.find('td').filter(function(){
+
+                    return $(this).index() === thIndex;
+
+                }).sortElements(function(a, b){
+
+                    if( $.text([a]).split(/\d\s/).reverse().join(" ") == $.text([b]).split(/\d\s/).reverse().join(" ") )
+                        return 0;
+
+                    return $.text([a]).split(/\d\s/).reverse().join(" ") > $.text([b]).split(/\d\s/).reverse().join(" ") ?
+                       inverse ? -1 : 1
+                       : inverse ? 1 : -1;
 
                 }, function(){
 
