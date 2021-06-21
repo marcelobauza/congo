@@ -161,5 +161,5 @@ function update_filters() {
     });
     $("#intro").remove();
     $("#select-box").removeClass("d-none");
-    $("#map_flex").css('height', '100%');
+    //$("#map_flex").css('height', '100%');
 }

@@ -1,24 +1,26 @@
 <div id="alerts"></div>
 <div class="bg-blue flex-dashboard">
   <div class="container-fluid">
-    <div class="row pt-1">
-      <div class="col-md-6 map-box">
-        <div id="map_flex"></div>
-      </div>
-      <div class="col-md-6" id="intro">
-        <div class="d-flex justify-content-center align-items-center bg-1 h-100">
-          <div class="container">
-            <p class="text-center">Seleccione en el mapa</p>
+    <div class="row">
+      <div class="col-xl-4 p-0">
+        <div class="col-12 p-0 map-box">
+          <div id="map_flex"></div>
+        </div>
+        <div class="col-12 p-0" id="intro">
+          <div class="d-flex justify-content-center align-items-center bg-1 h-100">
+            <div class="container">
+              <p class="text-center">Seleccione en el mapa</p>
+            </div>
           </div>
         </div>
+        <%= render 'flex/dashboards/filters' %>
       </div>
-      <%= render 'flex/dashboards/filters' %>
-      <div class="col-md-12 table-box">
-        <div class="mt-1">
-          <div class="container-fluid mh-726">
+      <div class="col-xl-8 p-0">
+        <div class="col-md-12 table-box p-0">
+          <div class="container-fluid mh-1248">
             <%= render 'flex/dashboards/table' %>
             <div class="mb-5">
-              <%= link_to "Nuevo", new_flex_dashboard_path(), remote: true, class: "btn btn-warning" %>
+              <%= link_to "Nuevo", new_flex_dashboard_path(), remote: true, class: "btn btn-warning ml-2" %>
               <button class="btn btn-secondary" onclick="genCharts();">Generar</button>
               <button class="btn btn-success" onclick="exportToExcel();">Descargar</button>
               <button onclick="clearTable();" class="btn btn-danger">Limpiar</button>
