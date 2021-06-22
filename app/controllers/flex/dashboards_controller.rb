@@ -200,6 +200,197 @@ class Flex::DashboardsController < ApplicationController
     market_volume = market_volume.as_json(:except => :id)
     result.push({"title": "Volúmen Mercado", "series": [{"data": market_volume}] })
 
+
+    # Superficie Útil (barras)
+    # # # # # # # # # # # # #
+
+    building_surface_range = data.pluck("total_surface_building")
+
+    # convierte a float
+    bsr_fixed = []
+    building_surface_range.each { |e| bsr_fixed << e.to_f }
+    building_surface_range = bsr_fixed
+
+    # levanta min y max
+    value_min = building_surface_range.min.to_f
+    value_max = building_surface_range.max.to_f
+
+    # arma rangos
+    val_range = (value_max - value_min)/6
+    ranges = []
+    new_val = value_min
+    ranges << new_val.to_f
+    5.times do
+      new_val = new_val + val_range
+      ranges << new_val.to_f
+    end
+    ranges << value_max.to_f
+
+    values_range_1 = []
+    values_range_2 = []
+    values_range_3 = []
+    values_range_4 = []
+    values_range_5 = []
+    values_range_6 = []
+
+    # carga los rangos
+    building_surface_range.each do |sup|
+      sup = sup.to_f
+      case sup
+      when ranges[0]..ranges[1]
+        values_range_1 << sup
+      when ranges[1]..ranges[2]
+        values_range_2 << sup
+      when ranges[2]..ranges[3]
+        values_range_3 << sup
+      when ranges[3]..ranges[4]
+        values_range_4 << sup
+      when ranges[4]..ranges[5]
+        values_range_5 << sup
+      when ranges[5]..ranges[6]
+        values_range_6 << sup
+      end
+    end
+
+    sup_final = [
+      {name: '1', value: values_range_1.count},
+      {name: '2', value: values_range_2.count},
+      {name: '3', value: values_range_3.count},
+      {name: '4', value: values_range_4.count},
+      {name: '5', value: values_range_5.count},
+      {name: '6', value: values_range_6.count},
+    ]
+
+    result.push({"title": "Superficie Útil (barras)", "series": [{"data": sup_final}] })
+
+
+
+    # Precio (barras)
+    # # # # # # # # # # # # #
+
+    calculated_value_range = data.pluck("calculated_value")
+
+    # convierte a float
+    cvr_fixed = []
+    calculated_value_range.each { |e| cvr_fixed << e.to_f }
+    calculated_value_range = cvr_fixed
+
+    # levanta min y max
+    value_min = calculated_value_range.min.to_f
+    value_max = calculated_value_range.max.to_f
+
+    # arma rangos
+    val_range = (value_max - value_min)/6
+    ranges = []
+    new_val = value_min
+    ranges << new_val.to_f
+    5.times do
+      new_val = new_val + val_range
+      ranges << new_val.to_f
+    end
+    ranges << value_max.to_f
+
+    values_range_1 = []
+    values_range_2 = []
+    values_range_3 = []
+    values_range_4 = []
+    values_range_5 = []
+    values_range_6 = []
+
+    # carga los rangos
+    calculated_value_range.each do |pri|
+      pri = pri.to_f
+      case pri
+      when ranges[0]..ranges[1]
+        values_range_1 << pri
+      when ranges[1]..ranges[2]
+        values_range_2 << pri
+      when ranges[2]..ranges[3]
+        values_range_3 << pri
+      when ranges[3]..ranges[4]
+        values_range_4 << pri
+      when ranges[4]..ranges[5]
+        values_range_5 << pri
+      when ranges[5]..ranges[6]
+        values_range_6 << pri
+      end
+    end
+
+    pri_final = [
+      {name: '1', value: values_range_1.count},
+      {name: '2', value: values_range_2.count},
+      {name: '3', value: values_range_3.count},
+      {name: '4', value: values_range_4.count},
+      {name: '5', value: values_range_5.count},
+      {name: '6', value: values_range_6.count},
+    ]
+
+    result.push({"title": "Precio (barras)", "series": [{"data": pri_final}] })
+
+
+
+    # Precio Unitario (barras)
+    # # # # # # # # # # # # #
+
+    uf_m2_u_range = data.pluck("uf_m2_u")
+
+    # convierte a float
+    umur_fixed = []
+    uf_m2_u_range.each { |e| umur_fixed << e.to_f }
+    uf_m2_u_range = umur_fixed
+
+    # levanta min y max
+    value_min = uf_m2_u_range.min.to_f
+    value_max = uf_m2_u_range.max.to_f
+
+    # arma rangos
+    val_range = (value_max - value_min)/6
+    ranges = []
+    new_val = value_min
+    ranges << new_val.to_f
+    5.times do
+      new_val = new_val + val_range
+      ranges << new_val.to_f
+    end
+    ranges << value_max.to_f
+
+    values_range_1 = []
+    values_range_2 = []
+    values_range_3 = []
+    values_range_4 = []
+    values_range_5 = []
+    values_range_6 = []
+
+    # carga los rangos
+    uf_m2_u_range.each do |pri_u|
+      pri_u = pri_u.to_f
+      case pri_u
+      when ranges[0]..ranges[1]
+        values_range_1 << pri_u
+      when ranges[1]..ranges[2]
+        values_range_2 << pri_u
+      when ranges[2]..ranges[3]
+        values_range_3 << pri_u
+      when ranges[3]..ranges[4]
+        values_range_4 << pri_u
+      when ranges[4]..ranges[5]
+        values_range_5 << pri_u
+      when ranges[5]..ranges[6]
+        values_range_6 << pri_u
+      end
+    end
+
+    pri_u_final = [
+      {name: '1', value: values_range_1.count},
+      {name: '2', value: values_range_2.count},
+      {name: '3', value: values_range_3.count},
+      {name: '4', value: values_range_4.count},
+      {name: '5', value: values_range_5.count},
+      {name: '6', value: values_range_6.count},
+    ]
+
+    result.push({"title": "Precio Unitario (barras)", "series": [{"data": pri_u_final}] })
+
     render :json => result
 
   end
