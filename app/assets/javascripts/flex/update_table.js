@@ -6,7 +6,7 @@ function update_table() {
     $(table_data).each(function (index) {
         $('#table tr:last').after(
             '<tr class="genTable">' +
-            '<td><input class="form-check-input" type="checkbox" value="' + ($(this)[0]['id']) + '" checked></td>' +
+            '<td class="input-checkbox"><input class="form-check-input" type="checkbox" value="' + ($(this)[0]['id']) + '" checked></td>' +
             '<td>' + ($(this)[0]["property_typee"]) + '</td>' +
             '<td>' + ($(this)[0]['inscription_date']) + '</td>' +
             '<td>' + ($(this)[0]["address"]) + '</td>' +
@@ -99,7 +99,8 @@ function update_table() {
 
         });
     // check - uncheck for excel
-    $('.genTable .form-check-input').change(function(){
+    $('.genTable .form-check-input').change(function(item){
         $(this).closest('tr').toggleClass('noExl');
+        $(this).is(':checked') ? $(this).closest('td').css('background-color','#45feed') : $(this).closest('td').css('background-color','#ed36be');
     });
 }

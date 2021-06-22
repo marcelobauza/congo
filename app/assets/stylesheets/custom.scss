@@ -264,22 +264,32 @@ div.custom-menu.show {
 }
 
 // Estilos para flex
-.bg-blue {
-  background: #00a2ff;
-}
-.bg-1 {
-  background-color: #373c40;
-}
-
-.bg-table-head {
-  background-color: #0076ba;
-}
-
-.table {
-  color: #fff !important;
-}
-
 .flex-dashboard {
+  .bg-white {
+    background: #e3e3e3;
+  }
+  .bg-1 {
+    background-color: #373c40;
+  }
+
+  .bg-celeste {
+    background-color: #45feed;
+    color: #000;
+  }
+
+  .bg-table-head {
+    background-color: #373c40;
+  }
+
+  .table {
+    color: #fff !important;
+  }
+  .table-bordered {
+    th, td {
+      border: 1px solid #373c40;
+    }
+  }
+
   .form-check-input {
     position: unset;
     margin-left: unset;
@@ -337,6 +347,15 @@ div.custom-menu.show {
         cursor: pointer;
       }
     }
+    .input-checkbox {
+      background-color: #45feed;
+    }
+    td {
+      color: #000;
+      &:not(:first-of-type) {
+        background-color: #e3e3e3;
+      }
+    }
   }
 
   .map-box {
@@ -362,6 +381,12 @@ div.custom-menu.show {
 
   .irs-with-grid .irs-grid {
     display: none;
+  }
+
+  .irs--flat .irs-from, .irs--flat .irs-to, .irs--flat .irs-single,
+  .irs--flat .irs-line {
+    background-color: #45feed !important;
+    color: #000;
   }
 }
 

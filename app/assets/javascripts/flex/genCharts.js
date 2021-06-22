@@ -62,7 +62,7 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,162,255)',
+                        borderColor: 'rgb(69,254,237)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
@@ -98,7 +98,7 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,162,255)',
+                        borderColor: 'rgb(69,254,237)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
@@ -134,7 +134,7 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,162,255)',
+                        borderColor: 'rgb(69,254,237)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
@@ -170,7 +170,7 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,162,255)',
+                        borderColor: 'rgb(69,254,237)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
@@ -206,7 +206,7 @@ function genCharts() {
                         data: dataChart,
                         label: "",
                         fill: false,
-                        borderColor: 'rgb(0,162,255)',
+                        borderColor: 'rgb(69,254,237)',
                         tension: 0.1,
                         backgroundColor: '#fff',
                         borderWidth: 2
@@ -241,7 +241,7 @@ function genCharts() {
                     datasets: [{
                         data: dataChart,
                         label: "",
-                        backgroundColor: 'rgb(0,162,255)',
+                        backgroundColor: 'rgb(69,254,237)',
                         tension: 0.1,
                         borderWidth: 2
                     }]
@@ -275,7 +275,7 @@ function genCharts() {
                     datasets: [{
                         data: dataChart,
                         label: "",
-                        backgroundColor: 'rgb(0,162,255)',
+                        backgroundColor: 'rgb(69,254,237)',
                         tension: 0.1,
                         borderWidth: 2
                     }]
@@ -309,7 +309,7 @@ function genCharts() {
                     datasets: [{
                         data: dataChart,
                         label: "",
-                        backgroundColor: 'rgb(0,162,255)',
+                        backgroundColor: 'rgb(69,254,237)',
                         tension: 0.1,
                         borderWidth: 2
                     }]
@@ -350,7 +350,7 @@ function genCharts() {
                     datasets: [{
                         data: radioChart,
                         label: "",
-                        backgroundColor: 'rgb(0,162,255)',
+                        backgroundColor: 'rgb(69,254,237)',
                         borderWidth: 2
                     }]
                 },

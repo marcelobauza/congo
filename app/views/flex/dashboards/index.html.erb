@@ -1,5 +1,5 @@
 <div id="alerts"></div>
-<div class="bg-blue flex-dashboard">
+<div class="bg-white flex-dashboard">
   <div class="container-fluid">
     <div class="row">
       <div class="col-xl-4 p-0">
@@ -15,14 +15,14 @@
         </div>
         <%= render 'flex/dashboards/filters' %>
       </div>
-      <div class="col-xl-8 p-0">
+      <div class="col-xl-8 p-0 bg-dark">
         <div class="col-md-12 table-box p-0">
           <div class="container-fluid mh-1248">
             <%= render 'flex/dashboards/table' %>
             <div class="mb-5">
               <%= link_to "Nuevo", new_flex_dashboard_path(), remote: true, class: "btn btn-warning ml-2" %>
               <button class="btn btn-secondary" onclick="genCharts();">Generar</button>
-              <button class="btn btn-success" onclick="exportToExcel();">Descargar</button>
+              <button class="btn btn-secondary" onclick="exportToExcel();downloadPDF();">Descargar</button>
               <button onclick="clearTable();" class="btn btn-danger">Limpiar</button>
             </div>
           </div>
