@@ -390,6 +390,20 @@ class Flex::DashboardsController < ApplicationController
 
     result.push({"title": "Precio Unitario (barras)", "series": [{"data": pri_u_final}] })
 
+
+
+    # Superficie por UF
+    # # # # # # # # # #
+
+    sup_x_uf = data
+      .select("calculated_value as name, AVG(total_surface_building) as count, COUNT(*) as radius")
+      .group(:calculated_value)
+      .order(:calculated_value)
+
+    sup_x_uf = sup_x_uf.as_json(:except => :id)
+
+    result.push({"title": "Superficie por UF", "series": [{"data": sup_x_uf}] })
+
     render :json => result
 
   end
