@@ -48,7 +48,7 @@ class Flex::DashboardsController < ApplicationController
       hectarea_inhabitants << tr.hectarea_inhabitants.to_f unless hectarea_inhabitants.include? tr.hectarea_inhabitants
     end
 
-    project_types = ProjectType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
+    project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
     seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
 
     result = {
