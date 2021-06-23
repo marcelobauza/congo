@@ -1,26 +1,36 @@
 <div class="modal fade" id="modal-flex" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content text-light">
+
       <div class="modal-header">
         <div id ="errors"></div>
-        <h5 class="modal-title"> Datos de Propiedad </h5>
+        <h5 class="modal-title"> Datos Propiedad </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
       <%= simple_form_for :transaction, url: { action: "create" }, remote: true do |f| %>
-        <%= f.input :county_id, collection: counties_for_select, input_html: { class: 'form-control'}%>
-        <%= f.input :address, input_html: { class: 'form-control' }, label: "Direccion" %>
-        <%= f.input :department, input_html: { class: 'form-control' } %>
-        <%= f.input :parkingi, input_html: { class: 'form-control' } %>
-        <%= f.input :cellar, input_html: { class: 'form-control' } %>
-        <%= f.input :seller_name, input_html: { class: 'form-control' } %>
-        <%= f.input :property_type_id, collection: property_type_for_select, input_html: { class: 'form-control' } %>
-        <%= f.input :surface, input_html: { class: 'form-control' } %>
-        <%= f.input :calculated_value, input_html: { class: 'form-control' } %>
-        <%= f.input :role, placeholder: "XXXXX-XXXXX", input_html: { class: 'form-control' } %>
-        <%= f.submit class: 'btn btn-primary' %>
+
+        <div class="modal-body modal-overflow">
+          <%= f.input :county_id, collection: counties_for_select, input_html: { class: 'form-control form-control-sm'}%>
+          <%= f.input :address, input_html: { class: 'form-control form-control-sm' }, label: "Direccion" %>
+          <%= f.input :department, input_html: { class: 'form-control form-control-sm' } %>
+          <%= f.input :parkingi, input_html: { class: 'form-control form-control-sm' } %>
+          <%= f.input :cellar, input_html: { class: 'form-control form-control-sm' } %>
+          <%= f.input :seller_name, input_html: { class: 'form-control form-control-sm' } %>
+          <%= f.input :property_type_id, collection: property_type_for_select, input_html: { class: 'form-control form-control-sm' } %>
+          <%= f.input :surface, input_html: { class: 'form-control' } %>
+          <%= f.input :calculated_value, input_html: { class: 'form-control form-control-sm' } %>
+          <%= f.input :role, placeholder: "XXXXX-XXXXX", input_html: { class: 'form-control form-control-sm' } %>
+        </div>
+
+        <div class="modal-footer">
+          <%= f.submit class: 'btn btn-primary', value: "Guardar" %>
+        </div>
+
       <% end %>
+
     </div>
   </div>
 </div>
