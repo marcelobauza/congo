@@ -197,7 +197,7 @@ module ImportProcess::ParseFile
               end
             end
 
-            verify_attributes(field, "Transactions")
+            verify_attributes(field, model)
 
             import_logger.current_row_index = shape.index
             import_logger.processed += 1
@@ -532,7 +532,7 @@ module ImportProcess::ParseFile
           attributes << [ "FuenteFech", "N" ]
           attributes << [ "COD_COM", "C" ]
           attributes << [ "id", "C" ]
-        when "Transactions"
+        when "Transaction"
           attributes << [ "PROPERTY_T", "C" ]
           attributes << [ "SELLER_TYP", "C" ]
           attributes << [ "INSCRIPTIO", "D" ]
@@ -613,6 +613,8 @@ module ImportProcess::ParseFile
           attributes << [ "OBSERVACIO", "C" ]
         when "RentFutureProject"
           attributes << [ "ADDRESS", "C" ]
+        when "RentTransaction"
+          attributes << [ "FOJA", "C" ]
         when "LOTS"
           attributes << [ "ID_COMUNA", "N" ]
           attributes << [ "SUP_M", "N" ]
