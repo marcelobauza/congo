@@ -125,7 +125,7 @@ class Flex::DashboardsController < ApplicationController
     @data = @data.where(:property_type_id => property_types) unless property_types.nil?
     @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from], inscription_dates[:to]) unless inscription_dates.nil?
     @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
-    @data = @data.where('building_regulations.osinciti BETWEEN ? AND ?', land_use[:from], land_use[:to]) unless land_use.nil?
+    @data = @data.where(building_regulations: {:building_zone => land_use}) unless land_use.nil?
     @data = @data.where('building_regulations.aminciti BETWEEN ? AND ?', max_height[:from], max_height[:to]) unless max_height.nil?
     @data = @data.where(building_regulations: {:density_type_id => density_types}) unless density_types.nil?
     @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
