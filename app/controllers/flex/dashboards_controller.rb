@@ -252,12 +252,12 @@ class Flex::DashboardsController < ApplicationController
     end
 
     sup_final = [
-      {name: '1', value: values_range_1.count},
-      {name: '2', value: values_range_2.count},
-      {name: '3', value: values_range_3.count},
-      {name: '4', value: values_range_4.count},
-      {name: '5', value: values_range_5.count},
-      {name: '6', value: values_range_6.count},
+      {name: '1', count: values_range_1.count},
+      {name: '2', count: values_range_2.count},
+      {name: '3', count: values_range_3.count},
+      {name: '4', count: values_range_4.count},
+      {name: '5', count: values_range_5.count},
+      {name: '6', count: values_range_6.count},
     ]
 
     result.push({"title": "Superficie Útil (barras)", "series": [{"data": sup_final}] })
@@ -316,12 +316,12 @@ class Flex::DashboardsController < ApplicationController
     end
 
     pri_final = [
-      {name: '1', value: values_range_1.count},
-      {name: '2', value: values_range_2.count},
-      {name: '3', value: values_range_3.count},
-      {name: '4', value: values_range_4.count},
-      {name: '5', value: values_range_5.count},
-      {name: '6', value: values_range_6.count},
+      {name: '1', count: values_range_1.count},
+      {name: '2', count: values_range_2.count},
+      {name: '3', count: values_range_3.count},
+      {name: '4', count: values_range_4.count},
+      {name: '5', count: values_range_5.count},
+      {name: '6', count: values_range_6.count},
     ]
 
     result.push({"title": "Precio (barras)", "series": [{"data": pri_final}] })
@@ -380,12 +380,12 @@ class Flex::DashboardsController < ApplicationController
     end
 
     pri_u_final = [
-      {name: '1', value: values_range_1.count},
-      {name: '2', value: values_range_2.count},
-      {name: '3', value: values_range_3.count},
-      {name: '4', value: values_range_4.count},
-      {name: '5', value: values_range_5.count},
-      {name: '6', value: values_range_6.count},
+      {name: '1', count: values_range_1.count},
+      {name: '2', count: values_range_2.count},
+      {name: '3', count: values_range_3.count},
+      {name: '4', count: values_range_4.count},
+      {name: '5', count: values_range_5.count},
+      {name: '6', count: values_range_6.count},
     ]
 
     result.push({"title": "Precio Unitario (barras)", "series": [{"data": pri_u_final}] })
