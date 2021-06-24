@@ -265,6 +265,10 @@ div.custom-menu.show {
 
 // Estilos para flex
 .flex-dashboard {
+  .hidden {
+    display: none;
+  }
+
   .bg-white {
     background: #e3e3e3;
   }
@@ -337,9 +341,6 @@ div.custom-menu.show {
     }
     td {
       font-size: 14px;
-    }
-    .hidden {
-      display: none;
     }
     #address_sort, #utilm2_sort, #e_sort, #uf_sort {
       &:hover {

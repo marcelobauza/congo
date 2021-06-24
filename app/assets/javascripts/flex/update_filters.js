@@ -42,7 +42,7 @@ function update_filters() {
             to: dateToTS(new Date($(this)[0]['to'])),
             prettify: tsToDate,
             onFinish: function (data) {
-                dataInsc_date = {"from: ": (data.from_pretty), "to: ": (data.to_pretty)}
+                dataInsc_date = {"from": (data.from_pretty), "to": (data.to_pretty)}
             }
         });
     });
@@ -59,7 +59,7 @@ function update_filters() {
             min_interval: null,
             max_interval: null,
             onFinish: function (data) {
-                dataMaxHeight = {"from: ": (data.from), "to: ": (data.to)}
+                dataMaxHeight = {"from": (data.from), "to": (data.to)}
             }
         });
     });
@@ -76,7 +76,7 @@ function update_filters() {
             min_interval: null,
             max_interval: null,
             onFinish: function (data) {
-                dataPrices = {"from: ": (data.from), "to: ": (data.to)}
+                dataPrices = {"from": (data.from), "to": (data.to)}
             }
         });
     });
@@ -93,7 +93,7 @@ function update_filters() {
             min_interval: null,
             max_interval: null,
             onFinish: function (data) {
-                dataUnit_prices = {"from: ": (data.from), "to: ": (data.to)}
+                dataUnit_prices = {"from": (data.from), "to": (data.to)}
             }
         });
     });
@@ -110,7 +110,7 @@ function update_filters() {
             min_interval: null,
             max_interval: null,
             onFinish: function (data) {
-                dataTerrain_surfaces = {"from: ": (data.from), "to: ": (data.to)}
+                dataTerrain_surfaces = {"from": (data.from), "to": (data.to)}
             }
         });
     });
@@ -127,7 +127,7 @@ function update_filters() {
             min_interval: null,
             max_interval: null,
             onFinish: function (data) {
-                dataBuilding_surfaces = {"from: ": (data.from), "to: ": (data.to)}
+                dataBuilding_surfaces = {"from": (data.from), "to": (data.to)}
             }
         });
     });
@@ -144,7 +144,7 @@ function update_filters() {
             min_interval: null,
             max_interval: null,
             onFinish: function (data) {
-                dataDensity = {"from: ": (data.from), "to: ": (data.to)}
+                dataDensity = {"from": (data.from), "to": (data.to)}
             }
         });
     });
