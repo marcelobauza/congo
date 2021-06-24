@@ -123,7 +123,7 @@ class Flex::DashboardsController < ApplicationController
       .where("transactions.inscription_date > ?", Date.today - 3.years)
 
     @data = @data.where(:property_type_id => property_types) unless property_types.nil?
-    @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from], inscription_dates[:to]) unless inscription_dates.nil?
+    @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
     @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
     @data = @data.where(building_regulations: {:building_zone => land_use}) unless land_use.nil?
     @data = @data.where('building_regulations.aminciti BETWEEN ? AND ?', max_height[:from], max_height[:to]) unless max_height.nil?

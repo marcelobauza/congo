@@ -27,7 +27,7 @@ function update_filters() {
 
             return d.toLocaleDateString(lang, {
                 year: 'numeric',
-                month: 'long',
+                month: 'numeric',
                 day: 'numeric'
             });
         }
