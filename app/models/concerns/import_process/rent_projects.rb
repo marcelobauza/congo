@@ -27,8 +27,8 @@ module ImportProcess::RentProjects
         rent_project  = RentProject.new
         factory       = RGeo::Geos.factory(srid: 4326)
         properties    = a.properties
-        county        = County.find_by(name: properties['county_id'].titleize)
-        project_type = ProjectType.find_by(name: properties['project_type_id'].titleize)
+        county        = County.find_by(code: properties['county_code'])
+        project_type = ProjectType.find_by(name: properties['project_type_id'].capitalize)
 
         rent_project.the_geom                = factory.parse_wkt(a.geometry.as_text)
         rent_project.code                    = properties['code']
@@ -39,8 +39,8 @@ module ImportProcess::RentProjects
         rent_project.sale_date               = properties['sale_date']
         rent_project.catastral_date          = properties['catastral_date']
         rent_project.offer                   = properties['offer']
-        rent_project.surface_util             = properties['surface_util']
-        rent_project.terrace                  = properties['terrace']
+        rent_project.surface_util            = properties['surface_util']
+        rent_project.terrace                 = properties['terrace']
         rent_project.price                   = properties['price']
         rent_project.bedroom                 = properties['bedroom']
         rent_project.bathroom                = properties['bathroom']
@@ -52,9 +52,9 @@ module ImportProcess::RentProjects
         rent_project.bimester                = properties['bimester']
         rent_project.year                    = properties['year']
 
-        rent_project.save!
 
-        if rent_project.errors.any?
+
+        if !rent_project.save
           rent_project.errors.full_messages.each do |error_message|
             import_logger.details << { :row_index => import_logger.current_row_index, :message => error_message }
           end

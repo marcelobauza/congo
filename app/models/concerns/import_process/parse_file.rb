@@ -197,7 +197,7 @@ module ImportProcess::ParseFile
               end
             end
 
-            verify_attributes(field, "Transactions")
+            verify_attributes(field, model)
 
             import_logger.current_row_index = shape.index
             import_logger.processed += 1
@@ -364,7 +364,7 @@ module ImportProcess::ParseFile
               end
             end
 
-            verify_attributes(field, "Future Projects")
+            verify_attributes(field, model)
 
             import_logger.current_row_index = shape.index
             import_logger.processed += 1
@@ -377,18 +377,19 @@ module ImportProcess::ParseFile
             geom = shape.geometry
             data = shape.attributes
 
-            bimester = data["BIM"]
+            bimester = data["BIMESTER"]
             year = data["YEAR"]
 
-            future_type = FutureProjectType.find_by(abbrev: data["FUENTE"])
+            #future_type = FutureProjectType.find_by(abbrev: data["FUENTE"])
+            future_type = FutureProjectType.find_by(name: data["FUTURE_PRO"])
 
             fut_proj = model.constantize.find_or_initialize_by(
-              address: data["DIRECCION"],
+              address: data["ADDRESS"],
               future_project_type_id: future_type.id,
               year: year,
               bimester: bimester,
-              file_number: data["N_PE"].to_i.to_s,
-              file_date: data["F_PE"]
+              file_number: data["FILE_NUMBE"].to_i.to_s,
+              file_date: data["FILE_DATE"]
             )
 
             fut_proj.new_record? ? was_new = true : was_new = false
@@ -531,7 +532,7 @@ module ImportProcess::ParseFile
           attributes << [ "FuenteFech", "N" ]
           attributes << [ "COD_COM", "C" ]
           attributes << [ "id", "C" ]
-        when "Transactions"
+        when "Transaction"
           attributes << [ "PROPERTY_T", "C" ]
           attributes << [ "SELLER_TYP", "C" ]
           attributes << [ "INSCRIPTIO", "D" ]
@@ -587,7 +588,7 @@ module ImportProcess::ParseFile
           attributes << [ "BIMESTRE", "C" ]
           attributes << [ "DORMS_T", "N"]
           attributes << [ "BANOS_T", "N"]
-        when "Future Projects"
+        when "FutureProject"
           attributes << [ "DIRECCION", "C" ]
           attributes << [ "COD_COM", "N" ]
           attributes << [ "N_ROL", "C" ]
@@ -610,6 +611,10 @@ module ImportProcess::ParseFile
           attributes << [ "BIM", "C" ]
           attributes << [ "YEAR", "N" ]
           attributes << [ "OBSERVACIO", "C" ]
+        when "RentFutureProject"
+          attributes << [ "ADDRESS", "C" ]
+        when "RentTransaction"
+          attributes << [ "FOJA", "C" ]
         when "LOTS"
           attributes << [ "ID_COMUNA", "N" ]
           attributes << [ "SUP_M", "N" ]
