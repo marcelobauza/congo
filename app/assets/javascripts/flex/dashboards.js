@@ -57,10 +57,10 @@ Congo.flex_dashboards.action_index = function () {
                         console.log('Datos filtros');
                         console.log(data);
 
-                        // parsed_data = data;
+                        parsed_data = data;
 
                         // Ejemplo
-                        parsed_data = JSON.parse('{\"property_types\":[[\"Casas\",1],[\"Departamentos\",2],[\"Oficinas\",3],[\"Local Comercial\",4],[\"Oficina y Local Comercial\",5]],\"inscription_dates\":{\"from\":\"2018-02-15\",\"to\":\"2020-12-30\"},\"seller_types\":[[\"PROPIETARIO\",1],[\"INMOBILIARIA\",2],[\"EMPRESA\",3],[\"BANCO\",4]],\"land_use\":[\"EA12\",\"EA12 pa\",\"EA7\",\"PzVec\",\"ZEP AE\",\"EC2+A8\",\"ZIM\"],\"max_height\":{\"from\":0,\"to\":99},\"density\":{\"from\":0,\"to\":1100},\"building_surfaces\":{\"from\":0,\"to\":520},\"terrain_surfaces\":{\"from\":0,\"to\":2147},\"prices\":{\"from\":64,\"to\":42900},\"unit_prices\":{\"from\":0,\"to\":2247}}');
+                        // parsed_data = JSON.parse('{\"property_types\":[[\"Casas\",1],[\"Departamentos\",2],[\"Oficinas\",3],[\"Local Comercial\",4],[\"Oficina y Local Comercial\",5]],\"inscription_dates\":{\"from\":\"2018-02-15\",\"to\":\"2020-12-30\"},\"seller_types\":[[\"PROPIETARIO\",1],[\"INMOBILIARIA\",2],[\"EMPRESA\",3],[\"BANCO\",4]],\"land_use\":[\"EA12\",\"EA12 pa\",\"EA7\",\"PzVec\",\"ZEP AE\",\"EC2+A8\",\"ZIM\"],\"max_height\":{\"from\":0,\"to\":99},\"density\":{\"from\":0,\"to\":1100},\"building_surfaces\":{\"from\":0,\"to\":520},\"terrain_surfaces\":{\"from\":0,\"to\":2147},\"prices\":{\"from\":64,\"to\":42900},\"unit_prices\":{\"from\":0,\"to\":2247}}');
 
                         console.log('Datos filtros h');
                         console.log(parsed_data);
