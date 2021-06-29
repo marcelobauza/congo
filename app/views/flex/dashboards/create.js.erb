@@ -1,25 +1,24 @@
-var errors = <%= @transaction.errors.any? %>
+var errors = <%= @tenement.errors.any? %>
 
 if (errors){
-  let error = '<div class="alert alert-danger">"<%= @transaction.errors.full_messages.join(',') %>"</div>'
+  let error = '<div class="alert alert-danger">"<%= @tenement.errors.full_messages.join(',') %>"</div>'
   $('#errors').empty()
   $('#errors').append(error);
 }else{
 
-  $('#table tr:last').after(
+  $('#table tr:first').before(
     '<tr class="genTable">' +
-    '<td><input class="form-check-input" type="checkbox" value="' + '<%= @transaction.id %>' + '"></td>' +
-    '<td>' + '<%= @transaction.property_type.name %>' + '</td>' +
-    '<td>' + '<%= @transaction.inscription_date %>' + '</td>' +
-    '<td>' + '<%= @transaction.address %>' + '</td>' +
-    '<td>' + '<%= @transaction.county.name %>' + '</td>' +
-    '<td>' + '<%= @transaction.seller_name %>' + '</td>' +
-    '<td>' + '<%= @transaction.total_surface_building %>' + '</td>' +
-    '<td>' + '<%= @transaction.total_surface_terrain %>' + '</td>' +
+    '<td><input class="form-check-input" type="checkbox" value="' + '<%= @tenement.id %>' + '"></td>' +
+    '<td>' + '<%= @tenement.property_type&.name %>' + '</td>' +
+    '<td></td>' +
+    '<td>' + '<%= @tenement.address %>' + '</td>' +
+    '<td>' + '<%= @tenement.county&.name %>' + '</td>' +
     '<td>' + '' + '</td>' +
-    '<td>' + '<%= @transaction.cellar %>' + '</td>' +
-    '<td>' + '<%= @transaction.calculated_value %>' + '</td>' +
+    '<td>' + '<%= @tenement.building_surface %>' + '</td>' +
+    '<td>' + '<%= @tenement.terrain_surface %>' + '</td>' +
+    '<td>' + '' + '</td>' +
+    '<td>' + '<%= @tenement.cellar %>' + '</td>' +
+    '<td>' + '<%= @tenement.uf %>' + '</td>' +
     '</tr>'
   );
 }
-
