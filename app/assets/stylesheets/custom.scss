@@ -264,6 +264,15 @@ div.custom-menu.show {
 }
 
 // Estilos para flex
+.download-button {
+  position: absolute;
+  top: 5px;
+  right: 150px;
+}
+#cantidad-registros-tabla {
+  margin-right: 15px;
+  text-decoration: underline;
+}
 .flex-dashboard {
   .hidden {
     display: none;

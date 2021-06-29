@@ -841,6 +841,8 @@ ActiveRecord::Schema.define(version: 2021_06_29_040554) do
     t.string "code_material"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
   create_table "tenements", force: :cascade do |t|
     t.string "address"
     t.bigint "property_type_id"
@@ -854,7 +856,6 @@ ActiveRecord::Schema.define(version: 2021_06_29_040554) do
     t.datetime "updated_at", null: false
     t.index ["county_id"], name: "index_tenements_on_county_id"
     t.index ["property_type_id"], name: "index_tenements_on_property_type_id"
-  end
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -1007,6 +1008,8 @@ ActiveRecord::Schema.define(version: 2021_06_29_040554) do
   add_foreign_key "regions_users", "users"
   add_foreign_key "rent_projects", "counties"
   add_foreign_key "rent_projects", "project_types"
+  add_foreign_key "tenements", "counties"
+  add_foreign_key "tenements", "property_types"
   add_foreign_key "user_polygons", "users"
   add_foreign_key "users", "regions"
 

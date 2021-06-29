@@ -25,6 +25,7 @@ function update_table() {
             '</tr>'
         );
     });
+    $("#cantidad-registros-tabla").text('Registros encontrados: ' + $(table_data).length)
     // sort table
     var table = $('table');
 
