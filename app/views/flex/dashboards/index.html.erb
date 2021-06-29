@@ -24,12 +24,12 @@
         <div class="col-md-12 table-box p-0">
           <div class="container-fluid mh-1248">
             <%= render 'flex/dashboards/table' %>
-            <div class="button-panel mb-5">
-              <%= link_to "Nuevo", new_flex_dashboard_path(), remote: true, class: "btn btn-warning ml-2" %>
-              <button class="btn btn-secondary" onclick="genCharts();">Generar</button>
-              <button onclick="clearTable();" class="btn btn-danger">Limpiar</button>
-            </div>
           </div>
+        </div>
+        <div class="button-panel mb-5">
+          <%= link_to "Nuevo", new_flex_dashboard_path(), remote: true, class: "btn btn-gris ml-2" %>
+          <button class="btn btn-oscuro" onclick="genCharts();">Generar</button>
+          <button onclick="clearTable();" class="btn btn-rosa">Limpiar</button>
         </div>
       </div>
     </div>

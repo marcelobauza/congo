@@ -273,6 +273,26 @@ div.custom-menu.show {
   margin-right: 15px;
   text-decoration: underline;
 }
+.button-panel {
+  position: absolute;
+  bottom: 0;
+}
+.btn {
+  &-gris {
+    background-color: #e3e3e3 !important;
+    color: #000 !important;
+  }
+  &-oscuro {
+    background-color: #373737 !important;
+    border: 1px solid #e3e3e3 !important;
+    color: #fff !important;
+  }
+  &-rosa {
+    background-color: #ed36be !important;
+    border: 1px solid #e3e3e3 !important;
+    color: #fff !important;
+  }
+}
 .flex-dashboard {
   .hidden {
     display: none;
@@ -338,7 +358,7 @@ div.custom-menu.show {
 
   .table-box {
     .mh-1248 {
-      max-height: 1216px;
+      max-height: 1134px;
       overflow-y: scroll;
       padding: 0;
     }
