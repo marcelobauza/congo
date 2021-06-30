@@ -1,0 +1,2 @@
+module Flex::TenementsHelper
+end

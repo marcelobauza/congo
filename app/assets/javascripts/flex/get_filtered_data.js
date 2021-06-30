@@ -4,7 +4,7 @@ function getFilteredData() {
     sellerTypes = $("#seller_type").val();
     land_useType = $("#land_use").val();
 
-    geom = Congo.flex_dashboards.config.geo_selection
+    geom = Congo.flex_flex_reports.config.geo_selection
 
     data = {
         geom: geom,
@@ -26,7 +26,7 @@ function getFilteredData() {
     $.ajax({
         async: false,
         type: 'get',
-        url: 'flex/dashboards/search_data_for_table.json',
+        url: 'search_data_for_table.json',
         datatype: 'json',
         data: data,
         success: function (data) {

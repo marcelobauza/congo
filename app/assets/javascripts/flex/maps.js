@@ -23,7 +23,7 @@ function create_map(){
   return flexMap;
 }
 
-function add_control(flexMap, fgr){
+function add_control(flexMap, fgr) {
   var drawControl = new L.Control.Draw({
     draw: {
       marker: false,

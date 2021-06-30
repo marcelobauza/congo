@@ -9,6 +9,7 @@ class CreateTenements < ActiveRecord::Migration[5.2]
       t.integer :parking
       t.integer :cellar
       t.string :uf
+      t.references :flex_report, foreing_key: true
 
       t.timestamps
     end

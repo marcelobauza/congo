@@ -16,7 +16,7 @@ function genCharts() {
     $.ajax({
         async: false,
         type: 'POST',
-        url: 'flex/dashboards/search_data_for_charts.json',
+        url: 'search_data_for_charts.json',
         datatype: 'json',
         data: data,
         success: function (data) {

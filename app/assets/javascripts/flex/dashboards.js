@@ -1,6 +1,6 @@
-Congo.namespace('flex_dashboards.action_index');
+Congo.namespace('flex_flex_reports.action_new');
 
-Congo.flex_dashboards.config = {
+Congo.flex_flex_reports.config = {
   geo_selection: ''
 }
 
@@ -21,7 +21,7 @@ var filteredData = {};
 
 ////////////////////////////////////////////////////////
 
-Congo.flex_dashboards.action_index = function () {
+Congo.flex_flex_reports.action_new = function () {
     let map_admin, marker, flexMap;
 
     let init = function () {
@@ -33,7 +33,7 @@ Congo.flex_dashboards.action_index = function () {
         flexMap.on('draw:created', function (e) {
             let data = draw_geometry(e, fgr);
 
-            Congo.flex_dashboards.config.geo_selection = data
+            Congo.flex_flex_reports.config.geo_selection = data
             if ('error' in data) {
                 $('#alerts').append(data['error']);
 
@@ -49,7 +49,7 @@ Congo.flex_dashboards.action_index = function () {
                 $.ajax({
                     async: false,
                     type: 'get',
-                    url: 'flex/dashboards/search_data_for_filters.json',
+                    url: 'search_data_for_filters.json',
                     datatype: 'json',
                     data: data,
                     success: function (data) {

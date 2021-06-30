@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-
   resources :rent_future_projects
   resources :rent_transactions
   resources :bots
@@ -128,11 +127,14 @@ Rails.application.routes.draw do
   end
 
   namespace :flex do
+    get 'flex_reports/search_data_for_filters'
+    get 'flex_reports/search_data_for_table'
+    post 'flex_reports/search_data_for_charts'
     resources :dashboards, only: [:index, :new, :create]
-    get 'dashboards/search_data_for_filters'
-    get 'dashboards/search_data_for_table'
-    post 'dashboards/search_data_for_charts'
-    root 'dashboards#index'
+    resources :tenements
+    resources :flex_reports
+
+    root 'flex_reports#index'
   end
 
   resources :application_statuses

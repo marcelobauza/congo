@@ -1,0 +1,2 @@
+module Flex::FlexReportsHelper
+end

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Flex Reports</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>User</th>
+      <th>Filters</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @flex_reports.each do |flex_report| %>
+      <tr>
+        <td><%= flex_report.name %></td>
+        <td><%= flex_report.user %></td>
+        <td><%= flex_report.filters %></td>
+        <td><%= link_to 'Show', flex_flex_report_path(flex_report) %></td>
+        <td><%= link_to 'Edit', edit_flex_flex_report_path(flex_report) %></td>
+        <td><%= link_to 'Destroy', flex_flex_report_path(flex_report), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Flex Report', new_flex_flex_report_path %>
