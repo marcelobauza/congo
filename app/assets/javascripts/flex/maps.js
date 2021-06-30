@@ -12,10 +12,13 @@ function create_map(){
     markerZoomAnimation: false,
     zoom: 11,
     center: [-33.4372, -70.6506],
-    zoomControl: false,
+    zoomControl: true,
     zoomAnimation: true,
     layers: [streets]
   });
+
+  // Agrega el ícono de búsqueda al mapa
+  street_name_search(flexMap);
 
   return flexMap;
 }
