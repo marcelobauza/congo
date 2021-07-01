@@ -26,7 +26,7 @@ body {
   top: 0;
   bottom: 0;
   width: 100%;
-  height: 53vh;
+  height: 56vh;
 }
 
 .admin_map_transactions {
@@ -264,11 +264,7 @@ div.custom-menu.show {
 }
 
 // Estilos para flex
-.download-button {
-  position: absolute;
-  top: 5px;
-  right: 150px;
-}
+
 #cantidad-registros-tabla {
   margin-right: 15px;
   text-decoration: underline;
@@ -358,8 +354,8 @@ div.custom-menu.show {
 
   .table-box {
     .mh-1248 {
-      max-height: 1134px;
-      overflow-y: scroll;
+      max-height: 56vh;
+      overflow-y: auto;
       padding: 0;
     }
     thead {
@@ -368,12 +364,17 @@ div.custom-menu.show {
       top: 0;
       z-index: 1;
     }
+    th {
+      font-size: 11px;
+      padding: 5px
+    }
     td {
-      font-size: 14px;
+      font-size: 10px;
+      padding: 2px
     }
     #address_sort, #utilm2_sort, #e_sort, #uf_sort {
       &:hover {
-        font-size: 16px !important;
+        color: #45FEED;
         cursor: pointer;
       }
     }
@@ -402,7 +403,9 @@ div.custom-menu.show {
         display: inline-block;
         overflow-x: hidden;
       }
-    }
+    };
+    height: 56vh;
+    overflow: hidden;
   }
 
   .irs {
@@ -550,4 +553,27 @@ span.multiselect-native-select {
   .flex-dashboard .select-box p, .flex-dashboard .select-box .multiselect.dropdown-toggle.custom-select {
     font-size: 13px;
   }
+}
+
+// Modifica el scroll del navagador
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: rgba(232, 235, 239, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: rgba(72, 75, 79, 0.5);
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: rgba(232, 235, 239, 0.5);
+}
+
+// Modifica el estilo de la flecha del carousel
+.flex-dashboard .carousel-control-next,
+.flex-dashboard .carousel-control-prev {
+  background-color: #373737;
+  border: 0px;
 }

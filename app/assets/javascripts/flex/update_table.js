@@ -10,7 +10,6 @@ function update_table() {
             '<td>' + ($(this)[0]["property_typee"]) + '</td>' +
             '<td>' + ($(this)[0]['inscription_date']) + '</td>' +
             '<td>' + ($(this)[0]["address"]) + '</td>' +
-            '<td>' + ($(this)[0]['c_name']) + '</td>' +
             '<td>' + ($(this)[0]['seller']) + '</td>' +
             '<td>' + ($(this)[0]['building_surface']) + '</td>' +
             '<td>' + ($(this)[0]['terrain_surface']) + '</td>' +

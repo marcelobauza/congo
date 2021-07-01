@@ -1,77 +1,70 @@
-<div class="col-12 d-none select-box p-0" id="select-box">
+<div class="col-12 d-none select-box p-0 border border-light" id="select-box">
   <div class="bg-1">
     <div class="container">
       <div class="row d-flex align-items-center">
-        <div class="col-4 my-2 text-center">
+
+        <div class="col-3 px-1 my-1 text-center">
           <div class="form-group">
-            <p>Tipo de propiedad</p>
-            <select class="form-control" id="prop_type" multiple></select>
+            <p class="mb-1">Tipo</p>
+            <select class="form-control form-control-sm" id="prop_type" multiple></select>
           </div>
         </div>
-        <div class="col-4 my-2 text-center">
+
+        <div class="col-3 px-1 my-1 text-center">
           <div class="form-group">
-            <p>Vendedor</p>
-            <select class="form-control" id="seller_type" multiple></select>
+            <p class="mb-1">Vendedor</p>
+            <select class="form-control form-control-sm" id="seller_type" multiple></select>
           </div>
         </div>
-        <div class="col-4 my-2 text-center">
+
+        <div class="col-3 px-1 my-1 text-center">
           <div class="form-group">
-            <p>Uso de suelo</p>
-            <select class="form-control" id="land_use" multiple></select>
+            <p class="mb-1">Uso de suelo</p>
+            <select class="form-control form-control-sm" id="land_use" multiple></select>
           </div>
         </div>
-        <div class="col-12 my-2 text-center">
-          <p class="mb-0">Fecha de inscripción</p>
+
+        <div class="col-3 px-1 my-1 text-center">
+          <button class="btn btn-secondary" onclick="getFilteredData();">Filtrar</button>
+        </div>
+
+        <div class="col-12 my-1 text-center">
+          <p class="mb-0">Fecha de Inscripción</p>
           <input type="range" class="js-range-slider w-100" id="insc_date">
         </div>
-        <!--<div class="col-8 my-2 text-center">
-          <p>Fecha de inscripción</p>
-        </div>-->
 
-        <div class="col-12 my-2 text-center">
-          <p class="mb-0">Superficie</p>
-          <input type="range" class="js-range-slider w-100" id="building_surfaces">
-        </div>
-        <!--<div class="col-8 my-2 text-center">
-          <p>Zona normativa</p>
-        </div>-->
-
-        <div class="col-12 my-2 text-center">
-          <p class="mb-0">Altura máxima</p>
+        <div class="col-6 my-1 text-center">
+          <p class="mb-0">Altura Máxima</p>
           <input type="range" class="js-range-slider w-100" id="max_height">
         </div>
 
-        <div class="col-12 my-2 text-center">
+        <div class="col-6 my-1 text-center">
           <p class="mb-0">Densidad</p>
           <input type="range" class="js-range-slider w-100" id="density">
         </div>
-        <!--<div class="col-8 my-2 text-center">
-          <p>Superficie</p>
-        </div>-->
-        <div class="col-12 my-2 text-center">
-          <p class="mb-0">Superficie terreno</p>
+
+        <div class="col-6 my-1 text-center">
+          <label for="building_surfaces" class="form-label mb-0">Superficie</label>
+          <input type="range" class="js-range-slider w-100" id="building_surfaces">
+        </div>
+
+        <div class="col-6 my-1 text-center">
+          <p class="mb-0">Superficie Terreno</p>
           <input type="range" class="js-range-slider w-100" id="t_surface">
         </div>
-        <!--<div class="col-8 my-2 text-center">
-          <p>Superficie terreno</p>
-        </div>-->
-        <div class="col-12 my-2 text-center">
+
+        <div class="col-6 my-1 text-center">
           <p class="mb-0">Precio</p>
           <input type="range" class="js-range-slider w-100" id="price">
         </div>
-        <!--<div class="col-8 my-2 text-center">
-          <p>Precio</p>
-        </div>-->
-        <div class="col-12 my-2 text-center">
-          <p class="mb-0">Precio unitario</p>
+
+        <div class="col-6 my-1 text-center">
+          <p class="mb-0">Precio Unitario</p>
           <input type="range" class="js-range-slider w-100" id="u_price">
         </div>
-        <div class="col-12 my-2 text-center">
-          <button class="btn btn-secondary" onclick="getFilteredData();">Filtrar</button>
-        </div>
-        <!--<div class="col-8 my-2 text-center">
-          <p>Precio unitario</p>
-        </div>-->
+
+
+
       </div>
     </div>
   </div>

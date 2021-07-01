@@ -150,13 +150,40 @@ function update_filters() {
     });
     $(document).ready(function () {
         $('#prop_type').multiselect({
-            includeSelectAllOption: true
+          maxHeight: 500,
+          buttonClass: 'form-control form-control-sm',
+          // buttonWidth: '100px',
+          nonSelectedText: 'Seleccionar',
+          allSelectedText: 'Todos',
+          numberDisplayed: 1,
+          nSelectedText: 'tipos',
+          includeFilterClearBtn: false,
+          includeSelectAllOption: true,
+          selectAllText: 'Todos',
         });
         $('#seller_type').multiselect({
-            includeSelectAllOption: true
+          maxHeight: 500,
+          buttonClass: 'form-control form-control-sm',
+          // buttonWidth: '100px',
+          nonSelectedText: 'Seleccionar',
+          allSelectedText: 'Todos',
+          numberDisplayed: 1,
+          nSelectedText: 'tipos',
+          includeFilterClearBtn: false,
+          includeSelectAllOption: true,
+          selectAllText: 'Todos',
         });
         $('#land_use').multiselect({
-            includeSelectAllOption: true
+          maxHeight: 500,
+          buttonClass: 'form-control form-control-sm',
+          // buttonWidth: '100px',
+          nonSelectedText: 'Seleccionar',
+          allSelectedText: 'Todos',
+          numberDisplayed: 1,
+          nSelectedText: 'tipos',
+          includeFilterClearBtn: false,
+          includeSelectAllOption: true,
+          selectAllText: 'Todos',
         });
     });
     $("#intro").remove();

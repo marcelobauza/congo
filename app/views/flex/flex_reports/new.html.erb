@@ -1,22 +1,19 @@
-<%= simple_form_for([:flex, @flex_report], remote: true) do |f| %>
-  <%= f.input :name %>
-    <%= f.submit %>
-<% end %>
+<div id="alerts"></div>
 
-  <div id="alerts"></div>
-<div class="download-button">
-  <span id="cantidad-registros-tabla"></span>
-  <button class="btn btn-secondary" onclick="exportToExcel();downloadPDF();">Descargar</button>
-</div>
-
-<div class="bg-white flex-dashboard">
+<div class="flex-dashboard">
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-xl-4 p-0">
+    <div class="row border border-light">
+
+      <!-- Mapa -->
+      <div class="col-xl-3 p-0">
         <div class="col-12 p-0 map-box">
           <div id="map_flex"></div>
         </div>
-        <div class="col-12 p-0" id="intro">
+      </div>
+
+      <!-- Filtros -->
+      <div class="col-xl-4 p-0">
+        <div class="col-12 select-box p-0 border border-light" id="intro">
           <div class="d-flex justify-content-center align-items-center bg-1 h-100">
             <div class="container">
               <p class="text-center">Seleccione en el mapa</p>
@@ -25,17 +22,30 @@
         </div>
         <%= render 'flex/dashboards/filters' %>
       </div>
-      <div class="col-xl-8 p-0 bg-dark">
+
+      <!-- Tabla -->
+      <div class="col-xl-5 p-0 bg-dark border border-light">
         <div class="col-md-12 table-box p-0">
           <div class="container-fluid mh-1248">
+            <div class="container">
+              <div class="row justify-content-md-center my-1">
+                <%= link_to "Nuevo", new_flex_dashboard_path(), remote: true, class: "btn btn-light btn-sm ml-2" %>
+                <div class="col-6">
+                  <%= simple_form_for([:flex, @flex_report], remote: true) do |f| %>
+                    <div class="form-row">
+                    <%= f.input :name, label: false, placeholder: 'Nombre del Reporte',input_html: {class:'form-control form-control-sm'} %>
+                    <%= f.submit "Generar", class: 'btn btn-outline-light btn-sm' %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
             <%= render 'flex/dashboards/table' %>
           </div>
         </div>
-        <div class="button-panel mb-5">
-        </div>
       </div>
-    </div>
 
-  <%= render 'flex/dashboards/charts' %>
+    </div>
+    <%= render 'flex/dashboards/charts' %>
   </div>
 </div>
