@@ -6,8 +6,8 @@ if (errors){
   $('#errors').append(error);
 }else{
 
-  $('#table tr:first').before(
-    '<tr class="genTable">' +
+  $('#table tr.user-data').append(
+
     '<td><input class="form-check-input" type="checkbox" value="' + '<%= @tenement.id %>' + '"></td>' +
     '<td>' + '<%= @tenement.property_type&.name %>' + '</td>' +
     '<td></td>' +
@@ -18,7 +18,7 @@ if (errors){
     '<td>' + '<%= @tenement.terrain_surface %>' + '</td>' +
     '<td>' + '' + '</td>' +
     '<td>' + '<%= @tenement.cellar %>' + '</td>' +
-    '<td>' + '<%= @tenement.uf %>' + '</td>' +
-    '</tr>'
+    '<td>' + '<%= @tenement.uf %>' + '</td>'
+
   );
 }
