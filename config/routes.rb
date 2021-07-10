@@ -132,7 +132,7 @@ Rails.application.routes.draw do
     post 'flex_reports/search_data_for_charts'
     resources :dashboards, only: [:index, :new, :create]
     resources :tenements
-    resources :flex_reports
+    resources :flex_reports, only: [:index, :new, :create]
 
     root 'flex_reports#index'
   end

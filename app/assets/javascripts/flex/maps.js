@@ -36,10 +36,12 @@ function add_control(flexMap, fgr) {
     }
   }).addTo(flexMap);
 
+  return drawControl;
 }
 
 function draw_geometry(e, fgr){
   size_box = [];
+
   fgr.eachLayer(function (layer) {
     fgr.removeLayer(layer);
   });
@@ -54,7 +56,9 @@ function draw_geometry(e, fgr){
 
     polygon.forEach(function (entry) {
       arr1 = Congo.map_utils.LatLngsToCoords(entry)
+
       arr1.push(arr1[0])
+
       size_box = [arr1];
     })
 
@@ -68,14 +72,18 @@ function draw_geometry(e, fgr){
       data = {polygon: JSON.stringify(size_box), geometryType: layerType}
     }
   } else if (layerType == 'circle') {
-    let centerpt = e.layer.getLatLng();
-    let radius   = e.layer.getRadius();
-    let center   = centerpt.lng +" " + centerpt.lat;
+      let centerpt = e.layer.getLatLng();
+      let radius   = e.layer.getRadius();
+      let center   = centerpt.lng +" " + centerpt.lat;
 
-    if (radius > '500') {
-      let error = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El área debe ser menor a 500 m.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
+      if (radius > '500') {
+        let error = '<div class="alert m-2 alert-warning alert-dismissible fade show" role="alert">El área debe ser menor a 500 m.<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button></div>'
 
-      data = { error: error }
+        data = { error: error }
+
+        fgr.eachLayer(function (layer) {
+          fgr.removeLayer(layer);
+        });
     }else{
       data = { radius: radius , point: center, geometryType: layerType}
     }
@@ -126,4 +134,3 @@ function geoserver_data(data, flexMap, fgr){
   fgr.addTo(flexMap);
   return;
 }
-

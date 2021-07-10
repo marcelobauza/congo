@@ -26,6 +26,11 @@ function update_table() {
     });
     $("#cantidad-registros-tabla").text('Registros encontrados: ' + $(table_data).length)
     // sort table
+
+    if ($(table_data).length > 0) {
+      $('[data-generate]').removeClass('d-none');
+    }
+
     var table = $('table');
 
     $('#utilm2_sort, #e_sort, #uf_sort')

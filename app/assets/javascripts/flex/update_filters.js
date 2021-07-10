@@ -1,13 +1,19 @@
-function update_filters() {
+function update_filters(data) {
+    parsed_data = data;
+
     $('tr.genTable').remove();
     $(".chartjs-render-monitor").removeAttr('class').removeAttr('style').removeAttr('width').removeAttr('height');
+
+    $("#prop_type").empty()
 
     $(parsed_data['property_types']).each(function () {
         $("#prop_type").append($('<option>').val($(this)[1]).text($(this)[0]));
     });
+
     $(parsed_data['seller_types']).each(function () {
         $("#seller_type").append($('<option>').val($(this)[1]).text($(this)[0]));
     });
+
     for (i = 0; i < $(parsed_data['land_use']).length; i++) {
         $("#land_use").append($('<option>').val($(parsed_data['land_use'])[i]).text($(parsed_data['land_use'])[i]));
     }
@@ -15,8 +21,6 @@ function update_filters() {
         var lang = "es-ES";
         var yearBegin = parseInt($(parsed_data['inscription_dates'])[0]['from'].split("-")[0]);
         var yearTo = parseInt($(parsed_data['inscription_dates'])[0]['to'].split("-")[0]);
-
-        //var year = 2018;
 
         function dateToTS(date) {
             return date.valueOf();

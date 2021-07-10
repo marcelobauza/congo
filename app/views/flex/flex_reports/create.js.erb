@@ -1,1 +1,19 @@
+<% if @flex_report.errors.any? %>
+  <% @flex_report.errors.each do |key, value| %>
+    $("#somediv").empty().
+    append('<div class="notice"><%= key %> <%= raw (value)%></div>')
+  <% end %>
+<% else %>
+  $("#somediv").empty()
+  $('[data-generate]').addClass('d-none');
+  $('[data-flex-filter]').addClass('d-none');
+  $('[data-flex-property]').addClass('d-none');
+
+  let flexMap = Congo.flex_flex_reports.config.map;
+  let controls = Congo.flex_flex_reports.config.controls;
+
+  flexMap.removeControl(controls);
+
   genCharts();
+<% end %>
+
