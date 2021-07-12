@@ -15,27 +15,29 @@
 
 <div class="card shadow">
   <div class="card-body">
+    <%= will_paginate @flex_reports %>
     <table class="table table-striped table-hover table-bordered">
       <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Usuario</th>
-          <th>Filtros</th>
-          <th colspan="2" class="text-center">Acciones</th>
-        </tr>
+      <tr>
+        <th>Nombre</th>
+        <th>Usuario</th>
+        <th>Filtros</th>
+        <th colspan="2" class="text-center">Acciones</th>
+      </tr>
       </thead>
 
       <tbody>
-        <% @flex_reports.each do |flex_report| %>
-          <tr>
-            <td><%= flex_report.name %></td>
-            <td><%= flex_report.user %></td>
-            <td><%= flex_report.filters %></td>
-            <td class="text-center"></td>
-            <td class="text-center"></td>
-          </tr>
-        <% end %>
+      <% @flex_reports.each do |flex_report| %>
+        <tr>
+          <td><%= flex_report.name %></td>
+          <td><%= flex_report.user %></td>
+          <td><%= flex_report.filters %></td>
+          <td class="text-center"></td>
+          <td class="text-center"></td>
+        </tr>
+      <% end %>
       </tbody>
     </table>
+    <%= will_paginate @flex_reports %>
   </div>
 </div>
