@@ -380,16 +380,25 @@ module ImportProcess::ParseFile
             bimester = data["BIMESTER"]
             year = data["YEAR"]
 
-            #future_type = FutureProjectType.find_by(abbrev: data["FUENTE"])
-            future_type = FutureProjectType.find_by(name: data["FUTURE_PRO"])
+            if model == 'FutureProject'
+              future_type = FutureProjectType.find_by(abbrev: data["FUENTE"])
+              address = data["DIRECCION"]
+              file_number = data["N_PE"].to_i.to_s
+              file_date = data["F_PE"]
+            else
+              future_type = FutureProjectType.find_by(name: data["FUTURE_PRO"])
+              address = data["ADDRESS"]
+              file_number = data["FILE_NUMBE"].to_i.to_s
+              file_date = data["FILE_DATE"]
+            end
 
             fut_proj = model.constantize.find_or_initialize_by(
-              address: data["ADDRESS"],
+              address: address,
               future_project_type_id: future_type.id,
               year: year,
               bimester: bimester,
-              file_number: data["FILE_NUMBE"].to_i.to_s,
-              file_date: data["FILE_DATE"]
+              file_number: file_number,
+              file_date: file_date
             )
 
             fut_proj.new_record? ? was_new = true : was_new = false
