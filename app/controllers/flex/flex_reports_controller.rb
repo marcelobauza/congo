@@ -120,18 +120,17 @@ class Flex::FlexReportsController < ApplicationController
   end
 
   def search_data_for_table
-
-    geom = params[:geom]
-    property_types = params[:property_types]
-    seller_types = params[:seller_types]
+    geom              = params[:geom]
+    property_types    = params[:property_types]
+    seller_types      = params[:seller_types]
     inscription_dates = params[:inscription_dates]
-    land_use = params[:land_use]
-    max_height = params[:max_height]
-    density_types = params[:density_types]
+    land_use          = params[:land_use]
+    max_height        = params[:max_height]
+    density_types     = params[:density_types]
     building_surfaces = params[:building_surfaces]
-    terrain_surfaces = params[:terrain_surfaces]
-    prices = params[:prices]
-    unit_prices = params[:unit_prices]
+    terrain_surfaces  = params[:terrain_surfaces]
+    prices            = params[:prices]
+    unit_prices       = params[:unit_prices]
 
     @data = Transaction
       .select("
@@ -158,8 +157,8 @@ class Flex::FlexReportsController < ApplicationController
     @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
     @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
     @data = @data.where(building_regulations: {:building_zone => land_use}) unless land_use.nil?
-    @data = @data.where('building_regulations.aminciti BETWEEN ? AND ?', max_height[:from], max_height[:to]) unless max_height.nil?
-    @data = @data.where(building_regulations: {:density_type_id => density_types}) unless density_types.nil?
+    #@data = @data.where('building_regulations.aminciti BETWEEN ? AND ?', max_height[:from], max_height[:to]) unless max_height.nil?
+    #@data = @data.where(building_regulations: {:density_type_id => density_types}) unless density_types.nil?
     @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
     @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
     @data = @data.where('transactions.calculated_value BETWEEN ? AND ?', prices[:from], prices[:to]) unless prices.nil?

@@ -3,6 +3,8 @@ function clearTable() {
 }
 
 function update_table() {
+    clearTable();
+
     $(table_data).each(function (index) {
         $('#table tr:last').after(
             '<tr class="genTable">' +
