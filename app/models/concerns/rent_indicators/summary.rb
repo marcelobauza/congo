@@ -17,6 +17,7 @@ module RentIndicators::Summary
       result.push({"title": "Precio UFm2", "series": price_ufm2_by_bimester(neighborhood, bimester, year)})
       result.push({"title": "Vacancia | Rentabilidad", "series": relation_price_by_vacancy(neighborhood, bimester, year)})
       result.push({"title": "Vacancia | Programa", "series": vacancy_by_mix_types(neighborhood, bimester, year)})
+      result.push({"title": "Precio Promedio", "series": avg_price(neighborhood, bimester, year)})
     end
 
     private
@@ -229,6 +230,65 @@ module RentIndicators::Summary
         bots_mix_types.map do |key, mix|
           data_bots.push("name": key, "count": mix.size)
         end
+        data_bots_final = [
+          {name: '1|1', count: 0},
+          {name: '1|2', count: 0},
+          {name: '1|3', count: 0},
+          {name: '2|1', count: 0},
+          {name: '2|2', count: 0},
+          {name: '2|3', count: 0},
+          {name: '3|1', count: 0},
+          {name: '3|2', count: 0},
+          {name: '3|3', count: 0},
+          {name: '4+', count: 0},
+        ]
+
+        data_bots.each do |row|
+          case row[:name]
+          when '1|1'
+            data_bots_final[0][:count] = row[:count]
+          when '1|2'
+            data_bots_final[1][:count] = row[:count]
+          when '1|3'
+            data_bots_final[2][:count] = row[:count]
+          when '2|1'
+            data_bots_final[3][:count] = row[:count]
+          when '2|2'
+            data_bots_final[4][:count] = row[:count]
+          when '2|3'
+            data_bots_final[5][:count] = row[:count]
+          when '3|1'
+            data_bots_final[6][:count] = row[:count]
+          when '3|2'
+            data_bots_final[7][:count] = row[:count]
+          when '3|3'
+            data_bots_final[8][:count] = row[:count]
+          else
+            suma = data_bots_final[9][:count] + row[:count]
+            data_bots_final[9][:count] = suma
+          end
+        end
+
+        series << { label: "Oferta", data: data_bots_final } if data_bots_final.any?
+      end
+
+      def avg_price neighborhood, bimester, year
+
+        data_bots = []
+        series    = []
+        bots      = bots_offer(neighborhood, bimester, year)
+
+        bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}|#{mt.bathroom}" }
+
+        bots_mix_types.map do |key, mix|
+          mix_prices = []
+          mix.each do |row|
+            mix_prices << row[:price]
+          end
+          mix_avg_price = mix_prices.sum / mix_prices.size.to_f
+          data_bots.push("name": key, "count": mix_avg_price)
+        end
+
         data_bots_final = [
           {name: '1|1', count: 0},
           {name: '1|2', count: 0},
