@@ -3,29 +3,25 @@
     <div class="container">
       <div class="row d-flex align-items-center">
 
-        <div class="col-3 px-1 my-1 text-center">
+        <div class="col-4 px-1 my-1 text-center">
           <div class="form-group">
             <p class="mb-1">Tipo Propiedad</p>
             <select class="form-control form-control-sm" id="prop_type" multiple></select>
           </div>
         </div>
 
-        <div class="col-3 px-1 my-1 text-center">
+        <div class="col-4 px-1 my-1 text-center">
           <div class="form-group">
             <p class="mb-1">Tipo Vendedor</p>
             <select class="form-control form-control-sm" id="seller_type" multiple></select>
           </div>
         </div>
 
-        <div class="col-3 px-1 my-1 text-center">
+        <div class="col-4 px-1 my-1 text-center">
           <div class="form-group">
             <p class="mb-1">Normativa</p>
             <select class="form-control form-control-sm" id="land_use" multiple></select>
           </div>
-        </div>
-
-        <div class="col-3 px-1 my-1 text-center">
-          <button class="btn btn-secondary" data-flex-filter onclick="getFilteredData();">Filtrar</button>
         </div>
 
         <div class="col-12 my-1 text-center">
@@ -51,6 +47,10 @@
         <div class="col-6 my-1 text-center">
           <p class="mb-0">Rango Precio UFm2</p>
           <input type="range" class="js-range-slider w-100" id="u_price">
+        </div>
+
+        <div class="col-12 px-1 my-3 text-center">
+          <button class="btn btn-secondary btn-sm" data-flex-filter onclick="getFilteredData();">Filtrar</button>
         </div>
       </div>
     </div>
