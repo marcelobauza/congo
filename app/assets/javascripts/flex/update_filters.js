@@ -51,10 +51,10 @@ function update_filters() {
             }
         });
     });
-    $(parsed_data['max_height']).each(function () {
+    $(parsed_data['building_surfaces']).each(function () {
         var from = parseFloat($(this)[0]['from']);
         var to = parseFloat($(this)[0]['to']);
-        $("#max_height").ionRangeSlider({
+        $("#building_surfaces").ionRangeSlider({
             type: "double",
             min: from,
             max: to,
@@ -64,7 +64,24 @@ function update_filters() {
             min_interval: null,
             max_interval: null,
             onFinish: function (data) {
-                dataMaxHeight = {"from": (data.from), "to": (data.to)}
+                dataBuilding_surfaces = {"from": (data.from), "to": (data.to)}
+            }
+        });
+    });
+    $(parsed_data['terrain_surfaces']).each(function () {
+        var from = parseFloat($(this)[0]['from']);
+        var to = parseFloat($(this)[0]['to']);
+        $("#t_surface").ionRangeSlider({
+            type: "double",
+            min: from,
+            max: to,
+            from: from,
+            to: to,
+            drag_interval: true,
+            min_interval: null,
+            max_interval: null,
+            onFinish: function (data) {
+                dataTerrain_surfaces = {"from": (data.from), "to": (data.to)}
             }
         });
     });
@@ -99,57 +116,6 @@ function update_filters() {
             max_interval: null,
             onFinish: function (data) {
                 dataUnit_prices = {"from": (data.from), "to": (data.to)}
-            }
-        });
-    });
-    $(parsed_data['terrain_surfaces']).each(function () {
-        var from = parseFloat($(this)[0]['from']);
-        var to = parseFloat($(this)[0]['to']);
-        $("#t_surface").ionRangeSlider({
-            type: "double",
-            min: from,
-            max: to,
-            from: from,
-            to: to,
-            drag_interval: true,
-            min_interval: null,
-            max_interval: null,
-            onFinish: function (data) {
-                dataTerrain_surfaces = {"from": (data.from), "to": (data.to)}
-            }
-        });
-    });
-    $(parsed_data['building_surfaces']).each(function () {
-        var from = parseFloat($(this)[0]['from']);
-        var to = parseFloat($(this)[0]['to']);
-        $("#building_surfaces").ionRangeSlider({
-            type: "double",
-            min: from,
-            max: to,
-            from: from,
-            to: to,
-            drag_interval: true,
-            min_interval: null,
-            max_interval: null,
-            onFinish: function (data) {
-                dataBuilding_surfaces = {"from": (data.from), "to": (data.to)}
-            }
-        });
-    });
-    $(parsed_data['density']).each(function () {
-        var from = parseFloat($(this)[0]['from']);
-        var to = parseFloat($(this)[0]['to']);
-        $("#density").ionRangeSlider({
-            type: "double",
-            min: from,
-            max: to,
-            from: from,
-            to: to,
-            drag_interval: true,
-            min_interval: null,
-            max_interval: null,
-            onFinish: function (data) {
-                dataDensity = {"from": (data.from), "to": (data.to)}
             }
         });
     });

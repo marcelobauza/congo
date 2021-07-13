@@ -85,19 +85,11 @@ class Flex::FlexReportsController < ApplicationController
 
     result = {
       'property_types': project_types,
+      'seller_types': seller_types,
+      'land_use': building_zone,
       'inscription_dates': {
         'from': inscription_date.min,
         'to': inscription_date.max
-      },
-      'seller_types': seller_types,
-      'land_use': building_zone,
-      'max_height': {
-        'from': aminciti.min,
-        'to': aminciti.max
-      },
-      'density': {
-        'from': hectarea_inhabitants.min,
-        'to': hectarea_inhabitants.max
       },
       'building_surfaces': {
         'from': total_surface_building.min,
@@ -123,12 +115,10 @@ class Flex::FlexReportsController < ApplicationController
     geom              = params[:geom]
     property_types    = params[:property_types]
     seller_types      = params[:seller_types]
-    inscription_dates = params[:inscription_dates]
     land_use          = params[:land_use]
-    max_height        = params[:max_height]
-    density_types     = params[:density_types]
-    building_surfaces = params[:building_surfaces]
+    inscription_dates = params[:inscription_dates]
     terrain_surfaces  = params[:terrain_surfaces]
+    building_surfaces = params[:building_surfaces]
     prices            = params[:prices]
     unit_prices       = params[:unit_prices]
 
@@ -154,13 +144,11 @@ class Flex::FlexReportsController < ApplicationController
       .where("transactions.inscription_date > ?", Date.today - 3.years)
 
     @data = @data.where(:property_type_id => property_types) unless property_types.nil?
-    @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
     @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
     @data = @data.where(building_regulations: {:building_zone => land_use}) unless land_use.nil?
-    #@data = @data.where('building_regulations.aminciti BETWEEN ? AND ?', max_height[:from], max_height[:to]) unless max_height.nil?
-    #@data = @data.where(building_regulations: {:density_type_id => density_types}) unless density_types.nil?
-    @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
+    @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
     @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
+    @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
     @data = @data.where('transactions.calculated_value BETWEEN ? AND ?', prices[:from], prices[:to]) unless prices.nil?
     @data = @data.where('transactions.uf_m2_u BETWEEN ? AND ?', unit_prices[:from], unit_prices[:to]) unless unit_prices.nil?
 
