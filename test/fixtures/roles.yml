@@ -1,7 +1,0 @@
-pro:
-  name: Pro
-  read_only: false
-
-admin:
-  name: Admin
-  read_only: false

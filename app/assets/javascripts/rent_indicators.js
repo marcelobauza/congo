@@ -676,8 +676,8 @@ Congo.rent_indicators.action_dashboards = function() {
         },
         success: function(data) {
 
-          console.log('Datos Distribución:');
-          console.log(data[1]);
+          console.log('Datos Charts:');
+          console.log(data);
 
           $("#spinner").hide();
 
@@ -850,7 +850,7 @@ Congo.rent_indicators.action_dashboards = function() {
                   })
                 }
 
-                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad') {
+                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad' || title == 'Vacancia | Programa' || title == 'Precio Promedio' || title == 'Promedio de Días de Publicación') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -956,7 +956,7 @@ Congo.rent_indicators.action_dashboards = function() {
 
               } else { // Line
 
-                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad') {
+                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad' || title == 'Vacancia | Programa' || title == 'Precio Promedio' || title == 'Promedio de Días de Publicación') {
 
                   var y_axes;
 
