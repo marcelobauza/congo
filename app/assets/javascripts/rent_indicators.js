@@ -850,7 +850,7 @@ Congo.rent_indicators.action_dashboards = function() {
                   })
                 }
 
-                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad') {
+                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad' || title == 'Vacancia | Programa') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
