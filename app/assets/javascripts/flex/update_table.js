@@ -9,11 +9,11 @@ function update_table() {
     $("#sel-box").on('click', function(){
         if( $(this).is(':checked') ) {
             $("#table .form-check-input").each(function(){
-                $(this).attr('checked', true);
+                $(this).prop('checked', true);
             });
         } else {
             $("#table .form-check-input").each(function(){
-                $(this).removeAttr('checked');
+                $(this).prop('checked', false);
             });
         }
     });

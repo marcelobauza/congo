@@ -559,7 +559,13 @@ span.multiselect-native-select {
   }
 }
 
-// Modifica el scroll del navagador
+@media (max-width: 1199px) {
+  body {
+    overflow: unset !important;
+  }
+}
+
+// Modifica el scroll del navegador
 ::-webkit-scrollbar {
   width: 10px;
   background-color: rgba(232, 235, 239, 0.5);
