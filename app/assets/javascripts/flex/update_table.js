@@ -5,6 +5,19 @@ function clearTable() {
 function update_table() {
     clearTable();
 
+    $("#sel-box").css('display', 'block');
+    $("#sel-box").on('click', function(){
+        if( $(this).is(':checked') ) {
+            $("#table .form-check-input").each(function(){
+                $(this).attr('checked', true);
+            });
+        } else {
+            $("#table .form-check-input").each(function(){
+                $(this).removeAttr('checked');
+            });
+        }
+    });
+
     $(table_data).each(function (index) {
         $('#table tr:last').after(
             '<tr class="genTable">' +
@@ -105,13 +118,5 @@ function update_table() {
             });
 
         });
-    // check - uncheck for excel
-    $('.genTable .form-check-input').change(function(item){
-        $(this).closest('tr').toggleClass('noExl');
-        $(this).is(':checked') ? $(this).closest('td').css('background-color','#45feed') : $(this).closest('td').css('background-color','#ed36be');
-    });
-    $('.user-data .form-check-input').change(function(item){
-        $(this).closest('tr').toggleClass('noExl');
-        $(this).is(':checked') ? $(this).closest('td').css('background-color','#45feed') : $(this).closest('td').css('background-color','#ed36be');
-    });
+
 }
