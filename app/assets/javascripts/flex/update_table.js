@@ -10,10 +10,12 @@ function update_table() {
         if( $(this).is(':checked') ) {
             $("#table .form-check-input").each(function(){
                 $(this).prop('checked', true);
+                $(".input-checkbox .form-check-input").closest('td').css('background','#45feed');
             });
         } else {
             $("#table .form-check-input").each(function(){
                 $(this).prop('checked', false);
+                $(".input-checkbox .form-check-input").closest('td').css('background','#ed36be');
             });
         }
     });
@@ -118,5 +120,9 @@ function update_table() {
             });
 
         });
-
+    $(".input-checkbox .form-check-input").each(function(){
+        $(this).change(function(){
+            $(this).is(':checked') ? $(this).closest('td').css('background','#45feed') : $(this).closest('td').css('background','#ed36be');
+        });
+    })
 }
