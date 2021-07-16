@@ -41,7 +41,7 @@ function update_table() {
             '</tr>'
         );
     });
-    $("#cantidad-registros-tabla").text('Registros encontrados: ' + $(table_data).length)
+    $("#cantidad-registros-tabla").text('Registros: ' + $(table_data).length)
     // sort table
 
     if ($(table_data).length > 0) {
