@@ -27,18 +27,20 @@
       <div class="col-xl-5 p-0 bg-dark border border-light">
         <div class="col-md-12 table-box p-0">
           <div class="container-fluid mh-1248">
-            <div class="container">
-              <div class="row justify-content-md-center my-1">
-                <div class="label" id="somediv"></div>
-                <%= link_to "Agregar Mi Propiedad", new_flex_dashboard_path(), remote: true, class: "btn btn-secondary btn-sm ml-2", data: { flex_property: true  } %>
-                <div class="col-6">
-                  <%= simple_form_for([:flex, @flex_report], remote: true) do |f| %>
-                    <div class="form-row">
-                      <%= f.input :name, label: false, placeholder: 'Nombre del Reporte',input_html: {class:'form-control form-control-sm'} %>
-                      <%= f.submit "Generar", class: 'btn btn-secondary btn-sm d-none', data: {generate: true, confirm: '¿Esta seguro de generar el informe?'} %>
+            <div class="container px-2">
+              <div class="d-flex flex-row justify-content-between">
+                <%= simple_form_for([:flex, @flex_report], remote: true) do |f| %>
+                  <div class="input-group">
+                    <%= f.input :name, label: false, placeholder: 'Nombre del Reporte',input_html: {class:'form-control form-control-sm'} %>
+                    <div class="input-group-append">
+                      <%= f.submit "Generar", class: 'btn btn-secondary btn-sm d-none', data: {generate: true, confirm: '¿Está seguro que desea generar el informe?'} %>
                     </div>
-                  <% end %>
+                  </div>
+                <% end %>
+                <div class="label mx-2" id="somediv">
+                  <span class="m-0" id="cantidad-registros-tabla"></span>
                 </div>
+                <%= link_to "Agregar Mi Propiedad", new_flex_dashboard_path(), remote: true, class: "btn btn-secondary btn-sm", data: { flex_property: true  } %>
               </div>
             </div>
             <%= render 'flex/dashboards/table' %>
