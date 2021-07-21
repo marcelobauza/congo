@@ -172,7 +172,18 @@ class Flex::FlexReportsController < ApplicationController
       .order("CONCAT(bimester,'/',year)")
 
     quantity = quantity.as_json(:except => :id)
-    result.push({"title": "Cantidad", "series": [{"data": quantity}] })
+
+    avg_quantity = quantity.map(&:clone)
+    total = []
+    avg_quantity.each do |a|
+      total << a['count']
+    end
+    avg = total.sum / total.size.to_f
+    avg_quantity.each do |b|
+      b['count'] = '%.2f' % avg
+    end
+
+    result.push({"title": "Cantidad", "series": [{'name': 'Cantidad', "data": quantity}, {'name': 'Promedio', "data": avg_quantity}] })
 
 
     # Superficie Útil
@@ -183,7 +194,18 @@ class Flex::FlexReportsController < ApplicationController
       .order("CONCAT(bimester,'/',year)")
 
     building_surface = building_surface.as_json(:except => :id)
-    result.push({"title": "Superficie Útil", "series": [{"data": building_surface}] })
+
+    avg_building_surface = building_surface.map(&:clone)
+    total = []
+    avg_building_surface.each do |a|
+      total << a['count']
+    end
+    avg = total.sum / total.size.to_f
+    avg_building_surface.each do |b|
+      b['count'] = '%.2f' % avg
+    end
+
+    result.push({"title": "Superficie Útil", "series": [{'name': 'Promedio Bimestre', "data": building_surface}, {'name': 'Promedio Muestra', "data": avg_building_surface}] })
 
 
     # Precio
@@ -194,7 +216,18 @@ class Flex::FlexReportsController < ApplicationController
       .order("CONCAT(bimester,'/',year)")
 
     price = price.as_json(:except => :id)
-    result.push({"title": "Precio", "series": [{"data": price}] })
+
+    avg_price = price.map(&:clone)
+    total = []
+    avg_price.each do |a|
+      total << a['count']
+    end
+    avg = total.sum / total.size.to_f
+    avg_price.each do |b|
+      b['count'] = '%.2f' % avg
+    end
+
+    result.push({"title": "Precio", "series": [{'name': 'Promedio Bimestre', "data": price}, {'name': 'Promedio Muestra', "data": avg_price}] })
 
 
     # Precio Unitario
@@ -205,7 +238,18 @@ class Flex::FlexReportsController < ApplicationController
       .order("CONCAT(bimester,'/',year)")
 
     unit_price = unit_price.as_json(:except => :id)
-    result.push({"title": "Precio Unitario", "series": [{"data": unit_price}] })
+
+    avg_unit_price = unit_price.map(&:clone)
+    total = []
+    avg_unit_price.each do |a|
+      total << a['count']
+    end
+    avg = total.sum / total.size.to_f
+    avg_unit_price.each do |b|
+      b['count'] = '%.2f' % avg
+    end
+
+    result.push({"title": "Precio Unitario", "series": [{'name': 'Promedio Bimestre', "data": unit_price}, {'name': 'Promedio Muestra', "data": avg_unit_price}] })
 
 
     # Volúmen Mercado
@@ -216,7 +260,18 @@ class Flex::FlexReportsController < ApplicationController
       .order("CONCAT(bimester,'/',year)")
 
     market_volume = market_volume.as_json(:except => :id)
-    result.push({"title": "Volúmen Mercado", "series": [{"data": market_volume}] })
+
+    avg_market_volume = market_volume.map(&:clone)
+    total = []
+    avg_market_volume.each do |a|
+      total << a['count']
+    end
+    avg = total.sum / total.size.to_f
+    avg_market_volume.each do |b|
+      b['count'] = '%.2f' % avg
+    end
+
+    result.push({"title": "Volúmen Mercado", "series": [{'name': 'Promedio Bimestre', "data": market_volume}, {'name': 'Promedio Muestra', "data": avg_market_volume}] })
 
 
     # Superficie Útil (barras)
@@ -426,6 +481,7 @@ class Flex::FlexReportsController < ApplicationController
     render :json => result
 
   end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_flex_report
