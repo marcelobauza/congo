@@ -6,7 +6,7 @@ class Flex::FlexReportsController < ApplicationController
   # GET /flex/reports
   # GET /flex/reports.json
   def index
-    @flex_reports = FlexReport.all.paginate(page: params[:page], per_page: 30)
+    @flex_reports = FlexReport.all.paginate(page: params[:page], per_page: 10)
   end
 
   # GET /flex/reports/1
