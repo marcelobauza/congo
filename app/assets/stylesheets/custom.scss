@@ -559,12 +559,6 @@ span.multiselect-native-select {
   }
 }
 
-@media (max-width: 1199px) {
-  body {
-    overflow: unset !important;
-  }
-}
-
 // Modifica el scroll del navegador
 ::-webkit-scrollbar {
   width: 10px;

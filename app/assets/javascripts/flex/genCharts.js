@@ -346,7 +346,7 @@ function genCharts() {
                     {
                         x: $(this)[0]['series'][0]['data'][i]['name'],
                         y: $(this)[0]['series'][0]['data'][i]['count'],
-                        r: $(this)[0]['series'][0]['data'][i]['radius']
+                        r: ($(this)[0]['series'][0]['data'][i]['radius'])*2
                     }
                 );
             }
