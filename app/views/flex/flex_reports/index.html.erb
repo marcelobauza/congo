@@ -12,7 +12,7 @@
     </div>
   </div>
 </div>
-
+<% if @flex_reports.present? %>
 <div class="card shadow">
   <div class="card-body">
     <%= will_paginate @flex_reports %>
@@ -41,3 +41,4 @@
     <%= will_paginate @flex_reports %>
   </div>
 </div>
+<% end %>
