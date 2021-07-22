@@ -274,9 +274,22 @@ class Flex::FlexReportsController < ApplicationController
     result.push({"title": "Volúmen Mercado", "series": [{'name': 'Promedio Bimestre', "data": market_volume}, {'name': 'Promedio Muestra', "data": avg_market_volume}] })
 
 
+
+    # Traemos los registros del usuario para armar las otras series
+
+    user_rows = Tenement.order(:id).limit(3)
     # Superficie Útil (barras)
     # # # # # # # # # # # # #
 
+    # Datos para serie usuario
+    user_building_surface = user_rows.pluck("building_surface")
+
+    # convierte a float (user)
+    bsr_fixed = []
+    user_building_surface.each { |e| bsr_fixed << e.to_f }
+    user_building_surface = bsr_fixed
+
+    # Datos para serie base
     building_surface_range = data.pluck("total_surface_building")
 
     # convierte a float
@@ -334,13 +347,58 @@ class Flex::FlexReportsController < ApplicationController
       {name: '6', count: values_range_6.count},
     ]
 
-    result.push({"title": "Superficie Útil (barras)", "series": [{"data": sup_final}] })
+    # Arma la serie del usuario
+    values_range_1 = []
+    values_range_2 = []
+    values_range_3 = []
+    values_range_4 = []
+    values_range_5 = []
+    values_range_6 = []
+
+    user_building_surface.each do |sup|
+      sup = sup.to_f
+      case sup
+      when ranges[0]..ranges[1]
+        values_range_1 << sup
+      when ranges[1]..ranges[2]
+        values_range_2 << sup
+      when ranges[2]..ranges[3]
+        values_range_3 << sup
+      when ranges[3]..ranges[4]
+        values_range_4 << sup
+      when ranges[4]..ranges[5]
+        values_range_5 << sup
+      when ranges[5]..ranges[6]
+        values_range_6 << sup
+      end
+    end
+
+    user_bs_final = [
+      {name: '1', count: values_range_1.count},
+      {name: '2', count: values_range_2.count},
+      {name: '3', count: values_range_3.count},
+      {name: '4', count: values_range_4.count},
+      {name: '5', count: values_range_5.count},
+      {name: '6', count: values_range_6.count},
+    ]
+
+    result.push({"title": "Superficie Útil (barras)", "series": [{"name": "Registros Base", "data": sup_final}, {"name": "Registros Usuario", "data": user_bs_final}] })
 
 
 
     # Precio (barras)
     # # # # # # # # # # # # #
 
+    ## Datos para serie usuario
+    user_calculated_value = user_rows.pluck("uf")
+
+    # convierte a float (user)
+    bsr_fixed = []
+    user_calculated_value.each { |e| bsr_fixed << e.to_f }
+    user_calculated_value = bsr_fixed
+
+
+    ## Datos para serie base
     calculated_value_range = data.pluck("calculated_value")
 
     # convierte a float
@@ -398,13 +456,54 @@ class Flex::FlexReportsController < ApplicationController
       {name: '6', count: values_range_6.count},
     ]
 
-    result.push({"title": "Precio (barras)", "series": [{"data": pri_final}] })
+    # Arma la serie del usuario
+    values_range_1 = []
+    values_range_2 = []
+    values_range_3 = []
+    values_range_4 = []
+    values_range_5 = []
+    values_range_6 = []
 
+    user_calculated_value.each do |sup|
+      sup = sup.to_f
+      case sup
+      when ranges[0]..ranges[1]
+        values_range_1 << sup
+      when ranges[1]..ranges[2]
+        values_range_2 << sup
+      when ranges[2]..ranges[3]
+        values_range_3 << sup
+      when ranges[3]..ranges[4]
+        values_range_4 << sup
+      when ranges[4]..ranges[5]
+        values_range_5 << sup
+      when ranges[5]..ranges[6]
+        values_range_6 << sup
+      end
+    end
+
+    user_cv_final = [
+      {name: '1', count: values_range_1.count},
+      {name: '2', count: values_range_2.count},
+      {name: '3', count: values_range_3.count},
+      {name: '4', count: values_range_4.count},
+      {name: '5', count: values_range_5.count},
+      {name: '6', count: values_range_6.count},
+    ]
+
+    result.push({"title": "Precio (barras)", "series": [{"name": "Registros Base", "data": pri_final}, {"name": "Registros Usuario", "data": user_cv_final}] })
 
 
     # Precio Unitario (barras)
     # # # # # # # # # # # # #
 
+    ## Datos para serie usuario
+    user_uf_m2_u = user_rows.select("uf").select("uf")
+
+    uf_m2_array = []
+    for i in 0..(user_calculated_value.size - 1)
+      uf_m2_array << user_calculated_value[i] * user_building_surface[i]
+    end
     uf_m2_u_range = data.pluck("uf_m2_u")
 
     # convierte a float
@@ -462,7 +561,42 @@ class Flex::FlexReportsController < ApplicationController
       {name: '6', count: values_range_6.count},
     ]
 
-    result.push({"title": "Precio Unitario (barras)", "series": [{"data": pri_u_final}] })
+    # Arma la serie del usuario
+    values_range_1 = []
+    values_range_2 = []
+    values_range_3 = []
+    values_range_4 = []
+    values_range_5 = []
+    values_range_6 = []
+
+    uf_m2_array.each do |sup|
+      sup = sup.to_f
+      case sup
+      when ranges[0]..ranges[1]
+        values_range_1 << sup
+      when ranges[1]..ranges[2]
+        values_range_2 << sup
+      when ranges[2]..ranges[3]
+        values_range_3 << sup
+      when ranges[3]..ranges[4]
+        values_range_4 << sup
+      when ranges[4]..ranges[5]
+        values_range_5 << sup
+      when ranges[5]..ranges[6]
+        values_range_6 << sup
+      end
+    end
+
+    user_ufm2_final = [
+      {name: '1', count: values_range_1.count},
+      {name: '2', count: values_range_2.count},
+      {name: '3', count: values_range_3.count},
+      {name: '4', count: values_range_4.count},
+      {name: '5', count: values_range_5.count},
+      {name: '6', count: values_range_6.count},
+    ]
+
+    result.push({"title": "Precio Unitario (barras)", "series": [{"name": "Registros Base", "data": pri_u_final}, {"name": "Registros Usuario", "data": user_ufm2_final}] })
 
 
 
