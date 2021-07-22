@@ -277,7 +277,7 @@ class Flex::FlexReportsController < ApplicationController
 
     # Traemos los registros del usuario para armar las otras series
 
-    user_rows = Tenement.order(:id).limit(3)
+    user_rows = Tenement.order(:id).where("created_at::date = current_date")
     # Superficie Útil (barras)
     # # # # # # # # # # # # #
 
