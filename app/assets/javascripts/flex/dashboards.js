@@ -1,3 +1,10 @@
+$(document).on('click', '.add_fields', function (event) {
+      time = new Date().getTime()
+      regexp = new RegExp($(this).data('id'), 'g')
+      $(this).before($(this).data('fields').replace(regexp, time))
+      event.preventDefault()
+})
+
 Congo.namespace('flex_flex_reports.action_new');
 
 Congo.flex_flex_reports.config = {

@@ -624,6 +624,11 @@ class Flex::FlexReportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def flex_report_params
-      params.require(:flex_report).permit(:name,  :filters).merge(user_id: current_user.id)
+       params.require(:flex_report).permit(
+         :name, :filters,
+         tenements_attributes: [:id, :county_id, :property_type_id,
+                                :address, :parking, :cellar, :buidling_surface,
+                                :terrain_surface, :uf]
+       ).merge(user_id: current_user.id)
     end
 end

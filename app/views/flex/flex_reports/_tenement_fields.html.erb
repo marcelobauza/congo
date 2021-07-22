@@ -1,0 +1,12 @@
+<fieldset>
+  <div>
+    <%= f.input :county_id, collection: counties_for_select, input_html: { class: 'form-control form-control-sm'}%>
+    <%= f.input :address, input_html: { class: 'form-control form-control-sm' }, label: "Direccion" %>
+    <%= f.input :parking, input_html: { class: 'form-control form-control-sm' } %>
+    <%= f.input :cellar, input_html: { class: 'form-control form-control-sm' } %>
+    <%= f.input :property_type_id, collection: property_type_for_select, input_html: { class: 'form-control form-control-sm' } %>
+    <%= f.input :building_surface, input_html: { class: 'form-control' } %>
+    <%= f.input :terrain_surface, input_html: { class: 'form-control' } %>
+    <%= f.input :uf, input_html: { class: 'form-control form-control-sm' } %>
+  </div>
+</fieldset>
