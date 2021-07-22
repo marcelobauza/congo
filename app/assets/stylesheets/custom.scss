@@ -290,6 +290,10 @@ div.custom-menu.show {
   }
 }
 .flex-dashboard {
+  .h-1440 {
+    height: 418px;
+    overflow: hidden;
+  }
   .hidden {
     display: none;
   }
