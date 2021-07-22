@@ -9,6 +9,10 @@
     <!-- Barra (Elementos Izquierda)-->
     <ul class="navbar-nav mr-auto">
     </ul>
+      <div class="nav-item dropdown">
+        <%= link_to 'Nuevo', new_flex_flex_report_path, :class => 'btn btn-primary',
+          data: {confirm: "¿Desea generar un reporte nuevo?"} %>
+      </div>
 
     <!-- Descarga PDF -->
     <div class="nav-item dropdown">

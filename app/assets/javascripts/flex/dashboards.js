@@ -48,6 +48,7 @@ Congo.flex_flex_reports.action_new = function () {
             } else {
                 flexMap.fitBounds(fgr.getBounds());
 
+                geoserver_building_regulations(data, flexMap, fgr);
                 geoserver_data(data, flexMap, fgr);
 
                 $.ajax({

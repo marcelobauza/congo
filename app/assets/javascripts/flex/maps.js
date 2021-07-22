@@ -128,9 +128,81 @@ function geoserver_data(data, flexMap, fgr){
     clickable: 'false',
     zIndex: 99};
 
-  source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
+  var source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
 
   fgr.addLayer(source_layers);
   fgr.addTo(flexMap);
+  return;
+}
+
+function geoserver_building_regulations(data, flexMap, fgr) {
+  let geometryType    = data['geometryType'];
+  let url             = window.location.hostname;
+  let coord_geoserver = [];
+  let legends         = [];
+  let env;
+
+
+  if (geometryType == 'circle'){
+    let point    = data['point'].split(' ');
+    let radius   = data['radius'];
+    let center   = [point[0], point[1]];
+    let options  = {steps: 50, units: 'meters', properties: {}};
+    let circle   = turf.circle(center, radius, options);
+    let pol      = circle['geometry']['coordinates'];
+
+    Congo.dashboards.config.map = flexMap;
+
+    $.each(pol, function(a, b){
+      $.each(b, function(c,d){
+        coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
+      })
+    });
+
+    cql_filter = "WITHIN(the_geom, Polygon(("+coord_geoserver+"))) ";
+    env        = "polygon: Polygon(("+ coord_geoserver +"))";
+  }else if (geometryType == 'polygon') {
+    let polygon = JSON.parse(data['polygon']);
+
+    $.each(polygon, function(a, b){
+      $.each(b, function(c,d){
+        coord_geoserver = coord_geoserver.concat(d[0]+" "+ d[1]);
+      })
+    });
+
+    cql_filter = "WITHIN(the_geom, Polygon(("+ coord_geoserver +"))) ";
+    env        = "polygon: Polygon(("+ coord_geoserver +"))";
+  }
+
+  legends.push({'name':'Menor a 400', 'color':'#f6eff7'});
+  legends.push({'name':'400 - 599 ', 'color':'#d0d1e6'});
+  legends.push({'name':'600 - 799', 'color':'#a6bddb'});
+  legends.push({'name':'800 - 1199', 'color':'#67a9cf'});
+  legends.push({'name':'Mayor 1200', 'color':'#1c9099'});
+  legends.push({'name':'Zona Congelada', 'color':'#ff0000'});
+
+
+  remove_legend()
+  legend_points(legends, flexMap);
+
+  var options_layers = {
+    layers: "inciti_v2:building_regulations_info",//nombre de la capa (ver get capabilities)
+    format: 'image/png',
+    transparent: 'true',
+    opacity: 1,
+    version: '1.0.0',//wms version (ver get capabilities)
+    tiled: true,
+    env: env,
+    styles: 'building_regulations_max_density_clip',
+    INFO_FORMAT: 'application/json',
+    format_options: 'callback:getJson',
+    clickable: 'false',
+    zIndex: 99};
+
+  var source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
+
+  fgr.addLayer(source_layers);
+  fgr.addTo(flexMap);
+
   return;
 }
