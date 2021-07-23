@@ -1,5 +1,5 @@
 <div id="alerts"></div>
-
+<div data-downloads-xls></div>
 <div class="flex-dashboard">
   <div class="container-fluid">
     <div class="row border border-light h-1440">
@@ -32,6 +32,11 @@
                 <%= simple_form_for([:flex, @flex_report], remote: true) do |f| %>
                   <div class="input-group">
                     <%= f.input :name, label: false, placeholder: 'Nombre del Reporte',input_html: {class:'form-control form-control-sm'} %>
+                    <%= f.input :transaction_ids, as: :hidden,
+                      input_html: {
+                        data: { flex_transactions_ids: true }
+
+                    } %>
                     <div class="input-group-append">
                       <%= f.submit "Generar", class: 'btn btn-secondary btn-sm d-none', data: {generate: true, confirm: '¿Está seguro que desea generar el informe?'} %>
                       <div class="label mx-2" id="somediv">

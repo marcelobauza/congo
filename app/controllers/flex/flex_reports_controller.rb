@@ -1,5 +1,5 @@
 class Flex::FlexReportsController < ApplicationController
-  before_action :set_flex_report, only: [:show, :edit, :update, :destroy]
+  before_action :set_flex_report, only: [:show]
 
   layout 'flex_dashboard', except: [:index]
 
@@ -13,6 +13,13 @@ class Flex::FlexReportsController < ApplicationController
   # GET /flex/reports/1
   # GET /flex/reports/1.json
   def show
+    @transactions = Transaction.where(id: @flex_report.transaction_ids)
+
+    respond_to do |format|
+      format.xlsx {
+        response.headers['Content-Disposition'] = 'attachment; filename="Flex_report.xlsx"'
+      }
+    end
   end
 
   # GET /flex/reports/new
@@ -24,6 +31,7 @@ class Flex::FlexReportsController < ApplicationController
   # POST /flex/reports.json
   def create
     @flex_report = FlexReport.new(flex_report_params)
+    @flex_report[:transaction_ids] = params[:flex_report][:transaction_ids].split(', ').map(&:to_i)
     @flex_report[:filters] = session[:data]
 
     respond_to do |format|
@@ -629,7 +637,7 @@ class Flex::FlexReportsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def flex_report_params
        params.require(:flex_report).permit(
-         :name, :filters,
+         :name, :filters, transaction_ids: [],
          tenements_attributes: [:id, :county_id, :property_type_id,
                                 :address, :parking, :cellar, :buidling_surface,
                                 :terrain_surface, :uf]
