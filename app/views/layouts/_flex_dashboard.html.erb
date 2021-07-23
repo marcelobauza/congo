@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <!-- Logo -->
+  <%= link_to flex_flex_reports_path(), class: "pr-3", data: {confirm: '¿Desea abandora el informe?'} do  %> <%=image_tag "round_inciti.png", width:"40", height:"40" %> <% end %>
+
+  <!-- Barra (Elementos Derecha)-->
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <!-- Barra (Elementos Izquierda)-->
+    <ul class="navbar-nav mr-auto">
+    </ul>
+      <div class="nav-item dropdown">
+        <%= link_to 'Nuevo', new_flex_flex_report_path, :class => 'btn btn-primary',
+          data: {confirm: "¿Desea generar un reporte nuevo?"} %>
+      </div>
+
+    <!-- Descarga PDF -->
+    <div class="nav-item dropdown">
+      <button class="btn btn-primary nav-link dropdown-toggle nocaret dropdown-width p-flex-nav-btn" onclick="downloadPDF();">
+        <i class=" fas fa-file-pdf size-flex-nav-item" title="Informe PDF"></i>
+      </button>
+    </div>
+
+    <!-- Descarga XLS -->
+    <div class="nav-item dropdown">
+      <button class="btn btn-primary nav-link dropdown-toggle nocaret dropdown-width p-flex-nav-btn" onclick="exportToExcel()">
+        <i class=" fas fa-file-excel size-flex-nav-item" title="Descarga XLS"></i>
+      </button>
+    </div>
+
+    <!-- Cuenta Dropdown -->
+    <div class="nav-item dropdown">
+      <button class="btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width p-flex-nav-btn" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-user size-flex-nav-item" title="Usuario"></i>
+      </button>
+      <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
+        <%= link_to destroy_user_session_path, method: :delete, 'class' => 'dropdown-item custom-item' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<%= yield %>

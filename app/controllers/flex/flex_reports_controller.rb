@@ -1,12 +1,13 @@
 class Flex::FlexReportsController < ApplicationController
   before_action :set_flex_report, only: [:show, :edit, :update, :destroy]
 
-  layout 'flex'
+  layout 'flex_dashboard', except: [:index]
 
   # GET /flex/reports
   # GET /flex/reports.json
   def index
     @flex_reports = FlexReport.all.paginate(page: params[:page], per_page: 10)
+    render layout: 'flex'
   end
 
   # GET /flex/reports/1
@@ -23,6 +24,7 @@ class Flex::FlexReportsController < ApplicationController
   # POST /flex/reports.json
   def create
     @flex_report = FlexReport.new(flex_report_params)
+    @flex_report[:filters] = session[:data]
 
     respond_to do |format|
       if @flex_report.save
@@ -121,6 +123,8 @@ class Flex::FlexReportsController < ApplicationController
     building_surfaces = params[:building_surfaces]
     prices            = params[:prices]
     unit_prices       = params[:unit_prices]
+
+    session[:data] = params
 
     @data = Transaction
       .select("
