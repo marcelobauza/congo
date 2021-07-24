@@ -324,7 +324,7 @@ module RentIndicators::Summary
           when '3|3'
             data_bots_final[8][:count] = row[:count]
           else
-            suma = data_bots_final[9][:count] + row[:count]
+            suma = data_bots_final[9][:count].to_i + row[:count].to_i
             data_bots_final[9][:count] = suma
           end
         end
