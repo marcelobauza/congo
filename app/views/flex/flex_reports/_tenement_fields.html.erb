@@ -1,12 +1,26 @@
-<fieldset>
-  <div>
-    <%= f.input :county_id, collection: counties_for_select, input_html: { class: 'form-control form-control-sm'}%>
-    <%= f.input :address, input_html: { class: 'form-control form-control-sm' }, label: "Direccion" %>
-    <%= f.input :parking, input_html: { class: 'form-control form-control-sm' } %>
-    <%= f.input :cellar, input_html: { class: 'form-control form-control-sm' } %>
-    <%= f.input :property_type_id, collection: property_type_for_select, input_html: { class: 'form-control form-control-sm' } %>
-    <%= f.input :building_surface, input_html: { class: 'form-control' } %>
-    <%= f.input :terrain_surface, input_html: { class: 'form-control' } %>
-    <%= f.input :uf, input_html: { class: 'form-control form-control-sm' } %>
+<div class="form-row">
+  <div class="col-2">
+    <%= f.input :county_id, label: false, collection: counties_for_select, input_html: { class: 'form-control form-control-sm'}%>
   </div>
-</fieldset>
+  <div class="col-3">
+    <%= f.input :address, label: false, input_html: { class: 'form-control form-control-sm' } %>
+  </div>
+  <div class="col-1">
+    <%= f.input :parking, label: false, input_html: { class: 'form-control form-control-sm' } %>
+  </div>
+  <div class="col-1">
+    <%= f.input :cellar, label: false, input_html: { class: 'form-control form-control-sm' } %>
+  </div>
+  <div class="col-2">
+    <%= f.input :property_type_id, label: false, collection: property_type_for_select, input_html: { class: 'form-control form-control-sm' } %>
+  </div>
+  <div class="col-1">
+    <%= f.input :building_surface, label: false, input_html: { class: 'form-control' } %>
+  </div>
+  <div class="col-1">
+    <%= f.input :terrain_surface, label: false, input_html: { class: 'form-control' } %>
+  </div>
+  <div class="col-1">
+    <%= f.input :uf, label: false, input_html: { class: 'form-control form-control-sm' } %>
+  </div>
+</div>
