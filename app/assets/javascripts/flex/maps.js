@@ -142,7 +142,6 @@ function geoserver_building_regulations(data, flexMap, fgr) {
   let legends         = [];
   let env;
 
-
   if (geometryType == 'circle'){
     let point    = data['point'].split(' ');
     let radius   = data['radius'];

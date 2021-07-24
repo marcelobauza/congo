@@ -31,7 +31,7 @@ class Flex::FlexReportsController < ApplicationController
   # POST /flex/reports.json
   def create
     @flex_report = FlexReport.new(flex_report_params)
-    @flex_report[:transaction_ids] = params[:flex_report][:transaction_ids].split(', ').map(&:to_i)
+    @flex_report[:transaction_ids] = params[:flex_report][:transaction_ids].split(',').map(&:to_i)
     @flex_report[:filters] = session[:data]
 
     respond_to do |format|

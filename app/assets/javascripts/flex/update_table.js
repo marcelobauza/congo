@@ -1,3 +1,23 @@
+$(document).on('change', '[data-sel-box]', function(){
+
+  values = rowsCheckTable()
+
+  $('[data-flex-transactions-ids]').val(values)
+})
+
+function rowsCheckTable() {
+  var values = []
+
+  $("[data-sel-box]").each(function() {
+    if ($(this).is(":checked")) {
+      values.push($(this).val())
+    }
+  });
+
+  return values
+}
+
+
 function clearTable() {
     $('tr.genTable').remove();
 }
@@ -23,7 +43,7 @@ function update_table() {
     $(table_data).each(function (index) {
         $('#table tr:last').after(
             '<tr class="genTable">' +
-            '<td class="for-order input-checkbox"><input class="form-check-input" type="checkbox" value="' + ($(this)[0]['id']) + '" checked></td>' +
+            '<td class="for-order input-checkbox"><input class="form-check-input" data-sel-box type="checkbox" value="' + ($(this)[0]['id']) + '" checked></td>' +
             '<td class="for-order">' + ($(this)[0]["property_typee"]) + '</td>' +
             '<td class="for-order">' + ($(this)[0]['inscription_date']) + '</td>' +
             '<td class="for-order">' + ($(this)[0]["address"]) + '</td>' +
@@ -125,4 +145,8 @@ function update_table() {
             $(this).is(':checked') ? $(this).closest('td').css('background','#45feed') : $(this).closest('td').css('background','#ed36be');
         });
     })
+
+  values = rowsCheckTable()
+
+  $('[data-flex-transactions-ids]').val(values)
 }
