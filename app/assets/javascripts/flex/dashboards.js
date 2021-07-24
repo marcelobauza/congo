@@ -5,6 +5,11 @@ $(document).on('click', '.add_fields', function(event) {
   event.preventDefault()
 })
 
+$(document).on('click', '.r_ten', function(event) {
+  $(this).closest('div.line').remove()
+  event.preventDefault();
+});
+
 Congo.namespace('flex_flex_reports.action_new');
 
 Congo.flex_flex_reports.config = {

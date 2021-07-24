@@ -3,5 +3,5 @@ class FlexReport < ApplicationRecord
 
   belongs_to :user
   has_many :tenements
-  accepts_nested_attributes_for :tenements
+  accepts_nested_attributes_for :tenements, :reject_if => lambda {|a| a[:address] }
 end

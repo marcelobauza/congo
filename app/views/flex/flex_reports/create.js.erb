@@ -8,7 +8,7 @@
   $('[data-generate]').addClass('d-none');
   $('[data-flex-filter]').addClass('d-none');
   $('[data-flex-property]').addClass('d-none');
-  $('[data-downloads-xls]').html("<%= j link_to 'XLS', flex_flex_report_path(@flex_report), :class => 'btn btn-primary' %>");
+  $('[data-downloads-xls]').html("<%= j link_to 'XLS', flex_flex_report_path(@flex_report, format: :xlsx), :class => 'btn btn-primary' %>");
 
   let flexMap  = Congo.flex_flex_reports.config.map;
   let controls = Congo.flex_flex_reports.config.controls;

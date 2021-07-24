@@ -1,0 +1,32 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Flex") do |sheet|
+  sheet.add_row [
+    'Tipo',
+    'Fecha Inscripción',
+    'Dirección',
+    'Vendedor',
+    'U m2',
+    'T m2',
+    'Estacionamiento',
+    'Bodega',
+    'UF',
+    'Role',
+    'Foja'
+  ]
+
+  @transactions.each do |row|
+    sheet.add_row [
+      row.property_type_name,
+      row.inscription_date,
+      row.address,
+      row.seller_name,
+      row.total_surface_building,
+      row.total_surface_terrain,
+      row.parkingi,
+      row.cellar,
+      row.calculated_value,
+      row.role,
+      row.number
+    ]
+  end
+end
