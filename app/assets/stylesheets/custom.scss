@@ -290,10 +290,6 @@ div.custom-menu.show {
   }
 }
 .flex-dashboard {
-  .h-1440 {
-    height: 418px;
-    overflow: hidden;
-  }
   .hidden {
     display: none;
   }
@@ -399,6 +395,13 @@ div.custom-menu.show {
 
   .map-box {
     padding: 0 15px;
+  }
+
+  @media (max-width: 1440px) {
+    .h-1440 {
+      max-height: 418px;
+      overflow: hidden;
+    }
   }
 
   .select-box {
