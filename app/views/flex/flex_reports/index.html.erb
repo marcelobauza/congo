@@ -21,6 +21,7 @@
           <tr>
             <th>Nombre</th>
             <th>Usuario</th>
+            <th>Creación</th>
             <th colspan="2" class="text-center">Acciones</th>
           </tr>
         </thead>
@@ -30,6 +31,7 @@
             <tr>
               <td><%= flex_report.name %></td>
               <td><%= flex_report.user %></td>
+              <td><%= l(flex_report.created_at, format: "%d %B, %Y") %></td>
               <td class="text-center"> <%= link_to 'XLS', flex_flex_report_path(flex_report, format: :xlsx) %></td>
               <td class="text-center"></td>
             </tr>
