@@ -1,0 +1,412 @@
+var doc = new jsPDF();
+
+data = {
+  transactions: <%= @tr_ids_array %>
+};
+
+console.log('Parámetros charts');
+console.log(data);
+
+$.ajax({
+  async: false,
+  type: 'POST',
+  url: 'flex_reports/search_data_for_charts',
+  datatype: 'json',
+  data: data,
+  success: function(data) {
+
+    $('.hidden.charts').removeClass("d-none");
+
+    console.log('Datos charts');
+    console.log(data);
+
+    $.each(data, function(i, chart) {
+
+      var title = chart['title'];
+      var series = chart['series'];
+      var datasets = [];
+      var serie_colour;
+      //
+      // console.log('-------------------------------------------------------->>'+title);
+
+      $.each(series, function(a, b) {
+
+        var label = b['name']
+        var data = b['data']
+        var name = [];
+        var count = [];
+        var radius = []
+        var id = [];
+        var name_colour = [];
+        var colour;
+
+        // Setea los colores dependiendo de la serie
+        switch (label) {
+            case 'Cantidad':
+            case 'Promedio Bimestre':
+            case 'Registros Base':
+              serie_colour = '#45feed'
+              break;
+            case 'Promedio':
+            case 'Promedio Muestra':
+            case 'Registros Usuario':
+              serie_colour = '#ee5f5b'
+              break;
+            default:
+              serie_colour = '#45feed'
+              break;
+          }
+
+
+        if (title == 'Superficie por UF') {
+
+          $.each(data, function(c, d) {
+            name.push(d['name'])
+            count.push({
+              x: d['name'],
+              y: d['count'],
+              r: d['radius'] * 2
+            });
+          })
+
+        } else {
+
+          $.each(data, function(c, d) {
+            name.push(d['name'])
+            count.push(d['count'])
+          })
+
+        }
+
+
+        if (title == 'Cantidad' || title == 'Superficie Útil' || title == 'Precio' || title == 'Precio Unitario' || title == 'Volúmen Mercado') {
+          chart_type = 'line';
+          datasets.push({
+            label: label,
+            data: count,
+            fill: false,
+            borderColor: serie_colour,
+            borderWidth: 2,
+            pointRadius: 0,
+            pointStyle: 'line',
+            lineTension: 0,
+          })
+        }
+
+        if (title == 'Superficie Útil (barras)' || title == 'Precio (barras)' || title == 'Precio Unitario (barras)') {
+          chart_type = 'bar';
+          datasets.push({
+            label: label,
+            data: count,
+            backgroundColor: serie_colour,
+          })
+        }
+
+        if (title == 'Superficie por UF') {
+          chart_type = 'bubble';
+          datasets.push({
+            label: label,
+            data: count,
+            backgroundColor: serie_colour,
+          })
+        }
+
+        chart_data = {
+          labels: name,
+          datasets: datasets
+        }
+
+      })
+
+      // Guardamos "options"
+      if (chart_type == 'bar') { // Bar
+
+        var chart_options = {
+          animation: false,
+          responsive: true,
+          title: {
+            display: false,
+          },
+          legend: {
+            display: false,
+          },
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem, data) {
+                var dataset = data.datasets[tooltipItem.datasetIndex];
+                var currentValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                return currentValue.toLocaleString('es-ES');
+              }
+            }
+          },
+          plugins: {
+            datalabels: {
+              display: false,
+            },
+          },
+          scales: {
+            xAxes: [{
+              stacked: true,
+              ticks: {
+                autoSkip: false,
+                maxRotation: 0,
+                // fontColor: '#2c2e34'
+              },
+              gridLines: {
+                // color: "#484b4f"
+              },
+            }],
+            yAxes: [{
+              stacked: true,
+              ticks: {
+                callback: function(label, index, labels) {
+                  label = label.toLocaleString('es-ES')
+                  return label;
+                },
+                beginAtZero: true,
+                // fontColor: '#2c2e34'
+              },
+              gridLines: {
+                // color: "#484b4f"
+              },
+            }],
+          }
+        };
+
+      } else if (chart_type == 'line') { // Line
+
+        var chart_options = {
+          animation: false,
+          responsive: true,
+          title: {
+            display: false,
+            text: title
+          },
+          legend: {
+            display: false,
+          },
+          plugins: {
+            datalabels: {
+              display: false,
+            },
+          },
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem, data) {
+                var dataset = data.datasets[tooltipItem.datasetIndex];
+                var currentValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                return currentValue.toLocaleString('es-ES');
+              }
+            },
+            mode: 'point',
+          },
+          hover: {
+            mode: 'point',
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                // fontColor: '#2c2e34'
+              },
+              gridLines: {
+                // color: "#484b4f"
+              },
+            }],
+            yAxes: [{
+              ticks: {
+                callback: function(label, index, labels) {
+                  label = label.toLocaleString('es-ES')
+                  return label;
+                },
+                beginAtZero: true,
+                // fontColor: '#2c2e34'
+              },
+              gridLines: {
+                // color: "#484b4f"
+              },
+            }],
+          }
+        };
+
+      } else { // Bubble
+
+        var chart_options = {
+          animation: false,
+          legend: {
+            display: false
+          },
+          tooltips: {
+            enabled: false
+          },
+          plugins: {
+            datalabels: {
+              display: false
+            }
+          }
+        };
+
+
+      } // Cierra else ("options")
+
+      var chart_settings = {
+        type: chart_type,
+        data: chart_data,
+        options: chart_options
+      }
+
+      var cantidadChartPDF = $("#chartCantidadPDF");
+      var supUtilChartPDF = $("#chartSupUtilPDF");
+      var precioChartPDF = $("#chartPrecioPDF");
+      var precioUnitarioChartPDF = $("#chartPrecioUnitarioPDF");
+      var volMercadoChartPDF = $("#chartVolMercadoPDF");
+      var supUtilBarrasChartPDF = $("#chartSupUtil-barrasPDF");
+      var precioBarrasChartPDF = $("#chartPrecio-barrasPDF");
+      var precioUnitarioBarrasChartPDF = $("#chartPrecioUnitario-barrasPDF");
+      var supUFChartPDF = $("#chartSupUFPDF");
+
+      switch (i) {
+        case 0:
+          var final_chart = new Chart(cantidadChartPDF, chart_settings);
+          cantidadChartPDF_img = final_chart.toBase64Image();
+          break;
+        case 1:
+          var final_chart = new Chart(supUtilChartPDF, chart_settings);
+          supUtilChartPDF_img = final_chart.toBase64Image();
+          break;
+        case 2:
+          var final_chart = new Chart(precioChartPDF, chart_settings);
+          precioChartPDF_img = final_chart.toBase64Image();
+          break;
+        case 3:
+          var final_chart = new Chart(precioUnitarioChartPDF, chart_settings);
+          precioUnitarioChartPDF_img = final_chart.toBase64Image();
+          break;
+        case 4:
+          var final_chart = new Chart(volMercadoChartPDF, chart_settings);
+          volMercadoChartPDF_img = final_chart.toBase64Image();
+          break;
+        case 5:
+          var final_chart = new Chart(supUtilBarrasChartPDF, chart_settings);
+          supUtilBarrasChartPDF_img = final_chart.toBase64Image();
+          break;
+        case 6:
+          var final_chart = new Chart(precioBarrasChartPDF, chart_settings);
+          precioBarrasChartPDF_img = final_chart.toBase64Image();
+          break;
+        case 7:
+          var final_chart = new Chart(precioUnitarioBarrasChartPDF, chart_settings);
+          precioUnitarioBarrasChartPDF_img = final_chart.toBase64Image();
+          break;
+        case 8:
+          var final_chart = new Chart(supUFChartPDF, chart_settings);
+          supUFChartPDF_img = final_chart.toBase64Image();
+          break;
+      }
+      img_height = (final_chart.height * 70) / final_chart.width
+
+    });
+
+    // Pie de página
+    function footer() {
+      doc.setFontSize(10.5);
+      doc.text('Inciti FLEX', 20, 290);
+      doc.setFontSize(10);
+      doc.text('p. ' + doc.page, 194, 290);
+      doc.page++;
+    };
+
+    var doc = new jsPDF();
+
+    doc.page = 1;
+
+    doc.setFontSize(10.5);
+
+    // Encabezado
+    doc.text("Nombre: Alberto González", 30, 30);
+    doc.text("Archivo: Casa Pepe", 30, 35);
+    doc.text("Dirección: Alberto Hurtado, 100, Providencia", 30, 40);
+    doc.line(30, 42, 180, 42); // horizontal line
+
+    // Filtros (izquierda)
+    doc.text("Tipo de Propiedad: Casa", 30, 55);
+    doc.text("Tipo de Vendedor: Particular, Inmobiliaria.", 30, 60);
+    doc.text("Zona Normativa: A4, A2.", 30, 65);
+
+    // Filtros (derecha)
+    doc.text("Rango Util: 40 a 120 m2", 105, 55);
+    doc.text("Rango Terreno: 100 a 300 m2", 105, 60);
+    doc.text("Rango Precio: UF 3.100 a UF 6600", 105, 65);
+    doc.text("Rango UFm2 Util: 40 a 60", 105, 70);
+
+
+    console.log('img_height');
+    console.log(img_height);
+
+
+    // Gráficos (primera fila)
+    doc.text("Cantidad Bimestral", 30, 90);
+    doc.text("Promedio: 100", 30, 95);
+    doc.addImage(cantidadChartPDF_img, 'JPEG', 30, 100, 70, img_height);
+    doc.text("Precio", 105, 90);
+    doc.text("Promedio: UF 5.000", 105, 95);
+    doc.addImage(precioChartPDF_img, 'JPEG', 105, 100, 70, img_height);
+
+
+
+
+    // Gráficos (segunda fila)
+    doc.text("Superficie Útil", 30, 150);
+    doc.text("Promedio: 60 m2", 30, 155);
+    doc.addImage(supUtilChartPDF_img, 'JPEG', 30, 160, 70, img_height);
+    doc.text("Precio Unitario Util", 105, 150);
+    doc.text("Promedio: 45 UFm2", 105, 155);
+    doc.addImage(precioUnitarioChartPDF_img, 'JPEG', 105, 160, 70, img_height);
+
+    // Gráficos (tercera fila)
+    doc.text("Volumen Mercadeo", 30, 215);
+    doc.text("Promedio: 100", 30, 220);
+    doc.addImage(volMercadoChartPDF_img, 'JPEG', 30, 225, 70, img_height);
+
+    // Pie de página
+    footer()
+
+    // Agregamos un página
+    doc.addPage('a4', 'portrait')
+
+
+    // Gráficos (primera fila)
+    doc.text("Rangos Superficie Util", 30, 30);
+    doc.addImage(supUtilBarrasChartPDF_img, 'JPEG', 30, 35, 70, img_height);
+    doc.text("Dispersión Temporal", 105, 30);
+    doc.addImage(supUFChartPDF_img, 'JPEG', 105, 35, 70, img_height);
+
+    // Gráficos (segunda fila)
+    doc.text("Rangos Precio Unitario", 30, 90);
+    doc.addImage(precioUnitarioBarrasChartPDF_img, 'JPEG', 30, 95, 70, img_height);
+
+    // Gráficos (tercera fila)
+    doc.text("Rangos Precio (UF)", 30, 150);
+    doc.addImage(precioBarrasChartPDF_img, 'JPEG', 30, 155, 70, img_height);
+
+    // Comentarios
+    doc.text("Comentarios", 105, 90);
+    doc.rect(105, 95, 75, 100);
+
+
+    // Pie de página
+    footer()
+
+    // Descarga
+    doc.save('Informe_Flex.pdf');
+    $('.hidden.charts').addClass("d-none");
+
+  },
+  error: function(jqxhr, textstatus, errorthrown) {
+    console.log("algo malo paso");
+  }
+});
+
+
+// Ejemplo uso variables
+// var asd = <%= @flex_report.id %>
+// asd = asd.toString()

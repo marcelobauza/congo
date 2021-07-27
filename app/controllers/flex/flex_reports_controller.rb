@@ -13,9 +13,16 @@ class Flex::FlexReportsController < ApplicationController
   # GET /flex/reports/1
   # GET /flex/reports/1.json
   def show
+
     @transactions = Transaction.where(id: @flex_report.transaction_ids)
 
+    @tr_ids_array = []
+    @transactions.each do |tr|
+      @tr_ids_array << tr.id
+    end
+
     respond_to do |format|
+      format.js
       format.xlsx {
         response.headers['Content-Disposition'] = 'attachment; filename="Flex_report.xlsx"'
       }
