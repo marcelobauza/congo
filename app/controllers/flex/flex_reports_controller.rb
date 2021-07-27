@@ -195,7 +195,9 @@ class Flex::FlexReportsController < ApplicationController
     avg_quantity = quantity.map(&:clone)
     total = []
     avg_quantity.each do |a|
-      total << a['count']
+      count = a['count']
+      count = 0.0 if a['count'].nil?
+      total << count
     end
     avg = total.sum / total.size.to_f
     avg_quantity.each do |b|
@@ -217,7 +219,9 @@ class Flex::FlexReportsController < ApplicationController
     avg_building_surface = building_surface.map(&:clone)
     total = []
     avg_building_surface.each do |a|
-      total << a['count']
+      count = a['count']
+      count = 0.0 if a['count'].nil?
+      total << count
     end
     avg = total.sum / total.size.to_f
     avg_building_surface.each do |b|
@@ -239,7 +243,9 @@ class Flex::FlexReportsController < ApplicationController
     avg_price = price.map(&:clone)
     total = []
     avg_price.each do |a|
-      total << a['count']
+      count = a['count']
+      count = 0.0 if a['count'].nil?
+      total << count
     end
     avg = total.sum / total.size.to_f
     avg_price.each do |b|
@@ -261,7 +267,9 @@ class Flex::FlexReportsController < ApplicationController
     avg_unit_price = unit_price.map(&:clone)
     total = []
     avg_unit_price.each do |a|
-      total << a['count']
+      count = a['count']
+      count = 0.0 if a['count'].nil?
+      total << count
     end
     avg = total.sum / total.size.to_f
     avg_unit_price.each do |b|
@@ -283,7 +291,9 @@ class Flex::FlexReportsController < ApplicationController
     avg_market_volume = market_volume.map(&:clone)
     total = []
     avg_market_volume.each do |a|
-      total << a['count']
+      count = a['count']
+      count = 0.0 if a['count'].nil?
+      total << count
     end
     avg = total.sum / total.size.to_f
     avg_market_volume.each do |b|
