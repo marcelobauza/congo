@@ -7,10 +7,16 @@ data = {
 console.log('Parámetros charts');
 console.log(data);
 
+path = window.location.pathname
+if (path == '/es/flex/flex_reports/new') {
+  url = 'search_data_for_charts'
+} else {
+  url = 'flex_reports/search_data_for_charts'
+}
 $.ajax({
   async: false,
   type: 'POST',
-  url: 'flex_reports/search_data_for_charts',
+  url: url,
   datatype: 'json',
   data: data,
   success: function(data) {
