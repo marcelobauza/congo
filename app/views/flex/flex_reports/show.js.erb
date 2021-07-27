@@ -329,8 +329,8 @@ $.ajax({
 
     // Encabezado
     doc.text("Nombre: " + '<%= @user.complete_name %>', 30, 30);
-    doc.text("Archivo: Casa Pepe", 30, 35);
-    doc.text("Dirección: Alberto Hurtado, 100, Providencia", 30, 40);
+    doc.text("Archivo: " + '<%= @flex_report.name %>', 30, 35);
+    doc.text("Dirección: " + '<%= @user.address %>', 30, 40);
     doc.line(30, 42, 180, 42); // horizontal line
 
     // Filtros (izquierda)
