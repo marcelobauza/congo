@@ -16,6 +16,7 @@ class Flex::FlexReportsController < ApplicationController
 
     @transactions = Transaction.where(id: @flex_report.transaction_ids)
 
+    @user = User.find(@flex_report.user_id)
     @tr_ids_array = []
     @transactions.each do |tr|
       @tr_ids_array << tr.id
