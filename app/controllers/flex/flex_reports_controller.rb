@@ -304,6 +304,11 @@ class Flex::FlexReportsController < ApplicationController
 
     market_volume = market_volume.as_json(:except => :id)
 
+    # Formatea a 2 decimales
+    market_volume.each do |p|
+      p['count'] = ('%.2f' % p['count']).to_f
+    end
+
     avg_market_volume = market_volume.map(&:clone)
     total = []
     avg_market_volume.each do |a|
