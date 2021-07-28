@@ -174,7 +174,7 @@ function genCharts() {
             stacked: true,
             ticks: {
               autoSkip: false,
-              maxRotation: 0,
+              maxRotation: 12,
               fontColor: '#e8ebef'
             },
             gridLines: {
