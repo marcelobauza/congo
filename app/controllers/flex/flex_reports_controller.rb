@@ -326,8 +326,9 @@ class Flex::FlexReportsController < ApplicationController
 
 
     # Traemos los registros del usuario para armar las otras series
-
     user_rows = Tenement.order(:id).where("created_at::date = current_date")
+
+
     # Superficie Útil (barras)
     # # # # # # # # # # # # #
 
@@ -355,12 +356,12 @@ class Flex::FlexReportsController < ApplicationController
     val_range = (value_max - value_min)/6
     ranges = []
     new_val = value_min
-    ranges << new_val.to_f
+    ranges << ('%.2f' % new_val).to_f
     5.times do
       new_val = new_val + val_range
-      ranges << new_val.to_f
+      ranges << ('%.2f' % new_val).to_f
     end
-    ranges << value_max.to_f
+    ranges << ('%.2f' % value_max).to_f
 
     values_range_1 = []
     values_range_2 = []
@@ -464,12 +465,12 @@ class Flex::FlexReportsController < ApplicationController
     val_range = (value_max - value_min)/6
     ranges = []
     new_val = value_min
-    ranges << new_val.to_f
+    ranges << ('%.2f' % new_val).to_f
     5.times do
       new_val = new_val + val_range
-      ranges << new_val.to_f
+      ranges << ('%.2f' % new_val).to_f
     end
-    ranges << value_max.to_f
+    ranges << ('%.2f' % value_max).to_f
 
     values_range_1 = []
     values_range_2 = []
@@ -569,12 +570,12 @@ class Flex::FlexReportsController < ApplicationController
     val_range = (value_max - value_min)/6
     ranges = []
     new_val = value_min
-    ranges << new_val.to_f
+    ranges << ('%.2f' % new_val).to_f
     5.times do
       new_val = new_val + val_range
-      ranges << new_val.to_f
+      ranges << ('%.2f' % new_val).to_f
     end
-    ranges << value_max.to_f
+    ranges << ('%.2f' % value_max).to_f
 
     values_range_1 = []
     values_range_2 = []
