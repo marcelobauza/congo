@@ -160,7 +160,26 @@ $.ajax({
           },
           plugins: {
             datalabels: {
-              display: false,
+              align: 'center',
+              anchor: 'center',
+              color: '#3d4046',
+              font: {
+                size: 10
+              },
+              formatter: (value, ctx) => {
+                // Mustra sólo los valores que estén por encima del 3%
+                let sum = 0;
+                let dataArr = ctx.chart.data.datasets[0].data;
+                dataArr.map(data => {
+                    sum += data;
+                });
+                let percentage = (value*100 / sum).toFixed(2);
+                if (percentage > 4) {
+                  return value.toLocaleString('es-ES');
+                } else {
+                  return null;
+                }
+              },
             },
           },
           scales: {
@@ -212,8 +231,20 @@ $.ajax({
           },
           plugins: {
             datalabels: {
-              display: false,
-            },
+              formatter: function(value, context) {
+                if (value > 0) {
+                  return value.toLocaleString('es-ES')
+                } else {
+                  return null
+                }
+              },
+              align: 'start',
+              anchor: 'start',
+              color: '#3d4046',
+              font: {
+                size: 10
+              },
+            }
           },
           tooltips: {
             callbacks: {
