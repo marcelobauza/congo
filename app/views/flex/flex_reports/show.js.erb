@@ -134,7 +134,20 @@ $.ajax({
             display: false,
           },
           legend: {
-            display: false,
+            display: true,
+            position: 'bottom',
+            labels: {
+              fontColor: '#3d4046',
+              fontSize: 12,
+              filter: function(legendItem, chartData) {
+                // Solo muestra el legend si algunos de sus valores es diferente a 0
+                if (chartData.datasets[legendItem.datasetIndex].data[0] != 0
+                  || chartData.datasets[legendItem.datasetIndex].data[1] != 0
+                  || chartData.datasets[legendItem.datasetIndex].data[2] != 0) {
+                  return legendItem.text
+                }
+              }
+            }
           },
           tooltips: {
             callbacks: {
@@ -189,7 +202,13 @@ $.ajax({
             text: title
           },
           legend: {
-            display: false,
+            display: true,
+            position: 'bottom',
+            labels: {
+              fontColor: '#3d4046',
+              fontSize: 12,
+              usePointStyle: true,
+            }
           },
           plugins: {
             datalabels: {
