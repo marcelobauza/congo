@@ -369,6 +369,12 @@ class Flex::FlexReportsController < ApplicationController
     values_range_4 = []
     values_range_5 = []
     values_range_6 = []
+    label_range_1 = "#{ranges[0]} - #{ranges[1]}"
+    label_range_2 = "#{ranges[1]} - #{ranges[2]}"
+    label_range_3 = "#{ranges[2]} - #{ranges[3]}"
+    label_range_4 = "#{ranges[3]} - #{ranges[4]}"
+    label_range_5 = "#{ranges[4]} - #{ranges[5]}"
+    label_range_6 = "#{ranges[5]} - #{ranges[6]}"
 
     # carga los rangos
     building_surface_range.each do |sup|
@@ -390,12 +396,12 @@ class Flex::FlexReportsController < ApplicationController
     end
 
     sup_final = [
-      {name: '1', count: values_range_1.count},
-      {name: '2', count: values_range_2.count},
-      {name: '3', count: values_range_3.count},
-      {name: '4', count: values_range_4.count},
-      {name: '5', count: values_range_5.count},
-      {name: '6', count: values_range_6.count},
+      {name: label_range_1, count: values_range_1.count},
+      {name: label_range_2, count: values_range_2.count},
+      {name: label_range_3, count: values_range_3.count},
+      {name: label_range_4, count: values_range_4.count},
+      {name: label_range_5, count: values_range_5.count},
+      {name: label_range_6, count: values_range_6.count},
     ]
 
     # Arma la serie del usuario
@@ -425,12 +431,12 @@ class Flex::FlexReportsController < ApplicationController
     end
 
     user_bs_final = [
-      {name: '1', count: values_range_1.count},
-      {name: '2', count: values_range_2.count},
-      {name: '3', count: values_range_3.count},
-      {name: '4', count: values_range_4.count},
-      {name: '5', count: values_range_5.count},
-      {name: '6', count: values_range_6.count},
+      {name: label_range_1, count: values_range_1.count},
+      {name: label_range_2, count: values_range_2.count},
+      {name: label_range_3, count: values_range_3.count},
+      {name: label_range_4, count: values_range_4.count},
+      {name: label_range_5, count: values_range_5.count},
+      {name: label_range_6, count: values_range_6.count},
     ]
 
     result.push({"title": "Superficie Útil (barras)", "series": [{"name": "Registros Base", "data": sup_final}, {"name": "Registros Usuario", "data": user_bs_final}] })
@@ -478,6 +484,12 @@ class Flex::FlexReportsController < ApplicationController
     values_range_4 = []
     values_range_5 = []
     values_range_6 = []
+    label_range_1 = "#{ranges[0]} - #{ranges[1]}"
+    label_range_2 = "#{ranges[1]} - #{ranges[2]}"
+    label_range_3 = "#{ranges[2]} - #{ranges[3]}"
+    label_range_4 = "#{ranges[3]} - #{ranges[4]}"
+    label_range_5 = "#{ranges[4]} - #{ranges[5]}"
+    label_range_6 = "#{ranges[5]} - #{ranges[6]}"
 
     # carga los rangos
     calculated_value_range.each do |pri|
@@ -499,12 +511,12 @@ class Flex::FlexReportsController < ApplicationController
     end
 
     pri_final = [
-      {name: '1', count: values_range_1.count},
-      {name: '2', count: values_range_2.count},
-      {name: '3', count: values_range_3.count},
-      {name: '4', count: values_range_4.count},
-      {name: '5', count: values_range_5.count},
-      {name: '6', count: values_range_6.count},
+      {name: label_range_1, count: values_range_1.count},
+      {name: label_range_2, count: values_range_2.count},
+      {name: label_range_3, count: values_range_3.count},
+      {name: label_range_4, count: values_range_4.count},
+      {name: label_range_5, count: values_range_5.count},
+      {name: label_range_6, count: values_range_6.count},
     ]
 
     # Arma la serie del usuario
@@ -534,12 +546,12 @@ class Flex::FlexReportsController < ApplicationController
     end
 
     user_cv_final = [
-      {name: '1', count: values_range_1.count},
-      {name: '2', count: values_range_2.count},
-      {name: '3', count: values_range_3.count},
-      {name: '4', count: values_range_4.count},
-      {name: '5', count: values_range_5.count},
-      {name: '6', count: values_range_6.count},
+      {name: label_range_1, count: values_range_1.count},
+      {name: label_range_2, count: values_range_2.count},
+      {name: label_range_3, count: values_range_3.count},
+      {name: label_range_4, count: values_range_4.count},
+      {name: label_range_5, count: values_range_5.count},
+      {name: label_range_6, count: values_range_6.count},
     ]
 
     result.push({"title": "Precio (barras)", "series": [{"name": "Registros Base", "data": pri_final}, {"name": "Registros Usuario", "data": user_cv_final}] })
@@ -583,6 +595,12 @@ class Flex::FlexReportsController < ApplicationController
     values_range_4 = []
     values_range_5 = []
     values_range_6 = []
+    label_range_1 = "#{ranges[0]} - #{ranges[1]}"
+    label_range_2 = "#{ranges[1]} - #{ranges[2]}"
+    label_range_3 = "#{ranges[2]} - #{ranges[3]}"
+    label_range_4 = "#{ranges[3]} - #{ranges[4]}"
+    label_range_5 = "#{ranges[4]} - #{ranges[5]}"
+    label_range_6 = "#{ranges[5]} - #{ranges[6]}"
 
     # carga los rangos
     uf_m2_u_range.each do |pri_u|
@@ -604,12 +622,12 @@ class Flex::FlexReportsController < ApplicationController
     end
 
     pri_u_final = [
-      {name: '1', count: values_range_1.count},
-      {name: '2', count: values_range_2.count},
-      {name: '3', count: values_range_3.count},
-      {name: '4', count: values_range_4.count},
-      {name: '5', count: values_range_5.count},
-      {name: '6', count: values_range_6.count},
+      {name: label_range_1, count: values_range_1.count},
+      {name: label_range_2, count: values_range_2.count},
+      {name: label_range_3, count: values_range_3.count},
+      {name: label_range_4, count: values_range_4.count},
+      {name: label_range_5, count: values_range_5.count},
+      {name: label_range_6, count: values_range_6.count},
     ]
 
     # Arma la serie del usuario
@@ -639,12 +657,12 @@ class Flex::FlexReportsController < ApplicationController
     end
 
     user_ufm2_final = [
-      {name: '1', count: values_range_1.count},
-      {name: '2', count: values_range_2.count},
-      {name: '3', count: values_range_3.count},
-      {name: '4', count: values_range_4.count},
-      {name: '5', count: values_range_5.count},
-      {name: '6', count: values_range_6.count},
+      {name: label_range_1, count: values_range_1.count},
+      {name: label_range_2, count: values_range_2.count},
+      {name: label_range_3, count: values_range_3.count},
+      {name: label_range_4, count: values_range_4.count},
+      {name: label_range_5, count: values_range_5.count},
+      {name: label_range_6, count: values_range_6.count},
     ]
 
     result.push({"title": "Precio Unitario (barras)", "series": [{"name": "Registros Base", "data": pri_u_final}, {"name": "Registros Usuario", "data": user_ufm2_final}] })
