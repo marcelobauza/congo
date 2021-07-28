@@ -217,6 +217,11 @@ class Flex::FlexReportsController < ApplicationController
 
     building_surface = building_surface.as_json(:except => :id)
 
+    # Formatea a 2 decimales
+    building_surface.each do |p|
+      p['count'] = ('%.2f' % p['count']).to_f
+    end
+
     avg_building_surface = building_surface.map(&:clone)
     total = []
     avg_building_surface.each do |a|
@@ -241,6 +246,11 @@ class Flex::FlexReportsController < ApplicationController
 
     price = price.as_json(:except => :id)
 
+    # Formatea a 2 decimales
+    price.each do |p|
+      p['count'] = ('%.2f' % p['count']).to_f
+    end
+
     avg_price = price.map(&:clone)
     total = []
     avg_price.each do |a|
@@ -264,6 +274,11 @@ class Flex::FlexReportsController < ApplicationController
       .order("CONCAT(bimester,'/',year)")
 
     unit_price = unit_price.as_json(:except => :id)
+
+    # Formatea a 2 decimales
+    unit_price.each do |p|
+      p['count'] = ('%.2f' % p['count']).to_f
+    end
 
     avg_unit_price = unit_price.map(&:clone)
     total = []
