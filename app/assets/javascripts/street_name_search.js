@@ -10,6 +10,7 @@ street_name_search = function(m){
     }),
     autoCollapse: true,
     autoType: false,
-    minLength: 2
+    minLength: 2,
+    zoom: 16
   }));
 }
