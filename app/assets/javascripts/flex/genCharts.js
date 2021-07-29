@@ -1,3 +1,18 @@
+Chart.pluginService.register({
+  beforeDraw: function (chart, easing) {
+    if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
+      var helpers = Chart.helpers;
+      var ctx = chart.chart.ctx;
+      var chartArea = chart.chartArea;
+
+      ctx.save();
+      ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
+      ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+      ctx.restore();
+    }
+  }
+});
+
 function genCharts() {
   $("#table .form-check-input").each(function() {
     if ($(this).is(":checked")) {
@@ -124,6 +139,8 @@ function genCharts() {
         datasets.push({
           label: label,
           data: count,
+          borderColor: '#2c2e34',
+          borderWidth : 2,
           backgroundColor: serie_colour,
         })
       }
@@ -133,6 +150,8 @@ function genCharts() {
         datasets.push({
           label: label,
           data: count,
+          borderColor: '#2c2e34',
+          borderWidth : 1,
           backgroundColor: serie_colour,
         })
       }
@@ -144,11 +163,15 @@ function genCharts() {
 
     })
 
+
     // Guardamos "options"
     if (chart_type == 'bar') { // Bar
 
       var chart_options = {
         responsive: true,
+        chartArea: {
+					backgroundColor: '#E3E3E3'
+				},
         title: {
           display: false,
         },
@@ -178,7 +201,7 @@ function genCharts() {
               fontColor: '#e8ebef'
             },
             gridLines: {
-              color: "#2c2e34"
+              color: "#798088"
             },
           }],
           yAxes: [{
@@ -192,7 +215,7 @@ function genCharts() {
               fontColor: '#e8ebef'
             },
             gridLines: {
-              color: "#2c2e34"
+              color: "#798088"
             },
           }],
         }
@@ -202,6 +225,9 @@ function genCharts() {
 
       var chart_options = {
         responsive: true,
+        chartArea: {
+          backgroundColor: '#E3E3E3'
+        },
         title: {
           display: false,
           text: title
@@ -233,7 +259,7 @@ function genCharts() {
               fontColor: '#e8ebef'
             },
             gridLines: {
-              color: "#2c2e34"
+              color: "#798088"
             },
           }],
           yAxes: [{
@@ -246,7 +272,7 @@ function genCharts() {
               fontColor: '#e8ebef'
             },
             gridLines: {
-              color: "#2c2e34"
+              color: "#798088"
             },
           }],
         }
@@ -255,12 +281,37 @@ function genCharts() {
     } else { // Bubble
 
       var chart_options = {
-        animation: false,
+        chartArea: {
+          backgroundColor: '#E3E3E3'
+        },
         legend: {
           display: false
         },
         tooltips: {
           enabled: false
+        },
+        scales: {
+          xAxes: [{
+            ticks: {
+              fontColor: '#e8ebef'
+            },
+            gridLines: {
+              color: "#798088"
+            },
+          }],
+          yAxes: [{
+            ticks: {
+              callback: function(label, index, labels) {
+                label = label.toLocaleString('es-ES')
+                return label;
+              },
+              beginAtZero: true,
+              fontColor: '#e8ebef'
+            },
+            gridLines: {
+              color: "#798088"
+            },
+          }],
         },
         plugins: {
           datalabels: {
