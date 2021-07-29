@@ -1,4 +1,4 @@
-class Flex::TenementsController < ApplicationController
+class Flex::TenementsController < Flex::FlexReportsController
   def new
     @tenement = Tenement.new
   end

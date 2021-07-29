@@ -1,4 +1,5 @@
 class Flex::FlexReportsController < ApplicationController
+  before_action :verify_flex_user
   before_action :set_flex_report, only: [:show]
 
   layout 'flex_dashboard', except: [:index]
@@ -6,7 +7,10 @@ class Flex::FlexReportsController < ApplicationController
   # GET /flex/reports
   # GET /flex/reports.json
   def index
-    @flex_reports = FlexReport.all.paginate(page: params[:page], per_page: 10)
+    @flex_reports = FlexReport.all.
+      order(created_at: :desc).
+      paginate(page: params[:page], per_page: 10)
+
     render layout: 'flex'
   end
 
@@ -80,53 +84,53 @@ class Flex::FlexReportsController < ApplicationController
         building_regulations.building_zone,
         building_regulations.aminciti,
         building_regulations.hectarea_inhabitants
-      ")
-      .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
-      .method_selection(params)
-      .where("transactions.inscription_date > ?", Date.today - 3.years)
+              ")
+                .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
+                .method_selection(params)
+                .where("transactions.inscription_date > ?", Date.today - 3.years)
 
-    data.each do |tr|
-      property_type_id << tr.property_type_id unless property_type_id.include? tr.property_type_id
-      inscription_date << tr.inscription_date unless inscription_date.include? tr.inscription_date
-      seller_type_id << tr.seller_type_id unless seller_type_id.include? tr.seller_type_id
-      total_surface_building << tr.total_surface_building.to_f unless total_surface_building.include? tr.total_surface_building
-      total_surface_terrain << tr.total_surface_terrain.to_f unless total_surface_terrain.include? tr.total_surface_terrain
-      calculated_value << tr.calculated_value.to_f unless calculated_value.include? tr.calculated_value
-      uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
-      building_zone << tr.building_zone unless building_zone.include? tr.building_zone
-      aminciti << tr.aminciti.to_f unless aminciti.include? tr.aminciti
-      hectarea_inhabitants << tr.hectarea_inhabitants.to_f unless hectarea_inhabitants.include? tr.hectarea_inhabitants
-    end
+              data.each do |tr|
+                property_type_id << tr.property_type_id unless property_type_id.include? tr.property_type_id
+                inscription_date << tr.inscription_date unless inscription_date.include? tr.inscription_date
+                seller_type_id << tr.seller_type_id unless seller_type_id.include? tr.seller_type_id
+                total_surface_building << tr.total_surface_building.to_f unless total_surface_building.include? tr.total_surface_building
+                total_surface_terrain << tr.total_surface_terrain.to_f unless total_surface_terrain.include? tr.total_surface_terrain
+                calculated_value << tr.calculated_value.to_f unless calculated_value.include? tr.calculated_value
+                uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
+                building_zone << tr.building_zone unless building_zone.include? tr.building_zone
+                aminciti << tr.aminciti.to_f unless aminciti.include? tr.aminciti
+                hectarea_inhabitants << tr.hectarea_inhabitants.to_f unless hectarea_inhabitants.include? tr.hectarea_inhabitants
+              end
 
-    project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
-    seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
+              project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
+              seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
 
-    result = {
-      'property_types': project_types,
-      'seller_types': seller_types,
-      'land_use': building_zone,
-      'inscription_dates': {
-        'from': inscription_date.min,
-        'to': inscription_date.max
-      },
-      'building_surfaces': {
-        'from': total_surface_building.min,
-        'to': total_surface_building.max
-      },
-      'terrain_surfaces': {
-        'from': total_surface_terrain.min,
-        'to': total_surface_terrain.max
-      },
-      'prices': {
-        'from': calculated_value.min,
-        'to': calculated_value.max
-      },
-      'unit_prices': {
-        'from': uf_m2_u.min,
-        'to': uf_m2_u.max
-      }
-    }
-    render json: result
+              result = {
+                'property_types': project_types,
+                'seller_types': seller_types,
+                'land_use': building_zone,
+                'inscription_dates': {
+                  'from': inscription_date.min,
+                  'to': inscription_date.max
+                },
+                'building_surfaces': {
+                  'from': total_surface_building.min,
+                  'to': total_surface_building.max
+                },
+                'terrain_surfaces': {
+                  'from': total_surface_terrain.min,
+                  'to': total_surface_terrain.max
+                },
+                'prices': {
+                  'from': calculated_value.min,
+                  'to': calculated_value.max
+                },
+                'unit_prices': {
+                  'from': uf_m2_u.min,
+                  'to': uf_m2_u.max
+                }
+              }
+              render json: result
   end
 
   def search_data_for_table
@@ -155,24 +159,24 @@ class Flex::FlexReportsController < ApplicationController
         transactions.parkingi AS parking_lot,
         transactions.cellar,
         transactions.calculated_value AS price
-      ")
-      .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
-      .joins("INNER JOIN property_types ON (property_types.id = transactions.property_type_id)")
-      .joins("INNER JOIN seller_types ON (seller_types.id = transactions.seller_type_id)")
-      .joins("INNER JOIN counties ON (counties.id = transactions.county_id)")
-      .method_selection(geom)
-      .where("transactions.inscription_date > ?", Date.today - 3.years)
+              ")
+                .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
+                .joins("INNER JOIN property_types ON (property_types.id = transactions.property_type_id)")
+                .joins("INNER JOIN seller_types ON (seller_types.id = transactions.seller_type_id)")
+                .joins("INNER JOIN counties ON (counties.id = transactions.county_id)")
+                .method_selection(geom)
+                .where("transactions.inscription_date > ?", Date.today - 3.years)
 
-    @data = @data.where(:property_type_id => property_types) unless property_types.nil?
-    @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
-    @data = @data.where(building_regulations: {:building_zone => land_use}) unless land_use.nil?
-    @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
-    @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
-    @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
-    @data = @data.where('transactions.calculated_value BETWEEN ? AND ?', prices[:from], prices[:to]) unless prices.nil?
-    @data = @data.where('transactions.uf_m2_u BETWEEN ? AND ?', unit_prices[:from], unit_prices[:to]) unless unit_prices.nil?
+              @data = @data.where(:property_type_id => property_types) unless property_types.nil?
+              @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
+              @data = @data.where(building_regulations: {:building_zone => land_use}) unless land_use.nil?
+              @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
+              @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
+              @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
+              @data = @data.where('transactions.calculated_value BETWEEN ? AND ?', prices[:from], prices[:to]) unless prices.nil?
+              @data = @data.where('transactions.uf_m2_u BETWEEN ? AND ?', unit_prices[:from], unit_prices[:to]) unless unit_prices.nil?
 
-    render :json => @data
+              render :json => @data
 
   end
 
@@ -686,6 +690,7 @@ class Flex::FlexReportsController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_flex_report
       @flex_report = FlexReport.find(params[:id])
@@ -693,11 +698,14 @@ class Flex::FlexReportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def flex_report_params
-       params.require(:flex_report).permit(
-         :name, :filters, transaction_ids: [],
-         tenements_attributes: [:id, :county_id, :property_type_id,
-                                :address, :parking, :cellar, :buidling_surface,
-                                :terrain_surface, :uf]
-       ).merge(user_id: current_user.id)
+      params.require(:flex_report).permit(
+        :name, :filters, transaction_ids: [],
+        tenements_attributes: [:id, :county_id, :property_type_id,
+                              :address, :parking, :cellar, :buidling_surface,
+                              :terrain_surface, :uf]
+      ).merge(user_id: current_user.id)
+    end
+    def verify_flex_user
+      redirect_to root_url unless current_user.role.name == 'Admin' or current_user.role.name == 'Flex'
     end
 end

@@ -1,4 +1,4 @@
-class Flex::DashboardsController < ApplicationController
+class Flex::DashboardsController < Flex::FlexReportsController
 
   layout 'flex'
 
