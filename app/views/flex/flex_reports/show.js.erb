@@ -339,6 +339,13 @@ $.ajax({
 
     });
 
+    // Levanta promedios
+    var avg_cantidad = data[0]['series'][1]['data'][0]['count']
+    var avg_sup_util = data[1]['series'][1]['data'][0]['count']
+    var avg_precio = data[2]['series'][1]['data'][0]['count']
+    var avg_precio_uni = data[3]['series'][1]['data'][0]['count']
+    var avg_vol_mer = data[4]['series'][1]['data'][0]['count']
+
     // Pie de página
     function footer() {
       doc.setFontSize(8);
@@ -372,16 +379,14 @@ $.ajax({
     doc.text("Rango UFm2 Util: 40 a 60", 105, 70);
 
 
-    console.log('img_height');
-    console.log(img_height);
 
 
     // Gráficos (primera fila)
     doc.text("Cantidad Bimestral", 30, 90);
-    doc.text("Promedio: 100", 30, 95);
+    doc.text("Promedio: " + avg_cantidad, 30, 95);
     doc.addImage(cantidadChartPDF_img, 'JPEG', 30, 100, 70, img_height);
     doc.text("Precio", 105, 90);
-    doc.text("Promedio: UF 5.000", 105, 95);
+    doc.text("Promedio: UF " + avg_precio, 105, 95);
     doc.addImage(precioChartPDF_img, 'JPEG', 105, 100, 70, img_height);
 
 
@@ -389,15 +394,15 @@ $.ajax({
 
     // Gráficos (segunda fila)
     doc.text("Superficie Útil", 30, 150);
-    doc.text("Promedio: 60 m2", 30, 155);
+    doc.text("Promedio: " + avg_sup_util + " m2", 30, 155);
     doc.addImage(supUtilChartPDF_img, 'JPEG', 30, 160, 70, img_height);
     doc.text("Precio Unitario Util", 105, 150);
-    doc.text("Promedio: 45 UFm2", 105, 155);
+    doc.text("Promedio: " + avg_precio_uni + " UFm2", 105, 155);
     doc.addImage(precioUnitarioChartPDF_img, 'JPEG', 105, 160, 70, img_height);
 
     // Gráficos (tercera fila)
     doc.text("Volumen Mercadeo", 30, 215);
-    doc.text("Promedio: 100", 30, 220);
+    doc.text("Promedio: " + avg_vol_mer, 30, 220);
     doc.addImage(volMercadoChartPDF_img, 'JPEG', 30, 225, 70, img_height);
 
     // Pie de página
