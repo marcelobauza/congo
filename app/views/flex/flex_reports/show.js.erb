@@ -1,7 +1,10 @@
 var doc = new jsPDF();
 
+tr_ids_array = <%= @tr_ids_array %>
+total_reg = tr_ids_array.length
+
 data = {
-  transactions: <%= @tr_ids_array %>
+  transactions: tr_ids_array
 };
 
 console.log('Parámetros charts');
@@ -338,10 +341,10 @@ $.ajax({
 
     // Pie de página
     function footer() {
-      doc.setFontSize(10.5);
+      doc.setFontSize(8);
       doc.text('Inciti FLEX', 20, 290);
-      doc.setFontSize(10);
-      doc.text('p. ' + doc.page, 194, 290);
+      doc.text('Registros: ' + total_reg, 190, 285, null, null, "right");
+      doc.text('Pág. ' + doc.page, 190, 290, null, null, "right");
       doc.page++;
     };
 
