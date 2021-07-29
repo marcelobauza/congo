@@ -231,7 +231,8 @@ $.ajax({
           plugins: {
             datalabels: {
               formatter: function(value, context) {
-                if (value > 0) {
+                // Solo muestra los valores > a 0 y que pertenezcan la primer serie
+                if (value > 0 && context.datasetIndex == 0) {
                   return value.toLocaleString('es-ES')
                 } else {
                   return null
