@@ -591,7 +591,7 @@ Congo.map_utils = function(){
               geo = JSON.parse(data['geo'])
             }
           })
-          var options = {tolerance: 0.0001, highQuality: false};
+          var options = {tolerance: 0.001, highQuality: false};
           var simplified = turf.simplify(geo, options);
           $.each(simplified['coordinates'][0], function(a, b){
             $.each(b, function(c,d){
@@ -653,7 +653,7 @@ Congo.map_utils = function(){
               geo = JSON.parse(data['geo'])
             }
           })
-          var options = {tolerance: 0.0001, highQuality: false};
+          var options = {tolerance: 0.001, highQuality: false};
           var simplified = turf.simplify(geo, options);
           $.each(simplified['coordinates'][0], function(a, b){
             $.each(b, function(c,d){
