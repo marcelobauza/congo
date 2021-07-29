@@ -223,6 +223,7 @@ class Flex::FlexReportsController < ApplicationController
 
     # Formatea a 2 decimales
     building_surface.each do |p|
+      p['count'] = 0.0 if p['count'].nil?
       p['count'] = ('%.2f' % p['count']).to_f
     end
 
@@ -252,6 +253,7 @@ class Flex::FlexReportsController < ApplicationController
 
     # Formatea a 2 decimales
     price.each do |p|
+      p['count'] = 0.0 if p['count'].nil?
       p['count'] = ('%.2f' % p['count']).to_f
     end
 
@@ -281,6 +283,7 @@ class Flex::FlexReportsController < ApplicationController
 
     # Formatea a 2 decimales
     unit_price.each do |p|
+      p['count'] = 0.0 if p['count'].nil?
       p['count'] = ('%.2f' % p['count']).to_f
     end
 
@@ -310,6 +313,7 @@ class Flex::FlexReportsController < ApplicationController
 
     # Formatea a 2 decimales
     market_volume.each do |p|
+      p['count'] = 0.0 if p['count'].nil?
       p['count'] = ('%.2f' % p['count']).to_f
     end
 
