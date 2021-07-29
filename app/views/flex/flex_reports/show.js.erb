@@ -3,6 +3,15 @@ var doc = new jsPDF();
 tr_ids_array = <%= @tr_ids_array %>
 total_reg = tr_ids_array.length
 
+// Filtros
+let property_types = "<%= @property_types %>"
+let seller_types = '<%= @seller_types %>'
+let land_use = '<%= @land_use %>'
+let building_surfaces = '<%= @building_surfaces %>'
+let terrain_surfaces = '<%= @terrain_surfaces %>'
+let prices = '<%= @prices %>'
+let unit_prices = '<%= @unit_prices %>'
+
 data = {
   transactions: tr_ids_array
 };
@@ -365,18 +374,18 @@ $.ajax({
     doc.text("Nombre: " + '<%= @user.complete_name %>', 30, 30);
     doc.text("Archivo: " + '<%= @flex_report.name %>', 30, 35);
     doc.text("Dirección: " + '<%= @user.address %>', 30, 40);
-    doc.line(30, 42, 180, 42); // horizontal line
+    doc.line(30, 42, 180, 42);
 
     // Filtros (izquierda)
-    doc.text("Tipo de Propiedad: Casa", 30, 55);
-    doc.text("Tipo de Vendedor: Particular, Inmobiliaria.", 30, 60);
-    doc.text("Zona Normativa: A4, A2.", 30, 65);
+    doc.text("Tipo de Propiedad: " + property_types, 30, 55);
+    doc.text("Tipo de Vendedor: " + seller_types, 30, 60);
+    doc.text("Zona Normativa: " + land_use, 30, 65);
 
     // Filtros (derecha)
-    doc.text("Rango Util: 40 a 120 m2", 105, 55);
-    doc.text("Rango Terreno: 100 a 300 m2", 105, 60);
-    doc.text("Rango Precio: UF 3.100 a UF 6600", 105, 65);
-    doc.text("Rango UFm2 Util: 40 a 60", 105, 70);
+    doc.text("Rango Util: " + building_surfaces + " m2", 30, 70);
+    doc.text("Rango Terreno: " + terrain_surfaces + " m2", 30, 75);
+    doc.text("Rango Precio: " + prices + " UF", 105, 70);
+    doc.text("Rango UFm2 Util: " + unit_prices, 105, 75);
 
 
 

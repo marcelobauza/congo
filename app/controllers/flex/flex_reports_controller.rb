@@ -20,6 +20,23 @@ class Flex::FlexReportsController < ApplicationController
 
     @transactions = Transaction.where(id: @flex_report.transaction_ids)
 
+    # Filtros
+    @filters = eval(@flex_report.filters)
+    @property_types = @filters["property_types"]
+    @property_types = PropertyType.where(:id => @property_types).map { |prop| prop.name.titleize }.join(", ") unless @property_types.nil?
+    @seller_types = @filters["seller_types"]
+    @seller_types = SellerType.where(:id => @seller_types).map { |seller| seller.name.titleize }.join(", ") unless @seller_types.nil?
+    @land_use = @filters["land_use"]
+    @land_use = @land_use.map { |i| i.to_s }.join(", ") unless @land_use.nil?
+    @building_surfaces = @filters["building_surfaces"]
+    @building_surfaces = "#{@building_surfaces['from']} a #{@building_surfaces['to']}" unless @building_surfaces.nil?
+    @terrain_surfaces = @filters["terrain_surfaces"]
+    @terrain_surfaces = "#{@terrain_surfaces['from']} a #{@terrain_surfaces['to']}" unless @terrain_surfaces.nil?
+    @prices = @filters["prices"]
+    @prices = "#{@prices['from']} a #{@prices['to']}" unless @prices.nil?
+    @unit_prices = @filters["unit_prices"]
+    @unit_prices = "#{@unit_prices['from']} a #{@unit_prices['to']}" unless @unit_prices.nil?
+
     @user = User.find(@flex_report.user_id)
     @tr_ids_array = []
     @transactions.each do |tr|
