@@ -199,6 +199,7 @@ class Flex::FlexReportsController < ApplicationController
 
   def search_data_for_charts
 
+    flex_report_id = params[:flex_report_id]
     transactions = params[:transactions]
     data = []
     result = []
@@ -351,7 +352,7 @@ class Flex::FlexReportsController < ApplicationController
 
 
     # Traemos los registros del usuario para armar las otras series
-    user_rows = Tenement.order(:id).where("created_at::date = current_date")
+    user_rows = Tenement.where(flex_report_id: flex_report_id)
 
 
     # Superficie Útil (barras)

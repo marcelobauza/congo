@@ -14,7 +14,8 @@
   let flexMap  = Congo.flex_flex_reports.config.map;
   let controls = Congo.flex_flex_reports.config.controls;
 
+  flex_report_id = '<%= @flex_report.id %>'
   flexMap.removeControl(controls);
 
-  genCharts();
+  genCharts(flex_report_id);
 <% end %>

@@ -13,7 +13,8 @@ Chart.pluginService.register({
   }
 });
 
-function genCharts() {
+function genCharts(flex_report_id) {
+
   $("#table .form-check-input").each(function() {
     if ($(this).is(":checked")) {
       dataFromTable.push($(this).val()); //variable que captura los datos de la tabla
@@ -24,6 +25,7 @@ function genCharts() {
   })
 
   data = {
+    flex_report_id: flex_report_id,
     transactions: dataFromTable
   };
 

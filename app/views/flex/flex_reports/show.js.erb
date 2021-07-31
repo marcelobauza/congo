@@ -1,5 +1,6 @@
 var doc = new jsPDF();
 
+flex_report_id = <%= @flex_report.id %>
 tr_ids_array = <%= @tr_ids_array %>
 total_reg = tr_ids_array.length
 
@@ -13,6 +14,7 @@ prices = '<%= @prices %>'
 unit_prices = '<%= @unit_prices %>'
 
 data = {
+  flex_report_id: flex_report_id,
   transactions: tr_ids_array
 };
 
