@@ -135,6 +135,18 @@ function genCharts() {
       }
 
       if (title == 'Superficie Útil (barras)' || title == 'Precio (barras)' || title == 'Precio Unitario (barras)') {
+        if (label == 'Registros Base') {
+          datalabels = {
+            anchor: 'center',
+            align: 'center'
+          }
+        } else {
+          datalabels = {
+            anchor: 'end',
+            align: 'end',
+            offset: -5,
+          }
+        }
         chart_type = 'bar';
         datasets.push({
           label: label,
@@ -142,6 +154,7 @@ function genCharts() {
           borderColor: '#2c2e34',
           borderWidth : 2,
           backgroundColor: serie_colour,
+          datalabels: datalabels
         })
       }
 
@@ -189,8 +202,18 @@ function genCharts() {
         },
         plugins: {
           datalabels: {
-            display: false,
-          },
+            font: {
+              weight: 'bold'
+            },
+            color: '#E3E3E3',
+            textStrokeColor: '#1B2631',
+            textStrokeWidth: 1,
+            textShadowColor: '#000000',
+            textShadowBlur: 5,
+            display: function(context) {
+              return context.dataset.data[context.dataIndex] > 0;
+            },
+          }
         },
         scales: {
           xAxes: [{
