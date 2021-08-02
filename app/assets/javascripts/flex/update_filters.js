@@ -19,9 +19,11 @@ function update_filters() {
         $("#land_use").append($('<option>').val($(parsed_data['land_use'])[i]).text($(parsed_data['land_use'])[i]));
     }
     $(parsed_data['inscription_dates']).each(function () {
-        var lang = "es-ES";
+        var lang      = "es-ES";
         var yearBegin = parseInt($(parsed_data['inscription_dates'])[0]['from'].split("-")[0]);
-        var yearTo = parseInt($(parsed_data['inscription_dates'])[0]['to'].split("-")[0]);
+        var yearTo    = parseInt($(parsed_data['inscription_dates'])[0]['to'].split("-")[0]);
+
+        inscriptionDate = {"from": parsed_data['inscription_dates'], "to": parsed_data['inscription_dates']}
 
         function dateToTS(date) {
             return date.valueOf();
@@ -47,7 +49,14 @@ function update_filters() {
             to: dateToTS(new Date($(this)[0]['to'])),
             prettify: tsToDate,
             onFinish: function (data) {
+               var fromDate = data.from_pretty.split('/');
+               var inscriptionFromDate =  new Date(fromDate[2], fromDate[1] - 1, fromDate[0])
+
+               var toDate = data.to_pretty.split('/');
+               var inscriptionToDate =  new Date(toDate[2], toDate[1] - 1, toDate[0])
+
                 dataInsc_date = {"from": (data.from_pretty), "to": (data.to_pretty)}
+                inscriptionDate = {"from": (inscriptionFromDate).toDateString(), "to": (inscriptionToDate).toDateString()}
             }
         });
     });

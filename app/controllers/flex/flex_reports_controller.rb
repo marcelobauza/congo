@@ -177,7 +177,6 @@ class Flex::FlexReportsController < ApplicationController
         transactions.cellar,
         transactions.calculated_value AS price
               ")
-                .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
                 .joins("INNER JOIN property_types ON (property_types.id = transactions.property_type_id)")
                 .joins("INNER JOIN seller_types ON (seller_types.id = transactions.seller_type_id)")
                 .joins("INNER JOIN counties ON (counties.id = transactions.county_id)")
@@ -186,7 +185,7 @@ class Flex::FlexReportsController < ApplicationController
 
               @data = @data.where(:property_type_id => property_types) unless property_types.nil?
               @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
-              @data = @data.where(building_regulations: {:building_zone => land_use}) unless land_use.nil?
+             # @data = @data.where(building_regulations: {:building_zone => land_use}) unless land_use.nil?
               @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
               @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
               @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?

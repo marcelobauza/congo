@@ -92,16 +92,55 @@ function draw_geometry(e, fgr){
   return data;
 }
 
-function geoserver_data(data, flexMap, fgr){
-  geometryType = data['geometryType'];
-  url          = window.location.hostname;
+function cql_filter_data() {
+  let data          = '';
+  let propertyTypes = $("#prop_type").val();
+  let sellerTypes   = $("#seller_type").val();
+  let land_useType  = $("#land_use").val();
 
-  if (geometryType == 'circle'){
+  if (Object.keys(inscriptionDate).length > 0) {
+    data = data + " AND inscription_date between '" + inscriptionDate['from'] + "' AND '" + inscriptionDate['to'] + "'"
+  }
+
+  if (propertyTypes.length > 0 ) {
+    data = " AND property_type_id IN(" + propertyTypes + ")"
+  }
+
+  if (sellerTypes.length > 0 ) {
+    data = data + " AND seller_type_id IN(" + sellerTypes + ")"
+  }
+
+  if (Object.keys(dataTerrain_surfaces).length > 0) {
+    data = data + " AND total_surface_terrain between " + dataTerrain_surfaces['from'] + " AND " + dataTerrain_surfaces['to']
+  }
+
+  if (Object.keys(dataBuilding_surfaces).length > 0) {
+    data = data + " AND total_surface_building between " + dataBuilding_surfaces['from'] + " AND " + dataBuilding_surfaces['to']
+  }
+
+  if (Object.keys(dataPrices).length > 0) {
+    data = data + " AND calculated_value between " + dataPrices['from'] + " AND " + dataPrices['to']
+  }
+
+  if (Object.keys(dataUnit_prices).length > 0) {
+    data = data + " AND uf_m2_u between " + dataUnit_prices['from'] + " AND " + dataUnit_prices['to']
+  }
+
+  return data
+}
+
+function geoserver_data(data, flexMap, fgr){
+  let geometryType = data['geometryType'];
+  let url          = window.location.hostname;
+  let filterPolygon;
+  let cqlFilter;
+
+  if (geometryType == 'circle') {
     let center  = data['point'];
     let radius  = data['radius'];
 
-    cql_filter ="DWITHIN(the_geom,Point("+center+"),"+radius+",meters)";
-  }else if (geometryType == 'polygon') {
+    filterPolygon ="DWITHIN(the_geom,Point("+center+"),"+radius+",meters)";
+  } else if (geometryType == 'polygon') {
     let polygon         = JSON.parse(data['polygon']);
     let coord_geoserver = [];
 
@@ -111,9 +150,16 @@ function geoserver_data(data, flexMap, fgr){
       })
     });
 
-    cql_filter ="WITHIN(the_geom, Polygon(("+coord_geoserver+"))) ";
+    filterPolygon ="WITHIN(the_geom, Polygon(("+coord_geoserver+"))) ";
   }
 
+  let filterData = cql_filter_data()
+
+  if (filterData) {
+    cqlFilter = filterPolygon + filterData
+  } else {
+    cqlFilter = filterPolygon
+  }
   var options_layers = {
     layers: "inciti_v2:transactions_info",//nombre de la capa (ver get capabilities)
     format: 'image/png',
@@ -124,12 +170,12 @@ function geoserver_data(data, flexMap, fgr){
     styles: 'poi_new',
     INFO_FORMAT: 'application/json',
     format_options: 'callback:getJson',
-    CQL_FILTER: cql_filter,
+    CQL_FILTER: cqlFilter,
     clickable: 'false',
     zIndex: 99};
 
   var source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
-
+Congo.flex_flex_reports.config.transactions_layer = source_layers
   fgr.addLayer(source_layers);
   fgr.addTo(flexMap);
   return;
@@ -172,17 +218,6 @@ function geoserver_building_regulations(data, flexMap, fgr) {
     cql_filter = "WITHIN(the_geom, Polygon(("+ coord_geoserver +"))) ";
     env        = "polygon: Polygon(("+ coord_geoserver +"))";
   }
-
-  legends.push({'name':'Menor a 400', 'color':'#f6eff7'});
-  legends.push({'name':'400 - 599 ', 'color':'#d0d1e6'});
-  legends.push({'name':'600 - 799', 'color':'#a6bddb'});
-  legends.push({'name':'800 - 1199', 'color':'#67a9cf'});
-  legends.push({'name':'Mayor 1200', 'color':'#1c9099'});
-  legends.push({'name':'Zona Congelada', 'color':'#ff0000'});
-
-
-  remove_legend()
-  legend_points(legends, flexMap);
 
   var options_layers = {
     layers: "inciti_v2:building_regulations_info",//nombre de la capa (ver get capabilities)
