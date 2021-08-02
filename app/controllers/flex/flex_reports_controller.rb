@@ -97,12 +97,8 @@ class Flex::FlexReportsController < ApplicationController
         transactions.total_surface_building,
         transactions.total_surface_terrain,
         transactions.calculated_value,
-        transactions.uf_m2_u,
-        building_regulations.building_zone,
-        building_regulations.aminciti,
-        building_regulations.hectarea_inhabitants
+        transactions.uf_m2_u
               ")
-                .joins("JOIN building_regulations ON (ST_Contains(building_regulations.the_geom, transactions.the_geom))")
                 .method_selection(params)
                 .where("transactions.inscription_date > ?", Date.today - 3.years)
 
@@ -114,9 +110,7 @@ class Flex::FlexReportsController < ApplicationController
                 total_surface_terrain << tr.total_surface_terrain.to_f unless total_surface_terrain.include? tr.total_surface_terrain
                 calculated_value << tr.calculated_value.to_f unless calculated_value.include? tr.calculated_value
                 uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
-                building_zone << tr.building_zone unless building_zone.include? tr.building_zone
-                aminciti << tr.aminciti.to_f unless aminciti.include? tr.aminciti
-                hectarea_inhabitants << tr.hectarea_inhabitants.to_f unless hectarea_inhabitants.include? tr.hectarea_inhabitants
+                building_zone << ''
               end
 
               project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
@@ -125,7 +119,6 @@ class Flex::FlexReportsController < ApplicationController
               result = {
                 'property_types': project_types,
                 'seller_types': seller_types,
-                'land_use': building_zone,
                 'inscription_dates': {
                   'from': inscription_date.min,
                   'to': inscription_date.max
