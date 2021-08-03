@@ -23,7 +23,7 @@ function update_filters() {
         var yearBegin = parseInt($(parsed_data['inscription_dates'])[0]['from'].split("-")[0]);
         var yearTo    = parseInt($(parsed_data['inscription_dates'])[0]['to'].split("-")[0]);
 
-        inscriptionDate = {"from": parsed_data['inscription_dates'], "to": parsed_data['inscription_dates']}
+        inscriptionDate = parsed_data['inscription_dates']
 
         function dateToTS(date) {
             return date.valueOf();
