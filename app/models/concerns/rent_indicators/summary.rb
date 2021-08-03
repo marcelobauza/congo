@@ -346,7 +346,7 @@ module RentIndicators::Summary
             pub_days << row[:created_at].to_date - row[:publish].to_date
           end
           mix_avg_pub_days = pub_days.sum / pub_days.size.to_f
-          data_bots.push("name": key, "count": '%.2f' % mix_avg_pub_days)
+          data_bots.push("name": key, "count": mix_avg_pub_days.round())
         end
 
         data_bots_final = [
