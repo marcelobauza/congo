@@ -287,7 +287,7 @@ module RentIndicators::Summary
             mix_prices << row[:price]
           end
           mix_avg_price = mix_prices.sum / mix_prices.size.to_f
-          data_bots.push("name": key, "count": '%.2f' % mix_avg_price)
+          data_bots.push("name": key, "count": mix_avg_price.round())
         end
 
         data_bots_final = [
