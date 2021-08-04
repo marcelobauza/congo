@@ -262,7 +262,7 @@ module RentIndicators::Summary
         series    = []
         bots      = bots_offer(neighborhood, bimester, year)
 
-        bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}|#{mt.bathroom}" }
+        bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}" }
 
         bots_mix_types.map do |key, mix|
           mix_prices = []
@@ -274,41 +274,23 @@ module RentIndicators::Summary
         end
 
         data_bots_final = [
-          {name: '1|1', count: 0},
-          {name: '1|2', count: 0},
-          {name: '1|3', count: 0},
-          {name: '2|1', count: 0},
-          {name: '2|2', count: 0},
-          {name: '2|3', count: 0},
-          {name: '3|1', count: 0},
-          {name: '3|2', count: 0},
-          {name: '3|3', count: 0},
-          {name: '4+', count: 0},
+          {name: '1', count: 0},
+          {name: '2', count: 0},
+          {name: '3', count: 0},
+          {name: '4+', count: 0}
         ]
 
         data_bots.each do |row|
           case row[:name]
-          when '1|1'
+          when '1'
             data_bots_final[0][:count] = row[:count]
-          when '1|2'
+          when '2'
             data_bots_final[1][:count] = row[:count]
-          when '1|3'
+          when '3'
             data_bots_final[2][:count] = row[:count]
-          when '2|1'
-            data_bots_final[3][:count] = row[:count]
-          when '2|2'
-            data_bots_final[4][:count] = row[:count]
-          when '2|3'
-            data_bots_final[5][:count] = row[:count]
-          when '3|1'
-            data_bots_final[6][:count] = row[:count]
-          when '3|2'
-            data_bots_final[7][:count] = row[:count]
-          when '3|3'
-            data_bots_final[8][:count] = row[:count]
           else
-            suma = data_bots_final[9][:count].to_i + row[:count].to_i
-            data_bots_final[9][:count] = suma
+            suma = data_bots_final[3][:count].to_i + row[:count].to_i
+            data_bots_final[3][:count] = suma
           end
         end
 
