@@ -850,7 +850,7 @@ Congo.rent_indicators.action_dashboards = function() {
                   })
                 }
 
-                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad' || title == 'Vacancia | Programa' || title == 'Precio Promedio' || title == 'Promedio de Días de Publicación') {
+                if (title == 'Superficie' || title == 'Vacancia | Rentabilidad') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,
@@ -864,6 +864,21 @@ Congo.rent_indicators.action_dashboards = function() {
                     pointHoverBackgroundColor: '#e8ebef',
                     pointHoverBorderWidth: 3,
                     pointHitRadius: 5,
+                  })
+                }
+
+                if (title == 'Vacancia | Programa' || title == 'Precio Promedio' || title == 'Promedio de Días de Publicación') {
+                  chart_type = 'line';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    fill: true,
+                    pointStyle: 'circle',
+                    backgroundColor: serie_colour,
+                    borderColor: serie_colour,
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    showLine: false,
                   })
                 }
 
