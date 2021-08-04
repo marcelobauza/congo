@@ -971,6 +971,7 @@ Congo.rent_indicators.action_dashboards = function() {
 
               } else { // Line
 
+                // Seteamos eje y simple o doble
                 if (title == 'Superficie' || title == 'Vacancia | Rentabilidad' || title == 'Vacancia | Programa' || title == 'Precio Promedio' || title == 'Promedio de Días de Publicación') {
 
                   var y_axes;
@@ -1023,6 +1024,29 @@ Congo.rent_indicators.action_dashboards = function() {
 
                 }
 
+                // Seteamos datalabels
+                if (title == 'Vacancia | Programa' || title == 'Precio Promedio' || title == 'Promedio de Días de Publicación') {
+                  datalabels = {
+                    formatter: function(value, context) {
+                      if (value > 0) {
+                        return value.toLocaleString('es-ES')
+                      } else {
+                        return null
+                      }
+                    },
+                    align: 'start',
+                    anchor: 'start',
+                    color: '#e8ebef',
+                    font: {
+                      size: 9
+                    },
+                  }
+                } else {
+                  datalabels = {
+                    display: false,
+                  }
+                }
+
                 var chart_options = {
                   responsive: true,
                   title: {
@@ -1039,9 +1063,7 @@ Congo.rent_indicators.action_dashboards = function() {
                     }
                   },
                   plugins: {
-                    datalabels: {
-                      display: false,
-                    },
+                    datalabels: datalabels,
                   },
                   tooltips: {
                     callbacks: {
