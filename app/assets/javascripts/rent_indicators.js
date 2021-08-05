@@ -901,7 +901,7 @@ Congo.rent_indicators.action_dashboards = function() {
                         // Mustra sólo los labels cuyo valor sea mayor al 4%
                         let sum = 0;
                         var label = ctx.chart.data.labels[ctx.dataIndex]
-                        let dataArr = ctx.chart.data.datasets[0].data;
+                        let dataArr = ctx.dataset.data;
                         dataArr.map(data => {
                           sum += data;
                         });
