@@ -192,8 +192,10 @@ module RentIndicators::Summary
 
         bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}" }
 
+        total_rows = 0
         bots_mix_types.map do |key, mix|
           data_bots.push("name": key, "count": mix.size)
+          total_rows = total_rows + mix.size
         end
 
         data_bots_final = [
@@ -215,6 +217,10 @@ module RentIndicators::Summary
             suma = data_bots_final[3][:count] + row[:count]
             data_bots_final[3][:count] = suma
           end
+        end
+
+        data_bots_final.each do |df|
+          df[:count] = "%.1f" % (df[:count] * 100 / total_rows.to_f)
         end
 
         series << { label: "Oferta", data: data_bots_final } if data_bots_final.any?
