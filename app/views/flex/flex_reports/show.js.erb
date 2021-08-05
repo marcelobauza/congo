@@ -456,15 +456,18 @@ $.ajax({
     // Gráficos (segunda fila)
     doc.text("Rangos Precio Unitario", 30, 90);
     doc.addImage(precioUnitarioBarrasChartPDF_img, 'JPEG', 30, 95, 70, img_height);
-
-    // Gráficos (tercera fila)
-    doc.text("Rangos Precio (UF)", 30, 150);
-    doc.addImage(precioBarrasChartPDF_img, 'JPEG', 30, 155, 70, img_height);
+    doc.text("Rangos Precio (UF)", 105, 90);
+    doc.addImage(precioBarrasChartPDF_img, 'JPEG', 105, 95, 70, img_height);
 
     // Comentarios
-    doc.text("Comentarios", 105, 90);
-    doc.rect(105, 95, 75, 100);
-
+    doc.text("Comentarios", 30, 150);
+    doc.setDrawColor(121, 128, 136);
+    doc.rect(30, 155, 150, 100);
+    line_row = 160
+    for (var i = 0; i < 20; i++) {
+      doc.line(30, line_row, 180, line_row);
+      line_row += 5;
+    }
 
     // Pie de página
     footer()
