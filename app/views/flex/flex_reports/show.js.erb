@@ -259,7 +259,7 @@ $.ajax({
                 if (title == 'Volúmen Mercado' || title == 'Precio') {
                   final_pos = context.dataset.data.length - 1
                   // Solo muestra los valores > a 0 y que pertenezcan la primer serie
-                  if (context.dataIndex == 0 || context.dataIndex == final_pos) {
+                  if (value > 0 && context.datasetIndex == 0 && (context.dataIndex == 0 || context.dataIndex == final_pos)) {
                     return value.toLocaleString('es-ES')
                   } else {
                     return null
