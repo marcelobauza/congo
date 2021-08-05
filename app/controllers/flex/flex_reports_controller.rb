@@ -201,9 +201,9 @@ class Flex::FlexReportsController < ApplicationController
     # Cantidad
 
     quantity = data
-      .select("CONCAT(bimester,'/',year) as name, COUNT(*)")
-      .group("CONCAT(bimester,'/',year)")
-      .order("CONCAT(bimester,'/',year)")
+      .select("CONCAT(year,'/',bimester) as name, COUNT(*)")
+      .group("CONCAT(year,'/',bimester)")
+      .order("CONCAT(year,'/',bimester)")
 
     quantity = quantity.as_json(:except => :id)
 
@@ -225,9 +225,9 @@ class Flex::FlexReportsController < ApplicationController
     # Superficie Útil
 
     building_surface = data
-      .select("CONCAT(bimester,'/',year) as name, AVG(total_surface_building) as count")
-      .group("CONCAT(bimester,'/',year)")
-      .order("CONCAT(bimester,'/',year)")
+      .select("CONCAT(year,'/',bimester) as name, AVG(total_surface_building) as count")
+      .group("CONCAT(year,'/',bimester)")
+      .order("CONCAT(year,'/',bimester)")
 
     building_surface = building_surface.as_json(:except => :id)
 
@@ -255,9 +255,9 @@ class Flex::FlexReportsController < ApplicationController
     # Precio
 
     price = data
-      .select("CONCAT(bimester,'/',year) as name, AVG(calculated_value) as count")
-      .group("CONCAT(bimester,'/',year)")
-      .order("CONCAT(bimester,'/',year)")
+      .select("CONCAT(year,'/',bimester) as name, AVG(calculated_value) as count")
+      .group("CONCAT(year,'/',bimester)")
+      .order("CONCAT(year,'/',bimester)")
 
     price = price.as_json(:except => :id)
 
@@ -285,9 +285,9 @@ class Flex::FlexReportsController < ApplicationController
     # Precio Unitario
 
     unit_price = data
-      .select("CONCAT(bimester,'/',year) as name, AVG(uf_m2_u) as count")
-      .group("CONCAT(bimester,'/',year)")
-      .order("CONCAT(bimester,'/',year)")
+      .select("CONCAT(year,'/',bimester) as name, AVG(uf_m2_u) as count")
+      .group("CONCAT(year,'/',bimester)")
+      .order("CONCAT(year,'/',bimester)")
 
     unit_price = unit_price.as_json(:except => :id)
 
@@ -315,9 +315,9 @@ class Flex::FlexReportsController < ApplicationController
     # Volúmen Mercado
 
     market_volume = data
-      .select("CONCAT(bimester,'/',year) as name, (AVG(calculated_value) * COUNT(*)) as count")
-      .group("CONCAT(bimester,'/',year)")
-      .order("CONCAT(bimester,'/',year)")
+      .select("CONCAT(year,'/',bimester) as name, (AVG(calculated_value) * COUNT(*)) as count")
+      .group("CONCAT(year,'/',bimester)")
+      .order("CONCAT(year,'/',bimester)")
 
     market_volume = market_volume.as_json(:except => :id)
 
