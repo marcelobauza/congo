@@ -87,16 +87,18 @@ function genCharts(flex_report_id) {
       switch (label) {
           case 'Cantidad':
           case 'Promedio Bimestre':
+            serie_colour = 'rgba(61, 64, 70, 0.9)'
+            break;
           case 'Registros Base':
-            serie_colour = '#333'
+            serie_colour = 'rgba(44, 46, 52, 0.6)'
             break;
           case 'Promedio':
           case 'Promedio Muestra':
           case 'Registros Usuario':
-            serie_colour = '#ee5f5b'
+            serie_colour = 'rgba(238, 95, 91, 0.9)'
             break;
           default:
-            serie_colour = '#45feed'
+            serie_colour = 'rgba(44, 46, 52, 0.6)'
             break;
         }
 
@@ -153,7 +155,7 @@ function genCharts(flex_report_id) {
         datasets.push({
           label: label,
           data: count,
-          borderColor: '#2c2e34',
+          borderColor: '#3d4046',
           borderWidth : 2,
           backgroundColor: serie_colour,
           datalabels: datalabels
@@ -165,7 +167,7 @@ function genCharts(flex_report_id) {
         datasets.push({
           label: label,
           data: count,
-          borderColor: '#2c2e34',
+          borderColor: '#3d4046',
           borderWidth : 1,
           backgroundColor: serie_colour,
         })
