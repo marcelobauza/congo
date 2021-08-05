@@ -117,7 +117,7 @@ module RentIndicators::Summary
           ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         )
 
-        mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}|#{s.bathroom}"}
+        mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}"}
 
         data        = []
         series      = []
@@ -131,41 +131,23 @@ module RentIndicators::Summary
         end
 
         data_final = [
-          {name: '1|1', count: 0},
-          {name: '1|2', count: 0},
-          {name: '1|3', count: 0},
-          {name: '2|1', count: 0},
-          {name: '2|2', count: 0},
-          {name: '2|3', count: 0},
-          {name: '3|1', count: 0},
-          {name: '3|2', count: 0},
-          {name: '3|3', count: 0},
-          {name: '4+', count: 0},
+          {name: '1', count: 0},
+          {name: '2', count: 0},
+          {name: '3', count: 0},
+          {name: '4+', count: 0}
         ]
 
         data.each do |row|
           case row[:name]
-          when '1|1'
+          when '1'
             data_final[0][:count] = row[:count]
-          when '1|2'
+          when '2'
             data_final[1][:count] = row[:count]
-          when '1|3'
+          when '3'
             data_final[2][:count] = row[:count]
-          when '2|1'
-            data_final[3][:count] = row[:count]
-          when '2|2'
-            data_final[4][:count] = row[:count]
-          when '2|3'
-            data_final[5][:count] = row[:count]
-          when '3|1'
-            data_final[6][:count] = row[:count]
-          when '3|2'
-            data_final[7][:count] = row[:count]
-          when '3|3'
-            data_final[8][:count] = row[:count]
           else
-            suma = data_final[9][:count] + row[:count]
-            data_final[9][:count] = suma
+            suma = data_final[3][:count] + row[:count]
+            data_final[3][:count] = suma
           end
         end
 
@@ -173,48 +155,30 @@ module RentIndicators::Summary
 
         data_bots = []
         bots      = bots_offer(neighborhood, bimester, year)
-        bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}|#{mt.bathroom}" }
+        bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}" }
 
         bots_mix_types.map do |key, mix|
           data_bots.push("name": key, "count": mix.size)
         end
 
         data_bots_final = [
-          {name: '1|1', count: 0},
-          {name: '1|2', count: 0},
-          {name: '1|3', count: 0},
-          {name: '2|1', count: 0},
-          {name: '2|2', count: 0},
-          {name: '2|3', count: 0},
-          {name: '3|1', count: 0},
-          {name: '3|2', count: 0},
-          {name: '3|3', count: 0},
-          {name: '4+', count: 0},
+          {name: '1', count: 0},
+          {name: '2', count: 0},
+          {name: '3', count: 0},
+          {name: '4+', count: 0}
         ]
 
         data_bots.each do |row|
           case row[:name]
-          when '1|1'
+          when '1'
             data_bots_final[0][:count] = row[:count]
-          when '1|2'
+          when '2'
             data_bots_final[1][:count] = row[:count]
-          when '1|3'
+          when '3'
             data_bots_final[2][:count] = row[:count]
-          when '2|1'
-            data_bots_final[3][:count] = row[:count]
-          when '2|2'
-            data_bots_final[4][:count] = row[:count]
-          when '2|3'
-            data_bots_final[5][:count] = row[:count]
-          when '3|1'
-            data_bots_final[6][:count] = row[:count]
-          when '3|2'
-            data_bots_final[7][:count] = row[:count]
-          when '3|3'
-            data_bots_final[8][:count] = row[:count]
           else
-            suma = data_bots_final[9][:count] + row[:count]
-            data_bots_final[9][:count] = suma
+            suma = data_bots_final[3][:count] + row[:count]
+            data_bots_final[3][:count] = suma
           end
         end
 
@@ -228,8 +192,10 @@ module RentIndicators::Summary
 
         bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}" }
 
+        total_rows = 0
         bots_mix_types.map do |key, mix|
           data_bots.push("name": key, "count": mix.size)
+          total_rows = total_rows + mix.size
         end
 
         data_bots_final = [
@@ -251,6 +217,10 @@ module RentIndicators::Summary
             suma = data_bots_final[3][:count] + row[:count]
             data_bots_final[3][:count] = suma
           end
+        end
+
+        data_bots_final.each do |df|
+          df[:count] = "%.1f" % (df[:count] * 100 / total_rows.to_f)
         end
 
         series << { label: "Oferta", data: data_bots_final } if data_bots_final.any?

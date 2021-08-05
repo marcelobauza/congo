@@ -251,32 +251,14 @@ function rent_indicators_report_pdf() {
               // Setea los colores dependiendo del label
               if (title == 'Distribución Programas') {
                 switch (d['name']) {
-                  case '1|1':
-                    colour = '#8E44AD'
-                    break;
-                  case '1|2':
+                  case '1':
                     colour = '#3498DB'
                     break;
-                  case '1|3':
-                    colour = '#1ABC9C'
-                    break;
-                  case '2|1':
+                  case '2':
                     colour = '#16A085'
                     break;
-                  case '2|2':
-                    colour = '#27AE60'
-                    break;
-                  case '2|3':
-                    colour = '#2ECC71'
-                    break;
-                  case '3|1':
-                    colour = '#F1C40F'
-                    break;
-                  case '3|2':
+                  case '3':
                     colour = '#E67E22'
-                    break;
-                  case '3|3':
-                    colour = '#D35400'
                     break;
                   case '4+':
                     colour = '#E74C3C'
@@ -791,43 +773,17 @@ Congo.rent_indicators.action_dashboards = function() {
                   count.push(d['count'])
                   id.push(d['id'])
 
-                  // Distribución Programas
-                  // 1|1 #4e67c8
-                  // 2|1 #5eccf3
-                  // 2|2 #a7ea52
-                  // 3|1 #5dceaf
-                  // 3|2 #ff8021
-                  // 4+ #f14124
-
                   // Setea los colores dependiendo del label
                   if (title == 'Distribución Programas') {
                     switch (d['name']) {
-                      case '1|1':
-                        colour = '#8E44AD'
-                        break;
-                      case '1|2':
+                      case '1':
                         colour = '#3498DB'
                         break;
-                      case '1|3':
-                        colour = '#1ABC9C'
-                        break;
-                      case '2|1':
+                      case '2':
                         colour = '#16A085'
                         break;
-                      case '2|2':
-                        colour = '#27AE60'
-                        break;
-                      case '2|3':
-                        colour = '#2ECC71'
-                        break;
-                      case '3|1':
-                        colour = '#F1C40F'
-                        break;
-                      case '3|2':
+                      case '3':
                         colour = '#E67E22'
-                        break;
-                      case '3|3':
-                        colour = '#D35400'
                         break;
                       case '4+':
                         colour = '#E74C3C'
@@ -945,7 +901,7 @@ Congo.rent_indicators.action_dashboards = function() {
                         // Mustra sólo los labels cuyo valor sea mayor al 4%
                         let sum = 0;
                         var label = ctx.chart.data.labels[ctx.dataIndex]
-                        let dataArr = ctx.chart.data.datasets[0].data;
+                        let dataArr = ctx.dataset.data;
                         dataArr.map(data => {
                           sum += data;
                         });
