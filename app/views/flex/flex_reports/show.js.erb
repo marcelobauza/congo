@@ -64,16 +64,18 @@ $.ajax({
         switch (label) {
             case 'Cantidad':
             case 'Promedio Bimestre':
+              serie_colour = 'rgba(61, 64, 70, 0.9)'
+              break;
             case 'Registros Base':
-              serie_colour = '#45feed'
+              serie_colour = 'rgba(44, 46, 52, 0.6)'
               break;
             case 'Promedio':
             case 'Promedio Muestra':
             case 'Registros Usuario':
-              serie_colour = '#ee5f5b'
+              serie_colour = 'rgba(238, 95, 91, 0.9)'
               break;
             default:
-              serie_colour = '#45feed'
+              serie_colour = 'rgba(44, 46, 52, 0.6)'
               break;
           }
 
@@ -114,11 +116,26 @@ $.ajax({
         }
 
         if (title == 'Superficie Útil (barras)' || title == 'Precio (barras)' || title == 'Precio Unitario (barras)') {
+          if (label == 'Registros Base') {
+            datalabels = {
+              anchor: 'center',
+              align: 'center'
+            }
+          } else {
+            datalabels = {
+              anchor: 'end',
+              align: 'end',
+              offset: -5,
+            }
+          }
           chart_type = 'bar';
           datasets.push({
             label: label,
             data: count,
+            borderColor: '#3d4046',
+            borderWidth : 1,
             backgroundColor: serie_colour,
+            datalabels: datalabels
           })
         }
 
@@ -127,6 +144,8 @@ $.ajax({
           datasets.push({
             label: label,
             data: count,
+            borderColor: '#3d4046',
+            borderWidth : 1,
             backgroundColor: serie_colour,
           })
         }
@@ -165,16 +184,19 @@ $.ajax({
           },
           plugins: {
             datalabels: {
-              align: 'center',
-              anchor: 'center',
-              color: '#3d4046',
               font: {
-                size: 10
+                weight: 'bold',
+                size: 12
               },
+              color: '#FFFFFF',
+              textStrokeColor: '#1B2631',
+              textStrokeWidth: 1,
+              textShadowColor: '#000000',
+              textShadowBlur: 5,
               formatter: (value, ctx) => {
-                // Mustra sólo los valores que estén por encima del 3%
+                // Mustra sólo los valores que estén por encima del 4%
                 let sum = 0;
-                let dataArr = ctx.chart.data.datasets[0].data;
+                let dataArr = ctx.dataset.data;
                 dataArr.map(data => {
                     sum += data;
                 });
@@ -207,7 +229,7 @@ $.ajax({
                 beginAtZero: true,
                 fontSize: 10,
                 fontColor: '#3d4046'
-              },
+              }
             }],
           }
         };
