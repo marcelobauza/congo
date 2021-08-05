@@ -196,12 +196,6 @@ function rent_indicators_report_pdf() {
         // Pie de página
         footer()
 
-        // Agrega nueva página
-        doc.addPage('a4', 'portrait')
-
-        // Pie de página
-        footer()
-
         for (var i = 1; i < data.length; i++) {
 
           var reg = data[i];
@@ -276,7 +270,6 @@ function rent_indicators_report_pdf() {
               datasets.push({
                 label: label,
                 data: count,
-                labels: name,
                 id: id,
                 backgroundColor: name_colour,
               })
@@ -295,6 +288,21 @@ function rent_indicators_report_pdf() {
                 pointHoverBackgroundColor: '#e8ebef',
                 pointHoverBorderWidth: 3,
                 pointHitRadius: 5,
+              })
+            }
+
+            if (title == 'Vacancia | Programa' || title == 'Precio Promedio' || title == 'Promedio de Días de Publicación') {
+              chart_type = 'line';
+              datasets.push({
+                label: label,
+                data: count,
+                fill: true,
+                pointStyle: 'circle',
+                backgroundColor: serie_colour,
+                borderColor: serie_colour,
+                borderWidth: 3,
+                pointRadius: 7,
+                showLine: false,
               })
             }
 
@@ -388,7 +396,7 @@ function rent_indicators_report_pdf() {
 
           } else { // Line
 
-            if (title == 'Superficie' || title == 'Vacancia | Rentabilidad') {
+            if (title == 'Superficie' || title == 'Vacancia | Rentabilidad' || title == 'Vacancia | Programa' || title == 'Precio Promedio' || title == 'Promedio de Días de Publicación') {
 
               y_axes = [{
                 ticks: {
@@ -435,6 +443,29 @@ function rent_indicators_report_pdf() {
 
             }
 
+            // Seteamos datalabels
+            if (title == 'Vacancia | Programa' || title == 'Precio Promedio' || title == 'Promedio de Días de Publicación') {
+              datalabels = {
+                formatter: function(value, context) {
+                  if (value > 0) {
+                    return value.toLocaleString('es-ES')
+                  } else {
+                    return null
+                  }
+                },
+                align: 'start',
+                anchor: 'start',
+                color: '#3d4046',
+                font: {
+                  size: 10
+                },
+              }
+            } else {
+              datalabels = {
+                display: false,
+              }
+            }
+
             var chart_options = {
               animation: false,
               responsive: true,
@@ -456,21 +487,7 @@ function rent_indicators_report_pdf() {
                 }
               },
               plugins: {
-                datalabels: {
-                  formatter: function(value, context) {
-                    if (value > 0) {
-                      return value.toLocaleString('es-ES')
-                    } else {
-                      return null
-                    }
-                  },
-                  align: 'start',
-                  anchor: 'start',
-                  color: '#3d4046',
-                  font: {
-                    size: 10
-                  },
-                }
+                datalabels: datalabels,
               },
               scales: {
                 xAxes: [{
@@ -506,6 +523,12 @@ function rent_indicators_report_pdf() {
 
           if (i % 2 != 0) {
 
+            // Agrega nueva página
+            doc.addPage('a4', 'portrait')
+
+            // Pie de página
+            footer()
+
             // Título del gráfico
             doc.setFontSize(16);
             doc.setFontStyle("bold");
@@ -514,37 +537,6 @@ function rent_indicators_report_pdf() {
             // Gráfico
             img_height = (final_chart.height * 190) / final_chart.width
             doc.addImage(chart, 'JPEG', 9, 30, 190, img_height);
-
-            // if (title == 'Distribución Programas') {
-            //
-            //   // agrega nombre de serie al chart
-            //   var dataset_label = chart_data.datasets
-            //   var lab_y_pos = 28;
-            //   for (var e = 0; e < dataset_label.length; e++) {
-            //     var lab = dataset_label[e]['label']
-            //     doc.setFontSize(10);
-            //     doc.setFontStyle("bold");
-            //     doc.text(lab, 105, lab_y_pos, null, null, 'center');
-            //     lab_y_pos += 32
-            //   }
-            //
-            //   // agrega leyendas debajo del chart
-            //   var doughnut_legends = final_chart.generateLegend();
-            //   var rect_x_pos = 60
-            //   var text_x_pos = 65
-            //   for (var a = 0; a < doughnut_legends.length; a++) {
-            //     var leg = doughnut_legends[a]
-            //     var label = leg['label']
-            //     var color = leg['color']
-            //     doc.setFontStyle("normal");
-            //     doc.text(label, text_x_pos, 133);
-            //     doc.setDrawColor(0)
-            //     doc.setFillColor(color)
-            //     doc.rect(rect_x_pos, 130, 3, 3, 'F')
-            //     rect_x_pos += 12
-            //     text_x_pos += 12
-            //   }
-            // }
 
           } else {
 
@@ -556,12 +548,6 @@ function rent_indicators_report_pdf() {
             // Gráfico
             img_height = (final_chart.height * 190) / final_chart.width
             doc.addImage(chart, 'JPEG', 9, 170, 190, img_height);
-
-            // Agrega nueva página
-            doc.addPage('a4', 'portrait')
-
-            // Pie de página
-            footer()
 
           } // Cierra if impar
         } // Cierra for
