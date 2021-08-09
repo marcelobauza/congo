@@ -252,6 +252,12 @@ $.ajax({
               usePointStyle: true,
             }
           },
+          layout: {
+              padding: {
+                right: 20,
+                top: 15
+              }
+          },
           plugins: {
             datalabels: {
               formatter: function(value, context) {
@@ -273,8 +279,8 @@ $.ajax({
                   }
                 }
               },
-              align: 'start',
-              anchor: 'start',
+              align: 'end',
+              anchor: 'end',
               color: '#3d4046',
               font: {
                 size: 10
