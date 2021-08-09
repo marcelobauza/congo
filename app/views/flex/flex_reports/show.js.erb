@@ -441,7 +441,7 @@ $.ajax({
     doc.text("Superficie Útil", 30, 150);
     doc.text("Promedio: " + avg_sup_util + " m2", 30, 155);
     doc.addImage(supUtilChartPDF_img, 'JPEG', 30, 160, 70, img_height);
-    doc.text("Precio Unitario Util", 105, 150);
+    doc.text("Precio Unitario Útil", 105, 150);
     doc.text("Promedio: " + avg_precio_uni + " UFm2", 105, 155);
     doc.addImage(precioUnitarioChartPDF_img, 'JPEG', 105, 160, 70, img_height);
 
@@ -465,7 +465,7 @@ $.ajax({
     doc.addImage(supUFChartPDF_img, 'JPEG', 105, 35, 70, img_height);
 
     // Gráficos (segunda fila)
-    doc.text("Rangos Precio Unitario", 30, 90);
+    doc.text("Rangos Precio Unitario Útil", 30, 90);
     doc.addImage(precioUnitarioBarrasChartPDF_img, 'JPEG', 30, 95, 70, img_height);
     doc.text("Rangos Precio (UF)", 105, 90);
     doc.addImage(precioBarrasChartPDF_img, 'JPEG', 105, 95, 70, img_height);
