@@ -367,7 +367,7 @@ function rent_indicators_report_pdf() {
               plugins: {
                 datalabels: {
                   formatter: (value, ctx) => {
-                    // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                    // Mustra sólo los valores (en porcentajes) que estén por encima del 4%
                     let sum = 0;
                     let dataArr = ctx.dataset.data;
                     dataArr.map(data => {
