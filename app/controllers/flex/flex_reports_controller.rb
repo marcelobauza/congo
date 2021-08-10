@@ -231,10 +231,10 @@ class Flex::FlexReportsController < ApplicationController
 
     building_surface = building_surface.as_json(:except => :id)
 
-    # Formatea a 2 decimales
+    # Redondea los valores y pone en 0 los nulos
     building_surface.each do |p|
-      p['count'] = 0.0 if p['count'].nil?
-      p['count'] = ('%.2f' % p['count']).to_f
+      p['count'] = 0 if p['count'].nil?
+      p['count'] = p['count'].round()
     end
 
     avg_building_surface = building_surface.map(&:clone)
@@ -261,10 +261,10 @@ class Flex::FlexReportsController < ApplicationController
 
     price = price.as_json(:except => :id)
 
-    # Formatea a 2 decimales
+    # Redondea los valores y pone en 0 los nulos
     price.each do |p|
-      p['count'] = 0.0 if p['count'].nil?
-      p['count'] = ('%.2f' % p['count']).to_f
+      p['count'] = 0 if p['count'].nil?
+      p['count'] = p['count'].round()
     end
 
     avg_price = price.map(&:clone)
@@ -291,10 +291,10 @@ class Flex::FlexReportsController < ApplicationController
 
     unit_price = unit_price.as_json(:except => :id)
 
-    # Formatea a 2 decimales
+    # Redondea los valores y pone en 0 los nulos
     unit_price.each do |p|
-      p['count'] = 0.0 if p['count'].nil?
-      p['count'] = ('%.2f' % p['count']).to_f
+      p['count'] = 0 if p['count'].nil?
+      p['count'] = p['count'].round()
     end
 
     avg_unit_price = unit_price.map(&:clone)
