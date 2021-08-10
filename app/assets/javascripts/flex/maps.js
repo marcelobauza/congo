@@ -125,10 +125,13 @@ function cql_filter_data() {
   if (Object.keys(dataUnit_prices).length > 0) {
     data = data + " AND uf_m2_u between " + dataUnit_prices['from'] + " AND " + dataUnit_prices['to']
   }
-console.log("Geoserver")
-console.log(land_useType)
-  if (land_useType.length > 0) {
-    data = data + ' AND building_regulation IN(' + land_useType + ')'
+  transactionLandUseType = []
+  $.each(land_useType, function(a, b){
+    transactionLandUseType.push("'" + b + "'")
+  })
+
+  if (transactionLandUseType.length > 0) {
+    data = data + ' AND building_regulation IN(' + transactionLandUseType + ')'
   }
 
   return data
