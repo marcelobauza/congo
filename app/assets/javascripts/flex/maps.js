@@ -103,7 +103,7 @@ function cql_filter_data() {
   }
 
   if (propertyTypes.length > 0 ) {
-    data = " AND property_type_id IN(" + propertyTypes + ")"
+    data = data + " AND property_type_id IN(" + propertyTypes + ")"
   }
 
   if (sellerTypes.length > 0 ) {
@@ -124,6 +124,11 @@ function cql_filter_data() {
 
   if (Object.keys(dataUnit_prices).length > 0) {
     data = data + " AND uf_m2_u between " + dataUnit_prices['from'] + " AND " + dataUnit_prices['to']
+  }
+console.log("Geoserver")
+console.log(land_useType)
+  if (land_useType) {
+    data = data + " AND building_regulation IN(" + land_useType + ")"
   }
 
   return data
