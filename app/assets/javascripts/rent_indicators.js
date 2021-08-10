@@ -367,7 +367,7 @@ function rent_indicators_report_pdf() {
               plugins: {
                 datalabels: {
                   formatter: (value, ctx) => {
-                    // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                    // Mustra sólo los valores (en porcentajes) que estén por encima del 4%
                     let sum = 0;
                     let dataArr = ctx.dataset.data;
                     dataArr.map(data => {
@@ -453,8 +453,8 @@ function rent_indicators_report_pdf() {
                     return null
                   }
                 },
-                align: 'start',
-                anchor: 'start',
+                align: 'end',
+                anchor: 'end',
                 color: '#3d4046',
                 font: {
                   size: 10
@@ -483,7 +483,8 @@ function rent_indicators_report_pdf() {
               },
               layout: {
                 padding: {
-                  right: 40
+                  right: 40,
+                  top: 25
                 }
               },
               plugins: {
@@ -976,8 +977,8 @@ Congo.rent_indicators.action_dashboards = function() {
                         return null
                       }
                     },
-                    align: 'start',
-                    anchor: 'start',
+                    align: 'end',
+                    anchor: 'end',
                     color: '#e8ebef',
                     font: {
                       size: 9
@@ -1002,6 +1003,11 @@ Congo.rent_indicators.action_dashboards = function() {
                       fontColor: '#e8ebef',
                       boxWidth: 12,
                       padding: 8,
+                    }
+                  },
+                  layout: {
+                    padding: {
+                      top: 15
                     }
                   },
                   plugins: {
