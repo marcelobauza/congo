@@ -16,7 +16,7 @@ function update_filters() {
     });
 
     for (i = 0; i < $(parsed_data['building_regulation']).length; i++) {
-        $("#land_use").append($('<option>').val($(parsed_data['building_regulation'])[i]).text($(parsed_data['building_regulation'])[i]));
+        $("#land_use").append($('<option>').val("'" + $(parsed_data['building_regulation'])[i] + "'").text($(parsed_data['building_regulation'])[i]));
     }
     $(parsed_data['inscription_dates']).each(function () {
         var lang      = "es-ES";

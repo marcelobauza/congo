@@ -127,8 +127,8 @@ function cql_filter_data() {
   }
 console.log("Geoserver")
 console.log(land_useType)
-  if (land_useType) {
-    data = data + " AND building_regulation IN(" + land_useType + ")"
+  if (land_useType.length > 0) {
+    data = data + ' AND building_regulation IN(' + land_useType + ')'
   }
 
   return data
