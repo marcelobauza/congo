@@ -15,8 +15,8 @@ function update_filters() {
         $("#seller_type").append($('<option>').val($(this)[1]).text($(this)[0]));
     });
 
-    for (i = 0; i < $(parsed_data['land_use']).length; i++) {
-        $("#land_use").append($('<option>').val($(parsed_data['land_use'])[i]).text($(parsed_data['land_use'])[i]));
+    for (i = 0; i < $(parsed_data['building_regulation']).length; i++) {
+        $("#land_use").append($('<option>').val($(parsed_data['building_regulation'])[i]).text($(parsed_data['building_regulation'])[i]));
     }
     $(parsed_data['inscription_dates']).each(function () {
         var lang      = "es-ES";

@@ -85,7 +85,7 @@ class Flex::FlexReportsController < ApplicationController
     total_surface_terrain = []
     calculated_value = []
     uf_m2_u = []
-    building_zone = []
+    building_regulation = []
     aminciti = []
     hectarea_inhabitants = []
 
@@ -97,6 +97,7 @@ class Flex::FlexReportsController < ApplicationController
         transactions.total_surface_building,
         transactions.total_surface_terrain,
         transactions.calculated_value,
+        transactions.building_regulation,
         transactions.uf_m2_u
               ")
                 .method_selection(params)
@@ -110,7 +111,7 @@ class Flex::FlexReportsController < ApplicationController
                 total_surface_terrain << tr.total_surface_terrain.to_f unless total_surface_terrain.include? tr.total_surface_terrain
                 calculated_value << tr.calculated_value.to_f unless calculated_value.include? tr.calculated_value
                 uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
-                building_zone << ''
+                building_regulation << tr.building_regulation
               end
 
               project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
@@ -138,7 +139,8 @@ class Flex::FlexReportsController < ApplicationController
                 'unit_prices': {
                   'from': uf_m2_u.min,
                   'to': uf_m2_u.max
-                }
+                },
+                'building_regulation': building_regulation.uniq
               }
               render json: result
   end
@@ -178,7 +180,7 @@ class Flex::FlexReportsController < ApplicationController
 
               @data = @data.where(:property_type_id => property_types) unless property_types.nil?
               @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
-             # @data = @data.where(building_regulations: {:building_zone => land_use}) unless land_use.nil?
+              @data = @data.where(building_regulation: land_use) unless land_use.nil?
               @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
               @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
               @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
