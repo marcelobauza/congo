@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_18_225332) do
+ActiveRecord::Schema.define(version: 2021_08_11_233311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -788,6 +788,7 @@ ActiveRecord::Schema.define(version: 2021_05_18_225332) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "land_m2", precision: 12, scale: 1
+    t.integer "tax_appraisal"
     t.index ["county_sii_id"], name: "tax_lands_county_sii_idx"
     t.index ["rol_number"], name: "tax_lands_role_idx"
   end
@@ -888,11 +889,11 @@ ActiveRecord::Schema.define(version: 2021_05_18_225332) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "additional_roles"
+    t.integer "tax_appraisal"
     t.index ["bimester"], name: "index_transactions_bimester"
     t.index ["county_id"], name: "index_transactions_on_county_id"
     t.index ["number"], name: "index_transactions_number"
     t.index ["role"], name: "role_1_idx"
-    t.index ["the_geom"], name: "id_transactions_the_geom", using: :gist
     t.index ["user_id"], name: "index_transactions_on_user_id"
     t.index ["year"], name: "index_transactions_year"
   end
