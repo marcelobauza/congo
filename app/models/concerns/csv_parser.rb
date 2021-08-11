@@ -5,7 +5,7 @@ module CsvParser
                 "OBSERVACIONES","LEVANTADO","DIGITADO", "LON", "LAT"]
 
   CBR_HEADER_SII = ["N°","FECHA","TOMO","FOJA","NUMERO","RUT_COMP","COMPRADOR","VENDEDOR","VENDE","CALLE","NUMERO","COMUNA","LOTE","MANZANA",
-                    "VILLA","CASA","DPTO","ESTAC","CANT_EST","BODEGA","CANT_BOD","OFICINA","LOCAL","USO","SUPERFICIE","PLANO","PESOS","UF","ROL","ROL2", "ROL3","ROLES ADICIONALES" ,"REQUIRIENTE",  "OBSERVACIONES","LEVANTADO","DIGITADO", "LON", "LAT", "TOTAL_SUP_CONSTRUIDO", "TOTAL_SUP_TERRENO", "UF_M2_U", "UF_M2_T","CODIGO_DEST", "CODIGO_MAT.", "ANO_SII"]
+                    "VILLA","CASA","DPTO","ESTAC","CANT_EST","BODEGA","CANT_BOD","OFICINA","LOCAL","USO","SUPERFICIE","PLANO","PESOS","UF","ROL","ROL2", "ROL3","ROLES ADICIONALES" ,"REQUIRIENTE",  "OBSERVACIONES","LEVANTADO","DIGITADO", "LON", "LAT", "TOTAL_SUP_CONSTRUIDO", "TOTAL_SUP_TERRENO", "UF_M2_U", "UF_M2_T","CODIGO_DEST", "CODIGO_MAT.", "ANO_SII", "AVALUO"]
 
   FUTURE_PROJECT = ["CODE", "ADDRESS","NAME", "ROLE_NUMBER", "FILE_NUMBER", "FILE_DATE", "OWNER", "LEGAL_AGENT", "ARCHITECH", "FLOORS", "UNDERGROUNDS", "TOTAL_UNITS", "TOTAL_PARKING", "TOTAL_COMMERCIALS", "M2_APPROVED", "M2_BUILT", "M2_FIELD", "CADASTRAL_DATE", "COMMENTS", "BIMESTER", "YEAR", "CADASTRE", "PROJECT_TYPE_ID", "FUTURE_PROJECT_TYPE_ID", "COUNTY", "X", "Y", "ID", "T_OFI"]
   PROJECT_HEADER = ["CODE","NAME", "ADDRESS", "FLOORS", "COUNTY", "PROJECT_TYPE", "BUILD_DATE", "SALE_DATE", "TRANSFER_DATE", "PILOT_DATE", "PROJECT_STATUS", "QUANTITY_DEPARTMENT", "ELEVATORS", "OBSERVATIONS", "PROJECT_STATUS_ID", "BIMESTER", "YEAR", "CADASTRE",  "STOCK_UNITS", "MIX_USABLE_M2", "MIX_TERRACE_M2", "LIVING", "SERVICE", "OFFICE", "UF_MIN", "UF_MAX", "UF_PARKING", "UF_CELLAR", "COMMON_EXPENSES", "TOTAL_UNITS", "T_MIN", "T_MAX", "HOME_TYPE", "MODEL", "LON", "LAT", "BAÑOS", "DORMITORIOS"]
@@ -71,7 +71,7 @@ end
                   t.department.scan(/E\d+/).join("-"), t.parkingi,t.department.scan(/B\d+/).join("-"), t.cellar, t.department.scan(/O\d+/).join("-"),
                   t.department.scan(/LC\d+/).join("-"),t.property_type.get_my_initials, t.surface, t.blueprint, t.real_value, t.calculated_value, t.role, t.role_1, t.role_2, t.additional_roles,
                   t.requiring_entity,t.comments, t.surveyor_id.nil? ? "" : t.surveyor.name, t.surveyor.nil? ? "": t.surveyor.name, t.the_geom.x,
-                  t.the_geom.y, t.total_surface_building, t.total_surface_terrain, t.uf_m2_u, t.uf_m2_t,t.code_destination, t.code_material, t.year_sii]
+                  t.the_geom.y, t.total_surface_building, t.total_surface_terrain, t.uf_m2_u, t.uf_m2_t,t.code_destination, t.code_material, t.year_sii, t.tax_appraisal]
 
         writer << values
       end

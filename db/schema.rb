@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_23_145201) do
+ActiveRecord::Schema.define(version: 2021_08_11_233311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -839,6 +839,10 @@ ActiveRecord::Schema.define(version: 2021_07_23_145201) do
     t.integer "county_sii_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "land_m2", precision: 12, scale: 1
+    t.integer "tax_appraisal"
+    t.index ["county_sii_id"], name: "tax_lands_county_sii_idx"
+    t.index ["rol_number"], name: "tax_lands_role_idx"
   end
 
   create_table "tax_useful_surfaces", force: :cascade do |t|
@@ -921,9 +925,11 @@ ActiveRecord::Schema.define(version: 2021_07_23_145201) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "additional_roles"
+    t.integer "tax_appraisal"
+    t.index ["bimester"], name: "index_transactions_bimester"
     t.index ["county_id"], name: "index_transactions_on_county_id"
-    t.index ["property_type_id"], name: "index_transactions_on_property_type_id"
-    t.index ["seller_type_id"], name: "index_transactions_on_seller_type_id"
+    t.index ["number"], name: "index_transactions_number"
+    t.index ["role"], name: "role_1_idx"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
@@ -1048,7 +1054,7 @@ ActiveRecord::Schema.define(version: 2021_07_23_145201) do
       DECLARE m int;
       BEGIN
         m = months2(cadastre, sale_date);
-        RETURN ( SELECT CASE (total_units - stock_units) WHEN 0 THEN 0 
+        RETURN ( SELECT CASE (total_units - stock_units) WHEN 0 THEN 0
         ELSE CASE m WHEN 0 THEN null
         ELSE (stock_units / ((total_units - stock_units)::double precision /m)) END
                                                       END) as masud;
@@ -1070,7 +1076,7 @@ ActiveRecord::Schema.define(version: 2021_07_23_145201) do
         if (disp = 0) then
           return 0;
         else
-          RETURN (select sum(pim.mix_usable_square_meters * pim.stock_units)/disp::int 
+          RETURN (select sum(pim.mix_usable_square_meters * pim.stock_units)/disp::int
             as pp_utiles
             from project_instance_mixes pim
             where pim.project_instance_id = proj_instance_id);
@@ -1142,7 +1148,7 @@ ActiveRecord::Schema.define(version: 2021_07_23_145201) do
        LANGUAGE plpgsql
       AS $function$
         BEGIN
-            
+
             RETURN (select (date_part('year', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('year', to_date(p.sale_date, 'DD/MM/YYYY'))) * 12 +
               (date_part('month', to_date(pi.cadastre, 'DD/MM/YYYY')) - date_part('month', to_date(p.sale_date, 'DD/MM/YYYY')))
               from project_instances pi inner join projects p
@@ -1217,7 +1223,7 @@ ActiveRecord::Schema.define(version: 2021_07_23_145201) do
        LANGUAGE plpgsql
       AS $function$
         BEGIN
-            
+
             RETURN (select sum(vhmu) from project_instance_mix_views where project_instance_id = proj_instance_id) as vhmo;
 
           END;
