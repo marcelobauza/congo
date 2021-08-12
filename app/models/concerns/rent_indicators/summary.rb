@@ -126,7 +126,6 @@ module RentIndicators::Summary
         mix_types.map do |key, mix|
           percentage_by_distribution = (mix.size.to_f / projects.count).to_f
           count                      = rented_park * percentage_by_distribution
-
           data.push("name": key, "count": count.to_i)
         end
 
@@ -186,16 +185,53 @@ module RentIndicators::Summary
       end
 
       def vacancy_by_mix_types neighborhood, bimester, year
+
+        projects = RentProject.where(
+          "ST_CONTAINS(
+          ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
+        )
+
+        mix_types = projects.group_by { |s| "#{s.bedroom.to_i + s.half_bedroom.to_i}"}
+
+        data        = []
+        series      = []
+        rented_park = (neighborhood.total_departments * neighborhood.tenure).to_i
+
+        mix_types.map do |key, mix|
+          percentage_by_distribution = (mix.size.to_f / projects.count).to_f
+          count                      = rented_park * percentage_by_distribution
+          data.push("name": key, "count": count.to_i)
+        end
+
+        data_final = [
+          {name: '1', count: 0},
+          {name: '2', count: 0},
+          {name: '3', count: 0},
+          {name: '4+', count: 0}
+        ]
+
+        data.each do |row|
+          case row[:name]
+          when '1'
+            data_final[0][:count] = row[:count]
+          when '2'
+            data_final[1][:count] = row[:count]
+          when '3'
+            data_final[2][:count] = row[:count]
+          else
+            suma = data_final[3][:count] + row[:count]
+            data_final[3][:count] = suma
+          end
+        end
+
         data_bots = []
         series    = []
         bots      = bots_offer(neighborhood, bimester, year)
 
         bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}" }
 
-        total_rows = 0
         bots_mix_types.map do |key, mix|
           data_bots.push("name": key, "count": mix.size)
-          total_rows = total_rows + mix.size
         end
 
         data_bots_final = [
@@ -219,11 +255,18 @@ module RentIndicators::Summary
           end
         end
 
-        data_bots_final.each do |df|
-          df[:count] = "%.1f" % (df[:count] * 100 / total_rows.to_f)
+        data_vacancy = [
+          {name: '1', count: 0},
+          {name: '2', count: 0},
+          {name: '3', count: 0},
+          {name: '4+', count: 0},
+        ]
+
+        4.times do |i|
+          data_vacancy[i][:count] = (((data_bots_final[i][:count]).to_f / (data_final[i][:count]).to_f) * 100).round(1) if data_final[i][:count] != 0
         end
 
-        series << { label: "Oferta", data: data_bots_final } if data_bots_final.any?
+        series << { label: "Vacancia", data: data_vacancy } if data_vacancy.any?
       end
 
       def avg_price neighborhood, bimester, year
