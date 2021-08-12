@@ -266,7 +266,7 @@ class Flex::FlexReportsController < ApplicationController
     # Redondea los valores y pone en 0 los nulos
     price.each do |p|
       p['count'] = 0 if p['count'].nil?
-      p['count'] = p['count'].round()
+      p['count'] = p['count'].round(1)
     end
 
     avg_price = price.map(&:clone)
