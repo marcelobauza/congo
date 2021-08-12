@@ -170,7 +170,7 @@ class Flex::FlexReportsController < ApplicationController
         transactions.total_surface_terrain::integer AS terrain_surface,
         transactions.parkingi AS parking_lot,
         transactions.cellar,
-        transactions.calculated_value::integer AS price
+        transactions.calculated_value AS price
               ")
                 .joins("INNER JOIN property_types ON (property_types.id = transactions.property_type_id)")
                 .joins("INNER JOIN seller_types ON (seller_types.id = transactions.seller_type_id)")
