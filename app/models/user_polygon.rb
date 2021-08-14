@@ -5,11 +5,13 @@ class UserPolygon < ApplicationRecord
     @wkt =  convert_geometry_as_text data
     return if @wkt.nil?
     @wkt.each do |wkt|
-      up = UserPolygon.new()
-      up.wkt = wkt['wkt']
-      up.user_id = data[:user_id]
-      up.layertype = data['controller']
-      up.save!
+      if wkt['wkt_area'] <= 50000000
+        up = UserPolygon.new()
+        up.wkt = wkt['wkt']
+        up.user_id = data[:user_id]
+        up.layertype = data['controller']
+        up.save!
+      end
     end
   end
 
@@ -18,18 +20,21 @@ class UserPolygon < ApplicationRecord
     case type_geometry
     when 'circle'
       radius = data['radius'].to_f / 1000
-      @wkt = ActiveRecord::Base.connection.execute("select ST_ASTEXT(st_buffer(ST_GeomFromText('POINT(#{data[:centerpt]})'), #{radius}, 8 )) as wkt")
+      @wkt = ActiveRecord::Base.connection.execute("select ST_ASTEXT(st_buffer(ST_GeomFromText('POINT(#{data[:centerpt]})'), #{radius}, 8 )) as wkt,
+                                                   st_area(st_buffer(ST_GeomFromText('POINT(#{data[:centerpt]})'), #{radius}, 8 ), false) as wkt_area")
     when 'polygon'
       polygon = JSON.parse(data[:wkt])
-      @wkt = ActiveRecord::Base.connection.execute("select st_astext(st_geomfromGeojson('{\"type\":\"Polygon\", \"coordinates\": #{polygon[0]} }')) as wkt")
+      @wkt = ActiveRecord::Base.connection.execute("select st_astext(st_geomfromGeojson('{\"type\":\"Polygon\", \"coordinates\": #{polygon[0]} }')) as wkt,
+                                                   st_area(st_geomfromGeojson('{\"type\":\"Polygon\", \"coordinates\": #{polygon[0]} }'), false) as wkt_area")
     else
       county_id = data[:county_id]
       county = County.find(county_id)
       @wkt=[]
       county.each do |c|
-        @wkt.push({"wkt" => c.the_geom.as_text})
+        @wkt.push({"wkt" => c.the_geom.as_text, "wkt_area"=>1})
       end
     end
+
     @wkt
   end
 
