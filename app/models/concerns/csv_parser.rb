@@ -10,7 +10,7 @@ module CsvParser
   FUTURE_PROJECT = ["CODE", "ADDRESS","NAME", "ROLE_NUMBER", "FILE_NUMBER", "FILE_DATE", "OWNER", "LEGAL_AGENT", "ARCHITECH", "FLOORS", "UNDERGROUNDS", "TOTAL_UNITS", "TOTAL_PARKING", "TOTAL_COMMERCIALS", "M2_APPROVED", "M2_BUILT", "M2_FIELD", "CADASTRAL_DATE", "COMMENTS", "BIMESTER", "YEAR", "CADASTRE", "PROJECT_TYPE_ID", "FUTURE_PROJECT_TYPE_ID", "COUNTY", "X", "Y", "ID", "T_OFI"]
   PROJECT_HEADER = ["CODE","NAME", "ADDRESS", "FLOORS", "COUNTY", "PROJECT_TYPE", "BUILD_DATE", "SALE_DATE", "TRANSFER_DATE", "PILOT_DATE", "PROJECT_STATUS", "QUANTITY_DEPARTMENT", "ELEVATORS", "OBSERVATIONS", "PROJECT_STATUS_ID", "BIMESTER", "YEAR", "CADASTRE",  "STOCK_UNITS", "MIX_USABLE_M2", "MIX_TERRACE_M2", "LIVING", "SERVICE", "OFFICE", "UF_MIN", "UF_MAX", "UF_PARKING", "UF_CELLAR", "COMMON_EXPENSES", "TOTAL_UNITS", "T_MIN", "T_MAX", "HOME_TYPE", "MODEL", "LON", "LAT", "BAÑOS", "DORMITORIOS"]
 
-POLYGON_HEADER = ["USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
+POLYGON_HEADER = ["ID", "USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
 
 DOWNLOADS_USERS_HEADER = ["USUARIO", "FECHA", "COMPRAVENTAS", "EXPEDIENTES", "PROYECTOS"]
 
@@ -118,7 +118,7 @@ end
 
       polygon.each do |t|
         username = User.find_by_id(t.user_id)
-        values = [username.name, t.created_at.to_date.strftime("%d/%m/%Y"), t.layertype, t.wkt, username.company]
+        values = [t.id, username.name, t.created_at.to_date.strftime("%d/%m/%Y"), t.layertype, t.wkt, username.company]
         writer << values
       end
     end
