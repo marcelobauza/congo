@@ -804,11 +804,11 @@ Congo.map_utils = function(){
     });
 
         Congo.rent_indicators.config.legends = [];
-        Congo.rent_indicators.config.legends.push({'name':'Alto', 'color':'#016c59'});
-        Congo.rent_indicators.config.legends.push({'name':'Medio Alto', 'color':'#1c9099'});
-        Congo.rent_indicators.config.legends.push({'name':'Medio', 'color':'#67a9cf'});
-        Congo.rent_indicators.config.legends.push({'name':'Medio Bajo', 'color':'#a6bddb'});
-        Congo.rent_indicators.config.legends.push({'name':'Bajo', 'color':'#d0d1e6'});
+        Congo.rent_indicators.config.legends.push({'name':'Alto', 'color':'#d73027'});
+        Congo.rent_indicators.config.legends.push({'name':'Medio Alto', 'color':'#fc8d59'});
+        Congo.rent_indicators.config.legends.push({'name':'Medio', 'color':'#fee090'});
+        Congo.rent_indicators.config.legends.push({'name':'Medio Bajo', 'color':'#e0f3f8'});
+        Congo.rent_indicators.config.legends.push({'name':'Bajo', 'color':'#91bfdb'});
     legends =  Congo.rent_indicators.config.legends
     remove_legend();
         legend_points(legends, map);
@@ -824,17 +824,17 @@ Congo.map_utils = function(){
       let vacancy = parseFloat(feature.properties.vacancy);
       switch (true){
         case (vacancy < 4):
-          return {"fillColor":  "#d0d1e6", "color": "#d0d1e6", "fillOpacity": "0.6", "weight": 1, "color": "#888" };
+          return {"fillColor":  "#d0d1e6", "color": "#91bfdb", "fillOpacity": "0.6", "weight": 1, "color": "#888" };
         case (vacancy >= 4) && (vacancy < 8):
-          return {"fillColor":  "#a6bddb", "color": "#a6bddb", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#a6bddb", "color": "#e0f3f8", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
         case (vacancy >= 8) && (vacancy < 12):
-          return {"fillColor":  "#67a9cf", "color": "#67a9cf", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#67a9cf", "color": "#fee090", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
         case (vacancy >= 12) && (vacancy < 16):
-          return {"fillColor":  "#1c9099", "color": "#1c9099", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#1c9099", "color": "#fc8d59", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
         case (vacancy >= 16):
-          return {"fillColor":  "#016c59", "color": "#016c59", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#016c59", "color": "#d73027", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
         default:
-          return {"fillColor":  "#d0d1e6", "color": "#d0d1e6", "fillOpacity": "0.6", "weight": 1, "color": "#888" };
+          return {"fillColor":  "#d0d1e6", "color": "#91bfdb", "fillOpacity": "0.6", "weight": 1, "color": "#888" };
       }
     }
 
@@ -847,17 +847,17 @@ Congo.map_utils = function(){
       console.log(price)
       switch (true){
         case (price < 400000):
-          return {"fillColor":  "#d0d1e6", "color": "#d0d1e6", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#d0d1e6", "color": "#91bfdb", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
         case (price >= 400000) && (price < 800000):
-          return {"fillColor":  "#a6bddb", "color": "#a6bddb", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#a6bddb", "color": "#e0f3f8", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
         case (price >= 800000) && (price < 1200000):
-          return {"fillColor":  "#67a9cf", "color": "#67a9cf", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#67a9cf", "color": "#fee090", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
         case (price >= 1200000) && (price < 1600000):
-          return {"fillColor":  "#1c9099", "color": "#1c9099", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#1c9099", "color": "#fc8d59", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
         case (price >= 1600000):
-          return {"fillColor":  "#016c59", "color": "#016c59", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#016c59", "color": "#d73027", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
         default:
-          return {"fillColor":  "#d0d1e6", "color": "#d0d1e6", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
+          return {"fillColor":  "#d0d1e6", "color": "#91bfdb", "fillOpacity": "0.6", "weight": 1, "color": "#888"};
 
       }
     }
