@@ -493,11 +493,11 @@ Congo.demography.action_dashboards = function(){
     //Legends
     Congo.demography.config.legends = [];
 
-    Congo.demography.config.legends.push({'name':'ABC1', 'color':'004b99'});
-    Congo.demography.config.legends.push({'name':'C2', 'color':'3b8ea5'});
-    Congo.demography.config.legends.push({'name':'C3', 'color':'f5ee9e'});
-    Congo.demography.config.legends.push({'name':'D', 'color':'f49e4c'});
-    Congo.demography.config.legends.push({'name':'E', 'color':'ab3428'});
+    Congo.demography.config.legends.push({'name':'ABC1', 'color':'d73027'});
+    Congo.demography.config.legends.push({'name':'C2', 'color':'fc8d59'});
+    Congo.demography.config.legends.push({'name':'C3', 'color':'fee090'});
+    Congo.demography.config.legends.push({'name':'D', 'color':'e0f3f8'});
+    Congo.demography.config.legends.push({'name':'E', 'color':'91bfdb'});
 
     $.ajax({
       type: 'GET',
