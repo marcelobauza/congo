@@ -9,7 +9,7 @@ class CountiesUser < ApplicationRecord
     feature = []
     counties.each do |c|
       county = c.county
-      feature << factory.feature(c.county.county_centroid, nil, {name: c.county.name, id: c.county.id})
+      feature << factory.feature(c.county.region.centroid, nil, {name: c.county.name, id: c.county.id})
     end
 
     output_geojson_collection =  RGeo::GeoJSON.encode factory.feature_collection(feature)
