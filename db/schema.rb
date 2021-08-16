@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_11_233311) do
+ActiveRecord::Schema.define(version: 2021_08_16_150821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -670,6 +670,7 @@ ActiveRecord::Schema.define(version: 2021_08_11_233311) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.geometry "centroid", limit: {:srid=>0, :type=>"st_point"}
   end
 
   create_table "regions_users", force: :cascade do |t|
