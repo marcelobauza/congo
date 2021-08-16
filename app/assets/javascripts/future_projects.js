@@ -719,12 +719,12 @@ Congo.future_projects.action_graduated_points = function(){
   init=function(){
         Congo.dashboards.config.style_layer= 'future_projects_point_graduated_m2_built';
         Congo.future_projects.config.legends =[];
-        Congo.future_projects.config.legends.push({'name':'Menor a 2.499', 'color':'d9d2b0'});
-        Congo.future_projects.config.legends.push({'name':'2.500 a 6.499', 'color':'fcd930'});
-        Congo.future_projects.config.legends.push({'name':'6.500 a 10.999', 'color':'fda821'});
-        Congo.future_projects.config.legends.push({'name':'11.000 a 19.999', 'color':'fa7c16'});
-        Congo.future_projects.config.legends.push({'name':'20.000 a 39.999', 'color':'f94710'});
-        Congo.future_projects.config.legends.push({'name':'Mayor a 40.000', 'color':'9d2608'});
+        Congo.future_projects.config.legends.push({'name':'Menor a 2.499', 'color':'d73027'});
+        Congo.future_projects.config.legends.push({'name':'2.500 a 6.499', 'color':'fc8d59'});
+        Congo.future_projects.config.legends.push({'name':'6.500 a 10.999', 'color':'fee090'});
+        Congo.future_projects.config.legends.push({'name':'11.000 a 19.999', 'color':'e0f3f8'});
+        Congo.future_projects.config.legends.push({'name':'20.000 a 39.999', 'color':'91bfdb'});
+        Congo.future_projects.config.legends.push({'name':'Mayor a 40.000', 'color':'4575b4'});
         Congo.map_utils.counties();
       }
 
