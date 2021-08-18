@@ -7,7 +7,7 @@ class Flex::FlexReportsController < ApplicationController
   # GET /flex/reports
   # GET /flex/reports.json
   def index
-    @flex_reports = FlexReport.all.
+    @flex_reports = FlexReport.where(user_id: current_user.id).
       order(created_at: :desc).
       paginate(page: params[:page], per_page: 10)
 
