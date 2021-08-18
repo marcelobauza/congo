@@ -400,7 +400,6 @@ class Flex::FlexReportsController < ApplicationController
 
     # carga los rangos
     building_surface_range.each do |sup|
-      sup = sup.to_f
       case sup
       when ranges[0]..ranges[1]
         values_range_1 << sup
@@ -435,7 +434,6 @@ class Flex::FlexReportsController < ApplicationController
     values_range_6 = []
 
     user_building_surface.each do |sup|
-      sup = sup.to_f
       case sup
       when ranges[0]..ranges[1]
         values_range_1 << sup
@@ -473,7 +471,7 @@ class Flex::FlexReportsController < ApplicationController
 
     # convierte a float (user)
     bsr_fixed = []
-    user_calculated_value.each { |e| bsr_fixed << e.to_f.round(1) }
+    user_calculated_value.each { |e| bsr_fixed << e.to_i }
     user_calculated_value = bsr_fixed
 
 
@@ -482,21 +480,21 @@ class Flex::FlexReportsController < ApplicationController
 
     # convierte a float
     cvr_fixed = []
-    calculated_value_range.each { |e| cvr_fixed << e.to_f.round(1) }
+    calculated_value_range.each { |e| cvr_fixed << e.to_i }
     calculated_value_range = cvr_fixed
 
     # levanta min y max
-    value_min = calculated_value_range.min
-    value_max = calculated_value_range.max
+    value_min = (calculated_value_range.min).round()
+    value_max = (calculated_value_range.max).round()
 
     # arma rangos
-    val_range = ((value_max - value_min)/6).round(1)
+    val_range = ((value_max - value_min)/6).round()
 
     ranges = []
     ranges << value_min
     new_val = value_min
     5.times do
-      new_val = (new_val + val_range).round(1)
+      new_val = new_val + val_range
       ranges << new_val
     end
     ranges << value_max
@@ -508,27 +506,26 @@ class Flex::FlexReportsController < ApplicationController
     values_range_5 = []
     values_range_6 = []
     label_range_1 = "#{ranges[0]} - #{ranges[1]}"
-    label_range_2 = "#{(ranges[1] + 0.1).round(1)} - #{ranges[2]}"
-    label_range_3 = "#{(ranges[2] + 0.1).round(1)} - #{ranges[3]}"
-    label_range_4 = "#{(ranges[3] + 0.1).round(1)} - #{ranges[4]}"
-    label_range_5 = "#{(ranges[4] + 0.1).round(1)} - #{ranges[5]}"
-    label_range_6 = "#{(ranges[5] + 0.1).round(1)} - #{ranges[6]}"
+    label_range_2 = "#{(ranges[1] + 1)} - #{ranges[2]}"
+    label_range_3 = "#{(ranges[2] + 1)} - #{ranges[3]}"
+    label_range_4 = "#{(ranges[3] + 1)} - #{ranges[4]}"
+    label_range_5 = "#{(ranges[4] + 1)} - #{ranges[5]}"
+    label_range_6 = "#{(ranges[5] + 1)} - #{ranges[6]}"
 
     # carga los rangos
     calculated_value_range.each do |pri|
-      pri = pri.to_f
       case pri
       when ranges[0]..ranges[1]
         values_range_1 << pri
-      when ranges[1] + 0.1..ranges[2]
+      when ranges[1] + 1..ranges[2]
         values_range_2 << pri
-      when ranges[2] + 0.1..ranges[3]
+      when ranges[2] + 1..ranges[3]
         values_range_3 << pri
-      when ranges[3] + 0.1..ranges[4]
+      when ranges[3] + 1..ranges[4]
         values_range_4 << pri
-      when ranges[4] + 0.1..ranges[5]
+      when ranges[4] + 1..ranges[5]
         values_range_5 << pri
-      when ranges[5] + 0.1..ranges[6]
+      when ranges[5] + 1..ranges[6]
         values_range_6 << pri
       end
     end
@@ -551,19 +548,18 @@ class Flex::FlexReportsController < ApplicationController
     values_range_6 = []
 
     user_calculated_value.each do |sup|
-      sup = sup.to_f
       case sup
       when ranges[0]..ranges[1]
         values_range_1 << sup
-      when ranges[1] + 0.1..ranges[2]
+      when ranges[1] + 1..ranges[2]
         values_range_2 << sup
-      when ranges[2] + 0.1..ranges[3]
+      when ranges[2] + 1..ranges[3]
         values_range_3 << sup
-      when ranges[3] + 0.1..ranges[4]
+      when ranges[3] + 1..ranges[4]
         values_range_4 << sup
-      when ranges[4] + 0.1..ranges[5]
+      when ranges[4] + 1..ranges[5]
         values_range_5 << sup
-      when ranges[5] + 0.1..ranges[6]
+      when ranges[5] + 1..ranges[6]
         values_range_6 << sup
       end
     end
@@ -629,7 +625,6 @@ class Flex::FlexReportsController < ApplicationController
 
     # carga los rangos
     uf_m2_u_range.each do |pri_u|
-      pri_u = pri_u.to_f
       case pri_u
       when ranges[0]..ranges[1]
         values_range_1 << pri_u
@@ -664,7 +659,6 @@ class Flex::FlexReportsController < ApplicationController
     values_range_6 = []
 
     uf_m2_array.each do |sup|
-      sup = sup.to_f
       case sup
       when ranges[0]..ranges[1]
         values_range_1 << sup
