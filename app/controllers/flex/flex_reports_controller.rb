@@ -43,6 +43,7 @@ class Flex::FlexReportsController < ApplicationController
       @tr_ids_array << tr.id
     end
 
+    @tenements = Tenement.where(flex_report_id: @flex_report.id)
     respond_to do |format|
       format.js
       format.xlsx {
@@ -721,7 +722,7 @@ class Flex::FlexReportsController < ApplicationController
       params.require(:flex_report).permit(
         :name, :filters, transaction_ids: [],
         tenements_attributes: [:id, :county_id, :property_type_id,
-                              :address, :parking, :cellar, :buidling_surface,
+                              :address, :parking, :cellar, :building_surface,
                               :terrain_surface, :uf]
       ).merge(user_id: current_user.id)
     end

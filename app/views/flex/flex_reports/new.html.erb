@@ -38,7 +38,7 @@
                   </div>
                   <%= link_to_add_fields "Agregar Propiedad", f, :tenements %>
                 </div>
-                <%= f.fields_for :tenements do |s| %>
+                <%= f.simple_fields_for :tenements do |s| %>
                   <%= render 'tenement', f: s %>
                 <% end %>
               <% end %>
