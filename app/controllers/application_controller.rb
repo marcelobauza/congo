@@ -4,6 +4,13 @@ class ApplicationController < ActionController::Base
   #before_action :set_paper_trail_whodunnit
   layout :layout_by_resource
 
+  def after_sign_in_path_for(resource)
+    if current_user.role.name == 'Flex'
+      flex_root_path()
+    else
+      root_path()
+    end
+  end
 
   def layout_by_resource
     if devise_controller? and
@@ -11,7 +18,11 @@ class ApplicationController < ActionController::Base
         action_name == 'new'
       "login"
     else
-      "application"
+      if current_user.role.name == 'Flex'
+        'flex'
+      else
+        "application"
+      end
     end
   end
 
@@ -22,7 +33,4 @@ class ApplicationController < ActionController::Base
   def default_url_options(options = {})
     {locale: I18n.locale}
   end
-
-
-
 end
