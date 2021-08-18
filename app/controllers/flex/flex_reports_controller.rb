@@ -495,7 +495,7 @@ class Flex::FlexReportsController < ApplicationController
     ranges << value_min
     new_val = value_min
     5.times do
-      new_val = new_val + val_range
+      new_val = (new_val + val_range).round(1)
       ranges << new_val
     end
     ranges << value_max
