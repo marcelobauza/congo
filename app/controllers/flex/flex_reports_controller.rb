@@ -691,6 +691,10 @@ class Flex::FlexReportsController < ApplicationController
     # Superficie por UF
     # # # # # # # # # #
 
+    sup_x_uf_user = user_rows
+      .select("uf as name, AVG(building_surface) as count, COUNT(*) as radius")
+      .group(:uf)
+      .order(:uf)
     sup_x_uf = data
       .select("calculated_value as name, AVG(total_surface_building) as count, COUNT(*) as radius")
       .group(:calculated_value)
@@ -698,7 +702,7 @@ class Flex::FlexReportsController < ApplicationController
 
     sup_x_uf = sup_x_uf.as_json(:except => :id)
 
-    result.push({"title": "Superficie por UF", "series": [{"data": sup_x_uf}] })
+    result.push({"title": "Superficie por UF", "series": [{"name": "Registros Base", "data": sup_x_uf}, {"name": "Registros Usuario", "data": sup_x_uf_user}] })
 
     render :json => result
 
