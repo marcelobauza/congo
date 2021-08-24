@@ -582,10 +582,10 @@ class Flex::FlexReportsController < ApplicationController
     # Datos para serie usuario
     user_uf_m2_u = user_rows.select("uf")
 
-    # Arma ufm2 de la base multiplicando precio * sup útil
+    # Arma ufm2 del user multiplicando precio * sup útil
     uf_m2_array = []
     for i in 0..(user_calculated_value.size - 1)
-      uf_m2_array << user_calculated_value[i] * user_building_surface[i]
+      uf_m2_array << user_calculated_value[i] / user_building_surface[i] unless user_building_surface[i] == 0
     end
     uf_m2_u_range = data.pluck("uf_m2_u")
 
