@@ -4,8 +4,8 @@ class User < ApplicationRecord
   include Users::Export
   #has_paper_trail
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :recoverable, :rememberable, :validatable, :session_limitable
+  # :recoverable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :rememberable, :validatable, :session_limitable, :registerable, :confirmable
 
   has_many :counties_users
   has_many :counties, through: :counties_users

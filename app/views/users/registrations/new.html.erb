@@ -1,30 +1,38 @@
-<h2>Sign up</h2>
-iasfdasdf
+<div class="form-signin">
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+    <center> <%=image_tag "round_inciti.png", class: "mb-4", height:"120" %> </center>
 
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
+    <div class="form-group">
+      <%= f.text_field :complete_name, class: 'form-control', placeholder: "Nombre" %>
+    </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+    <div class="form-group">
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control', placeholder: "E-mail" %>
+    </div>
 
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
+    <div class="form-group">
+      <%= f.text_field :rut, class: 'form-control', placeholder: "RUT" %>
+    </div>
 
-<%= render "users/shared/links" %>
+    <div class="form-group">
+      <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
+      <% end %><br />
+      <%= f.password_field :password, autocomplete: "new-password", class: 'form-control', placeholder: "Contraseña" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control', placeholder: "Repetir Contraseña" %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit class: 'btn btn-lg btn-primary btn-block', value: "Regístrate" %>
+    </div>
+  <% end %>
+
+  <%= render "users/shared/links" %>
+
+</div>
