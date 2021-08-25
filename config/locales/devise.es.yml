@@ -18,7 +18,7 @@ es:
       unconfirmed: "You have to confirm your email address before continuing."
     mailer:
       confirmation_instructions:
-        subject: "Confirmation instructions"
+        subject: "Bienvenido a Inciti"
       reset_password_instructions:
         subject: "Reset password instructions"
       unlock_instructions:
