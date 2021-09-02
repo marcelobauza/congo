@@ -9,11 +9,12 @@
     <!-- Barra (Elementos Izquierda)-->
     <ul class="navbar-nav mr-auto">
     </ul>
+    <% if has_orders? %>
       <div class="nav-item dropdown">
         <%= link_to 'Nuevo', new_flex_flex_report_path, :class => 'btn btn-primary',
           data: {confirm: "¿Desea generar un reporte nuevo?"} %>
       </div>
-
+    <% end %>
     <!-- Descarga XLS -->
     <div class="nav-item dropdown" data-flex-downloads-xls></div>
 
