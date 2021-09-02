@@ -27,9 +27,20 @@
       <%= f.collection_select(:region_ids, Region.all.order(:name), :id, :name, {include_blank: true}, {multiple: true}) %>
       <%= f.collection_select(:county_ids, County.where(enabled: true).order(:name), :id, :name, { include_blank: false }, {multiple: true}) %>
       <%= f.collection_select(:layer_types, LayerType.all, :id, :title, { include_blank: false }, {multiple: true}) %>
-      <div class="col-md-3">
-        <span class="help-inline"><%= t('form.hint.user.county').html_safe %></span>
+    <div class="row">
+      <h4>Flex Ordenes</h4>
+    </div>
+      <div class="row">
+        <div class="col-3">Cantidad</div>
+        <div class="col">Fecha creación</div>
       </div>
+      <%= f.simple_fields_for :flex_orders do |fo| %>
+        <%= render 'flex_order_fields', f: fo %>
+      <% end %>
+      <div id="up_table"></div>
+
+      <%= link_to_add_fields "agregar ordenes", f, :flex_orders %>
+
       <%= link_to 'Cancelar', admin_users_path, :class => 'btn btn-secondary' %>
       <%= f.submit "Guardar", class: 'btn btn-primary'%>
     <% end %>

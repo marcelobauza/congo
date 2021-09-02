@@ -54,7 +54,14 @@ class Flex::FlexReportsController < ApplicationController
 
   # GET /flex/reports/new
   def new
+    orders  = current_user.flex_orders.sum(&:amount).to_i
+    reports = current_user.flex_reports.size
+
+    if orders > reports
     @flex_report = FlexReport.new
+    else
+      redirect_to flex_flex_reports_path
+    end
   end
 
   # POST /flex/reports

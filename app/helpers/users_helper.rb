@@ -52,4 +52,11 @@ module UsersHelper
 
     surplus
   end
+
+  def has_orders?
+    orders  = current_user.flex_orders.sum(&:amount).to_i
+    reports = current_user.flex_reports.size
+
+    orders > reports
+  end
 end

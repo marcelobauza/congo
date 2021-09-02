@@ -1,0 +1,14 @@
+<div class="row">
+  <% if f.object.new_record? %>
+    <div class="col-3">
+      <%= f.input :amount, as: :string, label: false %>
+    </div>
+  <% else %>
+    <div class="col-3">
+      <%= f.object.amount %>
+    </div>
+    <div class="col">
+      <%= l f.object.created_at, format: '%d %B de %Y' %>
+    </div>
+  <% end %>
+</div>

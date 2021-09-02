@@ -13,8 +13,12 @@ class User < ApplicationRecord
   has_many :regions, through: :regions_users
   has_many :feedbacks
   has_many :downloads_users
+  has_many :flex_orders
+  has_many :flex_reports
   belongs_to :company
   belongs_to :role
+
+  accepts_nested_attributes_for :flex_orders, :reject_if => lambda {|a| a[:amount].blank? }
 
   validate :is_rut_valid
 
