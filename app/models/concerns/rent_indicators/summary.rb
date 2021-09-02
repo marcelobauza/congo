@@ -43,24 +43,26 @@ module RentIndicators::Summary
 
         bots = bots_offer(neighborhood, bimester, year)
 
-        rent_offer      = (bots.count / 0.9)
-        total_vacancy   = total_vacancy(neighborhood, bimester, year)
-        total_households = neighborhood.total_houses.to_i + neighborhood.total_departments.to_i + future_projects.to_i
-        avg_u_rent      = bots.average(:surface).to_f
-        avg_t_rent      = bots.average(:surface_t).to_f
-        avg_u_sale      = transactions.average(:total_surface_building).to_f
-        avg_cbr         = transactions.average(:calculated_value).to_i
-        avg_price_uf    = bots.average(:price_uf).to_i
-        avg_price_uf_m2 = average_price_uf_m2( bots.average(:price_uf).to_f, avg_u_rent.to_f).to_f
+        rent_offer          = (bots.count / 0.9)
+        total_vacancy       = total_vacancy(neighborhood, bimester, year)
+        total_households    = neighborhood.total_houses.to_i + neighborhood.total_departments.to_i + future_projects.to_i
+        total_departments   = neighborhood.total_departments.to_i + future_projects.to_i
+        avg_u_rent          = bots.average(:surface).to_f
+        avg_t_rent          = bots.average(:surface_t).to_f
+        avg_u_sale          = transactions.average(:total_surface_building).to_f
+        avg_cbr             = transactions.average(:calculated_value).to_i
+        avg_price_uf        = bots.average(:price_uf).to_i
+        avg_price_uf_m2     = average_price_uf_m2( bots.average(:price_uf).to_f, avg_u_rent.to_f).to_f
         gross_profitability = ((((12 * avg_price_uf) - (total_vacancy * 12 * avg_price_uf)) / avg_cbr.to_i) * 100).to_f
+
         pxq = ((avg_price_uf * ((neighborhood.total_departments * neighborhood.tenure) - rent_offer)) / 1000).to_f
 
         data.push("name": "Barrio", "count": neighborhood.name)
-        data.push("name": "Total Viviendas", "count": total_households )
-        data.push("name": "Total Departamentos", "count": neighborhood.total_departments)
-        data.push("name": "Parque Arrendados", "count": (neighborhood.total_departments * neighborhood.tenure).to_i)
+        data.push("name": "Total Viviendas", "count": total_households)
+        data.push("name": "Total Departamentos", "count": total_departments)
+        data.push("name": "Parque Arrendados", "count": (total_departments * neighborhood.tenure).to_i)
         data.push("name": "Porcentaje de Arriendo", "count": "%.1f" % (neighborhood.tenure * 100).to_f)
-        data.push("name": "Oferta de Arriendo" , "count": rent_offer.to_i )
+        data.push("name": "Oferta de Arriendo" , "count": rent_offer.to_i)
         data.push("name": "Tasa de Vacancia", "count": ("%.1f" % (total_vacancy * 100)).to_f)
         data.push("name": "Rentabilidad Bruta Anual", "count": ("%.1f" % gross_profitability).to_f)
         data.push("name": "Superficie Útil Oferta Arriendo", "count": ("%.1f" % avg_u_rent).to_f)
