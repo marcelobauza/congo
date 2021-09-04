@@ -170,15 +170,16 @@ class Flex::FlexReportsController < ApplicationController
       .select("
         transactions.id,
         property_types.name AS property_typee,
-        transactions.inscription_date,
         transactions.address,
         counties.name AS c_name,
         seller_types.name AS seller,
         transactions.total_surface_building::integer AS building_surface,
         transactions.total_surface_terrain::integer AS terrain_surface,
-        transactions.parkingi AS parking_lot,
-        transactions.cellar,
-        transactions.calculated_value::integer AS price
+        transactions.calculated_value::integer AS price,
+        CASE transactions.total_surface_building::integer
+          WHEN 0 THEN null
+          ELSE (transactions.calculated_value::integer / transactions.total_surface_building::integer)
+        END AS ufm2
               ")
                 .joins("INNER JOIN property_types ON (property_types.id = transactions.property_type_id)")
                 .joins("INNER JOIN seller_types ON (seller_types.id = transactions.seller_type_id)")

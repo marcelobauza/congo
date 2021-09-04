@@ -45,14 +45,12 @@ function update_table() {
             '<tr class="genTable">' +
             '<td class="for-order input-checkbox"><input class="form-check-input" data-sel-box type="checkbox" value="' + ($(this)[0]['id']) + '" checked></td>' +
             '<td class="for-order">' + ($(this)[0]["property_typee"]) + '</td>' +
-            '<td class="for-order">' + ($(this)[0]['inscription_date']) + '</td>' +
             '<td class="for-order">' + ($(this)[0]["address"]) + '</td>' +
             '<td class="for-order">' + ($(this)[0]['seller']) + '</td>' +
             '<td class="for-order">' + ($(this)[0]['building_surface']) + '</td>' +
             '<td class="for-order">' + ($(this)[0]['terrain_surface']) + '</td>' +
-            '<td class="for-order">' + ($(this)[0]['parking_lot']) + '</td>' +
-            '<td class="for-order">' + ($(this)[0]['cellar']) + '</td>' +
             '<td class="for-order">' + ($(this)[0]['price']) + '</td>' +
+            '<td class="for-order">' + ($(this)[0]['ufm2']) + '</td>' +
             '<td class="hidden">' + '' + '</td>' +
             '<td class="hidden">' + '' + '</td>' +
             '<td class="hidden">' + ($(this)[0]['id']) + '</td>' +
