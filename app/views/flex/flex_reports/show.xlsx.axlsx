@@ -11,7 +11,8 @@ wb.add_worksheet(name: "Flex") do |sheet|
     'Bodega',
     'UF',
     'Role',
-    'Foja'
+    'Foja',
+    'Avaluo'
   ]
 
   @transactions.each do |row|
@@ -26,7 +27,8 @@ wb.add_worksheet(name: "Flex") do |sheet|
       row.cellar,
       row.calculated_value,
       row.role,
-      row.number
+      row.number,
+      row.tax_appraisal
     ]
   end
 
