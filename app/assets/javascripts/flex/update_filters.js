@@ -1,11 +1,8 @@
 function update_filters() {
-    //parsed_data = data;
     $(".multiselect-native-select option").remove()
 
     $('tr.genTable').remove();
     $(".chartjs-render-monitor").removeAttr('class').removeAttr('style').removeAttr('width').removeAttr('height');
-
-    //$("#prop_type").empty()
 
     $(parsed_data['property_types']).each(function () {
         $("#prop_type").append($('<option>').val($(this)[1]).text($(this)[0]));
@@ -168,5 +165,16 @@ function update_filters() {
     });
     $("#intro").remove();
     $("#select-box").removeClass("d-none");
-    //$("#map_flex").css('height', '100%');
+
+  $("[data-building-regulations-pdf]").empty()
+  $.each(parsed_data['county_codes'], function(code, name){
+    $('[data-building-regulations-pdf]').append(
+      $('<a>', {
+        'class': 'btn btn-primary text-center',
+        'href': 'building_regulation_download?county_id=' + code,
+        'role': 'button',
+        'text': 'Descargar Ordenanza - ' + name
+      })
+    )
+  })
 }

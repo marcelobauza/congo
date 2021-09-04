@@ -85,17 +85,17 @@ class Flex::FlexReportsController < ApplicationController
   end
 
   def search_data_for_filters
-
-    property_type_id = []
-    inscription_date = []
-    seller_type_id = []
+    property_type_id       = []
+    inscription_date       = []
+    seller_type_id         = []
     total_surface_building = []
-    total_surface_terrain = []
-    calculated_value = []
-    uf_m2_u = []
-    building_regulation = []
-    aminciti = []
-    hectarea_inhabitants = []
+    total_surface_terrain  = []
+    calculated_value       = []
+    uf_m2_u                = []
+    building_regulation    = []
+    aminciti               = []
+    hectarea_inhabitants   = []
+    county_codes           = {}
 
     data = Transaction
       .select("
@@ -106,10 +106,11 @@ class Flex::FlexReportsController < ApplicationController
         transactions.total_surface_terrain,
         transactions.calculated_value,
         transactions.building_regulation,
-        transactions.uf_m2_u
-              ")
-                .method_selection(params)
-                .where("transactions.inscription_date > ?", Date.today - 3.years)
+        transactions.uf_m2_u,
+        transactions.county_id
+        ")
+        .method_selection(params)
+        .where("transactions.inscription_date > ?", Date.today - 3.years)
 
               data.each do |tr|
                 property_type_id << tr.property_type_id unless property_type_id.include? tr.property_type_id
@@ -120,6 +121,7 @@ class Flex::FlexReportsController < ApplicationController
                 calculated_value << tr.calculated_value.to_f unless calculated_value.include? tr.calculated_value
                 uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
                 building_regulation << tr.building_regulation
+                county_codes.merge!(tr.county.code => tr.county.name)
               end
 
               project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
@@ -148,7 +150,8 @@ class Flex::FlexReportsController < ApplicationController
                   'from': uf_m2_u.min,
                   'to': uf_m2_u.max
                 },
-                'building_regulation': building_regulation.uniq
+                'building_regulation': building_regulation.uniq,
+                'county_codes': county_codes
               }
               render json: result
   end
@@ -714,6 +717,18 @@ class Flex::FlexReportsController < ApplicationController
 
     render :json => result
 
+  end
+
+  def building_regulation_download
+    county_file = params[:county_id]
+    zip_file    = "#{Rails.root}/db/data/pdf/#{county_file}.zip"
+
+    if Dir.entries("#{Rails.root}/db/data/pdf/").detect {|f| f.match county_file}.nil? or county_file == ''
+      send_file("#{Rails.root}/db/data/pdf/normativa_inexistente.zip", :type => 'application/zip',
+                :disposition => 'inline', :filename => "normativa_inexistente.zip", :layout => false)
+    else
+      send_file(zip_file, :type => 'application/zip', :disposition => 'inline', :filename => "#{county_file}.zip", :layout => false)
+    end
   end
 
   private

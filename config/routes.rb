@@ -129,6 +129,7 @@ Rails.application.routes.draw do
   namespace :flex do
     get 'flex_reports/search_data_for_filters'
     get 'flex_reports/search_data_for_table'
+    get 'flex_reports/building_regulation_download' => 'flex_reports#building_regulation_download'
     post 'flex_reports/search_data_for_charts'
     resources :dashboards, only: [:index, :new, :create]
     resources :tenements
