@@ -127,6 +127,48 @@ class Flex::FlexReportsController < ApplicationController
               project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
               seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
 
+              # Acota rangos sup útil
+              min = total_surface_building.min.to_i
+              max = total_surface_building.max.to_i
+
+              if min == 0 && max == 0
+                tsb_min = 0
+                tsb_max = 0
+              elsif  min > 25 && max < 300
+                tsb_min = min
+                tsb_max = max
+              elsif min > 25 && max > 300
+                tsb_min = min
+                tsb_max = 300
+              elsif min < 25 && max < 300
+                tsb_min = 25
+                tsb_max = max
+              elsif min < 25 && max > 300
+                tsb_min = 25
+                tsb_max = 300
+              end
+
+              # Acota rangos ufm2
+              min = uf_m2_u.min.to_i
+              max = uf_m2_u.max.to_i
+
+              if min == 0 && max == 0
+                ufm2_min = 0
+                ufm2_max = 0
+              elsif  min > 5 && max < 100
+                ufm2_min = min
+                ufm2_max = max
+              elsif min > 5 && max > 100
+                ufm2_min = min
+                ufm2_max = 100
+              elsif min < 5 && max < 100
+                ufm2_min = 5
+                ufm2_max = max
+              elsif min < 5 && max > 100
+                ufm2_min = 5
+                ufm2_max = 100
+              end
+
               result = {
                 'property_types': project_types,
                 'seller_types': seller_types,
