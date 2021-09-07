@@ -177,8 +177,8 @@ class Flex::FlexReportsController < ApplicationController
                   'to': inscription_date.max
                 },
                 'building_surfaces': {
-                  'from': total_surface_building.min,
-                  'to': total_surface_building.max
+                  'from': tsb_min,
+                  'to': tsb_max
                 },
                 'terrain_surfaces': {
                   'from': total_surface_terrain.min,
@@ -189,8 +189,8 @@ class Flex::FlexReportsController < ApplicationController
                   'to': calculated_value.max
                 },
                 'unit_prices': {
-                  'from': uf_m2_u.min,
-                  'to': uf_m2_u.max
+                  'from': ufm2_min,
+                  'to': ufm2_max
                 },
                 'building_regulation': building_regulation.uniq,
                 'county_codes': county_codes
