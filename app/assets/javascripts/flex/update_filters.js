@@ -56,6 +56,12 @@ function update_filters() {
                 inscriptionDate = {"from": (inscriptionFromDate).toDateString(), "to": (inscriptionToDate).toDateString()}
             }
         });
+        $("#insc_date").data("ionRangeSlider").update({
+          min: from,
+          max: to,
+          from: from,
+          to: to,
+        });
     });
     $(parsed_data['building_surfaces']).each(function () {
         var from = parseFloat($(this)[0]['from']);
@@ -75,6 +81,12 @@ function update_filters() {
             onFinish: function (data) {
                 dataBuilding_surfaces = {"from": (data.from), "to": (data.to)}
             }
+        });
+        $("#building_surfaces").data("ionRangeSlider").update({
+          min: from,
+          max: to,
+          from: from,
+          to: to,
         });
     });
     $(parsed_data['terrain_surfaces']).each(function () {
@@ -96,6 +108,12 @@ function update_filters() {
                 dataTerrain_surfaces = {"from": (data.from), "to": (data.to)}
             }
         });
+        $("#t_surface").data("ionRangeSlider").update({
+          min: from,
+          max: to,
+          from: from,
+          to: to,
+        });
     });
     $(parsed_data['prices']).each(function () {
         var from = parseFloat($(this)[0]['from']);
@@ -116,6 +134,12 @@ function update_filters() {
                 dataPrices = {"from": (data.from), "to": (data.to)}
             }
         });
+        $("#price").data("ionRangeSlider").update({
+          min: from,
+          max: to,
+          from: from,
+          to: to,
+        });
     });
     $(parsed_data['unit_prices']).each(function () {
         var from = parseFloat($(this)[0]['from']);
@@ -135,6 +159,12 @@ function update_filters() {
             onFinish: function (data) {
                 dataUnit_prices = {"from": (data.from), "to": (data.to)}
             }
+        });
+        $("#u_price").data("ionRangeSlider").update({
+          min: from,
+          max: to,
+          from: from,
+          to: to,
         });
     });
     $(document).ready(function () {
