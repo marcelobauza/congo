@@ -225,23 +225,23 @@ class Flex::FlexReportsController < ApplicationController
           WHEN 0 THEN null
           ELSE (transactions.calculated_value::integer / transactions.total_surface_building::integer)
         END AS ufm2
-              ")
-                .joins("INNER JOIN property_types ON (property_types.id = transactions.property_type_id)")
-                .joins("INNER JOIN seller_types ON (seller_types.id = transactions.seller_type_id)")
-                .joins("INNER JOIN counties ON (counties.id = transactions.county_id)")
-                .method_selection(geom)
-                .where("transactions.inscription_date > ?", Date.today - 3.years)
+      ")
+      .joins("INNER JOIN property_types ON (property_types.id = transactions.property_type_id)")
+      .joins("INNER JOIN seller_types ON (seller_types.id = transactions.seller_type_id)")
+      .joins("INNER JOIN counties ON (counties.id = transactions.county_id)")
+      .method_selection(geom)
+      .where("transactions.inscription_date > ?", Date.today - 3.years)
 
-              @data = @data.where(:property_type_id => property_types) unless property_types.nil?
-              @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
-              @data = @data.where(building_regulation: land_use) unless land_use.nil?
-              @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
-              @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
-              @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
-              @data = @data.where('transactions.calculated_value BETWEEN ? AND ?', prices[:from], prices[:to]) unless prices.nil?
-              @data = @data.where('transactions.uf_m2_u BETWEEN ? AND ?', unit_prices[:from], unit_prices[:to]) unless unit_prices.nil?
+    @data = @data.where(:property_type_id => property_types) unless property_types.nil?
+    @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
+    @data = @data.where(building_regulation: land_use) unless land_use.nil?
+    @data = @data.where('inscription_date BETWEEN ? AND ?', inscription_dates[:from].to_date, inscription_dates[:to].to_date) unless inscription_dates.nil?
+    @data = @data.where('transactions.total_surface_terrain BETWEEN ? AND ?', terrain_surfaces[:from], terrain_surfaces[:to]) unless terrain_surfaces.nil?
+    @data = @data.where('transactions.total_surface_building BETWEEN ? AND ?', building_surfaces[:from], building_surfaces[:to]) unless building_surfaces.nil?
+    @data = @data.where('transactions.calculated_value BETWEEN ? AND ?', prices[:from], prices[:to]) unless prices.nil?
+    @data = @data.where('transactions.uf_m2_u BETWEEN ? AND ?', unit_prices[:from], unit_prices[:to]) unless unit_prices.nil?
 
-              render :json => @data
+    render :json => @data
 
   end
 
