@@ -109,93 +109,93 @@ class Flex::FlexReportsController < ApplicationController
         transactions.uf_m2_u,
         transactions.county_id
         ")
-        .method_selection(params)
-        .where("transactions.inscription_date > ?", Date.today - 3.years)
+      .method_selection(params)
+      .where("transactions.inscription_date > ?", Date.today - 3.years)
 
-              data.each do |tr|
-                property_type_id << tr.property_type_id unless property_type_id.include? tr.property_type_id
-                inscription_date << tr.inscription_date unless inscription_date.include? tr.inscription_date
-                seller_type_id << tr.seller_type_id unless seller_type_id.include? tr.seller_type_id
-                total_surface_building << tr.total_surface_building.to_f unless total_surface_building.include? tr.total_surface_building
-                total_surface_terrain << tr.total_surface_terrain.to_f unless total_surface_terrain.include? tr.total_surface_terrain
-                calculated_value << tr.calculated_value.to_f unless calculated_value.include? tr.calculated_value
-                uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
-                building_regulation << tr.building_regulation
-                county_codes.merge!(tr.county.code => tr.county.name)
-              end
+    data.each do |tr|
+      property_type_id << tr.property_type_id unless property_type_id.include? tr.property_type_id
+      inscription_date << tr.inscription_date unless inscription_date.include? tr.inscription_date
+      seller_type_id << tr.seller_type_id unless seller_type_id.include? tr.seller_type_id
+      total_surface_building << tr.total_surface_building.to_f unless total_surface_building.include? tr.total_surface_building
+      total_surface_terrain << tr.total_surface_terrain.to_f unless total_surface_terrain.include? tr.total_surface_terrain
+      calculated_value << tr.calculated_value.to_f unless calculated_value.include? tr.calculated_value
+      uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
+      building_regulation << tr.building_regulation
+      county_codes.merge!(tr.county.code => tr.county.name)
+    end
 
-              project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
-              seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
+    project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
+    seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
 
-              # Acota rangos sup útil
-              min = total_surface_building.min.to_i
-              max = total_surface_building.max.to_i
+    # Acota rangos sup útil
+    min = total_surface_building.min.to_i
+    max = total_surface_building.max.to_i
 
-              if min == 0 && max == 0
-                tsb_min = 0
-                tsb_max = 0
-              elsif  min > 25 && max < 300
-                tsb_min = min
-                tsb_max = max
-              elsif min > 25 && max > 300
-                tsb_min = min
-                tsb_max = 300
-              elsif min < 25 && max < 300
-                tsb_min = 25
-                tsb_max = max
-              elsif min < 25 && max > 300
-                tsb_min = 25
-                tsb_max = 300
-              end
+    if min == 0 && max == 0
+      tsb_min = 0
+      tsb_max = 0
+    elsif  min > 25 && max < 300
+      tsb_min = min
+      tsb_max = max
+    elsif min > 25 && max > 300
+      tsb_min = min
+      tsb_max = 300
+    elsif min < 25 && max < 300
+      tsb_min = 25
+      tsb_max = max
+    elsif min < 25 && max > 300
+      tsb_min = 25
+      tsb_max = 300
+    end
 
-              # Acota rangos ufm2
-              min = uf_m2_u.min.to_i
-              max = uf_m2_u.max.to_i
+    # Acota rangos ufm2
+    min = uf_m2_u.min.to_i
+    max = uf_m2_u.max.to_i
 
-              if min == 0 && max == 0
-                ufm2_min = 0
-                ufm2_max = 0
-              elsif  min > 5 && max < 100
-                ufm2_min = min
-                ufm2_max = max
-              elsif min > 5 && max > 100
-                ufm2_min = min
-                ufm2_max = 100
-              elsif min < 5 && max < 100
-                ufm2_min = 5
-                ufm2_max = max
-              elsif min < 5 && max > 100
-                ufm2_min = 5
-                ufm2_max = 100
-              end
+    if min == 0 && max == 0
+      ufm2_min = 0
+      ufm2_max = 0
+    elsif  min > 5 && max < 100
+      ufm2_min = min
+      ufm2_max = max
+    elsif min > 5 && max > 100
+      ufm2_min = min
+      ufm2_max = 100
+    elsif min < 5 && max < 100
+      ufm2_min = 5
+      ufm2_max = max
+    elsif min < 5 && max > 100
+      ufm2_min = 5
+      ufm2_max = 100
+    end
 
-              result = {
-                'property_types': project_types,
-                'seller_types': seller_types,
-                'inscription_dates': {
-                  'from': inscription_date.min,
-                  'to': inscription_date.max
-                },
-                'building_surfaces': {
-                  'from': tsb_min,
-                  'to': tsb_max
-                },
-                'terrain_surfaces': {
-                  'from': total_surface_terrain.min,
-                  'to': total_surface_terrain.max
-                },
-                'prices': {
-                  'from': calculated_value.min,
-                  'to': calculated_value.max
-                },
-                'unit_prices': {
-                  'from': ufm2_min,
-                  'to': ufm2_max
-                },
-                'building_regulation': building_regulation.uniq,
-                'county_codes': county_codes
-              }
-              render json: result
+    result = {
+      'property_types': project_types,
+      'seller_types': seller_types,
+      'inscription_dates': {
+        'from': inscription_date.min,
+        'to': inscription_date.max
+      },
+      'building_surfaces': {
+        'from': tsb_min,
+        'to': tsb_max
+      },
+      'terrain_surfaces': {
+        'from': total_surface_terrain.min,
+        'to': total_surface_terrain.max
+      },
+      'prices': {
+        'from': calculated_value.min,
+        'to': calculated_value.max
+      },
+      'unit_prices': {
+        'from': ufm2_min,
+        'to': ufm2_max
+      },
+      'building_regulation': building_regulation.uniq,
+      'county_codes': county_codes
+    }
+    render json: result
   end
 
   def search_data_for_table
