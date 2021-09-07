@@ -111,6 +111,7 @@ class Flex::FlexReportsController < ApplicationController
         ")
       .method_selection(params)
       .where("transactions.inscription_date > ?", Date.today - 3.years)
+      .where(analyzable: true)
 
     data.each do |tr|
       property_type_id << tr.property_type_id unless property_type_id.include? tr.property_type_id
@@ -231,6 +232,7 @@ class Flex::FlexReportsController < ApplicationController
       .joins("INNER JOIN counties ON (counties.id = transactions.county_id)")
       .method_selection(geom)
       .where("transactions.inscription_date > ?", Date.today - 3.years)
+      .where(analyzable: true)
 
     @data = @data.where(:property_type_id => property_types) unless property_types.nil?
     @data = @data.where(:seller_type_id => seller_types) unless seller_types.nil?
