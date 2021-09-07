@@ -69,6 +69,9 @@ function update_filters() {
             drag_interval: true,
             min_interval: null,
             max_interval: null,
+            onStart: function (data) {
+              dataBuilding_surfaces = {"from": (data.from), "to": (data.to)}
+            },
             onFinish: function (data) {
                 dataBuilding_surfaces = {"from": (data.from), "to": (data.to)}
             }
@@ -86,6 +89,9 @@ function update_filters() {
             drag_interval: true,
             min_interval: null,
             max_interval: null,
+            onStart: function (data) {
+              dataTerrain_surfaces = {"from": (data.from), "to": (data.to)}
+            },
             onFinish: function (data) {
                 dataTerrain_surfaces = {"from": (data.from), "to": (data.to)}
             }
@@ -103,6 +109,9 @@ function update_filters() {
             drag_interval: true,
             min_interval: null,
             max_interval: null,
+            onStart: function (data) {
+              dataPrices = {"from": (data.from), "to": (data.to)}
+            },
             onFinish: function (data) {
                 dataPrices = {"from": (data.from), "to": (data.to)}
             }
@@ -120,6 +129,9 @@ function update_filters() {
             drag_interval: true,
             min_interval: null,
             max_interval: null,
+            onStart: function (data) {
+              dataUnit_prices = {"from": (data.from), "to": (data.to)}
+            },
             onFinish: function (data) {
                 dataUnit_prices = {"from": (data.from), "to": (data.to)}
             }
