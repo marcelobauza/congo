@@ -29,7 +29,7 @@ function genCharts(flex_report_id) {
     transactions: dataFromTable
   };
 
-  console.log('Parámetros charts');
+  console.log('PARAMS search_data_for_charts');
   console.log(data);
 
   $.ajax({
@@ -40,7 +40,7 @@ function genCharts(flex_report_id) {
     data: data,
     success: function(data) {
 
-      console.log('Datos charts');
+      console.log('RESPONSE search_data_for_charts');
       console.log(data);
 
       charts = data

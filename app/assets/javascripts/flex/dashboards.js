@@ -77,6 +77,9 @@ Congo.flex_flex_reports.action_new = function () {
                 geoserver_building_regulations(data, flexMap, fgr);
                 geoserver_data(data, flexMap, fgr);
 
+                console.log('PARAMS search_data_for_filters');
+                console.log(data);
+
                 $.ajax({
                     async: false,
                     type: 'get',
@@ -86,8 +89,9 @@ Congo.flex_flex_reports.action_new = function () {
                     success: function (data) {
                         parsed_data = data
 
-                        console.log('Datos filtros h');
+                        console.log('RESPONSE search_data_for_filters');
                         console.log(parsed_data);
+                        
                         update_filters();
                     },
                     error: function (jqxhr, textstatus, errorthrown) {

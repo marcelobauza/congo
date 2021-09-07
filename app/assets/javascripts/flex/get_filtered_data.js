@@ -20,7 +20,7 @@ function getFilteredData() {
         unit_prices: dataUnit_prices
     }
 
-    console.log('Parámetros tabla');
+    console.log('PARAMS search_data_for_table');
     console.log(data);
 
     $.ajax({
@@ -31,8 +31,8 @@ function getFilteredData() {
         data: data,
         success: function (data) {
 
-            console.log('Datos tabla');
-            console.log(data);
+          console.log('RESPONSE search_data_for_table');
+          console.log(data);
 
             table_data = data
 
