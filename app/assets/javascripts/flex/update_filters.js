@@ -16,6 +16,8 @@ function update_filters() {
         $("#land_use").append($('<option>').val($(parsed_data['building_regulation'])[i]).text($(parsed_data['building_regulation'])[i]));
     }
     $(parsed_data['inscription_dates']).each(function () {
+        var from = dateToTS(new Date($(this)[0]['from']));
+        var to = dateToTS(new Date($(this)[0]['to']));
         var lang      = "es-ES";
         var yearBegin = parseInt($(parsed_data['inscription_dates'])[0]['from'].split("-")[0]);
         var yearTo    = parseInt($(parsed_data['inscription_dates'])[0]['to'].split("-")[0]);
@@ -40,10 +42,10 @@ function update_filters() {
             skin: "flat",
             type: "double",
             grid: true,
-            min: dateToTS(new Date($(this)[0]['from'])),
-            max: dateToTS(new Date($(this)[0]['to'])),
-            from: dateToTS(new Date($(this)[0]['from'])),
-            to: dateToTS(new Date($(this)[0]['to'])),
+            min: from,
+            max: to,
+            from: from,
+            to: to,
             prettify: tsToDate,
             onFinish: function (data) {
                var fromDate = data.from_pretty.split('/');
