@@ -2,7 +2,7 @@
   <%= link_to "Inicia sesión", new_session_path(resource_name), class: 'text-secondary' %><br />
 <% end %>
 
-<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+<%- if devise_mapping.registerable? && controller_name != 'registrations' && params['module'] == 'flex' %>
   <%= link_to "Regístrate", new_registration_path(resource_name), class: 'text-secondary' %><br />
 <% end %>
 
