@@ -8,7 +8,7 @@ module ApplicationHelper
     counties.map { |county| [county.name, county.id] }
   end
 
-  def link_to_add_fields(name, f, association)
+  def link_to_add_fields(name, f, association, locals={})
     new_object = f.object.send(association).klass.new
     id         = new_object.object_id
 
@@ -16,6 +16,6 @@ module ApplicationHelper
       render(association.to_s.singularize + "_fields", f: builder)
     end
 
-    link_to(name, '#', class: "add_fields btn btn-secondary btn-sm", data: {id: id, fields: fields.gsub("\n", "")})
+    link_to(name, '#', class: "add_fields btn btn-secondary btn-sm #{locals[:class]}", data: {id: id, fields: fields.gsub("\n", ""), "#{locals[:data]}": true})
   end
 end
