@@ -66,4 +66,8 @@ module UsersHelper
 
     orders - reports
   end
+
+  def orders_placed
+    reports = current_user.flex_reports.size
+  end
 end
