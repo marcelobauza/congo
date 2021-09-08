@@ -36,7 +36,7 @@
                   <div class="label mx-2" id="somediv">
                     <span class="m-0" id="cantidad-registros-tabla"></span>
                   </div>
-                  <%= link_to_add_fields "Agregar Propiedad", f, :tenements %>
+                  <%= link_to_add_fields "Agregar Propiedad", f, :tenements, data: 'add-property' %>
                 </div>
                 <%= f.simple_fields_for :tenements do |s| %>
                   <%= render 'tenement', f: s %>

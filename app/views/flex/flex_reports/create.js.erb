@@ -6,6 +6,7 @@
 <% else %>
   $("#somediv").empty()
   $('[data-generate]').addClass('d-none');
+  $('[data-add-property]').addClass('d-none');
   $('[data-flex-filter]').addClass('d-none');
   $('[data-flex-property]').addClass('d-none');
   $('[data-flex-downloads-xls]').html("<%= j link_to 'XLS', flex_flex_report_path(@flex_report, format: :xlsx), class: 'btn btn-primary' %>");
