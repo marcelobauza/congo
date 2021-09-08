@@ -1,11 +1,8 @@
 <div class="form-row line">
-  <div class="col-2">
-    <%= f.input :county_id, label: false, prompt: 'Comuna', collection: counties_for_select, input_html: { class: 'form-control form-control-sm'}%>
-  </div>
-  <div class="col-2">
+  <div class="col-3">
     <%= f.input :property_type_id, label: false, prompt: 'Tipo', collection: property_type_for_select, input_html: { class: 'form-control form-control-sm' } %>
   </div>
-  <div class="col-2">
+  <div class="col-5">
     <%= f.input :address, label: false, placeholder: 'Dirección', input_html: { class: 'form-control form-control-sm' } %>
   </div>
   <div class="col-1">
@@ -13,12 +10,6 @@
   </div>
   <div class="col-1">
     <%= f.input :terrain_surface, label: false, placeholder: 'Tm²', input_html: { class: 'form-control form-control-sm' } %>
-  </div>
-  <div class="col-1">
-    <%= f.text_field :parking, label: false, placeholder: 'E', class: 'form-control form-control-sm' %>
-  </div>
-  <div class="col-1">
-    <%= f.text_field :cellar, label: false, placeholder: 'B', class: 'form-control form-control-sm' %>
   </div>
   <div class="col-1">
     <%= f.input :uf, label: false, placeholder: 'UF', input_html: { class: 'form-control form-control-sm' } %>

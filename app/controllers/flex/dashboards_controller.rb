@@ -20,6 +20,6 @@ class Flex::DashboardsController < Flex::FlexReportsController
   end
 
   def tenement_params
-    params.require(:tenement).permit(:property_type_id, :address, :uf, :county_id, :cellar, :parking, :building_surface, :terrain_surface)
+    params.require(:tenement).permit(:property_type_id, :address, :uf, :building_surface, :terrain_surface)
   end
 end
