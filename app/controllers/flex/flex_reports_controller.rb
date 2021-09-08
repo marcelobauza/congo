@@ -156,18 +156,18 @@ class Flex::FlexReportsController < ApplicationController
     if min == 0 && max == 0
       ufm2_min = 0
       ufm2_max = 0
-    elsif  min > 5 && max < 100
+    elsif  min > 5 && max < 120
       ufm2_min = min
       ufm2_max = max
-    elsif min > 5 && max > 100
+    elsif min > 5 && max > 120
       ufm2_min = min
-      ufm2_max = 100
-    elsif min < 5 && max < 100
+      ufm2_max = 120
+    elsif min < 5 && max < 120
       ufm2_min = 5
       ufm2_max = max
-    elsif min < 5 && max > 100
+    elsif min < 5 && max > 120
       ufm2_min = 5
-      ufm2_max = 100
+      ufm2_max = 120
     end
 
     result = {
