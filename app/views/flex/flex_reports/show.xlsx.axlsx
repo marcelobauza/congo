@@ -12,7 +12,7 @@ wb.add_worksheet(name: "Flex") do |sheet|
     'UF',
     'Role',
     'Foja',
-    'Avaluo'
+    'Avaluo $'
   ]
 
   @transactions.each do |row|
