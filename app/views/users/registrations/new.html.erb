@@ -1,4 +1,21 @@
 <div class="form-signin">
+  <div class="card bg-light mb-3" style="max-width: 20rem;">
+    <div class="card-body text-primary">
+      <p>Si deseas contratar primero debes registrarte. El siguiente paso es enviar una correo a <a class="text-info" href="mailto:flex@inciti.com">flex@inciti.com</a> indicando:</p>
+      <ul>
+        <li>Nombre</li>
+        <li>Empresa o Institución</li>
+        <li>RUT</li>
+        <li>Cantidad de Informes</li>
+      </ul>
+      <p>Nuestra administradora de plataforma se contactará contigo para darte precio unitario y total de los informes cotizados, datos para pago e indicaciones de uso.</p>
+      <p>¡Gracias por elegirnos!</p>
+      <p>Inciti.</p>
+    </div>
+  </div>
+</div>
+
+<div class="form-signin">
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
