@@ -274,7 +274,7 @@ class Flex::FlexReportsController < ApplicationController
     end
     avg = total.sum / total.size.to_f
     avg_quantity.each do |b|
-      b['count'] = '%.2f' % avg
+      b['count'] = avg.round()
     end
 
     result.push({"title": "Cantidad", "series": [{'name': 'Cantidad', "data": quantity}, {'name': 'Promedio', "data": avg_quantity}] })
@@ -304,7 +304,7 @@ class Flex::FlexReportsController < ApplicationController
     end
     avg = total.sum / total.size.to_f
     avg_building_surface.each do |b|
-      b['count'] = '%.2f' % avg
+      b['count'] = avg.round()
     end
 
     result.push({"title": "Superficie Útil", "series": [{'name': 'Promedio Bimestre', "data": building_surface}, {'name': 'Promedio Muestra', "data": avg_building_surface}] })
@@ -334,7 +334,7 @@ class Flex::FlexReportsController < ApplicationController
     end
     avg = total.sum / total.size.to_f
     avg_price.each do |b|
-      b['count'] = '%.2f' % avg
+      b['count'] = avg.round()
     end
 
     result.push({"title": "Precio", "series": [{'name': 'Promedio Bimestre', "data": price}, {'name': 'Promedio Muestra', "data": avg_price}] })
@@ -364,7 +364,7 @@ class Flex::FlexReportsController < ApplicationController
     end
     avg = total.sum / total.size.to_f
     avg_unit_price.each do |b|
-      b['count'] = '%.2f' % avg
+      b['count'] = avg.round()
     end
 
     result.push({"title": "Precio Unitario", "series": [{'name': 'Promedio Bimestre', "data": unit_price}, {'name': 'Promedio Muestra', "data": avg_unit_price}] })
@@ -394,7 +394,7 @@ class Flex::FlexReportsController < ApplicationController
     end
     avg = total.sum / total.size.to_f
     avg_market_volume.each do |b|
-      b['count'] = '%.2f' % avg
+      b['count'] = avg.round()
     end
 
     result.push({"title": "Volúmen Mercado", "series": [{'name': 'Promedio Bimestre', "data": market_volume}, {'name': 'Promedio Muestra', "data": avg_market_volume}] })
