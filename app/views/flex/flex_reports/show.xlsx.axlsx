@@ -12,6 +12,7 @@ wb.add_worksheet(name: "Flex") do |sheet|
     'UF',
     'Role',
     'Foja',
+    'Numero',
     'Avaluo $'
   ]
 
@@ -27,6 +28,7 @@ wb.add_worksheet(name: "Flex") do |sheet|
       row.cellar,
       row.calculated_value,
       row.role,
+      row.sheet,
       row.number,
       row.tax_appraisal
     ]
