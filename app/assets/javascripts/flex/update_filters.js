@@ -5,11 +5,11 @@ function update_filters() {
     $(".chartjs-render-monitor").removeAttr('class').removeAttr('style').removeAttr('width').removeAttr('height');
 
     $(parsed_data['property_types']).each(function () {
-        $("#prop_type").append($('<option>').val($(this)[1]).text($(this)[0]));
+        $("#prop_type").append($('<option>').val($(this)[1]).text($(this)[0]).attr("selected", true));
     });
 
     $(parsed_data['seller_types']).each(function () {
-        $("#seller_type").append($('<option>').val($(this)[1]).text($(this)[0]));
+        $("#seller_type").append($('<option>').val($(this)[1]).text($(this)[0]).attr("selected", true));
     });
 
     for (i = 0; i < $(parsed_data['building_regulation']).length; i++) {
