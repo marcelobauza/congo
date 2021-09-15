@@ -30,10 +30,10 @@
         <!-- Párrafo Incial -->
         <tr>
           <td align="left" bgcolor="#ffffff" valign="top" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; color: #484b4f; line-height: 24px; border-top: 3px solid #d4dadf; border-left: 3px solid #d4dadf; border-right: 3px solid #d4dadf; border-top-right-radius: 10px; border-top-left-radius: 10px;">
-            <p style="font-size: 20px; margin: 0; padding-bottom: 10px;">Hola <%= @resource.name %>,</p>
+            <p style="font-size: 20px; margin: 0; padding-bottom: 10px;">Hola <%= @resource.email %>,</p>
             <br>
             <p style="font-size: 16px; margin: 0; padding-bottom: 10px;">Estas son las credenciales con las que vas a poder acceder a nuestra plataforma:</p>
-            <p style="font-size: 16px; margin: 0; padding-bottom: 10px;"><b>E-mail: </b><%= @resource.email %><br><b>Contraseña: </b><%= @resource.password %></p>
+            <p style="font-size: 16px; margin: 0; padding-bottom: 10px;"><b>Nombre: </b><%= @resource.name %><br><b>Contraseña: </b><%= @resource.password %></p>
             <p style="font-size: 16px; margin: 0;">Para activar tu cuenta de Flex, haz clic en el siguiente botón:</p>          </td>
         </tr>
 
@@ -45,6 +45,7 @@
                 <td align="center" bgcolor="#3A3F44" style="border-radius: 6px;">
                   <%= link_to 'Confirmar cuenta', confirmation_url(@resource, confirmation_token: @token, locale: I18n.locale.to_s, subdomain: "app"), style: "display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; color: #FFFFFF; text-decoration: none; border-radius: 6px;" %>
                 </td>
+                <td><a href='http://www.inciti.com/2021/09/14/uso-de-flex-2-0'>Instructivo</a></td>
               </tr>
             </table>
           </td>
