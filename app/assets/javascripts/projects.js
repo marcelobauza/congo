@@ -1738,7 +1738,7 @@ Congo.projects.action_dashboards = function(){
                   })
                 }
 
-                if (title == 'Proyectos en Venta') {
+                if (title == 'Proyectos en Venta' || title == 'Evolución Venta Mensual') {
                   chart_type = 'line';
                   datasets.push({
                     label: label,

@@ -437,6 +437,41 @@ class Project < ApplicationRecord
     values_by_period3(widget, select, filters, load_value)
   end
 
+  def self.vhmo_by_period(filters)
+
+    select = "SUM(vhmu) AS vhmo"
+    resultado_final = []
+    year = filters[:to_year].to_i
+    bimester = filters[:to_period].to_i
+
+    6.times do
+
+      resultado = ProjectInstanceMixView
+        .select(select)
+        .method_selection(filters)
+        .where(bimester: bimester)
+        .where(year: year)
+        .first
+
+        bim = {
+          name: "#{bimester}/#{year}",
+          count: resultado[:vhmo]
+        }
+        resultado_final << bim
+
+        if bimester == 1
+          bimester = 6
+          year = year - 1
+        else
+          bimester = bimester - 1
+        end
+
+    end
+
+    resultado_final
+  end
+
+
   def self.load_value
     lambda do |result, project, bimester|
       obj = {:value => "null", :bimester => bimester[:period], :year => bimester[:year]}
@@ -784,6 +819,7 @@ end
       uarea        = Project.projects_by_usable_area(filters)
       garea        = Project.projects_by_ground_area('ground_area', filters)
       sbim         = Project.projects_count_by_period('sale_bimester', filters)
+      vhmo         = Project.vhmo_by_period(filters)
       cfloor       = Project.projects_by_ranges('floors', filters)
       uf_ranges    = Project.projects_by_ranges('uf_avg_percent', filters)
       agencies     = projects_by_agencies filters
@@ -918,6 +954,13 @@ end
       end
       result.push({"title":"Proyectos en Venta", "series":[{"data": data}]})
 
+
+      # Evolución Venta Mensual
+      data =[]
+      vhmo.each do |item|
+        data.push("name": item[:name], "count": item[:count])
+      end
+      result.push({"title":"Evolución Venta Mensual", "series":[{"data": data}]})
       ##CANT PISOS
       data =[]
 
