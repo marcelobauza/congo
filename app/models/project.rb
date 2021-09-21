@@ -458,6 +458,39 @@ class Project < ApplicationRecord
           count: resultado[:vhmo]
         }
         resultado_final << bim
+        if bimester == 1
+          bimester = 6
+          year = year - 1
+        else
+          bimester = bimester - 1
+        end
+
+    end
+
+    resultado_final.reverse
+  end
+
+  def self.masd_by_period(filters)
+
+    select = "CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) ELSE SUM(project_instance_mix_views.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END AS masd "
+    resultado_final = []
+    year = filters[:to_year].to_i
+    bimester = filters[:to_period].to_i
+
+    6.times do
+
+      resultado = ProjectInstanceMixView
+        .select(select)
+        .method_selection(filters)
+        .where(bimester: bimester)
+        .where(year: year)
+        .first
+
+        bim = {
+          name: "#{bimester}/#{year}",
+          count: resultado[:masd]
+        }
+        resultado_final << bim
 
         if bimester == 1
           bimester = 6
@@ -468,7 +501,6 @@ class Project < ApplicationRecord
 
     end
 
-    resultado_final
     resultado_final.reverse
   end
 
@@ -821,6 +853,7 @@ end
       garea        = Project.projects_by_ground_area('ground_area', filters)
       sbim         = Project.projects_count_by_period('sale_bimester', filters)
       vhmo         = Project.vhmo_by_period(filters)
+      masd         = Project.masd_by_period(filters)
       cfloor       = Project.projects_by_ranges('floors', filters)
       uf_ranges    = Project.projects_by_ranges('uf_avg_percent', filters)
       agencies     = projects_by_agencies filters
@@ -962,6 +995,12 @@ end
         data.push("name": item[:name], "count": item[:count].to_f.round(1))
       end
       result.push({"title":"Evolución Venta Mensual", "series":[{"data": data}]})
+      # Meses en Stock
+      data =[]
+      masd.each do |item|
+        data.push("name": item[:name], "count": item[:count].to_i)
+      end
+      result.push({"title":"Meses en Stock", "series":[{"data": data}]})
       ##CANT PISOS
       data =[]
 
