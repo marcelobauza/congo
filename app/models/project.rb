@@ -959,7 +959,7 @@ end
       # Evolución Venta Mensual
       data =[]
       vhmo.each do |item|
-        data.push("name": item[:name], "count": item[:count])
+        data.push("name": item[:name], "count": item[:count].to_f.round(1))
       end
       result.push({"title":"Evolución Venta Mensual", "series":[{"data": data}]})
       ##CANT PISOS
