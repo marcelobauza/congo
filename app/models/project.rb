@@ -469,6 +469,7 @@ class Project < ApplicationRecord
     end
 
     resultado_final
+    resultado_final.reverse
   end
 
 
