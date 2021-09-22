@@ -496,764 +496,787 @@ function projects_report_pdf(){
     },
     success: function(data){
 
-      let build_image_map = new Promise((resolve, reject) => {
-        leafletImage(map, function(err, canvas) {
+      var mapContainer = document.getElementById('map');
+      $('.leaflet-top').addClass('d-none');
+      $('.leaflet-right').addClass('d-none');
+
+      html2canvas(mapContainer, {
+          useCORS: true,
+        }).then(function(canvas) {
+
           var img = document.createElement('img');
           var dimensions = map.getSize();
           img.width = dimensions.x;
           img.height = dimensions.y;
           img.src = canvas.toDataURL();
-          resolve(img);
-        });
-      });
 
-      build_image_map.then(function(img) {
+          // Oculta elementos leaflet para sacar la captura
+          $('.leaflet-top').removeClass('d-none');
+          $('.leaflet-right').removeClass('d-none');
 
-        // Habilitar la interacción con el mapa
-        map.dragging.enable();
-        map.doubleClickZoom.enable();
-        map.scrollWheelZoom.enable();
-        document.getElementById('map').style.cursor='grab';
+          // Habilitar la interacción con el mapa
+          map.dragging.enable();
+          map.doubleClickZoom.enable();
+          map.scrollWheelZoom.enable();
+          document.getElementById('map').style.cursor='grab';
 
-        // Oculta el spinner
-        $("#report_spinner").hide();
+          // Oculta el spinner
+          $("#report_spinner").hide();
 
-        // Habilita los botones
-        $('.btn').removeClass('disabled')
-        $('.close').prop('disabled', false);
+          // Habilita los botones
+          $('.btn').removeClass('disabled')
+          $('.close').prop('disabled', false);
 
-        data = data['data']
+          data = data['data']
 
-        // Creamos el doc
-        var doc = new jsPDF();
+          // Creamos el doc
+          var doc = new jsPDF();
 
-        doc.page = 1;
+          doc.page = 1;
 
-        // Pie de página
-        function footer() {
+          // Pie de página
+          function footer() {
+            doc.setFontStyle("bold");
+            doc.setFontSize(12);
+            doc.text('Fuente:', 20, 290);
+            doc.setFontStyle("normal");
+            doc.text('Levantamiento Bimestral en Salas de Ventas por Equipo de Catastro Inciti', 37, 290);
+            doc.setFontSize(10);
+            doc.text('p. ' + doc.page, 194, 290);
+            doc.page++;
+          };
+
+          // Título
           doc.setFontStyle("bold");
-          doc.setFontSize(12);
-          doc.text('Fuente:', 20, 290);
-          doc.setFontStyle("normal");
-          doc.text('Levantamiento Bimestral en Salas de Ventas por Equipo de Catastro Inciti', 37, 290);
-          doc.setFontSize(10);
-          doc.text('p. ' + doc.page, 194, 290);
-          doc.page++;
-        };
+          doc.setFontSize(22);
+          doc.text('Informe de Proyectos en Venta', 105, 20, null, null, 'center');
 
-        // Título
-        doc.setFontStyle("bold");
-        doc.setFontSize(22);
-        doc.text('Informe de Proyectos en Venta', 105, 20, null, null, 'center');
+          // Subtítulo
+          doc.setFontSize(16);
+          doc.text('Información General', 105, 35, null, null, 'center');
 
-        // Subtítulo
-        doc.setFontSize(16);
-        doc.text('Información General', 105, 35, null, null, 'center');
+          periods = Congo.projects.config.periods;
+          years = Congo.projects.config.years;
+          to_year = Congo.dashboards.config.year;
+          to_bimester = Congo.dashboards.config.bimester;
 
-        periods = Congo.projects.config.periods;
-        years = Congo.projects.config.years;
-        to_year = Congo.dashboards.config.year;
-        to_bimester = Congo.dashboards.config.bimester;
+          // Validamos si hay algún filtro aplicado
+          if (periods == '') {
 
-        // Validamos si hay algún filtro aplicado
-        if (periods == '') {
+            // Periodo Actual
+            doc.setFontSize(12);
+            doc.setFontStyle("bold");
+            doc.text('Periodo de tiempo seleccionado:', 10, 49);
+            doc.setFontStyle("normal");
+            doc.text(to_bimester+'° bimestre del '+to_year, 78, 49);
 
-          // Periodo Actual
-          doc.setFontSize(12);
-          doc.setFontStyle("bold");
-          doc.text('Periodo de tiempo seleccionado:', 10, 49);
-          doc.setFontStyle("normal");
-          doc.text(to_bimester+'° bimestre del '+to_year, 78, 49);
+          } else {
 
-        } else {
+            // Periodos Filtrados
+            doc.setFontSize(12);
+            doc.setFontStyle("bold");
+            doc.text('Periodos de tiempo seleccionados:', 10, 49);
+            doc.setFontStyle("normal");
+            var tab = 83
+            for (var i = 0; i < periods.length; i++) {
+              doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
+              tab = tab + 16
+            }
 
-          // Periodos Filtrados
-          doc.setFontSize(12);
-          doc.setFontStyle("bold");
-          doc.text('Periodos de tiempo seleccionados:', 10, 49);
-          doc.setFontStyle("normal");
-          var tab = 83
-          for (var i = 0; i < periods.length; i++) {
-            doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
-            tab = tab + 16
           }
 
-        }
+          // // imprime mapa
+          // var width_map_pdf = document.getElementById('map_pdf').offsetWidth * x_proportion;
+          // var height_map_pdf = document.getElementById('map_pdf').offsetHeight * y_proportion;
+          // if(altura_final + (190 * height_map_pdf/width_map_pdf)>(y_page - 20)) {
+          //     num_pages ++;
+          //     doc.addPage();
+          //     margin_pdf += 30;
+          //     altura_final = 10;
+          // }
+          // doc.addImage(imgData_pdf, 'PNG', 10, (altura_final + 10), 190 , 190 * height_map_pdf/width_map_pdf)
 
-        // Agrega mapa
-        img_height = (img.height * 190) / img.width
-        doc.addImage(img, 'JPEG', 9, 55, 190, img_height);
 
-        // Agrega leyenda
-        map_legends = Congo.projects.config.legends
-        rect_begin = img_height + 59
-        for (var i = 0; i < map_legends.length; i++) {
-          var leg = map_legends[i]
-          var name = leg['name']
-          var color = leg['color']
+          // Agrega mapa
+          img_height = (img.height * 190) / img.width
 
-          doc.setDrawColor(0)
-          doc.setFillColor(color)
-          doc.rect(20, rect_begin, 3, 3, 'F')
+          console.log('img_height');
+          console.log(img_height);
 
-          text_begin = rect_begin + 3
-          doc.setFontSize(10);
-          doc.setFontStyle("normal");
-          doc.text(name, 25, text_begin);
+          doc.addImage(img, 'PNG', 9, 55, 190, img_height);
 
-          rect_begin = rect_begin + 6
-        }
+          // // Agrega mapa
+          // img_height = (img.height * 190) / img.width
+          // doc.addImage(img, 'JPEG', 9, 55, 190, img_height);
 
-        // Pie de página
-        footer()
+          // Agrega leyenda
+          map_legends = Congo.projects.config.legends
+          rect_begin = img_height + 59
+          for (var i = 0; i < map_legends.length; i++) {
+            var leg = map_legends[i]
+            var name = leg['name']
+            var color = leg['color']
 
-        // Separamos la información
-        for (var i = 0; i < data.length; i++) {
+            doc.setDrawColor(0)
+            doc.setFillColor(color)
+            doc.rect(20, rect_begin, 3, 3, 'F')
 
-          if (i == 0) { // Listado de Proyectos
+            text_begin = rect_begin + 3
+            doc.setFontSize(10);
+            doc.setFontStyle("normal");
+            doc.text(name, 25, text_begin);
 
-            // Agregamos una página
-            doc.addPage('a4', 'portrait')
+            rect_begin = rect_begin + 6
+          }
 
-            // Pie de página
-            footer()
+          // Pie de página
+          footer()
 
-            // Subtítulo
-            doc.setFontStyle("bold");
-            doc.setFontSize(16);
-            doc.text('Listado de Proyectos', 105, 20, null, null, 'center');
+          // Separamos la información
+          for (var i = 0; i < data.length; i++) {
 
-            doc.line(10, 25, 200, 25);
+            if (i == 0) { // Listado de Proyectos
 
-            var list_projet = data[i]['list_projet'];
+              // Agregamos una página
+              doc.addPage('a4', 'portrait')
 
-            var line_num = 30
-            var vhmd = 0;
-            $.each(list_projet, function(a, b) {
+              // Pie de página
+              footer()
 
-              var code = b['code']
-              var name = b['name']
-              var real_estate_agent = b['agencyname']
-              var address = b['address']
-              var sold_units = b['sold_units']
-              var stock_units = b['stock_units']
-              var total_units = b['total_units']
-              vhmud = b['vhmud']
-              vhmd = vhmd + b['vhmud']
-              // Convertimos integer a varchar
-              sold_units = sold_units.toString()
-              stock_units = stock_units.toString()
-              total_units = total_units.toString()
-              vhmud = vhmud.toString()
+              // Subtítulo
+              doc.setFontStyle("bold");
+              doc.setFontSize(16);
+              doc.text('Listado de Proyectos', 105, 20, null, null, 'center');
 
-              if (line_num > 260) {
+              doc.line(10, 25, 200, 25);
+
+              var list_projet = data[i]['list_projet'];
+
+              var line_num = 30
+              var vhmd = 0;
+              $.each(list_projet, function(a, b) {
+
+                var code = b['code']
+                var name = b['name']
+                var real_estate_agent = b['agencyname']
+                var address = b['address']
+                var sold_units = b['sold_units']
+                var stock_units = b['stock_units']
+                var total_units = b['total_units']
+                vhmud = b['vhmud']
+                vhmd = vhmd + b['vhmud']
+                // Convertimos integer a varchar
+                sold_units = sold_units.toString()
+                stock_units = stock_units.toString()
+                total_units = total_units.toString()
+                vhmud = vhmud.toString()
+
+                if (line_num > 260) {
+
+                  doc.addPage('a4', 'portrait')
+
+                  // Pie de página
+                  footer()
+
+                  line_num = 25
+
+                  doc.line(10, 20, 200, 20);
+
+                }
+
+                // Cod
+                doc.setFontSize(12);
+                doc.setFontStyle("bold");
+                doc.text('Cod:', 10, line_num);
+                doc.setFontStyle("normal");
+                doc.text(code, 22, line_num);
+
+                // Nombre
+                doc.setFontStyle("bold");
+                doc.text('Nombre:', 62, line_num);
+                doc.setFontStyle("normal");
+                doc.text(name, 80, line_num);
+
+                line_num = line_num+8
+
+                // Inmobiliaria
+                doc.setFontStyle("bold");
+                doc.text('Inmobiliaria:', 10, line_num);
+                doc.setFontStyle("normal");
+                doc.text(real_estate_agent, 38, line_num);
+
+                line_num = line_num+8
+
+                // Dirección
+                doc.setFontStyle("bold");
+                doc.text('Dirección:', 10, line_num);
+                doc.setFontStyle("normal");
+                doc.text(address, 33, line_num);
+
+                line_num = line_num+8
+
+                // Oferta
+                doc.setFontStyle("bold");
+                doc.text('Oferta:', 10, line_num);
+                doc.setFontStyle("normal");
+                doc.text(total_units, 26, line_num);
+
+                // Venta
+                doc.setFontStyle("bold");
+                doc.text('Venta:', 62, line_num);
+                doc.setFontStyle("normal");
+                doc.text(sold_units, 77, line_num);
+
+                // Disponible
+                doc.setFontStyle("bold");
+                doc.text('Disponible:', 114, line_num);
+                doc.setFontStyle("normal");
+                doc.text(stock_units, 139, line_num);
+
+                // Velocidad
+                doc.setFontStyle("bold");
+                doc.text('Velocidad:', 169, line_num);
+                doc.setFontStyle("normal");
+                doc.text(vhmud, 193, line_num);
+
+                line_num = line_num+5
+
+                doc.line(10, line_num, 200, line_num);
+
+                line_num = line_num+8
+
+              }) // Cierra each
+            } else if (i == 1) { // Información General Departamentos
+
+              // Levantamos los valores de departamento
+              var info_department = data[i]['info_department'][0];
+
+              // Validamos si existen proyectos de departamento
+              if (info_department['project_count'] > 0) {
 
                 doc.addPage('a4', 'portrait')
 
                 // Pie de página
                 footer()
 
-                line_num = 25
+                var vhmo = info_department['vhmo'];
+                var vhmdd = info_department['vhmdd'];
+                var total_units = info_department['total_units1'];
+                var sold_units = info_department['total_sold'];
+                var stock_units = info_department['total_stock1']
+                var months_to_sell_out_stock = info_department['spend_stock_months1'];
+                var min_uf_m2_value = info_department['min_uf_m21'];
+                var max_uf_m2_value = info_department['max_uf_m21'];
+                var avg_uf_m2_value = info_department['avg_uf_m2'];
 
-                doc.line(10, 20, 200, 20);
+                var min_usable_square_m2 = info_department['min_usable_square_m21'];
+                var max_usable_square_m2 = info_department['max_usable_square_m21'];
+                var avg_usable_square_m2 = info_department['avg_usable_square_m21'];
+                var min_terrace_square_m2 = info_department['min_terrace_square_m21'];
+                var max_terrace_square_m2 = info_department['max_terrace_square_m21'];
+                var avg_terrace_square_m2 = info_department['avg_terrace_square_m21'];
+                var min_uf_value = info_department['min_uf1'];
+                var max_uf_value = info_department['max_uf1'];
+                var avg_uf_value = info_department['avg_uf1'];
+
+                // Cambiamos a string los valores que llegan como integer
+                vhmo = vhmo.toString();
+                vhmdd = vhmdd.toString();
+                // Subtítulo
+                doc.setFontStyle("bold");
+                doc.setFontSize(14);
+                doc.text('Información General Departamentos', 105, 20, null, null, 'center');
+
+                // Labels columna izquierda
+                doc.setFontSize(12);
+                doc.text('Venta Mensual en Regimen:', 74, 40, null, null, 'right');
+                doc.text('Venta Mensual Disponible:', 74, 50, null, null, 'right');
+                doc.text('Oferta:', 74, 70, null, null, 'right');
+                doc.text('Venta:', 74, 80, null, null, 'right');
+                doc.text('Disponibilidad:', 74, 90, null, null, 'right');
+                doc.text('Meses para agotar stock:', 74, 100, null, null, 'right');
+                doc.text('Valor UF/m² Mín.:', 74, 110, null, null, 'right');
+                doc.text('Valor UF/m² Máx.:', 74, 120, null, null, 'right');
+                doc.text('Valor UF/m² Prom.:', 74, 130, null, null, 'right');
+
+                // Valores columna izquierda
+                doc.setFontStyle("normal");
+                doc.text(vhmo, 76, 40);
+                doc.text(vhmdd, 76, 50);
+                doc.text(total_units, 76, 70);
+                doc.text(sold_units, 76, 80);
+                doc.text(stock_units, 76, 90);
+                doc.text(months_to_sell_out_stock, 76, 100);
+                doc.text(min_uf_m2_value, 76, 110);
+                doc.text(max_uf_m2_value, 76, 120);
+                doc.text(avg_uf_m2_value, 76, 130);
+
+                // Labels columna derecha
+                doc.setFontStyle("bold");
+                doc.text('Superficie Útil Mín. (m²):', 168, 40, null, null, 'right');
+                doc.text('Superficie Útil Máx. (m²):', 168, 50, null, null, 'right');
+                doc.text('Superficie Útil Prom. (m²):', 168, 60, null, null, 'right');
+                doc.text('Superficie Terraza Mín. (m²):', 168, 70, null, null, 'right');
+                doc.text('Superficie Terraza Máx. (m²):', 168, 80, null, null, 'right');
+                doc.text('Superficie Terraza Prom. (m²):', 168, 90, null, null, 'right');
+                doc.text('Valor UF Mín.:', 168, 110, null, null, 'right');
+                doc.text('Valor UF Máx.:', 168, 120, null, null, 'right');
+                doc.text('Valor UF Prom.:', 168, 130, null, null, 'right');
+
+                // Valores columna derecha
+                doc.setFontStyle("normal");
+                doc.text(min_usable_square_m2, 170, 40);
+                doc.text(max_usable_square_m2, 170, 50);
+                doc.text(avg_usable_square_m2, 170, 60);
+                doc.text(min_terrace_square_m2, 170, 70);
+                doc.text(max_terrace_square_m2, 170, 80);
+                doc.text(avg_terrace_square_m2, 170, 90);
+                doc.text(min_uf_value, 170, 110);
+                doc.text(max_uf_value, 170, 120);
+                doc.text(avg_uf_value, 170, 130);
+              }
+
+            } else if (i == 2) { // Información General Casas
+
+              // Levantamos los valores de casas
+              var info_house = data[i]['info_house'][0];
+
+              // Validamos si existen proyectos de casas
+              if (info_house['project_count'] > 0) {
+
+                doc.addPage('a4', 'portrait')
+
+                // Pie de página
+                footer()
+
+                var vhmo = info_house['vhmo'];
+                var vhmdd_h = info_house['vhmdd'];
+                var total_stock = info_house['total_units'];
+                var total_sale = info_house['total_sold'];
+                var total_availability = info_house['total_stock'];
+                var months_to_sell_out_stock = info_house['spend_stock_months1'];
+                var min_uf_m2_value = info_house['min_uf_m2'];
+                var max_uf_m2_value = info_house['max_uf_m2'];
+                var avg_uf_m2_value = info_house['avg_uf_m2'];
+
+                var min_usable_square_m2 = info_house['min_usable_square_m2'];
+                var max_usable_square_m2 = info_house['max_usable_square_m2'];
+                var avg_usable_square_m2 = info_house['avg_usable_square_m2'];
+                var min_land_area_m2 = info_house['min_m2_field'];
+                var max_land_area_m2 = info_house['max_m2_field'];
+                var avg_land_area_m2 = info_house['avg_m2_field'];
+                var min_uf_value = info_house['min_uf'];
+                var max_uf_value = info_house['max_uf'];
+                var avg_uf_value = info_house['avg_uf'];
+
+                // Cambiamos a string los valores que llegan como integer
+                max_land_area_m2 = max_land_area_m2.toString()
+                min_land_area_m2 = min_land_area_m2.toString()
+                total_stock = total_stock.toString()
+                vhmo = vhmo.toString()
+                vhmdd_h = vhmdd_h.toString()
+
+                // Subtítulo
+                doc.setFontStyle("bold");
+                doc.setFontSize(14);
+                doc.text('Información General Casas', 105, 20, null, null, 'center');
+
+                // Labels columna izquierda
+                doc.setFontSize(12);
+                doc.text('Venta Mensual en Regimen:', 74, 40, null, null, 'right');
+                doc.text('Venta Mensual Disponible:', 74, 50, null, null, 'right');
+                doc.text('Stock Total:', 74, 70, null, null, 'right');
+                doc.text('Venta Total:', 74, 80, null, null, 'right');
+                doc.text('Disponibilidad Total:', 74, 90, null, null, 'right');
+                doc.text('Meses para agotar stock:', 74, 100, null, null, 'right');
+                doc.text('Valor UF/m² Mín.:', 74, 110, null, null, 'right');
+                doc.text('Valor UF/m² Máx.:', 74, 120, null, null, 'right');
+                doc.text('Valor UF/m² Prom.:', 74, 130, null, null, 'right');
+
+                // Valores columna izquierda
+                doc.setFontStyle("normal");
+                doc.text(vhmo, 76, 40);
+                doc.text(vhmdd_h, 76, 50);
+                doc.text(total_stock, 76, 70);
+                doc.text(total_sale, 76, 80);
+                doc.text(total_availability, 76, 90);
+                doc.text(months_to_sell_out_stock, 76, 100);
+                doc.text(min_uf_m2_value, 76, 110);
+                doc.text(max_uf_m2_value, 76, 120);
+                doc.text(avg_uf_m2_value, 76, 130);
+
+                // Labels columna derecha
+                doc.setFontStyle("bold");
+                doc.text('Superficie Útil Mín. (m²):', 168, 40, null, null, 'right');
+                doc.text('Superficie Útil Máx. (m²):', 168, 50, null, null, 'right');
+                doc.text('Superficie Útil Prom. (m²):', 168, 60, null, null, 'right');
+                doc.text('Superficie Terreno Mín. (m²):', 168, 70, null, null, 'right');
+                doc.text('Superficie Terreno Máx. (m²):', 168, 80, null, null, 'right');
+                doc.text('Superficie Terreno Prom. (m²):', 168, 90, null, null, 'right');
+                doc.text('Valor UF Mín.:', 168, 110, null, null, 'right');
+                doc.text('Valor UF Máx.:', 168, 120, null, null, 'right');
+                doc.text('Valor UF Prom.:', 168, 130, null, null, 'right');
+
+                // Valores columna derecha
+                doc.setFontStyle("normal");
+                doc.text(min_usable_square_m2, 170, 40);
+                doc.text(max_usable_square_m2, 170, 50);
+                doc.text(avg_usable_square_m2, 170, 60);
+                doc.text(min_land_area_m2, 170, 70);
+                doc.text(max_land_area_m2, 170, 80);
+                doc.text(avg_land_area_m2, 170, 90);
+                doc.text(min_uf_value, 170, 110);
+                doc.text(max_uf_value, 170, 120);
+                doc.text(avg_uf_value, 170, 130);
 
               }
 
-              // Cod
-              doc.setFontSize(12);
-              doc.setFontStyle("bold");
-              doc.text('Cod:', 10, line_num);
-              doc.setFontStyle("normal");
-              doc.text(code, 22, line_num);
+            } else { // Gráficos
 
-              // Nombre
-              doc.setFontStyle("bold");
-              doc.text('Nombre:', 62, line_num);
-              doc.setFontStyle("normal");
-              doc.text(name, 80, line_num);
+              var reg = data[i];
+              var title = reg['title'];
+              var series = reg['series'];
+              var datasets = [];
 
-              line_num = line_num+8
+              // Extraemos las series
+              $.each(series, function(a, b){
 
-              // Inmobiliaria
-              doc.setFontStyle("bold");
-              doc.text('Inmobiliaria:', 10, line_num);
-              doc.setFontStyle("normal");
-              doc.text(real_estate_agent, 38, line_num);
+                var label = b['label']
+                var data = b['data']
 
-              line_num = line_num+8
+                // Setea los colores dependiendo de la serie
+                switch (label) {
+                  case 'UF Máximo':
+                  case 'Oferta Total':
+                  case 'Disponibles':
+                    rgba_color = 'rgba(66, 217, 100, 0.5)'
+                    rgb_colour = 'rgb(66, 217, 100)'
+                    break;
+                  case 'UF Mínimo':
+                  case 'Disponibilidad Total':
+                  case 'Vendidas':
+                    rgba_color = 'rgba(249, 156, 0, 0.5)'
+                    rgb_colour = 'rgb(249, 156, 0)'
+                    break;
+                  case 'UF Promedio':
+                  case 'Ventas Total':
+                    rgba_color = 'rgba(88, 185, 226, 0.5)'
+                    rgb_colour = 'rgb(88, 185, 226)'
+                    break;
+                }
 
-              // Dirección
-              doc.setFontStyle("bold");
-              doc.text('Dirección:', 10, line_num);
-              doc.setFontStyle("normal");
-              doc.text(address, 33, line_num);
+                var name = [];
+                var count = [];
 
-              line_num = line_num+8
+                // Extraemos los datos de las series
+                $.each(data, function(c, d){
+                  name.push(d['name'])
+                  count.push(d['count'])
+                })
 
-              // Oferta
-              doc.setFontStyle("bold");
-              doc.text('Oferta:', 10, line_num);
-              doc.setFontStyle("normal");
-              doc.text(total_units, 26, line_num);
+                // Guardamos "datasets" y "chart_type"
+                if (title == 'Venta & Disponibilidad por Programa') {
+                  chart_type = 'bar';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    backgroundColor: rgba_color,
+                    borderColor: rgb_colour,
+                    borderWidth: 1,
+                  })
+                }
 
-              // Venta
-              doc.setFontStyle("bold");
-              doc.text('Venta:', 62, line_num);
-              doc.setFontStyle("normal");
-              doc.text(sold_units, 77, line_num);
+                if (title == 'Oferta, Venta & Disponibilidad') {
+                  chart_type = 'line';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    fill: false,
+                    borderColor: rgb_colour,
+                    borderWidth: 4,
+                    pointRadius: 0,
+                    pointStyle: 'line',
+                    lineTension: 0,
+                  })
+                }
 
-              // Disponible
-              doc.setFontStyle("bold");
-              doc.text('Disponible:', 114, line_num);
-              doc.setFontStyle("normal");
-              doc.text(stock_units, 139, line_num);
+                if (title == 'Precio | UF') {
+                  chart_type = 'line';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    fill: false,
+                    borderColor: rgb_colour,
+                    borderWidth: 4,
+                    pointRadius: 0,
+                    pointStyle: 'line',
+                    lineTension: 0,
+                  })
+                }
 
-              // Velocidad
-              doc.setFontStyle("bold");
-              doc.text('Velocidad:', 169, line_num);
-              doc.setFontStyle("normal");
-              doc.text(vhmud, 193, line_num);
+                if (title == 'Precio Promedio | UFm² Útil') {
+                  chart_type = 'line';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    fill: false,
+                    borderColor: rgb_colour,
+                    borderWidth: 4,
+                    pointRadius: 0,
+                    pointStyle: 'line',
+                    lineTension: 0,
+                  })
+                }
 
-              line_num = line_num+5
+                if (title == 'Estado Obra') {
+                  chart_type = 'pie';
+                  datasets.push({
+                    label: label,
+                    data: count,
+                    backgroundColor: [
+                      'rgb(39,174,96)',
+                      'rgb(231,76,60)',
+                      'rgb(211,84,0)',
+                      'rgb(41,128,185)',
+                      'rgb(241,196,15)'
+                    ],
+                  })
+                }
 
-              doc.line(10, line_num, 200, line_num);
+                chart_data = {
+                  labels: name,
+                  datasets: datasets
+                }
 
-              line_num = line_num+8
-
-            }) // Cierra each
-          } else if (i == 1) { // Información General Departamentos
-
-            // Levantamos los valores de departamento
-            var info_department = data[i]['info_department'][0];
-
-            // Validamos si existen proyectos de departamento
-            if (info_department['project_count'] > 0) {
-
-              doc.addPage('a4', 'portrait')
-
-              // Pie de página
-              footer()
-
-              var vhmo = info_department['vhmo'];
-              var vhmdd = info_department['vhmdd'];
-              var total_units = info_department['total_units1'];
-              var sold_units = info_department['total_sold'];
-              var stock_units = info_department['total_stock1']
-              var months_to_sell_out_stock = info_department['spend_stock_months1'];
-              var min_uf_m2_value = info_department['min_uf_m21'];
-              var max_uf_m2_value = info_department['max_uf_m21'];
-              var avg_uf_m2_value = info_department['avg_uf_m2'];
-
-              var min_usable_square_m2 = info_department['min_usable_square_m21'];
-              var max_usable_square_m2 = info_department['max_usable_square_m21'];
-              var avg_usable_square_m2 = info_department['avg_usable_square_m21'];
-              var min_terrace_square_m2 = info_department['min_terrace_square_m21'];
-              var max_terrace_square_m2 = info_department['max_terrace_square_m21'];
-              var avg_terrace_square_m2 = info_department['avg_terrace_square_m21'];
-              var min_uf_value = info_department['min_uf1'];
-              var max_uf_value = info_department['max_uf1'];
-              var avg_uf_value = info_department['avg_uf1'];
-
-              // Cambiamos a string los valores que llegan como integer
-              vhmo = vhmo.toString();
-              vhmdd = vhmdd.toString();
-              // Subtítulo
-              doc.setFontStyle("bold");
-              doc.setFontSize(14);
-              doc.text('Información General Departamentos', 105, 20, null, null, 'center');
-
-              // Labels columna izquierda
-              doc.setFontSize(12);
-              doc.text('Venta Mensual en Regimen:', 74, 40, null, null, 'right');
-              doc.text('Venta Mensual Disponible:', 74, 50, null, null, 'right');
-              doc.text('Oferta:', 74, 70, null, null, 'right');
-              doc.text('Venta:', 74, 80, null, null, 'right');
-              doc.text('Disponibilidad:', 74, 90, null, null, 'right');
-              doc.text('Meses para agotar stock:', 74, 100, null, null, 'right');
-              doc.text('Valor UF/m² Mín.:', 74, 110, null, null, 'right');
-              doc.text('Valor UF/m² Máx.:', 74, 120, null, null, 'right');
-              doc.text('Valor UF/m² Prom.:', 74, 130, null, null, 'right');
-
-              // Valores columna izquierda
-              doc.setFontStyle("normal");
-              doc.text(vhmo, 76, 40);
-              doc.text(vhmdd, 76, 50);
-              doc.text(total_units, 76, 70);
-              doc.text(sold_units, 76, 80);
-              doc.text(stock_units, 76, 90);
-              doc.text(months_to_sell_out_stock, 76, 100);
-              doc.text(min_uf_m2_value, 76, 110);
-              doc.text(max_uf_m2_value, 76, 120);
-              doc.text(avg_uf_m2_value, 76, 130);
-
-              // Labels columna derecha
-              doc.setFontStyle("bold");
-              doc.text('Superficie Útil Mín. (m²):', 168, 40, null, null, 'right');
-              doc.text('Superficie Útil Máx. (m²):', 168, 50, null, null, 'right');
-              doc.text('Superficie Útil Prom. (m²):', 168, 60, null, null, 'right');
-              doc.text('Superficie Terraza Mín. (m²):', 168, 70, null, null, 'right');
-              doc.text('Superficie Terraza Máx. (m²):', 168, 80, null, null, 'right');
-              doc.text('Superficie Terraza Prom. (m²):', 168, 90, null, null, 'right');
-              doc.text('Valor UF Mín.:', 168, 110, null, null, 'right');
-              doc.text('Valor UF Máx.:', 168, 120, null, null, 'right');
-              doc.text('Valor UF Prom.:', 168, 130, null, null, 'right');
-
-              // Valores columna derecha
-              doc.setFontStyle("normal");
-              doc.text(min_usable_square_m2, 170, 40);
-              doc.text(max_usable_square_m2, 170, 50);
-              doc.text(avg_usable_square_m2, 170, 60);
-              doc.text(min_terrace_square_m2, 170, 70);
-              doc.text(max_terrace_square_m2, 170, 80);
-              doc.text(avg_terrace_square_m2, 170, 90);
-              doc.text(min_uf_value, 170, 110);
-              doc.text(max_uf_value, 170, 120);
-              doc.text(avg_uf_value, 170, 130);
-            }
-
-          } else if (i == 2) { // Información General Casas
-
-            // Levantamos los valores de casas
-            var info_house = data[i]['info_house'][0];
-
-            // Validamos si existen proyectos de casas
-            if (info_house['project_count'] > 0) {
-
-              doc.addPage('a4', 'portrait')
-
-              // Pie de página
-              footer()
-
-              var vhmo = info_house['vhmo'];
-              var vhmdd_h = info_house['vhmdd'];
-              var total_stock = info_house['total_units'];
-              var total_sale = info_house['total_sold'];
-              var total_availability = info_house['total_stock'];
-              var months_to_sell_out_stock = info_house['spend_stock_months1'];
-              var min_uf_m2_value = info_house['min_uf_m2'];
-              var max_uf_m2_value = info_house['max_uf_m2'];
-              var avg_uf_m2_value = info_house['avg_uf_m2'];
-
-              var min_usable_square_m2 = info_house['min_usable_square_m2'];
-              var max_usable_square_m2 = info_house['max_usable_square_m2'];
-              var avg_usable_square_m2 = info_house['avg_usable_square_m2'];
-              var min_land_area_m2 = info_house['min_m2_field'];
-              var max_land_area_m2 = info_house['max_m2_field'];
-              var avg_land_area_m2 = info_house['avg_m2_field'];
-              var min_uf_value = info_house['min_uf'];
-              var max_uf_value = info_house['max_uf'];
-              var avg_uf_value = info_house['avg_uf'];
-
-              // Cambiamos a string los valores que llegan como integer
-              max_land_area_m2 = max_land_area_m2.toString()
-              min_land_area_m2 = min_land_area_m2.toString()
-              total_stock = total_stock.toString()
-              vhmo = vhmo.toString()
-              vhmdd_h = vhmdd_h.toString()
-
-              // Subtítulo
-              doc.setFontStyle("bold");
-              doc.setFontSize(14);
-              doc.text('Información General Casas', 105, 20, null, null, 'center');
-
-              // Labels columna izquierda
-              doc.setFontSize(12);
-              doc.text('Venta Mensual en Regimen:', 74, 40, null, null, 'right');
-              doc.text('Venta Mensual Disponible:', 74, 50, null, null, 'right');
-              doc.text('Stock Total:', 74, 70, null, null, 'right');
-              doc.text('Venta Total:', 74, 80, null, null, 'right');
-              doc.text('Disponibilidad Total:', 74, 90, null, null, 'right');
-              doc.text('Meses para agotar stock:', 74, 100, null, null, 'right');
-              doc.text('Valor UF/m² Mín.:', 74, 110, null, null, 'right');
-              doc.text('Valor UF/m² Máx.:', 74, 120, null, null, 'right');
-              doc.text('Valor UF/m² Prom.:', 74, 130, null, null, 'right');
-
-              // Valores columna izquierda
-              doc.setFontStyle("normal");
-              doc.text(vhmo, 76, 40);
-              doc.text(vhmdd_h, 76, 50);
-              doc.text(total_stock, 76, 70);
-              doc.text(total_sale, 76, 80);
-              doc.text(total_availability, 76, 90);
-              doc.text(months_to_sell_out_stock, 76, 100);
-              doc.text(min_uf_m2_value, 76, 110);
-              doc.text(max_uf_m2_value, 76, 120);
-              doc.text(avg_uf_m2_value, 76, 130);
-
-              // Labels columna derecha
-              doc.setFontStyle("bold");
-              doc.text('Superficie Útil Mín. (m²):', 168, 40, null, null, 'right');
-              doc.text('Superficie Útil Máx. (m²):', 168, 50, null, null, 'right');
-              doc.text('Superficie Útil Prom. (m²):', 168, 60, null, null, 'right');
-              doc.text('Superficie Terreno Mín. (m²):', 168, 70, null, null, 'right');
-              doc.text('Superficie Terreno Máx. (m²):', 168, 80, null, null, 'right');
-              doc.text('Superficie Terreno Prom. (m²):', 168, 90, null, null, 'right');
-              doc.text('Valor UF Mín.:', 168, 110, null, null, 'right');
-              doc.text('Valor UF Máx.:', 168, 120, null, null, 'right');
-              doc.text('Valor UF Prom.:', 168, 130, null, null, 'right');
-
-              // Valores columna derecha
-              doc.setFontStyle("normal");
-              doc.text(min_usable_square_m2, 170, 40);
-              doc.text(max_usable_square_m2, 170, 50);
-              doc.text(avg_usable_square_m2, 170, 60);
-              doc.text(min_land_area_m2, 170, 70);
-              doc.text(max_land_area_m2, 170, 80);
-              doc.text(avg_land_area_m2, 170, 90);
-              doc.text(min_uf_value, 170, 110);
-              doc.text(max_uf_value, 170, 120);
-              doc.text(avg_uf_value, 170, 130);
-
-            }
-
-          } else { // Gráficos
-
-            var reg = data[i];
-            var title = reg['title'];
-            var series = reg['series'];
-            var datasets = [];
-
-            // Extraemos las series
-            $.each(series, function(a, b){
-
-              var label = b['label']
-              var data = b['data']
-
-              // Setea los colores dependiendo de la serie
-              switch (label) {
-                case 'UF Máximo':
-                case 'Oferta Total':
-                case 'Disponibles':
-                  rgba_color = 'rgba(66, 217, 100, 0.5)'
-                  rgb_colour = 'rgb(66, 217, 100)'
-                  break;
-                case 'UF Mínimo':
-                case 'Disponibilidad Total':
-                case 'Vendidas':
-                  rgba_color = 'rgba(249, 156, 0, 0.5)'
-                  rgb_colour = 'rgb(249, 156, 0)'
-                  break;
-                case 'UF Promedio':
-                case 'Ventas Total':
-                  rgba_color = 'rgba(88, 185, 226, 0.5)'
-                  rgb_colour = 'rgb(88, 185, 226)'
-                  break;
-              }
-
-              var name = [];
-              var count = [];
-
-              // Extraemos los datos de las series
-              $.each(data, function(c, d){
-                name.push(d['name'])
-                count.push(d['count'])
               })
 
-              // Guardamos "datasets" y "chart_type"
-              if (title == 'Venta & Disponibilidad por Programa') {
-                chart_type = 'bar';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  backgroundColor: rgba_color,
-                  borderColor: rgb_colour,
-                  borderWidth: 1,
-                })
-              }
+              // Guardamos "options"
+              if (chart_type == 'bar') { // Bar
 
-              if (title == 'Oferta, Venta & Disponibilidad') {
-                chart_type = 'line';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  fill: false,
-                  borderColor: rgb_colour,
-                  borderWidth: 4,
-                  pointRadius: 0,
-                  pointStyle: 'line',
-                  lineTension: 0,
-                })
-              }
-
-              if (title == 'Precio | UF') {
-                chart_type = 'line';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  fill: false,
-                  borderColor: rgb_colour,
-                  borderWidth: 4,
-                  pointRadius: 0,
-                  pointStyle: 'line',
-                  lineTension: 0,
-                })
-              }
-
-              if (title == 'Precio Promedio | UFm² Útil') {
-                chart_type = 'line';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  fill: false,
-                  borderColor: rgb_colour,
-                  borderWidth: 4,
-                  pointRadius: 0,
-                  pointStyle: 'line',
-                  lineTension: 0,
-                })
-              }
-
-              if (title == 'Estado Obra') {
-                chart_type = 'pie';
-                datasets.push({
-                  label: label,
-                  data: count,
-                  backgroundColor: [
-                    'rgb(39,174,96)',
-                    'rgb(231,76,60)',
-                    'rgb(211,84,0)',
-                    'rgb(41,128,185)',
-                    'rgb(241,196,15)'
-                  ],
-                })
-              }
-
-              chart_data = {
-                labels: name,
-                datasets: datasets
-              }
-
-            })
-
-            // Guardamos "options"
-            if (chart_type == 'bar') { // Bar
-
-              var chart_options = {
-                animation: false,
-                responsive: true,
-                title: {
-                  display: false
-                },
-                legend: {
-                  display: true,
-                  position: 'bottom',
-                  labels: {
-                    fontColor: '#3d4046',
-                    fontSize: 12,
-                  }
-                },
-                plugins: {
-                  datalabels: {
-                    align: 'center',
-                    anchor: 'center',
-                    color: '#3d4046',
-                    font: {
-                      size: 10
-                    },
-                    formatter: (value, ctx) => {
-                      // Mustra sólo los valores que estén por encima del 3%
-                      let sum = 0;
-                      let dataArr = ctx.chart.data.datasets[0].data;
-                      dataArr.map(data => {
-                          sum += data;
-                      });
-                      let percentage = (value*100 / sum).toFixed(2);
-                      if (percentage > 4) {
-                        return value.toLocaleString('es-ES');
-                      } else {
-                        return null;
-                      }
-                    },
-                  }
-                },
-                scales: {
-                  xAxes: [{
-                    stacked: true,
-                    ticks: {
-                      display: true,
-                      fontSize: 10,
-                      fontColor: '#3d4046'
-                    }
-                  }],
-                  yAxes: [{
-                    stacked: true,
-                    ticks: {
-                      callback: function(label, index, labels) {
-                        label = label.toLocaleString('es-ES')
-                        return label;
-                      },
-                      beginAtZero: true,
-                      display: true,
-                      fontSize: 10,
-                      fontColor: '#3d4046'
-                    },
-                  }],
-                }
-              };
-
-            } else if (chart_type == 'pie') { // Pie
-
-              var chart_options = {
-                animation: false,
-                responsive: true,
-                title: {
-                  display: false
-                },
-                legend: {
-                  display: true,
-                  position: 'bottom',
-                  labels: {
-                    fontColor: '#3d4046',
-                    fontSize: 12,
-                    usePointStyle: true,
-                  }
-                },
-                plugins: {
-                  datalabels: {
-                    formatter: (value, ctx) => {
-                      // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
-                      let sum = 0;
-                      let dataArr = ctx.chart.data.datasets[0].data;
-                      dataArr.map(data => {
-                          sum += data;
-                      });
-                      let percentage = (value*100 / sum).toFixed(2);
-                      if (percentage > 4) {
-                        return percentage+'%';
-                      } else {
-                        return null;
-                      }
-                    },
-                    align: 'end',
-                    anchor: 'center',
-                    color: '#FFFFFF',
-                    font: {
-                      weight: 'bold'
-                    },
-                    textStrokeColor: '#3d4046',
-                    textStrokeWidth: 1,
-                    textShadowColor: '#000000',
-                    textShadowBlur: 3,
+                var chart_options = {
+                  animation: false,
+                  responsive: true,
+                  title: {
+                    display: false
+                  },
+                  legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      fontColor: '#3d4046',
+                      fontSize: 12,
                     }
                   },
+                  plugins: {
+                    datalabels: {
+                      align: 'center',
+                      anchor: 'center',
+                      color: '#3d4046',
+                      font: {
+                        size: 10
+                      },
+                      formatter: (value, ctx) => {
+                        // Mustra sólo los valores que estén por encima del 3%
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value*100 / sum).toFixed(2);
+                        if (percentage > 4) {
+                          return value.toLocaleString('es-ES');
+                        } else {
+                          return null;
+                        }
+                      },
+                    }
+                  },
+                  scales: {
+                    xAxes: [{
+                      stacked: true,
+                      ticks: {
+                        display: true,
+                        fontSize: 10,
+                        fontColor: '#3d4046'
+                      }
+                    }],
+                    yAxes: [{
+                      stacked: true,
+                      ticks: {
+                        callback: function(label, index, labels) {
+                          label = label.toLocaleString('es-ES')
+                          return label;
+                        },
+                        beginAtZero: true,
+                        display: true,
+                        fontSize: 10,
+                        fontColor: '#3d4046'
+                      },
+                    }],
+                  }
                 };
 
-            } else { // Line
+              } else if (chart_type == 'pie') { // Pie
 
-              var chart_options = {
-                animation: false,
-                responsive: true,
-                title: {
-                  display: false
-                },
-                legend: {
-                  display: true,
-                  position: 'bottom',
-                  labels: {
-                    fontColor: '#3d4046',
-                    fontSize: 12,
-                    usePointStyle: true,
-                  }
-                },
-                layout: {
-                  padding: {
-                    right: 40
-                  }
-                },
-                plugins: {
-                  datalabels: {
-                    formatter: function(value, context) {
-                      if (value > 0) {
-                        return value.toLocaleString('es-ES')
-                      } else {
-                        return null
+                var chart_options = {
+                  animation: false,
+                  responsive: true,
+                  title: {
+                    display: false
+                  },
+                  legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      fontColor: '#3d4046',
+                      fontSize: 12,
+                      usePointStyle: true,
+                    }
+                  },
+                  plugins: {
+                    datalabels: {
+                      formatter: (value, ctx) => {
+                        // Mustra sólo los valores (en porcentajes) que estén por encima del 3%
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value*100 / sum).toFixed(2);
+                        if (percentage > 4) {
+                          return percentage+'%';
+                        } else {
+                          return null;
+                        }
+                      },
+                      align: 'end',
+                      anchor: 'center',
+                      color: '#FFFFFF',
+                      font: {
+                        weight: 'bold'
+                      },
+                      textStrokeColor: '#3d4046',
+                      textStrokeWidth: 1,
+                      textShadowColor: '#000000',
+                      textShadowBlur: 3,
                       }
                     },
-                    align: 'start',
-                    anchor: 'start',
-                    color: '#3d4046',
-                    font: {
-                      size: 10
-                    },
-                  }
-                },
-                scales: {
-                  xAxes: [{
-                    stacked: true,
-                    ticks: {
-                      display: true,
-                      fontSize: 10,
-                      fontColor: '#3d4046'
+                  };
+
+              } else { // Line
+
+                var chart_options = {
+                  animation: false,
+                  responsive: true,
+                  title: {
+                    display: false
+                  },
+                  legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                      fontColor: '#3d4046',
+                      fontSize: 12,
+                      usePointStyle: true,
                     }
-                  }],
-                  yAxes: [{
-                    ticks: {
-                      callback: function(label, index, labels) {
-                        label = label.toLocaleString('es-ES')
-                        return label;
+                  },
+                  layout: {
+                    padding: {
+                      right: 40
+                    }
+                  },
+                  plugins: {
+                    datalabels: {
+                      formatter: function(value, context) {
+                        if (value > 0) {
+                          return value.toLocaleString('es-ES')
+                        } else {
+                          return null
+                        }
                       },
-                      beginAtZero: true,
-                      display: true,
-                      fontSize: 10,
-                      fontColor: '#3d4046'
-                    },
-                  }],
-                }
-              };
+                      align: 'start',
+                      anchor: 'start',
+                      color: '#3d4046',
+                      font: {
+                        size: 10
+                      },
+                    }
+                  },
+                  scales: {
+                    xAxes: [{
+                      stacked: true,
+                      ticks: {
+                        display: true,
+                        fontSize: 10,
+                        fontColor: '#3d4046'
+                      }
+                    }],
+                    yAxes: [{
+                      ticks: {
+                        callback: function(label, index, labels) {
+                          label = label.toLocaleString('es-ES')
+                          return label;
+                        },
+                        beginAtZero: true,
+                        display: true,
+                        fontSize: 10,
+                        fontColor: '#3d4046'
+                      },
+                    }],
+                  }
+                };
 
-            } // Cierra else ("options")
+              } // Cierra else ("options")
 
-            var chart_settings = {
-              type: chart_type,
-              data: chart_data,
-              options: chart_options
-            }
+              var chart_settings = {
+                type: chart_type,
+                data: chart_data,
+                options: chart_options
+              }
 
-            // Creamos y adjuntamos el canvas
-            var canvas = document.createElement('canvas');
-            canvas.id = 'report-canvas-'+i;
-            $('#chart-report'+i).append(canvas);
+              // Creamos y adjuntamos el canvas
+              var canvas = document.createElement('canvas');
+              canvas.id = 'report-canvas-'+i;
+              $('#chart-report'+i).append(canvas);
 
-            var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
-            var final_chart = new Chart(chart_canvas, chart_settings);
+              var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
+              var final_chart = new Chart(chart_canvas, chart_settings);
 
-            var chart = final_chart.toBase64Image();
+              var chart = final_chart.toBase64Image();
 
-            if (i % 2 == 1) {
+              if (i % 2 == 1) {
 
-              doc.addPage('a4', 'portrait')
+                doc.addPage('a4', 'portrait')
 
-              // Pie de página
-              footer()
+                // Pie de página
+                footer()
 
-              // Título del gráfico
-              doc.setFontSize(16);
-              doc.setFontStyle("bold");
-              doc.text(title, 105, 20, null, null, 'center');
+                // Título del gráfico
+                doc.setFontSize(16);
+                doc.setFontStyle("bold");
+                doc.text(title, 105, 20, null, null, 'center');
 
-              // Gráfico
-              img_height = (final_chart.height * 190) / final_chart.width
-              doc.addImage(chart, 'JPEG', 9, 30, 190, img_height);
+                // Gráfico
+                img_height = (final_chart.height * 190) / final_chart.width
+                doc.addImage(chart, 'JPEG', 9, 30, 190, img_height);
 
-            } else {
+              } else {
 
-              // Título del gráfico
-              doc.setFontSize(16);
-              doc.setFontStyle("bold");
-              doc.text(title, 105, 160, null, null, 'center');
+                // Título del gráfico
+                doc.setFontSize(16);
+                doc.setFontStyle("bold");
+                doc.text(title, 105, 160, null, null, 'center');
 
-              // Gráfico
-              img_height = (final_chart.height * 190) / final_chart.width
-              doc.addImage(chart, 'JPEG', 9, 170, 190, img_height);
+                // Gráfico
+                img_height = (final_chart.height * 190) / final_chart.width
+                doc.addImage(chart, 'JPEG', 9, 170, 190, img_height);
 
-            } // Cierra if impar
+              } // Cierra if impar
+            } // Cierra if
+          } // Cierra for
 
-          } // Cierra if
-
-        } // Cierra for
-
-        // Descarga el archivo PDF
-        doc.save("Informe_ProyectosEnVenta.pdf");
+          // Descarga el archivo PDF
+          doc.save("Informe_ProyectosEnVenta.pdf");
 
       }); // Cierra then
     } // Cierra success
@@ -1484,6 +1507,9 @@ Congo.projects.action_dashboards = function(){
 
         },
         success: function(data){
+
+          console.log('RESPONSE PRV');
+          console.log(data);
 
           // Ocultamos el spinner y habilitamos los botones
           $("#spinner").hide();
