@@ -66,21 +66,28 @@ function rent_indicators_report_pdf() {
     },
     success: function(data) {
 
-      console.log('Datos PDF:');
-      console.log(data);
+      var mapContainer = document.getElementById('map');
+      $('.leaflet-top').addClass('d-none');
+      $('.leaflet-right').addClass('d-none');
+      $('.leaflet-html-legend').addClass('d-none');
+      $('.leaflet-tooltip-pane').addClass('d-none');
 
-      let build_image_map = new Promise((resolve, reject) => {
-        leafletImage(map, function(err, canvas) {
-          var img = document.createElement('img');
-          var dimensions = map.getSize();
-          img.width = dimensions.x;
-          img.height = dimensions.y;
-          img.src = canvas.toDataURL();
-          resolve(img);
-        });
-      });
+      html2canvas(mapContainer, {
+        useCORS: true,
+      }).then(function(canvas) {
 
-      build_image_map.then(function(img) {
+        var img = document.createElement('img');
+        var dimensions = map.getSize();
+        img.width = dimensions.x;
+        img.height = dimensions.y;
+        img.src = canvas.toDataURL();
+
+        // Oculta elementos leaflet para sacar la captura
+        $('.leaflet-top').removeClass('d-none');
+        $('.leaflet-right').removeClass('d-none');
+        $('.leaflet-html-legend').removeClass('d-none');
+        $('.leaflet-tooltip-pane').removeClass('d-none');
+
 
         // Oculta el spinner y habilitar la interacción con el mapa
         $("#report_spinner").hide();
