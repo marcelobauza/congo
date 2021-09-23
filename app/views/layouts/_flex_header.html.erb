@@ -6,6 +6,9 @@
     <!-- Barra (Elementos Izquierda)-->
     <ul class="navbar-nav mr-auto">
     </ul>
+
+    <!-- Comprar Informes -->
+    <button class="btn btn-primary" data-toggle="modal" data-target="#buy_modal"><i class="fas fa-shopping-cart" title="Comprar Reportes" style="font-size: 26px"></i></button>
     <!-- Salir -->
     <%= link_to destroy_user_session_path, method: :delete, 'class' => 'btn btn-primary' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
 
