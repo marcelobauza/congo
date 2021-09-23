@@ -21,16 +21,9 @@
 
     <!-- Descarga PDF -->
     <div class="nav-item dropdown" data-flex-downloads-pdf></div>
+    <!-- Salir -->
+    <%= link_to destroy_user_session_path, method: :delete, 'class' => 'btn btn-primary' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
 
-    <!-- Cuenta Dropdown -->
-    <div class="nav-item dropdown">
-      <button class="btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width p-flex-nav-btn" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-user size-flex-nav-item" title="Usuario"></i>
-      </button>
-      <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
-        <%= link_to destroy_user_session_path, method: :delete, 'class' => 'dropdown-item custom-item' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
-      </div>
-    </div>
   </div>
 </nav>
 
