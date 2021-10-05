@@ -705,16 +705,64 @@ future_projects_report_pdf = function() {
 
 Congo.future_projects.action_heatmap = function(){
 
-  init=function(){
+  init = function(){
 
-        Congo.future_projects.config.legends = [];
-        Congo.dashboards.config.style_layer= 'heatmap_test_future_projects';
-        Congo.future_projects.config.legends.push({'name':'Alto', 'color':'9d2608'});
-        Congo.future_projects.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
-        Congo.future_projects.config.legends.push({'name':'Medio', 'color':'fa7c16'});
-        Congo.future_projects.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
-        Congo.future_projects.config.legends.push({'name':'Bajo', 'color':'fcd930'});
-        Congo.map_utils.counties();
+    // var testData = {
+    //   max: 8,
+    //   data: [{
+    //     lat: -33.460363,
+    //     lng: -70.668076,
+    //     count: 20
+    //   }, {
+    //     lat: -33.461357,
+    //     lng: -70.669160,
+    //     count: 50
+    //   }]
+    // };
+    //
+    // // Config usada en GW
+    // cfg = {
+    //   "radius": 30,
+    //   "maxOpacity": .8,
+    //   "scaleRadius": false,
+    //   "useLocalExtrema": true,
+    //   latField: 'lat',
+    //   lngField: 'lng',
+    //   valueField: 'count'
+    // };
+    //
+    // // Config docs
+    // var cfg = {
+    //   // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+    //   // if scaleRadius is false it will be the constant radius used in pixels
+    //   "radius": 2,
+    //   "maxOpacity": .8,
+    //   // scales the radius based on map zoom
+    //   "scaleRadius": true,
+    //   // if set to false the heatmap uses the global maximum for colorization
+    //   // if activated: uses the data maximum within the current map boundaries
+    //   //   (there will always be a red spot with useLocalExtremas true)
+    //   "useLocalExtrema": true,
+    //   // which field name in your data represents the latitude - default "lat"
+    //   latField: 'lat',
+    //   // which field name in your data represents the longitude - default "lng"
+    //   lngField: 'lng',
+    //   // which field name in your data represents the data value - default "value"
+    //   valueField: 'count'
+    // };
+    //
+    // heatmapLayer = new HeatmapOverlay(cfg);
+    // heatmapLayer.setData(testData);
+    // map.addLayer(heatmapLayer);
+
+    Congo.future_projects.config.legends = [];
+    Congo.dashboards.config.style_layer= 'heatmap_test_future_projects';
+    Congo.future_projects.config.legends.push({'name':'Alto', 'color':'9d2608'});
+    Congo.future_projects.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
+    Congo.future_projects.config.legends.push({'name':'Medio', 'color':'fa7c16'});
+    Congo.future_projects.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
+    Congo.future_projects.config.legends.push({'name':'Bajo', 'color':'fcd930'});
+    Congo.map_utils.counties();
   }
   return {
     init: init,
