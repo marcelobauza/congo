@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_16_150821) do
+ActiveRecord::Schema.define(version: 2021_10_05_124525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -655,6 +655,7 @@ ActiveRecord::Schema.define(version: 2021_08_16_150821) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agency_id"], name: "index_projects_on_agency_id"
+    t.decimal "vhmo", precision: 8, scale: 1, default: "0.0"
     t.index ["county_id"], name: "index_projects_on_county_id"
     t.index ["project_type_id"], name: "index_projects_on_project_type_id"
   end
