@@ -14,7 +14,7 @@
       <%= f.input :complete_name, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
       <%= f.input :rut, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
       <%= f.input :email, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
-      <%= f.collection_select(:company_id, Company.all, :id, :name, { include_blank: false },{prompt: "Seleccione empresa"}) %>
+      <%= f.collection_select(:company_id, Company.order(:name), :id, :name, { include_blank: false },{prompt: "Seleccione empresa"}) %>
       <%= f.input :city, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
       <% if !@user.new_record? %>
         <%= f.input :current_password, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
