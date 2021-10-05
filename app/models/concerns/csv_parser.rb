@@ -14,6 +14,30 @@ POLYGON_HEADER = ["ID", "USUARIO", "FECHA", "CAPA", "WKT", "EMPRESA"]
 
 DOWNLOADS_USERS_HEADER = ["USUARIO", "FECHA", "COMPRAVENTAS", "EXPEDIENTES", "PROYECTOS"]
 
+PROJECTS_FOR_AREA = ["Nombre", "Código", "Comuna_id", "Area"]
+
+def self.get_projects_area_data_csv(projects)
+  tempFile = Tempfile.new('proyectos_por_area.csv')
+
+  CSV.open(tempFile.path, "w") do |writer|
+    writer << PROJECTS_FOR_AREA
+
+    projects.each do |project|
+      values = [
+        project.name,
+        project.code,
+        project.county_id,
+        project.area_name
+      ]
+
+      writer << values
+    end
+  end
+
+  tempFile.path
+end
+
+
 def self.get_downloads_users_csv_data du
   tempFile = Tempfile.new('transactions.csv')
 

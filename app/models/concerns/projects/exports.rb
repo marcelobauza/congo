@@ -2,6 +2,20 @@ module Projects::Exports
   extend ActiveSupport::Concern
 
   module ClassMethods
+    def get_area_data_csv filters
+      projects = Project.joins(
+        :project_instances
+      ).joins(
+        "inner join parcels on st_contains(parcels.the_geom, projects.the_geom)"
+      ).where(
+        project_instances: { bimester: filters[:bimester], year: filters[:year] }
+      ).select(
+        :name, :code, :county_id, :commune, :area_name
+      )
+
+      CsvParser.get_projects_area_data_csv(projects)
+    end
+
     def get_csv_data(filters)
       joins = [
         :county,

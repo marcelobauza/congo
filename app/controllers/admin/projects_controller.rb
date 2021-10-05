@@ -21,11 +21,19 @@ class Admin::ProjectsController < ApplicationController
   def export_data
     @projects = Project.new
   end
+
   def generate_csv
     file = Project.get_csv_data(params[:search])
     send_file file, :type => 'text/csv', :disposition => "inline", :filename => "projects.csv"
   end
 
+  def download_area_data
+  end
+
+  def generate_area_csv
+    file = Project.get_area_data_csv(params[:search])
+    send_file file, :type => 'text/csv', :disposition => "inline", :filename => "projects_area.csv"
+  end
 
   # GET /projects
   # GET /projects.json

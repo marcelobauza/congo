@@ -1,0 +1,19 @@
+<%= simple_form_for :search, url: admin_projects_generate_area_csv_path,
+  method: :get do |f| %>
+
+  <%= f.input :year,
+    label: t('activerecord.attributes.kpi.year'),
+    collection: 2010..Date.today.year,
+    input_html:{ class: 'form-control'},
+    wrapper_html:{ class: "form-group col-md-4"},
+    prompt: 'Seleccione año'
+  %>
+<%= f.input :bimester,
+  label: t('activerecord.attributes.kpi.bimester'),
+  collection: 1..6,
+  input_html:{ class: 'form-control'},
+  wrapper_html:{ class: "form-group col-md-4"},
+  prompt: 'Seleccione año'%>
+<%= f.submit "Buscar", class: 'btn primary'%>
+</div>
+<% end %>
