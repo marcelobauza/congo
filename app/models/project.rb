@@ -151,7 +151,7 @@ class Project < ApplicationRecord
     select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno))))  END AS pp_uf_dis_home, "
     select += "CASE SUM(project_instance_mix_views.total_m2) WHEN 0 THEN 0 "
     select += "ELSE AVG(project_instance_mix_views.uf_m2_home) END AS pp_uf_m2, "
-    select += "CASE vhmo WHEN 0 THEN vhmo else sum(vhmu) END AS vhmo, "
+    select += "SUM(CASE vhmo WHEN 0 THEN vhmu else vhmo END) AS vhmo, "
     select += "SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) AS vhmd, "
     select += "CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) "
     select += "ELSE SUM(project_instance_mix_views.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END AS masd, "
