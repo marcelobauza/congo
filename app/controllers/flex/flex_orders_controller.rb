@@ -28,6 +28,7 @@ class Flex::FlexOrdersController < ApplicationController
     preference_response = sdk.preference.create(preference_data)
     preference = preference_response[:response]
     @preference_id = preference['id']
+    @flex_order.save
   end
 
   private
