@@ -29,8 +29,11 @@ class Flex::FlexOrdersController < ApplicationController
     preference = preference_response[:response]
     @preference_id = preference['id']
   end
+
   private
 
   def flex_order_params
     params.require(:flex_order).permit(:amount, :status).merge(user_id: current_user.id)
   end
+
+end
