@@ -136,6 +136,7 @@ Rails.application.routes.draw do
     resources :dashboards, only: [:index, :new, :create]
     resources :tenements
     resources :flex_reports, only: [:index, :new, :create, :show]
+    resources :flex_orders, only: [:new, :create]
 
     root 'flex_reports#index'
   end

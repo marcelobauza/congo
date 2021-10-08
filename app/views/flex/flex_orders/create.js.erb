@@ -1,0 +1,8 @@
+preference_id = '<%= @preference_id %>'
+const mp = new MercadoPago('TEST-694989c1-76de-4ccb-af83-bdf325f52270', {locale: 'es-CL'});
+const checkout = mp.checkout({
+  preference: {
+      id: preference_id
+  },
+  autoOpen: true, // Habilita la apertura automática del Checkout Pro
+});

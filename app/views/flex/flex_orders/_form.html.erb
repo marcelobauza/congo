@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="info_modal_label">Comprar Reportes</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<%= simple_form_for(@flex_order, remote: true, :url => flex_flex_orders_path) do |form| %>
+
+  <div class="modal-body">
+
+    <% if @flex_order.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@flex_order.errors.count, "error") %> prohibited this flex order from being saved:</h2>
+        <ul><% @flex_order.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>
+      </div>
+    <% end %>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        Precio
+      </div>
+      <div class="form-group col-md-6">
+        CLP$ 3000
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <%= form.label :amount, 'Cantidad:', input_html: {class: 'col-form-label'}  %>
+      </div>
+      <div class="form-group col-md-6">
+        <%= form.input :amount, label: false, input_html: {class: 'form-control form-control-sm'} %>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <div class="actions text-right">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      <%= form.submit class: 'btn btn-primary', value: "Checkout" %>
+    </div>
+  </div>
+
+<% end %>
