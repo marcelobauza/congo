@@ -419,6 +419,8 @@ es:
         tome: Tomo
         active: Punto Activo
         comments: 'Observaciones'
+        type_registration: 'Tipo de inscripción'
+        lot_m2: 'Predio m2'
       kpi:
         polygon: Seleccione Poligono
         county: Comuna
