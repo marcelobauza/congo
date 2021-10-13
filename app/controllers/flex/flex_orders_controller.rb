@@ -29,6 +29,10 @@ class Flex::FlexOrdersController < ApplicationController
     preference_response = sdk.preference.create(preference_data)
     preference = preference_response[:response]
     @preference_id = preference['id']
+
+    @flex_order.preference_id = @preference_id
+    @flex_order.unit_price = @unit_price
+
     respond_to do |format|
       if @flex_order.save
         format.js

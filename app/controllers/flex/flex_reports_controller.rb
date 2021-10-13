@@ -7,6 +7,25 @@ class Flex::FlexReportsController < ApplicationController
   # GET /flex/reports
   # GET /flex/reports.json
   def index
+
+    unless params[:status] == 'null'
+      flex_order = FlexOrder.where(preference_id: params[:preference_id]).first
+      attributes = {
+        status: params[:status],
+        collection_id: params[:collection_id],
+        collection_status: params[:collection_status],
+        payment_id: params[:payment_id],
+        external_reference: params[:external_reference],
+        payment_type: params[:payment_type],
+        merchant_order_id: params[:merchant_order_id],
+        preference_id: params[:preference_id],
+        site_id: params[:site_id],
+        processing_mode: params[:processing_mode],
+        merchant_account_id: params[:merchant_account_id]
+      }
+      flex_order.update_attributes(attributes)
+    end
+
     @flex_reports = FlexReport.where(user_id: current_user.id).
       order(created_at: :desc).
       paginate(page: params[:page], per_page: 10)
