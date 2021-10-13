@@ -20,9 +20,9 @@ class Flex::FlexOrdersController < ApplicationController
       ],
       binary_mode: true,
       back_urls: {
-        success: 'http://app.inciti.com/es/flex/',
-        failure: 'http://app.inciti.com/es/flex/',
-        pending: 'http://app.inciti.com/es/flex/'
+        success: flex_flex_reports_url,
+        failure: flex_flex_reports_url,
+        pending: flex_flex_reports_url
       },
       auto_return: 'approved'
     }
