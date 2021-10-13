@@ -50,7 +50,7 @@ class Flex::FlexOrdersController < ApplicationController
   private
 
   def flex_order_params
-    params.require(:flex_order).permit(:amount, :status).merge(user_id: current_user.id)
+    params.require(:flex_order).permit(:amount).merge(user_id: current_user.id)
   end
 
 end
