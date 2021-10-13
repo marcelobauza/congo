@@ -31,8 +31,9 @@
       <h4>Flex Ordenes</h4>
     </div>
       <div class="row">
-        <div class="col-3">Cantidad</div>
-        <div class="col">Fecha creación</div>
+        <div class="col-1">Cantidad</div>
+        <div class="col-1">Estado</div>
+        <div class="col-2">Fecha creación</div>
       </div>
       <%= f.simple_fields_for :flex_orders do |fo| %>
         <%= render 'flex_order_fields', f: fo %>
