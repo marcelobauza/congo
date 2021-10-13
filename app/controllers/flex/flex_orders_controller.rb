@@ -7,7 +7,7 @@ class Flex::FlexOrdersController < ApplicationController
   def create
     require 'mercadopago'
     @flex_order = FlexOrder.new(flex_order_params)
-    sdk = Mercadopago::SDK.new('TEST-729515335620012-100805-7bb9e3341850d273e54eea3c30bdb0b0-837736362')
+    sdk = Mercadopago::SDK.new(ENV['MP_ACCESS_TOKEN'])
     @unit_price = 5000
     preference_data = {
       items: [
