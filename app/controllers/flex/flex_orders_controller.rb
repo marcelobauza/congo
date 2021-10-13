@@ -8,13 +8,14 @@ class Flex::FlexOrdersController < ApplicationController
     require 'mercadopago'
     @flex_order = FlexOrder.new(flex_order_params)
     sdk = Mercadopago::SDK.new('TEST-729515335620012-100805-7bb9e3341850d273e54eea3c30bdb0b0-837736362')
+    @unit_price = 5000
     preference_data = {
       items: [
         {
           title: 'Reporte Flex',
           quantity: @flex_order.amount,
           currency_id: 'CLP',
-          unit_price: 3000
+          unit_price: @unit_price
         }
       ],
       binary_mode: true,
