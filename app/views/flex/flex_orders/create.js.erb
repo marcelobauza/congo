@@ -4,5 +4,9 @@ const checkout = mp.checkout({
   preference: {
       id: preference_id
   },
-  autoOpen: true, // Habilita la apertura automática del Checkout Pro
+  autoOpen: true,
 });
+$("#buy_modal").modal('hide');
+setTimeout(function(){
+  $('.mp-mercadopago-checkout-wrapper').remove();
+}, 10000);
