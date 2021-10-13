@@ -28,7 +28,18 @@ class Flex::FlexOrdersController < ApplicationController
     preference_response = sdk.preference.create(preference_data)
     preference = preference_response[:response]
     @preference_id = preference['id']
-    @flex_order.save
+    respond_to do |format|
+      if @flex_order.save
+        format.js
+        format.html { redirect_to @flex_report, notice: 'La orden se creó correctamente.' }
+        format.json { render :show, status: :created, location: @flex_order }
+      else
+        format.js
+        format.html { render :new }
+        format.json { render json: @flex_order.errors, status: :unprocessable_entity }
+      end
+    end
+
   end
 
   private
