@@ -108,6 +108,7 @@ Rails.application.routes.draw do
     resources :feedbacks
     resources :building_regulations
     resources :future_project_sub_types
+    resources :flex_orders, only: [:index]
 
     resources :regions
 
