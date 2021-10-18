@@ -5,6 +5,7 @@
     <%= form.submit 'Filtar' %>
   </div>
 <% end %>
+<% if @flex_orders %>
   <table class="table">
     <tr>
       <th>Usuario</th>
@@ -19,9 +20,10 @@
         <td><%= flex_order.user.name %></td>
         <td><%= flex_order.user.email %></td>
         <td><%= flex_order.amount %></td>
-        <td><%= flex_order.amount *flex_order.unit_price %></td>
+        <td><%= flex_order.amount * flex_order.unit_price %></td>
         <td><%= flex_order.status %></td>
         <td><%= l(flex_order.created_at, format: '%d-%m-%Y') %></td>
       </tr>
     <% end %>
   </table>
+<% end %>
