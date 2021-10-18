@@ -292,6 +292,26 @@ ActiveRecord::Schema.define(version: 2021_10_12_191344) do
     t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
+  create_table "flex_orders", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "amount"
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "unit_price"
+    t.string "collection_id"
+    t.string "collection_status"
+    t.string "payment_id"
+    t.string "external_reference"
+    t.string "payment_type"
+    t.string "merchant_order_id"
+    t.string "preference_id"
+    t.string "site_id"
+    t.string "processing_mode"
+    t.string "merchant_account_id"
+    t.index ["user_id"], name: "index_flex_orders_on_user_id"
+  end
+
   create_table "flex_reports", force: :cascade do |t|
     t.string "name"
     t.bigint "user_id"
