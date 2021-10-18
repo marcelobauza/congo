@@ -164,6 +164,9 @@
 
       </div>
       <div class="form-row">
+
+        <%= f.input :type_registration, input_html: { class: 'form-control' }, wrapper_html: {class: 'col-md-2'}%>
+        <%= f.input :lot_m2, input_html: { class: 'form-control' }, wrapper_html: {class: 'col-md-2'} %>
         <%= f.input :comments, as: :text, input_html: {class: 'form-control'}, wrapper_html: {class: 'col-md-4'} %>
       </div>
       <%= f.hidden_field :latitude, class: 'latitude'  %>

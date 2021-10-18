@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_06_193957) do
+ActiveRecord::Schema.define(version: 2021_10_12_191344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -929,7 +929,7 @@ ActiveRecord::Schema.define(version: 2021_10_06_193957) do
     t.string "additional_roles"
     t.integer "tax_appraisal"
     t.boolean "analyzable", default: true
-    t.string "type_gistration"
+    t.string "type_registration"
     t.decimal "lot_m2", precision: 12, scale: 2
     t.index ["bimester"], name: "index_transactions_bimester"
     t.index ["county_id"], name: "index_transactions_on_county_id"

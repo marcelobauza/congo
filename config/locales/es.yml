@@ -224,6 +224,11 @@ es:
         format: "%{attribute} %{message}"
 
       models:
+        agency:
+          attributes:
+            base:
+              restrict_dependent_destroy:
+                has_many: "Tiene registros asociados"
         transaction:
           location_confirmation_required: confirmar la ubicacion
           not_within_county: donde posiciono el punto (%{point_county}) no coincide con la comuna seleccionada (%{selected_county})
@@ -419,6 +424,8 @@ es:
         tome: Tomo
         active: Punto Activo
         comments: 'Observaciones'
+        type_registration: 'Tipo de inscripción'
+        lot_m2: 'Predio m2'
       kpi:
         polygon: Seleccione Poligono
         county: Comuna
