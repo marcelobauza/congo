@@ -46,6 +46,7 @@ module Transactions::Imports
     self.role_1                 = data["ROL2"]
     self.role_2                 = data["ROL3"]
     self.additional_roles       = data["ROLES_ADIC"]
+    self.type_registration      = data["TIPOREG"]
 
     conditions = "rol_number = '#{self.role}'  #{Util.and} "
     conditions += "county_sii_id = #{data['CODE_SII']}"
