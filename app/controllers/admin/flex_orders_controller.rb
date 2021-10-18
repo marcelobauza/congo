@@ -1,6 +1,4 @@
 class Admin::FlexOrdersController < ApplicationController
-  before_action :set_agency, only: [:show, :edit, :update, :destroy]
-
   layout 'admin'
 
   def index

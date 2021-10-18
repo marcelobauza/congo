@@ -1,10 +1,12 @@
 <h3>Ordenes</h3>
+
 <%= form_for :query, url: admin_flex_orders_path, method: :get do |form| %>
   <div class="field">
     <%= form.text_field :date, input_html: {class: 'datepicker'} %>
     <%= form.submit 'Filtar' %>
   </div>
 <% end %>
+
 <% if @flex_orders %>
   <table class="table">
     <tr>
@@ -20,7 +22,7 @@
         <td><%= flex_order.user.name %></td>
         <td><%= flex_order.user.email %></td>
         <td><%= flex_order.amount %></td>
-        <td><%= flex_order.amount * flex_order.unit_price %></td>
+        <td><%= flex_order.amount.to_i * flex_order.unit_price.to_i %></td>
         <td><%= flex_order.status %></td>
         <td><%= l(flex_order.created_at, format: '%d-%m-%Y') %></td>
       </tr>
