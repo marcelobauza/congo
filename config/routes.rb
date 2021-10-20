@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   get 'building_regulations/building_regulation_download' => 'building_regulations#building_regulation_download'
   get 'users/export_csv_downloads_by_company' => 'users#export_csv_downloads_by_company'
   get 'counties/search_county_geojson' => 'counties#search_county_geojson'
+
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
     get 'user_polygons/export_data' => 'user_polygons#export_data'
@@ -156,11 +157,12 @@ Rails.application.routes.draw do
   resources :future_project_types
   resources :project_types
   resources :seller_types
-  devise_for :users, :controllers => { registrations: 'flex/registrations' }
+  devise_for :users, controllers: { registrations: "flex/registrations" }
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'dashboards#index'
 end
+
  match '*path', to: redirect("/#{I18n.default_locale}/%{path}"), via: :all
    match '', to: redirect("/#{I18n.default_locale}"), via: :all
 end
