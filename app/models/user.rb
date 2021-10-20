@@ -18,6 +18,8 @@ class User < ApplicationRecord
   belongs_to :company
   belongs_to :role
 
+  after_create :create_free_orders
+
   accepts_nested_attributes_for :flex_orders, :reject_if => lambda {|a| a[:amount].blank? }
 
   validate :is_rut_valid
@@ -26,9 +28,13 @@ class User < ApplicationRecord
     Util.is_rut_valid?(self, :rut, true)
   end
 
-   def active_for_authentication?
-       super && !disabled
-    end
+  def create_free_orders
+    FlexOrder.create! user_id: id, amount: 2, unit_price: 0, status: 'approved'
+  end
+
+  def active_for_authentication?
+    super && !disabled
+  end
 
   def to_s
     self.complete_name
