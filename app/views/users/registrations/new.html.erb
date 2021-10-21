@@ -23,7 +23,7 @@
     <center> <%=image_tag "round_inciti.png", class: "mb-4", height:"120" %> </center>
 
     <div class="form-group">
-      <%= f.text_field :name, class: 'form-control', placeholder: "Usuario" %>
+      <%= f.text_field :name, class: 'form-control', autofocus: true, placeholder: "Usuario" %>
     </div>
 
     <div class="form-group">
@@ -31,7 +31,7 @@
     </div>
 
     <div class="form-group">
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control', placeholder: "E-mail" %>
+      <%= f.email_field :email, autocomplete: "email", class: 'form-control', placeholder: "E-mail" %>
     </div>
 
     <div class="form-group">
@@ -39,10 +39,17 @@
     </div>
 
     <div class="form-group">
-      <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em>
-      <% end %><br />
-      <%= f.password_field :password, autocomplete: "new-password", class: 'form-control', placeholder: "Contraseña" %>
+      <div class="row">
+        <div class="col-mb-10 pl-3 pb-3">
+          <% if @minimum_password_length %>
+            <em>(<%= @minimum_password_length %> Caracteres mínimos)</em>
+          <% end %><br/>
+          <%= f.password_field :password, autocomplete: "new-password", class: 'form-control', placeholder: "Contraseña", data: { show_password: true } %>
+        </div>
+        <div class="col pt-4 mr-sm-4">
+          <a data-action-show-password class="far fa-eye-slash"></a>
+        </div>
+      </div>
     </div>
 
     <div class="form-group">
