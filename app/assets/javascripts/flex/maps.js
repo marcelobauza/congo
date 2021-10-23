@@ -94,8 +94,25 @@ function draw_geometry(e, fgr){
 
 function cql_filter_data() {
   let data          = '';
-  let propertyTypes = $("#prop_type").val();
-  let sellerTypes   = $("#seller_type").val();
+
+  // Tipo Propiedad
+  checkboxes = $('input[name="prop_type_chk"]')
+  propertyTypes = [];
+  checkboxes.each(function(i){
+    if ($(this).is(':checked')) {
+      propertyTypes.push($(this).val());
+    }
+  })
+
+  // Tipo Vendedor
+  checkboxes = $('input[name="seller_type_chk"]')
+  sellerTypes = [];
+  checkboxes.each(function(i){
+    if ($(this).is(':checked')) {
+      sellerTypes.push($(this).val());
+    }
+  })
+
   let land_useType  = $("#land_use").val();
 
   if (Object.keys(inscriptionDate).length > 0) {

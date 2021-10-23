@@ -44,6 +44,7 @@ var dataDensity           = {};
 var dataMaxHeight         = {};
 var filteredData          = {};
 var inscriptionDate       = {};
+let insc_date_range
 
 ////////////////////////////////////////////////////////
 
