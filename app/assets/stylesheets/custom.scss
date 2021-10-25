@@ -300,6 +300,7 @@ div.custom-menu.show {
     .mh-1248 {
       height: calc(100vh - 40vh - 169px);
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 0;
     }
     thead {
