@@ -255,6 +255,8 @@ es:
             rut:
               required_rut: "Usuario sin RUT"
               invalid_rut_format: " - Verifique el formato del RUT ingresado y vuelva a intentar"
+            company:
+              required: "Debe estar asociado a una empresa"
         order:
           invalid_rut_format: "Verifique el formato del RUT ingresado en facturacion y vuelva a intentar"
     models:
