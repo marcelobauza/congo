@@ -23,6 +23,12 @@
 
   <% end %>
 
+  <% flash.each do |type, msg| %>
+    <div>
+      <%= msg %>
+    </div>
+  <% end %>
+  
   <%= render "users/shared/links" %>
 
 </div>
