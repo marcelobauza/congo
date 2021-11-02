@@ -69,6 +69,18 @@ $(document).ready(function(){
   $('#building_regulations_floors').on('click', function(){
     Congo.dashboards.config.widget = 'building_regulations_floors';
   });
+
+  $("[data-action-show-password]").on('click',function() {
+    if ($("[data-show-password]").attr('type') === 'password') {
+      $("[data-show-password]").attr('type', 'text');
+      $("[data-action-show-password]").removeClass('fa-eye-slash')
+      $("[data-action-show-password]").addClass('fa-eye')
+    } else {
+      $("[data-show-password]").attr('type', 'password');
+      $("[data-action-show-password]").removeClass('fa-eye')
+      $("[data-action-show-password]").addClass('fa-eye-slash')
+    }
+  })
 });
 
 Congo.namespace('dashboards.action_index');

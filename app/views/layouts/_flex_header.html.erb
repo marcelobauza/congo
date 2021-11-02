@@ -8,7 +8,8 @@
     </ul>
 
     <!-- Comprar Informes -->
-    <button class="btn btn-primary" data-toggle="modal" data-target="#buy_modal"><i class="fas fa-shopping-cart" title="Comprar Reportes" style="font-size: 26px"></i></button>
+    <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#buy_modal"><i class="fas fa-shopping-cart" title="Comprar Reportes" style="font-size: 26px"></i></button> -->
+    <%= link_to new_flex_flex_order_path(), class: 'btn btn-primary', remote: true, 'data-toggle' =>  "modal", 'data-target' => '#buy_modal' do %> <i class="fas fa-shopping-cart" title="Comprar Reportes" style="font-size: 26px"></i> <% end %>
 
     <!-- Información -->
     <button class="btn btn-primary" data-toggle="modal" data-target="#info_modal"><i class="fas fa-info-circle" title="Información" style="font-size: 26px"></i></button>

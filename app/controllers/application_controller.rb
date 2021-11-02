@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  protect_from_forgery prepend:true, with: :exception
   before_action :authenticate_user!
   #before_action :set_paper_trail_whodunnit
   layout :layout_by_resource

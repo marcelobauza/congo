@@ -1,59 +1,81 @@
-<div class="col-12 d-none select-box p-0 border border-light h-1440" id="select-box">
-  <div class="bg-1">
-    <div class="container">
-      <div class="row d-flex align-items-center">
+<div class="col-12 d-none select-box px-2" id="select-box">
+  <div class="container">
+    <div class="row d-flex align-items-center">
 
-        <div class="col-4 px-1 my-1 text-center">
-          <div class="form-group">
-            <p class="mb-1 text-light">Tipo Propiedad</p>
-            <select class="form-control form-control-sm" id="prop_type" data-flex-property_type multiple></select>
-          </div>
-        </div>
-
-        <div class="col-4 px-1 my-1 text-center">
-          <div class="form-group">
-            <p class="mb-1 text-light">Tipo Vendedor</p>
-            <select class="form-control form-control-sm" id="seller_type" multiple></select>
-          </div>
-        </div>
-
-        <div class="col-4 px-1 my-1 text-center">
-          <div class="form-group">
-            <p class="mb-1 text-light">Normativa</p>
-            <select class="form-control form-control-sm" id="land_use" multiple></select>
-          </div>
-        </div>
-
-        <div class="col-12 my-1 text-center">
-          <p class="mb-0 text-light">Rango Fechas Inscripciones</p>
-          <input type="range" class="js-range-slider w-100" id="insc_date">
-        </div>
-
-        <div class="col-6 my-1 text-center">
-          <p class="mb-0 text-light">Rango Superficie Útil</p>
-          <input type="range" class="js-range-slider w-100" id="building_surfaces">
-        </div>
-
-        <div class="col-6 my-1 text-center">
-          <p class="mb-0 text-light">Rango Superficie Terreno</p>
-          <input type="range" class="js-range-slider w-100" id="t_surface">
-        </div>
-
-        <div class="col-6 my-1 text-center">
-          <p class="mb-0 text-light">Rango Precio UF</p>
-          <input type="range" class="js-range-slider w-100" id="price">
-        </div>
-
-        <div class="col-6 my-1 text-center">
-          <p class="mb-0 text-light">Rango Precio UFm2</p>
-          <input type="range" class="js-range-slider w-100" id="u_price">
-        </div>
-
-        <div class="col-12 px-1 my-3 text-center">
-          <button class="btn btn-secondary btn-sm" data-flex-filter onclick="getFilteredData();">Filtrar</button>
-          <button class="btn btn-secondary btn-sm" data-flex-filter onclick="update_filters();">Limpiar</button>
+      <div class="col-12 px-1 my-1 text-center">
+        <div class="form-group">
+          <p class="mb-1 text-light">Tipo Propiedad</p>
+          <div id="prop_type" class="d-flex flex-wrap justify-content-start"></div>
         </div>
       </div>
+
+      <div class="col-12 px-1 my-1 text-center">
+        <div class="form-group">
+          <p class="mb-1 text-light">Tipo Vendedor</p>
+          <div id="seller_type" class="d-flex flex-wrap justify-content-start"></div>
+        </div>
+      </div>
+
+      <div class="col-12 px-1 my-1 text-center">
+        <div class="form-group">
+          <p class="mb-1 text-light">Normativa</p>
+          <select class="form-control form-control-sm" id="land_use" multiple="multiple"></select>
+        </div>
+      </div>
+
+      <div class="col-12 my-1 text-center">
+        <p class="mb-0 text-light">Rango Fechas Inscripciones</p>
+        <input type="range" class="js-range-slider w-100" id="insc_date">
+      </div>
+
+      <div class="col-6 text-center">
+        <label>Sup Útil</label>
+        <div class="form-group row">
+          <div class="col-md-6 px-1">
+            <input id="from_bs" type="text" class="form-control form-control-sm">
+          </div>
+          <div class="col-md-6 px-1">
+            <input id="to_bs" type="text" class="form-control form-control-sm">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 text-center">
+        <label>Sup Terreno</label>
+        <div class="form-group row">
+          <div class="col-md-6 px-1">
+            <input id="from_ts" type="text" class="form-control form-control-sm">
+          </div>
+          <div class="col-md-6 px-1">
+            <input id="to_ts" type="text" class="form-control form-control-sm">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 text-center">
+        <label>Precio UF</label>
+        <div class="form-group row">
+          <div class="col-md-6 px-1">
+            <input id="from_p" type="text" class="form-control form-control-sm">
+          </div>
+          <div class="col-md-6 px-1">
+            <input id="to_p" type="text" class="form-control form-control-sm">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 text-center">
+        <label>Precio UFm2</label>
+        <div class="form-group row">
+          <div class="col-md-6 px-1">
+            <input id="from_up" type="text" class="form-control form-control-sm">
+          </div>
+          <div class="col-md-6 px-1">
+            <input id="to_up" type="text" class="form-control form-control-sm">
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

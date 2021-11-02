@@ -23,6 +23,10 @@ gem 'turbolinks', '~> 5'
 gem 'jquery-turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
+# Mercadopago
+gem 'mercadopago-sdk'
+gem 'http-accept'
+# Autenticación de usuarios
 gem 'devise'
 gem 'bootstrap', '~> 4.3.1'
 gem 'jquery-rails'
