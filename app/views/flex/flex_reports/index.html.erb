@@ -37,8 +37,8 @@
   <div class="card-body">
     <div class="form-row">
       <div class="col-md-4">
-        <h6>Total de créditos: <%= amount_orders %></h6>
-        <h6>Informes realizados: <%= orders_placed %></h6>
+        <h6>Total de créditos: <%= amount_orders current_user %></h6>
+        <h6>Informes realizados: <%= orders_placed current_user %></h6>
       </div>
       <div class="col-md-4 text-center">
         <h2>Reportes</h2>

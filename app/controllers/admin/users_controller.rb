@@ -8,7 +8,11 @@ class Admin::UsersController < Admin::DashboardsController
   # GET /users
   # GET /users.json
   def index
-    @users = User.get_users_by_filters(params).paginate(:page => params[:page], :per_page => 15)
+    if params[:role] == 'Flex'
+      @users = User.get_users_by_filters(params).where(role_id: [6,15]).paginate(:page => params[:page], :per_page => 15)
+    else
+      @users = User.get_users_by_filters(params).paginate(:page => params[:page], :per_page => 15)
+    end
   end
 
   # GET /users/1

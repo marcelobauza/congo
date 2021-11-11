@@ -60,14 +60,14 @@ module UsersHelper
     orders > reports
   end
 
-  def amount_orders
-    orders  = current_user.flex_orders.where(status: 'approved').sum(&:amount).to_i
-    reports = current_user.flex_reports.size
+  def amount_orders user
+    orders  = user.flex_orders.where(status: 'approved').sum(&:amount).to_i
+    reports = user.flex_reports.size
 
     orders - reports
   end
 
-  def orders_placed
-    reports = current_user.flex_reports.size
+  def orders_placed user
+    reports = user.flex_reports.size
   end
 end
