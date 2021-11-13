@@ -32,7 +32,8 @@ else
         'Terreno m2',
         'Fecha Catastro',
         'Bimestre',
-        'Año'
+        'Año',
+        'Estado'
       ]
       @xl.each do |row|
         sheet.add_row [
@@ -59,7 +60,8 @@ else
           row.m2_field,
           row.cadastral_date,
           row.bimester,
-          row.year
+          row.year,
+          status_future_project_type(row)
         ]
       end
     end

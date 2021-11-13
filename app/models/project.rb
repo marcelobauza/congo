@@ -151,7 +151,7 @@ class Project < ApplicationRecord
     select += "ELSE (SUM(project_instance_mix_views.total_m2 * uf_avg_percent) / (SUM(project_instance_mix_views.total_m2 * (mix_usable_square_meters + 0.25 * ps_terreno))))  END AS pp_uf_dis_home, "
     select += "CASE SUM(project_instance_mix_views.total_m2) WHEN 0 THEN 0 "
     select += "ELSE AVG(project_instance_mix_views.uf_m2_home) END AS pp_uf_m2, "
-    select += "SUM(vhmu) AS vhmo, "
+    select += "SUM(CASE vhmo WHEN 0 THEN vhmu else vhmo END) AS vhmo, "
     select += "SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) AS vhmd, "
     select += "CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) "
     select += "ELSE SUM(project_instance_mix_views.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END AS masd, "
@@ -436,6 +436,74 @@ class Project < ApplicationRecord
     select = "COUNT(DISTINCT(project_instance_mix_views.project_id)) as value, project_instance_mix_views.year, project_instance_mix_views.bimester"
     values_by_period3(widget, select, filters, load_value)
   end
+
+  def self.vhmo_by_period(filters)
+
+    select = "SUM(vhmu) AS vhmo"
+    resultado_final = []
+    year = filters[:to_year].to_i
+    bimester = filters[:to_period].to_i
+
+    6.times do
+
+      resultado = ProjectInstanceMixView
+        .select(select)
+        .method_selection(filters)
+        .where(bimester: bimester)
+        .where(year: year)
+        .first
+
+        bim = {
+          name: "#{bimester}/#{year}",
+          count: resultado[:vhmo]
+        }
+        resultado_final << bim
+        if bimester == 1
+          bimester = 6
+          year = year - 1
+        else
+          bimester = bimester - 1
+        end
+
+    end
+
+    resultado_final.reverse
+  end
+
+  def self.masd_by_period(filters)
+
+    select = "CASE SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) WHEN 0 THEN SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) ELSE SUM(project_instance_mix_views.stock_units)/SUM(CASE WHEN masud > 0 THEN vhmu ELSE 0 END) END AS masd "
+    resultado_final = []
+    year = filters[:to_year].to_i
+    bimester = filters[:to_period].to_i
+
+    6.times do
+
+      resultado = ProjectInstanceMixView
+        .select(select)
+        .method_selection(filters)
+        .where(bimester: bimester)
+        .where(year: year)
+        .first
+
+        bim = {
+          name: "#{bimester}/#{year}",
+          count: resultado[:masd]
+        }
+        resultado_final << bim
+
+        if bimester == 1
+          bimester = 6
+          year = year - 1
+        else
+          bimester = bimester - 1
+        end
+
+    end
+
+    resultado_final.reverse
+  end
+
 
   def self.load_value
     lambda do |result, project, bimester|
@@ -750,6 +818,13 @@ end
     where("agency_rols.agency_id IN (#{filters[:project_agency_ids].join(',')})")
   end
 
+  def self.amount_months cadastre, sale_date
+    cadastre_date = Date.strptime(cadastre, '%d/%m/%y')
+    sale_date     = Date.strptime(sale_date, '%d/%m/%y')
+
+    (((cadastre_date - sale_date) / 365 )* 12).round
+  end
+
   def self.summary f
 
     filters  = JSON.parse(f.to_json, {:symbolize_names=> true})
@@ -784,6 +859,8 @@ end
       uarea        = Project.projects_by_usable_area(filters)
       garea        = Project.projects_by_ground_area('ground_area', filters)
       sbim         = Project.projects_count_by_period('sale_bimester', filters)
+      vhmo         = Project.vhmo_by_period(filters)
+      masd         = Project.masd_by_period(filters)
       cfloor       = Project.projects_by_ranges('floors', filters)
       uf_ranges    = Project.projects_by_ranges('uf_avg_percent', filters)
       agencies     = projects_by_agencies filters
@@ -918,6 +995,19 @@ end
       end
       result.push({"title":"Proyectos en Venta", "series":[{"data": data}]})
 
+
+      # Evolución Venta Mensual
+      data =[]
+      vhmo.each do |item|
+        data.push("name": item[:name], "count": item[:count].to_f.round(1))
+      end
+      result.push({"title":"Evolución Venta Mensual", "series":[{"data": data}]})
+      # Meses en Stock
+      data =[]
+      masd.each do |item|
+        data.push("name": item[:name], "count": item[:count].to_i)
+      end
+      result.push({"title":"Meses en Stock", "series":[{"data": data}]})
       ##CANT PISOS
       data =[]
 

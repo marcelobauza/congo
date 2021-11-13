@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @flex_report.name %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @flex_report.user %>
+</p>
+
+<p>
+  <strong>Filters:</strong>
+  <%= @flex_report.filters %>
+</p>
+
+<%= link_to 'Edit', edit_flex_report_path(@flex_report) %> |
+<%= link_to 'Back', flex_reports_path %>

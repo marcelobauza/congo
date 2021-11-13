@@ -1,0 +1,129 @@
+<div id="alerts"></div>
+<div data-downloads-xls></div>
+<div class="flex-dashboard bg-secondary">
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- Filtros -->
+      <nav class="col-3 d-md-block sidebar collapse">
+        <div class="sidebar-sticky pt-3">
+
+          <div class="card text-white bg-primary m-0 mb-3">
+            <div class="card-header">Filtros</div>
+            <div class="card-body px-2">
+              <div class="select-box p-0" id="intro">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                  <div class="container">
+                    <p class="text-center">Seleccione en el mapa</p>
+                  </div>
+                </div>
+              </div>
+              <%= render 'flex/dashboards/filters' %>
+            </div>
+            <div class="card-footer">
+              <div class="col-12 px-1 text-center">
+                <button class="btn btn-secondary btn-sm" data-flex-filter onclick="getFilteredData();">Filtrar</button>
+                <button class="btn btn-secondary btn-sm" data-flex-filter onclick="update_filters();">Limpiar</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </nav>
+
+      <div class="col-6 p-0">
+        <!-- Mapa -->
+        <div class="col-12 pt-3 px-0 map-box">
+          <div class="card m-0 text-white bg-primary">
+            <div class="card-body p-3">
+              <div id="map_flex" class="rounded-lg bordered"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Tabla -->
+        <div class="col-12 pt-3 px-0 table-box">
+          <div class="card m-0 text-white bg-primary rounded-lg">
+            <div class="card-body">
+              <div class="container-fluid mh-1248">
+                <div class="container px-0">
+                  <%= simple_form_for([:flex, @flex_report], remote: true) do |f| %>
+                    <div class="d-flex flex-row justify-content-between pb-1" id="up_table">
+                      <%= f.input :name, label: false, placeholder: 'Nombre del Reporte', input_html: {class:'form-control form-control-sm'} %>
+                      <%= f.input :transaction_ids, as: :hidden, input_html: { data: { flex_transactions_ids: true }} %>
+                      <%= f.submit "Generar", class: 'btn btn-secondary btn-sm d-none', data: {generate: true, confirm: '¿Está seguro que desea generar el informe?'} %>
+                      <div class="label mx-2" id="somediv">
+                        <span class="m-0" id="cantidad-registros-tabla"></span>
+                      </div>
+                      <%= link_to_add_fields "Agregar Propiedad", f, :tenements, data: 'add-property' %>
+                    </div>
+                    <%= f.simple_fields_for :tenements do |s| %>
+                      <%= render 'tenement', f: s %>
+                    <% end %>
+                  <% end %>
+                </div>
+                <%= render 'flex/dashboards/table' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráficos -->
+      <nav class="col-3 d-md-block sidebar collapse pt-3">
+        <div class="sidebar-sticky sidebar-overflow">
+          <%= render 'flex/dashboards/charts' %>
+        </div>
+      </nav>
+
+    </div>
+
+  </div>
+</div>
+<div class="hidden charts d-none" style="width: 720px">
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Cantidad</p>
+      <canvas id="chartCantidadPDF"></canvas>
+    </div>
+    <div class="col-6">
+      <p class="text-center">Superficie útil</p>
+      <canvas id="chartSupUtilPDF"></canvas>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Precio</p>
+      <canvas id="chartPrecioPDF"></canvas>
+    </div>
+    <div class="col-6">
+      <p class="text-center">Precio Unitario Útil</p>
+      <canvas id="chartPrecioUnitarioPDF"></canvas>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Volumen de Mercado (Uf miles)</p>
+      <canvas id="chartVolMercadoPDF"></canvas>
+    </div>
+    <div class="col-6">
+      <p class="text-center">Superficie útil</p>
+      <canvas id="chartSupUtil-barrasPDF"></canvas>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Precio</p>
+      <canvas id="chartPrecio-barrasPDF"></canvas>
+    </div>
+    <div class="col-6">
+      <p class="text-center">Precio Unitario Útil</p>
+      <canvas id="chartPrecioUnitario-barrasPDF"></canvas>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Superficie por UF</p>
+      <canvas id="chartSupUFPDF"></canvas>
+    </div>
+  </div>
+</div>

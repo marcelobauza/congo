@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-
   resources :rent_future_projects
   resources :rent_transactions
   resources :bots
@@ -80,13 +79,16 @@ Rails.application.routes.draw do
   get 'building_regulations/building_regulation_download' => 'building_regulations#building_regulation_download'
   get 'users/export_csv_downloads_by_company' => 'users#export_csv_downloads_by_company'
   get 'counties/search_county_geojson' => 'counties#search_county_geojson'
+
   scope ":locale", locale: /#{I18n.available_locales.join("|")}/  do
   namespace :admin do
     get 'user_polygons/export_data' => 'user_polygons#export_data'
     get 'user_polygons/generate_csv' => 'user_polygons#generate_csv'
     get 'projects/export_data' => 'projects#export_data'
+    get 'projects/download_area_data' => 'projects#download_area_data'
     get 'users/export_data' => 'users#export_data'
     get 'projects/generate_csv' => 'projects#generate_csv'
+    get 'projects/generate_area_csv' => 'projects#generate_area_csv'
     get 'projects/kpi' => 'projects#kpi'
     get 'future_projects/export_data' => 'future_projects#export_data'
     get 'future_projects/generate_csv' => 'future_projects#generate_csv'
@@ -107,6 +109,7 @@ Rails.application.routes.draw do
     resources :feedbacks
     resources :building_regulations
     resources :future_project_sub_types
+    resources :flex_orders, only: [:index]
 
     resources :regions
 
@@ -126,6 +129,20 @@ Rails.application.routes.draw do
     get 'dashboards/index'
   root 'dashboards#index'
   end
+
+  namespace :flex do
+    get 'flex_reports/search_data_for_filters'
+    get 'flex_reports/search_data_for_table'
+    get 'flex_reports/building_regulation_download' => 'flex_reports#building_regulation_download'
+    post 'flex_reports/search_data_for_charts'
+    resources :dashboards, only: [:index, :new, :create]
+    resources :tenements
+    resources :flex_reports, only: [:index, :new, :create, :show]
+    resources :flex_orders, only: [:new, :create]
+
+    root 'flex_reports#index'
+  end
+
   resources :application_statuses
   resources :pois
   resources :poi_subcategories
@@ -140,11 +157,12 @@ Rails.application.routes.draw do
   resources :future_project_types
   resources :project_types
   resources :seller_types
-  devise_for :users
+  devise_for :users, controllers: { registrations: "flex/registrations" }
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'dashboards#index'
 end
+
  match '*path', to: redirect("/#{I18n.default_locale}/%{path}"), via: :all
    match '', to: redirect("/#{I18n.default_locale}"), via: :all
 end

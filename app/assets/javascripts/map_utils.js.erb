@@ -6,7 +6,7 @@ Congo.map_utils.config={
 }
 
 Congo.map_utils = function(){
-  var url, map, groupLayer, editableLayers, HandlerGeometry, typeGeometry , sourcePois, overlays, htmlLegend;
+  var url, map, groupLayer, editableLayers, HandlerGeometry, typeGeometry , sourcePois, overlays, htmlLegend, heatmapLayer;
   var init = function(){
     url = window.location.hostname;
 
@@ -591,7 +591,7 @@ Congo.map_utils = function(){
               geo = JSON.parse(data['geo'])
             }
           })
-          var options = {tolerance: 0.0001, highQuality: false};
+          var options = {tolerance: 0.001, highQuality: false};
           var simplified = turf.simplify(geo, options);
           $.each(simplified['coordinates'][0], function(a, b){
             $.each(b, function(c,d){
@@ -653,7 +653,7 @@ Congo.map_utils = function(){
               geo = JSON.parse(data['geo'])
             }
           })
-          var options = {tolerance: 0.0001, highQuality: false};
+          var options = {tolerance: 0.001, highQuality: false};
           var simplified = turf.simplify(geo, options);
           $.each(simplified['coordinates'][0], function(a, b){
             $.each(b, function(c,d){
@@ -699,7 +699,7 @@ Congo.map_utils = function(){
       transparent: 'true',
       opacity: 1,
       version: '1.0.0',//wms version (ver get capabilities)
-      tiled: true,
+      tiled: false,
       styles: style_layer,
       INFO_FORMAT: 'application/json',
       format_options: 'callback:getJson',
@@ -950,7 +950,8 @@ Congo.map_utils = function(){
     counties: counties,
     ica: ica,
     legend_points: legend_points,
-    draw_geometry: draw_geometry
+    draw_geometry: draw_geometry,
+    LatLngsToCoords: LatLngsToCoords
   }
 }();
 

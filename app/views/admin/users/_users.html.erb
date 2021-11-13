@@ -1,0 +1,38 @@
+<table class="table table-striped table-hover table-bordered">
+  <thead>
+    <tr>
+      <th><%= User.human_attribute_name :name %></th>
+      <th><%= User.human_attribute_name :complete_name %></th>
+      <th><%= User.human_attribute_name 'E-mail' %></th>
+      <th><%= User.human_attribute_name :company %></th>
+      <th><%= User.human_attribute_name :disabled %></th>
+      <th><%= User.human_attribute_name :role %></th>
+      <th><%= User.human_attribute_name :transactions_downloads %></th>
+      <th><%= User.human_attribute_name :transactions_accumulated_downloads %></th>
+      <th><%= User.human_attribute_name :projects_downloads %></th>
+      <th><%= User.human_attribute_name :projects_accumulated_downloads %></th>
+      <th><%= User.human_attribute_name :future_projects_downloads %></th>
+      <th><%= User.human_attribute_name :future_projects_accumulated_downloads %></th>
+      <th colspan="2" class="text-center">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%=h(user.name) %></td>
+        <td><%=h user.complete_name %></td>
+        <td><%=h user.email %></td>
+        <td><%=h user.company %></td>
+        <td><%=h user.disabled  ? t(:YES) : t(:NO) %></td>
+        <td><%=h user.role.name unless user.role_id.nil? %></td>
+        <td><%=h download_by_user user.id, :transactions %></td>
+        <td><%=h accumulated_download_by_user user.id, :transactions %></td>
+        <td><%=h download_by_user user.id, :projects %></td>
+        <td><%=h accumulated_download_by_user user.id, :projects %></td>
+        <td><%=h download_by_user user.id, :future_projects %></td>
+        <td><%=h accumulated_download_by_user user.id, :future_projects %></td>
+        <td class="text-center"><%= link_to edit_admin_user_path(user) do %> <i class="fas fa-edit"></i> <%end%></td>
+        <td class="text-center"><%= link_to admin_user_path(user), method: :delete, data: { confirm: '¿Está seguro?' } do %> <i class="fas fa-trash-alt " title="Eliminar"></i> <%end%></td>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render :partial => 'layouts/head' %>
+  </head>
+  <body data-controller="<%= params[:controller] %>" data-action="<%= safe_action_name params[:action] %>" class="nav-sm dashboard" style="overflow: hidden;">
+    <%= render partial: 'layouts/flex_header' %>
+  </body>
+</html>

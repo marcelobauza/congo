@@ -1,19 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
   <!-- Logo -->
   <%= link_to admin_dashboards_index_path(), class: "pr-3" do  %> <%=image_tag "round_inciti.png", width:"40", height:"40" %> <% end %>
-
   <!-- Barra (Todo menos Logo)-->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
     <!-- Barra (Elementos Izquierda)-->
     <ul class="navbar-nav mr-auto">
-
       <!-- Inicio -->
       <li class="nav-item">
         <%= link_to "Inicio", admin_dashboards_index_path(), class:"nav-link" %>
       </li>
-
       <!-- Usuarios -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -21,11 +16,12 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <%= link_to "Usuarios", admin_users_path(), class:"dropdown-item" %>
+          <%= link_to "Usuarios Flex", admin_users_path(role: 'Flex'), class:"dropdown-item" %>
           <%= link_to "Roles", admin_roles_path(), class:"dropdown-item" %>
           <%= link_to "Empresas", admin_companies_path(), class:"dropdown-item" %>
+          <%= link_to "Ordenes", admin_flex_orders_path(), class:"dropdown-item" %>
         </div>
       </li>
-
       <!-- Valores UF -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,7 +31,6 @@
           <%= link_to "Uf por Comuna", admin_county_ufs_path(), class:"dropdown-item" %>
           <%= link_to "Listado CSV", admin_uf_conversions_path(), class:"dropdown-item" %>
       </li>
-
       <!-- Capas -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -52,7 +47,6 @@
           <%= link_to "Normativa", admin_building_regulations_path(), class:"dropdown-item" %>
         </div>
       </li>
-
       <!-- Usuarios -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -63,22 +57,17 @@
           <%= link_to "Exportar CBR + SII", admin_transactions_export_data_sii_path(), class:"dropdown-item" %>
           <%= link_to "Exportar EM", admin_future_projects_export_data_path(), class:"dropdown-item" %>
           <%= link_to "Exportar PRV", admin_projects_export_data_path(), class:"dropdown-item" %>
+          <%= link_to "Exportar PRV Area", admin_projects_download_area_data_path(), class:"dropdown-item" %>
         </div>
       </li>
-
       <!-- Importaciones -->
       <li class="nav-item">
         <%= link_to "Importaciones", admin_import_processes_path(), class:"nav-link" %>
       </li>
-
       <!-- Comunas -->
       <li class="nav-item">
         <%= link_to "Comunas", admin_counties_path(), class:"nav-link" %>
       </li>
-
     </ul>
-
   </div>
-
 </nav>
-<%= yield %>

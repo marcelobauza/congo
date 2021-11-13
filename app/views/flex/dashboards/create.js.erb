@@ -1,0 +1,22 @@
+var errors = <%= @tenement.errors.any? %>
+
+if (errors){
+  let error = '<div class="alert alert-danger">"<%= @tenement.errors.full_messages.join(',') %>"</div>'
+  $('#errors').empty()
+  $('#errors').append(error);
+}else{
+
+  $('#table tr.bg-celeste:last').after(
+    '<tr class="user-data">' +
+    '<td><input class="form-check-input" type="checkbox" value="' + '<%= @tenement.id %>' + '"></td>' +
+    '<td>' + '<%= @tenement.property_type&.name %>' + '</td>' +
+    '<td></td>' +
+    '<td>' + '<%= @tenement.address %>' + '</td>' +
+    '<td>' + '<%= @tenement.county&.name %>' + '</td>' +
+    '<td>' + '<%= @tenement.building_surface %>' + '</td>' +
+    '<td>' + '<%= @tenement.terrain_surface %>' + '</td>' +
+    '<td>' + '<%= @tenement.cellar %>' + '</td>' +
+    '<td>' + '<%= @tenement.uf %>' + '</td>' +
+    '</tr>'
+  );
+}

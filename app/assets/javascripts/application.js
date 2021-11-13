@@ -14,6 +14,7 @@
 //= require leaflet/spin
 //= require leaflet/leaflet-spin
 //= require leaflet/leaflet-image
+//= require html2canvas.min.js
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets
@@ -21,6 +22,12 @@
 //= require rails-ujs
 //= require activestorage
 //= require congo
+//= require legend
+//= require lots
+//= require pois
+//= require map_utils
+//= require flex/maps
+//= require flex/dashboards
 //= require_tree .
 
 $.fn.datepicker.defaults.format = "yyyy/mm/dd";

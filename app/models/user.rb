@@ -4,8 +4,8 @@ class User < ApplicationRecord
   include Users::Export
   #has_paper_trail
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :recoverable, :rememberable, :validatable, :session_limitable
+  # :recoverable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :rememberable, :validatable, :session_limitable, :registerable, :confirmable
 
   has_many :counties_users
   has_many :counties, through: :counties_users
@@ -13,8 +13,14 @@ class User < ApplicationRecord
   has_many :regions, through: :regions_users
   has_many :feedbacks
   has_many :downloads_users
+  has_many :flex_orders
+  has_many :flex_reports
   belongs_to :company
   belongs_to :role
+
+  after_create :create_free_orders
+
+  accepts_nested_attributes_for :flex_orders, :reject_if => lambda {|a| a[:amount].blank? }
 
   validate :is_rut_valid
 
@@ -22,9 +28,13 @@ class User < ApplicationRecord
     Util.is_rut_valid?(self, :rut, true)
   end
 
-   def active_for_authentication?
-       super && !disabled
-    end
+  def create_free_orders
+    FlexOrder.create! user_id: id, amount: 2, unit_price: 0, status: 'approved'
+  end
+
+  def active_for_authentication?
+    super && !disabled
+  end
 
   def to_s
     self.complete_name
@@ -89,6 +99,6 @@ class User < ApplicationRecord
   end
 protected
 def password_required?
-   !persisted? || !password.blank? || !password_confirmation.blank?
+  !persisted? || !password.blank? || !password_confirmation.blank?
 end
 end

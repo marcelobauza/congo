@@ -1,5 +1,82 @@
-<p>Welcome <%= @email %>!</p>
+<!-- Preheader -->
+<div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
+  Te falta un solo paso para activar tu cuenta.
+</div>
 
-<p>You can confirm your account email through the link below:</p>
+<!-- Body -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
 
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+  <!-- Encabezado -->
+  <tr>
+    <td align="center" bgcolor="#e8ebef">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+        <tr>
+          <td align="center" bgcolor="#e8ebef" style="padding: 0px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
+            <a href="http://www.inciti.com/" target="_blank" style="padding: 10; display: inline-block;">
+              <img src="https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img/http://www.inciti.com/wp-content/themes/inciti_theme/images/Inciti_logo.png" alt="logo" width="200"">
+
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- Cuerpo -->
+  <tr>
+    <td align="center" bgcolor="#e8ebef">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+
+        <!-- Párrafo Incial -->
+        <tr>
+          <td align="left" bgcolor="#ffffff" valign="top" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; color: #484b4f; line-height: 24px; border-top: 3px solid #d4dadf; border-left: 3px solid #d4dadf; border-right: 3px solid #d4dadf; border-top-right-radius: 10px; border-top-left-radius: 10px;">
+            <p style="font-size: 20px; margin: 0; padding-bottom: 10px;">Hola <%= @resource.complete_name %>,</p>
+            <br>
+            <p style="font-size: 16px; margin: 0; padding-bottom: 10px;">Estas son las credenciales con las que vas a poder acceder a nuestra plataforma:</p>
+            <p style="font-size: 16px; margin: 0; padding-bottom: 10px;"><b>Usuario: </b><%= @resource.name %><br><b>Contraseña: </b><%= @resource.password %></p>
+            <p style="font-size: 16px; margin: 0;">Para activar tu cuenta de Flex, haz clic en el siguiente botón:</p>          </td>
+        </tr>
+
+        <!-- Botón Confirmar -->
+        <tr>
+          <td align="center" bgcolor="#ffffff" style="padding: 10px; border-left: 3px solid #d4dadf; border-right: 3px solid #d4dadf;">
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td align="center" bgcolor="#3A3F44" style="border-radius: 6px;">
+                  <%= link_to 'Confirmar cuenta', confirmation_url(@resource, confirmation_token: @token, locale: I18n.locale.to_s, subdomain: "app"), style: "display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; color: #FFFFFF; text-decoration: none; border-radius: 6px;" %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Despedida -->
+        <tr>
+          <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #484b4f; line-height: 24px; border-bottom: 3px solid #d4dadf; border-left: 3px solid #d4dadf; border-right: 3px solid #d4dadf; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;">
+            <p>Te invitamos a leer el <a href='http://www.inciti.com/2021/09/14/uso-de-flex-2-0'>instructivo</a> sobre el uso de Flex 2.0
+
+            <p style="margin: 0;">Atte.<br>Equipo de Inciti</p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+
+  <!-- Footer -->
+  <tr>
+    <td align="center" bgcolor="#e8ebef" style="padding: 24px;">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+
+        <!-- Aclaración final -->
+        <tr>
+          <td align="center" bgcolor="#e8ebef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
+            <p style="margin: 0;">Si recibiste este correo electrónico por error, por favor eliminalo. Este e-mail se envía automáticamente. No responder a esta dirección de correo.<br>Copyright &copy; 2021 Inciti. Todos los derechos reservados.</p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+
+</table>

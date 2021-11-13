@@ -3,6 +3,7 @@ Congo.namespace("downloads");
 Congo.downloads = function(){
 
   layer_type = Congo.dashboards.config.layer_type;
+
   console.log(layer_type);
   switch (layer_type) {
     case 'transactions_info':

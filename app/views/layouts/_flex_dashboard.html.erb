@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <!-- Logo -->
+  <%= link_to flex_flex_reports_path(), class: "pr-3", data: {confirm: '¿Desea abandora el informe?'} do  %> <%=image_tag "round_inciti.png", width:"40", height:"40" %> <% end %>
+
+  <!-- Barra (Elementos Derecha)-->
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <!-- Descarga XLS -->
+    <div class="nav-item dropdown" data-flex-downloads-xls></div>
+
+    <!-- Descarga PDF -->
+    <div class="nav-item dropdown" data-flex-downloads-pdf></div>
+
+    <!-- Barra (Elementos Izquierda)-->
+    <ul class="navbar-nav mr-auto">
+      <div data-building-regulations-pdf ></div>
+    </ul>
+
+    <% if has_orders? %>
+      <div class="nav-item dropdown">
+        <%= link_to new_flex_flex_report_path, :class => 'btn btn-primary', data: {confirm: "¿Desea generar un reporte nuevo?"} do  %> <i class=" fas fa-plus" title="Nuevo Reporte" style="font-size: 26px"></i> <% end %>
+      </div>
+    <% end %>
+
+    <!-- Salir -->
+    <%= link_to destroy_user_session_path, method: :delete, 'class' => 'btn btn-primary' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
+
+  </div>
+</nav>
+
+<%= yield %>

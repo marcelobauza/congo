@@ -224,6 +224,11 @@ es:
         format: "%{attribute} %{message}"
 
       models:
+        agency:
+          attributes:
+            base:
+              restrict_dependent_destroy:
+                has_many: "Tiene registros asociados"
         transaction:
           location_confirmation_required: confirmar la ubicacion
           not_within_county: donde posiciono el punto (%{point_county}) no coincide con la comuna seleccionada (%{selected_county})
@@ -250,6 +255,8 @@ es:
             rut:
               required_rut: "Usuario sin RUT"
               invalid_rut_format: " - Verifique el formato del RUT ingresado y vuelva a intentar"
+            company:
+              required: "Debe estar asociado a una empresa"
         order:
           invalid_rut_format: "Verifique el formato del RUT ingresado en facturacion y vuelva a intentar"
     models:
@@ -419,6 +426,8 @@ es:
         tome: Tomo
         active: Punto Activo
         comments: 'Observaciones'
+        type_registration: 'Tipo de inscripción'
+        lot_m2: 'Predio m2'
       kpi:
         polygon: Seleccione Poligono
         county: Comuna
