@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_12_191344) do
+ActiveRecord::Schema.define(version: 2021_11_13_215348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "postgis"
-  enable_extension "postgis_topology"
 
   create_table "agencies", force: :cascade do |t|
     t.string "name"
