@@ -1,0 +1,2 @@
+class NeighborhoodFutureProject < ApplicationRecord
+end

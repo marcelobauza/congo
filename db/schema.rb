@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_13_215348) do
+ActiveRecord::Schema.define(version: 2021_11_13_233918) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -512,6 +512,14 @@ ActiveRecord::Schema.define(version: 2021_11_13_215348) do
     t.decimal "e", default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "neighborhood_future_projects", force: :cascade do |t|
+    t.bigint "neighborhood_id"
+    t.integer "year"
+    t.integer "bimester"
+    t.integer "total_households"
+    t.index ["neighborhood_id"], name: "index_neighborhood_future_projects_on_neighborhood_id"
   end
 
   create_table "neighborhoods", force: :cascade do |t|

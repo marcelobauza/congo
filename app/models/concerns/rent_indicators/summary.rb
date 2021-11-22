@@ -41,12 +41,14 @@ module RentIndicators::Summary
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where(bimester: bimester, year: year).sum(:total_units)
 
+        neighborhood_future_project = NeighborhoodFutureProject.where(neighborhood_id: neighborhood.id, year: year, bimester: bimester).take
+
         bots = bots_offer(neighborhood, bimester, year)
 
         rent_offer          = (bots.count / 0.9)
         total_vacancy       = total_vacancy(neighborhood, bimester, year)
-        total_households    = neighborhood.total_houses.to_i + neighborhood.total_departments.to_i + future_projects.to_i
-        total_departments   = neighborhood.total_departments.to_i + future_projects.to_i
+        total_households    = neighborhood.total_houses.to_i + neighborhood.total_departments.to_i + neighborhood_future_project.total_households.to_i
+        total_departments   = neighborhood.total_departments.to_i + neighborhood_future_project.total_households.to_i
         avg_u_rent          = bots.average(:surface).to_f
         avg_t_rent          = bots.average(:surface_t).to_f
         avg_u_sale          = transactions.average(:total_surface_building).to_f
@@ -90,7 +92,9 @@ module RentIndicators::Summary
             ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))"
         ).where('year >= ?', 2017).sum(:total_units)
 
-        rent_department = (neighborhood.total_departments.to_i + future_projects.to_i) * neighborhood.tenure.to_f
+        neighborhood_future_project = NeighborhoodFutureProject.where(neighborhood_id: neighborhood.id, year: year, bimester: bimester).take
+
+        rent_department = (neighborhood.total_departments.to_i + neighborhood_future_project.total_households.to_i) * neighborhood.tenure.to_f
         bots            = bots_offer(neighborhood, bimester, year)
         rent_offer      = (bots.count / 0.9)
 
