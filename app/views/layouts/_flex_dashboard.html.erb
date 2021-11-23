@@ -17,6 +17,8 @@
       <div data-building-regulations-pdf ></div>
     </ul>
 
+    <div class="spinner-border text-light float-right mr-2" role="status" id="report_spinner" style="display: none;"></div>
+
     <% if has_orders? %>
       <div class="nav-item dropdown">
         <%= link_to new_flex_flex_report_path, :class => 'btn btn-primary', data: {confirm: "¿Desea generar un reporte nuevo?"} do  %> <i class=" fas fa-plus" title="Nuevo Reporte" style="font-size: 26px"></i> <% end %>

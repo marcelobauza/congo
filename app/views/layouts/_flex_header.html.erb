@@ -1,11 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <!-- Logo -->
   <%= link_to flex_flex_reports_path(), class: "pr-3" do  %> <%=image_tag "inciti_flex.png", width:"40", height:"40" %> <% end %>
+
   <!-- Barra (Elementos Derecha)-->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
     <!-- Barra (Elementos Izquierda)-->
     <ul class="navbar-nav mr-auto">
     </ul>
+
+    <div class="spinner-border text-light float-right mr-2" role="status" id="report_spinner" style="display: none;"></div>
 
     <!-- Comprar Informes -->
     <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#buy_modal"><i class="fas fa-shopping-cart" title="Comprar Reportes" style="font-size: 26px"></i></button> -->

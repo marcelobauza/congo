@@ -213,6 +213,8 @@ function geoserver_building_regulations(data, flexMap, fgr) {
   let legends         = [];
   let env;
 
+  Congo.dashboards.config.map = flexMap;
+
   if (geometryType == 'circle'){
     let point    = data['point'].split(' ');
     let radius   = data['radius'];
@@ -221,7 +223,6 @@ function geoserver_building_regulations(data, flexMap, fgr) {
     let circle   = turf.circle(center, radius, options);
     let pol      = circle['geometry']['coordinates'];
 
-    Congo.dashboards.config.map = flexMap;
 
     $.each(pol, function(a, b){
       $.each(b, function(c,d){
