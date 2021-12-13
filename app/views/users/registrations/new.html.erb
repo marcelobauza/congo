@@ -3,7 +3,11 @@
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
-    <center> <%=image_tag "round_inciti.png", class: "mb-4", height:"120" %> </center>
+    <center>
+      <%= link_to 'http://www.inciti.com' do %>
+        <%=image_tag "round_inciti.png", class: "mb-4", height:"120" %>
+      <% end %>
+    </center>
 
     <div class="form-group">
       <%= f.text_field :name, class: 'form-control', autofocus: true, placeholder: "Usuario" %>

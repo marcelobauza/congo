@@ -1,15 +1,21 @@
+<% btn   =  params['module'] == 'flex' ? 'btn_custom_flex' : 'btn-custom' %>
+<% title = params['module'] == 'flex' ? 'Inciti Flex' : 'Inciti Pro' %>
+
 <div class="form-signin">
-
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-
     <div class="form-group">
-      <center> <%=image_tag "round_inciti.png", class: "mb-4", height:"120" %> </center>
+      <center>
+        <%= link_to 'http://www.inciti.com' do %>
+          <%=image_tag "round_inciti.png", class: "mb-4", height:"120" %>
+        <% end %>
+        <h4 class="login_text_color"><%= title %></h4>
+      </center>
       <%= f.text_field :name, autofocus: true, autocomplete: "email", class: 'form-control', placeholder: "Usuario" %>
       <%= f.password_field :password, autocomplete: "current-password", class: 'form-control', placeholder: "Contraseña" %>
     </div>
 
     <% if devise_mapping.rememberable? %>
-      <div class="checkbox mb-3">
+      <div class="checkbox mb-3 login_text_color">
         <center>
           <%= f.check_box :remember_me %>
           <%= f.label :remember_me, 'Recuérdame' %>
@@ -18,7 +24,7 @@
     <% end %>
 
     <div class="actions">
-      <%= f.submit class: 'btn btn-lg btn-primary btn-block', value: "Ingresa" %>
+      <%= f.submit class: "#{btn} btn-lg btn-block", value: "Ingresar" %>
     </div>
 
   <% end %>
@@ -28,7 +34,7 @@
       <%= msg %>
     </div>
   <% end %>
-  
-  <%= render "users/shared/links" %>
 
+  <br/>
+  <%= render "users/shared/links" %>
 </div>
