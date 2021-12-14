@@ -1,9 +1,16 @@
 <h3>Ordenes</h3>
 
-<%= form_for :query, url: admin_flex_orders_path, method: :get do |form| %>
-  <div class="field">
-    <%= form.text_field :date, input_html: {class: 'datepicker'} %>
-    <%= form.submit 'Filtar' %>
+<%= simple_form_for :query, url: admin_flex_orders_path, method: :get do |form| %>
+  <div class="row">
+    <div class="col">
+      <%= form.input :from, label: 'Desde', input_html: { class: 'datepicker' } %>
+    </div>
+    <div class="col">
+      <%= form.input :to, label: 'Hasta', input_html: { class: 'datepicker' } %>
+    </div>
+    <div class="col">
+      <%= form.submit 'Filtar' %>
+    </div>
   </div>
 <% end %>
 
