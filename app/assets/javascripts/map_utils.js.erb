@@ -895,7 +895,7 @@ Congo.map_utils = function(){
       request: 'GetFeature',
       typeName: 'inciti_v2:counties_info',
       outputFormat: 'application/json',
-      CQL_FILTER: "county_id IN("+ county_id + ")"
+      CQL_FILTER: "county_id IN("+ county_id +")"
     }
     var parameters = L.Util.extend(defaultParameters);
     var URL = owsrootUrl + L.Util.getParamString(parameters);
