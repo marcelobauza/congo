@@ -83,6 +83,8 @@ $(document).ready(function(){
   })
 });
 
+
+
 Congo.namespace('dashboards.action_index');
 Congo.namespace('dashboards.action_graduated_points');
 
@@ -117,7 +119,8 @@ Congo.dashboards.config = {
   layerControl: {},
   editableLayers: {},
   sourcePois: {},
-  sourceLots: {}
+  sourceLots: {},
+  download_tag: 'info'
 }
 
 Congo.dashboards.pois =function(){

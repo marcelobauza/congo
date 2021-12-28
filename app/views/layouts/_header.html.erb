@@ -12,10 +12,6 @@
     <ul class="navbar-nav mr-auto">
 
       <!-- Texto -->
-      <li class="nav-item ">
-        <b><span class="navbar-text text-light pl-4" id="layer-name"></span></b>
-      </li>
-
     </ul>
 
     <div class="spinner-border text-light float-right mr-2" role="status" id="report_spinner" style="display: none;"></div>
@@ -204,6 +200,9 @@
 
     <% end %>
 
+      <div class="nav-item dropdown">
+        <%= link_to '', users_account_path(), class: "dropdown-item custom-item reports p-4", remote: true, id:"user_data", "data-status-downloads": true %>
+      </div>
     <!-- Cuenta Dropdown -->
     <div class="nav-item dropdown">
       <button class="btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

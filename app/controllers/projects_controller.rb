@@ -13,6 +13,12 @@ class ProjectsController < ApplicationController
   end
 
   def dashboards
+    acc     = User.accumulated_download_by_company current_user.id, 'projects'
+    surplus = 0
+
+    total_downloads = current_user.company.projects_downloads
+
+    @tag = acc > total_downloads ? 'danger' : 'success'
   end
 
  def projects_summary

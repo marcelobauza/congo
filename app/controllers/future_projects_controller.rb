@@ -1,13 +1,13 @@
 class FutureProjectsController < ApplicationController
   before_action :set_future_project, only: [:show, :edit, :update, :destroy]
-  
+
   def index
     @data = FutureProject.where(id: params[:id]).first
 
     respond_to do |f|
       f.json
     end
-    
+
   end
 
 
@@ -17,6 +17,12 @@ class FutureProjectsController < ApplicationController
   end
 
   def dashboards
+    acc     = User.accumulated_download_by_company current_user.id, 'future_projects'
+    surplus = 0
+
+    total_downloads = current_user.company.future_projects_downloads
+
+    @tag = acc > total_downloads ? 'danger' : 'success'
     respond_to do |f|
       f.js
     end

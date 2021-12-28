@@ -15,6 +15,12 @@ class TransactionsController < ApplicationController
   end
 
   def dashboards
+    acc     = User.accumulated_download_by_company current_user.id, 'transactions'
+    surplus = 0
+
+    total_downloads = current_user.company.transactions_downloads
+
+    @tag = acc > total_downloads ? 'danger' : 'success'
     respond_to do |f|
       f.js
     end

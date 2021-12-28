@@ -1,7 +1,10 @@
 class User < ApplicationRecord
 
   include Util
+  include Users::Downloads
   include Users::Export
+
+
   #has_paper_trail
   # Include default devise modules. Others available are:
   # :recoverable, :lockable, :timeoutable, :trackable and :omniauthable
