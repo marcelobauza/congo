@@ -3,7 +3,7 @@
   <head>
     <%= render :partial => 'layouts/head' %>
   </head>
-  <body class="login">
+  <body class="<%= params['module'] == 'flex' ? 'login' : 'login_flex' %>" >
 
     <%= yield %>
 
