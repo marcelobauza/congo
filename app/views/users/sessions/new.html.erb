@@ -26,11 +26,10 @@
     <div class="actions">
       <%= f.submit class: "#{btn} btn-lg btn-block", value: "Ingresar" %>
     </div>
-
   <% end %>
 
   <% flash.each do |type, msg| %>
-    <div>
+    <div class="login_text_color">
       <%= msg %>
     </div>
   <% end %>
