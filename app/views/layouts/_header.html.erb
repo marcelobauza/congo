@@ -201,7 +201,9 @@
     <% end %>
 
       <div class="nav-item dropdown">
-        <%= link_to '', users_account_path(), class: "dropdown-item custom-item reports p-4", remote: true, id:"user_data", "data-status-downloads": true %>
+        <%= link_to users_account_path(), class: "btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width", remote: true, id: "user_data", data: { "data-status-downloads": true} do %>
+          <i class="fas fa-cloud-download-alt" title="Información descargas" style="font-size: 15px"></i>
+        <% end %>
       </div>
     <!-- Cuenta Dropdown -->
     <div class="nav-item dropdown">
