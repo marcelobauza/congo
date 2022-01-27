@@ -26,7 +26,8 @@ class UsersController < ApplicationController
   end
 
   def export_csv_downloads_by_company
-    data = DownloadsUser.export_csv_downloads_by_company current_user.company_id, current_user
+    company = current_user.company
+    data = DownloadsUser.export_csv_downloads_by_company company, 'month'
 
     send_file data, :type => 'text/csv', :disposition => "inline", :filename => "Descargar_por_empresa.csv"
   end

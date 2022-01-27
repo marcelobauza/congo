@@ -2,23 +2,41 @@ module DownloadsUsers::Exports
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def export_csv_downloads_by_company company_id, current_user
-      layers = %w(:projects future_projects transactions)
-      from_date = calculate_date current_user
-      to_date   = from_date.next_month
+    def export_csv_downloads_by_company company, option
+      from_date, to_date = calculate_date(company, option)
 
       du = DownloadsUser.includes(:user).
         where(users:
-              {company_id: company_id}).
-        where(created_at: from_date..to_date)
+              {company_id: company.id}).
+      where(created_at: from_date..to_date)
 
       return CsvParser.get_downloads_users_csv_data(du)
     end
+
     private
-      def calculate_date current_user
-        i_day = current_user.company.enabled_date.day
-        day = Date.today.day
-        i_day <  day ?  Date.today.change(day: i_day) : Date.today.change(day: i_day).prev_month
+
+    def calculate_date company, option
+      if company.enabled_date.nil?
+        Date.today
+      else
+        i_day = company.enabled_date.day
+        day   = Date.today.day
+
+        if option == 'year'
+          [Date.today.change(day: i_day).prev_year, Date.today]
+        else
+          from_date = if i_day <  day
+                        Date.today.change(day: i_day)
+                      else
+                        Date.today.change(day: i_day).send("prev_#{option}")
+                      end
+
+          to_date = from_date.next_month
+
+          [from_date, to_date]
+        end
+
       end
+    end
   end
 end

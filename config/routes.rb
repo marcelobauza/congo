@@ -99,6 +99,8 @@ Rails.application.routes.draw do
     get 'periods/active_periods'
     get 'uf_conversions/calculate_uf' => 'uf_conversions#calculate_uf'
     get 'counties/search_geojson' => 'counties#search_geojson'
+    get 'companies/export_csv_downloads_by_company' => 'companies#export_csv_downloads_by_company'
+
     resources :agencies
     resources :periods
     resources :import_processes

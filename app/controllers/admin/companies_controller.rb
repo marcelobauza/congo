@@ -1,5 +1,5 @@
 class Admin::CompaniesController < Admin::DashboardsController
-  before_action :set_company, only: [:show, :edit, :update, :destroy]
+  before_action :set_company, only: [:show, :edit, :update, :destroy, :export_csv_downloads_by_company]
 
   layout 'admin'
 
@@ -66,6 +66,12 @@ class Admin::CompaniesController < Admin::DashboardsController
         format.json { head :no_content }
       end
     end
+  end
+
+  def export_csv_downloads_by_company
+    data = DownloadsUser.export_csv_downloads_by_company @company, 'year'
+
+    send_file data, :type => 'text/csv', :disposition => "inline", :filename => "Descargar_por_empresa.csv"
   end
 
   private
