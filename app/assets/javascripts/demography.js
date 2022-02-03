@@ -205,14 +205,14 @@ Congo.demography.action_dashboards = function(){
             datasets.push({
               data: count,
               backgroundColor: [
-                'rgb(39,174,96)',
-                'rgb(231,76,60)',
-                'rgb(211,84,0)',
-                'rgb(41,128,185)',
-                'rgb(241,196,15)',
-                'rgb(142,68,173)',
-                'rgb(192,57,43)',
-                'rgb(243,156,18)',
+                  'rgb(215,48,39)',
+                  'rgb(252,141,89)',
+                  'rgb(254,224,144)',
+                  'rgb(224,243,248)',
+                  'rgb(145,191,219)',
+                  'rgb(142,68,173)',
+                  'rgb(192,57,43)',
+                  'rgb(243,156,18)'
               ],
             })
 
@@ -670,11 +670,11 @@ Congo.demography.action_dashboards = function(){
               datasets.push({
                 data: count,
                 backgroundColor: [
-                  'rgb(39,174,96)',
-                  'rgb(231,76,60)',
-                  'rgb(211,84,0)',
-                  'rgb(41,128,185)',
-                  'rgb(241,196,15)',
+                  'rgb(215,48,39)',
+                  'rgb(252,141,89)',
+                  'rgb(254,224,144)',
+                  'rgb(224,243,248)',
+                  'rgb(145,191,219)',
                   'rgb(142,68,173)',
                   'rgb(192,57,43)',
                   'rgb(243,156,18)',
