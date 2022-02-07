@@ -17,13 +17,13 @@ module DownloadsUsers::Exports
 
     def calculate_date company, option
       if company.enabled_date.nil?
-        Date.today
+        [Date.today.prev_month, Date.today]
       else
         i_day = company.enabled_date.day
         day   = Date.today.day
 
         if option == 'year'
-          [Date.today.change(day: i_day).prev_year, Date.today]
+          [Date.today.prev_year, Date.today]
         else
           from_date = if i_day <  day
                         Date.today.change(day: i_day)
