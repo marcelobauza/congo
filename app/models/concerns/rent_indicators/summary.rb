@@ -321,6 +321,8 @@ module RentIndicators::Summary
         data_bots = []
         series    = []
         bots      = bots_offer(neighborhood, bimester, year)
+        count_mix = 0
+        sum_days  = 0
 
         bots_mix_types = bots.group_by { |mt| "#{mt.bedroom.to_i}" }
 
@@ -329,9 +331,18 @@ module RentIndicators::Summary
           mix.each do |row|
             pub_days << row[:created_at].to_date - row[:publish].to_date
           end
-          mix_avg_pub_days = pub_days.sum / pub_days.size.to_f
-          data_bots.push("name": key, "count": mix_avg_pub_days.round())
+          if key.to_i > 3
+            count_mix += pub_days.size.to_f
+            sum_days  += pub_days.sum
+          else
+            mix_avg_pub_days = pub_days.sum / pub_days.size.to_f
+            data_bots.push("name": key, "count": mix_avg_pub_days.round())
+          end
         end
+
+        mix_avg_pub_days_more_equal_four = count_mix > 0 ? (sum_days / count_mix).round() : 0
+
+        data_bots.push("name": '4', "count": mix_avg_pub_days_more_equal_four)
 
         data_bots_final = [
           {name: '1', count: 0},
@@ -349,8 +360,7 @@ module RentIndicators::Summary
           when '3'
             data_bots_final[2][:count] = row[:count]
           else
-            suma = data_bots_final[3][:count] + row[:count]
-            data_bots_final[3][:count] = suma
+            data_bots_final[3][:count] = row[:count]
           end
         end
 
