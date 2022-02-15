@@ -291,38 +291,54 @@ Congo.map_utils = function(){
         break;
       case 'transactions_info':
       case 'transactions_heatmap_amount':
+        year              = Congo.dashboards.config.year;
+        bimester          = Congo.dashboards.config.bimester;
+        property_type_ids = Congo.transactions.config.property_type_ids
+        seller_type_ids   = Congo.transactions.config.seller_type_ids
+        boost             = Congo.dashboards.config.boost;
+        widget            = Congo.dashboards.config.widget;
+        legends           = Congo.transactions.config.legends;
+        periods_selected  = Congo.transactions.config.period_selected
 
-        year = Congo.dashboards.config.year;
-        bimester = Congo.dashboards.config.bimester;
         Congo.transactions.action_dashboards.indicator_transactions();
 
-        property_type_ids = Congo.transactions.config.property_type_ids
-        seller_type_ids = Congo.transactions.config.seller_type_ids
-        boost = Congo.dashboards.config.boost;
-        widget =  Congo.dashboards.config.widget;
-        legends = Congo.transactions.config.legends;
-
-        if (widget == 'heat_cbr_amout'){
+        if (widget == 'heat_cbr_amout') {
           layer_type = 'transactions_heatmap_amount';
         }
 
         if (boost == false){
-          filter_layer = filter_layer +  " AND ( ";
-          for(i=6; i > 0; i--){
-              filter_layer = filter_layer + " (bimester='"+ bimester +"' AND year='"+ year+"')";
-              bimester = bimester - 1;
-              if (bimester == 0 ){
-                    bimester = 6;
-                    year = year - 1;
-                    }
-          if (i > 1){
-          filter_layer = filter_layer +  " OR ";
-          }
+            filter_layer = filter_layer +  " AND ( ";
+            if (Object.keys(periods_selected).length === 0) {
 
+            for(i=6; i > 0; i--) {
+              filter_layer = filter_layer + " (bimester='" + bimester + "' AND year='" + year +"')";
+              bimester = bimester - 1;
+              if (bimester == 0 ) {
+                bimester = 6;
+                year     = year - 1;
+              }
+
+              if (i > 1) {
+                filter_layer = filter_layer +  " OR ";
+              }
+            }
+          } else {
+            periods_count = 0
+            for(var p in periods_selected) {
+              bimester_year = periods_selected[p].split('-')
+              filter_layer = filter_layer + " (bimester='"+ bimester_year[0] +"' AND year='"+ bimester_year[1]+"')";
+
+              periods_count += 1
+
+              if (Object.keys(periods_selected).length > periods_count ) {
+                filter_layer = filter_layer +  " OR ";
+              }
+            }
           }
           filter_layer = filter_layer +  " ) ";
         }
-        if (property_type_ids.length > 0 ){
+
+        if (property_type_ids.length > 0 ) {
           filter_layer = filter_layer + " AND property_type_id IN ("+ property_type_ids + ")";
         }
 
@@ -887,15 +903,16 @@ Congo.map_utils = function(){
   }
 
   function search_county(county_id){
+    var cql_filter_counties = "county_id IN("+ county_id +")"
 
     var owsrootUrl = "http://"+url+":8080/geoserver/ows";
     var defaultParameters = {
       service: 'WFS',
-      version: '1.0.0',
+      version: '1.1.0',
       request: 'GetFeature',
       typeName: 'inciti_v2:counties_info',
       outputFormat: 'application/json',
-      CQL_FILTER: "county_id IN("+ county_id +")"
+      CQL_FILTER: cql_filter_counties
     }
     var parameters = L.Util.extend(defaultParameters);
     var URL = owsrootUrl + L.Util.getParamString(parameters);

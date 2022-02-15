@@ -326,7 +326,6 @@ Congo.dashboards.action_index = function() {
   }
 
   add_time_slider = function() {
-
     if ($('#time_slider').length == 0) {
 
       // Agregamos el slider al card de "Filtros Activos"
@@ -417,8 +416,6 @@ Congo.dashboards.action_index = function() {
     get_last_period: get_last_period
   }
 }();
-
-
 
 Congo.dashboards.action_graduated_points = function() {
 

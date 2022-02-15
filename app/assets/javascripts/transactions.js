@@ -11,12 +11,11 @@ Congo.transactions.config= {
   years: [],
   from_calculated_value: [],
   to_calculated_value: [],
-  legends: []
+  legends: [],
+  period_selected: {}
 }
 
-
 Congo.transactions.action_heatmap = function(){
-
   init=function(){
     widget =  Congo.dashboards.config.widget;
     Congo.transactions.config.legends =[]
@@ -1967,16 +1966,22 @@ Congo.transactions.action_dashboards = function(){
 
                     // Valida si el item del filtro existe
                     if ($('#item-'+filter_item_id).length == 0) {
-
                       // Almacena la variable global
                       var periods_years = x_tick.split("/");
                       Congo.transactions.config.periods.push(periods_years[0]);
+
+                      bimester_selected =  periods_years[0]
+                      year_selected     = String( periods_years[1]).padStart(4,'20')
+                      bimester_year_selected =  bimester_selected + "-" + year_selected
+
+                      Congo.transactions.config.period_selected[bimester_year_selected] = bimester_year_selected
+
                       if (title =! 'Compraventas') {
                         Congo.transactions.config.years.push(20+periods_years[1]);
+                        Congo.dashboards.config.years.push(20+periods_years[1]);
                       } else {
                         Congo.transactions.config.years.push(periods_years[1]);
                       }
-
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
                       $('#item-'+filter_item_id).append(text_item, close_button_item);
@@ -1985,15 +1990,15 @@ Congo.transactions.action_dashboards = function(){
 
                     // Elimina item del filtro
                     $('#close-'+filter_item_id).click(function() {
+                      var active_periods         = Congo.transactions.config.periods;
+                      var active_years           = Congo.transactions.config.years;
+                      var item_full_id           = $('#item-'+filter_item_id).attr('id');
+                      var item_full_id           = item_full_id.split("-");
+                      var period_id              = item_full_id[1];
+                      var year_id                = item_full_id[2];
+                      var delete_filter_selected = period_id + "-" + year_id
 
-                      var active_periods = Congo.transactions.config.periods;
-                      var active_years = Congo.transactions.config.years;
-
-                      var item_full_id = $('#item-'+filter_item_id).attr('id');
-
-                      item_full_id = item_full_id.split("-");
-                      var period_id = item_full_id[1];
-                      var year_id = item_full_id[2];
+                      delete Congo.transactions.config.period_selected[delete_filter_selected]
 
                       var periods_updated = $.grep(active_periods, function(n, i) {
                         return n != period_id;
@@ -2006,13 +2011,11 @@ Congo.transactions.action_dashboards = function(){
                       });
 
                       Congo.transactions.config.periods = periods_updated;
-                      Congo.transactions.config.years = years_updated;
+                      Congo.transactions.config.years   = years_updated;
 
                       $('#item-'+filter_item_id).remove();
                       Congo.map_utils.counties();
-
                     });
-
                   }, // Cierra onClick function
                   responsive: true,
                   title: {
