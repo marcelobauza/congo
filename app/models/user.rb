@@ -55,11 +55,10 @@ class User < ApplicationRecord
     disabled = params[:user][:disabled] unless params[:user].nil?
     nombre = params[:user][:complete_name] unless params[:user].nil?
 
-    User.select("users.*").
+    User.joins(:company).select("users.*").
       where(build_conditions({:role_id => role_id, :email => email,
                               :disabled => disabled,
-                              :complete_name => nombre})).
-                              order("complete_name")
+                              :complete_name => nombre}))
 
   end
   def self.build_conditions(filters)
