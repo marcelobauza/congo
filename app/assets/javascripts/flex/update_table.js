@@ -47,10 +47,10 @@ function update_table() {
             '<td class="for-order">' + ($(this)[0]["property_typee"]) + '</td>' +
             '<td class="for-order">' + ($(this)[0]["address"]) + '</td>' +
             '<td class="for-order">' + ($(this)[0]['seller']) + '</td>' +
-            '<td class="for-order">' + ($(this)[0]['building_surface']) + '</td>' +
-            '<td class="for-order">' + ($(this)[0]['terrain_surface']) + '</td>' +
+            '<td class="hidden">' + ($(this)[0]['building_surface']) + '</td>' +
+            '<td class="hidden">' + ($(this)[0]['terrain_surface']) + '</td>' +
             '<td class="for-order">' + ($(this)[0]['price']) + '</td>' +
-            '<td class="for-order">' + ($(this)[0]['ufm2']) + '</td>' +
+            '<td class="hidden">' + ($(this)[0]['ufm2']) + '</td>' +
             '<td class="hidden">' + '' + '</td>' +
             '<td class="hidden">' + '' + '</td>' +
             '<td class="hidden">' + ($(this)[0]['id']) + '</td>' +
