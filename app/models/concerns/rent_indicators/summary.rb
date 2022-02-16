@@ -329,7 +329,7 @@ module RentIndicators::Summary
         bots_mix_types.map do |key, mix|
           pub_days = []
           mix.each do |row|
-            pub_days << row[:created_at].to_date - row[:publish].to_date
+            pub_days << row[:collection_date].to_date - row[:publish].to_date
           end
           if key.to_i > 3
             count_mix += pub_days.size.to_f

@@ -80,8 +80,9 @@ module ImportProcess::ParseFile
       end
 
       def parse_bot(shp_file, import_logger)
-        st1 = JSON.parse(File.read(shp_file))
+        st1       = JSON.parse(File.read(shp_file))
         json_data = RGeo::GeoJSON.decode(st1, :json_parser => :json)
+
         json_data.each_with_index do |a, index|
           import_logger.current_row_index =index
 
@@ -100,10 +101,9 @@ module ImportProcess::ParseFile
             next
           end
 
-          bot = Bot.new
-          factory = RGeo::Geos.factory(srid: 4326)
+          factory    = RGeo::Geos.factory(srid: 4326)
           properties = a.properties
-   #       county = County.find_by(name: properties[:comune])
+          bot        = Bot.new
 
           bot.the_geom        = factory.parse_wkt(a.geometry.as_text)
           bot.publish         = properties['date']
@@ -112,7 +112,6 @@ module ImportProcess::ParseFile
           bot.modality        = properties['modality']
           bot.properties      = properties['properties']
           bot.region          = properties['region']
-    #      bot.county_id       = county.id
           bot.comune          = properties['comune']
           bot.street          = properties['street']
           bot.number          = properties['number']
@@ -133,6 +132,7 @@ module ImportProcess::ParseFile
           bot.email           = properties['email']
           bot.bimester        = properties['bimestre']
           bot.year            = properties['year']
+          bot.collection_date = properties['fechalev']
 
           bot.save!
 
@@ -142,6 +142,30 @@ module ImportProcess::ParseFile
             end
           else
             bot.new_record? ? import_logger.inserted += 1 : import_logger.updated += 1
+          end
+        end
+
+        insert_neighborhood_future_projects
+      end
+
+      def insert_neighborhood_future_projects
+        NeighborhoodFutureProject.destroy_all
+
+        Neighborhood.all.each do |neighborhood|
+          total_house = 0
+
+          Period.where('year >= ?', 2017).order(year: :asc, bimester: :asc).each do |period|
+            rfp =  RentFutureProject.where(bimester: period.bimester, year: period.year).where("ST_CONTAINS(
+            ST_GEOMFROMTEXT('#{neighborhood.the_geom}', 4326), ST_SETSRID(the_geom, 4326))").take
+
+              total_house +=  rfp.total_units if rfp
+
+              nn = NeighborhoodFutureProject.create!(
+                neighborhood_id: neighborhood.id,
+                year:              year,
+                bimester:          bimester,
+                total_households:  total_house
+              )
           end
         end
       end

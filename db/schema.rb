@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_13_233918) do
+ActiveRecord::Schema.define(version: 2022_02_16_193928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -76,8 +76,8 @@ ActiveRecord::Schema.define(version: 2021_11_13_233918) do
     t.geometry "the_geom", limit: {:srid=>0, :type=>"st_point"}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "collection_date"
     t.index ["bimester"], name: "index_bots_on_bimester"
-    t.index ["county_id"], name: "index_bots_on_county_id"
     t.index ["the_geom"], name: "index_bots_on_the_geom", using: :gist
     t.index ["year"], name: "index_bots_on_year"
   end
