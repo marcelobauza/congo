@@ -747,7 +747,7 @@ function projects_report_pdf(){
 
               }) // Cierra each
             } else if (i == 1) { // Información General Departamentos
-
+              if (data[i].hasOwnProperty('info_department') && (data[i]['info_department'] != '') ) {
               // Levantamos los valores de departamento
               var info_department = data[i]['info_department'][0];
 
@@ -835,12 +835,13 @@ function projects_report_pdf(){
                 doc.text(max_uf_value, 170, 120);
                 doc.text(avg_uf_value, 170, 130);
               }
+              }
 
             } else if (i == 2) { // Información General Casas
 
               // Levantamos los valores de casas
+              if (data[i].hasOwnProperty('info_house') && data[i]['info_house'] != '') {
               var info_house = data[i]['info_house'][0];
-
               // Validamos si existen proyectos de casas
               if (info_house['project_count'] > 0) {
 
@@ -929,6 +930,7 @@ function projects_report_pdf(){
                 doc.text(max_uf_value, 170, 120);
                 doc.text(avg_uf_value, 170, 130);
 
+              }
               }
 
             } else { // Gráficos
