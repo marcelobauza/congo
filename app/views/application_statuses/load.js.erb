@@ -1,66 +1,64 @@
-Congo.dashboards.config.layer_type ='' ;
-Congo.dashboards.config.radius = 0;
-Congo.dashboards.config.centerpt = '';
-Congo.dashboards.config.bimester = '';
-Congo.dashboards.config.year = '';
+Congo.dashboards.config.layer_type   = '';
+Congo.dashboards.config.radius       = 0;
+Congo.dashboards.config.centerpt     = '';
+Congo.dashboards.config.bimester     = '';
+Congo.dashboards.config.year         = '';
 Congo.dashboards.config.typeGeometry = '';
-Congo.dashboards.config.style_layer = '';
-Congo.dashboards.config.county_id = '';
-Congo.dashboards.config.size_box  = []; 
+Congo.dashboards.config.style_layer  = '';
+Congo.dashboards.config.size_box     = [];
+project_type_ids                     = [];
+layer_type                           = "<%= @row['layer_type'] %>";
+to_period                            = "<%= @row['to_period'] %>";
+to_year                              = "<%= @row['to_year'] %>";
+radius                               = "<%= @row['radius'] %>";
+center_point                         = "<%= @row['centerpt'] %>";
+type_geometry                        = "<%= @row['type_geometry'] %>";
+style_layer                          = "<%= @row['style_layer'] %>";
 
-layer_type = "<%= @row['layer_type'] %>";
-to_period = "<%= @row['to_period'] %>";
-to_year = "<%= @row['to_year'] %>";
-radius = "<%= @row['radius'] %>";
-center_point = "<%= @row['centerpt'] %>";
-type_geometry = "<%= @row['type_geometry'] %>";
-county_id = [];
-wkt = [];
-style_layer = "<%= @row['style_layer'] %>";
-project_type_ids = [];
-
-<% if  !@row['county_id'].nil? %>
-    Congo.dashboards.config.county_id.push(<%= raw @row['county_id'];%>);
+<% if @row['county_id'].any? %>
+  <% @row['county_id'].each do |county| %>
+    Congo.dashboards.config.county_id.push(['<%= county %>']);
+  <% end %>
 <% end %>
 
 <% if  !@row['wkt'].nil? %>
     Congo.dashboards.config.size_box = <%= raw @row['wkt'];%>;
 <% end %>
-  
-Congo.dashboards.config.layer_type = layer_type;
-Congo.dashboards.config.radius =  radius;
-Congo.dashboards.config.centerpt = center_point;
-Congo.dashboards.config.bimester = to_period;
-Congo.dashboards.config.year = to_year;
+
+Congo.dashboards.config.layer_type   = layer_type;
+Congo.dashboards.config.radius       = radius;
+Congo.dashboards.config.centerpt     = center_point;
+Congo.dashboards.config.bimester     = to_period;
+Congo.dashboards.config.year         = to_year;
 Congo.dashboards.config.typeGeometry = type_geometry;
-Congo.dashboards.config.style_layer = style_layer;
+Congo.dashboards.config.style_layer  = style_layer;
 
 Congo.map_utils.draw_geometry(type_geometry);
 
-switch (layer_type){
-  
+switch (layer_type) {
   case 'future_projects_info':
     let future_project_type_ids = [];
 
     <% if  !@row['future_project_type_ids'].nil? %>;
-      future_project_type_ids =   <%= raw @row['future_project_type_ids']%>;
+      future_project_type_ids = <%= raw @row['future_project_type_ids']%>;
     <% end %>
     <% if  !@row['project_type_ids'].nil? %>;
-      project_type_ids =   <%= raw @row['project_type_ids']%>;
+      project_type_ids = <%= raw @row['project_type_ids']%>;
     <% end %>
 
       if (future_project_type_ids.length > 0) {
-        Congo.transactions.config.future_project_type_ids = future_project_type_ids;  
+        Congo.transactions.config.future_project_type_ids = future_project_type_ids;
       }
       if (project_type_ids.length > 0) {
         Congo.transactions.config.future_project_type_ids = project_type_ids;
       }
       break;
   case 'transactions_info':
-    let seller_type_ids = [];
+    let seller_type_ids   = [];
     let property_type_ids = [];
+
     <% if  !@row['seller_type_ids'].nil? %>;
-      seller_type_ids =   <%= raw @row['seller_type_ids']%>;
+      seller_type_ids = <%= raw @row['seller_type_ids']%>;
     <% end %>
     <% if  !@row['property_type_ids'].nil? %>;
       property_type_ids = <%= raw @row['property_type_ids']%>;
@@ -69,79 +67,81 @@ switch (layer_type){
         Congo.transactions.config.seller_type_ids = seller_type_ids;
       }
       if (property_type_ids.length > 0) {
-        Congo.transactions.config.property_type_ids = property_type_ids; 
+        Congo.transactions.config.property_type_ids = property_type_ids;
       }
       break;
 
     case 'projects_feature_info':
       let project_status_ids = [];
-      let mix_ids = [];
-      let from_floor = [];
-      let to_floor = [];
-      let from_uf_value = [];
-      let to_uf_value = [];
+      let mix_ids            = [];
+      let from_floor         = [];
+      let to_floor           = [];
+      let from_uf_value      = [];
+      let to_uf_value        = [];
       let project_agency_ids = [];
+
     <% if  !@row['project_status_ids'].nil? %>;
-        project_status_ids =   <%= raw @row['project_status_ids']%>;
+        project_status_ids = <%= raw @row['project_status_ids']%>;
     <% end %>
 
     <% if  !@row['project_type_ids'].nil? %>;
-      project_type_ids =   <%= raw @row['project_type_ids']%>;
+      project_type_ids = <%= raw @row['project_type_ids']%>;
     <% end %>
 
     <% if  !@row['mix_ids'].nil? %>;
-        mix_ids =   <%= raw @row['mix_ids']%>;
+        mix_ids = <%= raw @row['mix_ids']%>;
     <% end %>
+
     <% if  !@row['from_floor'].nil? || !@row['to_floor'].nil? %>;
-      from_floor =  <%= raw @row['from_floor']%>;
-      to_floor =  <%= raw @row['to_floor']%>;
+      from_floor = <%= raw @row['from_floor']%>;
+      to_floor   = <%= raw @row['to_floor']%>;
     <% end %>
 
     <% if  !@row['from_uf_value'].nil? || !@row['to_uf_value'].nil? %>;
-      from_uf_value =  <%= raw @row['from_uf_value']%>;
-      to_uf_value =  <%= raw @row['to_uf_value']%>;
+      from_uf_value = <%= raw @row['from_uf_value']%>;
+      to_uf_value   = <%= raw @row['to_uf_value']%>;
     <% end %>
 
     <% if  !@row['project_agency_ids'].nil? %>;
-      project_agency_ids =  <%= raw @row['project_agency_ids']%>;
+      project_agency_ids = <%= raw @row['project_agency_ids']%>;
     <% end %>
 
-      Congo.projects.config.project_status_ids  = project_status_ids; 
-      Congo.projects.config.project_type_ids  = project_type_ids; 
-      Congo.projects.config.mix_ids  = mix_ids; 
-      Congo.projects.config.from_floor  = from_floor;
-      Congo.projects.config.to_floor  = to_floor; 
-      Congo.projects.config.from_uf_value  = from_uf_value; 
-      Congo.projects.config.to_uf_value  = to_uf_value; 
-      Congo.projects.config.project_agency_ids  = project_agency_ids;
+      Congo.projects.config.project_status_ids = project_status_ids;
+      Congo.projects.config.project_type_ids   = project_type_ids;
+      Congo.projects.config.mix_ids            = mix_ids;
+      Congo.projects.config.from_floor         = from_floor;
+      Congo.projects.config.to_floor           = to_floor;
+      Congo.projects.config.from_uf_value      = from_uf_value;
+      Congo.projects.config.to_uf_value        = to_uf_value;
+      Congo.projects.config.project_agency_ids = project_agency_ids;
       break;
     case 'building_regulations_info':
-      
-      let allowed_use_ids = [];
-      let from_construct =  '<%= raw @row['from_construct'] %>';
-      let to_construct = '<%= raw @row['to_construct'] %>';
-      let from_land_ocupation =  '<%= raw @row['from_land_ocupation'] %>';
-      let to_land_ocupation =  '<%= raw @row['to_land_ocupation'] %>';
-      let from_max_height =  '<%= raw @row['from_max_height'] %>';
-      let to_max_height=  '<%= raw @row['to_max_height'] %>';
-      let from_inhabitants_hectare=  '<%= raw @row['from_inhabitants_hectare'] %>';
-      let to_inhabitants_hectare =  '<%= raw @row['to_inhabitants_hectare'] %>';
+      let allowed_use_ids          = [];
+      let from_construct           = '<%= raw @row['from_construct'] %>';
+      let to_construct             = '<%= raw @row['to_construct'] %>';
+      let from_land_ocupation      = '<%= raw @row['from_land_ocupation'] %>';
+      let to_land_ocupation        = '<%= raw @row['to_land_ocupation'] %>';
+      let from_max_height          = '<%= raw @row['from_max_height'] %>';
+      let to_max_height            = '<%= raw @row['to_max_height'] %>';
+      let from_inhabitants_hectare = '<%= raw @row['from_inhabitants_hectare'] %>';
+      let to_inhabitants_hectare   = '<%= raw @row['to_inhabitants_hectare'] %>';
 
     <% if  !@row['allowed_use_ids'].nil? %>;
         allowed_use_ids =  <%= raw @row['allowed_use_ids']%>;
     <% end %>
-      Congo.building_regulations.config.allowed_use_ids = allowed_use_ids;
-      Congo.building_regulations.config.from_construct = from_construct;
-      Congo.building_regulations.config.to_construct = to_construct;
-      Congo.building_regulations.config.from_land_ocupation = from_land_ocupation;
-      Congo.building_regulations.config.to_land_ocupation = to_land_ocupation;
-      Congo.building_regulations.config.from_max_height = from_max_height;
-      Congo.building_regulations.config.to_max_height = to_max_height;
-      Congo.building_regulations.config.from_inhabitants_hectare = from_inhabitants_hectare;
-      Congo.building_regulations.config.to_inhabitants_hectare = to_inhabitatnts_hectare;
 
+      Congo.building_regulations.config.allowed_use_ids          = allowed_use_ids;
+      Congo.building_regulations.config.from_construct           = from_construct;
+      Congo.building_regulations.config.to_construct             = to_construct;
+      Congo.building_regulations.config.from_land_ocupation      = from_land_ocupation;
+      Congo.building_regulations.config.to_land_ocupation        = to_land_ocupation;
+      Congo.building_regulations.config.from_max_height          = from_max_height;
+      Congo.building_regulations.config.to_max_height            = to_max_height;
+      Congo.building_regulations.config.from_inhabitants_hectare = from_inhabitants_hectare;
+      Congo.building_regulations.config.to_inhabitants_hectare   = to_inhabitatnts_hectare;
     break;
 }
+
 Congo.map_utils.counties();
 
 $('#modal-load').modal('hide')

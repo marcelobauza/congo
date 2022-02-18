@@ -1,10 +1,9 @@
-ids = []
-name = '<%= @county[0].name %>'
+ids  = []
+name = "<%= @county.map(&:name).join(' - ') %>"
+
 ids.push(<%= @county.ids %>)
-    Congo.dashboards.config.county_id = ids;
-
-
-Congo.dashboards.config.county_name = name;
+Congo.dashboards.config.county_id    = ids;
+Congo.dashboards.config.county_name  = name;
 Congo.dashboards.config.typeGeometry = '';
 
 Congo.map_utils.counties();

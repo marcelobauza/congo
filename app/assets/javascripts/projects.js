@@ -2,67 +2,67 @@ Congo.namespace('projects.action_heatmap');
 Congo.namespace('projects.action_graduated_points');
 Congo.namespace('projects.action_dashboards');
 
-
-Congo.projects.config= {
-  county_name: '',
-  county_id: '',
-  layer_type: 'projects_feature_info',
-  project_status_ids: [],
-  project_type_ids: [],
-  mix_ids: [],
-  periods: [],
-  years: [],
-  from_floor: [],
-  to_floor: [],
-  from_uf_value: [],
-  to_uf_value: [],
-  project_agency_ids: [],
-  legends: []
+Congo.projects.config = {
+  county_name        : '',
+  county_id          : '',
+  layer_type         : 'projects_feature_info',
+  project_status_ids : [],
+  project_type_ids   : [],
+  mix_ids            : [],
+  periods            : [],
+  years              : [],
+  from_floor         : [],
+  to_floor           : [],
+  from_uf_value      : [],
+  to_uf_value        : [],
+  project_agency_ids : [],
+  legends            : []
 }
 
-Congo.projects.action_heatmap = function(){
-
-  init=function(){
+Congo.projects.action_heatmap = function() {
+  init = function() {
     widget =  Congo.dashboards.config.widget;
     switch (widget) {
       case 'heat_prv_uf':
-        Congo.dashboards.config.style_layer= 'heatmap_prv_uf';
+        Congo.dashboards.config.style_layer = 'heatmap_prv_uf';
+
         Congo.map_utils.counties();
+
         $('#layer-name').text('PROYECTOS EN VENTA - UF');
         break;
       case 'heat_prv_uf_m2_u':
-        Congo.dashboards.config.style_layer= 'heatmap_prv_uf_m2_u';
+        Congo.dashboards.config.style_layer = 'heatmap_prv_uf_m2_u';
+
         Congo.map_utils.counties();
+
         $('#layer-name').text('PROYECTOS EN VENTA - UF M² Útil');
         break;
     }
-        Congo.projects.config.legends.push({'name':'Alto', 'color':'9d2608'});
-        Congo.projects.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
-        Congo.projects.config.legends.push({'name':'Medio', 'color':'fa7c16'});
-        Congo.projects.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
-        Congo.projects.config.legends.push({'name':'Bajo', 'color':'fcd930'});
 
-
+    Congo.projects.config.legends.push({'name':'Alto', 'color':'9d2608'});
+    Congo.projects.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
+    Congo.projects.config.legends.push({'name':'Medio', 'color':'fa7c16'});
+    Congo.projects.config.legends.push({'name':'Medio Bajo', 'color':'fda821'});
+    Congo.projects.config.legends.push({'name':'Bajo', 'color':'fcd930'});
   }
+
   return {
     init: init,
   }
 }();
 
-projects_popup = function(id){
-
-  bimester = Congo.dashboards.config.bimester;
-  year = Congo.dashboards.config.year;
+projects_popup = function(id) {
+  bimester                       = Congo.dashboards.config.bimester;
+  year                           = Congo.dashboards.config.year;
   Congo.dashboards.config.row_id = id;
 
-  data = {id: id, bimester: bimester, year: year};
+  data = { id: id, bimester: bimester, year: year };
   $.ajax({
     type: 'GET',
     url: '/projects/index.json',
     datatype: 'json',
     data: data,
     success: function(data) {
-
       // Levantamos los datos para el tab "Detalle Proyecto"
       var detail = data
 
@@ -316,9 +316,8 @@ projects_popup = function(id){
 
       // Separamos los datos de los gráficos
       $.each(charts_data, function(i, reg) {
-
-        var name = [];
-        var count = [];
+        var name     = [];
+        var count    = [];
         var datasets = [];
 
         // Seteamos los títulos
@@ -409,61 +408,73 @@ projects_popup = function(id){
       }) // Cierra each charts_data
     } // Cierra success
   }) // Cierra ajax
-    Congo.dashboards.pois();
+
+  Congo.dashboards.pois();
 } // Cierra projects_popup
 
-Congo.projects.action_graduated_points = function(){
+Congo.projects.action_graduated_points = function() {
+  init = function() {
+    widget                        = Congo.dashboards.config.widget;
+    Congo.projects.config.legends = [];
 
-  init=function(){
-    widget =  Congo.dashboards.config.widget;
-        Congo.projects.config.legends = [];
     switch (widget) {
       case 'prv_stock_units':
-        Congo.dashboards.config.style_layer= 'prv_point_graduated_stock_units';
+        Congo.dashboards.config.style_layer = 'prv_point_graduated_stock_units';
+
         Congo.projects.config.legends.push({'name':'Menor a 2', 'color':'d73027'});
         Congo.projects.config.legends.push({'name':'2 a 4', 'color':'fc8d59'});
         Congo.projects.config.legends.push({'name':'5 a 14', 'color':'fee090'});
         Congo.projects.config.legends.push({'name':'15 a 44', 'color':'e0f3f8'});
         Congo.projects.config.legends.push({'name':'45 a 99', 'color':'91bfdb'});
         Congo.projects.config.legends.push({'name':'Mayor a 100', 'color':'4575b4'});
+
         Congo.map_utils.counties();
+
         $('#layer-name').text('PROYECTOS EN VENTA - Disponibilidad');
         break;
       case 'prv_sold_units':
-        Congo.dashboards.config.style_layer= 'prv_point_graduated_sold_units';
+        Congo.dashboards.config.style_layer = 'prv_point_graduated_sold_units';
+
         Congo.projects.config.legends.push({'name':'Menor a 0.5', 'color':'d73027'});
         Congo.projects.config.legends.push({'name':'0.5 a 0.9', 'color':'fc8d59'});
         Congo.projects.config.legends.push({'name':'1.0 a 2.4', 'color':'fee090'});
         Congo.projects.config.legends.push({'name':'2.5 a 4.9', 'color':'e0f3f8'});
         Congo.projects.config.legends.push({'name':'5.0 a 14.9', 'color':'91bfdb'});
         Congo.projects.config.legends.push({'name':'Mayor a 15.0', 'color':'4575b4'});
+
         Congo.map_utils.counties();
+
         $('#layer-name').text('PROYECTOS EN VENTA - Venta Mensual');
         break;
       case 'prv_uf_avg_percent':
-        Congo.dashboards.config.style_layer= 'prv_point_graduated_uf';
+        Congo.dashboards.config.style_layer = 'prv_point_graduated_uf';
+
         Congo.projects.config.legends.push({'name':'Menor a 2.499', 'color':'d73027'});
         Congo.projects.config.legends.push({'name':'2.500 a 3.999', 'color':'fc8d59'});
         Congo.projects.config.legends.push({'name':'4.000 a 6.499', 'color':'fee090'});
         Congo.projects.config.legends.push({'name':'6.500 a 10.499', 'color':'e0f3f8'});
         Congo.projects.config.legends.push({'name':'10.500 a 14.999', 'color':'91bfdb'});
         Congo.projects.config.legends.push({'name':'Mayor a 15.000', 'color':'4575b4'});
+
         Congo.map_utils.counties();
+
         $('#layer-name').text('PROYECTOS EN VENTA - UF');
         break;
       case 'prv_uf_m2_u':
-        Congo.dashboards.config.style_layer= 'prv_point_graduated_uf_m2_u';
+        Congo.dashboards.config.style_layer = 'prv_point_graduated_uf_m2_u';
+
         Congo.projects.config.legends.push({'name':'Menor a 26', 'color':'d73027'});
         Congo.projects.config.legends.push({'name':'27 a 52', 'color':'fc8d59'});
         Congo.projects.config.legends.push({'name':'53 a 63', 'color':'fee090'});
         Congo.projects.config.legends.push({'name':'64 a 82', 'color':'e0f3f8'});
         Congo.projects.config.legends.push({'name':'83 a 101', 'color':'91bfdb'});
         Congo.projects.config.legends.push({'name':'Mayor a 102', 'color':'4575b4'});
+
         Congo.map_utils.counties();
+
         $('#layer-name').text('PROYECTOS EN VENTA - UF M² Útil');
         break;
     }
-
   }
   return {
     init: init,
@@ -471,8 +482,7 @@ Congo.projects.action_graduated_points = function(){
 }();
 
 
-function projects_report_pdf(){
-
+function projects_report_pdf() {
   $.ajax({
     type: 'GET',
     url: '/reports/projects_pdf.json',
@@ -492,11 +502,10 @@ function projects_report_pdf(){
       // Deshabilita los botones
       $('.btn').addClass('disabled')
       $('.close').prop('disabled', true);
-
     },
-    success: function(data){
-
+    success: function(data) {
       var mapContainer = document.getElementById('map');
+
       $('.leaflet-top').addClass('d-none');
       $('.leaflet-right').addClass('d-none');
 
@@ -504,11 +513,11 @@ function projects_report_pdf(){
           useCORS: true,
         }).then(function(canvas) {
 
-          var img = document.createElement('img');
+          var img        = document.createElement('img');
           var dimensions = map.getSize();
-          img.width = dimensions.x;
-          img.height = dimensions.y;
-          img.src = canvas.toDataURL();
+          img.width      = dimensions.x;
+          img.height     = dimensions.y;
+          img.src        = canvas.toDataURL();
 
           // Oculta elementos leaflet para sacar la captura
           $('.leaflet-top').removeClass('d-none');
@@ -562,59 +571,38 @@ function projects_report_pdf(){
 
           // Validamos si hay algún filtro aplicado
           if (periods == '') {
-
             // Periodo Actual
             doc.setFontSize(12);
             doc.setFontStyle("bold");
             doc.text('Periodo de tiempo seleccionado:', 10, 49);
             doc.setFontStyle("normal");
             doc.text(to_bimester+'° bimestre del '+to_year, 78, 49);
-
           } else {
-
             // Periodos Filtrados
             doc.setFontSize(12);
             doc.setFontStyle("bold");
             doc.text('Periodos de tiempo seleccionados:', 10, 49);
             doc.setFontStyle("normal");
+
             var tab = 83
+
             for (var i = 0; i < periods.length; i++) {
               doc.text(periods[i]+'/'+years[i]+', ', tab, 49);
               tab = tab + 16
             }
-
           }
-
-          // // imprime mapa
-          // var width_map_pdf = document.getElementById('map_pdf').offsetWidth * x_proportion;
-          // var height_map_pdf = document.getElementById('map_pdf').offsetHeight * y_proportion;
-          // if(altura_final + (190 * height_map_pdf/width_map_pdf)>(y_page - 20)) {
-          //     num_pages ++;
-          //     doc.addPage();
-          //     margin_pdf += 30;
-          //     altura_final = 10;
-          // }
-          // doc.addImage(imgData_pdf, 'PNG', 10, (altura_final + 10), 190 , 190 * height_map_pdf/width_map_pdf)
-
-
           // Agrega mapa
           img_height = (img.height * 190) / img.width
 
-          console.log('img_height');
-          console.log(img_height);
-
           doc.addImage(img, 'PNG', 9, 55, 190, img_height);
-
-          // // Agrega mapa
-          // img_height = (img.height * 190) / img.width
-          // doc.addImage(img, 'JPEG', 9, 55, 190, img_height);
 
           // Agrega leyenda
           map_legends = Congo.projects.config.legends
-          rect_begin = img_height + 59
+          rect_begin  = img_height + 59
+
           for (var i = 0; i < map_legends.length; i++) {
-            var leg = map_legends[i]
-            var name = leg['name']
+            var leg   = map_legends[i]
+            var name  = leg['name']
             var color = leg['color']
 
             doc.setDrawColor(0)
@@ -622,21 +610,19 @@ function projects_report_pdf(){
             doc.rect(20, rect_begin, 3, 3, 'F')
 
             text_begin = rect_begin + 3
+
             doc.setFontSize(10);
             doc.setFontStyle("normal");
             doc.text(name, 25, text_begin);
 
             rect_begin = rect_begin + 6
           }
-
           // Pie de página
           footer()
 
           // Separamos la información
           for (var i = 0; i < data.length; i++) {
-
             if (i == 0) { // Listado de Proyectos
-
               // Agregamos una página
               doc.addPage('a4', 'portrait')
 
@@ -651,28 +637,25 @@ function projects_report_pdf(){
               doc.line(10, 25, 200, 25);
 
               var list_projet = data[i]['list_projet'];
+              var line_num    = 30
+              var vhmd        = 0;
 
-              var line_num = 30
-              var vhmd = 0;
               $.each(list_projet, function(a, b) {
-
-                var code = b['code']
-                var name = b['name']
+                var code              = b['code']
+                var name              = b['name']
                 var real_estate_agent = b['agencyname']
-                var address = b['address']
-                var sold_units = b['sold_units']
-                var stock_units = b['stock_units']
-                var total_units = b['total_units']
-                vhmud = b['vhmud']
-                vhmd = vhmd + b['vhmud']
-                // Convertimos integer a varchar
-                sold_units = sold_units.toString()
-                stock_units = stock_units.toString()
-                total_units = total_units.toString()
-                vhmud = vhmud.toString()
+                var address           = b['address']
+                var sold_units        = b['sold_units']
+                var stock_units       = b['stock_units']
+                var total_units       = b['total_units']
+                vhmud                 = b['vhmud']
+                vhmd                  = vhmd + b['vhmud']
+                sold_units            = sold_units.toString()
+                stock_units           = stock_units.toString()
+                total_units           = total_units.toString()
+                vhmud                 = vhmud.toString()
 
                 if (line_num > 260) {
-
                   doc.addPage('a4', 'portrait')
 
                   // Pie de página
@@ -681,7 +664,6 @@ function projects_report_pdf(){
                   line_num = 25
 
                   doc.line(10, 20, 200, 20);
-
                 }
 
                 // Cod
@@ -748,203 +730,194 @@ function projects_report_pdf(){
               }) // Cierra each
             } else if (i == 1) { // Información General Departamentos
               if (data[i].hasOwnProperty('info_department') && (data[i]['info_department'] != '') ) {
-              // Levantamos los valores de departamento
-              var info_department = data[i]['info_department'][0];
+                // Levantamos los valores de departamento
+                var info_department = data[i]['info_department'][0];
 
-              // Validamos si existen proyectos de departamento
-              if (info_department['project_count'] > 0) {
+                // Validamos si existen proyectos de departamento
+                if (info_department['project_count'] > 0) {
+                  doc.addPage('a4', 'portrait')
 
-                doc.addPage('a4', 'portrait')
+                  // Pie de página
+                  footer()
 
-                // Pie de página
-                footer()
+                  var vhmo                     = info_department['vhmo'];
+                  var vhmdd                    = info_department['vhmdd'];
+                  var total_units              = info_department['total_units1'];
+                  var sold_units               = info_department['total_sold'];
+                  var stock_units              = info_department['total_stock1']
+                  var months_to_sell_out_stock = info_department['spend_stock_months1'];
+                  var min_uf_m2_value          = info_department['min_uf_m21'];
+                  var max_uf_m2_value          = info_department['max_uf_m21'];
+                  var avg_uf_m2_value          = info_department['avg_uf_m2'];
+                  var min_usable_square_m2     = info_department['min_usable_square_m21'];
+                  var max_usable_square_m2     = info_department['max_usable_square_m21'];
+                  var avg_usable_square_m2     = info_department['avg_usable_square_m21'];
+                  var min_terrace_square_m2    = info_department['min_terrace_square_m21'];
+                  var max_terrace_square_m2    = info_department['max_terrace_square_m21'];
+                  var avg_terrace_square_m2    = info_department['avg_terrace_square_m21'];
+                  var min_uf_value             = info_department['min_uf1'];
+                  var max_uf_value             = info_department['max_uf1'];
+                  var avg_uf_value             = info_department['avg_uf1'];
 
-                var vhmo = info_department['vhmo'];
-                var vhmdd = info_department['vhmdd'];
-                var total_units = info_department['total_units1'];
-                var sold_units = info_department['total_sold'];
-                var stock_units = info_department['total_stock1']
-                var months_to_sell_out_stock = info_department['spend_stock_months1'];
-                var min_uf_m2_value = info_department['min_uf_m21'];
-                var max_uf_m2_value = info_department['max_uf_m21'];
-                var avg_uf_m2_value = info_department['avg_uf_m2'];
+                  // Cambiamos a string los valores que llegan como integer
+                  vhmo  = vhmo.toString();
+                  vhmdd = vhmdd.toString();
+                  // Subtítulo
+                  doc.setFontStyle("bold");
+                  doc.setFontSize(14);
+                  doc.text('Información General Departamentos', 105, 20, null, null, 'center');
 
-                var min_usable_square_m2 = info_department['min_usable_square_m21'];
-                var max_usable_square_m2 = info_department['max_usable_square_m21'];
-                var avg_usable_square_m2 = info_department['avg_usable_square_m21'];
-                var min_terrace_square_m2 = info_department['min_terrace_square_m21'];
-                var max_terrace_square_m2 = info_department['max_terrace_square_m21'];
-                var avg_terrace_square_m2 = info_department['avg_terrace_square_m21'];
-                var min_uf_value = info_department['min_uf1'];
-                var max_uf_value = info_department['max_uf1'];
-                var avg_uf_value = info_department['avg_uf1'];
+                  // Labels columna izquierda
+                  doc.setFontSize(12);
+                  doc.text('Venta Mensual en Regimen:', 74, 40, null, null, 'right');
+                  doc.text('Venta Mensual Disponible:', 74, 50, null, null, 'right');
+                  doc.text('Oferta:', 74, 70, null, null, 'right');
+                  doc.text('Venta:', 74, 80, null, null, 'right');
+                  doc.text('Disponibilidad:', 74, 90, null, null, 'right');
+                  doc.text('Meses para agotar stock:', 74, 100, null, null, 'right');
+                  doc.text('Valor UF/m² Mín.:', 74, 110, null, null, 'right');
+                  doc.text('Valor UF/m² Máx.:', 74, 120, null, null, 'right');
+                  doc.text('Valor UF/m² Prom.:', 74, 130, null, null, 'right');
 
-                // Cambiamos a string los valores que llegan como integer
-                vhmo = vhmo.toString();
-                vhmdd = vhmdd.toString();
-                // Subtítulo
-                doc.setFontStyle("bold");
-                doc.setFontSize(14);
-                doc.text('Información General Departamentos', 105, 20, null, null, 'center');
+                  // Valores columna izquierda
+                  doc.setFontStyle("normal");
+                  doc.text(vhmo, 76, 40);
+                  doc.text(vhmdd, 76, 50);
+                  doc.text(total_units, 76, 70);
+                  doc.text(sold_units, 76, 80);
+                  doc.text(stock_units, 76, 90);
+                  doc.text(months_to_sell_out_stock, 76, 100);
+                  doc.text(min_uf_m2_value, 76, 110);
+                  doc.text(max_uf_m2_value, 76, 120);
+                  doc.text(avg_uf_m2_value, 76, 130);
 
-                // Labels columna izquierda
-                doc.setFontSize(12);
-                doc.text('Venta Mensual en Regimen:', 74, 40, null, null, 'right');
-                doc.text('Venta Mensual Disponible:', 74, 50, null, null, 'right');
-                doc.text('Oferta:', 74, 70, null, null, 'right');
-                doc.text('Venta:', 74, 80, null, null, 'right');
-                doc.text('Disponibilidad:', 74, 90, null, null, 'right');
-                doc.text('Meses para agotar stock:', 74, 100, null, null, 'right');
-                doc.text('Valor UF/m² Mín.:', 74, 110, null, null, 'right');
-                doc.text('Valor UF/m² Máx.:', 74, 120, null, null, 'right');
-                doc.text('Valor UF/m² Prom.:', 74, 130, null, null, 'right');
+                  // Labels columna derecha
+                  doc.setFontStyle("bold");
+                  doc.text('Superficie Útil Mín. (m²):', 168, 40, null, null, 'right');
+                  doc.text('Superficie Útil Máx. (m²):', 168, 50, null, null, 'right');
+                  doc.text('Superficie Útil Prom. (m²):', 168, 60, null, null, 'right');
+                  doc.text('Superficie Terraza Mín. (m²):', 168, 70, null, null, 'right');
+                  doc.text('Superficie Terraza Máx. (m²):', 168, 80, null, null, 'right');
+                  doc.text('Superficie Terraza Prom. (m²):', 168, 90, null, null, 'right');
+                  doc.text('Valor UF Mín.:', 168, 110, null, null, 'right');
+                  doc.text('Valor UF Máx.:', 168, 120, null, null, 'right');
+                  doc.text('Valor UF Prom.:', 168, 130, null, null, 'right');
 
-                // Valores columna izquierda
-                doc.setFontStyle("normal");
-                doc.text(vhmo, 76, 40);
-                doc.text(vhmdd, 76, 50);
-                doc.text(total_units, 76, 70);
-                doc.text(sold_units, 76, 80);
-                doc.text(stock_units, 76, 90);
-                doc.text(months_to_sell_out_stock, 76, 100);
-                doc.text(min_uf_m2_value, 76, 110);
-                doc.text(max_uf_m2_value, 76, 120);
-                doc.text(avg_uf_m2_value, 76, 130);
-
-                // Labels columna derecha
-                doc.setFontStyle("bold");
-                doc.text('Superficie Útil Mín. (m²):', 168, 40, null, null, 'right');
-                doc.text('Superficie Útil Máx. (m²):', 168, 50, null, null, 'right');
-                doc.text('Superficie Útil Prom. (m²):', 168, 60, null, null, 'right');
-                doc.text('Superficie Terraza Mín. (m²):', 168, 70, null, null, 'right');
-                doc.text('Superficie Terraza Máx. (m²):', 168, 80, null, null, 'right');
-                doc.text('Superficie Terraza Prom. (m²):', 168, 90, null, null, 'right');
-                doc.text('Valor UF Mín.:', 168, 110, null, null, 'right');
-                doc.text('Valor UF Máx.:', 168, 120, null, null, 'right');
-                doc.text('Valor UF Prom.:', 168, 130, null, null, 'right');
-
-                // Valores columna derecha
-                doc.setFontStyle("normal");
-                doc.text(min_usable_square_m2, 170, 40);
-                doc.text(max_usable_square_m2, 170, 50);
-                doc.text(avg_usable_square_m2, 170, 60);
-                doc.text(min_terrace_square_m2, 170, 70);
-                doc.text(max_terrace_square_m2, 170, 80);
-                doc.text(avg_terrace_square_m2, 170, 90);
-                doc.text(min_uf_value, 170, 110);
-                doc.text(max_uf_value, 170, 120);
-                doc.text(avg_uf_value, 170, 130);
+                  // Valores columna derecha
+                  doc.setFontStyle("normal");
+                  doc.text(min_usable_square_m2, 170, 40);
+                  doc.text(max_usable_square_m2, 170, 50);
+                  doc.text(avg_usable_square_m2, 170, 60);
+                  doc.text(min_terrace_square_m2, 170, 70);
+                  doc.text(max_terrace_square_m2, 170, 80);
+                  doc.text(avg_terrace_square_m2, 170, 90);
+                  doc.text(min_uf_value, 170, 110);
+                  doc.text(max_uf_value, 170, 120);
+                  doc.text(avg_uf_value, 170, 130);
+                }
               }
-              }
-
             } else if (i == 2) { // Información General Casas
-
               // Levantamos los valores de casas
               if (data[i].hasOwnProperty('info_house') && data[i]['info_house'] != '') {
-              var info_house = data[i]['info_house'][0];
-              // Validamos si existen proyectos de casas
-              if (info_house['project_count'] > 0) {
+                var info_house = data[i]['info_house'][0];
+                // Validamos si existen proyectos de casas
+                if (info_house['project_count'] > 0) {
+                  doc.addPage('a4', 'portrait')
 
-                doc.addPage('a4', 'portrait')
+                  // Pie de página
+                  footer()
 
-                // Pie de página
-                footer()
+                  var vhmo                     = info_house['vhmo'];
+                  var vhmdd_h                  = info_house['vhmdd'];
+                  var total_stock              = info_house['total_units'];
+                  var total_sale               = info_house['total_sold'];
+                  var total_availability       = info_house['total_stock'];
+                  var months_to_sell_out_stock = info_house['spend_stock_months1'];
+                  var min_uf_m2_value          = info_house['min_uf_m2'];
+                  var max_uf_m2_value          = info_house['max_uf_m2'];
+                  var avg_uf_m2_value          = info_house['avg_uf_m2'];
+                  var min_usable_square_m2     = info_house['min_usable_square_m2'];
+                  var max_usable_square_m2     = info_house['max_usable_square_m2'];
+                  var avg_usable_square_m2     = info_house['avg_usable_square_m2'];
+                  var min_land_area_m2         = info_house['min_m2_field'];
+                  var max_land_area_m2         = info_house['max_m2_field'];
+                  var avg_land_area_m2         = info_house['avg_m2_field'];
+                  var min_uf_value             = info_house['min_uf'];
+                  var max_uf_value             = info_house['max_uf'];
+                  var avg_uf_value             = info_house['avg_uf'];
 
-                var vhmo = info_house['vhmo'];
-                var vhmdd_h = info_house['vhmdd'];
-                var total_stock = info_house['total_units'];
-                var total_sale = info_house['total_sold'];
-                var total_availability = info_house['total_stock'];
-                var months_to_sell_out_stock = info_house['spend_stock_months1'];
-                var min_uf_m2_value = info_house['min_uf_m2'];
-                var max_uf_m2_value = info_house['max_uf_m2'];
-                var avg_uf_m2_value = info_house['avg_uf_m2'];
+                  // Cambiamos a string los valores que llegan como integer
+                  max_land_area_m2 = max_land_area_m2.toString()
+                  min_land_area_m2 = min_land_area_m2.toString()
+                  total_stock      = total_stock.toString()
+                  vhmo             = vhmo.toString()
+                  vhmdd_h          = vhmdd_h.toString()
 
-                var min_usable_square_m2 = info_house['min_usable_square_m2'];
-                var max_usable_square_m2 = info_house['max_usable_square_m2'];
-                var avg_usable_square_m2 = info_house['avg_usable_square_m2'];
-                var min_land_area_m2 = info_house['min_m2_field'];
-                var max_land_area_m2 = info_house['max_m2_field'];
-                var avg_land_area_m2 = info_house['avg_m2_field'];
-                var min_uf_value = info_house['min_uf'];
-                var max_uf_value = info_house['max_uf'];
-                var avg_uf_value = info_house['avg_uf'];
+                  // Subtítulo
+                  doc.setFontStyle("bold");
+                  doc.setFontSize(14);
+                  doc.text('Información General Casas', 105, 20, null, null, 'center');
 
-                // Cambiamos a string los valores que llegan como integer
-                max_land_area_m2 = max_land_area_m2.toString()
-                min_land_area_m2 = min_land_area_m2.toString()
-                total_stock = total_stock.toString()
-                vhmo = vhmo.toString()
-                vhmdd_h = vhmdd_h.toString()
+                  // Labels columna izquierda
+                  doc.setFontSize(12);
+                  doc.text('Venta Mensual en Regimen:', 74, 40, null, null, 'right');
+                  doc.text('Venta Mensual Disponible:', 74, 50, null, null, 'right');
+                  doc.text('Stock Total:', 74, 70, null, null, 'right');
+                  doc.text('Venta Total:', 74, 80, null, null, 'right');
+                  doc.text('Disponibilidad Total:', 74, 90, null, null, 'right');
+                  doc.text('Meses para agotar stock:', 74, 100, null, null, 'right');
+                  doc.text('Valor UF/m² Mín.:', 74, 110, null, null, 'right');
+                  doc.text('Valor UF/m² Máx.:', 74, 120, null, null, 'right');
+                  doc.text('Valor UF/m² Prom.:', 74, 130, null, null, 'right');
 
-                // Subtítulo
-                doc.setFontStyle("bold");
-                doc.setFontSize(14);
-                doc.text('Información General Casas', 105, 20, null, null, 'center');
+                  // Valores columna izquierda
+                  doc.setFontStyle("normal");
+                  doc.text(vhmo, 76, 40);
+                  doc.text(vhmdd_h, 76, 50);
+                  doc.text(total_stock, 76, 70);
+                  doc.text(total_sale, 76, 80);
+                  doc.text(total_availability, 76, 90);
+                  doc.text(months_to_sell_out_stock, 76, 100);
+                  doc.text(min_uf_m2_value, 76, 110);
+                  doc.text(max_uf_m2_value, 76, 120);
+                  doc.text(avg_uf_m2_value, 76, 130);
 
-                // Labels columna izquierda
-                doc.setFontSize(12);
-                doc.text('Venta Mensual en Regimen:', 74, 40, null, null, 'right');
-                doc.text('Venta Mensual Disponible:', 74, 50, null, null, 'right');
-                doc.text('Stock Total:', 74, 70, null, null, 'right');
-                doc.text('Venta Total:', 74, 80, null, null, 'right');
-                doc.text('Disponibilidad Total:', 74, 90, null, null, 'right');
-                doc.text('Meses para agotar stock:', 74, 100, null, null, 'right');
-                doc.text('Valor UF/m² Mín.:', 74, 110, null, null, 'right');
-                doc.text('Valor UF/m² Máx.:', 74, 120, null, null, 'right');
-                doc.text('Valor UF/m² Prom.:', 74, 130, null, null, 'right');
+                  // Labels columna derecha
+                  doc.setFontStyle("bold");
+                  doc.text('Superficie Útil Mín. (m²):', 168, 40, null, null, 'right');
+                  doc.text('Superficie Útil Máx. (m²):', 168, 50, null, null, 'right');
+                  doc.text('Superficie Útil Prom. (m²):', 168, 60, null, null, 'right');
+                  doc.text('Superficie Terreno Mín. (m²):', 168, 70, null, null, 'right');
+                  doc.text('Superficie Terreno Máx. (m²):', 168, 80, null, null, 'right');
+                  doc.text('Superficie Terreno Prom. (m²):', 168, 90, null, null, 'right');
+                  doc.text('Valor UF Mín.:', 168, 110, null, null, 'right');
+                  doc.text('Valor UF Máx.:', 168, 120, null, null, 'right');
+                  doc.text('Valor UF Prom.:', 168, 130, null, null, 'right');
 
-                // Valores columna izquierda
-                doc.setFontStyle("normal");
-                doc.text(vhmo, 76, 40);
-                doc.text(vhmdd_h, 76, 50);
-                doc.text(total_stock, 76, 70);
-                doc.text(total_sale, 76, 80);
-                doc.text(total_availability, 76, 90);
-                doc.text(months_to_sell_out_stock, 76, 100);
-                doc.text(min_uf_m2_value, 76, 110);
-                doc.text(max_uf_m2_value, 76, 120);
-                doc.text(avg_uf_m2_value, 76, 130);
-
-                // Labels columna derecha
-                doc.setFontStyle("bold");
-                doc.text('Superficie Útil Mín. (m²):', 168, 40, null, null, 'right');
-                doc.text('Superficie Útil Máx. (m²):', 168, 50, null, null, 'right');
-                doc.text('Superficie Útil Prom. (m²):', 168, 60, null, null, 'right');
-                doc.text('Superficie Terreno Mín. (m²):', 168, 70, null, null, 'right');
-                doc.text('Superficie Terreno Máx. (m²):', 168, 80, null, null, 'right');
-                doc.text('Superficie Terreno Prom. (m²):', 168, 90, null, null, 'right');
-                doc.text('Valor UF Mín.:', 168, 110, null, null, 'right');
-                doc.text('Valor UF Máx.:', 168, 120, null, null, 'right');
-                doc.text('Valor UF Prom.:', 168, 130, null, null, 'right');
-
-                // Valores columna derecha
-                doc.setFontStyle("normal");
-                doc.text(min_usable_square_m2, 170, 40);
-                doc.text(max_usable_square_m2, 170, 50);
-                doc.text(avg_usable_square_m2, 170, 60);
-                doc.text(min_land_area_m2, 170, 70);
-                doc.text(max_land_area_m2, 170, 80);
-                doc.text(avg_land_area_m2, 170, 90);
-                doc.text(min_uf_value, 170, 110);
-                doc.text(max_uf_value, 170, 120);
-                doc.text(avg_uf_value, 170, 130);
-
+                  // Valores columna derecha
+                  doc.setFontStyle("normal");
+                  doc.text(min_usable_square_m2, 170, 40);
+                  doc.text(max_usable_square_m2, 170, 50);
+                  doc.text(avg_usable_square_m2, 170, 60);
+                  doc.text(min_land_area_m2, 170, 70);
+                  doc.text(max_land_area_m2, 170, 80);
+                  doc.text(avg_land_area_m2, 170, 90);
+                  doc.text(min_uf_value, 170, 110);
+                  doc.text(max_uf_value, 170, 120);
+                  doc.text(avg_uf_value, 170, 130);
+                }
               }
-              }
-
             } else { // Gráficos
-
-              var reg = data[i];
-              var title = reg['title'];
-              var series = reg['series'];
+              var reg      = data[i];
+              var title    = reg['title'];
+              var series   = reg['series'];
               var datasets = [];
 
               // Extraemos las series
-              $.each(series, function(a, b){
+              $.each(series, function(a, b) {
 
                 var label = b['label']
-                var data = b['data']
+                var data  = b['data']
 
                 // Setea los colores dependiendo de la serie
                 switch (label) {
@@ -967,11 +940,11 @@ function projects_report_pdf(){
                     break;
                 }
 
-                var name = [];
+                var name  = [];
                 var count = [];
 
                 // Extraemos los datos de las series
-                $.each(data, function(c, d){
+                $.each(data, function(c, d) {
                   name.push(d['name'])
                   count.push(d['count'])
                 })
@@ -979,6 +952,7 @@ function projects_report_pdf(){
                 // Guardamos "datasets" y "chart_type"
                 if (title == 'Venta & Disponibilidad por Programa') {
                   chart_type = 'bar';
+
                   datasets.push({
                     label: label,
                     data: count,
@@ -990,6 +964,7 @@ function projects_report_pdf(){
 
                 if (title == 'Oferta, Venta & Disponibilidad') {
                   chart_type = 'line';
+
                   datasets.push({
                     label: label,
                     data: count,
@@ -1004,6 +979,7 @@ function projects_report_pdf(){
 
                 if (title == 'Precio | UF') {
                   chart_type = 'line';
+
                   datasets.push({
                     label: label,
                     data: count,
@@ -1018,6 +994,7 @@ function projects_report_pdf(){
 
                 if (title == 'Precio Promedio | UFm² Útil') {
                   chart_type = 'line';
+
                   datasets.push({
                     label: label,
                     data: count,
@@ -1032,6 +1009,7 @@ function projects_report_pdf(){
 
                 if (title == 'Estado Obra') {
                   chart_type = 'pie';
+
                   datasets.push({
                     label: label,
                     data: count,
@@ -1049,12 +1027,10 @@ function projects_report_pdf(){
                   labels: name,
                   datasets: datasets
                 }
-
               })
 
               // Guardamos "options"
               if (chart_type == 'bar') { // Bar
-
                 var chart_options = {
                   animation: false,
                   responsive: true,
@@ -1117,9 +1093,7 @@ function projects_report_pdf(){
                     }],
                   }
                 };
-
               } else if (chart_type == 'pie') { // Pie
-
                 var chart_options = {
                   animation: false,
                   responsive: true,
@@ -1164,9 +1138,7 @@ function projects_report_pdf(){
                       }
                     },
                   };
-
               } else { // Line
-
                 var chart_options = {
                   animation: false,
                   responsive: true,
@@ -1238,11 +1210,11 @@ function projects_report_pdf(){
 
               // Creamos y adjuntamos el canvas
               var canvas = document.createElement('canvas');
-              canvas.id = 'report-canvas-'+i;
+              canvas.id  = 'report-canvas-' + i;
               $('#chart-report'+i).append(canvas);
 
               var chart_canvas = document.getElementById('report-canvas-'+i).getContext('2d');
-              var final_chart = new Chart(chart_canvas, chart_settings);
+              var final_chart  = new Chart(chart_canvas, chart_settings);
 
               var chart = final_chart.toBase64Image();
 
@@ -1260,10 +1232,9 @@ function projects_report_pdf(){
 
                 // Gráfico
                 img_height = (final_chart.height * 190) / final_chart.width
+
                 doc.addImage(chart, 'JPEG', 9, 30, 190, img_height);
-
               } else {
-
                 // Título del gráfico
                 doc.setFontSize(16);
                 doc.setFontStyle("bold");
@@ -1286,9 +1257,7 @@ function projects_report_pdf(){
 } // Cierra function projects_report_pdf
 
 function addInmoFilter(id, name) {
-
   if ($('#item-inmo-'+id).length == 0) {
-
     Congo.projects.config.project_agency_ids.push(id);
 
     $('#filter-body').append(
@@ -1306,16 +1275,13 @@ function addInmoFilter(id, name) {
         })
       )
     );
+
     Congo.map_utils.counties();
-
   };
-
 };
 
 function delInmoFilter(id, name) {
-
-  var active_inmo = Congo.projects.config.project_agency_ids;
-
+  var active_inmo  = Congo.projects.config.project_agency_ids;
   var inmo_updated = $.grep(active_inmo, function(n, i) {
     return n != id;
   });
@@ -1324,60 +1290,53 @@ function delInmoFilter(id, name) {
 
   $('#item-inmo-'+id).remove();
   Congo.map_utils.counties();
-
 }
 
-function maxCard(i){
+function maxCard(i) {
   $('#chart-container'+i).toggleClass('card-max fixed-top')
 }
 
-Congo.projects.action_dashboards = function(){
-
-  init=function(){
-
+Congo.projects.action_dashboards = function() {
+  init=function() {
     Congo.map_utils.init();
-
   }
 
-  indicator_projects = function(){
+  indicator_projects = function() {
+    var county_id = [];
 
-    county_id = [];
     $.each(Congo.dashboards.config.county_id, function(a,b){
-       county_id =b;
+       county_id = b;
     })
-    to_year = Congo.dashboards.config.year;
-    to_bimester = Congo.dashboards.config.bimester;
-    radius = Congo.dashboards.config.radius;
-    centerPoint = Congo.dashboards.config.centerpt;
-    wkt = Congo.dashboards.config.size_box;
+
+    to_year            = Congo.dashboards.config.year;
+    to_bimester        = Congo.dashboards.config.bimester;
+    radius             = Congo.dashboards.config.radius;
+    centerPoint        = Congo.dashboards.config.centerpt;
+    wkt                = Congo.dashboards.config.size_box;
     project_status_ids = Congo.projects.config.project_status_ids;
-    project_type_ids = Congo.projects.config.project_type_ids;
-    mix_ids = Congo.projects.config.mix_ids;
-    periods = Congo.projects.config.periods;
-    years = Congo.projects.config.years;
-    from_floor = Congo.projects.config.from_floor;
-    to_floor = Congo.projects.config.to_floor;
-    from_uf_value = Congo.projects.config.from_uf_value;
-    to_uf_value = Congo.projects.config.to_uf_value;
+    project_type_ids   = Congo.projects.config.project_type_ids;
+    mix_ids            = Congo.projects.config.mix_ids;
+    periods            = Congo.projects.config.periods;
+    years              = Congo.projects.config.years;
+    from_floor         = Congo.projects.config.from_floor;
+    to_floor           = Congo.projects.config.to_floor;
+    from_uf_value      = Congo.projects.config.from_uf_value;
+    to_uf_value        = Congo.projects.config.to_uf_value;
     project_agency_ids = Congo.projects.config.project_agency_ids;
-    type_geometry = Congo.dashboards.config.typeGeometry;
-    layer_type = Congo.dashboards.config.layer_type;
-    style_layer = Congo.dashboards.config.style_layer;
+    type_geometry      = Congo.dashboards.config.typeGeometry;
+    layer_type         = Congo.dashboards.config.layer_type;
+    style_layer        = Congo.dashboards.config.style_layer;
 
     // Sino se realizó la selección muestra un mensaje de alerta
     if (county_id.length == 0 && centerPoint == '' && wkt.length == 0) {
-
       Congo.dashboards.action_index.empty_selection_alert();
-
     // Si se realizó la selección, añade los elementos al dashboard
     } else {
-
       // Creamos el overlay y el time_slider
       Congo.dashboards.action_index.create_overlay_and_filter_card();
       Congo.dashboards.action_index.add_time_slider();
 
-      if (county_id != '') {
-
+      if (county_id.length > 0) {
         // Agregamos filtro Comuna
         Congo.dashboards.action_index.add_county_filter_item()
 
@@ -1400,9 +1359,7 @@ Congo.projects.action_dashboards = function(){
           layer_type: layer_type,
           style_layer: style_layer
         };
-
       } else if (centerPoint != '') {
-
         // Eliminamos filtro comuna
         $('#item-comuna').remove();
 
@@ -1426,9 +1383,7 @@ Congo.projects.action_dashboards = function(){
           layer_type: layer_type,
           style_layer: style_layer
         };
-
       } else {
-
         // Eliminamos filtro comuna
         $('#item-comuna').remove();
 
@@ -1451,7 +1406,6 @@ Congo.projects.action_dashboards = function(){
           layer_type: layer_type,
           style_layer: style_layer
         };
-
       };
 
       $.ajax({
@@ -1460,7 +1414,6 @@ Congo.projects.action_dashboards = function(){
         datatype: 'json',
         data: data,
         beforeSend: function() {
-
           // Mostramos el spinner y deshabilitamos los botones
           $("#spinner").show();
           $('.btn').addClass('disabled')
@@ -1506,22 +1459,19 @@ Congo.projects.action_dashboards = function(){
           // Eliminamos el time_slider de cbr y el census_filter
           $('#time_slider_cbr_item').remove()
           $('#census_filter').remove()
-
         },
-        success: function(data){
-
-          console.log('RESPONSE PRV');
-          console.log(data);
-
+        success: function(data) {
           // Ocultamos el spinner y habilitamos los botones
           $("#spinner").hide();
           $('.btn').removeClass('disabled')
           $('.close').prop('disabled', false);
-          bimester = Congo.dashboards.config.bimester;
-          year = Congo.dashboards.config.year;
-          ts_period = `${bimester}/${year}`;
+
+          bimester       = Congo.dashboards.config.bimester;
+          year           = Congo.dashboards.config.year;
+          ts_period      = `${bimester}/${year}`;
           slider_periods = Congo.dashboards.config.slider_periods
-          from = slider_periods.indexOf(ts_period) || slider_periods - 1;
+          from           = slider_periods.indexOf(ts_period) || slider_periods - 1;
+
           $("#time_slider").data("ionRangeSlider").update({
             block: false,
             from: from
@@ -1529,36 +1479,35 @@ Congo.projects.action_dashboards = function(){
 
           // Separamos la información
           for (var i = 0; i < data.length; i++) {
-
-            var reg = data[i];
-            var title = reg['title'];
+            var reg    = data[i];
+            var title  = reg['title'];
             var series = reg['series'];
 
             // Creamos el div contenedor
-            var chart_container = document.createElement('div');
+            var chart_container       = document.createElement('div');
             chart_container.className = 'chart-container card text-light bg-primary';
-            chart_container.id = 'chart-container'+i;
+            chart_container.id        = 'chart-container'+i;
 
             // Creamos el card-header
-            var card_header = document.createElement('div');
+            var card_header       = document.createElement('div');
             card_header.className = 'card-header pl-3';
-            card_header.id = 'header'+i;
+            card_header.id        = 'header'+i;
 
             // Creamos el collapse
-            var collapse = document.createElement('div');
+            var collapse       = document.createElement('div');
             collapse.className = 'collapse show';
-            collapse.id = 'collapse'+i;
+            collapse.id        = 'collapse'+i;
 
             // Creamos el card-body
-            var card_body = document.createElement('div');
+            var card_body       = document.createElement('div');
             card_body.className = 'card-body';
-            card_body.id = 'body'+i;
+            card_body.id        = 'body'+i;
 
             // Creamos handle, título y botones
-            var card_handle = '<span class="fas fa-arrows-alt handle border border-dark">'
+            var card_handle       = '<span class="fas fa-arrows-alt handle border border-dark">'
             var card_header_title = '<b>'+title+'</b>'
-            var card_min_button = '<button class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize" style="width: 24px; height: 12px"></i></button>'
-            var card_max_button = '<button class="close" id="card-max-'+i+'" onclick="maxCard('+i+')"><i class="fas fa-window-maximize" style="width: 24px; height: 12px"></i></button>'
+            var card_min_button   = '<button class="close" data-toggle="collapse" data-target="#collapse'+i+'" aria-expanded="true" aria-controls="collapse'+i+'" aria-label="Minimize"><i class="fas fa-window-minimize" style="width: 24px; height: 12px"></i></button>'
+            var card_max_button   = '<button class="close" id="card-max-'+i+'" onclick="maxCard('+i+')"><i class="fas fa-window-maximize" style="width: 24px; height: 12px"></i></button>'
 
             // Adjuntamos los elementos
             $('.overlay').append(chart_container);
@@ -1568,33 +1517,29 @@ Congo.projects.action_dashboards = function(){
 
             // Resumen
             if (title == "Resumen") {
-
               var info = reg['data'];
 
               // Extraemos los datos y los adjuntamos al div contenedor
-              $.each(info, function(y, z){
-                name = z['name'];
+              $.each(info, function(y, z) {
+                name  = z['name'];
                 count = z['count']
                 count = count.toLocaleString('es-ES')
-                item = name+': '+count+'<br>';
+                item  = name + ': ' + count+'<br>';
+
                 $('#body'+i).append(item);
               })
-
             // Gráficos
             } else if (title != "Proyectos por Inmobiliaria") {
-
               var datasets = [];
               var serie_colour;
 
               // Extraemos las series
-              $.each(series, function(a, b){
-
+              $.each(series, function(a, b) {
                 var label = b['label']
-                var data = b['data']
+                var data  = b['data']
 
                 // Setea los colores dependiendo de la serie
                 if (title == 'Venta & Disponibilidad por Programa' || title == 'Oferta, Venta & Disponibilidad' || title == 'Precio | UF' || title == 'Precio Promedio | UFm² Útil' || title == 'Superficie Útil | m²' || title == 'Superficie T | m²') {
-
                   switch (label) {
                     case 'Máximo':
                     case 'Oferta':
@@ -1612,14 +1557,14 @@ Congo.projects.action_dashboards = function(){
                   }
                 }
 
-                var name = [];
-                var count = [];
-                var id = [];
+                var name        = [];
+                var count       = [];
+                var id          = [];
                 var name_colour = [];
                 var colour;
 
                 // Extraemos los datos de las series
-                $.each(data, function(c, d){
+                $.each(data, function(c, d) {
                   name.push(d['name'])
                   count.push(d['count'])
                   id.push(d['id'])
@@ -1652,7 +1597,6 @@ Congo.projects.action_dashboards = function(){
 
                     name_colour.push(colour)
                   }
-
                 })
 
                 // Guardamos "datasets" y "chart_type"
