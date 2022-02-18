@@ -15,13 +15,13 @@ Congo.transactions.config= {
   period_selected: {}
 }
 
-Congo.transactions.action_heatmap = function(){
-  init=function(){
-    widget =  Congo.dashboards.config.widget;
-    Congo.transactions.config.legends =[]
+Congo.transactions.action_heatmap = function() {
+  init = function() {
+    widget                            = Congo.dashboards.config.widget;
+    Congo.transactions.config.legends = []
+
     switch (widget) {
       case 'heat_calculated_value':
-
         Congo.dashboards.config.style_layer= 'heatmap_transactions_calculated_value';
         Congo.transactions.config.legends.push({'name':'Alto', 'color':'9d2608'});
         Congo.transactions.config.legends.push({'name':'Medio Alto', 'color':'f94710'});
@@ -58,7 +58,7 @@ Congo.transactions.action_heatmap = function(){
   }
 }();
 
-transactions_popup = function(id, latlng){
+transactions_popup = function(id, latlng) {
 
   bimester = Congo.dashboards.config.bimester;
   year = Congo.dashboards.config.year;
@@ -1271,8 +1271,9 @@ Congo.transactions.action_dashboards = function(){
   indicator_transactions = function(){
     county_id = []
     $.each(Congo.dashboards.config.county_id, function(a,b){
-       county_id =b;
+       county_id = b;
     })
+
     to_year = Congo.dashboards.config.year;
     to_bimester = Congo.dashboards.config.bimester;
     radius = Congo.dashboards.config.radius;
@@ -1952,39 +1953,35 @@ Congo.transactions.action_dashboards = function(){
 
                 var chart_options = {
                   onClick: function(c, i) {
-
                     // Almacena los valores del chart
-                    var x_tick = this.data.labels[i[0]._index];
-
+                    var x_tick            = this.data.labels[i[0]._index];
                     // Crea el filtro
-                    var filter_item = document.createElement('div');
+                    var filter_item       = document.createElement('div');
                     filter_item.className = 'filter-transactions text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow';
-                    var filter_item_id = x_tick.split("/").join("-");
-                    filter_item.id = 'item-'+filter_item_id;
+                    var filter_item_id    = x_tick.split("/").join("-");
+                    filter_item.id        = 'item-'+filter_item_id;
                     var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
-                    var text_item = 'Periodo: '+x_tick;
+                    var text_item         = 'Periodo: '+x_tick;
 
                     // Valida si el item del filtro existe
                     if ($('#item-'+filter_item_id).length == 0) {
                       // Almacena la variable global
                       var periods_years = x_tick.split("/");
+
                       Congo.transactions.config.periods.push(periods_years[0]);
 
-                      bimester_selected =  periods_years[0]
-                      year_selected     = String( periods_years[1]).padStart(4,'20')
-                      bimester_year_selected =  bimester_selected + "-" + year_selected
+                      bimester_selected      = periods_years[0]
+                      year_selected          = String( periods_years[1]).padStart(4,'20')
+                      bimester_year_selected = bimester_selected + "-" + year_selected
 
                       Congo.transactions.config.period_selected[bimester_year_selected] = bimester_year_selected
 
-                      if (title =! 'Compraventas') {
-                        Congo.transactions.config.years.push(20+periods_years[1]);
-                        Congo.dashboards.config.years.push(20+periods_years[1]);
-                      } else {
-                        Congo.transactions.config.years.push(periods_years[1]);
-                      }
+                      Congo.transactions.config.years.push(year_selected);
+                      Congo.dashboards.config.years.push(year_selected);
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
                       $('#item-'+filter_item_id).append(text_item, close_button_item);
+
                       Congo.map_utils.counties();
                     };
 
@@ -2005,8 +2002,7 @@ Congo.transactions.action_dashboards = function(){
                       });
 
                       var period_position = active_periods.indexOf(period_id);
-
-                      var years_updated = $.grep(active_years, function(n, i) {
+                      var years_updated   = $.grep(active_years, function(n, i) {
                         return i != period_position;
                       });
 
@@ -2014,6 +2010,7 @@ Congo.transactions.action_dashboards = function(){
                       Congo.transactions.config.years   = years_updated;
 
                       $('#item-'+filter_item_id).remove();
+
                       Congo.map_utils.counties();
                     });
                   }, // Cierra onClick function
