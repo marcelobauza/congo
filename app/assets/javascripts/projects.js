@@ -3,20 +3,20 @@ Congo.namespace('projects.action_graduated_points');
 Congo.namespace('projects.action_dashboards');
 
 Congo.projects.config = {
-  county_name        : '',
-  county_id          : '',
-  layer_type         : 'projects_feature_info',
-  project_status_ids : [],
-  project_type_ids   : [],
-  mix_ids            : [],
-  periods            : [],
-  years              : [],
-  from_floor         : [],
-  to_floor           : [],
-  from_uf_value      : [],
-  to_uf_value        : [],
+  county_name: '',
+  county_id: '',
+  layer_type: 'projects_feature_info',
+  project_status_ids: [],
+  project_type_ids: [],
+  mix_ids: [],
+  periods: [],
+  years: [],
+  from_floor: [],
+  to_floor: [],
+  from_uf_value: [],
+  to_uf_value: [],
   project_agency_ids : [],
-  legends            : []
+  legends: []
 }
 
 Congo.projects.action_heatmap = function() {
