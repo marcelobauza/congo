@@ -120,7 +120,8 @@ Congo.dashboards.config = {
   editableLayers: {},
   sourcePois: {},
   sourceLots: {},
-  download_tag: 'info'
+  download_tag: 'info',
+  years: []
 }
 
 Congo.dashboards.pois =function(){
