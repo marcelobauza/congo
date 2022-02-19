@@ -1754,47 +1754,39 @@ Congo.projects.action_dashboards = function() {
 
               // Guardamos "options"
               if (chart_type == 'bar') { // Bar
-
                 // Armamos las opciones de Venta & Disponibilidad por Programa por separado
                 if (title == 'Venta & Disponibilidad por Programa') {
-
                   var chart_options = {
                     onClick: function(c, i) {
-
                       // Almacena los valores del chart
-                      var x_tick = this.data.labels[i[0]._index];
-                      var x_tick_id = this.data.datasets[0].id[i[0]._index];
-                      var title = this.options.title.text;
-
+                      var x_tick            = this.data.labels[i[0]._index];
+                      var x_tick_id         = this.data.datasets[0].id[i[0]._index];
+                      var title             = this.options.title.text;
                       // Crea el filtro
-                      var filter_item = document.createElement('div');
+                      var filter_item       = document.createElement('div');
                       filter_item.className = 'filter-projects text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow';
-                      var filter_item_id = x_tick.split(",").join("_");
-                      filter_item.id = 'item-'+filter_item_id+'-'+x_tick_id;
+                      var filter_item_id    = x_tick.split(",").join("_");
+                      filter_item.id        = 'item-'+filter_item_id+'-'+x_tick_id;
                       var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
-                      var text_item = title+': '+x_tick;
+                      var text_item         = title + ': ' + x_tick;
 
                       // Valida si el item del filtro existe
                       if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
-
                         // Almacena la variable global
                         Congo.projects.config.mix_ids.push(x_tick_id);
-
                         // Adjunta el item del filtro y recarga los datos
                         $('#filter-body').append(filter_item);
                         $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
-                      Congo.map_utils.counties();
+
+                        Congo.map_utils.counties();
                       };
 
                       // Elimina item del filtro
                       $('#close-'+filter_item_id).click(function() {
-
-                        var active_items = Congo.projects.config.mix_ids;
-
-                        var item_full_id = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
-                        item_full_id = item_full_id.split("-")
-                        var item_id = item_full_id[2]
-
+                        var active_items         = Congo.projects.config.mix_ids;
+                        var item_full_id         = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
+                        item_full_id             = item_full_id.split("-")
+                        var item_id              = item_full_id[2]
                         var active_items_updated = $.grep(active_items, function(n, i) {
                           return n != item_id;
                         });
@@ -1802,10 +1794,9 @@ Congo.projects.action_dashboards = function() {
                         Congo.projects.config.mix_ids = active_items_updated;
 
                         $('#item-'+filter_item_id+'-'+x_tick_id).remove();
-                      Congo.map_utils.counties();
 
+                        Congo.map_utils.counties();
                       });
-
                     }, // Cierra onClick function
                     responsive: true,
                     title: {
@@ -1984,54 +1975,46 @@ Congo.projects.action_dashboards = function() {
                     }
                   };
                 };
-
               } else if (chart_type == 'pie') { // Pie
-
                 var chart_options = {
                   onClick: function(c, i) {
-
                     // Almacena los valores del chart
-                    var x_tick = this.data.labels[i[0]._index];
-                    var x_tick_id = this.data.datasets[0].id[i[0]._index];
-                    var title = this.options.title.text;
-
+                    var x_tick            = this.data.labels[i[0]._index];
+                    var x_tick_id         = this.data.datasets[0].id[i[0]._index];
+                    var title             = this.options.title.text;
                     // Crea el filtro
-                    var filter_item = document.createElement('div');
+                    var filter_item       = document.createElement('div');
                     filter_item.className = 'filter-projects text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow';
-                    var filter_item_id = x_tick.split(" ").join("_");
-                    filter_item.id = 'item-'+filter_item_id+'-'+x_tick_id;
+                    var filter_item_id    = x_tick.split(" ").join("_");
+                    filter_item.id        = 'item-'+filter_item_id+'-'+x_tick_id;
                     var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
-                    var text_item = title+': '+x_tick;
+                    var text_item         = title+': '+x_tick;
 
                     // Valida si el item del filtro existe
                     if ($('#item-'+filter_item_id+'-'+x_tick_id).length == 0) {
-
                       // Almacena la variable global dependiendo del chart
                       if (title == 'Estado Obra') {
                         Congo.projects.config.project_status_ids.push(x_tick_id);
                       } else {
                         Congo.projects.config.project_type_ids.push(x_tick_id);
                       };
-
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
                       $('#item-'+filter_item_id+'-'+x_tick_id).append(text_item, close_button_item);
+
                       Congo.map_utils.counties();
                     };
-
                     // Elimina item del filtro
                     $('#close-'+filter_item_id).click(function() {
-
                       if (title == 'Estado Obra') {
                         var active_items = Congo.projects.config.project_status_ids;
                       } else {
                         var active_items = Congo.projects.config.project_type_ids;
                       };
 
-                      var item_full_id = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
-                      item_full_id = item_full_id.split("-")
-                      var item_id = item_full_id[2]
-
+                      var item_full_id         = $('#item-'+filter_item_id+'-'+x_tick_id).attr('id');
+                      item_full_id             = item_full_id.split("-")
+                      var item_id              = item_full_id[2]
                       var active_items_updated = $.grep(active_items, function(n, i) {
                         return n != item_id;
                       });
@@ -2043,9 +2026,9 @@ Congo.projects.action_dashboards = function() {
                       };
 
                       $('#item-'+filter_item_id+'-'+x_tick_id).remove();
+
                       Congo.map_utils.counties();
                     });
-
                   }, // Cierra onClick function
                   responsive: true,
                   title: {
@@ -2104,26 +2087,21 @@ Congo.projects.action_dashboards = function() {
                     }
                   },
                 };
-
               } else { // Line
-
                 var chart_options = {
                   onClick: function(c, i) {
-
                     // Almacena los valores del chart
-                    var x_tick = this.data.labels[i[0]._index];
-
+                    var x_tick            = this.data.labels[i[0]._index];
                     // Crea el filtro
-                    var filter_item = document.createElement('div');
+                    var filter_item       = document.createElement('div');
                     filter_item.className = 'filter-projects text-light bg-secondary px-2 mb-1 py-1 rounded border border-dark shadow';
-                    var filter_item_id = x_tick.split("/").join("-");
-                    filter_item.id = 'item-'+filter_item_id;
+                    var filter_item_id    = x_tick.split("/").join("-");
+                    filter_item.id        = 'item-'+filter_item_id;
                     var close_button_item = '<button type="button" class="close" id="close-'+filter_item_id+'">&times;</button>';
-                    var text_item = 'Periodo: '+x_tick;
+                    var text_item         = 'Periodo: '+x_tick;
 
                     // Valida si el item del filtro existe
                     if ($('#item-'+filter_item_id).length == 0) {
-
                       // Almacena la variable global
                       var periods_years = x_tick.split("/"); // NOTE: Reveer el uso de x_tick en vez de filter_item_id
                       Congo.projects.config.periods.push(periods_years[0]);
@@ -2132,28 +2110,24 @@ Congo.projects.action_dashboards = function() {
                       // Adjunta el item del filtro y recarga los datos
                       $('#filter-body').append(filter_item);
                       $('#item-'+filter_item_id).append(text_item, close_button_item);
+
                       Congo.map_utils.counties();
                     };
 
                     // Elimina item del filtro
                     $('#close-'+filter_item_id).click(function() {
-
-                      var active_periods = Congo.projects.config.periods;
-                      var active_years = Congo.projects.config.years;
-
-                      var item_full_id = $('#item-'+filter_item_id).attr('id');
-
-                      item_full_id = item_full_id.split("-");
-                      var period_id = item_full_id[1];
-                      var year_id = item_full_id[2];
-
+                      var active_periods  = Congo.projects.config.periods;
+                      var active_years    = Congo.projects.config.years;
+                      var item_full_id    = $('#item-'+filter_item_id).attr('id');
+                      item_full_id        = item_full_id.split("-");
+                      var period_id       = item_full_id[1];
+                      var year_id         = item_full_id[2];
                       var periods_updated = $.grep(active_periods, function(n, i) {
                         return n != period_id;
                       });
 
                       var period_position = active_periods.indexOf(period_id);
-
-                      var years_updated = $.grep(active_years, function(n, i) {
+                      var years_updated   = $.grep(active_years, function(n, i) {
                         return i != period_position;
                       });
 
@@ -2161,10 +2135,9 @@ Congo.projects.action_dashboards = function() {
                       Congo.projects.config.years = years_updated;
 
                       $('#item-'+filter_item_id).remove();
+
                       Congo.map_utils.counties();
-
                     });
-
                   }, // Cierra onClick function
                   responsive: true,
                   title: {

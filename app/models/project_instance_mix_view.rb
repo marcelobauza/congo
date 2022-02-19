@@ -23,9 +23,7 @@ class ProjectInstanceMixView < ApplicationRecord
     elsif !filters[:wkt].nil?
       where(WhereBuilder.build_within_condition(filters[:wkt]))
     else
-    where(WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ))
+      where(WhereBuilder.build_within_condition_radius(filters[:centerpt], filters[:radius] ))
     end
   end
-
-
 end
