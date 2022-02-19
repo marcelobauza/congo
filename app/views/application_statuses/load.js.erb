@@ -15,7 +15,7 @@ center_point                         = "<%= @row['centerpt'] %>";
 type_geometry                        = "<%= @row['type_geometry'] %>";
 style_layer                          = "<%= @row['style_layer'] %>";
 
-<% if @row['county_id'].any? %>
+<% if @row['county_id'].present? && @row['county_id'].any? %>
   <% @row['county_id'].each do |county| %>
     Congo.dashboards.config.county_id.push(['<%= county %>']);
   <% end %>
