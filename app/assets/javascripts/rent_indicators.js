@@ -583,6 +583,16 @@ Congo.rent_indicators.action_dashboards = function() {
     Congo.dashboards.action_index.create_overlay_and_filter_card();
     Congo.dashboards.action_index.add_time_slider();
 
+    bimester       = Congo.dashboards.config.bimester;
+    year           = Congo.dashboards.config.year;
+    ts_periods     = `${bimester}/${year}`;
+    slider_periods = Congo.dashboards.config.slider_periods
+    from           = slider_periods.indexOf(ts_periods) || slider_periods - 1;
+
+    $("#time_slider").data("ionRangeSlider").update({
+      from: from
+    });
+
     $('#item-comuna').remove();
     $("#spinner").hide();
 

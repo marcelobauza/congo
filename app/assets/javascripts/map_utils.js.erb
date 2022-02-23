@@ -714,7 +714,7 @@ Congo.map_utils = function(){
       format: 'image/png',
       transparent: 'true',
       opacity: 1,
-      version: '1.0.0',//wms version (ver get capabilities)
+      version: '1.1.0',//wms version (ver get capabilities)
       tiled: false,
       styles: style_layer,
       INFO_FORMAT: 'application/json',
@@ -771,25 +771,29 @@ Congo.map_utils = function(){
     }
   }
 
-  function ica(){
-    centerpt = Congo.dashboards.config.centerpt;
-    radius = Congo.dashboards.config.radius ;
+  function ica() {
+    centerpt     = Congo.dashboards.config.centerpt;
+    radius       = Congo.dashboards.config.radius ;
     polygon_size = Congo.dashboards.config.size_box;
-    geometry = centerpt.split(' ');
+    geometry     = centerpt.split(' ');
     typeGeometry = Congo.dashboards.config.typeGeometry;
-    county_id = Congo.dashboards.config.county_id;
-    groupLayer = Congo.dashboards.config.groupLayer;
-    year = Congo.dashboards.config.year;
-    bimester = Congo.dashboards.config.bimester;
+    county_id    = Congo.dashboards.config.county_id;
+    groupLayer   = Congo.dashboards.config.groupLayer;
+    year         = Congo.dashboards.config.year;
+    bimester     = Congo.dashboards.config.bimester;
+    layer_type   = Congo.dashboards.config.layer_type;
+    widget       = Congo.dashboards.config.widget
 
     wkt = {
       wkt: JSON.stringify(polygon_size),
-      county_id: county_id,
+      county_id: county_id[0],
       type_geometry: typeGeometry,
       centerpt: centerpt,
       radius: radius,
-      year: year,
-      bimester: bimester
+      to_year: year,
+      to_period: bimester,
+      layer_type: layer_type,
+      widget: widget
     }
 
     $.ajax({
@@ -827,7 +831,7 @@ Congo.map_utils = function(){
         Congo.rent_indicators.config.legends.push({'name':'Bajo', 'color':'#91bfdb'});
     legends =  Congo.rent_indicators.config.legends
     remove_legend();
-        legend_points(legends, map);
+    legend_points(legends, map);
     Congo.rent_indicators.action_dashboards.indicators();
   }
 

@@ -10,6 +10,7 @@ module GeometryOptions
         @select = polygon_select filters
       when 'list'
       end
+
       @select
     end
 
@@ -24,10 +25,12 @@ module GeometryOptions
       else
         @conditions = marker_condition filters
       end
+
       @conditions
     end
 
     private
+
       def polygon_select filters
         polygon = JSON.parse(filters[:wkt])
         select  = <<-SQL
@@ -44,13 +47,17 @@ module GeometryOptions
       end
 
       def marker_condition filters
-        c = filters[:county_id]['0'].join
+        c = filters[:county_id].join ', '
+
         conditions = <<-SQL
-          ST_Intersects(the_geom,
-            (select the_geom from counties
-              where id = '#{c}'
-            )
-            )
+          ST_Intersects(st_makevalid(the_geom),
+           st_makevalid((
+           select ST_CollectionExtract(
+           ST_COLLECT(
+           ARRAY(select the_geom from counties where id IN (#{c}))), 3)
+           )
+           )
+           )
         SQL
       end
 

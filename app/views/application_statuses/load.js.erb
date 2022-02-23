@@ -140,6 +140,20 @@ switch (layer_type) {
       Congo.building_regulations.config.from_inhabitants_hectare = from_inhabitants_hectare;
       Congo.building_regulations.config.to_inhabitants_hectare   = to_inhabitatnts_hectare;
     break;
+  case 'rent_indicators_info':
+      <% if @row['county_id'].present? && @row['county_id'].any? %>
+          Congo.dashboards.config.county_id = []
+          county_load                       = []
+
+        <% @row['county_id'].each do |county| %>
+          county_load.push('<%= county %>');
+        <% end %>
+
+        Congo.dashboards.config.county_id.push(county_load);
+    <% end %>
+
+      Congo.dashboards.config.widget = '<%= raw @row['widget'] %>'
+    break;
 }
 
 Congo.map_utils.counties();

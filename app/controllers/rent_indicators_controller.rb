@@ -10,7 +10,6 @@ class RentIndicatorsController < ApplicationController
   end
 
   def rent_indicators_summary
-    session[:data] = params
     params[:user_id] = current_user.id
     @result = RentIndicator.summary(params)
   end
