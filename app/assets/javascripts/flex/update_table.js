@@ -19,62 +19,55 @@ function rowsCheckTable() {
 
 
 function clearTable() {
-    $('tr.genTable').remove();
+  $('tr.genTable').remove();
 }
 
 function update_table() {
-    clearTable();
+  clearTable();
 
-    $("#sel-box").css('display', 'block');
-    $("#sel-box").on('click', function() {
-        if($(this).is(':checked')) {
-            $("#table .form-check-input").each(function() {
-              $(this).prop('checked', true);
-              $(".input-checkbox .form-check-input").closest('td').css('background','#45feed');
-            });
-        } else {
-          $("#table .form-check-input").each(function() {
-                $(this).prop('checked', false);
-                $(".input-checkbox .form-check-input").closest('td').css('background','#ed36be');
-            });
-        }
-    });
+  $("#sel-box").css('display', 'block');
+  $("#sel-box").on('click', function() {
 
-    $(table_data).each(function (index) {
-        $('#table tr:last').after(
-            '<tr class="genTable">' +
-            '<td class="for-order input-checkbox"><input class="form-check-input" data-sel-box type="checkbox" value="' + ($(this)[0]['id']) + '" checked></td>' +
-            '<td class="for-order">' + ($(this)[0]["property_typee"]) + '</td>' +
-            '<td class="for-order">' + ($(this)[0]["address"]) + '</td>' +
-            '<td class="for-order">' + ($(this)[0]['seller']) + '</td>' +
-            '<td class="hidden">' + ($(this)[0]['building_surface']) + '</td>' +
-            '<td class="hidden">' + ($(this)[0]['terrain_surface']) + '</td>' +
-            '<td class="for-order">' + ($(this)[0]['price']) + '</td>' +
-            '<td class="hidden">' + ($(this)[0]['ufm2']) + '</td>' +
-            '<td class="hidden">' + '' + '</td>' +
-            '<td class="hidden">' + '' + '</td>' +
-            '<td class="hidden">' + ($(this)[0]['id']) + '</td>' +
-            '<td class="hidden">' + '' + '</td>' +
-            '<td class="hidden">' + '' + '</td>' +
-            '</tr>'
-        );
-    });
-    $("#cantidad-registros-tabla").text('Registros: ' + $(table_data).length)
-    // sort table
-
-    if ($(table_data).length > 0) {
-      $('[data-generate]').removeClass('d-none');
+    if($(this).is(':checked')) {
+      $("#table .form-check-input").each(function() {
+        $(this).prop('checked', true);
+        $(".input-checkbox .form-check-input").closest('td').css('background','#45feed');
+      });
+    } else {
+      $("#table .form-check-input").each(function() {
+        $(this).prop('checked', false);
+        $(".input-checkbox .form-check-input").closest('td').css('background','#ed36be');
+      });
     }
+  });
 
-    var table = $('table');
+  $(table_data).each(function (index) {
+    $('#table tr:last').after(
+      '<tr class="genTable">' +
+      '<td class="for-order input-checkbox"><input class="form-check-input" data-sel-box type="checkbox" value="' + ($(this)[0]['id']) + '" checked></td>' +
+      '<td class="for-order">' + ($(this)[0]["property_typee"]) + '</td>' +
+      '<td class="for-order">' + ($(this)[0]["address"]) + '</td>' +
+      '<td class="for-order">' + ($(this)[0]['seller']) + '</td>' +
+      '<td class="for-order">' + ($(this)[0]['price']) + '</td>' +
+      '</tr>'
+    );
+  });
 
-  $('#utilm2_sort, #e_sort, #uf_sort')
+  $("#cantidad-registros-tabla").text('Registros: ' + $(table_data).length)
+  // sort table
+
+  if ($(table_data).length > 0) {
+    $('[data-generate]').removeClass('d-none');
+  }
+
+  var table = $('table');
+
+  $('#uf_sort')
     .wrapInner('<span title="ordenar esta columna"/>')
     .each(function() {
       var th      = $(this),
-          thIndex = th.index(),
-          inverse = false;
-
+        thIndex   = th.index(),
+        inverse   = false;
       th.click(function() {
         table.find('td.for-order').filter(function() {
           return $(this).index() === thIndex;
@@ -93,7 +86,7 @@ function update_table() {
       });
     });
 
-    $('#address_sort')
+  $('#address_sort')
     .wrapInner('<span title="ordenar esta columna"/>')
     .each(function() {
       var th    = $(this),
