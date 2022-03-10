@@ -192,7 +192,7 @@ function geoserver_data(data, flexMap, fgr){
     opacity: 1,
     version: '1.0.0',//wms version (ver get capabilities)
     tiled: true,
-    styles: 'poi_new',
+    styles: 'poi_flex',
     INFO_FORMAT: 'application/json',
     format_options: 'callback:getJson',
     CQL_FILTER: cqlFilter,
