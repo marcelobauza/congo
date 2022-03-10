@@ -398,9 +398,8 @@ module ImportProcess::ParseFile
               next
             end
 
-            factory = RGeo::Geos.factory(srid: 4326)
-            geom    = factory.parse_wkt(shape.geometry.as_text)
-            data    = shape.attributes
+            geom = shape.geometry
+            data = shape.attributes
 
             bimester = data["BIM"]
             year = data["YEAR"]
