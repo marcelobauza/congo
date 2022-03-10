@@ -398,10 +398,11 @@ module ImportProcess::ParseFile
               next
             end
 
-            geom = shape.geometry
-            data = shape.attributes
+            factory = RGeo::Geos.factory(srid: 4326)
+            geom    = factory.parse_wkt(shape.geometry.as_text)
+            data    = shape.attributes
 
-            bimester = data["BIMESTER"]
+            bimester = data["BIM"]
             year = data["YEAR"]
 
             if model == 'FutureProject'
