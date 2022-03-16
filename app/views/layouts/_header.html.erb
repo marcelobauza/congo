@@ -19,7 +19,9 @@
 
     <!-- Selección Dropdown -->
     <div class="nav-item dropdown">
-        <%= link_to counties_index_path(), remote: true, 'class': 'btn btn-primary nav-link dropdown-toggle nocaret dropdown-width', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %> <i class=" fas fa-list chart-modal" title="Comunas" ></i> <% end %>
+      <%= link_to counties_index_path(), remote: true, 'class': 'btn btn-primary nav-link dropdown-toggle nocaret dropdown-width', 'data-toggle' => "modal", 'data-target' => '#modal-counties' do %>
+        <i class=" fas fa-list chart-modal" title="Comunas" ></i>
+      <% end %>
     </div>
 
     <!-- Capas Dropdown -->
@@ -29,42 +31,41 @@
       </button>
 
       <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
-        <%if current_user.layer_types.include? 3 %>
+        <% if current_user.layer_types.include? 3 %>
           <%= link_to demography_dashboards_path(), class: "dropdown-item custom-item", remote: true, title: 'Demografía y Gasto' do %>
             <%= image_tag "demografia.png", width:"40", height:"40" %>
           <% end %>
         <% end %>
 
-        <%if current_user.layer_types.include? 4 %>
+        <% if current_user.layer_types.include? 4 %>
           <%= link_to building_regulations_dashboards_path(), class: "dropdown-item custom-item", remote: true, title: 'Normativa' do %>
             <%= image_tag "normativa.png", width:"40", height:"40" %>
           <% end %>
         <% end %>
 
-        <%if current_user.layer_types.include? 1 %>
+        <% if current_user.layer_types.include? 1 %>
           <%= link_to future_projects_dashboards_path(), class: "dropdown-item custom-item", remote: true, title: 'Expedientes Municipales' do %>
             <%= image_tag "em.png", width:"40", height:"40" %>
           <% end %>
         <% end %>
 
-        <%if current_user.layer_types.include? 6 %>
+        <% if current_user.layer_types.include? 6 %>
           <%= link_to rent_indicators_dashboards_path(), class: "dropdown-item custom-item", remote: true, id: 'ica', title: 'Arriendo Residencial' do %>
             <%= image_tag "ica.png", width:"40", height:"40" %>
           <% end %>
         <% end %>
 
-        <%if current_user.layer_types.include? 2 %>
+        <% if current_user.layer_types.include? 2 %>
           <%= link_to projects_dashboards_path(), class: "dropdown-item custom-item", remote: true, title: 'Proyectos en Venta' do %>
             <%= image_tag "prv.png", width:"40", height:"40" %>
           <% end %>
         <% end %>
 
-        <%if current_user.layer_types.include? 5 %>
+        <% if current_user.layer_types.include? 5 %>
           <%= link_to transactions_dashboards_path(), class: "dropdown-item custom-item", id: 'transactions_menu', remote: true, title: 'Compraventas' do %>
             <%= image_tag "cbr.png", width:"40", height:"40" %>
           <% end %>
         <% end %>
-
       </div>
     </div>
 
@@ -89,8 +90,13 @@
             </div>
           </div>
         </div>
-        <%= link_to dashboards_index_path(), class: "dropdown-item custom-item", remote: true, style: 'display: none', id: 'vor_dem' do %><i class="fas fa-dice-d20" title="Voronoi" style="font-size: 22px"></i><% end %>
-        <%= link_to dashboards_index_path(), class: "dropdown-item custom-item", remote: true, style: 'display: none', id: 'type_point' do %><i class="fas fa-circle" title="Puntos" style="font-size: 13px"></i><% end %>
+
+        <%= link_to dashboards_index_path(), class: "dropdown-item custom-item", remote: true, style: 'display: none', id: 'vor_dem' do %>
+          <i class="fas fa-dice-d20" title="Voronoi" style="font-size: 22px"></i>
+        <% end %>
+        <%= link_to dashboards_index_path(), class: "dropdown-item custom-item", remote: true, style: 'display: none', id: 'type_point' do %>
+          <i class="fas fa-circle" title="Puntos" style="font-size: 13px"></i>
+        <% end %>
 
         <!-- Puntos Proporcionales -->
         <div href="#" id="prop-prv" class="dropdown-submenu" style="display: none">
@@ -125,7 +131,10 @@
             </div>
           </div>
         </div>
-        <%= link_to dashboards_graduated_points_path(), class: "dropdown-item custom-item", id: 'prop-em', style: 'display: none', remote: true  do  %><i class=" fas fa-braille" title="Proporcionales" style="font-size: 22px"></i><% end %>
+
+        <%= link_to dashboards_graduated_points_path(), class: "dropdown-item custom-item", id: 'prop-em', style: 'display: none', remote: true  do %>
+          <i class=" fas fa-braille" title="Proporcionales" style="font-size: 22px"></i>
+        <% end %>
 
         <!-- Heatmap -->
         <div href="#" id="heat-prv" class="dropdown-submenu" style="display: none">
@@ -157,7 +166,10 @@
             </div>
           </div>
         </div>
-        <%= link_to dashboards_heatmap_path(), class: "dropdown-item custom-item", id: 'heat-em-dem', style: 'display: none', remote: true  do  %><i class=" fas fa-fire" title="Heatmap" style="font-size: 26px"></i><% end %>
+
+        <%= link_to dashboards_heatmap_path(), class: "dropdown-item custom-item", id: 'heat-em-dem', style: 'display: none', remote: true  do %>
+          <i class=" fas fa-fire" title="Heatmap" style="font-size: 26px"></i>
+        <% end %>
 
         <!-- Colores ICA -->
         <div href="#" id="col-ica" class="dropdown-submenu" style="display: none">
@@ -173,23 +185,26 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
     <!-- Útiles Dropdown -->
 
-    <% if (current_user.role.name == 'IPRO') || (current_user.role.name == 'IPRO+') || (current_user.role.name == 'Admin') || (current_user.role.name == 'MYPE')  || (current_user.role.name == 'IPRO+ Plus')%>
+    <% if user_has_permissions_to_tools? %>
       <div class="nav-item dropdown">
         <button class="btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-plus" title="Útiles"></i>
         </button>
         <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
-          <%= link_to "#", id: "boost", class: "dropdown-item custom-item", remote: true do %> <i class=" fas fa-database" title="Ver Base Completa" style="font-size: 26px"></i> <%end %>
-
+          <%= link_to "#", id: "boost", class: "dropdown-item custom-item", remote: true do %>
+            <i class=" fas fa-database" title="Ver Base Completa" style="font-size: 26px"></i>
           <% end %>
-            <%= link_to demography_calculated_gse_path, id: "census", class: "dropdown-item custom-item reports", style:"display: none", remote: true  do  %> <i class="fas fa-dollar-sign" title="GSE" style="font-size: 26px"></i>
-          <% if (current_user.role.name == 'IPRO+'|| (current_user.role.name == 'Admin') || (current_user.role.name == 'MYPE') || (current_user.role.name == 'IPRO+ Plus')) %>
+
+          <%= link_to demography_calculated_gse_path, id: "census", class: "dropdown-item custom-item reports", style:"display: none", remote: true do %>
+            <i class="fas fa-dollar-sign" title="GSE" style="font-size: 26px"></i>
+          <% end %>
+
+          <% if user_has_permissions_to_downloads? %>
             <div class="dropdown-divider"></div>
             <%= link_to "#", id: "pdf", class: "dropdown-item custom-item reports", data: {remote: true} do  %> <i class=" fas fa-file-pdf" title="Informe PDF" style="font-size: 26px"></i><% end %>
             <%= link_to "#", id: "base", class: "dropdown-item custom-item reports", remote: true  do  %> <i class=" fas fa-file-excel" title="Descarga XLS" style="font-size: 26px"></i><% end %>
@@ -198,23 +213,33 @@
           <% end %>
         </div>
       </div>
-
     <% end %>
 
-      <div class="nav-item dropdown">
-        <%= link_to users_account_path(), class: "btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width", remote: true, id: "user_data", data: { "status-downloads": true} do %>
-          <i class="fas fa-cloud-download-alt" title="Información descargas" style="font-size: 15px"></i>
-        <% end %>
-      </div>
+    <div class="nav-item dropdown">
+      <%= link_to users_account_path(), class: "btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width", remote: true, id: "user_data", data: { "status-downloads": true} do %>
+        <i class="fas fa-cloud-download-alt" title="Información descargas" style="font-size: 15px"></i>
+      <% end %>
+    </div>
     <!-- Cuenta Dropdown -->
     <div class="nav-item dropdown">
       <button class="btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-user" title="Usuario"></i>
       </button>
       <div class="dropdown-menu custom-menu" aria-labelledby="navbarDropdown">
-        <%= link_to users_account_path(), class: "dropdown-item custom-item reports", remote: true,  id:"user_data"  do  %> <i class=" fas fa-user" title="Mi Cuenta" style="font-size: 26px"></i><% end %>
-        <%= link_to application_statuses_path(), class: "dropdown-item custom-item reports", remote: true,  id:"sessions"  do  %> <i class=" fas fa-save" title="Administrador Sesiones" style="font-size: 26px"></i><% end %>
-        <%= link_to destroy_user_session_path, method: :delete, 'class' => 'dropdown-item custom-item' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
+        <%= link_to users_account_path(), class: "dropdown-item custom-item reports", remote: true, id: "user_data" do %>
+          <i class=" fas fa-user" title="Mi Cuenta" style="font-size: 26px"></i>
+        <% end %>
+        <%= link_to application_statuses_path(), class: "dropdown-item custom-item reports", remote: true, id: "sessions" do %>
+          <i class=" fas fa-save" title="Administrador Sesiones" style="font-size: 26px"></i>
+        <% end %>
+        <% if user_has_permissions_to_flex? %>
+          <%= link_to flex_root_path(), class: "dropdown-item custom-item reports", id: "flex" do %>
+            <i class="fas fa-exchange-alt" title="Acceso Pro" style="font-size: 26px"></i>
+          <% end %>
+        <% end %>
+        <%= link_to destroy_user_session_path, method: :delete, 'class' => 'dropdown-item custom-item' do %>
+          <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i>
+        <% end %>
       </div>
     </div>
   </div>

@@ -13,11 +13,12 @@ class User < ApplicationRecord
   has_many :counties_users
   has_many :counties, through: :counties_users
   has_many :regions_users
-  has_many :regions, through: :regions_users
+  has_many :regions, through: :regions_users, dependent: :destroy
   has_many :feedbacks
   has_many :downloads_users
   has_many :flex_orders
   has_many :flex_reports
+  has_many :user_polygons, dependent: :destroy
   belongs_to :company
   belongs_to :role
 
@@ -50,51 +51,40 @@ class User < ApplicationRecord
   end
 
   def self.get_users_by_filters(params)
-    role_id = params[:user][:role_id] unless params[:user].nil?
-    email = params[:user][:email] unless params[:user].nil?
-    disabled = params[:user][:disabled] unless params[:user].nil?
-    nombre = params[:user][:complete_name] unless params[:user].nil?
+    role_id       = params[:user][:role_id] unless params[:user].nil?
+    email         = params[:user][:email] unless params[:user].nil?
+    status        = params[:user][:disabled] unless params[:user].nil?
+    complete_name = params[:user][:complete_name] unless params[:user].nil?
 
-    User.joins(:company).select("users.*").
-      where(build_conditions({:role_id => role_id, :email => email,
-                              :disabled => disabled,
-                              :complete_name => nombre}))
+    query = User.joins(:company).all
+    query = query.filter_role role_id if role_id.present?
+    query = query.filter_email email if email.present?
+    query = query.filter_complete_name complete_name if complete_name.present?
+    query = query.filter_status status
 
+    query
   end
-  def self.build_conditions(filters)
-    if !filters[:role_id].blank?
-      conditions = WhereBuilder.build_equal_condition("role_id", filters[:role_id])
-    end
 
-    if !filters[:email].blank?
-      if (!conditions.nil?)
-        conditions += Util.and
-          conditions += WhereBuilder.build_equal_condition("email", filters[:email])
-      else
-        conditions = WhereBuilder.build_equal_condition("email", filters[:email])
-      end
-    end
-    if !filters[:complete_name].blank?
-      if (!conditions.nil?)
-        conditions += Util.and
-          conditions += WhereBuilder.build_like_condition("complete_name", filters[:complete_name])
-      else
-        conditions = WhereBuilder.build_like_condition("complete_name", filters[:complete_name])
-      end
-    end
-
-    if filters[:disabled] == '1'
-      if (!conditions.nil?)
-        conditions += Util.and
-          conditions += WhereBuilder.build_equal_condition("disabled", "TRUE")
-      else
-        conditions = WhereBuilder.build_equal_condition("disabled", "TRUE")
-      end
-    end
-    conditions
+  def self.filter_role role_id
+    where(role_id: role_id)
   end
-protected
-def password_required?
-  !persisted? || !password.blank? || !password_confirmation.blank?
-end
+
+  def self.filter_email email
+    where(email: email)
+  end
+
+  def self.filter_complete_name name
+    where('complete_name ilike ?', "%#{name}%")
+  end
+
+  def self.filter_status status
+    status = (status.nil? || status == "0") ? [false, nil] : true
+
+    where(disabled: status)
+  end
+
+  protected
+    def password_required?
+      !persisted? || !password.blank? || !password_confirmation.blank?
+    end
 end

@@ -18,4 +18,22 @@ module ApplicationHelper
 
     link_to(name, '#', class: "add_fields btn btn-secondary btn-sm #{locals[:class]}", data: {id: id, fields: fields.gsub("\n", ""), "#{locals[:data]}": true})
   end
+
+  def user_has_permissions_to_tools?
+    allowed_roles = ['IPRO', 'IPRO+', 'Admin', 'MYPE', 'IPRO+ Plus', 'PRO_FLEX']
+
+    allowed_roles.include? current_user.role.name
+  end
+
+  def user_has_permissions_to_downloads?
+    allowed_roles = ['IPRO+', 'Admin', 'MYPE', 'IPRO+ Plus', 'PRO_FLEX']
+
+    allowed_roles.include? current_user.role.name
+  end
+
+  def user_has_permissions_to_flex?
+    allowed_roles = ['Admin', 'PRO_FLEX', 'FLEX']
+
+    allowed_roles.include? current_user.role.name
+  end
 end
