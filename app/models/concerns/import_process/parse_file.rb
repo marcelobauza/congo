@@ -290,7 +290,7 @@ module ImportProcess::ParseFile
             data = shape.attributes
 
             unless data["DORMS_T"].to_i == 0 or data["BANOS_T"].to_i == 0
-              mix = ProjectMix.find_or_create_by(bedroom: data["DORMS_T"].to_f,  bathroom: data["BANOS_T"].to_i, mix_type:"#{data["DORMS_T"].to_f}d#{data["BANOS_T"].to_i}b")
+              mix = ProjectMix.where(bedroom: data["DORMS_T"],  bathroom: data["BANOS_T"].to_i).take
 
               if mix.nil?
                 import_logger.failed += 1
