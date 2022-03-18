@@ -1046,13 +1046,15 @@ class Project < ApplicationRecord
       where(conditions).
       where( year: filters[:to_year], bimester: filters[:to_period]).
       filters_project_types(filters).
-      filters_status_projects(filters)
+      filters_status_projects(filters).
+      filters_project_mixes(filters)
 
     @project_homes = ProjectHomeReport.
       where(conditions).
       where(year: filters[:to_year], bimester: filters[:to_period]).
       filters_project_types(filters).
-      filters_status_projects(filters)
+      filters_status_projects(filters).
+      filters_project_mixes(filters)
 
     return @project_homes, @project_departments
   end
@@ -1072,19 +1074,23 @@ class Project < ApplicationRecord
     select += "project_types.name as project_types_name, "
     select += "agencies.name as agencyname"
 
-    data = Project.
-      joins(:project_type, agency_rols: :agency, project_instances:[:project_status, :project_instance_mixes]).
+    Project.
+      joins(:project_type, agency_rols: :agency, project_instances: [:project_status, :project_instance_mixes]).
       method_selection(filters).
       get_project_types(filters).
-      where(project_instances: {year: filters[:to_year], bimester: filters[:to_period]}).
+      get_project_mixes(filters).
+      where(project_instances: { year: filters[:to_year], bimester: filters[:to_period] }).
       where("agency_rols.rol = 'INMOBILIARIA'").
       select(select).
-      group(:code, :name, :address, :project_types_name, 'agencies.name' ).uniq
-    data
+      group(:code, :name, :address, :project_types_name, 'agencies.name').uniq
   end
 
   def self.get_project_types filter
     filter[:project_type_ids] ? where(project_type_id: filter[:project_type_ids]) : all
+  end
+
+  def self.get_project_mixes filter
+    filter[:mix_ids] ? where(project_instance_mixes: { mix_id: filter[:mix_ids] }) : all
   end
 
   def self.information_general_department filters

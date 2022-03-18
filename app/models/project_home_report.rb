@@ -14,4 +14,12 @@ class ProjectHomeReport < ApplicationRecord
       all
     end
   end
+
+  def self.filters_project_mixes filters
+    if filters[:mix_ids].present?
+      where(mix_id: filters[:mix_ids])
+    else
+      all
+    end
+  end
 end
