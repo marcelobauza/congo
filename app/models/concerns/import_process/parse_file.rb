@@ -162,8 +162,8 @@ module ImportProcess::ParseFile
 
               nn = NeighborhoodFutureProject.create!(
                 neighborhood_id: neighborhood.id,
-                year:              year,
-                bimester:          bimester,
+                year:              period.year,
+                bimester:          period.bimester,
                 total_households:  total_house
               )
           end
