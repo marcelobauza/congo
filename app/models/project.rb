@@ -402,11 +402,14 @@ class Project < ApplicationRecord
     type                               = ProjectType.find_by_name(project_type)
     county                             = County.find_by(code: data["COMUNA"])
     agency                             = Agency.where(name: data["INMOBILIAR"]).first_or_create!
-    agency_rols                        = AgencyRol.find_or_create_by(
-      project_id: self.id,
-      agency_id: agency.id,
-      rol: 'INMOBILIARIA'
-    )
+    agency_rols                        = AgencyRol.where(project_id: self.id, rol: 'INMOBILIARIA').first
+
+    if agency_rols.nil?
+      AgencyRol.create(project_id: self.id, rol: 'INMOBILIARIA', agency_id: agency.id)
+    else
+      agency_rols.update_column :agency_id, agency.id
+    end
+
     self.code                          = data["COD_PROY"]
     self.address                       = ic.iconv(data["DIRECCION"].gsub("'","''"))
     self.name                          = ic.iconv(data["NOMBRE"])
