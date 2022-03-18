@@ -352,7 +352,7 @@ class Project < ApplicationRecord
 
   def self.projects_by_ground_area(widget, filters)
     projects = Project.joins(:project_instances).method_selection(filters).
-      where(build_conditions_new(filters, nil, true, range=false))
+      where(build_conditions_new(filters, nil, false, range=false))
 
     houses, departments = projects.partition {|project| project.project_type_id == 1}
 

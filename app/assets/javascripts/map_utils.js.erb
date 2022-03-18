@@ -404,6 +404,7 @@ Congo.map_utils = function(){
         project_status_ids = Congo.projects.config.project_status_ids;
         project_type_ids = Congo.projects.config.project_type_ids;
         agency_ids = Congo.projects.config.project_agency_ids;
+        mix_ids = Congo.projects.config.mix_ids;
         legends = Congo.projects.config.legends;
         filter_layer = filter_layer + "AND (bimester='"+ bimester +"' AND year='"+ year+"')";
 
@@ -420,6 +421,10 @@ Congo.map_utils = function(){
         }
         if (agency_ids.length > 0){
           filter_layer = filter_layer + " AND agency_id IN (" + agency_ids + ")";
+        }
+
+        if (mix_ids.length > 0) {
+          filter_layer = filter_layer + " AND mix_id IN (" + mix_ids + ")";
         }
 
 
