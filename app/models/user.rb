@@ -15,9 +15,9 @@ class User < ApplicationRecord
   has_many :regions_users
   has_many :regions, through: :regions_users, dependent: :destroy
   has_many :feedbacks
-  has_many :downloads_users
-  has_many :flex_orders
-  has_many :flex_reports
+  has_many :downloads_users, dependent: :destroy
+  has_many :flex_orders, dependent: :destroy
+  has_many :flex_reports, dependent: :destroy
   has_many :user_polygons, dependent: :destroy
   belongs_to :company
   belongs_to :role
