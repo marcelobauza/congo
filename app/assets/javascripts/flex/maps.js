@@ -2,7 +2,7 @@ function create_map(){
   let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: '',
     id: 'streets-v11',
-    accessToken: 'pk.eyJ1IjoiZmxhdmlhYXJpYXMiLCJhIjoiY2ppY2NzMm55MTN6OTNsczZrcGFkNHpoOSJ9.cL-mifEoJa6szBQUGnLmrA',
+    accessToken: 'pk.eyJ1IjoiYXNlcmdpb3AyMSIsImEiOiJjamVpbmY5bWcwcjB3MnhubDcycGtpY2JxIn0.-8iDxvJtpjVdfSsm4DEXRw',
     updateWhenIdle: true,
     reuseTiles: true
   });
