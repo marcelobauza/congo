@@ -1066,6 +1066,17 @@ Congo.building_regulations.action_dashboards = function(){
             } // Cierra if Habitantes por Hectárea
 
           } // Cierra for
+
+          // TODO: Eliminar cuando se implemente el nuevo sidebar
+          view_status = $('#view').hasClass('div_off');
+          if (view_status) {
+            $(".chart-container").css("transition-delay", "0s");
+            $(".chart-container").css("transform", "scale(0)");
+          } else {
+            $(".chart-container").css("transition-delay", "0.8s");
+            $(".chart-container").css("transform", "scale(1)");
+          }
+
         } // Cierra success
       }) // Cierra ajax
     } // Cierra if alert

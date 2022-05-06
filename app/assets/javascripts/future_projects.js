@@ -1836,6 +1836,17 @@ Congo.future_projects.action_dashboards = function(){
 
             } // Cierra if
           } // Cierra for
+
+          // TODO: Eliminar cuando se implemente el nuevo sidebar
+          view_status = $('#view').hasClass('div_off');
+          if (view_status) {
+            $(".chart-container").css("transition-delay", "0s");
+            $(".chart-container").css("transform", "scale(0)");
+          } else {
+            $(".chart-container").css("transition-delay", "0.8s");
+            $(".chart-container").css("transform", "scale(1)");
+          }
+
         }, // Cierra success
         error: function(jqXHR, textStatus, errorThrown) {
         } // Cierra error
