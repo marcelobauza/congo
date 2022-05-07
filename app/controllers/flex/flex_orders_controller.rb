@@ -6,16 +6,18 @@ class Flex::FlexOrdersController < ApplicationController
 
   def create
     require 'mercadopago'
+
     @flex_order = FlexOrder.new(flex_order_params)
-    sdk = Mercadopago::SDK.new(ENV['MP_ACCESS_TOKEN'])
-    @unit_price = 9990
+    unit_price  = @flex_order.get_price_by_plans
+    sdk         = Mercadopago::SDK.new(ENV['MP_ACCESS_TOKEN'])
+
     preference_data = {
       items: [
         {
           title: 'Reporte Flex',
           quantity: @flex_order.amount,
           currency_id: 'CLP',
-          unit_price: @unit_price
+          unit_price: unit_price
         }
       ],
       binary_mode: true,
@@ -26,12 +28,13 @@ class Flex::FlexOrdersController < ApplicationController
       },
       auto_return: 'approved'
     }
-    preference_response = sdk.preference.create(preference_data)
-    preference = preference_response[:response]
-    @preference_id = preference['id']
 
-    @flex_order.preference_id = @preference_id
-    @flex_order.unit_price = @unit_price
+    preference_response = sdk.preference.create(preference_data)
+    preference          = preference_response[:response]
+    preference_id       = preference['id']
+
+    @flex_order.preference_id = preference_id
+    @flex_order.unit_price    = unit_price
 
     respond_to do |format|
       if @flex_order.save
@@ -49,8 +52,7 @@ class Flex::FlexOrdersController < ApplicationController
 
   private
 
-  def flex_order_params
-    params.require(:flex_order).permit(:amount).merge(user_id: current_user.id)
-  end
-
+    def flex_order_params
+      params.require(:flex_order).permit(:amount).merge(user_id: current_user.id)
+    end
 end
