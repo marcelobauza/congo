@@ -1,10 +1,12 @@
-class AgenciesController < ApplicationController
+class Admin::AgenciesController < ApplicationController
   before_action :set_agency, only: [:show, :edit, :update, :destroy]
+
+  layout 'admin'
 
   # GET /agencies
   # GET /agencies.json
   def index
-    @agencies = Agency.all
+    @agencies = Agency.order name: :asc
   end
 
   # GET /agencies/1
@@ -42,7 +44,7 @@ class AgenciesController < ApplicationController
   def update
     respond_to do |format|
       if @agency.update(agency_params)
-        format.html { redirect_to @agency, notice: 'Agency was successfully updated.' }
+        format.html { redirect_to admin_agency_path(@agency), notice: 'Agency was successfully updated.' }
         format.json { render :show, status: :ok, location: @agency }
       else
         format.html { render :edit }
@@ -56,8 +58,12 @@ class AgenciesController < ApplicationController
   def destroy
     @agency.destroy
     respond_to do |format|
-      format.html { redirect_to agencies_url, notice: 'Agency was successfully destroyed.' }
-      format.json { head :no_content }
+      if @agency.destroy
+        flash[:success] = 'Agencia eliminada.'
+      else
+        flash[:danger] = 'No se puede eliminar'
+      end
+      format.html { redirect_to admin_agencies_url }
     end
   end
 

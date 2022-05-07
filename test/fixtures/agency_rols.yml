@@ -1,11 +1,4 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  rol: 
-  project_id: 1
-  agency: one
-
-two:
-  rol: 
-  project_id: 1
-  agency: two
+nova_departamento:
+  rol: 'INMOBILIARIA'
+  project_id: projects(departamento).id
+  agency: nova
