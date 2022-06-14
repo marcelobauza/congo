@@ -6,12 +6,10 @@
 </div>
 
 <%= simple_form_for(@flex_order, remote: true, :url => flex_flex_orders_path) do |form| %>
-
   <div class="modal-body">
-
     <% if @flex_order.errors.any? %>
       <div id="error_explanation">
-        <h2><%= pluralize(@flex_order.errors.count, "error") %> prohibited this flex order from being saved:</h2>
+        <h2><%= pluralize(@flex_order.errors.count, "error") %> No se pudo guardar</h2>
         <ul><% @flex_order.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>
       </div>
     <% end %>
@@ -21,7 +19,7 @@
         Precio
       </div>
       <div class="form-group col-md-6">
-        CLP$ 9990 <small>(IVA incluído)</small>
+        CLP$ <span data-flex-amount-text="true">9990</span> <small>(IVA incluído)</small>
       </div>
     </div>
 
@@ -30,10 +28,16 @@
         <%= form.label :amount, 'Cantidad:', input_html: {class: 'col-form-label'}  %>
       </div>
       <div class="form-group col-md-6">
-        <%= form.input :amount, label: false, input_html: {class: 'form-control form-control-sm'} %>
+        <%= form.input :amount, label: false,
+          input_html: {
+            class: 'form-control form-control-sm',
+            data: {
+              flex_plans: flex_orders_plans,
+              flex_amount: true
+            }
+          } %>
       </div>
     </div>
-
   </div>
 
   <div class="modal-footer">
@@ -42,5 +46,4 @@
       <%= form.submit class: 'btn btn-primary', value: "Checkout" %>
     </div>
   </div>
-
 <% end %>
