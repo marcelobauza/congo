@@ -296,7 +296,11 @@ Congo.dashboards.action_index = function() {
                 'class': 'card-body',
                 'id': 'filter-body'
               })
-            )
+            ),
+            $('<i>', { // flecha
+              'class': 'fas fa-arrow-alt-circle-right',
+              'id': 'view'
+            })
           )
         )
       )
@@ -311,6 +315,61 @@ Congo.dashboards.action_index = function() {
       moves: function(el, container, handle) {
         return handle.classList.contains('handle') || handle.parentNode.classList.contains('handle');
       }
+    });
+
+    $("#view").unbind('click').click(function() {
+
+      // Chequeamos el estado de view
+      view_status = $('#view').hasClass('div_off');
+
+      if (!view_status) { // Oculto
+
+        $(".overlay").css("transition", "width 1s");
+
+        $('#view').addClass('div_off');
+        $('#view').removeClass('fa-arrow-alt-circle-right');
+        $('#view').addClass('fa-arrow-alt-circle-left');
+        $(".overlay").css("width", "15px");
+        $(".overlay").css("overflow-y", "hidden");
+
+        $("#filter-container").removeClass('bg-primary');
+        $("#filter-container").addClass('border-0');
+        $("#filter-container").css("background-color", "rgba(58, 63, 68, 0)");
+        $("#filter-container").css("transition-delay", "0s");
+
+        $("#filter-header").css("transition-delay", "0s");
+        $("#filter-header").css("transform", "scale(0)");
+
+        $("#filter-collapse").css("transition-delay", "0s");
+        $("#filter-collapse").css("transform", "scale(0)");
+
+        $(".chart-container").css("transition-delay", "0s");
+        $(".chart-container").css("transform", "scale(0)");
+
+      } else { // Visible
+
+        $('#view').removeClass('div_off');
+        $('#view').removeClass('fa-arrow-alt-circle-left');
+        $('#view').addClass('fa-arrow-alt-circle-right');
+        $(".overlay").css("width", "400px");
+        $(".overlay").css("overflow-y", "scroll");
+
+        $("#filter-container").addClass('bg-primary');
+        $("#filter-container").removeClass('border-0');
+        $("#filter-container").css("background-color", "rgba(58, 63, 68, 1)");
+        $("#filter-container").css("transition-delay", "0.8s");
+
+        $("#filter-header").css("transition-delay", "0.8s");
+        $("#filter-header").css("transform", "scale(1)");
+
+        $("#filter-collapse").css("transition-delay", "0.8s");
+        $("#filter-collapse").css("transform", "scale(1)");
+
+        $(".chart-container").css("transition-delay", "0.8s");
+        $(".chart-container").css("transform", "scale(1)");
+
+      }
+
     });
 
   } // Cierra create_overlay_and_filter_card

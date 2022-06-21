@@ -630,3 +630,18 @@ span.multiselect-native-select {
 .custom-flex-colour::before {
   background-color: #3d4046 !important;
 }
+
+#view {
+  cursor: pointer;
+  position: absolute;
+  top: 40vh;
+  z-index: 402 !important;
+  font-size: 20px;
+  color: #e8ebef;
+  background: rgba(58, 63, 68, 0.5);
+  transform: translate(-50%);
+  border-width: 5px;
+  border-color: transparent;
+  border-radius: 50%;
+  border-style: solid;
+}
