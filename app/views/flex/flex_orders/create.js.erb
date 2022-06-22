@@ -1,6 +1,6 @@
-preference_id = '<%= @preference_id %>'
-const mp = new MercadoPago('<%= ENV["MP_PUBLIC_KEY"] %>', {locale: 'es-CL'});
-const checkout = mp.checkout({
+var preference_id = '<%= @preference_id %>'
+var mp = new MercadoPago('<%= ENV["MP_PUBLIC_KEY"] %>', {locale: 'es-CL'});
+var checkout = mp.checkout({
   preference: {
       id: preference_id
   },
