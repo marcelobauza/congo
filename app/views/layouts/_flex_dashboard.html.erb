@@ -6,6 +6,12 @@
   <!-- Barra (Elementos Derecha)-->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
+    <!-- Barra (Elementos Izquierda)-->
+    <ul class="navbar-nav mr-auto">
+      <h6 class="mb-0 mx-3 text-white">Créditos: <%= orders_placed current_user %></h6>
+      <h6 class="mb-0 mr-3 text-white">Informes: <%= amount_orders current_user %></h6>
+    </ul>
+
     <!-- Descarga XLS -->
     <div class="nav-item dropdown" data-flex-downloads-xls></div>
 
