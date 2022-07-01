@@ -45,7 +45,7 @@ wb.add_worksheet(name: "Flex") do |sheet|
       row.number,
       row.inscription_date,
       row.buyer_name,
-      row.seller_type_name,
+      row.seller_type_name == 'PROPIETARIO' ? 'PARTICULAR' : row.seller_type_name,
       row.seller_name,
       row.calculated_value,
       row.parkingi,

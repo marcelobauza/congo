@@ -44,7 +44,7 @@ class Flex::FlexReportsController < ApplicationController
     @property_types = @filters["property_types"]
     @property_types = PropertyType.where(:id => @property_types).map { |prop| prop.name.titleize }.join(", ") unless @property_types.nil?
     @seller_types = @filters["seller_types"]
-    @seller_types = SellerType.where(:id => @seller_types).map { |seller| seller.name.titleize }.join(", ") unless @seller_types.nil?
+    @seller_types = SellerType.where(:id => @seller_types).map { |seller| seller.name.titleize == 'Propietario' ? 'Particular' : seller.name.titleize }.join(", ") unless @seller_types.nil?
     @land_use = @filters["land_use"]
     @land_use = @land_use.map { |i| i.to_s }.join(", ") unless @land_use.nil?
     @building_surfaces = @filters["building_surfaces"]
@@ -145,7 +145,7 @@ class Flex::FlexReportsController < ApplicationController
     end
 
     project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
-    seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
+    seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name == "PROPIETARIO" ? "PARTICULAR" : seller.name, seller.id] }
 
     # Acota rangos sup útil
     min = total_surface_building.min.to_i
@@ -237,7 +237,10 @@ class Flex::FlexReportsController < ApplicationController
         property_types.name AS property_typee,
         transactions.address,
         counties.name AS c_name,
-        seller_types.name AS seller,
+        CASE
+          WHEN seller_types.name = 'PROPIETARIO' THEN 'PARTICULAR'
+          ELSE seller_types.name
+        END AS seller,
         transactions.total_surface_building::integer AS building_surface,
         transactions.total_surface_terrain::integer AS terrain_surface,
         transactions.calculated_value::integer AS price,
