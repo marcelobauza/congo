@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
   <!-- Logo -->
-  <%= link_to flex_flex_reports_path(), class: "navbar-brand", data: {confirm: '¿Desea abandonar el informe?'} do  %> Home <% end %>
+  <%= link_to flex_flex_reports_path(), class: "navbar-brand", data: {confirm: '¿Desea abandonar el informe?'} do %> Home <% end %>
 
   <!-- Barra (Elementos Derecha)-->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -20,14 +20,24 @@
 
     <div class="spinner-border text-light float-right mr-2" role="status" id="report_spinner" style="display: none;"></div>
 
+    <!-- Nuevo Reporte -->
     <% if has_orders? %>
       <div class="nav-item dropdown">
-        <%= link_to new_flex_flex_report_path, :class => 'btn btn-primary', data: {confirm: "¿Desea generar un reporte nuevo?"} do  %> <i class=" fas fa-plus" title="Nuevo Reporte" style="font-size: 26px"></i> <% end %>
+        <%= link_to new_flex_flex_report_path, :class => 'btn btn-primary', data: {confirm: "¿Desea generar un reporte nuevo?"} do %>
+          <i class=" fas fa-plus" title="Nuevo Reporte" style="font-size: 26px"></i>
+        <% end %>
       </div>
     <% end %>
 
+    <!-- Usuario -->
+    <%= link_to flex_users_account_path(), class: 'btn btn-primary', remote: true, id: "user_data" do %>
+      <i class=" fas fa-user" title="Mi Cuenta" style="font-size: 26px"></i>
+    <% end %>
+
     <!-- Salir -->
-    <%= link_to destroy_user_session_path, method: :delete, 'class' => 'btn btn-primary' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
+    <%= link_to destroy_user_session_path, method: :delete, 'class' => 'btn btn-primary' do %>
+      <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i>
+    <% end %>
 
   </div>
 </nav>
