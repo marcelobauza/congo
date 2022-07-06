@@ -133,6 +133,7 @@ Rails.application.routes.draw do
   end
 
   namespace :flex do
+    get 'flex_reports/graphs'
     get 'flex_reports/search_data_for_filters'
     get 'flex_reports/search_data_for_table'
     get 'flex_reports/building_regulation_download' => 'flex_reports#building_regulation_download'

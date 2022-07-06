@@ -14,37 +14,30 @@ Chart.pluginService.register({
 });
 
 function genCharts(flex_report_id) {
-
   $("#table .form-check-input").each(function() {
     if ($(this).is(":checked")) {
       dataFromTable.push($(this).val()); //variable que captura los datos de la tabla
     }
   });
+
   $(".user_data").each(function() {
     userData.push([$(this).attr('name'), $(this).val()]); //variable que captura los datos ingresados por el usuario
   })
 
+  var transaction_ids = $('[data-transactions-ids]').data('transactionsIds')
   data = {
     flex_report_id: flex_report_id,
-    transactions: dataFromTable
+    transactions: transaction_ids
   };
-
-  console.log('PARAMS search_data_for_charts');
-  console.log(data);
 
   $.ajax({
     async: false,
     type: 'POST',
-    url: 'search_data_for_charts.json',
+    url: 'flex_reports/search_data_for_charts.json',
     datatype: 'json',
     data: data,
     success: function(data) {
-
-      console.log('RESPONSE search_data_for_charts');
-      console.log(data);
-
       charts = data
-
     },
     error: function(jqxhr, textstatus, errorthrown) {
       console.log("algo malo paso");

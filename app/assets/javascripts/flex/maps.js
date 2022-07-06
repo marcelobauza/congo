@@ -186,7 +186,7 @@ function geoserver_data(data, flexMap, fgr){
     cqlFilter = filterPolygon
   }
   var options_layers = {
-    layers: "inciti_v2:transactions_info",//nombre de la capa (ver get capabilities)
+    layers: "inciti_v2:transaction_infos",//nombre de la capa (ver get capabilities)
     format: 'image/png',
     transparent: 'true',
     opacity: 1,
