@@ -20,6 +20,34 @@ $(document).on('click', '[data-flex-filter]', function(event) {
   geoserver_data(data, flexMap, fgr);
 })
 
+$(document).on('click', '.flex_arrow', function(e) {
+
+  closed_map = $('.flex_arrow').hasClass('closed_map');
+  closed_table = $('#flex_table_arrow').hasClass('closed_table');
+
+  if (closed_map) {
+    $(".mh-1248").css("height", "calc(100vh - 40vh - 169px)");
+    $(".map-box").removeClass('d-none')
+    $('.flex_arrow').removeClass('closed_map');
+  } else if (closed_table) {
+    $("#map_flex").css("height", "40vh");
+    $(".table-box").removeClass('d-none')
+    $('.flex_arrow').removeClass('closed_table');
+  } else {
+    arrow = e.target.id
+    if (arrow == 'flex_map_arrow') {
+      $(".mh-1248").css("height", "calc(100vh - 122px)");
+      $(".map-box").addClass('d-none')
+      $('.flex_arrow').addClass('closed_map');
+    } else {
+      $("#map_flex").css("height", "calc(100vh - 122px)");
+      $(".table-box").addClass('d-none')
+      $('.flex_arrow').addClass('closed_table');
+    }
+  }
+
+});
+
 Congo.namespace('flex_flex_reports.action_new');
 
 Congo.flex_flex_reports.config = {
@@ -92,7 +120,7 @@ Congo.flex_flex_reports.action_new = function () {
 
                         console.log('RESPONSE search_data_for_filters');
                         console.log(parsed_data);
-                        
+
                         update_filters();
                     },
                     error: function (jqxhr, textstatus, errorthrown) {
