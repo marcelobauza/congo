@@ -73,7 +73,12 @@ class Flex::FlexReportsController < ApplicationController
 
   # GET /flex/reports/new
   def new
-    orders  = current_user.flex_orders.where(status: 'approved').sum(&:amount).to_i
+    flex_information = FlexInformation.first
+    @info            = flex_information.info.split("\r\n").sort
+    @tutorial_link   = flex_information.tutorial_link
+    @video_link      = flex_information.video_link
+
+    orders   = current_user.flex_orders.where(status: 'approved').sum(&:amount).to_i
     reports = current_user.flex_reports.size
 
     if orders > reports

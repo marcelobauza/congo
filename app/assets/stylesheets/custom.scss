@@ -388,7 +388,12 @@ div.custom-menu.show {
         overflow-x: hidden;
       }
     };
-    height: calc(100vh - 220px);
+    height: calc(80vh - 200px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  #flex_info {
+    height: calc(20vh);
     overflow-y: auto;
     overflow-x: hidden;
   }

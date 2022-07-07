@@ -10,7 +10,7 @@
 
           <div class="card text-white bg-primary m-0 mb-3">
             <div class="card-header">Filtros</div>
-            <div class="card-body px-2">
+            <div class="card-body px-2 pt-2 pb-0">
               <div class="select-box p-0" id="intro">
                 <div class="d-flex justify-content-center align-items-center h-100">
                   <div class="container">
@@ -25,6 +25,22 @@
                 <button class="btn btn-secondary btn-sm" data-flex-filter onclick="getFilteredData();">Filtrar</button>
                 <button class="btn btn-secondary btn-sm" data-flex-filter onclick="update_filters();">Limpiar</button>
               </div>
+            </div>
+            <div id="flex_info" class="card-footer p-2">
+              <p class="mb-2">
+                Te invitamos a ver nuestros <b><ins><a href="<%= @video_link %>">videos</a></ins></b>
+                y <b><ins><a href="<%= @tutorial_link %>">tutoriales</a></ins></b> sobre el uso de Flex 3.0
+              </p>
+              <% if @info.present? %>
+                <div class="col-12 px-1">
+                  <b>Fechas de actualización:</b>
+                  <ul class="mb-1">
+                    <% @info.each do |row| %>
+                      <li><%= row %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
             </div>
           </div>
 
@@ -48,9 +64,10 @@
                 <div class="container px-0">
                   <%= simple_form_for([:flex, @flex_report]) do |f| %>
                     <div class="d-flex flex-row justify-content-between pb-1" id="up_table">
-                      <%= f.input :name, label: false, placeholder: 'Nombre del Reporte', input_html: {class:'form-control form-control-sm'} %>
+                      <%= f.input :name, label: false, placeholder: 'Nombre del Reporte', input_html: {class:'form-control form-control-sm'}, wrapper_html: { class: 'mb-0' } %>
                       <%= f.input :transaction_ids, as: :hidden, input_html: { data: { flex_transactions_ids: true }} %>
-                      <%= f.submit "Generar", class: 'btn btn-secondary btn-sm d-none', data: { generate: true, confirm: 'Gastará 1 crédito. Máx. 150 primeros registros para descarga XLSX. ¿Desea continuar?' } %>
+                      <%= f.submit "Generar", class: 'btn btn-sm btn-secondary d-none',
+                        data: { generate: true, confirm: 'Gastará 1 crédito. Máx. 150 primeros registros para descarga XLSX. ¿Desea continuar?' } %>
                       <div class="label mx-2" id="somediv">
                         <span class="m-0" id="cantidad-registros-tabla"></span>
                       </div>

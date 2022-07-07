@@ -1,0 +1,23 @@
+<div class="card shadow">
+  <div class="card-body">
+    <h2>Editar Información de Flex</h2>
+  </div>
+</div>
+
+<div class="card shadow">
+  <div class="card-body">
+    <div class="offset-3 col-6">
+      <%= simple_form_for([:admin, @flex_information]) do |f| %>
+        <%= f.error_notification %>
+        <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+          <%= f.input :info, :input_html => {:rows => 7} %>
+          <%= f.input :video_link %>
+          <%= f.input :tutorial_link %>
+          <div class="text-center">
+            <%= link_to 'Cancelar', admin_flex_informations_path, class: "btn btn-secondary" %>
+            <%= f.button :submit, class: "btn btn-primary", value: "Guardar" %>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>

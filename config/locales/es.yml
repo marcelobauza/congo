@@ -584,7 +584,11 @@ es:
         year: Año
       surveyor:
         name: Nombre
-
+      flex_information:
+        info: Información
+        video_link: Link de videos
+        tutorial_link: Link de tutoriales
+        
   controllers:
     successfully_updated: Actualizado correctamente
     successfully_created: Creado correctamente
