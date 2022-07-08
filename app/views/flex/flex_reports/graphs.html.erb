@@ -1,12 +1,10 @@
+<div data-transactions-ids='<%= @flex_report.transaction_ids %>'></div>
 
-    <div data-transactions-ids='<%= @flex_report.transaction_ids %>'></div>
 <!-- Gráficos -->
-<nav class="col-3 d-md-block sidebar collapse pt-3">
-  <div class="sidebar-sticky sidebar-overflow">
+<div class="col-12 pt-3 row m-0">
+  <%= render 'flex/dashboards/charts' %>
+</div>
 
-    <%= render 'flex/dashboards/charts' %>
-  </div>
-</nav>
 <div class="hidden charts d-none" style="width: 720px">
   <div class="row">
     <div class="col-6">
@@ -80,4 +78,3 @@
   genCharts(flex_report_id);
 <% end %>
 </script>
-
