@@ -12,13 +12,13 @@
       <h6 class="mb-0 mr-3 text-white">Informes: <%= orders_placed current_user %> </h6>
     </ul>
 
+    <div class="spinner-border text-light float-right mr-2" role="status" id="report_spinner" style="display: none;"></div>
+
     <!-- Descarga XLS -->
     <div class="nav-item dropdown" data-flex-downloads-xls></div>
 
     <!-- Descarga PDF -->
     <div class="nav-item dropdown" data-flex-downloads-pdf></div>
-
-    <div class="spinner-border text-light float-right mr-2" role="status" id="report_spinner" style="display: none;"></div>
 
     <!-- Nuevo Reporte -->
     <% if has_orders? %>
