@@ -1,6 +1,6 @@
 class Flex::FlexReportsController < ApplicationController
   before_action :verify_flex_user
-  before_action :set_flex_report, only: [:show]
+  before_action :set_flex_report, only: [:show, :graphs]
 
   layout 'flex_dashboard', except: [:index]
 
@@ -74,9 +74,9 @@ class Flex::FlexReportsController < ApplicationController
   # GET /flex/reports/new
   def new
     flex_information = FlexInformation.first
-    @info            = flex_information.info.split("\r\n").sort
-    @tutorial_link   = flex_information.tutorial_link
-    @video_link      = flex_information.video_link
+    @info            = flex_information&.info&.split("\r\n")&.sort
+    @tutorial_link   = flex_information&.tutorial_link
+    @video_link      = flex_information&.video_link
 
     orders   = current_user.flex_orders.where(status: 'approved').sum(&:amount).to_i
     reports = current_user.flex_reports.size
@@ -97,7 +97,7 @@ class Flex::FlexReportsController < ApplicationController
 
     respond_to do |format|
       if @flex_report.save
-        #format.js
+        format.js
         format.html { render :graphs, status: :created, location: flex_flex_reports_graphs_path() }
       else
         format.js
@@ -240,11 +240,10 @@ class Flex::FlexReportsController < ApplicationController
 
   def search_data_for_charts
     flex_report_id = params[:flex_report_id]
-    transactions = params[:transactions]
-    data = []
-    result = []
-
-    data = Transaction.where(:id => transactions)
+    transactions   = params[:transactions]
+    data           = []
+    result         = []
+    data           = Transaction.where(:id => transactions)
 
     # Cantidad
 

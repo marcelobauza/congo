@@ -64,7 +64,7 @@
             <div class="card-body">
               <div class="container-fluid mh-1248">
                 <div class="container px-0">
-                  <%= simple_form_for([:flex, @flex_report]) do |f| %>
+                  <%= simple_form_for([:flex, @flex_report], remote: true) do |f| %>
                     <div class="d-flex flex-row justify-content-between pb-1" id="up_table">
                       <%= f.input :name, label: false, placeholder: 'Nombre del Reporte', input_html: {class:'form-control form-control-sm'}, wrapper_html: { class: 'mb-0' } %>
                       <%= f.input :transaction_ids, as: :hidden, input_html: { data: { flex_transactions_ids: true }} %>

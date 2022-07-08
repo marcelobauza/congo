@@ -33,7 +33,7 @@ function genCharts(flex_report_id) {
   $.ajax({
     async: false,
     type: 'POST',
-    url: 'flex_reports/search_data_for_charts.json',
+    url: 'search_data_for_charts.json',
     datatype: 'json',
     data: data,
     success: function(data) {

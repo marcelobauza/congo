@@ -1,0 +1,10 @@
+<% if @flex_report.errors.any? %>
+  <% @flex_report.errors.each do |key, value| %>
+    $("#somediv").empty().
+    append('<div class="notice danger"><%= key %> <%= raw (value)%></div>')
+  <% end %>
+<% else %>
+    $("#somediv").empty().
+    append('<div class="notice danger">Generado</div>')
+  $('[data-flex-downloads-xls]').html("<%= j link_to 'GRAPHS', flex_flex_reports_graphs_path(locale: 'es', id: @flex_report.id), class: 'btn btn-primary' %>");
+<% end %>
