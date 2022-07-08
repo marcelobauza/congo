@@ -140,6 +140,7 @@ Rails.application.routes.draw do
     get 'flex_reports/building_regulation_download' => 'flex_reports#building_regulation_download'
     post 'flex_reports/search_data_for_charts'
     get 'users/account' => 'users#account'
+    put 'users/update' => 'users#update'
     resources :dashboards, only: [:index, :new, :create]
     resources :tenements
     resources :flex_reports, only: [:index, :new, :create, :show]
