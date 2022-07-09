@@ -43,13 +43,15 @@ $(document).on('click', '.flex_arrow', function(e) {
       $("#map_flex").css("height", "calc(100vh - 122px)");
       $(".table-box").addClass('d-none')
       $('.flex_arrow').addClass('closed_table');
+
+      let map = Congo.flex_flex_reports.config.map;
+
+      map.invalidateSize()
     }
   }
-
 });
 
 Congo.namespace('flex_flex_reports.action_new');
-
 Congo.flex_flex_reports.config = {
   geo_selection: '',
   map: '',
@@ -58,7 +60,6 @@ Congo.flex_flex_reports.config = {
   transactions_layer: ''
 }
 
-//filters
 var table_data            = "";
 var dataFromTable         = []; // variable que captura ids de la tabla
 var dataForCharts         = { transactions: dataFromTable }; // variable para los charts
@@ -80,14 +81,13 @@ Congo.flex_flex_reports.action_new = function () {
     let map_admin, marker, flexMap;
 
     let init = function () {
-        let flexMap = create_map();
-        let fgr     = L.featureGroup().addTo(flexMap);
-
+        let flexMap  = create_map();
+        let fgr      = L.featureGroup().addTo(flexMap);
         let controls = add_control(flexMap, fgr);
 
-        Congo.flex_flex_reports.config.map = flexMap;
+        Congo.flex_flex_reports.config.map      = flexMap;
         Congo.flex_flex_reports.config.controls = controls;
-        Congo.flex_flex_reports.config.fgr = fgr;
+        Congo.flex_flex_reports.config.fgr      = fgr;
 
         flexMap.on('draw:created', function (e) {
             let data = draw_geometry(e, fgr);
@@ -106,9 +106,6 @@ Congo.flex_flex_reports.action_new = function () {
                 geoserver_building_regulations(data, flexMap, fgr);
                 geoserver_data(data, flexMap, fgr);
 
-                console.log('PARAMS search_data_for_filters');
-                console.log(data);
-
                 $.ajax({
                     async: false,
                     type: 'get',
@@ -117,9 +114,6 @@ Congo.flex_flex_reports.action_new = function () {
                     data: data,
                     success: function (data) {
                         parsed_data = data
-
-                        console.log('RESPONSE search_data_for_filters');
-                        console.log(parsed_data);
 
                         update_filters();
                     },
