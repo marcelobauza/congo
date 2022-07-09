@@ -59,6 +59,10 @@
 </div>
 
 <script charset="utf-8">
+
+$('[data-navbar-1]').html("<%= @flex_report.name %>");
+$('[data-navbar-2]').html("Registros: <%= @flex_report.transaction_ids.count %>");
+
 <% if @flex_report.errors.any? %>
   <% @flex_report.errors.each do |key, value| %>
     $("#somediv").empty().

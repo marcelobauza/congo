@@ -8,8 +8,8 @@
 
     <!-- Barra (Elementos Izquierda)-->
     <ul class="navbar-nav mr-auto">
-      <h6 class="mb-0 mx-3 text-white">Créditos: <%= amount_orders current_user %></h6>
-      <h6 class="mb-0 mr-3 text-white">Informes: <%= orders_placed current_user %> </h6>
+      <h6 data-navbar-1 class="mb-0 mx-3 text-white">Créditos: <%= amount_orders current_user %></h6>
+      <h6 data-navbar-2 class="mb-0 mr-3 text-white">Informes: <%= orders_placed current_user %></h6>
     </ul>
 
     <div class="spinner-border text-light float-right mr-2" role="status" id="report_spinner" style="display: none;"></div>
