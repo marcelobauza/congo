@@ -19,14 +19,12 @@ data = {
   transactions: tr_ids_array
 };
 
-console.log('Parámetros charts');
-console.log(data);
-
 path = window.location.pathname
+
 if (path == '/es/flex/flex_reports/new') {
   url = 'search_data_for_charts'
 } else {
-  url = 'flex_reports/search_data_for_charts'
+  url = 'search_data_for_charts'
 }
 
 $.ajax({
@@ -49,12 +47,10 @@ $.ajax({
 
   },
   success: function(data) {
-
     map = Congo.dashboards.config.map
 
     // Si estámos en el dashboard armamos el reporte con el mapa
     if (map.options) {
-
       // Oculta elementos leaflet para la captura del mapa
       $('.leaflet-top').addClass('d-none');
       $('.leaflet-right').addClass('d-none');
@@ -146,16 +142,13 @@ $.ajax({
                   r: d['radius'] * 2
                 });
               })
-
             } else {
 
               $.each(data, function(c, d) {
                 name.push(d['name'])
                 count.push(d['count'])
               })
-
             }
-
 
             if (title == 'Cantidad' || title == 'Superficie Útil' || title == 'Precio' || title == 'Precio Unitario' || title == 'Volúmen Mercado') {
               chart_type = 'line';
@@ -210,7 +203,6 @@ $.ajax({
               labels: name,
               datasets: datasets
             }
-
           })
 
           // Guardamos "options"
