@@ -20,12 +20,7 @@ data = {
 };
 
 path = window.location.pathname
-
-if (path == '/es/flex/flex_reports/new') {
-  url = 'search_data_for_charts'
-} else {
-  url = 'search_data_for_charts'
-}
+url  = '<%= flex_flex_reports_search_data_for_charts_path %>'
 
 $.ajax({
   async: false,
