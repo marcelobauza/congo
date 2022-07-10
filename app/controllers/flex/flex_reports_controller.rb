@@ -778,6 +778,8 @@ class Flex::FlexReportsController < ApplicationController
       ).merge(user_id: current_user.id)
     end
     def verify_flex_user
+      Current.user = current_user
+
       redirect_to root_url unless current_user.role.name == 'Admin' or current_user.role.name == 'Flex' or current_user.role.name == 'PRO_FLEX'
     end
 end

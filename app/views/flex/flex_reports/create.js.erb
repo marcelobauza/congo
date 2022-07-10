@@ -1,10 +1,8 @@
 <% if @flex_report.errors.any? %>
+    $("#somediv").empty()
   <% @flex_report.errors.each do |key, value| %>
-    $("#somediv").empty().
-    append('<div class="notice danger"><%= key %> <%= raw (value)%></div>')
-  <% end %>
+    $("#somediv").append('<div class="text-danger"><%= I18n.t("flex_report.#{key}") %> <%= raw (value)%></div>')
+<% end %>
 <% else %>
-    $("#somediv").empty().
-    append('<div class="notice danger">Generado</div>')
-  $('[data-flex-grahps]').html("<%= j link_to 'Graficos', flex_flex_reports_graphs_path(locale: 'es', id: @flex_report.id), class: 'btn btn-primary' %>");
+    window.location.assign("<%= flex_flex_reports_graphs_path(locale: 'es', id: @flex_report.id) %>")
 <% end %>
