@@ -10,15 +10,15 @@
     </center>
 
     <div class="form-group">
-      <%= f.text_field :name, class: 'form-control', autofocus: true, placeholder: "Usuario" %>
+      <%= f.text_field :name, class: 'form-control', autofocus: true, placeholder: "¿Cómo quieres llamarte?" %>
     </div>
 
     <div class="form-group">
-      <%= f.email_field :email, autocomplete: "email", class: 'form-control', placeholder: "E-mail" %>
+      <%= f.email_field :email, autocomplete: "email", class: 'form-control', placeholder: "¿Cuál es tu e-mail?" %>
     </div>
 
     <div class="form-group">
-      <%= f.phone_field :phone, autocomplete: "email", class: 'form-control', placeholder: "Teléfono" %>
+      <%= f.phone_field :phone, autocomplete: "email", class: 'form-control', placeholder: "¿Cuál es tu teléfono?" %>
     </div>
 
     <div class="form-group">
@@ -27,7 +27,7 @@
           <% if @minimum_password_length %>
             <em>(<%= @minimum_password_length %> Caracteres mínimos)</em>
           <% end %><br/>
-          <%= f.password_field :password, autocomplete: "new-password", class: 'form-control', placeholder: "Contraseña", data: { show_password: true } %>
+          <%= f.password_field :password, autocomplete: "new-password", class: 'form-control', placeholder: "Ingresa una contraseña", data: { show_password: true } %>
         </div>
         <div class="col pt-4 mr-sm-4">
           <a data-action-show-password class="far fa-eye-slash"></a>
@@ -36,7 +36,7 @@
     </div>
 
     <div class="form-group">
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control', placeholder: "Repetir Contraseña" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control', placeholder: "Repite la contraseña anterior" %>
     </div>
 
     <div class="actions">
