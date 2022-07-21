@@ -33,6 +33,6 @@ class Flex::UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:complete_name, :password, :password_confirmation, :name, :city)
+      params.require(:user).permit(:complete_name, :rut, :phone, :password, :password_confirmation)
     end
 end
