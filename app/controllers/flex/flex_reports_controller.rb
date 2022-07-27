@@ -35,7 +35,7 @@ class Flex::FlexReportsController < ApplicationController
   # GET /flex/reports/1
   # GET /flex/reports/1.json
   def show
-    @transactions = Transaction.where(id: @flex_report.transaction_ids).limit(150)
+    @transactions = Transaction.where(id: @flex_report.transaction_ids)
 
     @filters           = eval(@flex_report.filters)
     @property_types    = @filters["property_types"]
@@ -59,7 +59,10 @@ class Flex::FlexReportsController < ApplicationController
       @tr_ids_array << tr.id
     end
 
+    @transactions = @transactions.limit(150) if params['format'] == 'xlsx'
+
     @tenements = Tenement.where(flex_report_id: @flex_report.id)
+
     respond_to do |format|
       format.js
       format.xlsx {
