@@ -728,7 +728,7 @@ Congo.map_utils = function(){
       CQL_FILTER: cql_filter,
       clickable: 'false',
       zIndex: 99};
-    source_layers = new L.tileLayer.betterWms("https://"+url+"/geoserver/wms", options_layers);
+    source_layers = new L.tileLayer.betterWms("https://"+url+"/geoserver/inciti/wms", options_layers);
 
     groupLayer.addLayer(source_layers);
     layerControl.addOverlay(groupLayer, "Datos");
