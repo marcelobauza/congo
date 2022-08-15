@@ -231,8 +231,10 @@ Congo.dashboards.action_index = function() {
     var active_periods = document.querySelector('#downloads').dataset.urlPeriods
 
     $.ajax({
+      headers: { "Accept": "application/json"},
       async: false,
       type: 'GET',
+      crossDomain: true,
       data: {
         enable: "true"
       },
