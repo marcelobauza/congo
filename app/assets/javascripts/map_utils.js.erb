@@ -728,7 +728,7 @@ Congo.map_utils = function(){
       CQL_FILTER: cql_filter,
       clickable: 'false',
       zIndex: 99};
-    source_layers = new L.tileLayer.betterWms("http://"+url+"/geoserver/wms", options_layers);
+    source_layers = new L.tileLayer.betterWms("https://"+url+"/geoserver/wms", options_layers);
 
     groupLayer.addLayer(source_layers);
     layerControl.addOverlay(groupLayer, "Datos");
@@ -914,7 +914,7 @@ Congo.map_utils = function(){
   function search_county(county_id){
     var cql_filter_counties = "county_id IN("+ county_id +")"
 
-    var owsrootUrl = "http://"+url+"/geoserver/ows";
+    var owsrootUrl = "https://"+url+"/geoserver/ows";
     var defaultParameters = {
       service: 'WFS',
       version: '1.1.0',
