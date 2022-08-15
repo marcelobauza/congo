@@ -12,5 +12,5 @@ const load_lots = function(url){
     format_options: 'callback:getJson'
   };
 
-  return  new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_lots);
+  return  new L.tileLayer.betterWms("https://"+url+"/geoserver/inciti/wms", options_lots);
 }

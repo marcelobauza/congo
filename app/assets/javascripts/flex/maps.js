@@ -199,7 +199,7 @@ function geoserver_data(data, flexMap, fgr){
     clickable: 'false',
     zIndex: 99};
 
-  var source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
+  var source_layers = new L.tileLayer.betterWms("https://"+url+"/geoserver/inciti/wms", options_layers);
 Congo.flex_flex_reports.config.transactions_layer = source_layers
   fgr.addLayer(source_layers);
   fgr.addTo(flexMap);
@@ -259,7 +259,7 @@ function geoserver_building_regulations(data, flexMap, fgr) {
     clickable: 'false',
     zIndex: 99};
 
-  var source_layers = new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_layers);
+  var source_layers = new L.tileLayer.betterWms("https://"+url+"/geoserver/inciti/wms", options_layers);
 
   fgr.addLayer(source_layers);
   fgr.addTo(flexMap);
