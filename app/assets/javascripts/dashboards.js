@@ -228,13 +228,15 @@ Congo.dashboards.action_index = function() {
     Congo.dashboards.action_index.get_last_period();
     Congo.map_utils.init();
 
+    var active_periods = document.querySelector('#downloads').dataset.urlPeriods
+
     $.ajax({
       async: false,
       type: 'GET',
       data: {
         enable: "true"
       },
-      url: '/admin/periods/active_periods.json',
+      url: active_periods,
       datatype: 'json',
       success: function(data) {
         $.each(data, function(key, period) {
