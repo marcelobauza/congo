@@ -4,6 +4,7 @@ class User < ApplicationRecord
   include Users::Downloads
   include Users::Export
 
+  attr_accessor :validate_phone
 
   #has_paper_trail
   # Include default devise modules. Others available are:
@@ -25,9 +26,15 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :flex_orders, :reject_if => lambda {|a| a[:amount].blank? }
 
   validate :is_rut_valid
+  validates :name, presence: true
+  validates :phone, presence: true, if: :validate_phone?
+
+  def validate_phone?
+    validate_phone == 'true' || validate_phone == true
+  end
 
   def is_rut_valid
-    Util.is_rut_valid?(self, :rut, true)
+    Util.is_rut_valid?(self, :rut, false)
   end
 
   def active_for_authentication?

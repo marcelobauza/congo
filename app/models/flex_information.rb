@@ -1,0 +1,2 @@
+class FlexInformation < ApplicationRecord
+end

@@ -1,28 +1,38 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
   <!-- Logo -->
-  <%= link_to flex_flex_reports_path(), class: "pr-3" do  %> <%=image_tag "inciti_flex.png", width:"40", height:"40" %> <% end %>
+  <%= link_to flex_flex_reports_path(), class: "navbar-brand" do %> Home <% end %>
 
   <!-- Barra (Elementos Derecha)-->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
     <!-- Barra (Elementos Izquierda)-->
     <ul class="navbar-nav mr-auto">
+      <h6 class="mb-0 mx-3 text-white">Créditos: <%= amount_orders current_user %></h6>
+      <h6 class="mb-0 mr-3 text-white">Informes: <%= orders_placed current_user %> </h6>
     </ul>
 
     <div class="spinner-border text-light float-right mr-2" role="status" id="report_spinner" style="display: none;"></div>
 
     <!-- Comprar Informes -->
-    <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#buy_modal"><i class="fas fa-shopping-cart" title="Comprar Reportes" style="font-size: 26px"></i></button> -->
-    <%= link_to new_flex_flex_order_path(), class: 'btn btn-primary', remote: true, 'data-toggle' =>  "modal", 'data-target' => '#buy_modal' do %> <i class="fas fa-shopping-cart" title="Comprar Reportes" style="font-size: 26px"></i> <% end %>
+    <%= link_to new_flex_flex_order_path(), class: 'btn btn-primary', remote: true, 'data-toggle' =>  "modal", 'data-target' => '#buy_modal' do %>
+      <i class="fas fa-shopping-cart" title="Comprar Reportes" style="font-size: 26px"></i>
+    <% end %>
+
+    <!-- Acceso Pro -->
     <%= link_to dashboards_index_path(), class: 'btn btn-primary' do %>
       <i class="fas fa-exchange-alt" title="Acceso Pro" style="font-size: 26px"></i>
     <% end %>
 
-    <!-- Información -->
-    <button class="btn btn-primary" data-toggle="modal" data-target="#info_modal"><i class="fas fa-info-circle" title="Información" style="font-size: 26px"></i></button>
+    <!-- Usuario -->
+    <%= link_to flex_users_account_path(), class: 'btn btn-primary', remote: true, id: "user_data" do %>
+      <i class=" fas fa-user" title="Mi Cuenta" style="font-size: 26px"></i>
+    <% end %>
 
     <!-- Salir -->
-    <%= link_to destroy_user_session_path, method: :delete, 'class' => 'btn btn-primary' do  %> <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i> <% end %>
+    <%= link_to destroy_user_session_path, method: :delete, 'class' => 'btn btn-primary' do %>
+      <i class=" fas fa-sign-out-alt" title="Salir" style="font-size: 26px"></i>
+    <% end %>
 
   </div>
 

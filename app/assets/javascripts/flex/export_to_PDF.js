@@ -1,18 +1,18 @@
 function downloadPDF() {
     $('.hidden.charts').css('display', 'inline');
 
-    var cantidadChartPDF = $("#chartCantidadPDF");
-    var supUtilChartPDF = $("#chartSupUtilPDF");
-    var precioChartPDF = $("#chartPrecioPDF");
-    var precioUnitarioChartPDF = $("#chartPrecioUnitarioPDF");
-    var volMercadoChartPDF = $("#chartVolMercadoPDF");
-    var supUtilBarrasChartPDF = $("#chartSupUtil-barrasPDF");
-    var precioBarrasChartPDF = $("#chartPrecio-barrasPDF");
+    var cantidadChartPDF             = $("#chartCantidadPDF");
+    var supUtilChartPDF              = $("#chartSupUtilPDF");
+    var precioChartPDF               = $("#chartPrecioPDF");
+    var precioUnitarioChartPDF       = $("#chartPrecioUnitarioPDF");
+    var volMercadoChartPDF           = $("#chartVolMercadoPDF");
+    var supUtilBarrasChartPDF        = $("#chartSupUtil-barrasPDF");
+    var precioBarrasChartPDF         = $("#chartPrecio-barrasPDF");
     var precioUnitarioBarrasChartPDF = $("#chartPrecioUnitario-barrasPDF");
-    var supUFChartPDF = $("#chartSupUFPDF");
-    labelsChartPDF = [];
-    dataChartPDF = [];
-    radioChartPDF = [];
+    var supUFChartPDF                = $("#chartSupUFPDF");
+    var labelsChartPDF               = [];
+    var dataChartPDF                 = [];
+    var radioChartPDF                = [];
 
     var pdf = new jsPDF();
 
@@ -26,7 +26,6 @@ function downloadPDF() {
     pdf.setFontStyle("bold");
 
     $(charts).each(function () {
-
         if ($(this)[0]['title'] == 'Cantidad') {
             for (i = 0; i < $(this)[0]['series'][0]['data'].length; i++) {
                 labelsChartPDF.push($(this)[0]['series'][0]['data'][i]['name'])

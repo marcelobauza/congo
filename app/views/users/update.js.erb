@@ -1,16 +1,9 @@
-// Levanta los posibles errores
 var errors = '<%= raw @errorMessage %>';
 
-// Sino hay errores actualiza y elimina el modal
-if (errors == '{}') {
-
-  // Elimina el modal
+if (errors == '[]') {
   $("#modal-account").remove();
   $('.modal-backdrop').remove();
-
-// Si hay errores advierte al usuario
 } else {
-
   $("#error_item").remove()
   $("#users_error").append(
     $('<p>', {
@@ -18,5 +11,4 @@ if (errors == '{}') {
       'text': errors
     })
   )
-
 }

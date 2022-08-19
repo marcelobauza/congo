@@ -1,0 +1,14 @@
+var errors = '<%= raw @errorMessage %>';
+
+if (errors == '[]') {
+  $("#modal-flex-account").remove();
+  $('.modal-backdrop').remove();
+} else {
+  $("#error_item").remove()
+  $("#users_error").append(
+    $('<p>', {
+      'id': 'error_item',
+      'text': errors
+    })
+  )
+}

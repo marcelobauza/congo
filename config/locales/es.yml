@@ -183,6 +183,9 @@ es:
       update: 'Actualizar %{model}'
       submit: 'Guardar %{model}'
 
+  flex_report:
+    name: 'Nombre'
+
   errors:
     format: "%{attribute} %{message}"
 
@@ -584,6 +587,10 @@ es:
         year: Año
       surveyor:
         name: Nombre
+      flex_information:
+        info: Información
+        video_link: Link de videos
+        tutorial_link: Link de tutoriales
 
   controllers:
     successfully_updated: Actualizado correctamente

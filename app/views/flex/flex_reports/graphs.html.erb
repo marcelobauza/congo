@@ -1,0 +1,88 @@
+<div data-transactions-ids='<%= @flex_report.transaction_ids %>'></div>
+
+<!-- Gráficos -->
+<div class="col-12 pt-3 row m-0">
+  <%= render 'flex/dashboards/charts' %>
+</div>
+<div class="col-12 row justify-content-end m-0">
+  <div class="px-1" data-flex-downloads-pdf></div>
+  <div class="px-1" data-flex-downloads-xls></div>
+</div>
+
+<div class="hidden charts d-none" style="width: 720px">
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Cantidad</p>
+      <canvas id="chartCantidadPDF"></canvas>
+    </div>
+    <div class="col-6">
+      <p class="text-center">Superficie útil</p>
+      <canvas id="chartSupUtilPDF"></canvas>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Precio</p>
+      <canvas id="chartPrecioPDF"></canvas>
+    </div>
+    <div class="col-6">
+      <p class="text-center">Precio Unitario Útil</p>
+      <canvas id="chartPrecioUnitarioPDF"></canvas>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Volumen de Mercado (Uf miles)</p>
+      <canvas id="chartVolMercadoPDF"></canvas>
+    </div>
+    <div class="col-6">
+      <p class="text-center">Superficie útil</p>
+      <canvas id="chartSupUtil-barrasPDF"></canvas>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Precio</p>
+      <canvas id="chartPrecio-barrasPDF"></canvas>
+    </div>
+    <div class="col-6">
+      <p class="text-center">Precio Unitario Útil</p>
+      <canvas id="chartPrecioUnitario-barrasPDF"></canvas>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <p class="text-center">Superficie por UF</p>
+      <canvas id="chartSupUFPDF"></canvas>
+    </div>
+  </div>
+</div>
+
+<script charset="utf-8">
+
+$('[data-navbar-1]').html("<%= @flex_report.name %>");
+$('[data-navbar-2]').html("Registros: <%= @flex_report.transaction_ids.count %>");
+
+<% if @flex_report.errors.any? %>
+  <% @flex_report.errors.each do |key, value| %>
+    $("#somediv").empty().
+    append('<div class="notice"><%= key %> <%= raw (value)%></div>')
+  <% end %>
+<% else %>
+  $("#somediv").empty()
+  $('[data-generate]').addClass('d-none');
+  $('[data-add-property]').addClass('d-none');
+  $('[data-flex-filter]').addClass('d-none');
+  $('[data-flex-property]').addClass('d-none');
+  $('[data-flex-downloads-xls]').html("<%= j link_to 'XLS', flex_flex_report_path(@flex_report, format: :xlsx), class: 'btn btn-primary' %>");
+  $('[data-flex-downloads-pdf]').html("<%= j link_to 'PDF', flex_flex_report_path(@flex_report), remote: true, class: 'btn btn-primary' %>");
+
+  let flexMap  = Congo.flex_flex_reports.config.map;
+  let controls = Congo.flex_flex_reports.config.controls;
+
+  flex_report_id = '<%= @flex_report.id %>'
+  //flexMap.removeControl(controls);
+
+  genCharts(flex_report_id);
+<% end %>
+</script>

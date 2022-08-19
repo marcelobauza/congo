@@ -229,6 +229,8 @@ GEM
     public_suffix (3.0.3)
     puma (3.12.1)
     rack (2.0.7)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rack-protection (2.1.0)
       rack
     rack-test (1.1.0)
@@ -438,6 +440,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   pry
   puma (~> 3.11)
+  rack-cors
   rails (~> 5.2.1)
   redis (~> 4)
   rgeo
@@ -468,4 +471,4 @@ RUBY VERSION
    ruby 2.4.1p111
 
 BUNDLED WITH
-   2.2.17
+   2.2.24

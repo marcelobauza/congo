@@ -20,8 +20,38 @@ $(document).on('click', '[data-flex-filter]', function(event) {
   geoserver_data(data, flexMap, fgr);
 })
 
-Congo.namespace('flex_flex_reports.action_new');
+$(document).on('click', '.flex_arrow', function(e) {
 
+  closed_map = $('.flex_arrow').hasClass('closed_map');
+  closed_table = $('#flex_table_arrow').hasClass('closed_table');
+
+  if (closed_map) {
+    $(".mh-1248").css("height", "calc(100vh - 40vh - 169px)");
+    $(".map-box").removeClass('d-none')
+    $('.flex_arrow').removeClass('closed_map');
+  } else if (closed_table) {
+    $("#map_flex").css("height", "40vh");
+    $(".table-box").removeClass('d-none')
+    $('.flex_arrow').removeClass('closed_table');
+  } else {
+    arrow = e.target.id
+    if (arrow == 'flex_map_arrow') {
+      $(".mh-1248").css("height", "calc(100vh - 122px)");
+      $(".map-box").addClass('d-none')
+      $('.flex_arrow').addClass('closed_map');
+    } else {
+      $("#map_flex").css("height", "calc(100vh - 122px)");
+      $(".table-box").addClass('d-none')
+      $('.flex_arrow').addClass('closed_table');
+
+      let map = Congo.flex_flex_reports.config.map;
+
+      map.invalidateSize()
+    }
+  }
+});
+
+Congo.namespace('flex_flex_reports.action_new');
 Congo.flex_flex_reports.config = {
   geo_selection: '',
   map: '',
@@ -30,7 +60,6 @@ Congo.flex_flex_reports.config = {
   transactions_layer: ''
 }
 
-//filters
 var table_data            = "";
 var dataFromTable         = []; // variable que captura ids de la tabla
 var dataForCharts         = { transactions: dataFromTable }; // variable para los charts
@@ -52,14 +81,13 @@ Congo.flex_flex_reports.action_new = function () {
     let map_admin, marker, flexMap;
 
     let init = function () {
-        let flexMap = create_map();
-        let fgr     = L.featureGroup().addTo(flexMap);
-
+        let flexMap  = create_map();
+        let fgr      = L.featureGroup().addTo(flexMap);
         let controls = add_control(flexMap, fgr);
 
-        Congo.flex_flex_reports.config.map = flexMap;
+        Congo.flex_flex_reports.config.map      = flexMap;
         Congo.flex_flex_reports.config.controls = controls;
-        Congo.flex_flex_reports.config.fgr = fgr;
+        Congo.flex_flex_reports.config.fgr      = fgr;
 
         flexMap.on('draw:created', function (e) {
             let data = draw_geometry(e, fgr);
@@ -78,9 +106,6 @@ Congo.flex_flex_reports.action_new = function () {
                 geoserver_building_regulations(data, flexMap, fgr);
                 geoserver_data(data, flexMap, fgr);
 
-                console.log('PARAMS search_data_for_filters');
-                console.log(data);
-
                 $.ajax({
                     async: false,
                     type: 'get',
@@ -90,9 +115,6 @@ Congo.flex_flex_reports.action_new = function () {
                     success: function (data) {
                         parsed_data = data
 
-                        console.log('RESPONSE search_data_for_filters');
-                        console.log(parsed_data);
-                        
                         update_filters();
                     },
                     error: function (jqxhr, textstatus, errorthrown) {
