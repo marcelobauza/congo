@@ -1,13 +1,12 @@
 class Flex::FlexReportsController < ApplicationController
   before_action :verify_flex_user
-  before_action :set_flex_report, only: [:show]
+  before_action :set_flex_report, only: [:show, :graphs]
 
   layout 'flex_dashboard', except: [:index]
 
   # GET /flex/reports
   # GET /flex/reports.json
   def index
-
     unless params[:status] == 'null'
       flex_order = FlexOrder.where(preference_id: params[:preference_id]).first
       attributes = {
@@ -36,33 +35,34 @@ class Flex::FlexReportsController < ApplicationController
   # GET /flex/reports/1
   # GET /flex/reports/1.json
   def show
-
     @transactions = Transaction.where(id: @flex_report.transaction_ids)
 
-    # Filtros
-    @filters = eval(@flex_report.filters)
-    @property_types = @filters["property_types"]
-    @property_types = PropertyType.where(:id => @property_types).map { |prop| prop.name.titleize }.join(", ") unless @property_types.nil?
-    @seller_types = @filters["seller_types"]
-    @seller_types = SellerType.where(:id => @seller_types).map { |seller| seller.name.titleize }.join(", ") unless @seller_types.nil?
-    @land_use = @filters["land_use"]
-    @land_use = @land_use.map { |i| i.to_s }.join(", ") unless @land_use.nil?
+    @filters           = eval(@flex_report.filters)
+    @property_types    = @filters["property_types"]
+    @property_types    = PropertyType.where(:id => @property_types).map { |prop| prop.name.titleize }.join(", ") unless @property_types.nil?
+    @seller_types      = @filters["seller_types"]
+    @seller_types      = SellerType.where(:id => @seller_types).map { |seller| seller.name.titleize == 'Propietario' ? 'Particular' : seller.name.titleize }.join(", ") unless @seller_types.nil?
+    @land_use          = @filters["land_use"]
+    @land_use          = @land_use.map { |i| i.to_s }.join(", ") unless @land_use.nil?
     @building_surfaces = @filters["building_surfaces"]
     @building_surfaces = "#{@building_surfaces['from']} a #{@building_surfaces['to']}" unless @building_surfaces.nil?
-    @terrain_surfaces = @filters["terrain_surfaces"]
-    @terrain_surfaces = "#{@terrain_surfaces['from']} a #{@terrain_surfaces['to']}" unless @terrain_surfaces.nil?
-    @prices = @filters["prices"]
-    @prices = "#{@prices['from']} a #{@prices['to']}" unless @prices.nil?
-    @unit_prices = @filters["unit_prices"]
-    @unit_prices = "#{@unit_prices['from']} a #{@unit_prices['to']}" unless @unit_prices.nil?
+    @terrain_surfaces  = @filters["terrain_surfaces"]
+    @terrain_surfaces  = "#{@terrain_surfaces['from']} a #{@terrain_surfaces['to']}" unless @terrain_surfaces.nil?
+    @prices            = @filters["prices"]
+    @prices            = "#{@prices['from']} a #{@prices['to']}" unless @prices.nil?
+    @unit_prices       = @filters["unit_prices"]
+    @unit_prices       = "#{@unit_prices['from']} a #{@unit_prices['to']}" unless @unit_prices.nil?
+    @user              = User.find(@flex_report.user_id)
+    @tr_ids_array      = []
 
-    @user = User.find(@flex_report.user_id)
-    @tr_ids_array = []
     @transactions.each do |tr|
       @tr_ids_array << tr.id
     end
 
+    @transactions = @transactions.limit(150) if params['format'] == 'xlsx'
+
     @tenements = Tenement.where(flex_report_id: @flex_report.id)
+
     respond_to do |format|
       format.js
       format.xlsx {
@@ -73,7 +73,12 @@ class Flex::FlexReportsController < ApplicationController
 
   # GET /flex/reports/new
   def new
-    orders  = current_user.flex_orders.where(status: 'approved').sum(&:amount).to_i
+    flex_information = FlexInformation.first
+    @info            = flex_information&.info&.split("\r\n")&.sort
+    @tutorial_link   = flex_information&.tutorial_link
+    @video_link      = flex_information&.video_link
+
+    orders   = current_user.flex_orders.where(status: 'approved').sum(&:amount).to_i
     reports = current_user.flex_reports.size
 
     if orders > reports
@@ -93,8 +98,7 @@ class Flex::FlexReportsController < ApplicationController
     respond_to do |format|
       if @flex_report.save
         format.js
-        format.html { redirect_to @flex_report, notice: 'Report was successfully created.' }
-        format.json { render :show, status: :created, location: @flex_report }
+        format.html { render :graphs, status: :created, location: flex_flex_reports_graphs_path() }
       else
         format.js
         format.html { render :new }
@@ -103,110 +107,74 @@ class Flex::FlexReportsController < ApplicationController
     end
   end
 
-  def search_data_for_filters
-    property_type_id       = []
-    inscription_date       = []
-    seller_type_id         = []
-    total_surface_building = []
-    total_surface_terrain  = []
-    calculated_value       = []
-    uf_m2_u                = []
-    building_regulation    = []
-    aminciti               = []
-    hectarea_inhabitants   = []
-    county_codes           = {}
+  def graphs
+  end
 
-    data = Transaction
-      .select("
-        transactions.property_type_id,
-        transactions.inscription_date,
-        transactions.seller_type_id,
-        transactions.total_surface_building,
-        transactions.total_surface_terrain,
-        transactions.calculated_value,
-        transactions.building_regulation,
-        transactions.uf_m2_u,
-        transactions.county_id
-        ")
-      .method_selection(params)
-      .where("transactions.inscription_date > ?", Date.today - 3.years)
+  def search_data_for_filters
+    county_codes = {}
+
+    data = TransactionInfo.
+      method_selection(params)
+      .where("inscription_date > ?", Date.today - 3.years)
       .where(analyzable: true)
 
-    data.each do |tr|
-      property_type_id << tr.property_type_id unless property_type_id.include? tr.property_type_id
-      inscription_date << tr.inscription_date unless inscription_date.include? tr.inscription_date
-      seller_type_id << tr.seller_type_id unless seller_type_id.include? tr.seller_type_id
-      total_surface_building << tr.total_surface_building.to_f unless total_surface_building.include? tr.total_surface_building
-      total_surface_terrain << tr.total_surface_terrain.to_f unless total_surface_terrain.include? tr.total_surface_terrain
-      calculated_value << tr.calculated_value.to_f unless calculated_value.include? tr.calculated_value
-      uf_m2_u << tr.uf_m2_u.to_f unless uf_m2_u.include? tr.uf_m2_u
-      building_regulation << tr.building_regulation
-      county_codes.merge!(tr.county.code => tr.county.name)
-    end
+    property_type_id       = data.map(&:property_type_id).uniq
+    seller_type_id         = data.map(&:seller_type_id).uniq
+    total_surface_building = data.map(&:total_surface_building)
+    total_surface_terrain  = data.map(&:total_surface_terrain)
+    uf_m2_u                = data.map(&:uf_m2_u)
+    inscription_date       = data.map(&:inscription_date)
+    calculated_value       = data.map(&:calculated_value)
+    county_ids             = data.map(&:county_id).uniq
+    building_regulation    = data.map(&:building_regulation).uniq
 
-    project_types = PropertyType.where(:id => property_type_id).map { |prop| [prop.name, prop.id] }
-    seller_types = SellerType.where(:id => seller_type_id).map { |seller| [seller.name, seller.id] }
+    County.where(id: county_ids).map { |c| county_codes[c.code] = c.name }
+
+    project_types = PropertyType.where(id: property_type_id).map { |prop| [prop.name, prop.id] }
+    seller_types = SellerType.where(id: seller_type_id).map { |seller| [seller.name == "PROPIETARIO" ? "PARTICULAR" : seller.name, seller.id] }
 
     # Acota rangos sup útil
-    min = total_surface_building.min.to_i
-    max = total_surface_building.max.to_i
+    min_surface = total_surface_building.compact.min.to_i
+    max_surface = total_surface_building.compact.max.to_i
 
-    if min == 0 && max == 0
+    if min_surface == 0 && max_surface == 0
       tsb_min = 0
       tsb_max = 0
-    elsif  min > 25 && max < 300
-      tsb_min = min
-      tsb_max = max
-    elsif min > 25 && max > 300
-      tsb_min = min
-      tsb_max = 300
-    elsif min < 25 && max < 300
-      tsb_min = 25
-      tsb_max = max
-    elsif min < 25 && max > 300
-      tsb_min = 25
-      tsb_max = 300
+    else
+      tsb_min = min_surface < 25 ? 25 : min_surface
+      tsb_max = max_surface > 300 ? 300 : max_surface
     end
 
     # Acota rangos ufm2
-    min = uf_m2_u.min.to_i
-    max = uf_m2_u.max.to_i
+    min_uf_m2 = uf_m2_u.compact.min.to_i
+    max_uf_m2 = uf_m2_u.compact.max.to_i
 
-    if min == 0 && max == 0
+    if min_uf_m2 == 0 && max_uf_m2 == 0
       ufm2_min = 0
       ufm2_max = 0
-    elsif  min > 5 && max < 120
-      ufm2_min = min
-      ufm2_max = max
-    elsif min > 5 && max > 120
-      ufm2_min = min
-      ufm2_max = 120
-    elsif min < 5 && max < 120
-      ufm2_min = 5
-      ufm2_max = max
-    elsif min < 5 && max > 120
-      ufm2_min = 5
-      ufm2_max = 120
+    else
+      ufm2_min = min_uf_m2 < 5 ? 5 : min_uf_m2
+      ufm2_max = max_uf_m2 > 120 ? 120 : max_uf_m2
     end
 
     result = {
       'property_types': project_types,
       'seller_types': seller_types,
       'inscription_dates': {
-        'from': inscription_date.min,
-        'to': inscription_date.max
+        'from': inscription_date.compact.min,
+        'to': inscription_date.compact.max
       },
       'building_surfaces': {
         'from': tsb_min,
         'to': tsb_max
       },
       'terrain_surfaces': {
-        'from': total_surface_terrain.min,
-        'to': total_surface_terrain.max
+        'from': total_surface_terrain.compact.min,
+        'to': total_surface_terrain.compact.max
       },
       'prices': {
-        'from': calculated_value.min,
-        'to': calculated_value.max
+        'from': calculated_value.compact.min,
+        'to': calculated_value.compact.max
       },
       'unit_prices': {
         'from': ufm2_min,
@@ -215,6 +183,7 @@ class Flex::FlexReportsController < ApplicationController
       'building_regulation': building_regulation.uniq,
       'county_codes': county_codes
     }
+
     render json: result
   end
 
@@ -237,7 +206,10 @@ class Flex::FlexReportsController < ApplicationController
         property_types.name AS property_typee,
         transactions.address,
         counties.name AS c_name,
-        seller_types.name AS seller,
+        CASE
+          WHEN seller_types.name = 'PROPIETARIO' THEN 'PARTICULAR'
+          ELSE seller_types.name
+        END AS seller,
         transactions.total_surface_building::integer AS building_surface,
         transactions.total_surface_terrain::integer AS terrain_surface,
         transactions.calculated_value::integer AS price,
@@ -267,13 +239,11 @@ class Flex::FlexReportsController < ApplicationController
   end
 
   def search_data_for_charts
-
     flex_report_id = params[:flex_report_id]
-    transactions = params[:transactions]
-    data = []
-    result = []
-    data = Transaction.where(:id => transactions)
-
+    transactions   = params[:transactions]
+    data           = []
+    result         = []
+    data           = Transaction.where(:id => transactions)
 
     # Cantidad
 
@@ -811,6 +781,8 @@ class Flex::FlexReportsController < ApplicationController
       ).merge(user_id: current_user.id)
     end
     def verify_flex_user
+      Current.user = current_user
+
       redirect_to root_url unless current_user.role.name == 'Admin' or current_user.role.name == 'Flex' or current_user.role.name == 'PRO_FLEX'
     end
 end

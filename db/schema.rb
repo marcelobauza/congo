@@ -291,6 +291,14 @@ ActiveRecord::Schema.define(version: 2022_08_30_210947) do
     t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
+  create_table "flex_informations", force: :cascade do |t|
+    t.text "info"
+    t.string "video_link"
+    t.string "tutorial_link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "flex_orders", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "amount"

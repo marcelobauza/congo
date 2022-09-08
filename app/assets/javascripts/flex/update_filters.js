@@ -203,7 +203,7 @@ function update_filters() {
   $.each(parsed_data['county_codes'], function(code, name){
     $('[data-building-regulations-pdf]').append(
       $('<a>', {
-        'class': 'btn btn-primary text-center',
+        'class': 'btn btn-primary btn-sm text-center',
         'href': 'building_regulation_download?county_id=' + code,
         'role': 'button',
         'text': 'PRC/' + name

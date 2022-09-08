@@ -12,5 +12,5 @@ load_pois = function(url){
     format_options: 'callback:getJson'
   };
 
-  return new L.tileLayer.betterWms("http://"+url+":8080/geoserver/wms", options_info);
+  return new L.tileLayer.betterWms("https://"+url+"/geoserver/inciti/wms", options_info);
 }

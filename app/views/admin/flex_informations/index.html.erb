@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<div class="card shadow">
+  <div class="card-body">
+    <div class="form-row">
+      <div class="col-8">
+        <h2>Información de Flex</h2>
+      </div>
+      <div class="col-4 text-right">
+        <%= link_to 'Editar', edit_admin_flex_information_path(@flex_information), class: 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow">
+  <div class="card-body">
+    <% @info = @flex_information.info.split("\r\n").sort %>
+    <p>
+      <strong><%= FlexInformation.human_attribute_name :info %>:</strong>
+      <ul class="mb-1">
+        <% @info.each do |row| %>
+          <li><%= row %></li>
+        <% end %>
+      </ul>
+    </p>
+    <p>
+      <strong><%= FlexInformation.human_attribute_name :video_link %>:</strong>
+      <%= @flex_information.video_link %>
+    </p>
+    <p>
+      <strong><%= FlexInformation.human_attribute_name :tutorial_link %>:</strong>
+      <%= @flex_information.tutorial_link %>
+    </p>
+  </div>
+</div>

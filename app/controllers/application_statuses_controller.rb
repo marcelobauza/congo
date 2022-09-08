@@ -20,7 +20,7 @@ class ApplicationStatusesController < ApplicationController
 
   def share_users
     @row_filter = ApplicationStatus.where(id: params[:share_users]['row_to_share']).select(:filters, :name)
-    @ids = params[:share_users][:ids].reject(&:blank?) 
+    @ids = params[:share_users][:ids].reject(&:blank?)
 @ids.each do |id|
         ApplicationStatus.create(user_id: id, filters: @row_filter[0]['filters'], name: @row_filter[0]['name'])
     end
@@ -51,15 +51,14 @@ class ApplicationStatusesController < ApplicationController
   # POST /application_statuses
   # POST /application_statuses.json
   def create
-
     @data = session[:data]
     @application_status = ApplicationStatus.new(application_status_params)
     @application_status[:filters] = @data
     respond_to do |format|
       if @application_status.save
         format.js
+      end
     end
-  end
   end
 
   # PATCH/PUT /application_statuses/1

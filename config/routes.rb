@@ -112,6 +112,7 @@ Rails.application.routes.draw do
     resources :building_regulations
     resources :future_project_sub_types
     resources :flex_orders, only: [:index]
+    resources :flex_informations, only: [:index, :edit, :update, :show]
 
     resources :regions
 
@@ -133,10 +134,13 @@ Rails.application.routes.draw do
   end
 
   namespace :flex do
+    get 'flex_reports/graphs'
     get 'flex_reports/search_data_for_filters'
     get 'flex_reports/search_data_for_table'
     get 'flex_reports/building_regulation_download' => 'flex_reports#building_regulation_download'
     post 'flex_reports/search_data_for_charts'
+    get 'users/account' => 'users#account'
+    put 'users/update' => 'users#update'
     resources :dashboards, only: [:index, :new, :create]
     resources :tenements
     resources :flex_reports, only: [:index, :new, :create, :show]
