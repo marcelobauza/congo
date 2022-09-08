@@ -1,24 +1,23 @@
 class ReportsController < ApplicationController
 
   def future_projects_data
-    filters         = JSON.parse(session[:data].to_json, {:symbolize_names => true})
-    @xl             = FutureProject.reports(filters)
-    u               = User.find(current_user.id)
-    total_downloads_allowed = u.role.total_download_future_projects
-    total_accumulated_downloads = u.downloads_users.where('created_at::date = ?', Date.today).sum(:future_projects)
+    filters                 = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+    data                    = FutureProject.reports(filters)
+    total_downloads_allowed = current_user.role.total_download_future_projects
+    months                  = current_user.role.plan_validity_months
+    layer                   = 'future_projects'
 
-    total_downloads = total_downloads_allowed - total_accumulated_downloads
+    ActiveRecord::Base.transaction do
+      if months > 0
+        allowed_downloads_by_plans layer, total_downloads_allowed, data
+      else
+        total_accumulated_downloads = current_user.downloads_users.where('created_at::date = ?', Date.today).sum(:future_projects)
+
+        limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
+      end
+    end
 
     respond_to do |format|
-      if total_downloads > 0
-        limit = @xl.count <= total_downloads ? @xl.count : total_downloads
-        @xl   = @xl.limit(limit)
-
-        u.downloads_users.create! future_projects: limit
-      else
-        @message = "Ha superado el límite de descarga"
-      end
-
       format.xlsx {
         response.headers['Content-Disposition'] = 'attachment; filename="Datos_ExpedientesMunicipales.xlsx"'
       }
@@ -31,14 +30,6 @@ class ReportsController < ApplicationController
     send_data @xl,
           :type => 'text/xml; charset=UTF-8;',
               :disposition => "attachment; filename=Datos_ExpedientesMunicipales.kml"
-  end
-
-  def transactions_data_kml
-    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
-    @xl = Transaction.kml_data(filters)
-    send_data @xl,
-          :type => 'text/xml; charset=UTF-8;',
-              :disposition => "attachment; filename=Datos_Compraventas.kml"
   end
 
   def future_projects_summary
@@ -116,25 +107,33 @@ class ReportsController < ApplicationController
     end
   end
 
+  def transactions_data_kml
+    filters  = JSON.parse(session[:data].to_json, {:symbolize_names=> true})
+    @xl = Transaction.kml_data(filters)
+    send_data @xl,
+          :type => 'text/xml; charset=UTF-8;',
+              :disposition => "attachment; filename=Datos_Compraventas.kml"
+  end
+
   def transactions_data
-    filters                     = JSON.parse(session[:data].to_json, {:symbolize_names => true})
-    filters[:user_id]          = current_user.id
-    @transaction                = Transaction.reports(filters)
-    u                           = User.find(current_user.id)
-    total_downloads_allowed     = u.role.total_download_transactions
-    total_accumulated_downloads = u.downloads_users.where('created_at::date = ?', Date.today).sum(:transactions)
-    total_downloads             = total_downloads_allowed - total_accumulated_downloads
+    filters                 = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+    filters[:user_id]       = current_user.id
+    data                    = Transaction.reports(filters)
+    total_downloads_allowed = current_user.role.total_download_transactions
+    months                  = current_user.role.plan_validity_months
+    layer                   = 'transactions'
+
+    ActiveRecord::Base.transaction do
+      if months > 0
+        allowed_downloads_by_plans layer, total_downloads_allowed, data
+      else
+        total_accumulated_downloads = current_user.downloads_users.where('created_at::date = ?', Date.today).sum(layer.to_sym)
+
+        limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
+      end
+    end
 
     respond_to do |format|
-      if total_downloads > 0
-        limit = @transaction.count <= total_downloads ? @transaction.count : total_downloads
-        @transaction = @transaction.limit(total_downloads)
-
-        u.downloads_users.create! transactions: limit
-      else
-        @message = "Ha superado el límite de descarga"
-      end
-
       format.xlsx {
         response.headers['Content-Disposition'] = 'attachment; filename="Datos_Compraventas.xlsx"'
       }
@@ -208,15 +207,13 @@ class ReportsController < ApplicationController
   def projects_data
     filters                              = JSON.parse(session[:data].to_json, {:symbolize_names => true})
     @project_homes, @project_departments = Project.reports(filters)
-    u                                    = User.find(current_user.id)
 
-    respond_to do |format|
       @code_departments = @project_departments.map { |p| p.code }.uniq
 
       if @code_departments.any?
         @project_departments = @project_departments.where(code: @code_departments).order(:code)
 
-        u.downloads_users.create! projects: @code_departments.count
+        current_user.downloads_users.create! projects: @code_departments.count
       end
 
       @code_homes = @project_homes.map { |p| p.code }.uniq
@@ -224,8 +221,10 @@ class ReportsController < ApplicationController
       if @code_homes.any?
         @project_homes = @project_homes.where(code: @code_homes).order(:code)
 
-        u.downloads_users.create! projects: @code_homes.count
+        current_user.downloads_users.create! projects: @code_homes.count
       end
+
+    respond_to do |format|
       format.xlsx {
         response.headers['Content-Disposition'] = 'attachment; filename="Datos_ProyectosEnVenta.xlsx"'
       }
@@ -429,4 +428,35 @@ class ReportsController < ApplicationController
       }
     end
   end
+
+  private
+
+    def limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
+      total_downloads = total_downloads_allowed - total_accumulated_downloads
+
+      if total_downloads > 0
+        limit = data.count <= total_downloads ? data.count : total_downloads
+        @xl   = data.limit(limit)
+
+        current_user.downloads_users.create! "#{layer}": limit
+      else
+        @message = "Ha superado el límite de descarga"
+      end
+    end
+
+    def allowed_downloads_by_plans layer, total_downloads_allowed, data
+      from_date         = current_user.company.enabled_date
+      to_date           = from_date + current_user.role.plan_validity_months.months
+      allowed_downloads = (from_date..to_date).include? Date.today
+
+      if allowed_downloads
+        total_accumulated_downloads = current_user.downloads_users.
+          where('created_at::date >= :from_date and created_at::date <= :to_date', from_date: from_date, to_date: to_date).
+          sum(layer.to_sym)
+
+        limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
+      else
+        @message = "No tiene plan permitido"
+      end
+    end
 end

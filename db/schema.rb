@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_16_193928) do
+ActiveRecord::Schema.define(version: 2022_08_30_210947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -846,6 +846,7 @@ ActiveRecord::Schema.define(version: 2022_02_16_193928) do
     t.integer "total_download_projects", default: 0
     t.integer "total_download_future_projects", default: 0
     t.integer "total_download_transactions", default: 0
+    t.integer "plan_validity_months", default: 0
   end
 
   create_table "seller_types", force: :cascade do |t|

@@ -28,7 +28,7 @@ wb.add_worksheet(name: "Compraventas") do |sheet|
     'Sup_l_cons',
     'Año Construccion',
   ]
-  @transaction.each do |row|
+  @xl.each do |row|
     sheet.add_row [
       row.property_type_name,
       row.address,
@@ -85,7 +85,7 @@ if current_user.role.name == 'IPRO+' || current_user.role.name == 'Admin' || cur
     'Año Construccion',
     'Observaciones'
   ]
-  @transaction.each do |row|
+  @xl.each do |row|
     sheet.add_row [
       row.the_geom.x,
       row.the_geom.y,
