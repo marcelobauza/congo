@@ -33,6 +33,12 @@
                 <th>UF M2 U</th>
                 <th>PxQ R</th>
                 <th>PxQ D</th>
+                <th>Venta Periodo</th>
+                <th>VVM</th>
+                <th>MAS</th>
+                <th>Venta Anual</th>
+                <th>VVMA</th>
+                <th>MASA</th>
               </tr>
             </thead>
             <tbody>
@@ -55,6 +61,16 @@
                   <td><%= "%.1f" % d['uf_m2_u'] if d['uf_m2_u']%></td>
                   <td><%= "%.1f" % d['pxqr'] if d['pxqr']%></td>
                   <td><%= "%.1f" % d['pxqd'] if d['pxqd']%></td>
+                  <td><%= sale_period(d) %></td>
+                  <td><%= vvm(d) %></td>
+                  <td><%= mas(d) %></td>
+                  <td><%= sale_anual d %></td>
+                  <td><%= vvma d %></td>
+                  <td><%= masa d %></td>
+                  <td><% (value = sale_period(d)).positive? ? value : '-'  %></td>
+                  <td><% (value = vvm(d)).positive? ? ("%.1f" % value) : '-' %></td>
+                  <td><% (value = mas(d)).positive? ? ("%.1f" % value) : '-'%></td>
+
                 </tr>
               <% end %>
             </tbody>

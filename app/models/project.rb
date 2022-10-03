@@ -5,6 +5,7 @@ class Project < ApplicationRecord
   include Util
   include Ranges
   include Projects::Exports
+  include Projects::Parcels
   include Projects::Periods
   include Projects::Scopes
 
