@@ -5,11 +5,11 @@ module ProjectsHelper
     vp        = 0
 
     if @area.include? area_name
-      vp                  = @area[area_name][:sale_period] - d['availability']
-      @area[area_name]    = { sale_period: d['availability'], availability: vp }
+      vp                  = @area[area_name][:sale_period] - d['availability'].to_i
+      @area[area_name]    = { sale_period: d['availability'].to_i, availability: vp }
     else
-      @area[area_name]    = { sale_period: d['availability'], availability: d['availability'] }
-      vp                  = d['availability']
+      @area[area_name]    = { sale_period: d['availability'].to_i, availability: d['availability'].to_i }
+      vp                  = d['availability'].to_i
     end
 
     vp
@@ -20,7 +20,7 @@ module ProjectsHelper
     bimester  = d['bimester']
     area_name = d['area_name']
 
-    sale_anual = Project.projects_by_parcel(year, bimester, area_name) - d['availability']
+    sale_anual = Project.projects_by_parcel(year, bimester, area_name) - d['availability'].to_i
 
     @area[area_name].merge!({ sale_anual: sale_anual })
 
@@ -31,7 +31,7 @@ module ProjectsHelper
     area_name = d['area_name']
 
     if @area.include? area_name
-      (@area[area_name][:availability] / 2)
+      (@area[area_name][:availability].to_i / 2)
     end
   end
 
@@ -48,9 +48,9 @@ module ProjectsHelper
     area_name = d['area_name']
 
     if @area.include? area_name
-      vvm =  (@area[area_name][:availability] / 2 ).to_f
+      vvm =  (@area[area_name][:availability].to_i / 2 ).to_f
 
-      (vvm / @area[area_name][:availability])
+      (vvm / @area[area_name][:availability].to_i)
     end
   end
 
