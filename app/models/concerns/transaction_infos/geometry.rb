@@ -10,7 +10,7 @@ module TransactionInfos::Geometry
         condition = where("ST_Contains(ST_SetSRID(ST_GeomFromGeoJSON('{
                           \"type\":\"Polygon\",
                           \"coordinates\": #{polygon}}'
-                         ), 4326), transactions.the_geom)"
+                         ), 4326), transaction_infos.the_geom)"
                          )
                         #  .where("ST_Intersects(ST_SetSRID(ST_GeomFromGeoJSON('{
                         #          \"type\":\"Polygon\",
