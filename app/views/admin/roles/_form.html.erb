@@ -13,6 +13,7 @@
       <%= f.input :total_download_projects, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
       <%= f.input :total_download_future_projects, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
       <%= f.input :total_download_transactions, input_html: { class: 'form-control' }, wrapper_html: { class: 'form-group row col-md-3' }%>
+      <%= f.input :plan_validity_months, input_html: { class: "form-control" }, wrapper_html: { class: "col-md-4 form-group row" } %>
       <%= link_to 'Cancelar', admin_roles_path(), :class => 'btn btn-secondary', wrapper_html: { class: 'form-group row' } %>
       <%= f.submit :submit, class: 'btn btn-primary', value: "Guardar", wrapper_html: { class: 'form-group row' } %>
     <% end %>

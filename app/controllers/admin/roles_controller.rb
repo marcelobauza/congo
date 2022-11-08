@@ -81,7 +81,8 @@ class Admin::RolesController < ApplicationController
         :meters_download_radius_transactions,
         :total_download_projects,
         :total_download_future_projects,
-        :total_download_transactions
+        :total_download_transactions,
+        :plan_validity_months
       )
     end
 end

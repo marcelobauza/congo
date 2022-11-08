@@ -518,6 +518,7 @@ es:
         total_download_transactions: "Total descarga en CBR"
         total_download_future_projects: "Total descarga en EM"
         total_download_projects: "Total descarga en PRV"
+        plan_validity_months: "Meses de descargas"
       order:
         user_data: Datos del Usuario
         data_bases: Bases de Datos

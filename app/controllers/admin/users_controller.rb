@@ -11,7 +11,7 @@ class Admin::UsersController < Admin::DashboardsController
     if params[:role] == 'Flex'
       @users = User.get_users_by_filters(params).where(role_id: [6,15]).paginate(page: params[:page], per_page: 15).order(params['sort_by'])
     else
-      @users = User.get_users_by_filters(params).where.not(role_id: [6,15]).paginate(page: params[:page], per_page: 15).order(params['sort_by'])
+      @users = User.get_users_by_filters(params).where.not(role_id: [15]).paginate(page: params[:page], per_page: 15).order(params['sort_by'])
     end
   end
 
