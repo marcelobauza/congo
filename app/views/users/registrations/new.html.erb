@@ -4,9 +4,7 @@
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <center>
-      <%= link_to 'http://www.inciti.com' do %>
-        <%=image_tag "round_inciti.png", class: "mb-4", height:"120" %>
-      <% end %>
+      <%=image_tag "biens_sign_up.png", class: "mb-4", height:"200" %>
     </center>
 
     <div class="form-group">
@@ -22,25 +20,22 @@
     </div>
 
     <div class="form-group">
-      <div class="row">
-        <div class="col-mb-10 pl-3 pb-3">
-          <% if @minimum_password_length %>
-            <em>(<%= @minimum_password_length %> Caracteres mínimos)</em>
-          <% end %><br/>
-          <%= f.password_field :password, autocomplete: "new-password", class: 'form-control', placeholder: "Ingresa una contraseña", data: { show_password: true } %>
-        </div>
-        <div class="col pt-4 mr-sm-4">
-          <a data-action-show-password class="far fa-eye-slash"></a>
-        </div>
+      <div class="d-flex justify-content-between flex_singup_black">
+        <% if @minimum_password_length %>
+          (<%= @minimum_password_length %> Caracteres mínimos)
+        <% end %>
+        <a data-action-show-password class="far fa-eye-slash"></a>
       </div>
+      <%= f.password_field :password, autocomplete: "new-password", class: 'form-control', placeholder: "Ingresa una contraseña", data: { show_password: true } %>
     </div>
+
 
     <div class="form-group">
       <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'form-control', placeholder: "Repite la contraseña anterior" %>
     </div>
 
     <div class="actions">
-      <%= f.submit class: 'btn btn-lg btn-primary btn-block', value: "Regístrate" %>
+      <%= f.submit class: 'btn btn-lg btn-primary btn-block flex_button_sign_up', value: "Regístrate" %>
     </div>
   <% end %>
 

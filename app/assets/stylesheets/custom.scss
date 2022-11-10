@@ -10,51 +10,7 @@ body {
   align-items: center;
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: #A0DDE9;
-}
-
-.login_flex {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #49BEAA;
-}
-
-.login_text_color {
-  color: #000 !important;
-}
-
-.btn-custom {
-  background-color: #FBC009;
-  font-size: 14px;
-  padding: 6px 12px;
-  margin-bottom: 0;
-
-  display: inline-block;
-  text-decoration: none;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background-image: none;
-  border: 0px solid transparent !important;
-  color: #000 !important;
-}
-
-.btn_custom_flex {
-  background-color: #2D3047;
-  border: 1px solid transparent !important;
-  text-align: center;
-  color: #FFF
+  background-color: #EEEEE9;
 }
 
 #map {
@@ -641,8 +597,6 @@ span.multiselect-native-select {
   text-transform: uppercase;
 }
 
-
-
 // Personaliza colores del custom checkbox
 .custom-switch .custom-control-input:checked~.custom-flex-colour::after {
   background-color: #5bc0de !important;
@@ -671,4 +625,96 @@ span.multiselect-native-select {
   border-color: transparent;
   border-radius: 50%;
   border-style: solid;
+}
+
+.login_flex {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #479D7B;
+}
+
+.flex_singup_black {
+  color: #1B1C20
+}
+
+.flex_singup_black:hover {
+  color: #6c757d
+}
+
+.flex_singin_yellow {
+  color: #FFD14C
+}
+
+.flex_singin_orange {
+  color: #F18606
+}
+
+.login_text_color {
+  color: #000 !important;
+}
+
+.flex_button_sign_up {
+   background-image: linear-gradient(#1B1C20, #1B1C20 40%, #1B1C20) !important;
+}
+.flex_button_sign_up:hover {
+  border-color: #EEEEE9 !important;
+}
+
+
+
+
+.flex_button_sign_in_reg {
+   background-image: linear-gradient(#FFD14C, #FFD14C 40%, #FFD14C) !important;
+   color: #1B1C20 !important;
+}
+.flex_button_sign_in_reg:hover {
+  border-color: #1B1C20 !important;
+}
+
+.btn-custom {
+  background-color: #FBC009;
+  // font-size: 14px;
+  // padding: 6px 12px;
+  margin-bottom: 0;
+
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent !important;
+  color: #1B1C20 !important;
+  text-shadow: none !important;
+}
+
+.flex_btn_log_in {
+  background-color: #2D3047;
+  border: 1px solid transparent !important;
+  text-align: center;
+  color: #FFF
+}
+
+.flex_btn_log_in {
+  background-image: linear-gradient(#F18606, #F18606 40%, #F18606) !important;
+  color: #1B1C20 !important;
+  background-color: #2D3047;
+  border: 1px solid transparent !important;
+  text-align: center;
+  color: #FFF
+}
+
+.flex_btn_log_in:hover {
+  border-color: #1B1C20 !important;
 }
