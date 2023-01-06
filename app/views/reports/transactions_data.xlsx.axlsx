@@ -1,7 +1,7 @@
 if @message
   wb = xlsx_package.workbook
 
-  wb.add_worksheet(name: "Expedientes_Municipales") do |sheet|
+  wb.add_worksheet(name: "Compraventas") do |sheet|
     sheet.add_row [@message]
   end
 else
