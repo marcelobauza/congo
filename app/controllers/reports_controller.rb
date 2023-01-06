@@ -119,7 +119,7 @@ class ReportsController < ApplicationController
     filters                 = JSON.parse(session[:data].to_json, {:symbolize_names => true})
     filters[:user_id]       = current_user.id
     data                    = Transaction.reports(filters)
-    total_downloads_allowed = current_user.role.total_download_transactions
+    total_downloads_allowed = current_user.company.transactions_downloads || 0
     months                  = current_user.role.plan_validity_months
     layer                   = 'transactions'
 
