@@ -450,9 +450,7 @@ class ReportsController < ApplicationController
       allowed_downloads = (from_date..to_date).include? Date.today
 
       if allowed_downloads
-        total_accumulated_downloads = current_user.downloads_users.
-          where('created_at::date >= :from_date and created_at::date <= :to_date', from_date: from_date, to_date: to_date).
-          sum(layer.to_sym)
+        total_accumulated_downloads = User.accumulated_download_by_company current_user.id, 'transactions'
 
         limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
       else
