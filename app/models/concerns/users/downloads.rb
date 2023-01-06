@@ -5,8 +5,8 @@ module Users::Downloads
     def accumulated_download_by_company user, layer
       u = User.find(user)
 
-      from_date = current_user.company.enabled_date
-      to_date   = from_date + current_user.role.plan_validity_months.months
+      from_date = u.company.enabled_date
+      to_date   = from_date + u.role.plan_validity_months.months
      # from_date = calculate_date u
      # to_date   = from_date.next_month
 
