@@ -69,7 +69,7 @@ class Admin::CompaniesController < Admin::DashboardsController
   end
 
   def export_csv_downloads_by_company
-    data = DownloadsUser.export_csv_downloads_by_company @company, 'year'
+    data = DownloadsUser.export_csv_downloads_by_company @company, 'year', current_user
 
     send_file data, :type => 'text/csv', :disposition => "inline", :filename => "Descargar_por_empresa.csv"
   end

@@ -2,8 +2,9 @@ module DownloadsUsers::Exports
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def export_csv_downloads_by_company company, option
-      from_date, to_date = calculate_date(company, option)
+    def export_csv_downloads_by_company company, option, user
+      from_date = company.enabled_date
+      to_date   = from_date + user.role.plan_validity_months.months
 
       du = DownloadsUser.includes(:user).
         where(users:
