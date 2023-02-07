@@ -3,7 +3,7 @@ class ReportsController < ApplicationController
   def future_projects_data
     filters                 = JSON.parse(session[:data].to_json, {:symbolize_names => true})
     data                    = FutureProject.reports(filters)
-    total_downloads_allowed = current_user.role.total_download_future_projects
+    total_downloads_allowed = current_user.company.future_projects_downloads || 0
     months                  = current_user.role.plan_validity_months
     layer                   = 'future_projects'
 
