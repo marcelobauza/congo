@@ -1,13 +1,13 @@
 wb = xlsx_package.workbook
 
-if @data.blank? || @data.first.blank?
+if @data.blank? || @data.second.blank?
   wb.add_worksheet(name: "Edificios") do |sheet|
     sheet.add_row ['Ha superado el limite máximo de Descargas']
   end
 else
   if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'IPRO+ Plus') || (current_user.role.name == 'Admin')
-    forced_integer_format = wb.styles.add_style :format_code => '0'
-    forced_float_format = wb.styles.add_style :format_code => '0.0'
+    forced_integer_format           = wb.styles.add_style :format_code => '0'
+    forced_float_format             = wb.styles.add_style :format_code => '0.0'
     forced_float_format_two_decimal = wb.styles.add_style :format_code => '0.00'
     wb.add_worksheet(name: 'Edificios') do |sheet|
       sheet.add_row [
@@ -58,7 +58,7 @@ else
         'Rango UF',
         'Rango Util'
       ]
-      @data.first.each do |row|
+      @data.second.each do |row|
         sheet.add_row [
           ('%.6f' % row[:x]).to_f,
           ('%.6f' % row[:y]).to_f,
@@ -97,8 +97,8 @@ else
           row[:percentage_sold] * 100,
           ("%.1f" % row[:vhmu]).to_f,
           ("%.1f" % row[:vhmud]).to_f,
-          ("%.1f" % row[:pxq]).to_f,
-          ("%.1f" % row[:pxq_d]).to_f,
+          (("%.1f" % row[:pxq]).to_f unless row[:pxq].nil?),
+          (("%.1f" % row[:pxq_d]).to_f unless row[:pxq_d].nil?),
           row[:status],
           row[:build_date],
           row[:sale_date],
@@ -152,7 +152,7 @@ else
   end
 end
 
-if @data.blank? || (@data.second.blank?)
+if @data.blank? || (@data.first.blank?)
   wb.add_worksheet(name: "Casas") do |sheet|
     sheet.add_row ['Ha superado el limite máximo de Descargas']
   end
@@ -208,7 +208,7 @@ else
       'Rango UF',
       'Rango Util'
     ]
-    @data.second.each do |row|
+    @data.first.each do |row|
       sheet.add_row [
         ('%.6f' % row[:x]).to_f,
         ('%.6f' % row[:y]).to_f,

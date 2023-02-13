@@ -211,7 +211,7 @@ class ReportsController < ApplicationController
     layer                   = 'projects'
     @data                   = []
 
-    (@project_departments, @project_homes = Project.reports(filters)).each do |project|
+    (@project_homes, @project_departments = Project.reports(filters)).each do |project|
       codes = []
       data  = project
 
