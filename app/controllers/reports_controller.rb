@@ -209,8 +209,8 @@ class ReportsController < ApplicationController
     total_downloads_allowed = current_user.company.projects_downloads || 0
     months                  = current_user.role.plan_validity_months
     layer                   = 'projects'
+    @data                   = []
 
- @project_departments
     (@project_departments, @project_homes = Project.reports(filters)).each do |project|
       codes = []
       data  = project
@@ -219,11 +219,12 @@ class ReportsController < ApplicationController
 
       ActiveRecord::Base.transaction do
         if months > 0
-          allowed_downloads_by_plans layer, total_downloads_allowed, data, count: codes.count
+          allowed_downloads_by_plans(layer, total_downloads_allowed, data, count: codes.count)
+          @data << @xl
         else
           total_accumulated_downloads = current_user.downloads_users.where('created_at::date = ?', Date.today).sum(:projects)
 
-          limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
+        @data << limit_downloads(total_downloads_allowed, total_accumulated_downloads, data, layer)
         end
       end
     end

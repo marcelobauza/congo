@@ -7,8 +7,6 @@ module Users::Downloads
 
       from_date = u.company.enabled_date
       to_date   = from_date + u.role.plan_validity_months.months
-     # from_date = calculate_date u
-     # to_date   = from_date.next_month
 
       DownloadsUser.includes(
         :user
