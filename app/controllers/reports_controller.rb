@@ -205,24 +205,28 @@ class ReportsController < ApplicationController
   end
 
   def projects_data
-    filters                              = JSON.parse(session[:data].to_json, {:symbolize_names => true})
-    @project_homes, @project_departments = Project.reports(filters)
+    filters                 = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+    total_downloads_allowed = current_user.company.projects_downloads || 0
+    months                  = current_user.role.plan_validity_months
+    layer                   = 'projects'
 
-      @code_departments = @project_departments.map { |p| p.code }.uniq
+ @project_departments
+    (@project_departments, @project_homes = Project.reports(filters)).each do |project|
+      codes = []
+      data  = project
 
-      if @code_departments.any?
-        @project_departments = @project_departments.where(code: @code_departments).order(:code)
+      codes << project.map(&:code).uniq if project.present?
 
-        current_user.downloads_users.create! projects: @code_departments.count
+      ActiveRecord::Base.transaction do
+        if months > 0
+          allowed_downloads_by_plans layer, total_downloads_allowed, data, count: codes.count
+        else
+          total_accumulated_downloads = current_user.downloads_users.where('created_at::date = ?', Date.today).sum(:projects)
+
+          limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
+        end
       end
-
-      @code_homes = @project_homes.map { |p| p.code }.uniq
-
-      if @code_homes.any?
-        @project_homes = @project_homes.where(code: @code_homes).order(:code)
-
-        current_user.downloads_users.create! projects: @code_homes.count
-      end
+    end
 
     respond_to do |format|
       format.xlsx {
@@ -431,12 +435,17 @@ class ReportsController < ApplicationController
 
   private
 
-    def limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
+    def limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer, count: nil
       total_downloads = total_downloads_allowed - total_accumulated_downloads
 
       if total_downloads > 0
-        limit = data.count <= total_downloads ? data.count : total_downloads
-        @xl   = data.limit(limit)
+				limit = if count
+					count <= total_downloads ? data.count : total_downloads
+				else
+        	data.count <= total_downloads ? data.count : total_downloads
+				end
+
+        @xl = data.limit(limit)
 
         current_user.downloads_users.create! "#{layer}": limit
       else
@@ -444,15 +453,15 @@ class ReportsController < ApplicationController
       end
     end
 
-    def allowed_downloads_by_plans layer, total_downloads_allowed, data
+    def allowed_downloads_by_plans layer, total_downloads_allowed, data, count: nil
       from_date         = current_user.company.enabled_date
       to_date           = from_date + current_user.role.plan_validity_months.months
       allowed_downloads = (from_date..to_date).include? Date.today
 
       if allowed_downloads
-        total_accumulated_downloads = User.accumulated_download_by_company current_user.id, 'transactions'
+        total_accumulated_downloads = User.accumulated_download_by_company current_user.id, layer
 
-        limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
+        limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer, count: nil
       else
         @message = "No tiene plan permitido"
       end
