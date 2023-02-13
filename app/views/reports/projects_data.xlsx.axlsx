@@ -153,7 +153,9 @@ else
 end
 
 if @data.blank? || (@data.second.blank?)
-  sheet.add_row ['Ha superado el limite máximo de Descargas']
+  wb.add_worksheet(name: "Casas") do |sheet|
+    sheet.add_row ['Ha superado el limite máximo de Descargas']
+  end
 else
   wb.add_worksheet(name: 'Casas') do |sheet|
     sheet.add_row [
