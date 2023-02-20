@@ -6,11 +6,7 @@ module Users::Downloads
       u = User.find(user)
 
       from_date = u.company.enabled_date
-      to_date   = if u.role == 'admin'
-                    Date.today
-                  else
-                    from_date  +u.role.plan_validity_months.months
-                   end
+      to_date   = from_date + u.role.plan_validity_months.months
 
       DownloadsUser.includes(
         :user

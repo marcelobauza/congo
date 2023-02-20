@@ -4,7 +4,11 @@ module DownloadsUsers::Exports
   module ClassMethods
     def export_csv_downloads_by_company company, option, user
       from_date = company.enabled_date
-      to_date   = from_date + user.role.plan_validity_months.months
+      to_date   = if user.role.name == 'Admin'
+                    Date.today
+                  else
+                    from_date  + user.role.plan_validity_months.months
+                   end
 
       du = DownloadsUser.includes(:user).
         where(users:
