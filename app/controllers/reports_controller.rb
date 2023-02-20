@@ -449,6 +449,8 @@ class ReportsController < ApplicationController
         @xl = data.limit(limit)
 
         current_user.downloads_users.create! "#{layer}": limit
+
+        @xl
       else
         @message = "Ha superado el límite de descarga"
       end
