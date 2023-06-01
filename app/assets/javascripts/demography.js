@@ -449,6 +449,8 @@ Congo.demography.action_dashboards = function(){
     }) // Cierra ajax
   } // Cierra demography_report_pdf
 
+  var dem_charts_ajax;
+
   indicator_demography = function(){
     county_id = [];
     $.each(Congo.dashboards.config.county_id, function(a,b){
@@ -506,7 +508,11 @@ Congo.demography.action_dashboards = function(){
     Congo.demography.config.legends.push({'name':'D', 'color':'e0f3f8'});
     Congo.demography.config.legends.push({'name':'E', 'color':'91bfdb'});
 
-    $.ajax({
+    if (dem_charts_ajax && dem_charts_ajax.readyState != 4) {
+      dem_charts_ajax.abort();
+    }
+
+    dem_charts_ajax = $.ajax({
       type: 'GET',
       url: '/demography/general.json',
       datatype: 'json',

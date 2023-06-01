@@ -1070,6 +1070,8 @@ future_projects_popup= function(id){
 
 Congo.future_projects.action_dashboards = function(){
 
+  var fp_charts_ajax;
+
   init=function(){
 
     Congo.map_utils.init();
@@ -1169,8 +1171,11 @@ Congo.future_projects.action_dashboards = function(){
           }
 
 
+      if (fp_charts_ajax && fp_charts_ajax.readyState != 4) {
+        fp_charts_ajax.abort();
+      }
 
-      $.ajax({
+      fp_charts_ajax = $.ajax({
         type: 'GET',
         url: '/future_projects/future_projects_summary.json',
         datatype: 'json',

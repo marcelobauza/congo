@@ -493,6 +493,8 @@ function delUsoFilter(id, name) {
 
 Congo.building_regulations.action_dashboards = function(){
 
+  var br_charts_ajax;
+
   init=function(){
 
     Congo.map_utils.init();
@@ -597,7 +599,11 @@ Congo.building_regulations.action_dashboards = function(){
 
       };
 
-      $.ajax({
+      if (br_charts_ajax && br_charts_ajax.readyState != 4) {
+        br_charts_ajax.abort();
+      }
+
+      br_charts_ajax = $.ajax({
         type: 'GET',
         url: '/building_regulations/building_regulations_filters.json',
         datatype: 'json',

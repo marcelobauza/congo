@@ -1297,6 +1297,9 @@ function maxCard(i) {
 }
 
 Congo.projects.action_dashboards = function() {
+
+  var prv_charts_ajax;
+
   init=function() {
     Congo.map_utils.init();
   }
@@ -1408,7 +1411,11 @@ Congo.projects.action_dashboards = function() {
         };
       };
 
-      $.ajax({
+      if (prv_charts_ajax && prv_charts_ajax.readyState != 4) {
+        prv_charts_ajax.abort();
+      }
+
+      prv_charts_ajax = $.ajax({
         type: 'GET',
         url: '/projects/projects_summary.json',
         datatype: 'json',

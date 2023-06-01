@@ -1262,6 +1262,8 @@ add_time_slider_cbr = function() {
 
 Congo.transactions.action_dashboards = function(){
 
+  var cbr_charts_ajax;
+
   init=function(){
 
     Congo.map_utils.init();
@@ -1368,7 +1370,12 @@ Congo.transactions.action_dashboards = function(){
  if (boost == true){
                data['boost'] =  boost;
              }
-      $.ajax({
+
+      if (cbr_charts_ajax && cbr_charts_ajax.readyState != 4) {
+        cbr_charts_ajax.abort();
+      }
+
+      cbr_charts_ajax = $.ajax({
         type: 'GET',
         url: '/transactions/transactions_summary.json',
         datatype: 'json',
