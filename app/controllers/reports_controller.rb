@@ -438,6 +438,7 @@ class ReportsController < ApplicationController
 
     def limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer, count: nil
       total_downloads = total_downloads_allowed - total_accumulated_downloads
+      ids             = []
 
       if total_downloads > 0
 				limit = if count
@@ -448,7 +449,13 @@ class ReportsController < ApplicationController
 
         @xl = data.limit(limit)
 
-        current_user.downloads_users.create!("#{layer}": limit, collection_ids: @xl.ids)
+        if layer == 'projects'
+          ids << @xl.map(&:pim_id) if @xl.present?
+        else
+          ids << @xl.ids
+        end
+
+        current_user.downloads_users.create!("#{layer}": limit, collection_ids: ids.flatten)
 
         @xl
       else

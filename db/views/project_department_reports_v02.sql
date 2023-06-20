@@ -79,10 +79,15 @@ end as Range_util,
       round(vhmu(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date)::numeric,1)
     end as vhmud,
     the_geom,
-    st_x(the_geom) as x,
-    st_y(the_geom) as y
+    st_x(projects.the_geom) as x,
+    st_y(projects.the_geom) as y,
+    county_name(projects.county_id::integer) AS county_name,
+    projects.project_type_id,
+    project_instances.project_status_id,
+    pim.mix_id,
+    pim.id as pim_id
   FROM projects
-    INNER JOIN project_instances ON project_instances.project_id = projects.id
+  INNER JOIN project_instances ON project_instances.project_id = projects.id
     INNER JOIN project_instance_mixes pim ON project_instances.id = pim.project_instance_id
     INNER JOIN project_mixes ON pim.mix_id = project_mixes.id
     INNER JOIN project_types ON project_types.id = projects.project_type_id
