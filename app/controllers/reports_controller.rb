@@ -448,7 +448,7 @@ class ReportsController < ApplicationController
 
         @xl = data.limit(limit)
 
-        current_user.downloads_users.create! "#{layer}": limit
+        current_user.downloads_users.create!("#{layer}": limit, collection_ids: @xl.ids)
 
         @xl
       else

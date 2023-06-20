@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_30_210947) do
+ActiveRecord::Schema.define(version: 2023_06_17_153138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -257,6 +257,8 @@ ActiveRecord::Schema.define(version: 2022_08_30_210947) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
+    t.integer "collection_ids", default: [], array: true
     t.index ["user_id"], name: "index_downloads_users_on_user_id"
   end
 
