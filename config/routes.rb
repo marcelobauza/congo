@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   resources :rent_future_projects
   resources :rent_transactions
   resources :bots
@@ -22,6 +23,7 @@ Rails.application.routes.draw do
   get 'dashboards/heatmap'
   get 'dashboards/filter_county_for_lon_lat'
   get 'dashboards/filter_period'
+  get 'downloads_users/index'
 
   get 'future_project_types/legend_points'
   get 'density_types/legend_points'
