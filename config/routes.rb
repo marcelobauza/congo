@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   get 'dashboards/heatmap'
   get 'dashboards/filter_county_for_lon_lat'
   get 'dashboards/filter_period'
-  get 'downloads_users/index'
+
 
   get 'future_project_types/legend_points'
   get 'density_types/legend_points'
@@ -103,6 +103,7 @@ Rails.application.routes.draw do
     get 'counties/search_geojson' => 'counties#search_geojson'
     get 'companies/export_csv_downloads_by_company' => 'companies#export_csv_downloads_by_company'
 
+
     resources :agencies
     resources :periods
     resources :import_processes
@@ -162,6 +163,7 @@ Rails.application.routes.draw do
   resources :project_statuses
   resources :property_types
 
+    resources 'downloads_users', only: [:index, :new, :create]
   resources :future_project_types
   resources :project_types
   resources :seller_types
