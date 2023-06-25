@@ -1,8 +1,16 @@
 class DownloadsUsersController < ApplicationController
+  before_action :set_user, only: [:index]
+
   def index
-    @downloads_users = DownloadsUser.
-      where(user_id: current_user.id).
-      where.not(collection_ids: '{}')
+    @downloads_users = DownloadsUser
+      .where(user_id: @user.id)
+      .where.not(collection_ids: '{}')
+      .order(created_at: :desc)
+      .paginate(page: params[:page], per_page: 10)
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   def new
@@ -18,6 +26,10 @@ class DownloadsUsersController < ApplicationController
   end
 
   private
+
+    def set_user
+      @user = User.find(current_user.id)
+    end
 
   def transactions_data
     filters                 = JSON.parse(session[:data].to_json, {:symbolize_names => true})
