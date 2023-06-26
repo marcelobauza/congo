@@ -19,9 +19,7 @@ class DownloadsUsersController < ApplicationController
 
   def create
     ActiveRecord::Base.transaction do
-      @donwloads_users = DownloadsUser.new(params)
-
-
+      @donwloads_users = DownloadsUser.new(downloads_users_params)
     end
   end
 
@@ -92,4 +90,9 @@ class DownloadsUsersController < ApplicationController
       @message = "Ha superado el límite de descarga"
     end
   end
+
+  def downloads_users_params
+    params.require(:downloads_user).permit(:title).merge(user_id: current_user.id)
+  end
+
 end
