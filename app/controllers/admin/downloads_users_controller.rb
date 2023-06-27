@@ -14,4 +14,10 @@ class Admin::DownloadsUsersController < ApplicationController
       format.html
     end
   end
+
+  def delete
+    DownloadsUser.where(id: params[:downloads_user_ids]).destroy_all
+
+    redirect_to admin_downloads_users_path, notice: "Los registros se han eliminado correctamente."
+  end
 end

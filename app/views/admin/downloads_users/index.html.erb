@@ -15,29 +15,55 @@
 
 <div class="card shadow">
   <div class="card-body">
-    <table class="table table-striped table-hover table-bordered">
-      <tr>
-        <th>Usuario</th>
-        <th>Titulo</th>
-        <th>Creación</th>
-        <th>CBR</th>
-        <th>PRV</th>
-        <th>EM</th>
-        <th colspan="2" class="text-center">Acciones</th>
-      </tr>
-      <% @downloads_users.each do |du| %>
+    <%= form_tag delete_admin_downloads_users_path, method: :delete do %>
+      <table class="table table-striped table-hover table-bordered">
         <tr>
-          <td><%= du.user.name %></td>
-          <td><%= du.title %></td>
-          <td><%= l(du.created_at, format: "%d %B, %Y") %></td>
-          <td><%= du.transactions %></td>
-          <td><%= du.projects %></td>
-          <td><%= du.future_projects %></td>
-          <td class="text-center"> <%= link_to '#' %></td>
-          <td class="text-center"> <%= link_to '#' %></td>
+          <th>Usuario</th>
+          <th>Titulo</th>
+          <th>Creación</th>
+          <th>CBR</th>
+          <th>PRV</th>
+          <th>EM</th>
+          <th class="text-center"><%= check_box_tag "select-all-checkbox" %></th>
+          <th colspan="2" class="text-center">Acciones</th>
         </tr>
-      <% end %>
-    </table>
+        <% @downloads_users.each do |du| %>
+          <tr>
+            <td><%= du.user.name %></td>
+            <td><%= du.title %></td>
+            <td><%= l(du.created_at, format: "%d %B, %Y") %></td>
+            <td><%= du.transactions %></td>
+            <td><%= du.projects %></td>
+            <td><%= du.future_projects %></td>
+            <td class="text-center"><%= check_box_tag "downloads_user_ids[]", du.id, false, class: "row-checkbox" %></td>
+            <td class="text-center"><%= link_to '#' %></td>
+            <td class="text-center"><%= link_to '#' %></td>
+          </tr>
+        <% end %>
+      </table>
+      <%= submit_tag "Eliminar", class: "btn btn-sm btn-danger" %>
+    <% end %>
     <%= will_paginate @downloads_users %>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const selectAllCheckbox = document.querySelector("#select-all-checkbox");
+    const checkboxes = document.querySelectorAll(".row-checkbox");
+
+    selectAllCheckbox.addEventListener("change", function() {
+      checkboxes.forEach(function(checkbox) {
+        checkbox.checked = selectAllCheckbox.checked;
+      });
+    });
+
+    checkboxes.forEach(function(checkbox) {
+      checkbox.addEventListener("change", function() {
+        selectAllCheckbox.checked = Array.from(checkboxes).every(function(checkbox) {
+          return checkbox.checked;
+        });
+      });
+    });
+  });
+</script>
