@@ -1,11 +1,12 @@
 class Admin::DownloadsUsersController < ApplicationController
   layout 'admin'
-  before_action :set_user, only: [:index]
 
   def index
+    @users = User.select("id, name").order(:name).map { |u| [u.name, u.id]}
+
     @downloads_users = DownloadsUser
-      .where(user_id: @user.id)
       .where.not(collection_ids: '{}')
+      .by_user(params[:user_id])
       .order(created_at: :desc)
       .paginate(page: params[:page], per_page: 10)
 
@@ -13,10 +14,4 @@ class Admin::DownloadsUsersController < ApplicationController
       format.html
     end
   end
-
-  private
-
-    def set_user
-      @user = User.find(current_user.id)
-    end
 end
