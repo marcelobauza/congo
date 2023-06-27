@@ -116,6 +116,7 @@ Rails.application.routes.draw do
     resources :future_project_sub_types
     resources :flex_orders, only: [:index]
     resources :flex_informations, only: [:index, :edit, :update, :show]
+    resources :downloads_users, only: [:index]
 
     resources :regions
 

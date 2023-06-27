@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<div class="card shadow">
+  <div class="card-body">
+    <h2>Descargas XLS de Usuarios</h2>
+  </div>
+</div>
+
+<div class="card shadow">
+  <div class="card-body">
+    <table class="table table-striped table-hover table-bordered">
+      <tr>
+        <th>Usuario</th>
+        <th>Titulo</th>
+        <th>Creación</th>
+        <th>CBR</th>
+        <th>PRV</th>
+        <th>EM</th>
+        <th colspan="2" class="text-center">Acciones</th>
+      </tr>
+      <% @downloads_users.each do |du| %>
+        <tr>
+          <td><%= du.user.name %></td>
+          <td><%= du.title %></td>
+          <td><%= l(du.created_at, format: "%d %B, %Y") %></td>
+          <td><%= du.transactions %></td>
+          <td><%= du.projects %></td>
+          <td><%= du.future_projects %></td>
+          <td class="text-center"> <%= link_to '#' %></td>
+          <td class="text-center"> <%= link_to '#' %></td>
+        </tr>
+      <% end %>
+    </table>
+    <%= will_paginate @downloads_users %>
+  </div>
+</div>
