@@ -721,6 +721,8 @@ es:
       index: Comunas
       pdf: Agregar PDF
       edit: Editar Comuna
+    downloads_user:
+      search: Buscar
 
   welcome: Bienvenido
   login: Ingreso
