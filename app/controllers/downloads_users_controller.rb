@@ -72,6 +72,10 @@ class DownloadsUsersController < ApplicationController
 
   private
 
+  def set_user
+    @user = User.find(current_user.id)
+  end
+
   def future_projects_data filters
     data                    = FutureProject.reports(filters)
     total_downloads_allowed = current_user.company.future_projects_downloads || 0
