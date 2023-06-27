@@ -35,22 +35,26 @@ class DownloadsUsersController < ApplicationController
         else
           @downloads_users[:collection_ids] = data.ids
           @downloads_users[:transactions]   = data.count
+          @downloads_users[:layer_type]     = 'transactions'
 
           @downloads_users.save!
 
           excel_data = transaction_data_xls.to_stream.read
+          filename = 'CompraVentas.xlsx'
         end
       elsif  filters[:layer_type] == 'future_projects_info'
         data = future_projects_data filters
         if @message
           excel_data = @message
         else
-          @downloads_users[:collection_ids] = data.ids
-          @downloads_users[:transactions]   = data.count
+          @downloads_users[:collection_ids]  = data.ids
+          @downloads_users[:future_projects] = data.count
+          @downloads_users[:layer_type]      = 'future_projects'
 
           @downloads_users.save!
 
           excel_data = future_projects_data_xls.to_stream.read
+          filename = 'Expedientes_Municipales.xlsx'
         end
       elsif  filters[:layer_type] == 'projects_feature_info'
         data = projects_data filters
@@ -58,16 +62,44 @@ class DownloadsUsersController < ApplicationController
           excel_data = @message
         else
           @downloads_users[:collection_ids] = data.flatten.map &:pim_id
-          @downloads_users[:transactions]   = data.flatten.count
+          @downloads_users[:projects]   = data.flatten.count
+          @downloads_users[:layer_type]      = 'projects'
 
           @downloads_users.save!
 
           excel_data = projects_data_xls.to_stream.read
+          filename = 'Proyectos_Residenciales_en_Ventas.xlsx'
         end
       end
 
-      send_data excel_data, filename: "report.xlsx", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      send_data excel_data, filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     end
+  end
+
+  def reports_by_layer
+    layer = DownloadsUser.find params[:id]
+
+    if layer.layer_type == 'transactions'
+      @xl = Transaction.where(id: layer.collection_ids)
+
+      excel_data = transaction_data_xls.to_stream.read
+      filename   = 'CompraVentas.xlsx'
+    elsif layer.layer_type == 'future_projects'
+      @xl = FutureProject.where(id: layer.collection_ids)
+
+      excel_data = future_projects_data_xls.to_stream.read
+      filename = 'Expedientes_Municipales.xlsx'
+    elsif layer.layer_type == 'projects'
+      @data                   = []
+      @data << ProjectHomeReport.where(pim_id: layer.collection_ids)
+      @data << ProjectDepartmentReport.where(pim_id: layer.collection_ids)
+
+
+      excel_data = projects_data_xls.to_stream.read
+      filename = 'Proyectos_Residenciales_en_Ventas.xlsx'
+    end
+
+    send_data excel_data, filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
   private
@@ -91,8 +123,6 @@ class DownloadsUsersController < ApplicationController
         row = limit_downloads total_downloads_allowed, total_accumulated_downloads, data, layer
       end
     end
-
-    row
   end
 
   def projects_data filters

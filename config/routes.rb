@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     get 'companies/export_csv_downloads_by_company' => 'companies#export_csv_downloads_by_company'
 
 
+
     resources :agencies
     resources :periods
     resources :import_processes
@@ -153,6 +154,7 @@ Rails.application.routes.draw do
     root 'flex_reports#index'
   end
 
+  get 'downloads_users/reports_by_layer' => 'downloads_users#reports_by_layer'
   resources :application_statuses
   resources :pois
   resources :poi_subcategories

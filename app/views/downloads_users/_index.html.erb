@@ -50,7 +50,7 @@
               <th>PRV</th>
               <th>EM</th>
               <th>Creación</th>
-              <th colspan="2" class="text-center">Acciones</th>
+              <th class="text-center">Acciones</th>
             </tr>
           </thead>
 
@@ -62,8 +62,7 @@
                 <td><%= du.projects %></td>
                 <td><%= du.future_projects %></td>
                 <td><%= l(du.created_at, format: "%d %B, %Y") %></td>
-                <td class="text-center"> <%= link_to '#' %></td>
-                <td class="text-center"> <%= link_to '#' %></td>
+                <td class="text-center"> <%= link_to 'Descargar xls', downloads_users_reports_by_layer_path(id: du.id) %></td>
               </tr>
             <% end %>
           </tbody>
