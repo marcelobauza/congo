@@ -66,7 +66,7 @@ class DownloadsUsersController < ApplicationController
           excel_data = @message
         else
           @downloads_users[:collection_ids] = data.flatten.map &:pim_id
-          @downloads_users[:projects]   = data.flatten.count
+          @downloads_users[:projects]   = data.flatten.uniq(&:code).count
           @downloads_users[:layer_type]      = 'projects'
 
           @downloads_users.save!
