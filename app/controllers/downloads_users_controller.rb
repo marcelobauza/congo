@@ -78,6 +78,10 @@ class DownloadsUsersController < ApplicationController
 
       send_data excel_data, filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     end
+  rescue ActiveRecord::RecordInvalid => e
+    respond_to do |format|
+      format.js { render json: { success: false, errors: @downlods_users.errors.full_messages }}
+    end
   end
 
   def reports_by_layer

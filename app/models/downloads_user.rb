@@ -6,4 +6,5 @@ class DownloadsUser < ApplicationRecord
   scope :by_layer_type, lambda { |layer_type| where(layer_type: layer_type) if layer_type.present? }
 
   include DownloadsUsers::Exports
+  include DownloadsUsers::Validations
 end
