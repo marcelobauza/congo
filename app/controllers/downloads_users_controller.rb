@@ -6,9 +6,13 @@ class DownloadsUsersController < ApplicationController
   include Reports::TransactionsDataXls
 
   def index
+    @layer_types = [['CBR', 'transactions'], ['PRV', 'projects'], ['EM', 'future_projects']]
+
     @downloads_users = DownloadsUser
-      .where(user_id: current_user.id)
       .where.not(collection_ids: '{}')
+      .where(user_id: current_user.id)
+      .by_layer_type(params[:layer_type])
+      .disabled_only(false)
       .order(created_at: :desc)
       .paginate(page: params[:page], per_page: 10)
 
