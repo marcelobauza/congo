@@ -67,8 +67,15 @@
             <% end %>
           </tbody>
         </table>
-        <%= js_will_paginate @recipes %>
-      </div>
+          <div class="row">
+            <div class="col-6">
+              <%= js_will_paginate @recipes %>
+            </div>
+            <div class="col-6 text-right">
+              <%= link_to "Exportar descargas", users_export_csv_downloads_by_company_path %>
+            </div>
+          </div>
+        </div>
 
     </div>
   </div>
