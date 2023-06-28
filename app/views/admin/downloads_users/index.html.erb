@@ -24,8 +24,8 @@
           <th>CBR</th>
           <th>PRV</th>
           <th>EM</th>
-          <th class="text-center"><%= check_box_tag "select-all-checkbox" %></th>
           <th colspan="2" class="text-center">Acciones</th>
+          <th class="text-center"><%= check_box_tag "select-all-checkbox" %></th>
         </tr>
         <% @downloads_users.each do |du| %>
           <tr>
@@ -35,9 +35,9 @@
             <td><%= du.transactions %></td>
             <td><%= du.projects %></td>
             <td><%= du.future_projects %></td>
+            <td class="text-center"><%= link_to '#' %></td>
+            <td class="text-center"><%= link_to admin_downloads_user_path(du), method: :delete, data: { confirm: '¿Estás seguro de que deseas eliminar esta descarga?' } do %> <i class="fas fa-trash-alt " title="Eliminar"></i> <%end%></td>
             <td class="text-center"><%= check_box_tag "downloads_user_ids[]", du.id, false, class: "row-checkbox" %></td>
-            <td class="text-center"><%= link_to '#' %></td>
-            <td class="text-center"><%= link_to '#' %></td>
           </tr>
         <% end %>
       </table>

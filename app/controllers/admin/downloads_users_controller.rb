@@ -18,6 +18,12 @@ class Admin::DownloadsUsersController < ApplicationController
     end
   end
 
+  def destroy
+    downloads_user = DownloadsUser.find(params[:id])
+    downloads_user.destroy
+    redirect_to admin_downloads_users_path, notice: "El registro se ha eliminado correctamente."
+  end
+
   def update_status
     downloads_users = DownloadsUser.where(id: params[:downloads_user_ids])
 
