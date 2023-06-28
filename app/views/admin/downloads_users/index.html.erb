@@ -35,8 +35,8 @@
             <td><%= du.transactions %></td>
             <td><%= du.projects %></td>
             <td><%= du.future_projects %></td>
-            <td class="text-center"><%= link_to '#' %></td>
-            <td class="text-center"><%= link_to admin_downloads_user_path(du), method: :delete, data: { confirm: '¿Estás seguro de que deseas eliminar esta descarga?' } do %> <i class="fas fa-trash-alt " title="Eliminar"></i> <%end%></td>
+            <td class="text-center"><%= link_to downloads_users_reports_by_layer_path(id: du.id) do %><i class="fas fa-download" title="Descargar"></i><% end %></td>
+            <td class="text-center"><%= link_to admin_downloads_user_path(du), method: :delete, data: { confirm: '¿Estás seguro de que deseas eliminar esta descarga?' } do %><i class="fas fa-trash-alt" title="Eliminar"></i><% end %></td>
             <td class="text-center"><%= check_box_tag "downloads_user_ids[]", du.id, false, class: "row-checkbox" %></td>
           </tr>
         <% end %>
