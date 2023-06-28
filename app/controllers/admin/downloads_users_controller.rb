@@ -3,10 +3,12 @@ class Admin::DownloadsUsersController < ApplicationController
 
   def index
     @users = User.select("id, name").order(:name).map { |u| [u.name, u.id] }
+    @layer_types = [['CBR', 'transactions'], ['PRV', 'projects'], ['EM', 'future_projects']]
 
     @downloads_users = DownloadsUser
       .where.not(collection_ids: '{}')
       .by_user(params[:user_id])
+      .by_layer_type(params[:layer_type])
       .disabled_only(params[:disabled_only] || false)
       .order(created_at: :desc)
       .paginate(page: params[:page], per_page: 10)
