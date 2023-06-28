@@ -62,7 +62,7 @@
                 <td><%= du.projects %></td>
                 <td><%= du.future_projects %></td>
                 <td><%= l(du.created_at, format: "%d %B, %Y") %></td>
-                <td class="text-center"> <%= link_to 'Descargar xls', downloads_users_reports_by_layer_path(id: du.id) %></td>
+                <td class="text-center"><%= link_to downloads_users_reports_by_layer_path(id: du.id) do %><i class="fas fa-download" title="Descargar"></i><% end %></td>
               </tr>
             <% end %>
           </tbody>
