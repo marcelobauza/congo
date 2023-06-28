@@ -15,7 +15,7 @@
 
 <div class="card shadow">
   <div class="card-body">
-    <%= form_tag delete_admin_downloads_users_path, method: :delete do %>
+    <%= form_tag update_status_admin_downloads_users_path, method: :patch do %>
       <table class="table table-striped table-hover table-bordered">
         <tr>
           <th>Usuario</th>
@@ -41,9 +41,21 @@
           </tr>
         <% end %>
       </table>
-      <%= submit_tag "Eliminar", class: "btn btn-sm btn-danger" %>
+      <div class="row">
+        <div class="col-6">
+          <%= will_paginate @downloads_users %>
+        </div>
+        <div class="col-6">
+          <div class="text-right">
+            <% if @disabled_only %>
+              <%= submit_tag "Habilitar", class: "btn btn-sm btn-success", name: "commit" %>
+            <% else %>
+              <%= submit_tag "Deshabilitar", class: "btn btn-sm btn-danger", name: "commit" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
     <% end %>
-    <%= will_paginate @downloads_users %>
   </div>
 </div>
 

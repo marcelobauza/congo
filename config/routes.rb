@@ -119,7 +119,7 @@ Rails.application.routes.draw do
     resources :flex_informations, only: [:index, :edit, :update, :show]
     resources :downloads_users, only: [:index] do
       collection do
-        delete :delete
+        patch :update_status
       end
     end
 
