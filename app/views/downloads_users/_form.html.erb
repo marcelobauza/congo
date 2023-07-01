@@ -9,7 +9,7 @@
         </button>
       </div>
 
-      <%= simple_form_for(@donwloads_users) do |f| %>
+      <%= simple_form_for(@donwloads_users, remote: true) do |f| %>
         <%= f.error_notification %>
         <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 

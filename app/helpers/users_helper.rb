@@ -12,9 +12,8 @@ module UsersHelper
     downloads = u.downloads_users.sum(layer)
   end
 
-  def accumulated_download_by_company user, layer
-    u = User.find(user)
-
+  def accumulated_download_by_company layer
+    u         = User.find(current_user.id)
     from_date = u.company.enabled_date
     to_date   = from_date + u.role.plan_validity_months.months
 
@@ -27,14 +26,8 @@ module UsersHelper
     ).sum(layer)
   end
 
-  def calculate_date
-    #i_day = current_user.company.enabled_date.day
-    #day = Date.today.day
-    #i_day <  day ?  Date.today.change(day: i_day) : Date.today.change(day: i_day).prev_month
-  end
-
-  def surplus_downloads user, layer
-    acc     = accumulated_download_by_company user, layer
+  def surplus_downloads layer
+    acc     = accumulated_download_by_company layer
     surplus = 0
 
     total_downloads = case layer

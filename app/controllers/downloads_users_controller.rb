@@ -6,8 +6,6 @@ class DownloadsUsersController < ApplicationController
   include Reports::TransactionsDataXls
 
   def index
-    @layer_types = [['CBR', 'transactions'], ['PRV', 'projects'], ['EM', 'future_projects']]
-
     @downloads_users = DownloadsUser
       .where.not(collection_ids: '{}')
       .where(user_id: current_user.id)
@@ -29,54 +27,55 @@ class DownloadsUsersController < ApplicationController
     ActiveRecord::Base.transaction do
       @downloads_users = DownloadsUser.new(downloads_users_params)
 
-      filters = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+      filters  = JSON.parse(session[:data].to_json, {:symbolize_names => true})
+      title    = params[:downloads_user][:title]
+      filename = "#{title}.xlsx"
 
-      if filters[:layer_type] == 'transactions_info'
-        data = transactions_data filters
+      if filters && filters[:layer_type]
+        if filters[:layer_type] == 'transactions_info'
+          data = transactions_data filters
 
-        if @message
-          excel_data = @message
-        else
-          @downloads_users[:collection_ids] = data.ids
-          @downloads_users[:transactions]   = data.count
-          @downloads_users[:layer_type]     = 'transactions'
+          if @message
+            excel_data = @message
+          else
+            @downloads_users[:collection_ids] = data.ids
+            @downloads_users[:transactions]   = data.count
+            @downloads_users[:layer_type]     = 'transactions'
 
-          @downloads_users.save!
+            @downloads_users.save!
 
-          excel_data = transaction_data_xls.to_stream.read
-          filename = 'CompraVentas.xlsx'
+            excel_data = transaction_data_xls.to_stream.read
+          end
+        elsif  filters[:layer_type] == 'future_projects_info'
+          data = future_projects_data filters
+          if @message
+            excel_data = @message
+          else
+            @downloads_users[:collection_ids]  = data.ids
+            @downloads_users[:future_projects] = data.count
+            @downloads_users[:layer_type]      = 'future_projects'
+
+            @downloads_users.save!
+
+            excel_data = future_projects_data_xls.to_stream.read
+          end
+        elsif  filters[:layer_type] == 'projects_feature_info'
+          data = projects_data filters
+          if @message
+            excel_data = @message
+          else
+            @downloads_users[:collection_ids] = data.flatten.map &:pim_id
+            @downloads_users[:projects]   = data.flatten.uniq(&:code).count
+            @downloads_users[:layer_type]      = 'projects'
+
+            @downloads_users.save!
+
+            excel_data = projects_data_xls.to_stream.read
+          end
         end
-      elsif  filters[:layer_type] == 'future_projects_info'
-        data = future_projects_data filters
-        if @message
-          excel_data = @message
-        else
-          @downloads_users[:collection_ids]  = data.ids
-          @downloads_users[:future_projects] = data.count
-          @downloads_users[:layer_type]      = 'future_projects'
 
-          @downloads_users.save!
-
-          excel_data = future_projects_data_xls.to_stream.read
-          filename = 'Expedientes_Municipales.xlsx'
-        end
-      elsif  filters[:layer_type] == 'projects_feature_info'
-        data = projects_data filters
-        if @message
-          excel_data = @message
-        else
-          @downloads_users[:collection_ids] = data.flatten.map &:pim_id
-          @downloads_users[:projects]   = data.flatten.uniq(&:code).count
-          @downloads_users[:layer_type]      = 'projects'
-
-          @downloads_users.save!
-
-          excel_data = projects_data_xls.to_stream.read
-          filename = 'Proyectos_Residenciales_en_Ventas.xlsx'
-        end
+        #send_data excel_data, filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       end
-
-      send_data excel_data, filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     end
   rescue ActiveRecord::RecordInvalid => e
     respond_to do |format|
@@ -182,6 +181,7 @@ class DownloadsUsersController < ApplicationController
     from_date         = current_user.company.enabled_date
     to_date           = from_date + current_user.role.plan_validity_months.months
     allowed_downloads = (from_date..to_date).include? Date.today
+
 
     if allowed_downloads
       total_accumulated_downloads = User.accumulated_download_by_company current_user.id, layer

@@ -1,1 +1,9 @@
 $('#download-modal').modal('hide')
+
+$.ajax({
+  url: '<%= downloads_users_path() %>',
+  type: 'GET',
+  dataType: 'script',
+  success: function(data) {},
+  error: function(xhr, status, error) {}
+});
