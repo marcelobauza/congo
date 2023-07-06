@@ -4,7 +4,7 @@
       <%= select_tag :layer_type, options_for_select(downloads_layer_types, params[:layer_type]), include_blank: "Capa", class: "form-control form-control-sm" %>
     </div>
     <div class="form-group mx-2">
-      <%= submit_tag t('menu.downloads_user.search'), class: "btn btn-sm btn-primary" %>
+      <%= submit_tag 'Filtrar', class: "btn btn-sm btn-primary" %>
     </div>
   </div>
 <% end %>

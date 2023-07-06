@@ -12,7 +12,7 @@ class DownloadsUsersController < ApplicationController
       .by_layer_type(params[:layer_type])
       .disabled_only(false)
       .order(created_at: :desc)
-      .paginate(page: params[:page], per_page: 10)
+      .paginate(page: params[:page], per_page: 7)
 
     respond_to do |format|
       format.js
