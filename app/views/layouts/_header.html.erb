@@ -207,7 +207,7 @@
           <% if user_has_permissions_to_downloads? %>
             <div class="dropdown-divider"></div>
             <%= link_to "#", id: "pdf", class: "dropdown-item custom-item reports", data: {remote: true} do  %> <i class=" fas fa-file-pdf" title="Informe PDF" style="font-size: 26px"></i><% end %>
-            <%= link_to "#", id: "base", class: "dropdown-item custom-item reports", remote: true  do  %> <i class=" fas fa-file-excel" title="Descarga XLS" style="font-size: 26px"></i><% end %>
+            <%= link_to new_downloads_user_path(), class: "dropdown-item custom-item", remote: true do %><i class=" fas fa-file-excel" title="Descarga XLS" style="font-size: 26px"></i><% end %>
             <%= link_to "#", id: "graph", class: "dropdown-item custom-item reports", remote: true  do  %> <i class="far fa-file-excel" title="Descarga Resumen XLS" style="font-size: 26px"></i><% end %>
             <%= link_to "#", id: "kml", class: "dropdown-item custom-item reports", remote: true  do  %> <%=image_tag "kml_icon.svg", width:"30", height:"30" %> <% end %>
           <% end %>
@@ -216,7 +216,7 @@
     <% end %>
 
     <div class="nav-item dropdown">
-      <%= link_to users_account_path(), class: "btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width", remote: true, id: "user_data", data: { "status-downloads": true} do %>
+      <%= link_to downloads_users_path(), class: "btn btn-primary my-2 my-sm-0 nav-link dropdown-toggle nocaret dropdown-width", remote: true, id: "user_data", data: { "status-downloads": true} do %>
         <i class="fas fa-cloud-download-alt" title="Información descargas" style="font-size: 15px"></i>
       <% end %>
     </div>

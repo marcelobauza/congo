@@ -1,0 +1,98 @@
+<div class="modal fade" id="modal-downloads-users" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content text-light">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Descargas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <h6 class="text-center">Descargas de mi empresa</h6>
+        <div class="col-md-6 offset-md-3">
+          <table class="table table-striped table-hover table-bordered table-sm" style="font-size: 12px;">
+            <thead>
+              <tr>
+                <th>Capa</th>
+                <th class="text-center">Realizadas</th>
+                <th class="text-center">Disponibles</th>
+                <th class="text-center">Excedidas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Compraventas</td>
+                <td class="text-center"><%= accumulated_download_by_company('transactions') %></td>
+                <td class="text-center"><%= current_user.company.transactions_downloads %></td>
+                <td class="text-center text-danger"><%= surplus_downloads('transactions') %></td>
+              </tr>
+              <tr>
+                <td>Expedientes Municipales</td>
+                <td class="text-center"><%= accumulated_download_by_company('future_projects') %></td>
+                <td class="text-center"><%= current_user.company.future_projects_downloads %></td>
+                <td class="text-center text-danger"><%= surplus_downloads('future_projects') %></td>
+              </tr>
+              <tr>
+                <td>Proyectos</td>
+                <td class="text-center"><%= accumulated_download_by_company('projects') %></td>
+                <td class="text-center"><%= current_user.company.projects_downloads %></td>
+                <td class="text-center text-danger"><%= surplus_downloads('projects') %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr>
+
+        <div class="row">
+          <div class="col-6 offset-md-3">
+            <h5 class="text-center">Mis descargas</h6>
+          </div>
+          <div class="col-3">
+            <%= render :partial => "filters" %>
+          </div>
+        </div>
+
+
+        <table class="table table-striped table-hover table-bordered table-sm">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th class="text-center">CBR</th>
+              <th class="text-center">PRV</th>
+              <th class="text-center">EM</th>
+              <th class="text-center">Creación</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @downloads_users.each do |du| %>
+              <tr>
+                <td><%= du.title %></td>
+                <td class="text-center"><%= du.transactions %></td>
+                <td class="text-center"><%= du.projects %></td>
+                <td class="text-center"><%= du.future_projects %></td>
+                <td class="text-center"><%= l(du.created_at, format: "%d %B, %Y") %></td>
+                <td class="text-center"><%= link_to downloads_users_reports_by_layer_path(id: du.id) do %><i class="fas fa-download" title="Descargar"></i><% end %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+          <div class="row">
+            <div class="col-6">
+              <%= js_will_paginate @recipes %>
+            </div>
+            <div class="col-6 text-right">
+              <%= link_to "Descargar historial de descargas de mi empresa", users_export_csv_downloads_by_company_path %>
+            </div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Agregar spinner -->
