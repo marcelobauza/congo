@@ -26,10 +26,7 @@ class DownloadsUsersController < ApplicationController
   def create
     ActiveRecord::Base.transaction do
       @downloads_users = DownloadsUser.new(downloads_users_params)
-
-      filters  = JSON.parse(session[:data].to_json, {:symbolize_names => true})
-      title    = params[:downloads_user][:title]
-      filename = "#{title}.xlsx"
+      filters          = JSON.parse(session[:data].to_json, {:symbolize_names => true})
 
       if filters && filters[:layer_type]
         if filters[:layer_type] == 'transactions_info'
@@ -73,8 +70,6 @@ class DownloadsUsersController < ApplicationController
             excel_data = projects_data_xls.to_stream.read
           end
         end
-
-        #send_data excel_data, filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       end
     end
   rescue ActiveRecord::RecordInvalid => e
@@ -84,26 +79,23 @@ class DownloadsUsersController < ApplicationController
   end
 
   def reports_by_layer
-    layer = DownloadsUser.find params[:id]
+    layer    = DownloadsUser.find params[:id]
+    filename = "#{layer.title}.xlsx"
 
     if layer.layer_type == 'transactions'
       @xl = Transaction.where(id: layer.collection_ids)
 
       excel_data = transaction_data_xls.to_stream.read
-      filename   = 'CompraVentas.xlsx'
     elsif layer.layer_type == 'future_projects'
       @xl = FutureProject.where(id: layer.collection_ids)
 
       excel_data = future_projects_data_xls.to_stream.read
-      filename = 'Expedientes_Municipales.xlsx'
     elsif layer.layer_type == 'projects'
-      @data                   = []
+      @data = []
       @data << ProjectHomeReport.where(pim_id: layer.collection_ids)
       @data << ProjectDepartmentReport.where(pim_id: layer.collection_ids)
 
-
       excel_data = projects_data_xls.to_stream.read
-      filename = 'Proyectos_Residenciales_en_Ventas.xlsx'
     end
 
     send_data excel_data, filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

@@ -7,7 +7,7 @@ module Reports::ProjectsDataXls
 
     if @data.blank? || @data.second.blank?
       wb.add_worksheet(name: "Edificios") do |sheet|
-        sheet.add_row ['Ha superado el limite máximo de Descargas']
+        sheet.add_row ['No se encontraron datos']
       end
     else
       if (current_user.role.name == 'IPRO+') || (current_user.role.name == 'IPRO+ Plus') || (current_user.role.name == 'Admin')
@@ -159,7 +159,7 @@ module Reports::ProjectsDataXls
 
     if @data.blank? || (@data.first.blank?)
       wb.add_worksheet(name: "Casas") do |sheet|
-        sheet.add_row ['Ha superado el limite máximo de Descargas']
+        sheet.add_row ['No se encontraron datos']
       end
     else
       wb.add_worksheet(name: 'Casas') do |sheet|
