@@ -1,19 +1,49 @@
-<% btn   = params['module'] == 'flex' ? 'flex_btn_log_in' : 'btn-custom' %>
-<% title = params['module'] == 'flex' ? 'Inciti Flex' : 'Inciti Pro' %>
-<% logo  = params['module'] == 'flex' ? 'biens_sign_in.png' : 'round_inciti.png' %>
+<% btn        = params['module'] == 'flex' ? 'flex_btn_log_in' : 'btn-custom' %>
+<% title      = params['module'] == 'flex' ? 'Inciti Flex' : 'Inciti Pro' %>
+<% class_form = params['module'] == 'flex' ? 'form-signin-flex' : 'form-signin'  %>
+<% logo       = 'round_inciti.png' %>
 
-<div class="form-signin">
+<div class=<%= class_form %>>
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <div class="form-group">
-      <center>
-        <%= image_tag logo, class: "mb-4", height:"200" %>
-        <% if params['module'] != 'flex' %>
+    <% if params['module'] != 'flex' %>
+      <div class="form-group">
+        <center>
+          <%= image_tag logo, class: "mb-4", height:"200" %>
           <h4 class="login_text_color"><%= title %></h4>
-        <% end %>
-      </center>
-      <%= f.text_field :name, autofocus: true, autocomplete: "email", class: 'form-control', placeholder: "Usuario" %>
-      <%= f.password_field :password, autocomplete: "current-password", class: 'form-control', placeholder: "Contraseña" %>
-    </div>
+        </center>
+      </div>
+    <% else %>
+      <div class="form-group text-color-flex">
+        <center>
+          <div class="row">
+            <div class="col-md-2">
+              <%= image_tag logo, class: "mb-2 center", height:"80" %>
+            </div>
+            <div class="col-md-9">
+              <i><b class="title-login">FLEX</b>La plataforma que se ajusta a tu presupuesto.</i>
+            </div>
+          </div>
+          <div>
+            <div>Para profesionales que necesitan tasar o fijar precio de propiedades.</div>
+            </br>
+            <div>
+              Accede a compraventas residenciales y comerciales, normativa urbana y
+              estadísticas de contexto. Navega por toda la ciudad, elige tu zona, filtra lo que quieres ver,
+              genera informes y descargar tus bases de datos.
+            </div>
+            <div class="row align-items-center">
+              <div class="col-md-9">
+                <i>¡Regístrate y comienza a usar FLEX ya mismo!</i> Solo En
+              </div>
+              <div class="circulo col-md-2">Gran Santiago</div>
+            </div>
+          </div>
+        </center>
+      </div>
+    <% end %>
+
+    <%= f.text_field :name, autofocus: true, autocomplete: "email", class: 'form-control', placeholder: "Usuario" %>
+    <%= f.password_field :password, autocomplete: "current-password", class: 'form-control', placeholder: "Contraseña" %>
 
     <% if devise_mapping.rememberable? %>
       <div class="checkbox mb-3 login_text_color">
@@ -24,11 +54,12 @@
       </div>
     <% end %>
 
+
     <div class="actions">
       <%= f.button 'Ingresar', class: "#{btn} btn-lg btn-block flex_button_sign_in" %>
     </div>
-  <% end %>
 
+  <% end %>
   <% flash.each do |type, msg| %>
     <div class="login_text_color">
       <%= msg %>
@@ -37,4 +68,5 @@
 
   <br/>
   <%= render "users/shared/links" %>
+
 </div>

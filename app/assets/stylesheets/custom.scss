@@ -71,6 +71,33 @@ body {
   border-top-right-radius: 0;
 }
 
+// Signin_flex
+.form-signin-flex {
+  width: 100%;
+  max-width: 650px;
+  padding: 15px;
+  margin: auto;
+}
+.title-login{
+  color: #000 !important;
+  font-size: 50px;
+}
+
+.text-color-flex {
+  color: #000 !important;
+}
+
+.circulo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #000; /* Color de fondo del círculo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff; /* Color del texto */
+  font-size: 20px;
+}
 // Dropdown Dashboard Navbar
 div.custom-menu.show {
   min-width: unset;
