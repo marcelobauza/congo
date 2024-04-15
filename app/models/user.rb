@@ -25,6 +25,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :flex_orders, :reject_if => lambda {|a| a[:amount].blank? }
 
+  after_create :create_free_orders
+
   validate :is_rut_valid
   validates :name, presence: true
   validates :phone, presence: true, if: :validate_phone?
@@ -89,6 +91,12 @@ class User < ApplicationRecord
 
     where(disabled: status)
   end
+
+  private
+
+    def create_free_orders
+      FlexOrder.create! user_id: id, amount: 2, unit_price: 0, status: 'approved'
+    end
 
   protected
     def password_required?
