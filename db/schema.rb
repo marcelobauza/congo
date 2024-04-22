@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_30_210947) do
+ActiveRecord::Schema.define(version: 2023_06_27_044146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -257,6 +257,10 @@ ActiveRecord::Schema.define(version: 2022_08_30_210947) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
+    t.integer "collection_ids", default: [], array: true
+    t.string "layer_type"
+    t.boolean "disabled", default: false
     t.index ["user_id"], name: "index_downloads_users_on_user_id"
   end
 
@@ -3159,15 +3163,211 @@ ActiveRecord::Schema.define(version: 2022_08_30_210947) do
       lots.county_id
      FROM lots;
   SQL
-  create_view "building_regulations_transactions", sql_definition: <<-SQL
-      SELECT t.id,
-      t.address,
-      t.property_type_id,
-      t.inscription_date,
-      br.building_zone,
-      t.seller_type_id,
-      t.the_geom
-     FROM (transactions t
-       JOIN building_regulations br ON (st_contains(br.the_geom, t.the_geom)));
+  create_view "project_department_reports", sql_definition: <<-SQL
+      SELECT project_instances.bimester,
+      project_instances.year,
+      projects.code,
+      projects.name AS project_name,
+      projects.address,
+      projects.county_id,
+      projects.floors,
+      projects.build_date,
+      projects.sale_date,
+      projects.transfer_date,
+      projects.pilot_opening_date,
+      project_instances.cadastre,
+      project_statuses.name AS status,
+      pim.living_room,
+      pim.service_room,
+      pim.h_office,
+      pim.discount,
+      pim.mix_usable_square_meters,
+      pim.mix_terrace_square_meters,
+      pim.total_units,
+      pim.stock_units,
+      pim.home_type,
+      pim.mix_m2_field,
+      pim.mix_m2_built,
+      round(pim.uf_parking, 0) AS uf_parking,
+      round(pim.uf_cellar, 0) AS uf_cellar,
+      project_mixes.bedroom,
+      project_mixes.bathroom,
+      project_types.name AS project_type_name,
+      ( SELECT a.name
+             FROM (agencies a
+               JOIN agency_rols ar ON ((a.id = ar.agency_id)))
+            WHERE ((ar.project_id = projects.id) AND ((ar.rol)::text = 'INMOBILIARIA'::text))) AS agency_name,
+      ( SELECT round((sum((project_instance_mixes.mix_usable_square_meters * (project_instance_mixes.total_units)::numeric)) / (sum(project_instance_mixes.total_units))::numeric), 1) AS round
+             FROM project_instance_mixes
+            WHERE (project_instance_mixes.project_instance_id = project_instances.id)) AS pp_utiles,
+      ( SELECT round((sum((project_instance_mixes.mix_terrace_square_meters * (project_instance_mixes.total_units)::numeric)) / (sum(project_instance_mixes.total_units))::numeric), 1) AS round
+             FROM project_instance_mixes
+            WHERE (project_instance_mixes.project_instance_id = project_instances.id)) AS pp_terrazas,
+      ( SELECT round((sum(((project_instance_mixes.mix_usable_square_meters * (project_instance_mixes.total_units)::numeric) * round(((((project_instance_mixes.uf_min * ((1)::numeric - (project_instance_mixes.percentage / (100)::numeric))) + (project_instance_mixes.uf_max * ((1)::numeric - (project_instance_mixes.percentage / (100)::numeric)))) / (2)::numeric) / (project_instance_mixes.mix_usable_square_meters + (project_instance_mixes.mix_terrace_square_meters * 0.5))), 1))) / sum((project_instance_mixes.mix_usable_square_meters * (project_instance_mixes.total_units)::numeric))), 1) AS round
+             FROM project_instance_mixes
+            WHERE (project_instance_mixes.project_instance_id = project_instances.id)) AS pp_ufm2ut,
+      ( SELECT round((sum(((((project_instance_mixes.mix_usable_square_meters * (project_instance_mixes.total_units)::numeric) * ((project_instance_mixes.uf_min * ((1)::numeric - (project_instance_mixes.percentage / (100)::numeric))) + (project_instance_mixes.uf_max * ((1)::numeric - (project_instance_mixes.percentage / (100)::numeric))))) / (2)::numeric) / project_instance_mixes.mix_usable_square_meters)) / sum((project_instance_mixes.mix_usable_square_meters * (project_instance_mixes.total_units)::numeric))), 1) AS round
+             FROM project_instance_mixes
+            WHERE (project_instance_mixes.project_instance_id = project_instances.id)) AS pp_ufm2u,
+      round((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))), 0) AS uf_min_percent,
+      round((pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric))), 0) AS uf_max_percent,
+      round((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric), 0) AS uf_avg_percent,
+      round((pp_uf(project_instances.id))::numeric, 0) AS pp_uf,
+      round((vhmu(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date))::numeric, 1) AS vhmu,
+      round((pxq(project_instances.id))::numeric, 1) AS pxq,
+      round((((vhmd(pim.project_instance_id) * pp_uf_dis(pim.project_instance_id)) / (1000)::double precision))::numeric, 1) AS pxq_d,
+      round(((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / (pim.mix_usable_square_meters + (pim.mix_terrace_square_meters * 0.5))), 1) AS uf_m2,
+      round(((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters), 1) AS uf_m2_u,
+      round((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric)) AS mix_uf_value,
+      round((round(((pim.total_units - pim.stock_units))::numeric, 2) / (pim.total_units)::numeric), 2) AS percentage_sold,
+      (pim.total_units - pim.stock_units) AS sold_units,
+      months(project_instances.id) AS months,
+          CASE
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (0)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (440)::numeric)) THEN '0 a 440'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (441)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (929)::numeric)) THEN '441 a 929'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (930)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (1549)::numeric)) THEN '930 a 1549'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (1550)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (3399)::numeric)) THEN '1550 a 3399'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (3400)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (5390)::numeric)) THEN '3400 a 5390'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (5391)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (7950)::numeric)) THEN '5391 a 7950'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (7951)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (11500)::numeric)) THEN '7951 a 11500'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (11501)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (15600)::numeric)) THEN '11501 a 15600'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (15601)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (500000)::numeric)) THEN '15601 a 500000'::text
+              ELSE NULL::text
+          END AS range_uf,
+          CASE
+              WHEN ((pim.mix_usable_square_meters >= (0)::numeric) AND (pim.mix_usable_square_meters <= 30.99)) THEN '< 30'::text
+              WHEN ((pim.mix_usable_square_meters >= (31)::numeric) AND (pim.mix_usable_square_meters <= 45.99)) THEN '31 a 45'::text
+              WHEN ((pim.mix_usable_square_meters >= (46)::numeric) AND (pim.mix_usable_square_meters <= 60.99)) THEN '46 a 60'::text
+              WHEN ((pim.mix_usable_square_meters >= (61)::numeric) AND (pim.mix_usable_square_meters <= 80.99)) THEN '61 a 80'::text
+              WHEN ((pim.mix_usable_square_meters >= (81)::numeric) AND (pim.mix_usable_square_meters <= 100.99)) THEN '81 a 100'::text
+              WHEN ((pim.mix_usable_square_meters >= (101)::numeric) AND (pim.mix_usable_square_meters <= 120.99)) THEN '101 a 120'::text
+              WHEN ((pim.mix_usable_square_meters >= (121)::numeric) AND (pim.mix_usable_square_meters <= 140.99)) THEN '121 a 140'::text
+              WHEN ((pim.mix_usable_square_meters >= (141)::numeric) AND (pim.mix_usable_square_meters <= 160.99)) THEN '141 a 160'::text
+              WHEN ((pim.mix_usable_square_meters >= (161)::numeric) AND (pim.mix_usable_square_meters <= 180.99)) THEN '161 a 180'::text
+              WHEN ((pim.mix_usable_square_meters >= (181)::numeric) AND (pim.mix_usable_square_meters <= 200.99)) THEN '181 a 200'::text
+              WHEN (pim.mix_usable_square_meters > (200)::numeric) THEN '>200'::text
+              ELSE NULL::text
+          END AS range_util,
+          CASE masud(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date)
+              WHEN 0 THEN (0)::numeric
+              ELSE round((vhmu(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date))::numeric, 1)
+          END AS vhmud,
+      projects.the_geom,
+      st_x(projects.the_geom) AS x,
+      st_y(projects.the_geom) AS y,
+      county_name((projects.county_id)::integer) AS county_name,
+      projects.project_type_id,
+      project_instances.project_status_id,
+      pim.mix_id,
+      pim.id AS pim_id
+     FROM (((((projects
+       JOIN project_instances ON ((project_instances.project_id = projects.id)))
+       JOIN project_instance_mixes pim ON ((project_instances.id = pim.project_instance_id)))
+       JOIN project_mixes ON ((pim.mix_id = project_mixes.id)))
+       JOIN project_types ON ((project_types.id = projects.project_type_id)))
+       JOIN project_statuses ON ((project_statuses.id = project_instances.project_status_id)))
+    WHERE (projects.project_type_id = 2);
+  SQL
+  create_view "project_home_reports", sql_definition: <<-SQL
+      SELECT project_instances.bimester,
+      project_instances.year,
+      projects.code,
+      projects.name AS project_name,
+      projects.address,
+      county_name((projects.county_id)::integer) AS county_name,
+      projects.county_id,
+      ( SELECT a.name
+             FROM (agencies a
+               JOIN agency_rols ar ON ((a.id = ar.agency_id)))
+            WHERE ((ar.project_id = projects.id) AND ((ar.rol)::text = 'INMOBILIARIA'::text))) AS agency_name,
+      pim.model,
+      projects.floors,
+      pim.t_min,
+      pim.t_max,
+      pim.mix_usable_square_meters,
+      ( SELECT round((sum((((project_instance_mixes.t_min + project_instance_mixes.t_max) / (2)::numeric) * (project_instance_mixes.total_units)::numeric)) / (sum(project_instance_mixes.total_units))::numeric), 1) AS round
+             FROM project_instance_mixes
+            WHERE (project_instance_mixes.project_instance_id = project_instances.id)) AS pp_terreno,
+      pp_utiles(project_instances.id) AS pp_utiles,
+      project_mixes.bedroom,
+      project_mixes.bathroom,
+      pim.living_room,
+      pim.service_room,
+      pim.h_office,
+      pim.discount,
+      round((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))), 0) AS uf_min_percent,
+      round((pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric))), 0) AS uf_max_percent,
+      round((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric), 0) AS uf_avg_percent,
+      pp_uf(project_instances.id) AS pp_uf,
+      round(pim.uf_parking, 0) AS uf_parking,
+      round(pim.uf_cellar, 0) AS uf_cellar,
+      round(((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / (pim.mix_usable_square_meters + (((pim.t_min + pim.t_max) / (2)::numeric) * 0.25))), 1) AS uf_m2_ut,
+      ( SELECT round((sum(((project_instance_mixes.mix_usable_square_meters * (project_instance_mixes.total_units)::numeric) * round(((((project_instance_mixes.uf_min * ((1)::numeric - (project_instance_mixes.percentage / (100)::numeric))) + (project_instance_mixes.uf_max * ((1)::numeric - (project_instance_mixes.percentage / (100)::numeric)))) / (2)::numeric) / (project_instance_mixes.mix_usable_square_meters + (((project_instance_mixes.t_min + project_instance_mixes.t_max) / (2)::numeric) * 0.25))), 1))) / sum((project_instance_mixes.mix_usable_square_meters * (project_instance_mixes.total_units)::numeric))), 2) AS round
+             FROM project_instance_mixes
+            WHERE (project_instance_mixes.project_instance_id = project_instances.id)) AS pp_ufm2ut,
+      round(((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) / pim.mix_usable_square_meters), 1) AS uf_m2_u,
+      ( SELECT round((sum(((project_instance_mixes.mix_usable_square_meters * (project_instance_mixes.total_units)::numeric) * round(((((project_instance_mixes.uf_min * ((1)::numeric - (project_instance_mixes.percentage / (100)::numeric))) + (project_instance_mixes.uf_max * ((1)::numeric - (project_instance_mixes.percentage / (100)::numeric)))) / (2)::numeric) / project_instance_mixes.mix_usable_square_meters), 1))) / sum((project_instance_mixes.mix_usable_square_meters * (project_instance_mixes.total_units)::numeric))), 1) AS round
+             FROM project_instance_mixes
+            WHERE (project_instance_mixes.project_instance_id = project_instances.id)) AS pp_ufm2u,
+      pim.total_units,
+      pim.stock_units,
+      (pim.total_units - pim.stock_units) AS sold_units,
+      months(project_instances.id) AS months,
+      round((vhmu(pim.total_units, pim.stock_units, project_instances.cadastre, projects.sale_date))::numeric, 1) AS vhmu,
+      round((pxq(project_instances.id))::numeric, 1) AS pxq,
+      round((((vhmd(pim.project_instance_id) * pp_uf_dis(pim.project_instance_id)) / (1000)::double precision))::numeric, 1) AS pxq_d,
+      project_statuses.name AS status,
+      projects.build_date,
+      projects.sale_date,
+      projects.transfer_date,
+      project_instances.cadastre,
+          CASE
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (0)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (440)::numeric)) THEN '0 a 440'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (441)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (929)::numeric)) THEN '441 a 929'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (930)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (1549)::numeric)) THEN '930 a 1549'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (1550)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (3399)::numeric)) THEN '1550 a 3399'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (3400)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (5390)::numeric)) THEN '3400 a 5390'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (5391)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (7950)::numeric)) THEN '5391 a 7950'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (7951)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (11500)::numeric)) THEN '7951 a 11500'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (11501)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (15600)::numeric)) THEN '11501 a 15600'::text
+              WHEN (((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) >= (156001)::numeric) AND ((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric) <= (500000)::numeric)) THEN '156010 a 500000'::text
+              ELSE NULL::text
+          END AS range_uf,
+          CASE
+              WHEN ((pim.mix_usable_square_meters >= (0)::numeric) AND (pim.mix_usable_square_meters <= 30.99)) THEN '< 30'::text
+              WHEN ((pim.mix_usable_square_meters >= (31)::numeric) AND (pim.mix_usable_square_meters <= 45.99)) THEN '31 a 45'::text
+              WHEN ((pim.mix_usable_square_meters >= (46)::numeric) AND (pim.mix_usable_square_meters <= 60.99)) THEN '46 a 60'::text
+              WHEN ((pim.mix_usable_square_meters >= (61)::numeric) AND (pim.mix_usable_square_meters <= 80.99)) THEN '61 a 80'::text
+              WHEN ((pim.mix_usable_square_meters >= (81)::numeric) AND (pim.mix_usable_square_meters <= 100.99)) THEN '81 a 100'::text
+              WHEN ((pim.mix_usable_square_meters >= (101)::numeric) AND (pim.mix_usable_square_meters <= 120.99)) THEN '101 a 120'::text
+              WHEN ((pim.mix_usable_square_meters >= (121)::numeric) AND (pim.mix_usable_square_meters <= 140.99)) THEN '121 a 140'::text
+              WHEN ((pim.mix_usable_square_meters >= (141)::numeric) AND (pim.mix_usable_square_meters <= 160.99)) THEN '141 a 160'::text
+              WHEN ((pim.mix_usable_square_meters >= (161)::numeric) AND (pim.mix_usable_square_meters <= 180.99)) THEN '161 a 180'::text
+              WHEN ((pim.mix_usable_square_meters >= (181)::numeric) AND (pim.mix_usable_square_meters <= 200.99)) THEN '181 a 200'::text
+              WHEN (pim.mix_usable_square_meters > (200)::numeric) THEN '>200'::text
+              ELSE NULL::text
+          END AS range_util,
+      project_types.name AS project_type_name,
+      pim.home_type,
+      round((((pim.uf_min * ((1)::numeric - (pim.percentage / (100)::numeric))) + (pim.uf_max * ((1)::numeric - (pim.percentage / (100)::numeric)))) / (2)::numeric)) AS mix_uf_value,
+      pim.mix_m2_field,
+      pim.mix_m2_built,
+      round((round(((pim.total_units - pim.stock_units))::numeric, 2) / (pim.total_units)::numeric), 2) AS percentage_sold,
+      projects.pilot_opening_date,
+      round((masd(project_instances.id))::numeric, 1) AS vhmud,
+      projects.the_geom,
+      st_x(projects.the_geom) AS x,
+      st_y(projects.the_geom) AS y,
+      projects.project_type_id,
+      project_instances.project_status_id,
+      pim.mix_id,
+      pim.id AS pim_id
+     FROM (((((projects
+       JOIN project_instances ON ((project_instances.project_id = projects.id)))
+       JOIN project_instance_mixes pim ON ((project_instances.id = pim.project_instance_id)))
+       JOIN project_mixes ON ((pim.mix_id = project_mixes.id)))
+       JOIN project_types ON ((project_types.id = projects.project_type_id)))
+       JOIN project_statuses ON ((project_statuses.id = project_instances.project_status_id)))
+    WHERE (projects.project_type_id = 1);
   SQL
 end

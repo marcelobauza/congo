@@ -1,0 +1,6 @@
+if ($("#modal-downloads-users").length > 0) {
+  $("#modal-downloads-users").remove();
+  $('.modal-backdrop').remove();
+}
+
+$('<%= j render "index" %>').modal();
