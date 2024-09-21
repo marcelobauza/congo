@@ -90,6 +90,6 @@ class Admin::CountiesController < Admin::DashboardsController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def county_params
-      params.require(:county).permit(:name, :code, :transaction_data, :demography_data, :legislation_data, :sales_project_data, :future_project_data, :commercial_project_data, :code_sii, :number_last_project_future, :enabled)
+      params.require(:county).permit(:name, :code, :transaction_data, :demography_data, :legislation_data, :sales_project_data, :future_project_data, :commercial_project_data, :code_sii, :number_last_project_future, :enabled, :region_id)
     end
 end

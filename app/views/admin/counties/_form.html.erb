@@ -31,6 +31,13 @@
       </div>
 
       <div class="form-group row">
+        <%= form.label :region_id, 'Regiones', class: 'col-md-2 text-right col-form-label' %>
+        <div class="col-md-3">
+          <%= form.input :region_id, label: false, collection: regions_for_select, class: "form-control" %>
+        </div>
+      </div>
+
+      <div class="form-group row">
         <%= form.label :enabled, 'Habilitada?', class: 'col-md-2 text-right form-check-label' %>
         <div class="col-md-3">
         <%= form.check_box :enabled %>
